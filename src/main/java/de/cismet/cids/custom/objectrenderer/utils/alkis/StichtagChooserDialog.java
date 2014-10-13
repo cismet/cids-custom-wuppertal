@@ -14,6 +14,8 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
 import Sirius.navigator.connection.SessionManager;
 
+import org.apache.log4j.Logger;
+
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -21,13 +23,14 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.util.NbBundle;
 
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
@@ -38,9 +41,16 @@ import javax.swing.UIManager;
  * @version  $Revision$, $Date$
  */
 public class StichtagChooserDialog extends javax.swing.JDialog {
-    
-    private static final GregorianCalendar datepickerLowerBound = new GregorianCalendar(2011, 4,1);
-    
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final GregorianCalendar datepickerLowerBound = new GregorianCalendar(2011, 4, 1);
+    private static final Logger LOG = Logger.getLogger(StichtagChooserDialog.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private Date lastValidDate;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
@@ -73,7 +83,22 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         lblIcon.setIcon(UIManager.getIcon("OptionPane.questionIcon"));
         lblBusy.setBusy(false);
         final CardLayout cl = (CardLayout)(pnlStatus.getLayout());
+        lastValidDate = datepicker.getDate();
         cl.show(pnlStatus, "empty");
+        datepicker.getEditor().setEditable(false);
+        datepicker.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    if (datepicker.getDate() == null) {
+                        datepicker.setDate(lastValidDate);
+                    } else {
+                        lastValidDate = datepicker.getDate();
+                    }
+                    final CardLayout cl = (CardLayout)(pnlStatus.getLayout());
+                    cl.show(pnlStatus, "empty");
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -96,19 +121,25 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         pnlCheckDate = new javax.swing.JPanel();
         lblBusy = new org.jdesktop.swingx.JXBusyLabel();
         lblCheckDate = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         pnlWrongDate = new javax.swing.JPanel();
         lblDateWarning = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         jPanel1 = new javax.swing.JPanel();
         lblIcon = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(550, 150));
-        setPreferredSize(new java.awt.Dimension(550, 150));
+        setMinimumSize(new java.awt.Dimension(720, 200));
+        setPreferredSize(new java.awt.Dimension(720, 200));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -134,24 +165,32 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
 
         pnlControls.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnOk, org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.btnOk.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnOk,
+            org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.btnOk.text")); // NOI18N
         btnOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnOkActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         pnlControls.add(btnOk, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnCancel, org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.btnCancel.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnCancel,
+            org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnCancelActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -161,7 +200,9 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
 
         pnlCheckDate.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblBusy, org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.lblBusy.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBusy,
+            org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.lblBusy.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -169,7 +210,11 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         pnlCheckDate.add(lblBusy, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblCheckDate, org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.lblCheckDate.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblCheckDate,
+            org.openide.util.NbBundle.getMessage(
+                StichtagChooserDialog.class,
+                "StichtagChooserDialog.lblCheckDate.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -185,7 +230,11 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
 
         pnlWrongDate.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblDateWarning, org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.lblDateWarning.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblDateWarning,
+            org.openide.util.NbBundle.getMessage(
+                StichtagChooserDialog.class,
+                "StichtagChooserDialog.lblDateWarning.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -211,7 +260,9 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(pnlControls, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblIcon, org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.lblIcon.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblIcon,
+            org.openide.util.NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.lblIcon.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -219,14 +270,14 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         getContentPane().add(lblIcon, gridBagConstraints);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
 
         final SwingWorker<Date, Void> worker = new SwingWorker<Date, Void>() {
 
@@ -243,7 +294,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
                     final Date d = datepicker.getDate();
                     try {
                         final Date serverDate = get();
-                        if (d.before(serverDate)) {
+                        if ((d != null) && d.before(serverDate)) {
                             StichtagChooserDialog.this.setVisible(false);
                             final CardLayout cl = (CardLayout)(pnlStatus.getLayout());
                             cl.show(pnlStatus, "empty");
@@ -253,8 +304,12 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
                         }
                     } catch (Exception ex) {
                         final ErrorInfo ei = new ErrorInfo(
-                                NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.preventFutureStichtagMessageDialog.title"),
-                                NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.preventFutureStichtagMessageDialog.message"),
+                                NbBundle.getMessage(
+                                    StichtagChooserDialog.class,
+                                    "StichtagChooserDialog.preventFutureStichtagMessageDialog.title"),
+                                NbBundle.getMessage(
+                                    StichtagChooserDialog.class,
+                                    "StichtagChooserDialog.preventFutureStichtagMessageDialog.message"),
                                 null,
                                 null,
                                 ex,
@@ -276,17 +331,17 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         repaint();
         worker.execute();
         this.repaint();
-    }//GEN-LAST:event_btnOkActionPerformed
+    } //GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         datepicker.setDate(null);
         setVisible(false);
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
