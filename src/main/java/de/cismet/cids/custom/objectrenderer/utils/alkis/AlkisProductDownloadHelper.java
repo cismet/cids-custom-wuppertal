@@ -25,10 +25,9 @@ import javax.swing.JOptionPane;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.CredentialsAwareHttpDownlaod;
 import de.cismet.tools.gui.downloadmanager.Download;
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -62,7 +61,7 @@ public class AlkisProductDownloadHelper {
             final String actionTag,
             final String completeBuchungsblattCode,
             final Component parent) {
-        HttpDownload download = null;
+        CredentialsAwareHttpDownlaod download = null;
         if (!ObjectRendererUtils.checkActionTag(actionTag)) {
             showNoProductPermissionWarning(parent);
             return null;
@@ -79,13 +78,15 @@ public class AlkisProductDownloadHelper {
                 if (url != null) {
                     String filename = product + "." + completeBuchungsblattCode.replace("/", "--").trim();
                     filename = filename.replaceAll(" +", "_"); // replace all whitespaces
-                    download = new HttpDownload(
+                    download = new CredentialsAwareHttpDownlaod(
                             url,
                             "",
                             DownloadManagerDialog.getJobname(),
                             downloadTitle,
                             filename,
-                            ".pdf");
+                            ".pdf",
+                            "user",
+                            "password");
                 }
             }
         } catch (Exception ex) {

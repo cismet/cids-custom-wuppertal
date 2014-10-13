@@ -1538,14 +1538,16 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 final Date stichtag = stichtagDialog.getDate();
                 if (stichtag != null) {
                     if (BillingPopup.doBilling("bestnw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                        final String jobname = hlBestandsnachweisNrwStichtagPdf.getText();
+                        if (DownloadManagerDialog.showAskingForUserTitle(this)) {
+                        }
                         final Download d = AlkisProductDownloadHelper.createStichtagProductDownload(
                                 stichtag,
-                                hlBestandsnachweisNrwStichtagPdf.getText(),
+                                jobname,
                                 AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF,
                                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW,
                                 getCompleteBuchungsblattCode(),
                                 this);
-
                         DownloadManager.instance().add(d);
                     }
                 }
@@ -1556,7 +1558,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_nrw.pdf");
         }
-    } //GEN-LAST:event_hlBestandsnachweisNrwStichtagPdfActionPerformed
+    }                                                                                                    //GEN-LAST:event_hlBestandsnachweisNrwStichtagPdfActionPerformed
 
     /**
      * DOCUMENT ME!

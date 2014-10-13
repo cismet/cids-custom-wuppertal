@@ -14,6 +14,8 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
 import Sirius.navigator.connection.SessionManager;
 
+import org.apache.log4j.Logger;
+
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -21,13 +23,14 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.util.NbBundle;
 
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
@@ -38,6 +41,15 @@ import javax.swing.UIManager;
  * @version  $Revision$, $Date$
  */
 public class StichtagChooserDialog extends javax.swing.JDialog {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final GregorianCalendar datepickerLowerBound = new GregorianCalendar(2011, 4, 1);
+    private static final Logger LOG = Logger.getLogger(StichtagChooserDialog.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private Date lastValidDate;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -71,7 +83,22 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         lblIcon.setIcon(UIManager.getIcon("OptionPane.questionIcon"));
         lblBusy.setBusy(false);
         final CardLayout cl = (CardLayout)(pnlStatus.getLayout());
+        lastValidDate = datepicker.getDate();
         cl.show(pnlStatus, "empty");
+        datepicker.getEditor().setEditable(false);
+        datepicker.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    if (datepicker.getDate() == null) {
+                        datepicker.setDate(lastValidDate);
+                    } else {
+                        lastValidDate = datepicker.getDate();
+                    }
+                    final CardLayout cl = (CardLayout)(pnlStatus.getLayout());
+                    cl.show(pnlStatus, "empty");
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -106,8 +133,8 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         lblIcon = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(520, 150));
-        setPreferredSize(new java.awt.Dimension(520, 150));
+        setMinimumSize(new java.awt.Dimension(720, 200));
+        setPreferredSize(new java.awt.Dimension(720, 200));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -126,6 +153,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
         cal.add(Calendar.DAY_OF_MONTH, -1);
         datepicker = new JXDatePicker(cal.getTime());
         datepicker.getMonthView().setUpperBound(cal.getTime());
+        datepicker.getMonthView().setLowerBound(datepickerLowerBound.getTime());
         // this enables direct switching of the year...
         datepicker.getMonthView().setZoomable(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -266,7 +294,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
                     final Date d = datepicker.getDate();
                     try {
                         final Date serverDate = get();
-                        if (d.before(serverDate)) {
+                        if ((d != null) && d.before(serverDate)) {
                             StichtagChooserDialog.this.setVisible(false);
                             final CardLayout cl = (CardLayout)(pnlStatus.getLayout());
                             cl.show(pnlStatus, "empty");
@@ -276,8 +304,12 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
                         }
                     } catch (Exception ex) {
                         final ErrorInfo ei = new ErrorInfo(
-                                "Fehler beim Validieren des eingegebenen Datums",
-                                "Das eingegebene Datum konnte nicht auf dem Sever validiert werden",
+                                NbBundle.getMessage(
+                                    StichtagChooserDialog.class,
+                                    "StichtagChooserDialog.preventFutureStichtagMessageDialog.title"),
+                                NbBundle.getMessage(
+                                    StichtagChooserDialog.class,
+                                    "StichtagChooserDialog.preventFutureStichtagMessageDialog.message"),
                                 null,
                                 null,
                                 ex,

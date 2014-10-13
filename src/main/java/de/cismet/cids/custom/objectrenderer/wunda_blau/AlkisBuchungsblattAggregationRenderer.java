@@ -474,13 +474,13 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                         downloads.add(d);
                     }
 
+                    String jobname = hlBestandsnachweisStichtagNRW.getText();
+                    if (DownloadManagerDialog.showAskingForUserTitle(this)) {
+//                        jobname = DownloadManagerDialog.getJobname();
+                    }
                     if (downloads.size() > 1) {
-                        String jobname = hlBestandsnachweisStichtagNRW.getText();
-                        if (DownloadManagerDialog.showAskingForUserTitle(this)) {
-                            jobname = DownloadManagerDialog.getJobname();
-                            if ((jobname == null) || jobname.isEmpty()) {
-                                jobname = hlBestandsnachweisStichtagNRW.getText();
-                            }
+                        if ((jobname == null) || jobname.isEmpty()) {
+                            jobname = hlBestandsnachweisStichtagNRW.getText();
                         }
                         DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
                     } else if (downloads.size() == 1) {
