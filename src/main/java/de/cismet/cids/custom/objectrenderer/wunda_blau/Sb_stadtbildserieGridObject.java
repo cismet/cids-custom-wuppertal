@@ -113,6 +113,9 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
         CidsBean stadtbild;
         if (!imagesToShow.isEmpty() && (index < imagesToShow.size()) && (index != 0)) {
             stadtbild = imagesToShow.get(index);
+            if (stadtbild.equals((CidsBean)stadtbildserie.getProperty("vorschaubild"))) {
+                stadtbild = imagesToShow.get(0);
+            }
         } else {
             stadtbild = (CidsBean)stadtbildserie.getProperty("vorschaubild");
         }
@@ -300,9 +303,12 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     @Override
     protected String getBildnummer() {
-        final String bildnummer;
+        String bildnummer;
         if (!imagesToShow.isEmpty() && (index < imagesToShow.size()) && (index != 0)) {
             bildnummer = (String)imagesToShow.get(index).getProperty("bildnummer");
+            if (bildnummer.equals((String)stadtbildserie.getProperty("vorschaubild.bildnummer"))) {
+                bildnummer = (String)imagesToShow.get(0).getProperty("bildnummer");
+            }
         } else {
             bildnummer = (String)stadtbildserie.getProperty("vorschaubild.bildnummer");
         }
