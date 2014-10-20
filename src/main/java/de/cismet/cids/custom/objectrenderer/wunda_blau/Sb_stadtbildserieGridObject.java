@@ -111,7 +111,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public CidsBean getStadtbildUnderMarker() {
         CidsBean stadtbild;
-        if (!imagesToShow.isEmpty() && (index < imagesToShow.size())) {
+        if (!imagesToShow.isEmpty() && (index < imagesToShow.size()) && (index != 0)) {
             stadtbild = imagesToShow.get(index);
         } else {
             stadtbild = (CidsBean)stadtbildserie.getProperty("vorschaubild");
@@ -301,7 +301,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     @Override
     protected String getBildnummer() {
         final String bildnummer;
-        if (!imagesToShow.isEmpty() && (index < imagesToShow.size())) {
+        if (!imagesToShow.isEmpty() && (index < imagesToShow.size()) && (index != 0)) {
             bildnummer = (String)imagesToShow.get(index).getProperty("bildnummer");
         } else {
             bildnummer = (String)stadtbildserie.getProperty("vorschaubild.bildnummer");
