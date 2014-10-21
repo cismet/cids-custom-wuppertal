@@ -1330,6 +1330,34 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     }
                 });
 
+            /*
+             * Mouse listener that ensures that the vorschaubild is shown if mouse leaves statbildserie cell
+             * Unfortunately it is not possible to attach Mouse listner directly to the grid cell elements
+             */
+            this.addMouseMotionListener(new MouseAdapter() {
+
+                    int hoveredSerieIndex = -1;
+
+                    @Override
+                    public void mouseMoved(final MouseEvent e) {
+                        final int index = PictureSelectionJGrid.this.getCellAt(e.getPoint());
+
+                        if (index >= 0) {
+                            hoveredSerieIndex = index;
+                        } else {
+                            if (hoveredSerieIndex >= 0) {
+                                final Object o = PictureSelectionJGrid.this.getModel().getElementAt(hoveredSerieIndex);
+                                if (o instanceof Sb_stadtbildserieGridObject) {
+                                    final Sb_stadtbildserieGridObject hoveredSerie = (Sb_stadtbildserieGridObject)o;
+                                    // fraction of 0 means we want to show the first image which is the vorschau bild
+                                    hoveredSerie.setFraction(0);
+                                }
+                            }
+                            hoveredSerieIndex = -1;
+                        }
+                    }
+                });
+
             this.addMouseMotionListener(new MouseAdapter() {
 
                     int lastIndex = -1;
