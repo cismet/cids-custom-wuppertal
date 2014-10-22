@@ -112,6 +112,9 @@
             <version>0.4-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.7</version>
             <groupId>com.twelvemonkeys.imageio</groupId>
             <artifactId>imageio-jpeg</artifactId>
             <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
