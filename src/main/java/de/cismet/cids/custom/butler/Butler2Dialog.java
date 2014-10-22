@@ -164,7 +164,6 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
         formatSymbols.setDecimalSeparator('.');
         coordFormatter.setDecimalFormatSymbols(formatSymbols);
-        this.setTitle(null);
         boxes = PredefinedBoxes.butler2Boxes;
         initComponents();
         butler2ProductPanel1.addProductListSelectionListener(this);
