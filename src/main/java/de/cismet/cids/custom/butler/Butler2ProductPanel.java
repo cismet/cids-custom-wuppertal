@@ -18,8 +18,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -36,7 +34,6 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
-import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 
 /**
  * DOCUMENT ME!
@@ -44,19 +41,17 @@ import de.cismet.cids.custom.utils.nas.NasProductTemplate;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelectionListener, ActionListener {
+public class Butler2ProductPanel extends javax.swing.JPanel implements ActionListener, ListSelectionListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(Butler1ProductPanel.class);
-    private static final double DXF_DISCOUNT = 0.5d;
     private static final double RASTER_DISCOUNT = 0.25d;
 
     //~ Instance fields --------------------------------------------------------
 
     ArrayList<ButlerProduct> products;
     ArrayList<ButlerResolution> resolutions;
-    ArrayList<ButlerFormat> formats;
     private Geometry geom;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
@@ -69,7 +64,6 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
     private javax.swing.JPanel pnlFee;
     private de.cismet.cids.custom.nas.NasFeePreviewPanel pnlFeePreview;
     private javax.swing.JPanel pnlFormat;
-    private javax.swing.JRadioButton rbDxf;
     private javax.swing.JRadioButton rbShp;
     private javax.swing.JRadioButton rbTif;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -85,12 +79,10 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         initComponents();
         pnlFeePreview = new NasFeePreviewPanel();
         lstProdukt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lstProdukt.addListSelectionListener(this);
-        rbDxf.addActionListener(this);
         rbShp.addActionListener(this);
         rbTif.addActionListener(this);
         // this fires the action event and starts the fee calculation
-        rbDxf.setSelected(true);
+        rbShp.setSelected(true);
         // setting an empty geometry causes the fee preview panel to show a fee of 0.
         final GeometryFactory gf = new GeometryFactory();
         geom = gf.createMultiPolygon(null);
@@ -115,7 +107,6 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         lstProdukt = new javax.swing.JList();
         lblFormat = new javax.swing.JLabel();
         pnlFormat = new javax.swing.JPanel();
-        rbDxf = new javax.swing.JRadioButton();
         rbShp = new javax.swing.JRadioButton();
         rbTif = new javax.swing.JRadioButton();
         lblFiller = new javax.swing.JLabel();
@@ -171,17 +162,6 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         add(lblFormat, gridBagConstraints);
 
         pnlFormat.setLayout(new java.awt.GridBagLayout());
-
-        btGroupFormat.add(rbDxf);
-        rbDxf.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            rbDxf,
-            org.openide.util.NbBundle.getMessage(Butler2ProductPanel.class, "Butler2ProductPanel.rbDxf.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        pnlFormat.add(rbDxf, gridBagConstraints);
 
         btGroupFormat.add(rbShp);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -272,19 +252,8 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
             final ArrayList<ButlerProductGroup> productGroups = tester.getButler2ProductGroups();
             products = productGroups.get(0).getButlerProducts();
             resolutions = productGroups.get(0).getButlerResolutions();
-//             final ButlerProductGroup productGroup = productGroups.get(0);
-//        if (productGroup != null) {
-//            final Binding productBinding = bindingGroup.getBinding("productBinding");
-//            final Property productProp = productBinding.getSourceProperty();
-//            productProp.setValue(this, productGroup.getButlerProducts());
-//            final Binding resolutionBinding = bindingGroup.getBinding("resolutionBinding");
-//            final Property resolutionProp = resolutionBinding.getSourceProperty();
-//            resolutionProp.setValue(this, productGroup.getButlerResolutions());
-//            productGroup.getButlerFormats();
-//            updateFormatButtons(productGroup.getButlerFormats());
-//        }
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.error(ex.getMessage(), ex);
         }
     }
 
@@ -304,24 +273,6 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
      */
     public void setResolutions(final ArrayList<ButlerResolution> resolutions) {
         this.resolutions = resolutions;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public ArrayList<ButlerFormat> getFormats() {
-        return formats;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  formats  DOCUMENT ME!
-     */
-    public void setFormats(final ArrayList<ButlerFormat> formats) {
-        this.formats = formats;
     }
 
     /**
@@ -369,13 +320,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
     public ButlerProduct getSelectedProduct() {
         final ButlerProduct bp = (ButlerProduct)lstProdukt.getSelectedValue();
         if (bp != null) {
-            if (rbDxf.isSelected()) {
-                // this must be dxf to find the file in the right folder
-                bp.setFormat(new ButlerFormat("dxf"));
-                final ButlerResolution res = new ButlerResolution();
-                res.setKey("800");
-                bp.setResolution(res);
-            } else if (rbShp.isSelected()) {
+            if (rbShp.isSelected()) {
                 final ButlerResolution res = new ButlerResolution();
                 res.setKey("600");
                 bp.setResolution(res);
@@ -389,22 +334,6 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
             }
         }
         return bp;
-    }
-
-    @Override
-    public void valueChanged(final ListSelectionEvent e) {
-        final ButlerProduct selectedProduct = (ButlerProduct)lstProdukt.getSelectedValue();
-        if (selectedProduct != null) {
-            final String productKey = selectedProduct.getKey();
-            if (productKey.endsWith("g")) {
-                if (rbDxf.isSelected()) {
-                    btGroupFormat.clearSelection();
-                }
-                rbDxf.setEnabled(false);
-            } else {
-                rbDxf.setEnabled(true);
-            }
-        }
     }
 
     /**
@@ -422,23 +351,12 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
     private void calculateFee() {
         pnlFee.removeAll();
         pnlFeePreview = new NasFeePreviewPanel();
-        setDiscountInFeePreview();
+        pnlFeePreview.setDiscount(RASTER_DISCOUNT);
         pnlFeePreview.setGeom(geom);
         pnlFeePreview.refresh();
         pnlFee.add(pnlFeePreview);
         pnlFee.revalidate();
         pnlFee.repaint();
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void setDiscountInFeePreview() {
-        if (rbDxf.isSelected()) {
-            pnlFeePreview.setDiscount(DXF_DISCOUNT);
-        } else {
-            pnlFeePreview.setDiscount(RASTER_DISCOUNT);
-        }
     }
 
     @Override
@@ -453,5 +371,10 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
      */
     public ArrayList<ProductGroupAmount> getProductGroupAmounts() {
         return pnlFeePreview.getProductGroupAmounts();
+    }
+
+    @Override
+    public void valueChanged(final ListSelectionEvent e) {
+        calculateFee();
     }
 }
