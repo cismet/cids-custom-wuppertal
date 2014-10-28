@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.DefaultListModel;
@@ -28,6 +29,8 @@ import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.commons.concurrency.CismetExecutors;
+
 /**
  * DOCUMENT ME!
  *
@@ -35,6 +38,10 @@ import de.cismet.cids.dynamics.CidsBean;
  * @version  $Revision$, $Date$
  */
 public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieGridObjectListener {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final ExecutorService highResAvailableThreadPool = CismetExecutors.newFixedThreadPool(20);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -144,16 +151,16 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
          */
         void startThreadToDetermineIfHighResImageAvailable() {
             final String imageNumber = (String)stadtbild.getProperty("bildnummer");
-            (new Thread(new Runnable() {
+            highResAvailableThreadPool.submit(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            imageAvailableInHighRes.set(
-                                Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
-                                        != null);
-                            SingleStadtbildGridObject.this.notifyModel();
-                        }
-                    })).start();
+                    @Override
+                    public void run() {
+                        imageAvailableInHighRes.set(
+                            Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
+                                    != null);
+                        SingleStadtbildGridObject.this.notifyModel();
+                    }
+                });
         }
 
         @Override
