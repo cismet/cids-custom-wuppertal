@@ -1,4 +1,4 @@
-cids-custom-wuppertal
+cids-custom-wuppertal [![Build Status](http://ci.cismet.de/buildStatus/icon?job=cids-custom-wuppertal)](https://ci.cismet.de/job/cids-custom-wuppertal/)
 =====================
 
 Client-side customisations of the cids system for the city of Wuppertal.
