@@ -242,8 +242,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         final String[] pairs = query.split("&");
         for (final String pair : pairs) {
             final int idx = pair.indexOf("=");
-            query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"),
-                URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+            // it can happen that the url contains &&
+            if (idx != -1) {
+                query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"),
+                    URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+            }
         }
         return query_pairs;
     }
