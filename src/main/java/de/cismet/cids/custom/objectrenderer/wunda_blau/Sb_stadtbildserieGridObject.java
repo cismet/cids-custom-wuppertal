@@ -224,8 +224,17 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * DOCUMENT ME!
      */
     public void selectAllStadtbilder() {
+        selecteAllStadtbilder(true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  fireEvents  DOCUMENT ME!
+     */
+    public void selecteAllStadtbilder(final boolean fireEvents) {
         for (final CidsBean stadtbild : imagesToShow) {
-            selectStadtbildOfSerie(stadtbild);
+            selectStadtbildOfSerie(stadtbild, fireEvents);
         }
     }
 
@@ -245,9 +254,19 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * @param  bildnummer  DOCUMENT ME!
      */
     public void selectStadtbildOfSerie(final CidsBean bildnummer) {
+        selectStadtbildOfSerie(bildnummer, true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bildnummer  DOCUMENT ME!
+     * @param  fireEvents  DOCUMENT ME!
+     */
+    public void selectStadtbildOfSerie(final CidsBean bildnummer, final boolean fireEvents) {
         if (!this.isInBin && imagesToShow.contains(bildnummer)) {
             final boolean wasAdded = selectedBildnummernOfSerie.add(bildnummer);
-            if (wasAdded) {
+            if (wasAdded && fireEvents) {
                 fireStadtbildChosen(bildnummer);
                 notifyModel();
             }
@@ -417,6 +436,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
             listener.stadtbildUnchosen(this, stadtbild);
         }
     }
+
     /**
      * DOCUMENT ME!
      */
@@ -425,6 +445,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
             listener.sb_stadtbildserieGridObjectMoveToBin(this);
         }
     }
+
     /**
      * DOCUMENT ME!
      */
@@ -438,6 +459,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     protected boolean isPreviewAllowed() {
         return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
     }
+
     /**
      * DOCUMENT ME!
      *
