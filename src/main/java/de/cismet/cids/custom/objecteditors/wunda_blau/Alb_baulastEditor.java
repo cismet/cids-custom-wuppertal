@@ -30,6 +30,7 @@ import java.text.DateFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -607,6 +608,12 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                 errors.add(
                     "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\n"
                             + "Bitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
+            }
+
+            final List baulastArt = (List)cidsBean.getProperty("art");
+
+            if ((baulastArt == null) || baulastArt.isEmpty()) {
+                errors.add("Die Baulast muss mindestens eine Baulastart haben");
             }
 
             if (errors.size() > 0) {
