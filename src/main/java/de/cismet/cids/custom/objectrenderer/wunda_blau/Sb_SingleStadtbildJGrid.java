@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -59,6 +60,23 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stadbilder  DOCUMENT ME!
+     * @param  source      DOCUMENT ME!
+     */
+    public void addStadtbilder(final Collection<CidsBean> stadbilder, final Sb_stadtbildserieGridObject source) {
+        for (final CidsBean b : stadbilder) {
+            final SingleStadtbildGridObject gridObject = new SingleStadtbildGridObject(b, source);
+            if (!modelProxy.contains(gridObject)) {
+                gridObject.startThreadToDetermineIfHighResImageAvailable();
+                ((DefaultListModel)this.getModel()).addElement(gridObject);
+                modelProxy.add(gridObject);
+            }
+        }
+    }
 
     @Override
     public void stadtbildChosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
