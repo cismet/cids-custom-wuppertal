@@ -353,7 +353,8 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
         if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             result.addAll(getProductGroupAmountForObject("eapkt", pointAmount));
-        } else if (nasProduct.getKey().equalsIgnoreCase("ohne_eigentuemer")) {
+        } else if (nasProduct.getKey().equalsIgnoreCase("ohne_eigentuemer")
+                    || nasProduct.getKey().equalsIgnoreCase("dxf")) {
             result.addAll(getProductGroupAmountForObject("eageb", gebaeudeAmount));
             result.addAll(getProductGroupAmountForObject("eaflst", flurstueckAmount));
         } else if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
