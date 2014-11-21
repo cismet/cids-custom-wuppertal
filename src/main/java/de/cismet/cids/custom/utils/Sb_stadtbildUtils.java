@@ -13,6 +13,7 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import org.apache.commons.imaging.Imaging;
 import org.apache.commons.lang.StringUtils;
 
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
@@ -43,7 +44,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.imageio.ImageIO;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -59,6 +59,7 @@ import de.cismet.commons.concurrency.CismetConcurrency;
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import org.apache.commons.imaging.ImageReadException;
 
 /**
  * DOCUMENT ME!
@@ -99,16 +100,20 @@ public class Sb_stadtbildUtils {
         R102 = getLagerR102();
 
         try {
-            ERROR_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResource(
+            ERROR_IMAGE = Imaging.getBufferedImage(Sb_stadtbildUtils.class.getResourceAsStream(
                         "/de/cismet/cids/custom/objecteditors/wunda_blau/no_image.png"));
         } catch (IOException ex) {
+            LOG.error("Could not fetch ERROR_IMAGE", ex);
+        } catch (ImageReadException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
         }
 
         try {
-            PLACEHOLDER_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResource(
+            PLACEHOLDER_IMAGE = Imaging.getBufferedImage(Sb_stadtbildUtils.class.getResourceAsStream(
                         "/de/cismet/cids/custom/objecteditors/wunda_blau/wait_image.png"));
         } catch (IOException ex) {
+            LOG.error("Could not fetch ERROR_IMAGE", ex);
+        } catch (ImageReadException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
         }
 
@@ -332,7 +337,7 @@ public class Sb_stadtbildUtils {
             InputStream is = null;
             try {
                 is = WebAccessManager.getInstance().doRequest(urlLowResImage);
-                final BufferedImage img = ImageIO.read(is);
+                final BufferedImage img = Imaging.getBufferedImage(is);
                 if (img != null) {
                     IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
                 } else {
@@ -629,7 +634,9 @@ public class Sb_stadtbildUtils {
                 InputStream is = null;
                 try {
                     is = WebAccessManager.getInstance().doRequest(urlLowResImage);
-                    final BufferedImage img = ImageIO.read(is);
+
+                    final BufferedImage img = Imaging.getBufferedImage(is);
+
                     if (img != null) {
                         IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
                     } else {
