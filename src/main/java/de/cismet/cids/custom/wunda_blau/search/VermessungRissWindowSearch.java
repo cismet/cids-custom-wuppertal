@@ -117,6 +117,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private javax.swing.JButton btnAddFlurstueck;
     private javax.swing.JButton btnFilterSchluessel505To508;
     private javax.swing.JButton btnFilterSchluesselAll;
+    private javax.swing.JButton btnNewSearch;
     private javax.swing.JButton btnRemoveFlurstueck;
     private javax.swing.JCheckBox chkFilterSchluessel501;
     private javax.swing.JCheckBox chkFilterSchluessel502;
@@ -338,6 +339,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         btnRemoveFlurstueck = new javax.swing.JButton();
         chkSearchInCismap = new javax.swing.JCheckBox();
         pnlButtons = new javax.swing.JPanel();
+        btnNewSearch = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -472,6 +474,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         pnlFilterRiss.add(pnlFilterRissWildcards, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -635,6 +638,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -740,6 +744,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -761,9 +766,31 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(pnlButtons, gridBagConstraints);
+
+        btnNewSearch.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissWindowSearch.class,
+                "VermessungRissWindowSearch.btnNewSearch.text"));        // NOI18N
+        btnNewSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                VermessungRissWindowSearch.class,
+                "VermessungRissWindowSearch.btnNewSearch.toolTipText")); // NOI18N
+        btnNewSearch.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnNewSearchActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(btnNewSearch, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -892,6 +919,32 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         // Hock for popup menu. The return value of JPopupMenu.isPopupTrigger() depends on the OS.
         lstFlurstueckeMousePressed(evt);
     } //GEN-LAST:event_lstFlurstueckeMouseReleased
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+        txtBlatt.setText("");
+        txtFlur.setText("");
+        txtGemarkung.setText("");
+        txtSchluessel.setText("");
+
+        chkFilterSchluessel501.setSelected(true);
+        chkFilterSchluessel502.setSelected(true);
+        chkFilterSchluessel503.setSelected(true);
+        chkFilterSchluessel504.setSelected(true);
+        chkFilterSchluessel505.setSelected(true);
+        chkFilterSchluessel506.setSelected(true);
+        chkFilterSchluessel507.setSelected(true);
+        chkFilterSchluessel508.setSelected(true);
+        chkFilterSchluessel600.setSelected(true);
+
+        chkSearchInCismap.setSelected(false);
+
+        flurstuecksvermessungFilterModel.clear();
+    } //GEN-LAST:event_btnNewSearchActionPerformed
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {

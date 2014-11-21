@@ -90,6 +90,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     private javax.swing.JButton btnGebaeudeUndBauwerkspunkte;
     private javax.swing.JButton btnGrenzUndGebaudepunkte;
     private javax.swing.JButton btnHoehenfestpunkte;
+    private javax.swing.JButton btnNewSearch;
     private javax.swing.JCheckBox chkAufnahmepunkte;
     private javax.swing.JCheckBox chkBesondereBauwerkspunkte;
     private javax.swing.JCheckBox chkBesondereGebaeudepunkte;
@@ -234,6 +235,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         gluFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+        btnNewSearch = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -306,6 +308,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -567,6 +570,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(pnlFilterPointtype, gridBagConstraints);
@@ -634,6 +638,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(pnlFilterGST, gridBagConstraints);
@@ -655,6 +660,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -665,6 +671,27 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         add(gluFiller, gridBagConstraints);
+
+        btnNewSearch.setText(org.openide.util.NbBundle.getMessage(
+                MeasurementPointWindowSearch.class,
+                "MeasurementPointWindowSearch.btnNewSearch.text"));        // NOI18N
+        btnNewSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MeasurementPointWindowSearch.class,
+                "MeasurementPointWindowSearch.btnNewSearch.toolTipText")); // NOI18N
+        btnNewSearch.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnNewSearchActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(btnNewSearch, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -774,6 +801,26 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     private void chkNivellementPunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkNivellementPunkteActionPerformed
         changeEnabledStateOfSearchButtons();
     }                                                                                        //GEN-LAST:event_chkNivellementPunkteActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+        txtPointcode.setText("");
+        chkAufnahmepunkte.setSelected(true);
+        chkBesondereBauwerkspunkte.setSelected(true);
+        chkBesondereGebaeudepunkte.setSelected(true);
+        chkBesondereTopographischePunkte.setSelected(true);
+        chkGrenzpunkte.setSelected(true);
+        chkNivellementPunkte.setSelected(true);
+        chkSonstigeVermessungspunkte.setSelected(true);
+
+        chkSearchInCismap.setSelected(false);
+
+        rdoFilterGSTAll.setSelected(true);
+    } //GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
      * DOCUMENT ME!
