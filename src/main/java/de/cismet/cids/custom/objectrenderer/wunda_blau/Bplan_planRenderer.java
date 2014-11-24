@@ -14,7 +14,11 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import org.apache.commons.imaging.Imaging;
+
 import java.awt.EventQueue;
+
+import java.io.InputStream;
 
 import java.net.URL;
 
@@ -26,6 +30,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.security.WebAccessManager;
 
 /**
  * DOCUMENT ME!
@@ -115,7 +121,8 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer, Requ
                                         }
                                     });
 
-                                bild = new ImageIcon(new URL(url));
+                                final InputStream is = WebAccessManager.getInstance().doRequest(new URL(url));
+                                bild = new ImageIcon(Imaging.getBufferedImage(is));
                                 EventQueue.invokeLater(new Runnable() {
 
                                         @Override
