@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -661,42 +660,42 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinActionPerformed
+    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinActionPerformed
         moveSelectedStadtbildserienToOtherGrid(grdStadtbildserien, grdBin);
-    }//GEN-LAST:event_btnBinActionPerformed
+    }                                                                          //GEN-LAST:event_btnBinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinRecycleActionPerformed
+    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinRecycleActionPerformed
         moveSelectedStadtbildserienToOtherGrid(grdBin, grdStadtbildserien);
-    }//GEN-LAST:event_btnBinRecycleActionPerformed
+    }                                                                                 //GEN-LAST:event_btnBinRecycleActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldSizeStateChanged
+    private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldSizeStateChanged
         grdStadtbildserien.setFixedCellDimension(sldSize.getValue());
         grdStadtbildserien.ensureIndexIsVisible(grdStadtbildserien.getSelectedIndex());
         grdBin.setFixedCellDimension(sldSize.getValue());
         grdBin.ensureIndexIsVisible(grdBin.getSelectedIndex());
         grdWarenkorb.setFixedCellDimension(sldSize.getValue());
         grdWarenkorb.ensureIndexIsVisible(grdWarenkorb.getSelectedIndex());
-    }//GEN-LAST:event_sldSizeStateChanged
+    }                                                                           //GEN-LAST:event_sldSizeStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnSlideActionPerformed
+    private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnSlideActionPerformed
         showInfoPanel(!pnlInfoPanels.isVisible());
         wasInfoPanelVisibleBeforeSwitch = pnlInfoPanels.isVisible();
-    }//GEN-LAST:event_tbtnSlideActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnSlideActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -734,7 +733,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         if (this.getSelectedStadtbilderAmount() <= 0) {
             JOptionPane.showMessageDialog(
                 this,
@@ -811,51 +810,51 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             final MultipleDownload multipleDownload = new MultipleDownload(downloads, filename);
             DownloadManager.instance().add(multipleDownload);
         }
-    }//GEN-LAST:event_btnReportActionPerformed
+    } //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblSwitchToSerieMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSwitchToSerieMouseClicked
+    private void lblSwitchToSerieMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblSwitchToSerieMouseClicked
         switchToSerie();
-    }//GEN-LAST:event_lblSwitchToSerieMouseClicked
+    }                                                                                //GEN-LAST:event_lblSwitchToSerieMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblSwitchToBinMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSwitchToBinMouseClicked
+    private void lblSwitchToBinMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblSwitchToBinMouseClicked
         switchToBin();
-    }//GEN-LAST:event_lblSwitchToBinMouseClicked
+    }                                                                              //GEN-LAST:event_lblSwitchToBinMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblMiddleMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMiddleMouseClicked
+    private void lblMiddleMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblMiddleMouseClicked
         switchToWarenkorb();
-    }//GEN-LAST:event_lblMiddleMouseClicked
+    }                                                                         //GEN-LAST:event_lblMiddleMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveWarenkorbActionPerformed
+    private void btnRemoveWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveWarenkorbActionPerformed
         ((Sb_SingleStadtbildJGrid)grdWarenkorb).unchoseStadtbilderSelectedInTheGrid();
         grdWarenkorb.getSelectionModel().clearSelection();
-    }//GEN-LAST:event_btnRemoveWarenkorbActionPerformed
+    }                                                                                      //GEN-LAST:event_btnRemoveWarenkorbActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadHighResImageActionPerformed
+    private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
         final String jobname = DownloadManagerDialog.getJobname();
         // create an array with Sb_stadtbildserieGridObject of the current vorschau.
         final Sb_stadtbildserieGridObject[] gridObjectArr =
@@ -921,20 +920,20 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     }
                 }
             }.execute();
-    }//GEN-LAST:event_btnDownloadHighResImageActionPerformed
+    } //GEN-LAST:event_btnDownloadHighResImageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMoveSerienToWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveSerienToWarenkorbActionPerformed
+    private void btnMoveSerienToWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMoveSerienToWarenkorbActionPerformed
         // select every Stadtbild of the selected Stadtbildserien
         final List<Sb_stadtbildserieGridObject> selectedStadtbildserien = grdStadtbildserien.getSelectedValuesList();
         for (final Sb_stadtbildserieGridObject stadtbildserie : selectedStadtbildserien) {
             stadtbildserie.selectAllStadtbilder();
         }
-    }//GEN-LAST:event_btnMoveSerienToWarenkorbActionPerformed
+    } //GEN-LAST:event_btnMoveSerienToWarenkorbActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1008,7 +1007,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         lblSubtitle.setText("Warenkorb");
     }
-
 
     /**
      * DOCUMENT ME!

@@ -13,6 +13,7 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.lang.StringUtils;
 
@@ -44,7 +45,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
@@ -59,7 +59,6 @@ import de.cismet.commons.concurrency.CismetConcurrency;
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import org.apache.commons.imaging.ImageReadException;
 
 /**
  * DOCUMENT ME!
