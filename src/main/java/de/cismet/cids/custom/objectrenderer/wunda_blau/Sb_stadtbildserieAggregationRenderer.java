@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -1007,11 +1006,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnMoveSerienToWarenkorb.setVisible(false);
 
         lblSubtitle.setText("Warenkorb");
-    }
-
-    @Override
-    public void paint(final Graphics g) {
-        super.paint(g); // To change body of generated methods, choose Tools | Templates.
     }
 
     /**
