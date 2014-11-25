@@ -14,13 +14,13 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
-import org.apache.commons.imaging.Imaging;
-
 import java.awt.EventQueue;
 
 import java.io.InputStream;
 
 import java.net.URL;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -122,7 +122,7 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer, Requ
                                     });
 
                                 final InputStream is = WebAccessManager.getInstance().doRequest(new URL(url));
-                                bild = new ImageIcon(Imaging.getBufferedImage(is));
+                                bild = new ImageIcon(ImageIO.read(is));
                                 EventQueue.invokeLater(new Runnable() {
 
                                         @Override
