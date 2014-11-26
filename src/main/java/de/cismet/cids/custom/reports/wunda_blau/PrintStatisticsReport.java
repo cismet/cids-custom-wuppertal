@@ -13,11 +13,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.tools.collections.HashArrayList;
 
 /**
  * PrintStatisticsReport gets Billing-CidsBean and evaluates them to generate a BillingStatisticsReport.
@@ -29,24 +34,24 @@ public class PrintStatisticsReport {
 
     //~ Instance fields --------------------------------------------------------
 
-    private HashMap<String, Integer> productInformation = new HashMap<String, Integer>();
-    private Date[] fromDate_tillDate;
-    private Collection<CidsBean> billingsBeans;
+    private final HashMap<String, Integer> productInformation = new HashMap<String, Integer>();
+    private final Date[] fromDate_tillDate;
+    private final Collection<CidsBean> billingsBeans;
     private int amountTotalDownloads = 0;
     private int amountWithCosts = 0;
     private int amountWithoutCosts = 0;
     private int amountVUamtlicherLageplan = 0;
     private int amountVUhoheitlicheVermessung = 0;
     private int amountVUsonstige = 0;
-    private int amountVUamtlicherLageplanGB = 0;
-    private int amountVUhoheitlicheVermessungGB = 0;
-    private int amountVUsonstigeGB = 0;
     private int amountWithCostsVU = 0;
     private int amountWithCostsWiederver = 0;
     private double earningsWithCostsVU = 0;
     private double earningsWithCostsWiederver = 0;
     private int amountWiederverkaeufe = 0;
-    private int amountWiederverkaeufeGB = 0;
+    private final Set<String> amountWiederverkaeufeGBs = new HashSet<String>();
+    private final Set<String> amountVUamtlicherLageplanGBs = new HashSet<String>();
+    private final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<String>();
+    private final Set<String> amountVUsonstigeGBs = new HashSet<String>();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -131,15 +136,15 @@ public class PrintStatisticsReport {
                 amountVUamtlicherLageplan,
                 amountVUhoheitlicheVermessung,
                 amountVUsonstige,
-                amountVUamtlicherLageplanGB,
-                amountVUhoheitlicheVermessungGB,
-                amountVUsonstigeGB,
+                amountVUamtlicherLageplanGBs.size(),
+                amountVUhoheitlicheVermessungGBs.size(),
+                amountVUsonstigeGBs.size(),
                 amountWithCostsVU,
                 amountWithCostsWiederver,
                 earningsWithCostsVU,
                 earningsWithCostsWiederver,
                 amountWiederverkaeufe,
-                amountWiederverkaeufeGB);
+                amountWiederverkaeufeGBs.size());
     }
 
     /**
@@ -152,7 +157,7 @@ public class PrintStatisticsReport {
 
         final String geschaeftsbuchnummer = (String)billing.getProperty("geschaeftsbuchnummer");
         boolean geschaeftsbuchnummerIsValid = false;
-        if (!geschaeftsbuchnummer.trim().equals("")) {
+        if (geschaeftsbuchnummer != null && !geschaeftsbuchnummer.trim().equals("")) {
             geschaeftsbuchnummerIsValid = true;
         }
 
@@ -177,7 +182,7 @@ public class PrintStatisticsReport {
         if (verwendungsKey.startsWith("WV")) {
             amountWiederverkaeufe++;
             if (geschaeftsbuchnummerIsValid) {
-                amountWiederverkaeufeGB++;
+                amountWiederverkaeufeGBs.add(geschaeftsbuchnummer);
             }
             if (withCosts) {
                 amountWithCostsWiederver++;
@@ -188,17 +193,17 @@ public class PrintStatisticsReport {
         if (verwendungsKey.equals("VU aL")) {
             amountVUamtlicherLageplan++;
             if (geschaeftsbuchnummerIsValid) {
-                amountVUamtlicherLageplanGB++;
+                amountVUamtlicherLageplanGBs.add(geschaeftsbuchnummer);
             }
         } else if (verwendungsKey.equals("VU hV")) {
             amountVUhoheitlicheVermessung++;
             if (geschaeftsbuchnummerIsValid) {
-                amountVUhoheitlicheVermessungGB++;
+                amountVUhoheitlicheVermessungGBs.add(geschaeftsbuchnummer);
             }
         } else if (verwendungsKey.equals("VU s")) {
             amountVUsonstige++;
             if (geschaeftsbuchnummerIsValid) {
-                amountVUsonstigeGB++;
+                amountVUsonstigeGBs.add(geschaeftsbuchnummer);
             }
         }
     }
