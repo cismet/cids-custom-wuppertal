@@ -16,7 +16,11 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import java.awt.EventQueue;
 
+import java.io.InputStream;
+
 import java.net.URL;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -26,6 +30,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.security.WebAccessManager;
 
 /**
  * DOCUMENT ME!
@@ -115,7 +121,8 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer, Requ
                                         }
                                     });
 
-                                bild = new ImageIcon(new URL(url));
+                                final InputStream is = WebAccessManager.getInstance().doRequest(new URL(url));
+                                bild = new ImageIcon(ImageIO.read(is));
                                 EventQueue.invokeLater(new Runnable() {
 
                                         @Override
