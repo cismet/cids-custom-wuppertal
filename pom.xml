@@ -61,11 +61,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.cismet.apachefork</groupId>
-            <artifactId>commons-imaging</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>de.cismet.cismap</groupId>
             <artifactId>cismap-plugin</artifactId>
             <version>2.0-SNAPSHOT</version>
@@ -115,6 +110,16 @@
             <groupId>de.cismet</groupId>
             <artifactId>jgrid</artifactId>
             <version>0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-jpeg</artifactId>
+            <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-tiff</artifactId>
+            <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
         </dependency>
     </dependencies>
 
