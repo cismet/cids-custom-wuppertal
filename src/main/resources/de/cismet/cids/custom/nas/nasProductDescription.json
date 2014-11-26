@@ -26,7 +26,8 @@
         "format": "DXF",
         "template": "/de/cismet/cids/custom/utils/nas/A_o_eigentuemer.xml",
         "params":{
-            "$2":"OFF"
+            "$2":"OFF",
+            "$3":"ACI"
         }
     },{
         "key": "dxf",
@@ -35,7 +36,8 @@
         "format": "DXF",
         "template": "/de/cismet/cids/custom/utils/nas/A_o_eigentuemer.xml",
         "params":{
-           "$2":"ON"
+           "$2":"ON",
+           "$3":"ACI"
         }
     }
 ]
