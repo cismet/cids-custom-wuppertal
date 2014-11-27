@@ -604,6 +604,9 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                     "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\n"
                             + "Bitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
             }
+            if (!Alb_Constraints.checkEintragungsdatum(cidsBean)) {
+                errors.add("Die Baulast muss ein Eintragungsdatum haben.");
+            }
             if (!Alb_Constraints.checkBaulastDates(cidsBean)) {
                 errors.add(
                     "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\n"
