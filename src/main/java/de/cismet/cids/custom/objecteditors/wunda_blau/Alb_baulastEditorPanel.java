@@ -72,6 +72,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.BaulastCreateSearchGeometryListener;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -97,6 +98,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     public static final String ATAG_FINAL_CHECK = "navigator.baulasten.final_check"; // NOI18N
     private static final Logger LOG = Logger.getLogger(Alb_baulastEditorPanel.class);
     private static final ComboBoxModel waitModel = new DefaultComboBoxModel(new String[] { "Wird geladen..." });
+    private static final java.util.Date BAULAST_LOWER_DATE_BOUND = new GregorianCalendar(1960, 0, 1).getTime();
     private static final Converter<java.sql.Date, String> DATE_TO_STRING = new Converter<Date, String>() {
 
             @Override
@@ -222,6 +224,16 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         lstFlurstueckeBeguenstigt.setCellRenderer(new HyperlinkStyleExistingLandparcelCellRenderer());
         lstFlurstueckeBelastet.setCellRenderer(new HyperlinkStyleExistingLandparcelCellRenderer());
         changeAutocompleteBehaviourOfDatePickers();
+
+        bdcEintragungsdatum.getMonthView().setLowerBound(BAULAST_LOWER_DATE_BOUND);
+        bdcLoeschungsdatum.getMonthView().setLowerBound(BAULAST_LOWER_DATE_BOUND);
+        bdcGeschlossenAm.getMonthView().setLowerBound(BAULAST_LOWER_DATE_BOUND);
+        bdcBefristungsdatum.getMonthView().setLowerBound(BAULAST_LOWER_DATE_BOUND);
+
+        bdcEintragungsdatum.getMonthView().setUpperBound(new java.util.Date());
+        bdcGeschlossenAm.getMonthView().setUpperBound(new java.util.Date());
+        bdcLoeschungsdatum.getMonthView().setUpperBound(new java.util.Date());
+        bdcBefristungsdatum.getMonthView().setUpperBound(new GregorianCalendar(9999, 11, 31).getTime());
     }
 
     //~ Methods ----------------------------------------------------------------

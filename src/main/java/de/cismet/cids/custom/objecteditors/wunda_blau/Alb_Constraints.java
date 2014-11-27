@@ -207,4 +207,17 @@ public class Alb_Constraints {
         }
         return false;
     }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   baulastBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean checkEintragungsdatum(final CidsBean baulastBean) {
+        final Object eintragungsDatumObj = baulastBean.getProperty("eintragungsdatum");
+
+        return (eintragungsDatumObj != null) && (eintragungsDatumObj instanceof Date);
+    }
 }

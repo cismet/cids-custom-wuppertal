@@ -30,6 +30,7 @@ import java.text.DateFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -603,10 +604,19 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                     "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\n"
                             + "Bitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
             }
+            if (!Alb_Constraints.checkEintragungsdatum(cidsBean)) {
+                errors.add("Die Baulast muss ein Eintragungsdatum haben.");
+            }
             if (!Alb_Constraints.checkBaulastDates(cidsBean)) {
                 errors.add(
                     "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\n"
                             + "Bitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
+            }
+
+            final List baulastArt = (List)cidsBean.getProperty("art");
+
+            if ((baulastArt == null) || baulastArt.isEmpty()) {
+                errors.add("Die Baulast muss mindestens eine Baulastart haben");
             }
 
             if (errors.size() > 0) {

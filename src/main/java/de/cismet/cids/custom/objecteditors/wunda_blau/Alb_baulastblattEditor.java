@@ -1313,6 +1313,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                             + alleLastenOhneBelastetesFS
                             + "\nBitte ordnen Sie diesen laufenden Nummern belastete Flurstücke zu, erst dann kann der Datensatz gespeichert werden.");
             }
+            for (final CidsBean last : baulastenBeans) {
+                if (!Alb_Constraints.checkEintragungsdatum(last)) {
+                    errors.add("Die Baulast" + last.toString() + " muss ein Eintragungsdatum haben.");
+                }
+            }
             final List<String> incorrectBaulasteDates = Alb_Constraints.getIncorrectBaulastDates(cidsBean);
             if (incorrectBaulasteDates.size() > 0) {
                 errors.add(
@@ -1328,6 +1333,15 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         "Die laufende Nummer "
                                 + lastString
                                 + " ist mehrfach vergeben. Bitte ordnen Sie jeder Baulaste eine eindeutige laufende Nummer zu.");
+                }
+            }
+
+            // check i at least one Baulastart was assigned
+            for (final CidsBean last : baulastenBeans) {
+                final List baulastArt = (List)last.getProperty("art");
+
+                if ((baulastArt == null) || baulastArt.isEmpty()) {
+                    errors.add("Die Baulast" + last.toString() + " muss mindestens eine Baulastart haben.");
                 }
             }
 
@@ -1362,16 +1376,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      */
     public static void main(final String[] args) throws Exception {
         DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
-//        DevelopmentTools.createRendererInFrameFromRMIConnectionOnLocalhost(
+
+            // DevelopmentTools.createRendererInFrameFromRMIConnectionOnLocalhost(
             "WUNDA_BLAU",
             "Administratoren",
             "admin",
             "kif",
             "alb_baulastblatt",
             15626,
-//            15625,
-//            15624,
-//            "Title",
+            // 15625,
+            // 15624,
+            // "Title",
             1024,
             800);
     }
