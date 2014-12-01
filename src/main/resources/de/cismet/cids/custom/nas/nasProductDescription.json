@@ -27,17 +27,19 @@
         "template": "/de/cismet/cids/custom/utils/nas/A_o_eigentuemer.xml",
         "params":{
             "$2":"OFF",
-            "$3":"ACI"
+            "$3":"ACI",
+            "$4":"OFF"
         }
     },{
         "key": "dxf",
-        "displayName": "DXF (SW)",
+        "displayName": "DXF (Strichdarstellung)",
         "billingKey": "skmekomdxf",
         "format": "DXF",
         "template": "/de/cismet/cids/custom/utils/nas/A_o_eigentuemer.xml",
         "params":{
            "$2":"ON",
-           "$3":"GRAU_RGB"
+           "$3":"GRAU_RGB",
+           "$4":"OFF"
         }
     }
 ]
