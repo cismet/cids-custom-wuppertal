@@ -7,8 +7,13 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 
 import com.guigarage.jgrid.JGrid;
 
@@ -34,6 +39,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -58,10 +64,14 @@ import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
+
+import de.cismet.commons.concurrency.CismetExecutors;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -100,12 +110,15 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private static final String REPORT_STADTBILDSERIE_EXCEL_URL =
         "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildbericht_Excel.jasper";
 
+    private static final String DOMAIN = "WUNDA_BLAU";
+    private static final ExecutorService highResAvailableThreadPool = CismetExecutors.newFixedThreadPool(20);
+
     //~ Instance fields --------------------------------------------------------
 
     private boolean wasInfoPanelVisibleBeforeSwitch = true;
 
     private Collection<CidsBean> cidsBeans = null;
-    private SwingWorker enableHighResDownloadWorker;
+    private HashSet<String> highResStadtbilder = new HashSet<String>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBin;
@@ -931,8 +944,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         // select every Stadtbild of the selected Stadtbildserien
         final List<Sb_stadtbildserieGridObject> selectedStadtbildserien = grdStadtbildserien.getSelectedValuesList();
         for (final Sb_stadtbildserieGridObject stadtbildserie : selectedStadtbildserien) {
-            stadtbildserie.selectAllStadtbilder();
+            stadtbildserie.selecteAllStadtbilder(false);
+            ((Sb_SingleStadtbildJGrid)grdWarenkorb).addStadtbilder(stadtbildserie.getSelectedBildnummernOfSerie(),
+                stadtbildserie);
         }
+        updateFooterLabels();
+        setEnableHighResDownload();
+        btnReport.setEnabled(this.getSelectedStadtbilderAmount() > 0);
     } //GEN-LAST:event_btnMoveSerienToWarenkorbActionPerformed
 
     /**
@@ -1177,13 +1195,21 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     @Override
     public void stadtbildChosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
-        setEnableHighResDownload();
+        final String imageNumber = (String)stadtbild.getProperty("bildnummer");
+        if (!highResStadtbilder.contains(imageNumber)) {
+            checkHighResDownloadAvailable(stadtbild);
+        }
+        btnDownloadHighResImage.setEnabled(!highResStadtbilder.isEmpty());
         btnReport.setEnabled(this.getSelectedStadtbilderAmount() > 0);
     }
 
     @Override
     public void stadtbildUnchosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
-        setEnableHighResDownload();
+        final String imageNumber = (String)stadtbild.getProperty("bildnummer");
+        if (highResStadtbilder.contains(imageNumber)) {
+            highResStadtbilder.remove(imageNumber);
+        }
+        btnDownloadHighResImage.setEnabled(!highResStadtbilder.isEmpty());
         btnReport.setEnabled(this.getSelectedStadtbilderAmount() > 0);
     }
 
@@ -1200,6 +1226,25 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     /**
+     * DOCUMENT ME!
+     *
+     * @param  stadtbild       DOCUMENT ME!
+     * @param  stadtbildSerie  DOCUMENT ME!
+     */
+    private void checkHighResDownloadAvailable(final CidsBean stadtbild, final CidsBean stadtbildSerie) {
+        highResAvailableThreadPool.submit(new HighResDownloadChecker(stadtbild, stadtbildSerie));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stadtbild  DOCUMENT ME!
+     */
+    private void checkHighResDownloadAvailable(final CidsBean stadtbild) {
+        checkHighResDownloadAvailable(stadtbild, null);
+    }
+
+    /**
      * Only enable the HighResDownload button if at least one image is accessible. This means that a high-res picture
      * must exist and the download must be allowed.
      */
@@ -1210,54 +1255,114 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         ((DefaultListModel)grdStadtbildserien.getModel()).copyInto(gridObjectArr);
 
         btnDownloadHighResImage.setEnabled(false);
-
-        if (enableHighResDownloadWorker != null) {
-            enableHighResDownloadWorker.cancel(true);
+        for (final Sb_stadtbildserieGridObject gridObject : gridObjectArr) {
+            final CidsBean stadtbildserie = gridObject.getCidsBean();
+            for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
+                checkHighResDownloadAvailable(stadtbild, stadtbildserie);
+            }
         }
-
-        enableHighResDownloadWorker = new SwingWorker<Boolean, Void>() {
-
-                @Override
-                protected Boolean doInBackground() throws Exception {
-                    // iterate over the Sb_stadtbildserieGridObject then over the selected Stadtbilder of each
-                    // GridObject
-                    for (final Sb_stadtbildserieGridObject gridObject : gridObjectArr) {
-                        final CidsBean stadtbildserie = gridObject.getCidsBean();
-                        final boolean downloadAllowed = Sb_RestrictionLevelUtils
-                                    .determineRestrictionLevelForStadtbildserie(
-                                        stadtbildserie).isDownloadAllowed();
-                        if (downloadAllowed) {
-                            for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
-                                final String imageNumber = (String)stadtbild.getProperty("bildnummer");
-                                if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                }
-
-                @Override
-                protected void done() {
-                    boolean enableHighResDownload = false;
-                    try {
-                        enableHighResDownload = this.get();
-                    } catch (InterruptedException ex) {
-                        LOG.warn(ex, ex);
-                    } catch (ExecutionException ex) {
-                        LOG.warn(ex, ex);
-                    } catch (CancellationException ex) {
-                        // do nothing - was probably canceled such that another work can run
-                        return;
-                    }
-                    btnDownloadHighResImage.setEnabled(enableHighResDownload);
-                }
-            };
-        enableHighResDownloadWorker.execute();
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class HighResDownloadChecker extends SwingWorker<Boolean, Void> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private CidsBean stadtbild;
+        private CidsBean stadtbildSerie;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new HighResDownloadChecker object.
+         *
+         * @param  stadtbild       DOCUMENT ME!
+         * @param  stadtbildSerie  DOCUMENT ME!
+         */
+        public HighResDownloadChecker(final CidsBean stadtbild, final CidsBean stadtbildSerie) {
+            this.stadtbild = stadtbild;
+            this.stadtbildSerie = stadtbildSerie;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Boolean doInBackground() throws Exception {
+            // determine the Stadtbildserie of the stadtbild to check if the download is allowed
+
+            final String imageNumber = (String)stadtbild.getProperty("bildnummer");
+            if (stadtbildSerie == null) {
+                final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, "sb_serie_bild_array");
+                String query = "SELECT "
+                            + mc.getID()
+                            + ", sb_serie_bild_array."
+                            + mc.getPrimaryKey()
+                            + " FROM "
+                            + mc.getTableName()
+                            + " WHERE "
+                            + " stadtbild= " + stadtbild.getProperty("id").toString();
+                try {
+                    final MetaObject[] metaObjects = SessionManager.getProxy()
+                                .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+                    final CidsBean array = metaObjects[0].getBean();
+                    final MetaClass mcSerie = ClassCacheMultiple.getMetaClass(DOMAIN, "sb_stadtbildserie");
+                    query = "SELECT "
+                                + mcSerie.getID()
+                                + ",sb_stadtbildserie."
+                                + mcSerie.getPrimaryKey()
+                                + " FROM "
+                                + mcSerie.getTableName()
+                                + " WHERE "
+                                + " id= " + array.getProperty("sb_stadtbildserie_reference").toString();
+                    final MetaObject[] serieMetaObjects = SessionManager.getProxy()
+                                .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+                    stadtbildSerie = serieMetaObjects[0].getBean();
+                } catch (ConnectionException ex) {
+                    LOG.error("Could not determine the Stadtbildserie of Stadtbild " + stadtbild.toString(), ex);
+                    return false;
+                }
+            }
+
+            final boolean downloadAllowed = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
+                    stadtbildSerie)
+                        .isDownloadAllowed();
+            if (downloadAllowed) {
+                if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                final boolean highResDownloadAvailable = get();
+                final String imageNumber = (String)stadtbild.getProperty("bildnummer");
+                if (highResDownloadAvailable) {
+                    highResStadtbilder.add(imageNumber);
+                } else {
+                    if (highResStadtbilder.contains(imageNumber)) {
+                        highResStadtbilder.remove(imageNumber);
+                    }
+                }
+            } catch (InterruptedException ex) {
+                LOG.warn(ex, ex);
+            } catch (ExecutionException ex) {
+                LOG.warn(ex, ex);
+            } catch (CancellationException ex) {
+                // do nothing - was probably canceled such that another work can run
+                return;
+            }
+            btnDownloadHighResImage.setEnabled(!highResStadtbilder.isEmpty());
+        }
+    }
 
     /**
      * A JGrid with different adaptations for this case. E.g. on click on a grid element, information about this element
