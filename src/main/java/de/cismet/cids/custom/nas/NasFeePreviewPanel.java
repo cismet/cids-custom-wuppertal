@@ -11,13 +11,9 @@
  */
 package de.cismet.cids.custom.nas;
 
-import Sirius.navigator.exception.ConnectionException;
-
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
-
-import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -28,12 +24,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.nas.NasProductTemplate;
+import de.cismet.cids.custom.utils.nas.NasProduct;
 
 /**
  * DOCUMENT ME!
@@ -46,11 +41,12 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger log = Logger.getLogger(NasFeePreviewPanel.class);
+    private static final String PK_NASOEIG = "nasoeig";
 
     //~ Instance fields --------------------------------------------------------
 
     private boolean isPointType;
-    private NasProductTemplate template;
+    private NasProduct nasProduct;
     private Geometry geom;
     private int pointAmount = 0;
     private int gebaeudeAmount = 0;
@@ -89,16 +85,17 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
      * Creates a new NasFeePreviewPanel object.
      */
     public NasFeePreviewPanel() {
-        this(NasProductTemplate.OHNE_EIGENTUEMER);
+        this(new NasProduct("ohne_eigentuemer"));
+        this.nasProduct.setBillingKey(PK_NASOEIG);
     }
 
     /**
      * Creates new form NasFeePreviewPanel.
      *
-     * @param  template  isPointType DOCUMENT ME!
+     * @param  nasProduct  isPointType DOCUMENT ME!
      */
-    public NasFeePreviewPanel(final NasProductTemplate template) {
-        this.template = template;
+    public NasFeePreviewPanel(final NasProduct nasProduct) {
+        this.nasProduct = nasProduct;
         this.discount = 1;
         initComponents();
     }
@@ -223,33 +220,35 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                     gebaeudeAmount = 0;
                     final HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>();
                     if (geom == null) {
-//                    showError();
                         NasFeePreviewPanel.this.revalidate();
                         NasFeePreviewPanel.this.repaint();
                         return null;
                     }
                     // do the search
-// final NasProductTemplate type = (NasProductTemplate)cbType.getSelectedItem();
                     double totalFee = 0;
-                    if (template == NasProductTemplate.POINTS) {
+                    final String nasBillingKey = nasProduct.getBillingKey();
+                    if ((nasProduct != null) && nasProduct.getKey().equalsIgnoreCase("punkte")) {
                         final ArrayList<String> values = new ArrayList<String>();
                         pointAmount = NasFeeCalculator.getPointAmount(geom);
                         values.add("" + pointAmount);
-                        final double pointFee = NasFeeCalculator.getFeeForPoints(pointAmount) * discount;
+                        final double pointFee = NasFeeCalculator.getFeeForPoints(pointAmount, nasBillingKey) * discount;
                         totalFee += pointFee;
                         values.add(formatter.format(pointFee));
-                        result.put("points", values);
+                        result.put("punkte", values);
                     } else {
                         final ArrayList<String> flurstueckValues = new ArrayList<String>();
                         final ArrayList<String> gebaeudeValues = new ArrayList<String>();
                         flurstueckAmount = NasFeeCalculator.getFlurstueckAmount(geom);
                         flurstueckValues.add("" + flurstueckAmount);
-                        final double flurstueckFee = NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount)
+                        final double flurstueckFee =
+                            NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount, nasBillingKey)
                                     * discount;
                         totalFee += flurstueckFee;
                         // ToDo this is a quick and dirty way to calculate the fee for type KOMPLETT
-                        if (template == NasProductTemplate.KOMPLETT) {
-                            final double eigentuemerFee = NasFeeCalculator.getFeeForEigentuemer(flurstueckAmount)
+                        if ((nasProduct != null) && nasProduct.getKey().equalsIgnoreCase("komplett")) {
+                            final double eigentuemerFee = NasFeeCalculator.getFeeForEigentuemer(
+                                    flurstueckAmount,
+                                    nasBillingKey)
                                         * discount;
                             totalFee += eigentuemerFee;
                             final ArrayList<String> eigentuemerValues = new ArrayList<String>();
@@ -261,7 +260,8 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                         result.put("flurstuecke", flurstueckValues);
                         gebaeudeAmount = NasFeeCalculator.getGebaeudeAmount(geom);
                         gebaeudeValues.add("" + gebaeudeAmount);
-                        final double gebaeudeFee = NasFeeCalculator.getFeeForGebaeude(gebaeudeAmount) * discount;
+                        final double gebaeudeFee = NasFeeCalculator.getFeeForGebaeude(gebaeudeAmount, nasBillingKey)
+                                    * discount;
                         totalFee += gebaeudeFee;
                         gebaeudeValues.add(formatter.format(gebaeudeFee));
                         result.put("gebaeude", gebaeudeValues);
@@ -276,10 +276,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                 protected void done() {
                     try {
                         final HashMap<String, ArrayList<String>> result = get();
-//                    final NasProductTemplate selectedTemplate = (NasProductTemplate) cbType.getSelectedItem();
-//                    pnlFee = new NasFeePreviewPanel(selectedTemplate);
                         if (result == null) {
-//                            showWait(false);
                             showError();
                             NasFeePreviewPanel.this.revalidate();
                             NasFeePreviewPanel.this.repaint();
@@ -290,13 +287,13 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                             if (key.equals("total")) {
                                 setTotalLabel(values.get(0));
                             }
-                            if (template == NasProductTemplate.POINTS) {
-                                if (key.equals("points")) {
+                            if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
+                                if (key.equals("punkte")) {
                                     setPointLabels(values.get(0), values.get(1));
                                     break;
                                 }
                             } else {
-                                if (template == NasProductTemplate.KOMPLETT) {
+                                if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
                                     if (key.equals("eigentuemer")) {
                                         setEigentuemerLabels(values.get(0), values.get(1));
                                     }
@@ -343,8 +340,8 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
      *
      * @return  DOCUMENT ME!
      */
-    public NasProductTemplate getTemplate() {
-        return template;
+    public NasProduct getNasProduct() {
+        return nasProduct;
     }
 
     /**
@@ -354,12 +351,13 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
      */
     public ArrayList<ProductGroupAmount> getProductGroupAmounts() {
         final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             result.addAll(getProductGroupAmountForObject("eapkt", pointAmount));
-        } else if (template == NasProductTemplate.OHNE_EIGENTUEMER) {
+        } else if (nasProduct.getKey().equalsIgnoreCase("ohne_eigentuemer")
+                    || nasProduct.getKey().equalsIgnoreCase("dxf")) {
             result.addAll(getProductGroupAmountForObject("eageb", gebaeudeAmount));
             result.addAll(getProductGroupAmountForObject("eaflst", flurstueckAmount));
-        } else if (template == NasProductTemplate.KOMPLETT) {
+        } else if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             result.addAll(getProductGroupAmountForObject("eageb", gebaeudeAmount));
             result.addAll(getProductGroupAmountForObject("eaflst", flurstueckAmount));
             result.addAll(getProductGroupAmountForObject("eaeig", flurstueckAmount));
@@ -385,47 +383,31 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     private ArrayList<ProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey, int amount) {
         final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
         if (amount > 1000000) {
-            final int tmpPoints = amount - 1000000;
+            final int tmpPoints = amount
+                        - 1000000;
             result.add(new ProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
             amount = 1000000;
         }
         if (amount > 100000) {
-            final int tmpPoints = amount - 100000;
+            final int tmpPoints = amount
+                        - 100000;
             result.add(new ProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
             amount = 100000;
         }
         if (amount > 10000) {
-            final int tmpPoints = amount - 10000;
+            final int tmpPoints = amount
+                        - 10000;
             result.add(new ProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
             amount = 10000;
         }
         if (amount > 1000) {
-            final int tmpPoints = amount - 1000;
+            final int tmpPoints = amount
+                        - 1000;
             result.add(new ProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
             amount = 1000;
         }
         result.add(new ProductGroupAmount(objectBaseKey + "_1000", amount));
         return result;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  args  DOCUMENT ME!
-     */
-    public static void main(final String[] args) {
-        final JFrame f = new JFrame("foo");
-        f.setSize(500, 500);
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        final NasFeePreviewPanel pan = new NasFeePreviewPanel();
-        f.getContentPane().add(pan);
-        f.setVisible(true);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        }
-        pan.setGeom(null);
     }
 
     /**
@@ -441,43 +423,43 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         lblTitle = new javax.swing.JLabel();
         lblAnzahlTitle = new javax.swing.JLabel();
         lblGesamtTitle = new javax.swing.JLabel();
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblFlurstuecke = new javax.swing.JLabel();
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblGebaeude = new javax.swing.JLabel();
         }
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblPunkte = new javax.swing.JLabel();
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblFlurstueckeAnzahl = new javax.swing.JLabel();
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblFlurstueckeGesamt = new javax.swing.JLabel();
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblGebaeudeAnzahl = new javax.swing.JLabel();
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblGebeaudeGesamt = new javax.swing.JLabel();
         }
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblPunkteAnzahl = new javax.swing.JLabel();
         }
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             lblPunkteGesamt = new javax.swing.JLabel();
         }
         jPanel1 = new javax.swing.JPanel();
         lblGesamtValue = new javax.swing.JLabel();
         lblGesamt = new javax.swing.JLabel();
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             lblEigentuemer = new javax.swing.JLabel();
         }
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             lblEigentuemerAnzahl = new javax.swing.JLabel();
         }
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             lblEigentuemerGesamt = new javax.swing.JLabel();
         }
         lblFiller = new javax.swing.JLabel();
@@ -523,14 +505,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
         pnlFee.add(lblGesamtTitle, gridBagConstraints);
 
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblFlurstuecke,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblFlurstuecke.text")); // NOI18N
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 3;
@@ -539,12 +521,12 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblFlurstuecke, gridBagConstraints);
         }
 
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblGebaeude,
                 org.openide.util.NbBundle.getMessage(NasFeePreviewPanel.class, "NasFeePreviewPanel.lblGebaeude.text")); // NOI18N
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 2;
@@ -553,12 +535,12 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblGebaeude, gridBagConstraints);
         }
 
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblPunkte,
                 org.openide.util.NbBundle.getMessage(NasFeePreviewPanel.class, "NasFeePreviewPanel.lblPunkte.text")); // NOI18N
         }
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 6;
@@ -567,14 +549,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblPunkte, gridBagConstraints);
         }
 
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblFlurstueckeAnzahl,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblFlurstueckeAnzahl.text")); // NOI18N
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 3;
@@ -582,14 +564,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblFlurstueckeAnzahl, gridBagConstraints);
         }
 
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblFlurstueckeGesamt,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblFlurstueckeGesamt.text")); // NOI18N
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 3;
@@ -598,14 +580,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblFlurstueckeGesamt, gridBagConstraints);
         }
 
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblGebaeudeAnzahl,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblGebaeudeAnzahl.text")); // NOI18N
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 2;
@@ -613,14 +595,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblGebaeudeAnzahl, gridBagConstraints);
         }
 
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblGebeaudeGesamt,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblGebeaudeGesamt.text")); // NOI18N
         }
-        if (template != NasProductTemplate.POINTS) {
+        if (!nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 2;
@@ -629,14 +611,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblGebeaudeGesamt, gridBagConstraints);
         }
 
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblPunkteAnzahl,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblPunkteAnzahl.text")); // NOI18N
         }
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 6;
@@ -644,14 +626,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblPunkteAnzahl, gridBagConstraints);
         }
 
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblPunkteGesamt,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblPunkteGesamt.text")); // NOI18N
         }
-        if (template == NasProductTemplate.POINTS) {
+        if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 6;
@@ -692,14 +674,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         pnlFee.add(jPanel1, gridBagConstraints);
 
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblEigentuemer,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblEigentuemer.text")); // NOI18N
         }
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 5;
@@ -708,14 +690,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblEigentuemer, gridBagConstraints);
         }
 
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblEigentuemerAnzahl,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblEigentuemerAnzahl.text")); // NOI18N
         }
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 5;
@@ -723,14 +705,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             pnlFee.add(lblEigentuemerAnzahl, gridBagConstraints);
         }
 
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             org.openide.awt.Mnemonics.setLocalizedText(
                 lblEigentuemerGesamt,
                 org.openide.util.NbBundle.getMessage(
                     NasFeePreviewPanel.class,
                     "NasFeePreviewPanel.lblEigentuemerGesamt.text")); // NOI18N
         }
-        if (template == NasProductTemplate.KOMPLETT) {
+        if (nasProduct.getKey().equalsIgnoreCase("komplett")) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 5;

@@ -106,7 +106,7 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cbType">
           <BindingProperties>
-            <BindingProperty name="elements" source="Form" sourcePath="${productTemplates}" target="cbType" targetPath="elements" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="elements" source="Form" sourcePath="${nasProducts}" target="cbType" targetPath="elements" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbTypeActionPerformed"/>

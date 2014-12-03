@@ -777,6 +777,24 @@ public class BillingPopup extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public static BillingInfo getBillingInfo() {
+        return billingInfo;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static HashMap<String, Product> getProducts() {
+        return products;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   args  the command line arguments
      *
      * @throws  Exception  DOCUMENT ME!

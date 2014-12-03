@@ -56,11 +56,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -76,11 +76,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -96,11 +96,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -116,11 +116,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -136,11 +136,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -156,11 +156,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -176,11 +176,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template != NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(!nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -196,11 +196,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -216,11 +216,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template == NasProductTemplate.POINTS){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;punkte&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -280,11 +280,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -300,11 +300,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -320,11 +320,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(template == NasProductTemplate.KOMPLETT){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(nasProduct.getKey().equalsIgnoreCase(&quot;komplett&quot;)){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

@@ -31,7 +31,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import de.cismet.cids.custom.utils.nas.NasProductTemplate;
+import de.cismet.cids.custom.utils.nas.NasProduct;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
@@ -51,12 +51,17 @@ public class NASDownload extends AbstractCancellableDownload {
     private static String SEVER_ACTION = "nasDataQuery";
     private static String XML_EXTENSION = ".xml";
     private static String ZIP_EXTENSION = ".zip";
-    private static final String BASE_TITLE;
+    private static String DXF_EXTENSION = ".dxf";
+    private static final String BASE_TITLE_NAS;
+    private static final String BASE_TITLE_DXF;
 
     static {
-        BASE_TITLE = NbBundle.getMessage(
+        BASE_TITLE_NAS = NbBundle.getMessage(
                 NASDownload.class,
-                "NASDownload.basetitle.text");
+                "NASDownload.basetitle.nas.text");
+        BASE_TITLE_DXF = NbBundle.getMessage(
+                NASDownload.class,
+                "NASDownload.basetitle.dxf.text");
     }
 
     //~ Enums ------------------------------------------------------------------
@@ -77,7 +82,7 @@ public class NASDownload extends AbstractCancellableDownload {
 
     protected String filename = null;
     private Future<ByteArrayWrapper> pollingFuture;
-    private NasProductTemplate template;
+    private NasProduct product;
     private GeometryCollection geometries;
     private String orderId;
     private transient byte[] content;
@@ -91,14 +96,16 @@ public class NASDownload extends AbstractCancellableDownload {
      *
      * @param  orderId     DOCUMENT ME!
      * @param  isSplitted  DOCUMENT ME!
+     * @param  isDxf       DOCUMENT ME!
      * @param  requestId   DOCUMENT ME!
      */
-    public NASDownload(final String orderId, final boolean isSplitted, final String requestId) {
+    public NASDownload(final String orderId, final boolean isSplitted, final boolean isDxf, final String requestId) {
         omitSendingRequest = true;
         this.orderId = orderId;
-        template = null;
+        product = new NasProduct();
+        product.setFormat(isDxf ? NasProduct.Format.DXF.toString() : NasProduct.Format.NAS.toString());
         geometries = null;
-        this.title = BASE_TITLE;
+        this.title = isDxf ? BASE_TITLE_DXF : BASE_TITLE_NAS;
         status = State.WAITING;
         this.requestId = requestId;
         this.directory = "";
@@ -108,7 +115,12 @@ public class NASDownload extends AbstractCancellableDownload {
         } else {
             fileToSaveTo = new File("" + orderId);
         }
-        final String extension = isSplitted ? ZIP_EXTENSION : XML_EXTENSION;
+        String extension = XML_EXTENSION;
+        if (product.getFormat().equals(NasProduct.Format.DXF.toString())) {
+            extension = DXF_EXTENSION;
+        } else if (isSplitted) {
+            extension = ZIP_EXTENSION;
+        }
         if ((filename != null) && !filename.equals("")) {
             determineDestinationFile(filename, extension);
         } else {
@@ -123,7 +135,7 @@ public class NASDownload extends AbstractCancellableDownload {
      * @param  filename   DOCUMENT ME!
      * @param  directory  DOCUMENT ME!
      * @param  requestId  DOCUMENT ME!
-     * @param  template   DOCUMENT ME!
+     * @param  product    template DOCUMENT ME!
      * @param  g          DOCUMENT ME!
      */
 // public NASDownload(final String title,
@@ -145,16 +157,16 @@ public class NASDownload extends AbstractCancellableDownload {
      * @param  filename   DOCUMENT ME!
      * @param  directory  DOCUMENT ME!
      * @param  requestId  DOCUMENT ME!
-     * @param  template   DOCUMENT ME!
+     * @param  product    template DOCUMENT ME!
      * @param  g          DOCUMENT ME!
      */
     public NASDownload(final String title,
             final String filename,
             final String directory,
             final String requestId,
-            final NasProductTemplate template,
+            final NasProduct product,
             final GeometryCollection g) {
-        this.template = template;
+        this.product = product;
         geometries = g;
         this.title = title;
         this.directory = directory;
@@ -166,7 +178,12 @@ public class NASDownload extends AbstractCancellableDownload {
             fileToSaveTo = new File("" + System.currentTimeMillis());
         }
         this.filename = filename;
-        final String extension = isOrderSplitted(g) ? ZIP_EXTENSION : XML_EXTENSION;
+        String extension;
+        if (product.getFormat().equals(NasProduct.Format.DXF.toString())) {
+            extension = DXF_EXTENSION;
+        } else {
+            extension = isOrderSplitted(g) ? ZIP_EXTENSION : XML_EXTENSION;
+        }
         if ((filename != null) && !filename.equals("")) {
             determineDestinationFile(filename, extension);
         } else {
@@ -241,10 +258,12 @@ public class NASDownload extends AbstractCancellableDownload {
             titleChanged();
             status = State.RUNNING;
             stateChanged();
+            final String format = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString()) ? "DXF"
+                                                                                                         : "NAS";
             if (!omitSendingRequest) {
                 if (!downloadFuture.isCancelled()) {
                     if (log.isDebugEnabled()) {
-                        log.debug("NAS Download: sending request to server");
+                        log.debug(format + " Download: sending request to server");
                     }
                     orderId = sendNasRequest();
                 } else {
@@ -405,7 +424,8 @@ public class NASDownload extends AbstractCancellableDownload {
         } else if (p == Phase.DOWNLOAD) {
             appendix = NbBundle.getMessage(NASDownload.class, "NASDownload.downloadTitle.text");
         }
-        title = BASE_TITLE;
+        title = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString()) ? BASE_TITLE_DXF
+                                                                                       : BASE_TITLE_NAS;
         if ((appendix != null) && !appendix.equals("")) {
             title += " - " + appendix;
         }
@@ -419,7 +439,7 @@ public class NASDownload extends AbstractCancellableDownload {
     private String sendNasRequest() {
         final ServerActionParameter paramTemplate = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.TEMPLATE
                         .toString(),
-                template);
+                product);
         final ServerActionParameter paramGeom = new ServerActionParameter(
                 NasDataQueryAction.PARAMETER_TYPE.GEOMETRY_COLLECTION.toString(),
                 geometries);

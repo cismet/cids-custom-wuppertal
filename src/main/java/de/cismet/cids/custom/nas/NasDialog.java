@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.nas;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -21,7 +23,6 @@ import com.vividsolutions.jts.geom.Polygon;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.BasicStroke;
@@ -33,10 +34,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -54,7 +58,8 @@ import javax.swing.table.AbstractTableModel;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
-import de.cismet.cids.custom.utils.nas.NasProductTemplate;
+import de.cismet.cids.custom.utils.nas.NasProduct;
+//import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -90,6 +95,17 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 //    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
     private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.7f);
     private static final Color FEATURE_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.1f);
+    private static final String BASE_TITLE_NAS;
+    private static final String BASE_TITLE_DXF;
+
+    static {
+        BASE_TITLE_NAS = NbBundle.getMessage(
+                NasDialog.class,
+                "NASDownload.basetitle.nas.text");
+        BASE_TITLE_DXF = NbBundle.getMessage(
+                NasDialog.class,
+                "NASDownload.basetitle.dxf.text");
+    }
 
     //~ Instance fields --------------------------------------------------------
 
@@ -104,13 +120,13 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     private ArrayList<GeomWrapper> selectedGeomWrappers = new ArrayList<GeomWrapper>();
     private HashMap<GeomWrapper, Feature> bufferFeatureMap = new HashMap<GeomWrapper, Feature>();
     private NasFeePreviewPanel feePreview = new NasFeePreviewPanel();
-    private ArrayList<NasProductTemplate> productTemplates = new ArrayList<NasProductTemplate>();
     private ArrayList<DefaultStyledFeature> pointFeatures = new ArrayList<DefaultStyledFeature>();
     private boolean firstBufferCall = true;
     private boolean isInitialized = false;
     private int pointAmount = 0;
     private int gebaeudeAmount = 0;
     private int flurstueckAmount = 0;
+    private ArrayList<NasProduct> nasProducts;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
@@ -139,6 +155,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new NasDialog object.
+     */
+    public NasDialog() {
+    }
+
+    /**
      * Creates new form NasDialog.
      *
      * @param  parent  DOCUMENT ME!
@@ -157,10 +179,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      */
     public NasDialog(final java.awt.Frame parent, final boolean modal, final Collection<Feature> selectedFeatures) {
         super(parent, modal);
+        loadNasProducts();
         MAP_BUFFER = Double.parseDouble(NbBundle.getMessage(NasDialog.class, "NasDialog.selectedGeomMapBuffer"));
-        productTemplates.add(NasProductTemplate.POINTS);
-        productTemplates.add(NasProductTemplate.OHNE_EIGENTUEMER);
-        productTemplates.add(NasProductTemplate.KOMPLETT);
         geomWrappers = new LinkedList<GeomWrapper>();
         map = CismapBroker.getInstance().getMappingComponent();
         final FeatureCollection fc = map.getFeatureCollection();
@@ -236,7 +256,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         initMap();
         pnlMap.setLayout(new BorderLayout());
         pnlMap.add(map, BorderLayout.CENTER);
-        cbType.setSelectedItem(NasProductTemplate.OHNE_EIGENTUEMER);
+        cbType.setSelectedIndex(1);
         calculateFee();
         isInitialized = true;
         map.addMouseListener(new MouseAdapter() {
@@ -250,6 +270,20 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void loadNasProducts() {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            nasProducts = mapper.readValue(NasDialog.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/nas/nasProductDescription.json"),
+                    mapper.getTypeFactory().constructCollectionType(List.class, NasProduct.class));
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -342,7 +376,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         pnlSettings.add(lblType, gridBagConstraints);
 
         final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${productTemplates}");
+                "${nasProducts}");
         final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
                     .createJComboBoxBinding(
                         org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -591,8 +625,21 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 @Override
                 public void run() {
                     try {
-                        final NasProductTemplate template = (NasProductTemplate)cbType.getSelectedItem();
+                        final NasProduct product = (NasProduct)cbType.getSelectedItem();
                         final String requestId = tfAuftragsnummer.getText().trim();
+                        if (requestId.isEmpty()) {
+                            JOptionPane.showMessageDialog(
+                                StaticSwingTools.getParentFrame(NasDialog.this),
+                                org.openide.util.NbBundle.getMessage(
+                                    NasDialog.class,
+                                    "NasDialog.OrderIdCheck.JOptionPane.emptyRequestIdMessage"),
+                                org.openide.util.NbBundle.getMessage(
+                                    NasDialog.class,
+                                    "NasDialog.OrderIdCheck.JOptionPane.title"),
+                                JOptionPane.ERROR_MESSAGE);
+                            tfAuftragsnummer.requestFocus();
+                            return;
+                        }
                         if ((requestId != null)) {
                             boolean containsWrongChar = false;
                             String wrongChar = "";
@@ -624,12 +671,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                         final ArrayList<ProductGroupAmount> list = feePreview.getProductGroupAmounts();
                         final ProductGroupAmount[] goupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
                         if (BillingPopup.doBilling(
-                                        template.getBillingKey(),
+                                        product.getBillingKey(),
                                         "request",
                                         requestId,
                                         null,
                                         goupAmounts)) {
-                            doDownload(requestId, template);
+                            doDownload(requestId, product);
                         } else {
                             log.error("do billing returns false. can not start download");
                         }
@@ -645,31 +692,33 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      * DOCUMENT ME!
      *
      * @param  requestId  DOCUMENT ME!
-     * @param  template   DOCUMENT ME!
+     * @param  product    DOCUMENT ME!
      */
-    private void doDownload(final String requestId, final NasProductTemplate template) {
+    private void doDownload(final String requestId, final NasProduct product) {
         if (DownloadManagerDialog.showAskingForUserTitle(
                         CismapBroker.getInstance().getMappingComponent())) {
             final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
                             .getJobname() : null;
+            final String title = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString())
+                ? BASE_TITLE_DXF : BASE_TITLE_NAS;
             DownloadManager.instance()
                     .add(
                         new NASDownload(
-                            "NAS-Download",
+                            title,
                             "",
                             jobname,
                             requestId,
-                            template,
+                            product,
                             generateSearchGeomCollection()));
         } else {
             DownloadManager.instance()
                     .add(
                         new NASDownload(
-                            "NAS-Download",
+                            "title",
                             "",
                             "",
                             requestId,
-                            template,
+                            product,
                             generateSearchGeomCollection()));
         }
     }
@@ -939,7 +988,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      * /** * DOCUMENT ME!*
      */
     private void calculateFee() {
-        final NasProductTemplate selectedTemplate = (NasProductTemplate)cbType.getSelectedItem();
+        final NasProduct selectedTemplate = (NasProduct)cbType.getSelectedItem();
         final Geometry geom = generateSearchGeom();
         pnlFee.removeAll();
         feePreview = new NasFeePreviewPanel(selectedTemplate);
@@ -1055,17 +1104,17 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      *
      * @return  DOCUMENT ME!
      */
-    public ArrayList<NasProductTemplate> getProductTemplates() {
-        return productTemplates;
+    public ArrayList<NasProduct> getNasProducts() {
+        return nasProducts;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  productTemplates  DOCUMENT ME!
+     * @param  nasProducts  DOCUMENT ME!
      */
-    public void setProductTemplates(final ArrayList<NasProductTemplate> productTemplates) {
-        this.productTemplates = productTemplates;
+    public void setNasProducts(final ArrayList<NasProduct> nasProducts) {
+        this.nasProducts = nasProducts;
     }
 
     @Override

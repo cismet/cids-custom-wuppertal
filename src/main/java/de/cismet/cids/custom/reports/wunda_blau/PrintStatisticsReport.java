@@ -157,7 +157,7 @@ public class PrintStatisticsReport {
 
         final String geschaeftsbuchnummer = (String)billing.getProperty("geschaeftsbuchnummer");
         boolean geschaeftsbuchnummerIsValid = false;
-        if (geschaeftsbuchnummer != null && !geschaeftsbuchnummer.trim().equals("")) {
+        if ((geschaeftsbuchnummer != null) && !geschaeftsbuchnummer.trim().equals("")) {
             geschaeftsbuchnummerIsValid = true;
         }
 
