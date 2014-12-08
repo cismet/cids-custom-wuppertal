@@ -233,22 +233,7 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
                 g.drawImage(scaledErrorImage, 0, cellDimension / 12, null);
                 return imageToShow;
             } else {
-                final Image overlay = Sb_stadtbildUtils.scaleImage(
-                        Sb_stadtbildUtils.ERROR_IMAGE,
-                        cellDimension,
-                        invert);
-
-                // create the new image, canvas size is the max. of both image sizes
-                final int w = Math.max(image.getWidth(null), overlay.getWidth(null));
-                final int h = Math.max(image.getHeight(null), overlay.getHeight(null));
-                final BufferedImage combined = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-
-                final Graphics2D g = (Graphics2D)combined.getGraphics().create();
-                g.drawImage(image, 0, 0, null);
-                g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
-                // heuristic to center the overlay
-                g.drawImage(overlay, 0, cellDimension / 12, null);
-                return combined;
+                return image;
             }
         }
 
