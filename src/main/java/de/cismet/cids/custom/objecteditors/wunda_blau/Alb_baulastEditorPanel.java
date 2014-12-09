@@ -1476,6 +1476,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
          */
         @Override
         protected ComboBoxModel doInBackground() throws Exception {
+            Thread.currentThread().setName("BaulastArtenComboModelWorker");
             return new DefaultComboBoxModel(getLWBaulastarten());
         }
 

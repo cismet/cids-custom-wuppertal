@@ -2200,7 +2200,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                                 url.toString(),
                                 (Geometry)null,
                                 new ProductGroupAmount("ea", 1))) {
-                    CismetThreadPool.execute(new Runnable() {
+                    CismetThreadPool.execute(new Thread("AlkisPointRenderer openDownload") {
 
                             @Override
                             public void run() {
@@ -2515,6 +2515,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
          */
         @Override
         protected Point doInBackground() throws Exception {
+            Thread.currentThread().setName("AlkisPointRenderer RetrieveWorker");
             if (infoService != null) {
                 return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
             } else {
@@ -2698,6 +2699,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
+            Thread.currentThread().setName("RefreshDocumentWorker");
             BufferedImage result = null;
 
             if (pointcode == null) {

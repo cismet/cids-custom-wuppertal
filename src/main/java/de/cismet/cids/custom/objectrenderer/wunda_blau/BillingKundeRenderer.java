@@ -1186,6 +1186,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
 
                 @Override
                 protected Collection<MetaObject> doInBackground() throws Exception {
+                    Thread.currentThread().setName("BillingKundeRenderer filterBuchungen()");
                     // return cidsBillingSearchStatement.performServerSearch();
                     return SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(), cidsBillingSearchStatement);

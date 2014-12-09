@@ -395,7 +395,7 @@ public class ObjectRendererUtils {
             final int shadowSize,
             final JLabel toSet) {
         if ((bildURL != null) && (toSet != null)) {
-            final Runnable loader = new Runnable() {
+            final Runnable loader = new Thread("ObjectRendererUtils loadPictureAndSet()") {
 
                     @Override
                     public void run() {
@@ -441,7 +441,7 @@ public class ObjectRendererUtils {
             final int shadowSize,
             final JButton toSet) {
         if ((bildURL != null) && (toSet != null)) {
-            final Runnable loader = new Runnable() {
+            final Runnable loader = new Thread("OpenRendererUtils loadPictureAndSet") {
 
                     @Override
                     public void run() {

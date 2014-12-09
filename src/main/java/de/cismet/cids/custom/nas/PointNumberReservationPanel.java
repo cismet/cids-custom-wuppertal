@@ -610,6 +610,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
 
                 @Override
                 protected PointNumberReservationRequest doInBackground() throws Exception {
+                    Thread.currentThread().setName("reservationWorker");
                     final Integer anzahl = (Integer)jspAnzahl.getValue();
                     final Integer startwert;
                     final String swText = tfStartWert.getText();
@@ -733,6 +734,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
+                    Thread.currentThread().setName("isAntragExistingWorker");
                     final ServerActionParameter action = new ServerActionParameter(
                             PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
                             PointNumberReserverationServerAction.ACTION_TYPE.IS_ANTRAG_EXISTING);

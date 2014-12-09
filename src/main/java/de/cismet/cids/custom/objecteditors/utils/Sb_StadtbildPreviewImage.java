@@ -637,6 +637,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
          */
         @Override
         protected ImageIcon doInBackground() throws Exception {
+            Thread.currentThread().setName("ImageResizeWorker");
             if (image != null) {
                 final ImageIcon result = new ImageIcon(adjustScale(image, pnlFoto, 20, 20));
                 return result;
@@ -709,6 +710,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
+            Thread.currentThread().setName("LoadSelectedImageWorker");
             if ((bildnummer != null) && (bildnummer.length() > 0)) {
                 return Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
             }
@@ -780,6 +782,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
          */
         @Override
         protected Boolean doInBackground() throws Exception {
+            Thread.currentThread().setName("CheckAccessibilityOfHighResImage");
             if (stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed()) {
                 return Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
                             != null;

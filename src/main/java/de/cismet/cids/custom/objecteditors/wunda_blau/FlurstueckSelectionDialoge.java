@@ -131,6 +131,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
                 @Override
                 protected ComboBoxModel doInBackground() throws Exception {
+                    Thread.currentThread().setName("FlurstueckSelectionDialoge getLWGemarkungen");
                     return new DefaultComboBoxModel(FlurstueckFinder.getLWGemarkungen());
                 }
 
@@ -368,6 +369,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
+                        Thread.currentThread().setName("FlurstueckSelectionDialoge getLWFlure");
                         return new DefaultComboBoxModel(FlurstueckFinder.getLWFlure(selGemarkungsNr));
                     }
                 });
@@ -509,6 +511,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
+                        Thread.currentThread().setName("FlurstueckSelectionDialoge getLWFurstuecksZaehlerNenner");
                         return new DefaultComboBoxModel(
                                 FlurstueckFinder.getLWFurstuecksZaehlerNenner(selGem, selFlurNr.toString()));
                     }

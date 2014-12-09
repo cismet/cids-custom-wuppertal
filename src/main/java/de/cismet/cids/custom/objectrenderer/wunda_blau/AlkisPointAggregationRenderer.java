@@ -497,7 +497,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * @param  evt  DOCUMENT ME!
      */
     private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
-        CismetThreadPool.execute(new Runnable() {
+        CismetThreadPool.execute(new Thread("AlkisPointAggregationRenderer formAcestorAdded()") {
 
                 @Override
                 public void run() {
@@ -991,7 +991,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @version  $Revision$, $Date$
      */
-    protected class GenerateProduct implements Runnable {
+    protected class GenerateProduct extends Thread {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -1007,6 +1007,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
          * @param  alkisPoints  DOCUMENT ME!
          */
         public GenerateProduct(final String format, final Collection<CidsBean> alkisPoints) {
+            super("GenerateProduct");
             this.format = format;
             this.alkisPoints = alkisPoints;
         }

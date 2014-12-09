@@ -360,6 +360,7 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
 
         @Override
         protected Integer doInBackground() throws Exception {
+            Thread.currentThread().setName("MinYearFetcherWorker");
             final Sb_minAufnahmedatumYearFetcherServerSearch minYearFetcher =
                 new Sb_minAufnahmedatumYearFetcherServerSearch();
             final Collection minYearCollection = SessionManager.getConnection()

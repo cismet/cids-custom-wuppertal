@@ -1300,6 +1300,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
+                    Thread.currentThread().setName("Butler2Dialog valueChanged()");
                     for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
                         final Butler2ProductPanel productPanel = (Butler2ProductPanel)tbpProducts.getComponentAt(i);
                         final ButlerProduct product = productPanel.getSelectedProduct();

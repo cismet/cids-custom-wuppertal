@@ -223,6 +223,7 @@ public abstract class AbstractJasperReportPrint {
          */
         @Override
         protected JasperPrint doInBackground() throws Exception {
+            Thread.currentThread().setName("JasperPrintWorker");
             if (isCancelled()) {
                 return null;
             } else {

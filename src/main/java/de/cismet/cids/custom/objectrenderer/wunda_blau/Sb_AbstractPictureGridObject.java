@@ -121,6 +121,7 @@ public abstract class Sb_AbstractPictureGridObject {
 
                 @Override
                 protected Image doInBackground() throws Exception {
+                    Thread.currentThread().setName("Sb_AbstractPictureGridObject retrieveFutureImageWorker");
                     return futureImage.get();
                 }
 

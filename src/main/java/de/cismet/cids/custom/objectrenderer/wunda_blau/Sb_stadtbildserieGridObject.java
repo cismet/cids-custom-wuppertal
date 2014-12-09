@@ -473,6 +473,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
 
                     @Override
                     protected Sb_RestrictionLevelUtils.BulletPointSettings doInBackground() throws Exception {
+                        Thread.currentThread().setName("Sb_stadtbildserieGridObject determineBulletPointColor()");
                         return Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(Sb_stadtbildserieGridObject.this
                                         .getCidsBean());
                     }

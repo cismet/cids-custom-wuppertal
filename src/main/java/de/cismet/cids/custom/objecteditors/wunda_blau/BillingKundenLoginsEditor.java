@@ -290,6 +290,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
 
                         @Override
                         protected DefaultComboBoxModel doInBackground() throws Exception {
+                            Thread.currentThread().setName("AlwaysReloadBindableReferenceCombo init()");
                             if (model != null) {
                                 return model;
                             } else {

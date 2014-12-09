@@ -283,6 +283,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
 
                 @Override
                 protected Date doInBackground() throws Exception {
+                    Thread.currentThread().setName("StichtagChooserDialog btnOkActionPerformed()");
                     return (Date)SessionManager.getProxy().executeTask(
                             "getDate",
                             "WUNDA_BLAU",

@@ -659,6 +659,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
 
         @Override
         protected Integer doInBackground() throws Exception {
+            Thread.currentThread().setName("NextBildNummerFetcherWorker");
             final Sb_maxBildnummerFetcherServerSearch maxBildnummerFetcher = new Sb_maxBildnummerFetcherServerSearch();
             final Collection maxBildnummerCollection = SessionManager.getConnection()
                         .customServerSearch(SessionManager.getSession().getUser(), maxBildnummerFetcher);

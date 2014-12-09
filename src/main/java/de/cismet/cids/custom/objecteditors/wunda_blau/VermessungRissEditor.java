@@ -1408,7 +1408,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  isVermessungsriss  DOCUMENT ME!
      */
     private void downloadProduct(final URL url, final boolean isVermessungsriss) {
-        CismetThreadPool.execute(new Runnable() {
+        CismetThreadPool.execute(new Thread("VermessungRissEditor downloadProduct()") {
 
                 @Override
                 public void run() {
@@ -2671,6 +2671,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         //~ Methods ------------------------------------------------------------
         @Override
         protected ListModel doInBackground() throws Exception {
+                Thread.currentThread().setName("PictureReaderWorker");
             final DefaultListModel model = new DefaultListModel();
 
             closeReader();
@@ -2736,6 +2737,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         //~ Methods ------------------------------------------------------------
         @Override
         protected BufferedImage doInBackground() throws Exception {
+                Thread.currentThread().setName("PictureSelectWorker");
             if (pictureReader != null) {
                 return pictureReader.loadPage(pageNumber);
             }
@@ -2811,6 +2813,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
          */
         @Override
         protected List[] doInBackground() throws Exception {
+                Thread.currentThread().setName("RefreshDocumentWorker");
             final List[] result = new List[2];
 
             final Integer gemarkung = getGemarkungOfCurrentCidsBean();

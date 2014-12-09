@@ -394,7 +394,7 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
      * DOCUMENT ME!
      */
     private void writeInscriberCache() {
-        final Runnable r = new Runnable() {
+        final Runnable t = new Thread("A4HSPersistent writeInscriverCache") {
 
                 @Override
                 public void run() {
@@ -405,6 +405,6 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
                     }
                 }
             };
-        CismetThreadPool.execute(r);
+        CismetThreadPool.execute(t);
     }
 }

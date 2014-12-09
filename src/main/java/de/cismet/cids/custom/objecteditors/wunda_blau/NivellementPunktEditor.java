@@ -948,7 +948,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 return;
             }
 
-            CismetThreadPool.execute(new Runnable() {
+            CismetThreadPool.execute(new Thread("NivellementPunktEditor openDoc()") {
 
                     @Override
                     public void run() {
@@ -1381,6 +1381,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
+            Thread.currentThread().setName("RefreshDocumentWorker");
+
             final Collection<URL> validURLs = getCorrespondingURLs(txtDGKBlattnummer.getText(),
                     txtLaufendeNummer.getText());
 

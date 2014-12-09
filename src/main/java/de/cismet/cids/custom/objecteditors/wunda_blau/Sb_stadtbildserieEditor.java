@@ -2127,6 +2127,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
                 @Override
                 protected Sb_RestrictionLevelUtils.BulletPointSettings doInBackground() throws Exception {
+                    Thread.currentThread().setName("Sb_stadtbildserieEditor determineBulletPoint()");
                     return Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(cidsBean);
                 }
 
@@ -2690,6 +2691,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
         @Override
         protected Void doInBackground() throws Exception {
+            Thread.currentThread().setName("SavePruefhinweisWorker");
             SessionManager.getProxy()
                     .executeTask(
                         Sb_stadtbildserieUpdatePruefhinweisAction.TASK_NAME,

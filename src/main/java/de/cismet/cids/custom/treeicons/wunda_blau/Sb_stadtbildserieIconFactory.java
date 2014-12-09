@@ -143,6 +143,9 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
 
                                     @Override
                                     protected Icon doInBackground() throws Exception {
+                                        Thread.currentThread()
+                                                .setName(
+                                                    "Alb_stadtbildserieIconFactory generateIconAccordingToPosition()");
                                         return createIconForNode(node);
                                     }
 

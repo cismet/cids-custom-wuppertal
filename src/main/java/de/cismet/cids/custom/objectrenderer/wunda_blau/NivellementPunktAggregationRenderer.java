@@ -410,7 +410,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
      * @param  evt  DOCUMENT ME!
      */
     private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
-        CismetThreadPool.execute(new Runnable() {
+        CismetThreadPool.execute(new Thread("NivellementPunktAggregationRenderer animateToOverview") {
 
                 @Override
                 public void run() {

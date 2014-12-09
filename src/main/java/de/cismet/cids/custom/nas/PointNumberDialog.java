@@ -1230,6 +1230,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
          */
         @Override
         protected Collection<PointNumberReservation> doInBackground() throws Exception {
+            Thread.currentThread().setName("PointNumberLoadWorker");
             final String anr = getAnr();
             if ((anr == null) || anr.equals("") || !anr.matches("[a-zA-Z0-9_-]*")) {
                 showFreigabeError();
@@ -1335,6 +1336,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
          */
         @Override
         protected Collection doInBackground() throws Exception {
+            Thread.currentThread().setName("VermessungsnummerLoadWorker");
             final CidsServerSearch search = new VermessungsStellenNummerSearch(user);
             final Collection res = SessionManager.getProxy()
                         .customServerSearch(SessionManager.getSession().getUser(), search);
@@ -1362,6 +1364,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
          */
         @Override
         protected PointNumberReservationRequest doInBackground() throws Exception {
+            Thread.currentThread().setName("FreigebenWorker");
             if ((model.getSelectedValues() == 0)) {
                 return null;
             }
@@ -1555,6 +1558,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
          */
         @Override
         protected Collection<String> doInBackground() throws Exception {
+            Thread.currentThread().setName("AllAntragsnummernLoadWorker");
             final ServerActionParameter action = new ServerActionParameter(
                     PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
                     PointNumberReserverationServerAction.ACTION_TYPE.GET_ALL_RESERVATIONS);

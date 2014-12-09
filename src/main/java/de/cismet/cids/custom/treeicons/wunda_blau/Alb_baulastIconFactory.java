@@ -177,6 +177,9 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
 
                                     @Override
                                     protected Void doInBackground() throws Exception {
+                                        Thread.currentThread()
+                                                .setName("Alb_baulastIconFactory generateIconFromState()");
+
                                         if (!(node == null)) {
                                             if (node.getPath()[0].equals(
                                                             ComponentRegistry.getRegistry().getSearchResultsTree()

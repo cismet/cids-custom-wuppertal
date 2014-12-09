@@ -392,6 +392,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                 @Override
                 protected Void doInBackground() throws Exception {
+                    Thread.currentThread()
+                            .setName("VermessungsRissAggregationRenderer btnGenerateReportActionPerformed()");
                     final Object typeObj = cmbType.getSelectedItem();
                     final String type;
                     if (typeObj instanceof String) {

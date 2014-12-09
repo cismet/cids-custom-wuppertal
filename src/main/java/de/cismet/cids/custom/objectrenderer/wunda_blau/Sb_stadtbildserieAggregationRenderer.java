@@ -882,6 +882,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                 @Override
                 protected Void doInBackground() throws Exception {
+                    Thread.currentThread()
+                            .setName("Sb_stadtbildserieAggregationRenderer btnDownloadHighResImageActionPerformed()");
                     // iterate over the Sb_stadtbildserieGridObject then over the selected Stadtbilder of each
                     // GridObject
                     for (final Sb_stadtbildserieGridObject gridObject : gridObjectArr) {
@@ -1294,6 +1296,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         @Override
         protected Boolean doInBackground() throws Exception {
+            Thread.currentThread().setName("HighResDownloadChecker");
             // determine the Stadtbildserie of the stadtbild to check if the download is allowed
 
             final String imageNumber = (String)stadtbild.getProperty("bildnummer");

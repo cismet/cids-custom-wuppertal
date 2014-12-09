@@ -4136,6 +4136,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         @Override
         protected BufferedImage doInBackground() throws Exception {
+            Thread.currentThread().setName("LoadSelectedImageWorker");
             if ((file != null) && (file.length() > 0)) {
                 return downloadImageFromWebDAV(file);
 //                return downloadImageFromUrl(file);
@@ -4199,6 +4200,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         @Override
         protected ImageIcon doInBackground() throws Exception {
+            Thread.currentThread().setName("ImageResizeWorker");
             if (image != null) {
 //                if (panButtons.getSize().getWidth() + 10 < panPreview.getSize().getWidth()) {
                 // ImageIcon result = new ImageIcon(ImageUtil.adjustScale(image, panPreview, 20, 20));
@@ -4266,6 +4268,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         @Override
         protected Collection<CidsBean> doInBackground() throws Exception {
+            Thread.currentThread().setName("ImageUploadWorker");
             final Collection<CidsBean> newBeans = new ArrayList<CidsBean>();
             int i = lstFotos.getModel().getSize() + 1;
             for (final File imageFile : fotos) {

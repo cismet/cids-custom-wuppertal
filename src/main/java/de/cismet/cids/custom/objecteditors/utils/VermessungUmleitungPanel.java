@@ -347,6 +347,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
                 @Override
                 protected URL doInBackground() throws Exception {
+                    Thread.currentThread().setName("VermessungUmleitungPanel checkIfLinkDocumentExists()");
                     final String input = getLinkDocument();
 //                if (!isNummerConsistent(input)) {
 //                    return null;
@@ -429,6 +430,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
+                    Thread.currentThread().setName("VermessungUmleitungPanel deleteFile()");
                     if (initError) {
                         return false;
                     }
@@ -501,6 +503,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
+                    Thread.currentThread().setName("VermessungUmleitungPanel createLinkFile()");
                     if (initError) {
                         return false;
                     }

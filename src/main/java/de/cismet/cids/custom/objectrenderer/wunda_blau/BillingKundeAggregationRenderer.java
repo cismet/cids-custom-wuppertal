@@ -871,6 +871,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
                 @Override
                 protected Collection<MetaObject> doInBackground() throws Exception {
+                    Thread.currentThread().setName("BillingKundeAggregationRenderer filterBuchungen()");
                     // return cidsBillingSearchStatement.performServerSearch();
                     return SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),

@@ -362,6 +362,7 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
          */
         @Override
         protected Void doInBackground() throws Exception {
+            Thread.currentThread().setName("PictureWorker");
             int j = -1;
             urls = new String[beans.size()];
             for (final CidsBean b : beans) {

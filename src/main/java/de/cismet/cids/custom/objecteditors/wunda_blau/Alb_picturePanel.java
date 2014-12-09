@@ -949,7 +949,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         final URL url;
         url = current;
 
-        CismetThreadPool.execute(new Runnable() {
+        CismetThreadPool.execute(new Thread("Alb_picturePanel openDownload") {
 
                 @Override
                 public void run() {
@@ -1287,6 +1287,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
                     @Override
                     protected Void doInBackground() throws Exception {
+                        Thread.currentThread().setName("Alb_picturePanel persistWorker");
                         cidsBean.persist();
                         return null;
                     }
@@ -1590,6 +1591,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         //~ Methods ------------------------------------------------------------
         @Override
         protected List[] doInBackground() throws Exception {
+            Thread.currentThread().setName("FileSearchWorker");
             final List[] result = new List[2];
 //            if (!StaticDebuggingTools.checkHomeForFile("BAULASTENHTTPDOCPREVIEW")) {
 //                final Object blattObj = getCidsBean().getProperty(TEXTBLATT_PROPERTY);
@@ -1717,6 +1719,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
          */
         @Override
         protected ListModel doInBackground() throws Exception {
+            Thread.currentThread().setName("PictureReaderWorker");
             final DefaultListModel model = new DefaultListModel();
             readPageGeometriesIntoMap(getPages());
 
@@ -1815,6 +1818,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
+            Thread.currentThread().setName("PictureSelectWorker");
             if (pictureReader != null) {
                 return pictureReader.loadPage(pageNumber);
             }

@@ -744,7 +744,7 @@ public class Sb_stadtbildUtils {
          * @param  priority  DOCUMENT ME!
          */
         public void execute(final Runnable command, final int priority) {
-            super.execute(new ComparableFutureTask(command, null, priority));
+            super.execute(new Thread(new ComparableFutureTask(command, null, priority), "ComparableFutureTask"));
         }
 
         @Override

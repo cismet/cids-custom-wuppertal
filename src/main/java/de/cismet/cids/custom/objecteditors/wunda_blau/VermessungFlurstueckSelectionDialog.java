@@ -144,6 +144,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
                 @Override
                 protected ComboBoxModel doInBackground() throws Exception {
+                    Thread.currentThread().setName("AbstractFlurstueckComboModelWorker");
                     return new DefaultComboBoxModel(VermessungFlurstueckFinder.getLWGemarkungen());
                 }
 
@@ -161,6 +162,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
                 @Override
                 protected ComboBoxModel doInBackground() throws Exception {
+                    Thread.currentThread().setName("AbstractFlurstueckComboModelWorker");
                     final DefaultComboBoxModel result = new DefaultComboBoxModel(
                             VermessungFlurstueckFinder.getVeraenderungsarten());
 
@@ -433,6 +435,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
+                        Thread.currentThread().setName("AbstractFlurstueckComboModelWorker");
                         return new DefaultComboBoxModel(VermessungFlurstueckFinder.getLWFlure(gemarkung));
                     }
                 });
@@ -545,6 +548,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
+                        Thread.currentThread().setName("AbstractFlurstueckComboModelWorker");
                         return new DefaultComboBoxModel(
                                 VermessungFlurstueckFinder.getLWFurstuecksZaehlerNenner(gemarkung, flur.toString()));
                     }

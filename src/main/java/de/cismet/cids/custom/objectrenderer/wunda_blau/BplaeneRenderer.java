@@ -149,7 +149,7 @@ public class BplaeneRenderer extends BlurredMapObjectRenderer {
             }
             final String url = host + path + plan + "_TEXT.gif";
             // "http://s10220.wuppertal-intra.de:8098/luft/image/bplaene/nicht_rechtsk/0-99/B42A_TEXT.gif"
-            final Thread loader = new Thread() {
+            final Thread loader = new Thread("BplaeneRenderer loader") {
 
                     @Override
                     public void run() {

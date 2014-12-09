@@ -1172,6 +1172,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
          */
         @Override
         protected DefaultComboBoxModel doInBackground() throws Exception {
+            Thread.currentThread().setName("Alb_stadtbildEditor ComboBoxWorker");
             return initDialogeSuchwortCombobox();
         }
 

@@ -207,6 +207,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
 
                 @Override
                 protected HashMap<String, ArrayList<String>> doInBackground() throws Exception {
+                    Thread.currentThread().setName("feeCalculatorWorker");
                     SwingUtilities.invokeLater(new Runnable() {
 
                             @Override

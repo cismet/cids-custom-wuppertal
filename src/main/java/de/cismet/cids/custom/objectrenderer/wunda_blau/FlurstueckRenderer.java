@@ -491,6 +491,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 
                 @Override
                 protected Collection<Node> doInBackground() throws Exception {
+                    Thread.currentThread().setName("FlurstueckRenderer searchWorker");
                     return SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), stmnt);
                 }
 

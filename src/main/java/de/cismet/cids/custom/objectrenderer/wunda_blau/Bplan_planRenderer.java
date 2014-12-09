@@ -106,7 +106,7 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer, Requ
 
                 final String url = host + path + plan + "_TEXT.gif";
 
-                final Thread loader = new Thread() {
+                final Thread loader = new Thread("BPlaen_planRenderer loader") {
 
                         @Override
                         public void run() {

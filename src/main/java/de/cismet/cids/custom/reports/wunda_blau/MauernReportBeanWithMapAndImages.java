@@ -152,7 +152,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
             }
         }
 
-        CismetThreadPool.execute(new Runnable() {
+        CismetThreadPool.execute(new Thread("MauernReportBeanWithMapAndImages retrieveFromWebDAV0") {
 
                 @Override
                 public void run() {
@@ -177,7 +177,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                 }
             });
 
-        CismetThreadPool.execute(new Runnable() {
+        CismetThreadPool.execute(new Thread("MauernReportBeanWithMapAndImages retrieveFromWebDAV1") {
 
                 @Override
                 public void run() {

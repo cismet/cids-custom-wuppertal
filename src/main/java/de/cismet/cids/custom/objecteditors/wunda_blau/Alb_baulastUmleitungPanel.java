@@ -236,6 +236,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
 
                 @Override
                 protected URL doInBackground() throws Exception {
+                    Thread.currentThread().setName("Alb_baulastUmleitungPanel checkIfLinkDocumentExists()");
                     final String input = getLinkDocument();
                     if (!isNummerConsistent(input)) {
                         return null;
@@ -280,6 +281,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
+                    Thread.currentThread().setName("Alb_baulastUmleitungPanel deleteFile()");
                     final String filename = createFilename();
                     final File f = File.createTempFile(filename, ".txt");
                     return webDavHelper.deleteFileFromWebDAV(
@@ -348,6 +350,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
 
                 @Override
                 protected Void doInBackground() throws Exception {
+                    Thread.currentThread().setName("Alb_baulastUmleitungPanel createLinkFile()");
                     final String filename = createFilename().toLowerCase();
                     final File f = File.createTempFile(filename, ".txt");
                     final FileWriter fw = new FileWriter(f);
