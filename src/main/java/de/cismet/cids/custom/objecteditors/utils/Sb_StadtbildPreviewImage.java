@@ -356,7 +356,6 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
-        final String jobname = DownloadManagerDialog.getJobname();
         final String imageNumber = (String)stadtbildserieProvider.getSelectedStadtbild().getProperty("bildnummer");
         try {
             if (BillingPopup.doBilling(
@@ -365,6 +364,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                             (Geometry)null,
                             new ProductGroupAmount("ea", 1)) && DownloadManagerDialog.showAskingForUserTitle(
                             this)) {
+                final String jobname = DownloadManagerDialog.getJobname();
                 DownloadManager.instance()
                         .add(
                             new TifferDownload(
