@@ -1143,9 +1143,25 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                                 final String propertyName,
                                 final Collection<CidsBean> arrayValueToProcess) throws Exception {
                             if (!propertyName.endsWith("pages")) {
-                                final Collection<CidsBean> collectionToFill = CidsBeanSupport
-                                        .getBeanCollectionFromProperty(beanToInit, propertyName);
+                                final List<CidsBean> collectionToFill = CidsBeanSupport.getBeanCollectionFromProperty(
+                                        beanToInit,
+                                        propertyName);
                                 collectionToFill.clear();
+                                if (!arrayValueToProcess.isEmpty()) {
+                                    for (final CidsBean flurstueck : arrayValueToProcess) {
+                                        final CidsBean clonedFlurstueck = CidsBean.createNewCidsBeanFromTableName(
+                                                flurstueck.getMetaObject().getDomain(),
+                                                flurstueck.getMetaObject().getMetaClass().getTableName());
+                                        clonedFlurstueck.getMetaObject().setStatus(MetaObject.NO_STATUS);
+                                        for (final String flurstueckPropertyName : flurstueck.getPropertyNames()) {
+                                            clonedFlurstueck.setProperty(
+                                                flurstueckPropertyName,
+                                                flurstueck.getProperty(flurstueckPropertyName));
+                                        }
+
+                                        collectionToFill.add(flurstueck);
+                                    }
+                                }
                                 collectionToFill.addAll(arrayValueToProcess);
                             }
                         }
