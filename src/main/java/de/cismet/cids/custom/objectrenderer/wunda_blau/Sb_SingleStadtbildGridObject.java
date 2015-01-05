@@ -137,6 +137,7 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
     public Image getImage(final int cellDimension, final boolean invert) {
         final Image image = super.getImage(cellDimension, invert);
         if (imageAvailableInHighRes.get() || (image == Sb_stadtbildUtils.PLACEHOLDER_IMAGE)) {
+            setPreview(false);
             return image;
         } else if (image == null) {
             final BufferedImage imageToShow = new BufferedImage(
@@ -150,8 +151,10 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
                     invert);
             // heuristic to center the error image
             g.drawImage(scaledErrorImage, 0, cellDimension / 12, null);
+            setPreview(false);
             return imageToShow;
         } else {
+            setPreview(true);
             return image;
         }
     }

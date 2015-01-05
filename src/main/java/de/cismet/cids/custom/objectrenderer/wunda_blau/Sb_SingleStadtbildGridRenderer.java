@@ -152,15 +152,16 @@ public class Sb_SingleStadtbildGridRenderer extends javax.swing.JPanel implement
             final Sb_SingleStadtbildGridObject gridObject = ((Sb_SingleStadtbildGridObject)value);
             image = gridObject.getImage(fixedCellDimension, false);
             final boolean highResAvailable = gridObject.isHighResAvailable();
-            if (image == Sb_stadtbildUtils.PLACEHOLDER_IMAGE) {
-                lblHighRes.setText("nicht Digital");
-            } else {
-                lblHighRes.setText("nur Vorschaubild");
-            }
-            if (!highResAvailable) {
-                lblHighRes.setVisible(true);
-            } else {
+            final boolean isPreviewAvailable = gridObject.isPreview();
+            if (highResAvailable) {
                 lblHighRes.setVisible(false);
+            } else {
+                lblHighRes.setVisible(true);
+                if (isPreviewAvailable) {
+                    lblHighRes.setText("nur Vorschaubild");
+                } else {
+                    lblHighRes.setText("nicht Digital");
+                }
             }
         }
 
