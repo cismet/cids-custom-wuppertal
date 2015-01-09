@@ -432,35 +432,35 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
+    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
         if (gridObject != null) {
             gridObject.selectAllStadtbilder();
         }
-    }//GEN-LAST:event_btnSelectAllActionPerformed
+    }                                                                                //GEN-LAST:event_btnSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSelectNoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectNoneActionPerformed
+    private void btnSelectNoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectNoneActionPerformed
         if (gridObject != null) {
             gridObject.deselectAllStadtbilder();
         }
-    }//GEN-LAST:event_btnSelectNoneActionPerformed
+    }                                                                                 //GEN-LAST:event_btnSelectNoneActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInvertSelectionActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvertSelectionActionPerformed
+    private void btnInvertSelectionActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInvertSelectionActionPerformed
         if (gridObject != null) {
             for (final CidsBean stadtbild : gridObject.getImagesToShow()) {
                 gridObject.selectOrDeselectStadtbild(stadtbild);
             }
         }
-    }//GEN-LAST:event_btnInvertSelectionActionPerformed
+    }                                                                                      //GEN-LAST:event_btnInvertSelectionActionPerformed
 
     /**
      * DOCUMENT ME!
