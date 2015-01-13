@@ -531,7 +531,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      */
     @Override
     public String getName() {
-        return "Baulast Suche";
+        return "Baulast-Suche";
     }
 
     /**
