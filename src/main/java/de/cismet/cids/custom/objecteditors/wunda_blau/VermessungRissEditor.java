@@ -244,8 +244,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JList lstLandparcels;
     private javax.swing.JList lstPages;
     private de.cismet.tools.gui.panels.LayeredAlertPanel measureComponentPanel;
+    private javax.swing.JPanel panLeft;
+    private javax.swing.JPanel panRight;
     private javax.swing.JPanel pnlBusy;
-    private javax.swing.JPanel pnlContainer;
     private de.cismet.tools.gui.RoundedPanel pnlControls;
     private de.cismet.tools.gui.RoundedPanel pnlDocument;
     private de.cismet.tools.gui.RoundedPanel pnlDocuments;
@@ -396,7 +397,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlGrenzniederschriftAlert = new javax.swing.JPanel();
         grenzNiederschriftWarnMessage = new javax.swing.JLabel();
         rissWarnMessage = new javax.swing.JLabel();
-        pnlContainer = new javax.swing.JPanel();
+        panLeft = new javax.swing.JPanel();
+        pnlDocument = new de.cismet.tools.gui.RoundedPanel();
+        pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblReducedSize = new javax.swing.JLabel();
+        pnlUmleitungHeader = new javax.swing.JPanel();
+        lblHeaderDocument = new javax.swing.JLabel();
+        jxlUmleitung = new org.jdesktop.swingx.JXHyperlink();
+        measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
         lblGeneralInformation = new javax.swing.JLabel();
@@ -426,6 +434,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblBlatt = new javax.swing.JLabel();
         txtBlatt = new javax.swing.JTextField();
         ftxFlur = new javax.swing.JFormattedTextField();
+        panRight = new javax.swing.JPanel();
         pnlLandparcels = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderLandparcels = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderLandparcels = new javax.swing.JLabel();
@@ -451,13 +460,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblHeaderPages = new javax.swing.JLabel();
         scpPages = new javax.swing.JScrollPane();
         lstPages = new javax.swing.JList();
-        pnlDocument = new de.cismet.tools.gui.RoundedPanel();
-        pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblReducedSize = new javax.swing.JLabel();
-        pnlUmleitungHeader = new javax.swing.JPanel();
-        lblHeaderDocument = new javax.swing.JLabel();
-        jxlUmleitung = new org.jdesktop.swingx.JXHyperlink();
-        measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -506,8 +508,72 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         setLayout(new java.awt.GridBagLayout());
 
-        pnlContainer.setOpaque(false);
-        pnlContainer.setLayout(new java.awt.GridBagLayout());
+        panLeft.setOpaque(false);
+        panLeft.setLayout(new java.awt.GridBagLayout());
+
+        pnlHeaderDocument.setBackground(java.awt.Color.darkGray);
+        pnlHeaderDocument.setLayout(new java.awt.GridBagLayout());
+
+        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
+        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.lblReducedSize.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
+
+        pnlUmleitungHeader.setOpaque(false);
+        pnlUmleitungHeader.setLayout(new java.awt.GridBagLayout());
+
+        lblHeaderDocument.setForeground(java.awt.Color.white);
+        lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.lblHeaderDocument.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlUmleitungHeader.add(lblHeaderDocument, gridBagConstraints);
+
+        jxlUmleitung.setForeground(new java.awt.Color(204, 204, 204));
+        jxlUmleitung.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.jxlUmleitung.text"));        // NOI18N
+        jxlUmleitung.setToolTipText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.jxlUmleitung.toolTipText")); // NOI18N
+        jxlUmleitung.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jxlUmleitungActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        pnlUmleitungHeader.add(jxlUmleitung, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        pnlHeaderDocument.add(pnlUmleitungHeader, gridBagConstraints);
+
+        pnlDocument.add(pnlHeaderDocument, java.awt.BorderLayout.NORTH);
+
+        measureComponentPanel.setPreferredSize(new java.awt.Dimension(200, 200));
+        pnlDocument.add(measureComponentPanel, java.awt.BorderLayout.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 5);
+        panLeft.add(pnlDocument, gridBagConstraints);
 
         pnlGeneralInformation.setLayout(new java.awt.GridBagLayout());
 
@@ -523,7 +589,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         pnlGeneralInformation.add(pnlHeaderGeneralInformation, gridBagConstraints);
@@ -608,6 +674,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.5;
@@ -639,6 +706,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.5;
@@ -695,15 +763,15 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
         pnlGeneralInformation.add(btnCombineGeometries, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         pnlGeneralInformation.add(gluGeneralInformationGap, gridBagConstraints);
@@ -799,6 +867,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.5;
@@ -839,6 +908,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.5;
@@ -871,9 +941,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.75;
-        gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        pnlContainer.add(pnlGeneralInformation, gridBagConstraints);
+        panLeft.add(pnlGeneralInformation, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(panLeft, gridBagConstraints);
+
+        panRight.setOpaque(false);
+        panRight.setLayout(new java.awt.GridBagLayout());
 
         pnlLandparcels.setLayout(new java.awt.GridBagLayout());
 
@@ -999,20 +1077,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.25;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
-        pnlContainer.add(pnlLandparcels, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weighty = 0.1;
-        add(pnlContainer, gridBagConstraints);
+        panRight.add(pnlLandparcels, gridBagConstraints);
 
         pnlControls.setLayout(new java.awt.GridBagLayout());
 
@@ -1130,12 +1200,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlControls.add(btnOpen, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
-        add(pnlControls, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        panRight.add(pnlControls, gridBagConstraints);
 
         pnlDocuments.setLayout(new java.awt.GridBagLayout());
 
@@ -1210,12 +1280,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlDocuments.add(jLabel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 5, 5);
-        add(pnlDocuments, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 0);
+        panRight.add(pnlDocuments, gridBagConstraints);
 
         pnlHeaderPages.setBackground(new java.awt.Color(51, 51, 51));
         pnlHeaderPages.setLayout(new java.awt.FlowLayout());
@@ -1247,81 +1317,23 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlPages.add(scpPages, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
-        add(pnlPages, gridBagConstraints);
-
-        pnlHeaderDocument.setBackground(java.awt.Color.darkGray);
-        pnlHeaderDocument.setLayout(new java.awt.GridBagLayout());
-
-        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
-        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblReducedSize.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
-
-        pnlUmleitungHeader.setOpaque(false);
-        pnlUmleitungHeader.setLayout(new java.awt.GridBagLayout());
-
-        lblHeaderDocument.setForeground(java.awt.Color.white);
-        lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderDocument.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlUmleitungHeader.add(lblHeaderDocument, gridBagConstraints);
-
-        jxlUmleitung.setForeground(new java.awt.Color(204, 204, 204));
-        jxlUmleitung.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.jxlUmleitung.text"));        // NOI18N
-        jxlUmleitung.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.jxlUmleitung.toolTipText")); // NOI18N
-        jxlUmleitung.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jxlUmleitungActionPerformed(evt);
-                }
-            });
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        panRight.add(pnlPages, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        pnlUmleitungHeader.add(jxlUmleitung, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        pnlHeaderDocument.add(pnlUmleitungHeader, gridBagConstraints);
-
-        pnlDocument.add(pnlHeaderDocument, java.awt.BorderLayout.NORTH);
-
-        measureComponentPanel.setPreferredSize(new java.awt.Dimension(200, 200));
-        pnlDocument.add(measureComponentPanel, java.awt.BorderLayout.CENTER);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
-        add(pnlDocument, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
-        add(gluGapControls, gridBagConstraints);
+        panRight.add(gluGapControls, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        add(panRight, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
