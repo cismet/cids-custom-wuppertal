@@ -464,7 +464,7 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
 
     @Override
     public String getName() {
-        return "Flurstück Suche";
+        return "Flurstück-Suche";
     }
 
     @Override
