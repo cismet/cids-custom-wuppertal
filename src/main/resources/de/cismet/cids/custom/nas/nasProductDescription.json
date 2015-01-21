@@ -17,6 +17,7 @@
         "key": "komplett",
         "displayName": "NAS (komplett)",
         "billingKey": "naskom",
+        "permissionNeeded": "custom.alkis.buchungsblatt@WUNDA_BLAU",
         "format": "NAS",
         "template": "/de/cismet/cids/custom/utils/nas/A_komplett.xml"
     },{
