@@ -11,6 +11,9 @@
  */
 package de.cismet.cids.custom.nas;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -280,9 +283,36 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
             nasProducts = mapper.readValue(NasDialog.class.getResourceAsStream(
                         "/de/cismet/cids/custom/nas/nasProductDescription.json"),
                     mapper.getTypeFactory().constructCollectionType(List.class, NasProduct.class));
+            final ArrayList<NasProduct> skips = new ArrayList<NasProduct>();
+            for (final NasProduct np : nasProducts) {
+                if (np.getPermissionNeeded() != null) {
+                    if (!validateUserHasActionAttribute(np.getPermissionNeeded())) {
+                        skips.add(np);
+                    }
+                }
+            }
+            nasProducts.removeAll(skips);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   actionAttributeString  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserHasActionAttribute(final String actionAttributeString) {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), actionAttributeString)
+                        != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
+        }
+        return false;
     }
 
     /**
