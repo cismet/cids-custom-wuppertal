@@ -1587,7 +1587,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
                 final List<String> tmp = new ArrayList<String>();
                 for (int i = 0; i < result.size(); i++) {
-                    final String s = result.get(i).substring(5);
+                    final String anr = result.get(i);
+                    final int underscorePos = anr.indexOf("_");
+                    final String s = anr.substring(underscorePos + 1);
                     tmp.add(s);
                 }
                 Collections.sort(tmp);

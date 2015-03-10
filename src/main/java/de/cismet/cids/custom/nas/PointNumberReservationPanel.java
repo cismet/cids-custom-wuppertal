@@ -709,7 +709,9 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                             Styles.INFO);
                                     }
                                     if (!pnrDialog.isErgaenzenMode()) {
-                                        pnrDialog.addAnr(result.getAntragsnummer().substring(5));
+                                        final String anr = result.getAntragsnummer();
+                                        final int underscorePos = anr.indexOf("_");
+                                        pnrDialog.addAnr(anr.substring(underscorePos + 1));
                                     }
                                     pnrDialog.enableDoneButton(true);
                                     btnErstellen.setEnabled(true);
