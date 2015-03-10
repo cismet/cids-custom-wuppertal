@@ -32,6 +32,7 @@ public abstract class Sb_AbstractPictureGridObject {
     private SwingWorker<Image, Void> worker;
     /** The image which was shown the last time. This is a small cache for Sb_AbstractPictureGridObject; */
     private LastShownImage lastShownImage;
+    private boolean preview;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -104,6 +105,24 @@ public abstract class Sb_AbstractPictureGridObject {
         } else {
             return null;
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  preview  DOCUMENT ME!
+     */
+    protected void setPreview(final boolean preview) {
+        this.preview = preview;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isPreview() {
+        return preview;
     }
 
     /**
