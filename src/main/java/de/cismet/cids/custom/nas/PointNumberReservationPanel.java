@@ -561,7 +561,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnErstellenActionPerformed
+    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
         // check anr
         final String anr = pnrDialog.getAnr();
         if ((anr == null) || anr.isEmpty()) {
@@ -709,9 +709,9 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                             Styles.INFO);
                                     }
                                     if (!pnrDialog.isErgaenzenMode()) {
-                                        String anr=result.getAntragsnummer();
-                                        int underscorePos=anr.indexOf("_");
-                                        pnrDialog.addAnr(anr.substring(underscorePos+1));
+                                        final String anr = result.getAntragsnummer();
+                                        final int underscorePos = anr.indexOf("_");
+                                        pnrDialog.addAnr(anr.substring(underscorePos + 1));
                                     }
                                     pnrDialog.enableDoneButton(true);
                                     btnErstellen.setEnabled(true);
@@ -807,7 +807,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             };
 
         isAntragExistingWorker.execute();
-    }//GEN-LAST:event_btnErstellenActionPerformed
+    } //GEN-LAST:event_btnErstellenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -859,22 +859,22 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshNbzActionPerformed
+    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshNbzActionPerformed
         checkNummerierungsbezirke();
         btnRefreshNbz.setVisible(false);
         this.invalidate();
         this.validate();
         this.repaint();
-    }//GEN-LAST:event_btnRefreshNbzActionPerformed
+    }                                                                                 //GEN-LAST:event_btnRefreshNbzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspAnzahlStateChanged
+    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_jspAnzahlStateChanged
 //        handleAnzahlSpinnderChanged();
-    }//GEN-LAST:event_jspAnzahlStateChanged
+    } //GEN-LAST:event_jspAnzahlStateChanged
 
     /**
      * DOCUMENT ME!
