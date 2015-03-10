@@ -903,16 +903,16 @@ public class PointNumberDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
+    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
         this.dispose();
-    }                                                                           //GEN-LAST:event_btnDoneActionPerformed
+    }//GEN-LAST:event_btnDoneActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
         freigebenWorker = new FreigebenWorker();
 
         try {
@@ -932,14 +932,14 @@ public class PointNumberDialog extends javax.swing.JDialog {
         protokollPane.addMessage("Sende Freigabeauftrag.", BusyLoggingTextPane.Styles.INFO);
 
         freigebenWorker.execute();
-    } //GEN-LAST:event_btnFreigebenActionPerformed
+    }//GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadActionPerformed
+    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         if (result == null) {
             return;
         }
@@ -960,39 +960,39 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
 
         DownloadManager.instance().add(download);
-    } //GEN-LAST:event_btnDownloadActionPerformed
+    }//GEN-LAST:event_btnDownloadActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragPrefixActionPerformed
+    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragPrefixActionPerformed
 //        skipLoadAntragsnummern = true;
 //        loadAllAntragsNummern();
 //        skipLoadAntragsnummern = false;
-    } //GEN-LAST:event_cbAntragPrefixActionPerformed
+    }//GEN-LAST:event_cbAntragPrefixActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAllActionPerformed
+    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeSelectAllActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             item.setSelected(true);
             model.setValueAt(item, i, 0);
         }
         tblPunktnummern.repaint();
-    }                                                                                  //GEN-LAST:event_btnDeSelectAllActionPerformed
+    }//GEN-LAST:event_btnDeSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
+    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             // inverts the selection for the item
@@ -1000,20 +1000,20 @@ public class PointNumberDialog extends javax.swing.JDialog {
             model.setValueAt(item, i, 0);
         }
         tblPunktnummern.repaint();
-    } //GEN-LAST:event_btnSelectAllActionPerformed
+    }//GEN-LAST:event_btnSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragsNummerActionPerformed
+    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragsNummerActionPerformed
         // since the combobox in the freigeben tab is  not editable no document events are fired when changing the
         // selected item
         if (!cbAntragsNummer.isEditable() && (tbpModus.getSelectedIndex() == 2)) {
             loadPointNumbers();
         }
-    } //GEN-LAST:event_cbAntragsNummerActionPerformed
+    }//GEN-LAST:event_cbAntragsNummerActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1078,7 +1078,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     dialog.setVisible(true);
                 }
             });
-    }
+     }
 
     /**
      * DOCUMENT ME!
@@ -1587,7 +1587,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
                 final List<String> tmp = new ArrayList<String>();
                 for (int i = 0; i < result.size(); i++) {
-                    final String s = result.get(i).substring(5);
+                    String anr=result.get(i);
+                    int underscorePos=anr.indexOf("_");
+                    final String s = anr.substring(underscorePos+1);
                     tmp.add(s);
                 }
                 Collections.sort(tmp);
@@ -1616,6 +1618,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
     }
 
+   
+    
+    
     /**
      * DOCUMENT ME!
      *
