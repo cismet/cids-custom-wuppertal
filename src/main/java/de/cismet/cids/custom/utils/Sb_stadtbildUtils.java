@@ -376,9 +376,10 @@ public class Sb_stadtbildUtils {
         if (isBildnummerInCacheOrFailed(bildnummer)) {
             final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
             if (cachedImageRef != null) {
-                return cachedImageRef.get();
-            } else {
-                return null;
+                final Object ret = cachedImageRef.get();
+                if (ret != null) {
+                    return ret;
+                }
             }
         }
         final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(
