@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -142,6 +143,16 @@ public class Sb_stadtbildUtils {
      */
     public static CidsBean getWUPPERTAL() {
         return WUPPERTAL;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public static void simulateGC() {
+        final Set<String> keys = IMAGE_CACHE.map.keySet();
+        for (final String key : keys) {
+            IMAGE_CACHE.get(key).clear();
+        }
     }
 
     /**
@@ -376,9 +387,10 @@ public class Sb_stadtbildUtils {
         if (isBildnummerInCacheOrFailed(bildnummer)) {
             final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
             if (cachedImageRef != null) {
-                return cachedImageRef.get();
-            } else {
-                return null;
+                final Object ret = cachedImageRef.get();
+                if (ret != null) {
+                    return ret;
+                }
             }
         }
         final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(
@@ -396,7 +408,8 @@ public class Sb_stadtbildUtils {
      * @return  DOCUMENT ME!
      */
     public static boolean isBildnummerInCacheOrFailed(final String bildnummer) {
-        return IMAGE_CACHE.containsKey(bildnummer) || FAILED_IMAGES.containsKey(bildnummer);
+        return (IMAGE_CACHE.containsKey(bildnummer) && (IMAGE_CACHE.get(bildnummer).get() != null))
+                    || FAILED_IMAGES.containsKey(bildnummer);
     }
 
     /**
