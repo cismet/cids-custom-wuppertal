@@ -17,6 +17,8 @@ import org.apache.commons.lang.StringUtils;
 
 import java.awt.Image;
 
+import java.io.Serializable;
+
 import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -284,7 +286,7 @@ public class Sb_RestrictionLevelUtils {
      *
      * @version  $Revision$, $Date$
      */
-    public static class RestrictionLevel {
+    public static class RestrictionLevel implements Serializable {
 
         //~ Instance fields ----------------------------------------------------
 
