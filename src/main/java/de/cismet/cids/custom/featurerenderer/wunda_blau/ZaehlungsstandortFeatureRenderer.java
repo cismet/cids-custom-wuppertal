@@ -216,10 +216,11 @@ public class ZaehlungsstandortFeatureRenderer extends CustomCidsFeatureRenderer 
                 }
             }
         }
-        if (lastYear.equals("2008")) {
+
+        if (lastYear != null) {
             return s + " (" + avgLast + "/h)";
         } else {
-            return s + " (in 2008 keine Zählung)";
+            return s + " (noch keine Zählung vorhanden)";
         }
     }
 
