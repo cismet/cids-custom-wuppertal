@@ -187,6 +187,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     reportVorauswahl();
                 }
             };
+        vorauswahlReportAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.actionVorauswahlReport.toolTipText"));
         vorauswahlReportAction.setEnabled(true);
 
         vorauswahlDownloadAction = new AbstractAction(
@@ -199,6 +204,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     downladVorauswahl();
                 }
             };
+        vorauswahlDownloadAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.actionVorauswahlDownload.toolTipText"));
         vorauswahlDownloadAction.setEnabled(isAtLeastOneVorschauInHighRes());
 
         warenkorbReportAction = new AbstractAction(
@@ -210,6 +220,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     reportWarenkorb();
                 }
             };
+        warenkorbReportAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.actionWarenkorbReport.toolTipText"));
         warenkorbReportAction.setEnabled(false);
 
         warenkorbDownloadAction = new AbstractAction(
@@ -222,6 +237,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     downladWarenkorb();
                 }
             };
+        warenkorbDownloadAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.actionWarenkorbDownload.toolTipText"));
         warenkorbDownloadAction.setEnabled(isAtLeastOneSelectedInHighRes());
 
         initComponents();
