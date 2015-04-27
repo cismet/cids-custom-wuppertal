@@ -1937,8 +1937,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
          *
          * @return  DOCUMENT ME!
          */
-        public int getAnzahlBilder() {
-            return stadtbildserie.getBeanCollectionProperty("stadtbilder_arr").size();
+        public String getAnzahlBilder() {
+            return Integer.toString(stadtbildserie.getBeanCollectionProperty("stadtbilder_arr").size());
         }
     }
 }
