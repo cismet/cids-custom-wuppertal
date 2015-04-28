@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -38,9 +39,9 @@ class JahresberichtAction extends AbstractAction {
      */
     public JahresberichtAction() {
         putValue(NAME, "Jahresbericht für Bezirksregierung");
-//        final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
-//                    "/de/cismet/cids/custom/icons/mails-stack.png"));
-//        putValue(SMALL_ICON, icon);
+        final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
+                    "/de/cismet/cids/custom/icons/document-list.png"));
+        putValue(SMALL_ICON, icon);
     }
 
     //~ Methods ----------------------------------------------------------------
