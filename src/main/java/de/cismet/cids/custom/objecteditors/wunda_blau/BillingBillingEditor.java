@@ -812,6 +812,12 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
                 cidsBean.setProperty("aenderung_alter_wert", originalProjektbezeichnung);
                 cidsBean.setProperty("aenderung_neuer_wert", txtProjektbezeichnung.getText());
             }
+            if ((cidsBean != null) && ((Boolean)cidsBean.getProperty("abgerechnet"))
+                        && (((Date)cidsBean.getProperty("abgrechnungsdatum")) == null)) {
+                cidsBean.setProperty("abgrechnungsdatum", new Date());
+            } else if ((cidsBean != null) && !((Boolean)cidsBean.getProperty("abgerechnet"))) {
+                cidsBean.setProperty("abgrechnungsdatum", null);
+            }
             return true;
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
