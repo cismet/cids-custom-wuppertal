@@ -48,26 +48,26 @@ public class BillingStatisticsReport {
 
     //~ Instance fields --------------------------------------------------------
 
+    protected Date from;
+    protected Date till;
+    protected int amountTotalDownloads;
+    protected int amountWithCosts;
+    protected int amountWithoutCosts;
+    protected int amountVUamtlicherLageplan;
+    protected int amountVUhoheitlicheVermessung;
+    protected int amountVUsonstige;
+    protected int amountVUamtlicherLageplanGB = 0;
+    protected int amountVUhoheitlicheVermessungGB = 0;
+    protected int amountVUsonstigeGB = 0;
+    protected int amountWithCostsVU = 0;
+    protected int amountWithCostsWiederver = 0;
+    protected double earningsWithCostsVU = 0;
+    protected double earningsWithCostsWiederver = 0;
+    protected int amountWiederverkaeufe = 0;
+    protected int amountWiederverkaeufeGB = 0;
+
     SwingWorker<JasperPrint, Void> downloadWorker;
     Collection<CidsBean> billingBeans;
-
-    private Date from;
-    private Date till;
-    private int amountTotalDownloads;
-    private int amountWithCosts;
-    private int amountWithoutCosts;
-    private int amountVUamtlicherLageplan;
-    private int amountVUhoheitlicheVermessung;
-    private int amountVUsonstige;
-    private int amountVUamtlicherLageplanGB = 0;
-    private int amountVUhoheitlicheVermessungGB = 0;
-    private int amountVUsonstigeGB = 0;
-    private int amountWithCostsVU = 0;
-    private int amountWithCostsWiederver = 0;
-    private double earningsWithCostsVU = 0;
-    private double earningsWithCostsWiederver = 0;
-    private int amountWiederverkaeufe = 0;
-    private int amountWiederverkaeufeGB = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -135,6 +135,33 @@ public class BillingStatisticsReport {
 
     /**
      * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected String getReportUrl() {
+        return REPORT_URL;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected String getFilename() {
+        return "buchungen_geschaeftsstatistik";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected String getTitle() {
+        return "Buchungen: Geschäftsstatistik";
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     public void generateReport() {
         final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
@@ -159,12 +186,12 @@ public class BillingStatisticsReport {
 
         if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
             final String jobname = DownloadManagerDialog.getJobname();
-            final String filename = "buchungen_geschaeftsstatistik";
-            final String title = "Buchungen: Geschäftsstatistik";
+            final String filename = getFilename();
+            final String title = getTitle();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
-                            REPORT_URL,
+                            getReportUrl(),
                             parametersGenerator,
                             dataSourceGenerator,
                             jobname,

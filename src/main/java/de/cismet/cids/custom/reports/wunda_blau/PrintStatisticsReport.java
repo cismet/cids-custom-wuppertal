@@ -14,15 +14,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.tools.collections.HashArrayList;
 
 /**
  * PrintStatisticsReport gets Billing-CidsBean and evaluates them to generate a BillingStatisticsReport.
@@ -34,24 +31,24 @@ public class PrintStatisticsReport {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final HashMap<String, Integer> productInformation = new HashMap<String, Integer>();
-    private final Date[] fromDate_tillDate;
-    private final Collection<CidsBean> billingsBeans;
-    private int amountTotalDownloads = 0;
-    private int amountWithCosts = 0;
-    private int amountWithoutCosts = 0;
-    private int amountVUamtlicherLageplan = 0;
-    private int amountVUhoheitlicheVermessung = 0;
-    private int amountVUsonstige = 0;
-    private int amountWithCostsVU = 0;
-    private int amountWithCostsWiederver = 0;
-    private double earningsWithCostsVU = 0;
-    private double earningsWithCostsWiederver = 0;
-    private int amountWiederverkaeufe = 0;
-    private final Set<String> amountWiederverkaeufeGBs = new HashSet<String>();
-    private final Set<String> amountVUamtlicherLageplanGBs = new HashSet<String>();
-    private final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<String>();
-    private final Set<String> amountVUsonstigeGBs = new HashSet<String>();
+    protected final HashMap<String, Integer> productInformation = new HashMap<String, Integer>();
+    protected final Date[] fromDate_tillDate;
+    protected final Collection<CidsBean> billingsBeans;
+    protected int amountTotalDownloads = 0;
+    protected int amountWithCosts = 0;
+    protected int amountWithoutCosts = 0;
+    protected int amountVUamtlicherLageplan = 0;
+    protected int amountVUhoheitlicheVermessung = 0;
+    protected int amountVUsonstige = 0;
+    protected int amountWithCostsVU = 0;
+    protected int amountWithCostsWiederver = 0;
+    protected double earningsWithCostsVU = 0;
+    protected double earningsWithCostsWiederver = 0;
+    protected int amountWiederverkaeufe = 0;
+    protected final Set<String> amountWiederverkaeufeGBs = new HashSet<String>();
+    protected final Set<String> amountVUamtlicherLageplanGBs = new HashSet<String>();
+    protected final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<String>();
+    protected final Set<String> amountVUsonstigeGBs = new HashSet<String>();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -125,7 +122,7 @@ public class PrintStatisticsReport {
      *
      * @return  DOCUMENT ME!
      */
-    private BillingStatisticsReport createReport() {
+    protected BillingStatisticsReport createReport() {
         return new BillingStatisticsReport(
                 billingsBeans,
                 fromDate_tillDate[0],
