@@ -569,6 +569,9 @@ public class ButlerDownload extends HttpDownload {
                     } else {
                         return null;
                     }
+                } catch (final Exception ex) {
+                    log.warn("unknown download error", ex);
+                    return null;
                 }
                 if (Thread.interrupted()) {
                     if (log.isDebugEnabled()) {
