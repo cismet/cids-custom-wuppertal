@@ -19,9 +19,11 @@ import org.openide.util.Exceptions;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import java.util.ArrayList;
 import java.util.Properties;
@@ -540,10 +542,12 @@ public class ButlerDownload extends HttpDownload {
             baseUrl.append(requestId);
             for (final String fileExtension : fileExtensions) {
                 try {
-                    result.add(new URL(baseUrl.toString() + fileExtension));
+                    result.add(new URL(URLEncoder.encode(baseUrl.toString() + fileExtension, "UTF8")));
                 } catch (MalformedURLException ex) {
                     // should not happen
                     log.error("Missformed Download URL");
+                } catch (UnsupportedEncodingException ex) {
+                    log.error("Unsupported Encoding", ex); // never thrown
                 }
             }
             return result;
