@@ -516,39 +516,41 @@ public class ButlerDownload extends HttpDownload {
             final StringBuilder baseUrl = new StringBuilder();
             final ArrayList<String> fileExtensions = new ArrayList<String>();
             final String format = product.getFormat().getKey();
-            baseUrl.append(BUTLER_SERVER_BASE_PATH);
-            if (format.equals("dxf")) {
-                baseUrl.append(DXF_RESULT_DIR);
-                fileExtensions.add(".dxf");
-            } else if (format.equals("shp")) {
-                baseUrl.append(SHAPE_RESULT_DIR);
-                fileExtensions.add(".shp");
-                fileExtensions.add(".prj");
-                fileExtensions.add(".dbf");
-                fileExtensions.add(".shx");
-            } else if (format.equals("tif")) {
-                baseUrl.append(TIF_RESULT_DIR);
-                fileExtensions.add(".tif");
-            } else if (format.equals("geotif")) {
-                baseUrl.append(TIF_RESULT_DIR);
-                fileExtensions.add(".tif");
-                fileExtensions.add(".tfw");
-            } else {
-                // this must be true here: format.equals("pdf")
-                baseUrl.append(PDF_RESULT_DIR);
-                fileExtensions.add(".pdf");
-            }
-            baseUrl.append("/");
-            baseUrl.append(requestId);
-            for (final String fileExtension : fileExtensions) {
-                try {
-                    result.add(new URL(URLEncoder.encode(baseUrl.toString() + fileExtension, "UTF8")));
-                } catch (MalformedURLException ex) {
-                    // should not happen
-                    log.error("Missformed Download URL");
-                } catch (UnsupportedEncodingException ex) {
-                    log.error("Unsupported Encoding", ex); // never thrown
+            try {
+                baseUrl.append(BUTLER_SERVER_BASE_PATH);
+                if (format.equals("dxf")) {
+                    baseUrl.append(DXF_RESULT_DIR);
+                    fileExtensions.add(".dxf");
+                } else if (format.equals("shp")) {
+                    baseUrl.append(SHAPE_RESULT_DIR);
+                    fileExtensions.add(".shp");
+                    fileExtensions.add(".prj");
+                    fileExtensions.add(".dbf");
+                    fileExtensions.add(".shx");
+                } else if (format.equals("tif")) {
+                    baseUrl.append(TIF_RESULT_DIR);
+                    fileExtensions.add(".tif");
+                } else if (format.equals("geotif")) {
+                    baseUrl.append(TIF_RESULT_DIR);
+                    fileExtensions.add(".tif");
+                    fileExtensions.add(".tfw");
+                } else {
+                    // this must be true here: format.equals("pdf")
+                    baseUrl.append(PDF_RESULT_DIR);
+                    fileExtensions.add(".pdf");
                 }
+                baseUrl.append("/");
+                baseUrl.append(URLEncoder.encode(requestId, "UTF8"));
+                for (final String fileExtension : fileExtensions) {
+                    try {
+                        result.add(new URL(baseUrl.toString() + fileExtension));
+                    } catch (MalformedURLException ex) {
+                        // should not happen
+                        log.error("Missformed Download URL");
+                    }
+                }
+            } catch (UnsupportedEncodingException ex) {
+                log.error("Unsupported Encoding", ex); // never thrown
             }
             return result;
         }
