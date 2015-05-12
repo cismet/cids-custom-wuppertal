@@ -423,7 +423,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.txtBildnummer.toolTipText")); // NOI18N
         txtBildnummer.setMinimumSize(new java.awt.Dimension(4, 23));
-        txtBildnummer.setPreferredSize(new java.awt.Dimension(120, 23));
+        txtBildnummer.setPreferredSize(new java.awt.Dimension(240, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1332,7 +1332,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         if (tabBildnummern.getSelectedComponent().equals(pnlBildnummer)) {
             final String imageNr = txtBildnummer.getText().trim();
             if (StringUtils.isNotBlank(imageNr)) {
-                stadtbildSerieSearchStatement.setSingleImageNumber(imageNr);
+                stadtbildSerieSearchStatement.setImageNumberRule(imageNr);
             }
         } else {
             final String imageNrFrom = txtImageNrFrom.getText().trim();
