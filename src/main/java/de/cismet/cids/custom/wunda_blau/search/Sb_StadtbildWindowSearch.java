@@ -953,13 +953,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
-        final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
-                SwingUtilities.getWindowAncestor(this),
-                true);
-        final CidsBean newSuchwort = dialog.showDialog();
-        if (newSuchwort != null) {
-            final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
-            dlm.addElement(newSuchwort);
+        final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
+        for (final CidsBean newSuchwort : Sb_stadtbildserieEditorAddSuchwortDialog.getInstance().showDialog()) {
+            if (newSuchwort != null) {
+                dlm.addElement(newSuchwort);
+            }
         }
     }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
 
