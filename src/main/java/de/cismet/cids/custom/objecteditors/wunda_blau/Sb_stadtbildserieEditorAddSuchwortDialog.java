@@ -354,16 +354,16 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         if (jButton2.isEnabled()) {
             jProgressBar1.setMaximum(jTable1.getSelectedRowCount());
             jProgressBar1.setValue(0);
@@ -375,7 +375,6 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                     @Override
                     protected Void doInBackground() throws Exception {
                         int number = 0;
-                        beansToReturn.clear();
                         for (final int viewIndex : jTable1.getSelectedRows()) {
                             final int value = number++;
                             final int modelIndex = jTable1.convertRowIndexToModel(viewIndex);
@@ -406,16 +405,16 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                     }
                 }.execute();
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    } //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jTextField1ActionPerformed
         jButton2ActionPerformed(evt);
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }                                                                               //GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -423,6 +422,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      * @return  DOCUMENT ME!
      */
     public Collection<CidsBean> showDialog() {
+        beansToReturn.clear();
         StaticSwingTools.showDialog(this);
         jTable1.getSelectionModel().clearSelection();
         jTextField1.setText("");
