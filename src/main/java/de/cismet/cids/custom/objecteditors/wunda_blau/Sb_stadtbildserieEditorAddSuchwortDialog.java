@@ -152,7 +152,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
         if (jTextField1.getText().length() == 0) {
             sorter.setRowFilter(null);
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter(jTextField1.getText()));
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + jTextField1.getText()));
         }
 
         if ((sorter.getViewRowCount() == 1) && (jTable1.getSelectedRowCount() == 0)) {
@@ -354,16 +354,16 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if (jButton2.isEnabled()) {
             jProgressBar1.setMaximum(jTable1.getSelectedRowCount());
             jProgressBar1.setValue(0);
@@ -405,16 +405,16 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                     }
                 }.execute();
         }
-    } //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         jButton2ActionPerformed(evt);
-    }                                                                               //GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * DOCUMENT ME!
