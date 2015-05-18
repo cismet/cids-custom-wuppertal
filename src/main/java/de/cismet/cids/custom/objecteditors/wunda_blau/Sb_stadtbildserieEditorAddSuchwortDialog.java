@@ -14,12 +14,15 @@ import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -96,17 +99,6 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                 @Override
                 public void valueChanged(final ListSelectionEvent e) {
                     jButton2.setEnabled(jTable1.getSelectedRowCount() > 0);
-                }
-            });
-
-        jTextField1.addFocusListener(new FocusAdapter() {
-
-                @Override
-                public void focusGained(final FocusEvent e) {
-                }
-                @Override
-                public void focusLost(final FocusEvent e) {
-                    jTextField1.requestFocus();
                 }
             });
 
@@ -292,6 +284,13 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                     jTextField1ActionPerformed(evt);
                 }
             });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+
+                @Override
+                public void keyPressed(final java.awt.event.KeyEvent evt) {
+                    jTextField1KeyPressed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -314,6 +313,13 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
         jTable1.setShowHorizontalLines(false);
         jTable1.setShowVerticalLines(false);
         jTable1.setTableHeader(null);
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+
+                @Override
+                public void keyPressed(final java.awt.event.KeyEvent evt) {
+                    jTable1KeyPressed(evt);
+                }
+            });
         jScrollPane1.setViewportView(jTable1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -354,16 +360,16 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         if (jButton2.isEnabled()) {
             jProgressBar1.setMaximum(jTable1.getSelectedRowCount());
             jProgressBar1.setValue(0);
@@ -405,16 +411,46 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                     }
                 }.execute();
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    } //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jTextField1ActionPerformed
         jButton2ActionPerformed(evt);
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }                                                                               //GEN-LAST:event_jTextField1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jTextField1KeyPressed(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_jTextField1KeyPressed
+        final Component source = (Component)evt.getSource();
+        if ((evt.getKeyCode() == KeyEvent.VK_ESCAPE)) {
+            final JTextField f = (JTextField)source;
+            if (f.getText().isEmpty()) {
+                setVisible(false);
+            } else {
+                f.setText("");
+            }
+        }
+    }                                                                       //GEN-LAST:event_jTextField1KeyPressed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jTable1KeyPressed(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_jTable1KeyPressed
+        if ((evt.getKeyCode() != KeyEvent.VK_UP) && (evt.getKeyCode() != KeyEvent.VK_DOWN)
+                    && (evt.getKeyCode() != KeyEvent.VK_SHIFT)
+                    && (evt.getKeyCode() != KeyEvent.VK_CONTROL)) {
+            jTextField1.requestFocus();
+        }
+    }                                                                   //GEN-LAST:event_jTable1KeyPressed
 
     /**
      * DOCUMENT ME!
