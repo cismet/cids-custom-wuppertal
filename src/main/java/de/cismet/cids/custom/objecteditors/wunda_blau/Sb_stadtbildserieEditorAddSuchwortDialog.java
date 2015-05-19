@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
@@ -144,7 +145,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
         if (jTextField1.getText().length() == 0) {
             sorter.setRowFilter(null);
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + jTextField1.getText()));
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(jTextField1.getText())));
         }
 
         if ((sorter.getViewRowCount() == 1) && (jTable1.getSelectedRowCount() == 0)) {
