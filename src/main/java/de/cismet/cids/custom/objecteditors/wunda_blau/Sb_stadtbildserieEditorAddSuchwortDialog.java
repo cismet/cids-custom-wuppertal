@@ -14,11 +14,22 @@ import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+<<<<<<< Updated upstream
+=======
+import org.h2.expression.Rownum;
+
+import java.awt.Component;
+>>>>>>> Stashed changes
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
+<<<<<<< Updated upstream
+=======
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+>>>>>>> Stashed changes
 
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
@@ -152,7 +163,19 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
         if (jTextField1.getText().length() == 0) {
             sorter.setRowFilter(null);
         } else {
+<<<<<<< Updated upstream
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + jTextField1.getText()));
+=======
+            sorter.setRowFilter(new RowFilter<TableModel, Integer>() {
+
+                    @Override
+                    public boolean include(final RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
+                        return ((LightweightMetaObject)entry.getValue(0)).toString()
+                                    .toLowerCase()
+                                    .contains(jTextField1.getText().toLowerCase());
+                    }
+                });
+>>>>>>> Stashed changes
         }
 
         if ((sorter.getViewRowCount() == 1) && (jTable1.getSelectedRowCount() == 0)) {
