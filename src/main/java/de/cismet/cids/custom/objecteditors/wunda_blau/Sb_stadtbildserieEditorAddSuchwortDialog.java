@@ -15,13 +15,10 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import java.awt.Component;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
@@ -145,7 +142,15 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
         if (jTextField1.getText().length() == 0) {
             sorter.setRowFilter(null);
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(jTextField1.getText())));
+            sorter.setRowFilter(new RowFilter<TableModel, Integer>() {
+
+                    @Override
+                    public boolean include(final RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
+                        return ((LightweightMetaObject)entry.getValue(0)).toString()
+                                    .toLowerCase()
+                                    .contains(jTextField1.getText().toLowerCase());
+                    }
+                });
         }
 
         if ((sorter.getViewRowCount() == 1) && (jTable1.getSelectedRowCount() == 0)) {
@@ -361,16 +366,16 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if (jButton2.isEnabled()) {
             jProgressBar1.setMaximum(jTable1.getSelectedRowCount());
             jProgressBar1.setValue(0);
@@ -412,23 +417,23 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                     }
                 }.execute();
         }
-    } //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         jButton2ActionPerformed(evt);
-    }                                                                               //GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTextField1KeyPressed(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_jTextField1KeyPressed
+    private void jTextField1KeyPressed(final java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
         final Component source = (Component)evt.getSource();
         if ((evt.getKeyCode() == KeyEvent.VK_ESCAPE)) {
             final JTextField f = (JTextField)source;
@@ -438,20 +443,20 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                 f.setText("");
             }
         }
-    }                                                                       //GEN-LAST:event_jTextField1KeyPressed
+    }//GEN-LAST:event_jTextField1KeyPressed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTable1KeyPressed(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_jTable1KeyPressed
+    private void jTable1KeyPressed(final java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyPressed
         if ((evt.getKeyCode() != KeyEvent.VK_UP) && (evt.getKeyCode() != KeyEvent.VK_DOWN)
                     && (evt.getKeyCode() != KeyEvent.VK_SHIFT)
                     && (evt.getKeyCode() != KeyEvent.VK_CONTROL)) {
             jTextField1.requestFocus();
         }
-    }                                                                   //GEN-LAST:event_jTable1KeyPressed
+    }//GEN-LAST:event_jTable1KeyPressed
 
     /**
      * DOCUMENT ME!
