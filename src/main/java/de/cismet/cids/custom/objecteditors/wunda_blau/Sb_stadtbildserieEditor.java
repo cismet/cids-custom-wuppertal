@@ -605,13 +605,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panPrintButton.setLayout(new java.awt.GridBagLayout());
 
         btnReport.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/icons/einzelReport.png"))); // NOI18N
         btnReport.setText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieEditor.class,
-                "MauerEditor.btnReport.text"));                                       // NOI18N
+                "MauerEditor.btnReport.text"));                                            // NOI18N
         btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieEditor.class,
-                "MauerEditor.btnReport.toolTipText"));                                // NOI18N
+                "MauerEditor.btnReport.toolTipText"));                                     // NOI18N
         btnReport.setBorderPainted(false);
         btnReport.setContentAreaFilled(false);
         btnReport.setFocusPainted(false);

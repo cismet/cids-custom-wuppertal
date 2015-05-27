@@ -205,15 +205,15 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
         pnlCtrlBtn.setLayout(new java.awt.GridBagLayout());
 
         btnDownloadHighResImage.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/download.png"))); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/icons/einzelDownload.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnDownloadHighResImage,
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildPreviewImage.class,
-                "Sb_StadtbildPreviewImage.btnDownloadHighResImage.text"));                         // NOI18N
+                "Sb_StadtbildPreviewImage.btnDownloadHighResImage.text"));                   // NOI18N
         btnDownloadHighResImage.setToolTipText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildPreviewImage.class,
-                "Sb_StadtbildPreviewImage.btnDownloadHighResImage.toolTipText"));                  // NOI18N
+                "Sb_StadtbildPreviewImage.btnDownloadHighResImage.toolTipText"));            // NOI18N
         btnDownloadHighResImage.setBorder(null);
         btnDownloadHighResImage.setBorderPainted(false);
         btnDownloadHighResImage.setContentAreaFilled(false);
