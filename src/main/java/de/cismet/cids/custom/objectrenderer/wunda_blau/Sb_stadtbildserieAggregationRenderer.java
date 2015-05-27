@@ -1909,6 +1909,24 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         public void setImage(final Image image) {
             this.image = image;
         }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getStrasse() {
+            return (String)stadtbildserie.getProperty("strasse.name");
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getHausnummer() {
+            return (String)stadtbildserie.getProperty("hausnummer");
+        }
     }
 
     /**
@@ -1939,24 +1957,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
          */
         public String getAnzahlBilder() {
             return Integer.toString(stadtbildserie.getBeanCollectionProperty("stadtbilder_arr").size());
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public String getStrasse() {
-            return (String)stadtbildserie.getProperty("strasse.name");
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public String getHausnummer() {
-            return (String)stadtbildserie.getProperty("hausnummer");
         }
 
         /**
