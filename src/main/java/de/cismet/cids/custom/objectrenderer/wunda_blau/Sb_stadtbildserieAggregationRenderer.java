@@ -1425,7 +1425,12 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     public void stadtbildChosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
         final String imageNumber = (String)stadtbild.getProperty("bildnummer");
         selectedStadtbilder.add(imageNumber);
-        refreshWarenkorbDownloadAction();
+        if (!highResStadtbilder.contains(imageNumber)) {
+            warenkorbDownloadAction.putValue(
+                Action.SHORT_DESCRIPTION,
+                createAnzahlHighResBilderTooltipText(-1, "dem Warenkorb"));
+            checkHighResDownloadAvailable(stadtbild);
+        }
         warenkorbReportAction.setEnabled(getSelectedStadtbilderAmount() > 0);
     }
 
@@ -1551,7 +1556,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      */
     private static String createAnzahlHighResBilderTooltipText(final int anzahlBilder, final String fillText) {
         final String tooltipText;
-        if (anzahlBilder <= 0) {
+        if (anzahlBilder < 0) {
+            tooltipText = "Verfügbare Bilder aus " + fillText + " herunterladen (Anzahl wird ermittelt...)";
+        } else if (anzahlBilder == 0) {
             tooltipText = "Keine verfügbaren Bilder in " + fillText;
         } else if (anzahlBilder == 1) {
             tooltipText = 1 + " verfügbares Bild aus " + fillText + " herunterladen";
