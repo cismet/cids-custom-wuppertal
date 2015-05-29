@@ -204,12 +204,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     downladVorauswahl();
                 }
             };
-        vorauswahlDownloadAction.putValue(
-            Action.SHORT_DESCRIPTION,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.actionVorauswahlDownload.toolTipText"));
-        vorauswahlDownloadAction.setEnabled(isAtLeastOneVorschauInHighRes());
 
         warenkorbReportAction = new AbstractAction(
                 null,
@@ -237,12 +231,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     downladWarenkorb();
                 }
             };
-        warenkorbDownloadAction.putValue(
-            Action.SHORT_DESCRIPTION,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.actionWarenkorbDownload.toolTipText"));
-        warenkorbDownloadAction.setEnabled(isAtLeastOneSelectedInHighRes());
+
+        refreshVorauswahlDownloadAction();
+        refreshWarenkorbDownloadAction();
 
         initComponents();
 
@@ -1434,7 +1425,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     public void stadtbildChosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
         final String imageNumber = (String)stadtbild.getProperty("bildnummer");
         selectedStadtbilder.add(imageNumber);
-        warenkorbDownloadAction.setEnabled(isAtLeastOneSelectedInHighRes());
+        refreshWarenkorbDownloadAction();
         warenkorbReportAction.setEnabled(getSelectedStadtbilderAmount() > 0);
     }
 
@@ -1444,14 +1435,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         if (selectedStadtbilder.contains(imageNumber)) {
             selectedStadtbilder.remove(imageNumber);
         }
-        warenkorbDownloadAction.setEnabled(isAtLeastOneSelectedInHighRes());
+        refreshWarenkorbDownloadAction();
         warenkorbReportAction.setEnabled(getSelectedStadtbilderAmount() > 0);
     }
 
     @Override
     public void sb_stadtbildserieGridObjectMoveToBin(final Sb_stadtbildserieGridObject source) {
         setEnableHighResDownload();
-        warenkorbReportAction.setEnabled(getSelectedStadtbilderAmount() > 0);
+        refreshWarenkorbDownloadAction();
     }
 
     @Override
@@ -1503,13 +1494,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @return  DOCUMENT ME!
      */
-    private boolean isAtLeastOneVorschauInHighRes() {
+    private int countAnzahlVorauswahlInHighRes() {
+        int count = 0;
         for (final String bildnummer : vorschauStadtbilder) {
             if (highResStadtbilder.contains(bildnummer)) {
-                return true;
+                count++;
             }
         }
-        return false;
+        return count;
     }
 
     /**
@@ -1517,13 +1509,56 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @return  DOCUMENT ME!
      */
-    private boolean isAtLeastOneSelectedInHighRes() {
+    private int countAnzahlWarenkorbInHighRes() {
+        int count = 0;
         for (final String bildnummer : selectedStadtbilder) {
             if (highResStadtbilder.contains(bildnummer)) {
-                return true;
+                count++;
             }
         }
-        return false;
+        return count;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshVorauswahlDownloadAction() {
+        final int countAnzahlVorauswahlInHighRes = countAnzahlVorauswahlInHighRes();
+        vorauswahlDownloadAction.setEnabled(countAnzahlVorauswahlInHighRes > 0);
+        vorauswahlDownloadAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            createAnzahlHighResBilderTooltipText(countAnzahlVorauswahlInHighRes, "der Vorauswahl"));
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshWarenkorbDownloadAction() {
+        final int countAnzahlWarenkorbInHighRes = countAnzahlWarenkorbInHighRes();
+        warenkorbDownloadAction.setEnabled(countAnzahlWarenkorbInHighRes > 0);
+        warenkorbDownloadAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            createAnzahlHighResBilderTooltipText(countAnzahlWarenkorbInHighRes, "dem Warenkorb"));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   anzahlBilder  DOCUMENT ME!
+     * @param   fillText      DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String createAnzahlHighResBilderTooltipText(final int anzahlBilder, final String fillText) {
+        final String tooltipText;
+        if (anzahlBilder <= 0) {
+            tooltipText = "Keine verfügbaren Bilder in " + fillText;
+        } else if (anzahlBilder == 1) {
+            tooltipText = 1 + " verfügbares Bild aus " + fillText + " herunterladen";
+        } else {
+            tooltipText = anzahlBilder + " verfügbare Bilder aus " + fillText + " herunterladen";
+        }
+        return tooltipText;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1623,8 +1658,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 // do nothing - was probably canceled such that another work can run
                 return;
             }
-            vorauswahlDownloadAction.setEnabled(isAtLeastOneVorschauInHighRes());
-            warenkorbDownloadAction.setEnabled(isAtLeastOneSelectedInHighRes());
+
+            refreshVorauswahlDownloadAction();
+            refreshWarenkorbDownloadAction();
         }
     }
 
