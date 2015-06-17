@@ -51,7 +51,7 @@ public class NasStartupHook implements StartupHook {
 
     @Override
     public void applicationStarted() {
-        SwingUtilities.invokeLater(new Runnable() {
+        new Thread(new Runnable() {
 
                 @Override
                 public void run() {
@@ -100,6 +100,6 @@ public class NasStartupHook implements StartupHook {
                         }
                     }
                 }
-            });
+            }).start();
     }
 }
