@@ -54,13 +54,21 @@ public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
         defaultBindableDateChooserFrom = new de.cismet.cids.editors.DefaultBindableDateChooser();
         defaultBindableDateChooserTo = new de.cismet.cids.editors.DefaultBindableDateChooser();
         defaultBindableReferenceComboStatus = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        hFill = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        vFill = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        hFill = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        vFill = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblFrom, NbBundle.getMessage(Oab_GewaessereinzugsgebietEditor.class, "Oab_GewaessereinzugsgebietEditor.lblFrom.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFrom,
+            NbBundle.getMessage(
+                Oab_GewaessereinzugsgebietEditor.class,
+                "Oab_GewaessereinzugsgebietEditor.lblFrom.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -68,7 +76,9 @@ public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(15, 15, 5, 5);
         add(lblFrom, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblTo, NbBundle.getMessage(Oab_GewaessereinzugsgebietEditor.class, "Oab_GewaessereinzugsgebietEditor.lblTo.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTo,
+            NbBundle.getMessage(Oab_GewaessereinzugsgebietEditor.class, "Oab_GewaessereinzugsgebietEditor.lblTo.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -76,7 +86,11 @@ public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         add(lblTo, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblStatus, NbBundle.getMessage(Oab_GewaessereinzugsgebietEditor.class, "Oab_GewaessereinzugsgebietEditor.lblStatus.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStatus,
+            NbBundle.getMessage(
+                Oab_GewaessereinzugsgebietEditor.class,
+                "Oab_GewaessereinzugsgebietEditor.lblStatus.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -111,5 +125,5 @@ public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.weighty = 1.0;
         add(vFill, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    }                                                                // </editor-fold>//GEN-END:initComponents
 }
