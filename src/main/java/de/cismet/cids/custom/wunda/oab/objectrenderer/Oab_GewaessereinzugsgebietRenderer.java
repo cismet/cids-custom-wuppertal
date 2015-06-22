@@ -9,12 +9,12 @@ import org.openide.util.NbBundle;
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
+public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer {
 
     /**
      * Creates new form Oab_Gewaessereinzugsgebiet
      */
-    public Oab_Gewaessereinzugsgebiet() {
+    public Oab_GewaessereinzugsgebietRenderer() {
         initComponents();
     }
 
@@ -68,7 +68,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         lblMapTitle.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         lblMapTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblMapTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(lblMapTitle, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblMapTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblMapTitle, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblMapTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -100,7 +100,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         pnlData.setOpaque(false);
         pnlData.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblName, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblName.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblName, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -115,7 +115,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         lblData.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         lblData.setForeground(new java.awt.Color(255, 255, 255));
         lblData.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(lblData, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblData.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblData, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblData.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -132,7 +132,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         gridBagConstraints.weightx = 1.0;
         pnlData.add(semiRoundedPanelData, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblNameValue, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblNameValue.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblNameValue, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblNameValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -141,7 +141,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblNameValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblFrom, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblFrom.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblFrom, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblFrom.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -149,7 +149,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblFrom, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblFromValue, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblFromValue.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblFromValue, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblFromValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -158,7 +158,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblFromValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblTo, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblTo.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblTo, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblTo.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -166,7 +166,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblTo, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblToValue, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblToValue.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblToValue, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblToValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -175,7 +175,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblToValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblStatus, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblStatus.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblStatus, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblStatus.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -183,7 +183,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblStatus, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblStatusValue, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblStatusValue.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblStatusValue, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblStatusValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -216,7 +216,7 @@ public class Oab_Gewaessereinzugsgebiet extends AbstractCidsBeanRenderer {
         lblProjects.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         lblProjects.setForeground(new java.awt.Color(255, 255, 255));
         lblProjects.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(lblProjects, NbBundle.getMessage(Oab_Gewaessereinzugsgebiet.class, "Oab_Gewaessereinzugsgebiet.lblProjects.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblProjects, NbBundle.getMessage(Oab_GewaessereinzugsgebietRenderer.class, "Oab_GewaessereinzugsgebietRenderer.lblProjects.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

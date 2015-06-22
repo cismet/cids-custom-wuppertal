@@ -55,7 +55,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblMapTitle.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblMapTitle.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -90,7 +90,7 @@
         <Component class="javax.swing.JLabel" name="lblName">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblName.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblName.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -123,7 +123,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblData.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblData.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -137,7 +137,7 @@
         <Component class="javax.swing.JLabel" name="lblNameValue">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblNameValue.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblNameValue.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -149,7 +149,7 @@
         <Component class="javax.swing.JLabel" name="lblFrom">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblFrom.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblFrom.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -161,7 +161,7 @@
         <Component class="javax.swing.JLabel" name="lblFromValue">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblFromValue.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblFromValue.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -173,7 +173,7 @@
         <Component class="javax.swing.JLabel" name="lblTo">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblTo.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblTo.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -185,7 +185,7 @@
         <Component class="javax.swing.JLabel" name="lblToValue">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblToValue.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblToValue.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -197,7 +197,7 @@
         <Component class="javax.swing.JLabel" name="lblStatus">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblStatus.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblStatus.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -209,7 +209,7 @@
         <Component class="javax.swing.JLabel" name="lblStatusValue">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblStatusValue.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblStatusValue.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -271,7 +271,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_Gewaessereinzugsgebiet.lblProjects.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_GewaessereinzugsgebietRenderer.lblProjects.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
