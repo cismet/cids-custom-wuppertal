@@ -21,9 +21,9 @@ public class AuftragsbuchToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        final Integer auftragsart = (Integer)cidsBean.getProperty("auftragsnummer");
-        if (auftragsart != null) {
-            return auftragsart.toString();
+        final String auftragsnr = (String)cidsBean.getProperty("auftragsnummer");
+        if (auftragsnr != null) {
+            return auftragsnr.toString();
         } else {
             return "keine Auftragsnummer vergeben";
         }
