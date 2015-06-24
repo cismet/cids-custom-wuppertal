@@ -92,7 +92,7 @@ public class PointNumberDownload extends AbstractDownload {
      */
     private void createFileBody() {
         for (final PointNumberReservation pnr : content.getPointNumbers()) {
-            contentBuilder.append(pnr.getPunktnummern());
+            contentBuilder.append(pnr.getPunktnummer());
             if (!isFreigabeMode) {
                 contentBuilder.append(" (");
                 try {

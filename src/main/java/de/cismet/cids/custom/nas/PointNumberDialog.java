@@ -25,14 +25,18 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 
 import java.io.IOException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -45,7 +49,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
@@ -55,9 +58,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.plaf.basic.BasicComboBoxEditor;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
@@ -74,8 +74,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSe
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.search.CidsServerSearch;
-
-import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -112,43 +110,62 @@ public class PointNumberDialog extends javax.swing.JDialog {
     Timer t = new Timer();
     private PointNumberReservationRequest result;
     private boolean hasFreigabeAccess = false;
+    private boolean hasVerlaengernAccess = false;
     private AllAntragsnummernLoadWorker allAnrLoadWorker = new AllAntragsnummernLoadWorker();
     private FreigebenWorker freigebenWorker = new FreigebenWorker();
+    private VerlaengernWorker verlaengernWorker = new VerlaengernWorker();
     private PointNumberLoadWorker pnrLoadWorker = new PointNumberLoadWorker();
     private boolean useAutoCompleteDecorator = false;
     private List<String> priorityPrefixes = new ArrayList<String>();
     private List<CheckListItem> punktnummern = new ArrayList<CheckListItem>();
-    private PunktNummerTableModel model = new PunktNummerTableModel();
-    private boolean skipLoadAntragsnummern = true;
+    private PunktNummerTableModel releaseModel = new PunktNummerTableModel(false);
+    private PunktNummerTableModel prolongModel = new PunktNummerTableModel(true);
+    private boolean hasBeenDownloaded = true;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeSelectAll;
+    private javax.swing.JButton btnDeSelectAll1;
     private javax.swing.JButton btnDone;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnFreigeben;
     private javax.swing.JButton btnSelectAll;
+    private javax.swing.JButton btnSelectAll1;
+    private javax.swing.JButton btnVerlaengern;
     private javax.swing.JComboBox cbAntragPrefix;
     private javax.swing.JComboBox cbAntragsNummer;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXBusyLabel jxFreigebenWaitLabel;
+    private org.jdesktop.swingx.JXBusyLabel jxFreigebenWaitLabel1;
     private javax.swing.JLabel lblAnrSeperator;
     private javax.swing.JLabel lblAntragsnummer;
     private javax.swing.JLabel lblFreigebenError;
+    private javax.swing.JLabel lblFreigebenError1;
     private javax.swing.JLabel lblProtokoll;
     private javax.swing.JLabel lblPunktNummern;
+    private javax.swing.JLabel lblPunktNummern1;
     private javax.swing.JLabel lblTabErgaenzen;
     private javax.swing.JLabel lblTabFreigeben;
     private javax.swing.JLabel lblTabReservieren;
+    private javax.swing.JLabel lblTabVerlaengern;
     private javax.swing.JLabel lblVnr;
     private javax.swing.JPanel pnlAntragsnummer;
     private javax.swing.JPanel pnlControls;
     private de.cismet.cids.custom.nas.PointNumberReservationPanel pnlErgaenzen;
     private javax.swing.JPanel pnlFreigabeListControls;
+    private javax.swing.JPanel pnlFreigabeListControls1;
     private javax.swing.JPanel pnlFreigeben;
     private javax.swing.JPanel pnlFreigebenCard;
     private javax.swing.JPanel pnlFreigebenError;
@@ -158,9 +175,15 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pnlTabErgaenzen;
     private javax.swing.JPanel pnlTabFreigeben;
     private javax.swing.JPanel pnlTabReservieren;
+    private javax.swing.JPanel pnlTabVerlaengern;
+    private javax.swing.JPanel pnlVerlaengern;
+    private javax.swing.JPanel pnlVerlaengernCard;
+    private javax.swing.JPanel pnlVerlaengernError;
+    private javax.swing.JPanel pnlVerlaengernWait;
     private javax.swing.JPanel pnlWait;
     private de.cismet.commons.gui.progress.BusyLoggingTextPane protokollPane;
     private javax.swing.JTable tblPunktnummern;
+    private javax.swing.JTable tblPunktnummern1;
     private javax.swing.JTabbedPane tbpModus;
     // End of variables declaration//GEN-END:variables
 
@@ -191,15 +214,17 @@ public class PointNumberDialog extends javax.swing.JDialog {
             LOG.error("Could not read pointnumberSettings.properties", e);
         }
 
-        tbpModus.setTabComponentAt(0, pnlTabReservieren);
+        tbpModus.setTabComponentAt(0, lblTabReservieren);
         tbpModus.setTabComponentAt(1, lblTabErgaenzen);
         tbpModus.setTabComponentAt(2, lblTabFreigeben);
+        tbpModus.setTabComponentAt(3, lblTabVerlaengern);
 
         tbpModus.addChangeListener(new ChangeListener() {
 
                 @Override
                 public void stateChanged(final ChangeEvent e) {
-                    if (tbpModus.getSelectedIndex() == 2) {
+                    if ((tbpModus.getSelectedComponent().equals(pnlFreigeben))
+                                || (tbpModus.getSelectedComponent().equals(pnlVerlaengern))) {
                         loadPointNumbers();
                     } else {
                         final PointNumberReservationPanel pnl = (PointNumberReservationPanel)
@@ -213,7 +238,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 @Override
                 public void stateChanged(final ChangeEvent e) {
                     final DefaultComboBoxModel model = (DefaultComboBoxModel)cbAntragsNummer.getModel();
-                    if (tbpModus.getSelectedIndex() == 0) {
+                    if (tbpModus.getSelectedComponent().equals(pnlReservieren)) {
                         model.setSelectedItem("");
                         cbAntragsNummer.setEditable(true);
                     } else {
@@ -257,6 +282,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             });
         try {
             configureFreigebenTab();
+            configureVerlaengernTab();
             configurePrefixBox();
         } catch (Exception e) {
             LOG.error("Error during determination of vermessungstellennummer", e);
@@ -273,8 +299,23 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 column.setMaxWidth(20);
             }
         }
+        if ((tblPunktnummern1 != null) && (tblPunktnummern1.getColumnModel() != null)) {
+            final TableColumn column = tblPunktnummern1.getColumnModel().getColumn(0);
+            if (column != null) {
+                column.setPreferredWidth(20);
+                column.setMaxWidth(20);
+            }
+        }
+
         tblPunktnummern.setTableHeader(null);
         tblPunktnummern.setShowGrid(false);
+        tblPunktnummern1.setTableHeader(null);
+        tblPunktnummern1.setShowGrid(false);
+
+        final Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, 18);
+        jXDatePicker1.setDate(c.getTime());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -305,7 +346,22 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
                     != null;
         if (!hasFreigabeAccess) {
-            tbpModus.remove(2);
+            tbpModus.remove(pnlVerlaengern);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    private void configureVerlaengernTab() throws ConnectionException {
+        // if user does not have the right to do freigaben, remove the tab
+        hasVerlaengernAccess = SessionManager.getConnection()
+                    .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernVerlaengern")
+                    != null;
+        if (!hasVerlaengernAccess) {
+            tbpModus.remove(pnlVerlaengern);
         }
     }
 
@@ -377,9 +433,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
                             loadAllAntragsNummern();
                         }
                     } catch (InterruptedException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOG.error(ex, ex);
                     } catch (ExecutionException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOG.error(ex, ex);
                     }
                 }
             };
@@ -404,7 +460,10 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnrLoadWorker = new PointNumberLoadWorker();
         final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
         cl.show(pnlFreigeben, "card1");
+        final CardLayout cl1 = (CardLayout)(pnlVerlaengern.getLayout());
+        cl1.show(pnlVerlaengern, "card1");
         jxFreigebenWaitLabel.setBusy(true);
+        jxFreigebenWaitLabel1.setBusy(true);
         pnrLoadWorker.execute();
     }
 
@@ -456,7 +515,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * @return  DOCUMENT ME!
      */
     public boolean isErgaenzenMode() {
-        return tbpModus.getSelectedIndex() == 1;
+        return tbpModus.getSelectedComponent().equals(pnlErgaenzen);
     }
 
     /**
@@ -468,6 +527,17 @@ public class PointNumberDialog extends javax.swing.JDialog {
         final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
         cl.show(pnlFreigeben, "card3");
         jxFreigebenWaitLabel.setBusy(true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void showVerlaengernError() {
+//        tfAntragsnummer.getDocument().addDocumentListener(this);
+        jxFreigebenWaitLabel1.setBusy(false);
+        final CardLayout cl1 = (CardLayout)(pnlVerlaengern.getLayout());
+        cl1.show(pnlVerlaengern, "card3");
+        jxFreigebenWaitLabel1.setBusy(true);
     }
 
     /**
@@ -485,6 +555,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
         lblTabErgaenzen = new javax.swing.JLabel();
         pnlTabFreigeben = new javax.swing.JPanel();
         lblTabFreigeben = new javax.swing.JLabel();
+        pnlTabVerlaengern = new javax.swing.JPanel();
+        lblTabVerlaengern = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -509,6 +581,27 @@ public class PointNumberDialog extends javax.swing.JDialog {
         tblPunktnummern = new javax.swing.JTable();
         pnlFreigebenError = new javax.swing.JPanel();
         lblFreigebenError = new javax.swing.JLabel();
+        pnlVerlaengern = new javax.swing.JPanel();
+        pnlVerlaengernWait = new javax.swing.JPanel();
+        jxFreigebenWaitLabel1 = new org.jdesktop.swingx.JXBusyLabel();
+        pnlVerlaengernCard = new javax.swing.JPanel();
+        lblPunktNummern1 = new javax.swing.JLabel();
+        pnlFreigabeListControls1 = new javax.swing.JPanel();
+        btnSelectAll1 = new javax.swing.JButton();
+        btnDeSelectAll1 = new javax.swing.JButton();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblPunktnummern1 = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        btnVerlaengern = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        pnlVerlaengernError = new javax.swing.JPanel();
+        lblFreigebenError1 = new javax.swing.JLabel();
         cbAntragPrefix = new WideComboBox();
         lblAnrSeperator = new javax.swing.JLabel();
         pnlAntragsnummer = new javax.swing.JPanel();
@@ -555,6 +648,16 @@ public class PointNumberDialog extends javax.swing.JDialog {
             org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabFreigeben.text")); // NOI18N
         pnlTabFreigeben.add(lblTabFreigeben);
 
+        pnlTabVerlaengern.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        pnlTabVerlaengern.setOpaque(false);
+
+        lblTabVerlaengern.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_153_unchecked_054_clock.png")));          // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTabVerlaengern,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabVerlaengern.text")); // NOI18N
+        pnlTabVerlaengern.add(lblTabVerlaengern);
+
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
                     { null, null, null, null },
@@ -594,7 +697,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 "PointNumberDialog.pnlReservieren.TabConstraints.tabToolTip")); // NOI18N
         tbpModus.addTab(org.openide.util.NbBundle.getMessage(
                 PointNumberDialog.class,
-                "PointNumberDialog.pnlErgaenzen.TabConstraints.tabTitle"),
+                "PointNumberDialog.pnlReservieren.TabConstraints.tabTitle"),
             pnlErgaenzen);                                                      // NOI18N
 
         pnlFreigeben.setLayout(new java.awt.CardLayout());
@@ -696,7 +799,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 0);
         pnlFreigebenCard.add(pnlFreigabeListControls, gridBagConstraints);
 
-        tblPunktnummern.setModel(model);
+        tblPunktnummern.setModel(releaseModel);
         tblPunktnummern.setFillsViewportHeight(true);
         tblPunktnummern.setShowHorizontalLines(false);
         tblPunktnummern.setShowVerticalLines(false);
@@ -727,8 +830,170 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         tbpModus.addTab(org.openide.util.NbBundle.getMessage(
                 PointNumberDialog.class,
-                "PointNumberDialog.pnlFreigeben.TabConstraints.tabTitle"),
+                "PointNumberDialog.pnlReservieren.TabConstraints.tabTitle"),
             pnlFreigeben); // NOI18N
+
+        pnlVerlaengern.setLayout(new java.awt.CardLayout());
+
+        pnlVerlaengernWait.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jxFreigebenWaitLabel1,
+            org.openide.util.NbBundle.getMessage(
+                PointNumberDialog.class,
+                "PointNumberDialog.jxFreigebenWaitLabel1.text")); // NOI18N
+        pnlVerlaengernWait.add(jxFreigebenWaitLabel1, new java.awt.GridBagConstraints());
+
+        pnlVerlaengern.add(pnlVerlaengernWait, "card1");
+
+        pnlVerlaengernCard.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblPunktNummern1,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblPunktNummern1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pnlVerlaengernCard.add(lblPunktNummern1, gridBagConstraints);
+
+        pnlFreigabeListControls1.setLayout(new java.awt.GridBagLayout());
+
+        btnSelectAll1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/nas/icon-selectionadd.png")));                       // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnSelectAll1,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnSelectAll1.text")); // NOI18N
+        btnSelectAll1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PointNumberDialog.class,
+                "PointNumberDialog.btnSelectAll1.toolTipText"));                                                    // NOI18N
+        btnSelectAll1.setPreferredSize(new java.awt.Dimension(30, 28));
+        btnSelectAll1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSelectAll1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        pnlFreigabeListControls1.add(btnSelectAll1, gridBagConstraints);
+
+        btnDeSelectAll1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/nas/icon-selectionremove.png")));                      // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnDeSelectAll1,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDeSelectAll1.text")); // NOI18N
+        btnDeSelectAll1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PointNumberDialog.class,
+                "PointNumberDialog.btnDeSelectAll1.toolTipText"));                                                    // NOI18N
+        btnDeSelectAll1.setPreferredSize(new java.awt.Dimension(30, 28));
+        btnDeSelectAll1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnDeSelectAll1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        pnlFreigabeListControls1.add(btnDeSelectAll1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlFreigabeListControls1.add(filler3, gridBagConstraints);
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+        pnlFreigabeListControls1.add(jPanel4, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 0);
+        pnlVerlaengernCard.add(pnlFreigabeListControls1, gridBagConstraints);
+
+        tblPunktnummern1.setModel(prolongModel);
+        tblPunktnummern1.setFillsViewportHeight(true);
+        tblPunktnummern1.setShowHorizontalLines(false);
+        tblPunktnummern1.setShowVerticalLines(false);
+        tblPunktnummern1.setTableHeader(null);
+        jScrollPane4.setViewportView(tblPunktnummern1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pnlVerlaengernCard.add(jScrollPane4, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        jPanel2.add(jXDatePicker1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnVerlaengern,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnVerlaengern.text")); // NOI18N
+        btnVerlaengern.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnVerlaengernActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        jPanel2.add(btnVerlaengern, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(jPanel3, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        jPanel2.add(jLabel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pnlVerlaengernCard.add(jPanel2, gridBagConstraints);
+
+        pnlVerlaengern.add(pnlVerlaengernCard, "card2");
+
+        pnlVerlaengernError.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFreigebenError1,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblFreigebenError1.text")); // NOI18N
+        pnlVerlaengernError.add(lblFreigebenError1, new java.awt.GridBagConstraints());
+
+        pnlVerlaengern.add(pnlVerlaengernError, "card3");
+
+        tbpModus.addTab(org.openide.util.NbBundle.getMessage(
+                PointNumberDialog.class,
+                "PointNumberDialog.pnlReservieren.TabConstraints.tabTitle"),
+            pnlVerlaengern); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -920,7 +1185,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         } catch (BadLocationException ex) {
             LOG.error("Could not clear Protokoll Pane", ex);
         }
-        if ((model.getSelectedValues() == 0)) {
+        if ((releaseModel.getSelectedValues() == 0)) {
             protokollPane.addMessage(
                 "Es wurden keine Punktnummern zur Freigabe selektiert.",
                 BusyLoggingTextPane.Styles.ERROR);
@@ -931,6 +1196,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         protokollPane.setBusy(true);
         protokollPane.addMessage("Sende Freigabeauftrag.", BusyLoggingTextPane.Styles.INFO);
 
+        warnIfNeeded();
         freigebenWorker.execute();
     } //GEN-LAST:event_btnFreigebenActionPerformed
 
@@ -960,6 +1226,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
 
         DownloadManager.instance().add(download);
+        hasBeenDownloaded = true;
     } //GEN-LAST:event_btnDownloadActionPerformed
 
     /**
@@ -982,7 +1249,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             item.setSelected(true);
-            model.setValueAt(item, i, 0);
+            releaseModel.setValueAt(item, i, 0);
         }
         tblPunktnummern.repaint();
     }                                                                                  //GEN-LAST:event_btnDeSelectAllActionPerformed
@@ -997,7 +1264,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             // inverts the selection for the item
             item.setSelected(false);
-            model.setValueAt(item, i, 0);
+            releaseModel.setValueAt(item, i, 0);
         }
         tblPunktnummern.repaint();
     } //GEN-LAST:event_btnSelectAllActionPerformed
@@ -1010,10 +1277,69 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragsNummerActionPerformed
         // since the combobox in the freigeben tab is  not editable no document events are fired when changing the
         // selected item
-        if (!cbAntragsNummer.isEditable() && (tbpModus.getSelectedIndex() == 2)) {
+        if (!cbAntragsNummer.isEditable()
+                    && (tbpModus.getSelectedComponent().equals(pnlFreigeben)
+                        || (tbpModus.getSelectedComponent().equals(pnlVerlaengern)))) {
             loadPointNumbers();
         }
     } //GEN-LAST:event_cbAntragsNummerActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnVerlaengernActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnVerlaengernActionPerformed
+        verlaengernWorker = new VerlaengernWorker();
+
+        try {
+            protokollPane.getDocument().remove(0, protokollPane.getDocument().getLength());
+        } catch (BadLocationException ex) {
+            LOG.error("Could not clear Protokoll Pane", ex);
+        }
+        if ((prolongModel.getSelectedValues() == 0)) {
+            protokollPane.addMessage(
+                "Es wurden keine Punktnummern zum Verlängern selektiert.",
+                BusyLoggingTextPane.Styles.ERROR);
+            return;
+        }
+        enableDoneButton(false);
+        btnVerlaengern.setEnabled(false);
+        protokollPane.setBusy(true);
+        protokollPane.addMessage("Sende Verlängerungseauftrag.", BusyLoggingTextPane.Styles.INFO);
+
+        warnIfNeeded();
+        verlaengernWorker.execute();
+    } //GEN-LAST:event_btnVerlaengernActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnSelectAll1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAll1ActionPerformed
+        for (int i = 0; i < punktnummern.size(); i++) {
+            final CheckListItem item = (CheckListItem)punktnummern.get(i);
+            // inverts the selection for the item
+            item.setSelected(false);
+            prolongModel.setValueAt(item, i, 0);
+        }
+        tblPunktnummern1.repaint();
+    } //GEN-LAST:event_btnSelectAll1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnDeSelectAll1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAll1ActionPerformed
+        for (int i = 0; i < punktnummern.size(); i++) {
+            final CheckListItem item = (CheckListItem)punktnummern.get(i);
+            item.setSelected(true);
+            prolongModel.setValueAt(item, i, 0);
+        }
+        tblPunktnummern1.repaint();
+    }                                                                                   //GEN-LAST:event_btnDeSelectAll1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1153,6 +1479,32 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    public void setSuccess() {
+        hasBeenDownloaded = false;
+    }
+
+    @Override
+    public void dispose() {
+        warnIfNeeded();
+        super.dispose();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void warnIfNeeded() {
+        if (!hasBeenDownloaded) {
+            final PointNumberWarnDialog d = new PointNumberWarnDialog(StaticSwingTools.getFirstParentFrame(this), true);
+            StaticSwingTools.showDialog(d);
+            if (d.isDownloadRequested()) {
+                btnDownloadActionPerformed(null);
+            }
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1233,6 +1585,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             final String anr = getAnr();
             if ((anr == null) || anr.equals("") || !anr.matches("[a-zA-Z0-9_-]*")) {
                 showFreigabeError();
+                showVerlaengernError();
                 return null;
             }
 
@@ -1272,32 +1625,47 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
 
                 final List<CheckListItem> listModel = new ArrayList<CheckListItem>();
-                int i = 0;
+                final SimpleDateFormat formatterFrom = new SimpleDateFormat("yyyy-MM-dd");
+                final SimpleDateFormat formatterTo = new SimpleDateFormat("dd.MM.yyyy");
                 for (final PointNumberReservation pnr : result) {
-                    listModel.add(new CheckListItem(pnr.getPunktnummern()));
-                    i++;
+                    try {
+                        listModel.add(new CheckListItem(
+                                pnr.getPunktnummer(),
+                                formatterTo.format(formatterFrom.parse(pnr.getAblaufDatum()))));
+                    } catch (ParseException ex) {
+                        listModel.add(new CheckListItem(pnr.getPunktnummer(), pnr.getAblaufDatum()));
+                    }
                 }
                 Collections.sort(listModel, new CheckBoxItemComparator());
                 punktnummern.clear();
                 punktnummern.addAll(listModel);
                 tblPunktnummern.repaint();
+                tblPunktnummern1.repaint();
                 jScrollPane2.invalidate();
                 jScrollPane2.validate();
                 jScrollPane2.repaint();
+                jScrollPane4.invalidate();
+                jScrollPane4.validate();
+                jScrollPane4.repaint();
                 jxFreigebenWaitLabel.setBusy(false);
+                jxFreigebenWaitLabel1.setBusy(false);
                 final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
                 cl.show(pnlFreigeben, "card2");
+                final CardLayout cl1 = (CardLayout)(pnlVerlaengern.getLayout());
+                cl1.show(pnlVerlaengern, "card2");
 //                        tfAntragsnummer.getDocument().removeDocumentListener(PointNumberDialog.this);
             } catch (InterruptedException ex) {
                 LOG.error(
                     "Swing worker that retrieves pointnumbers for antragsnummer was interrupted",
                     ex);
                 showFreigabeError();
+                showVerlaengernError();
             } catch (ExecutionException ex) {
                 LOG.error(
                     "Error in executing worker thread that retrieves pointnumbers for antragsnummer",
                     ex);
                 showFreigabeError();
+                showVerlaengernError();
             }
         }
     }
@@ -1362,7 +1730,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
          */
         @Override
         protected PointNumberReservationRequest doInBackground() throws Exception {
-            if ((model.getSelectedValues() == 0)) {
+            if ((releaseModel.getSelectedValues() == 0)) {
                 return null;
             }
 
@@ -1370,7 +1738,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             for (int i = 0; i < punktnummern.size(); i++) {
                 final CheckListItem item = (CheckListItem)punktnummern.get(i);
                 if (item.isSelected) {
-                    selectedValues.add(item.toString());
+                    selectedValues.add(item.getPnr());
                 }
             }
             final HashMap<Integer, ArrayList<Long>> pnrIntervals = new HashMap<Integer, ArrayList<Long>>();
@@ -1501,11 +1869,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                         + result.getAntragsnummer()
                                         + " erfolgreich. Folgende Punktnummern wurden freigegeben:",
                                 BusyLoggingTextPane.Styles.SUCCESS);
+                            setSuccess();
                             protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
                             for (final PointNumberReservation pnr : result.getPointNumbers()) {
                                 protokollPane.addMessage(
                                     ""
-                                            + pnr.getPunktnummern(),
+                                            + pnr.getPunktnummer(),
                                     BusyLoggingTextPane.Styles.INFO);
                             }
                             int selectedValues = 0;
@@ -1537,6 +1906,174 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class VerlaengernWorker extends SwingWorker<Object[], Void> {
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
+        @Override
+        protected Object[] doInBackground() throws Exception {
+            if ((prolongModel.getSelectedValues() == 0)) {
+                return null;
+            }
+
+            final List<PointNumberReservation> selectedValues = new ArrayList<PointNumberReservation>();
+            for (int i = 0; i < punktnummern.size(); i++) {
+                final CheckListItem item = (CheckListItem)punktnummern.get(i);
+                if (item.isSelected) {
+                    final PointNumberReservation pnr = new PointNumberReservation();
+                    pnr.setAblaufDatum(item.getAblaufdatum());
+                    pnr.setPunktnummer(item.getPnr());
+                    selectedValues.add(pnr);
+                }
+            }
+
+            final String anr = getAnr();
+            if (!anr.matches("[a-zA-Z0-9_-]*")) {
+                return null;
+            }
+
+            final Collection<ServerActionParameter> allSaps = new ArrayList<ServerActionParameter>();
+
+            final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
+            final ServerActionParameter prefixSap = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+                    anrPrefix);
+            final ServerActionParameter aNummerSap = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
+                    anr);
+            final ServerActionParameter actionSap = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
+                    PointNumberReserverationServerAction.ACTION_TYPE.DO_PROLONG);
+
+            final ServerActionParameter dateSap = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.PROLONG_DATE.toString(),
+                    jXDatePicker1.getDate());
+
+            allSaps.add(prefixSap);
+            allSaps.add(aNummerSap);
+            allSaps.add(actionSap);
+            allSaps.add(dateSap);
+            for (final PointNumberReservation pnr : selectedValues) {
+                final ServerActionParameter<Integer> pnrSap = new ServerActionParameter<Integer>(
+                        PointNumberReserverationServerAction.PARAMETER_TYPE.POINT_NUMBER.toString(),
+                        Integer.parseInt(
+                            pnr.getPunktnummer().substring(
+                                pnr.getPunktnummer().length()
+                                        - 6,
+                                pnr.getPunktnummer().length())));
+                LOG.info("adding pnr SAP: " + pnrSap.getValue());
+                allSaps.add(pnrSap);
+            }
+
+            final PointNumberReservationRequest res = new PointNumberReservationRequest();
+            res.setSuccessful(true);
+            final PointNumberReservationRequest result = (PointNumberReservationRequest)SessionManager
+                        .getProxy()
+                        .executeTask(
+                                SEVER_ACTION,
+                                "WUNDA_BLAU",
+                                null,
+                                allSaps.toArray(new ServerActionParameter[0]));
+            if ((result != null) && !result.isSuccessfull()) {
+                res.setSuccessful(false);
+                res.setProtokoll(result.getProtokoll());
+            }
+            if ((result != null) && (result.getPointNumbers() != null)
+                        && !selectedValues.isEmpty()) {
+                if (res.getAntragsnummer() == null) {
+                    res.setAntragsnummer(result.getAntragsnummer());
+                }
+            }
+            res.setPointNumbers(selectedValues);
+            return new Object[] { jXDatePicker1.getDate(), res };
+        }
+
+        /**
+         * DOCUMENT ME!
+         */
+        @Override
+        protected void done() {
+            final java.util.Timer t = new java.util.Timer();
+            t.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            final Object[] ret = get();
+                            final Date datum = (Date)ret[0];
+                            final PointNumberReservationRequest result = (PointNumberReservationRequest)ret[1];
+                            setResult(result);
+                            if ((result == null) || !result.isSuccessfull()) {
+                                protokollPane.addMessage(
+                                    "Fehler beim Senden des Auftrags",
+                                    BusyLoggingTextPane.Styles.ERROR);
+                                protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                                if ((result != null) && (result.getErrorMessages() != null)) {
+                                    for (final String s : result.getErrorMessages()) {
+                                        protokollPane.addMessage(
+                                            s,
+                                            BusyLoggingTextPane.Styles.ERROR);
+                                        protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                                    }
+                                    protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                                    protokollPane.addMessage(
+                                        "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
+                                        BusyLoggingTextPane.Styles.ERROR);
+                                }
+                                enableDoneButton(true);
+                                btnVerlaengern.setEnabled(true);
+                                protokollPane.setBusy(false);
+                                return;
+                            }
+                            enableDoneButton(true);
+                            final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+                            btnVerlaengern.setEnabled(true);
+                            protokollPane.setBusy(false);
+                            protokollPane.addMessage(
+                                "Verlängerung für Antragsnummer: "
+                                        + result.getAntragsnummer()
+                                        + " erfolgreich. Die Reservierung folgender Punktnummern wurde auf den "
+                                        + formatter.format(datum)
+                                        + " verlängert:",
+                                BusyLoggingTextPane.Styles.SUCCESS);
+                            setSuccess();
+                            hasBeenDownloaded = false;
+                            protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                            for (final PointNumberReservation pnr : result.getPointNumbers()) {
+                                protokollPane.addMessage(
+                                    ""
+                                            + pnr.getPunktnummer(),
+                                    BusyLoggingTextPane.Styles.INFO);
+                            }
+                            loadPointNumbers();
+                        } catch (InterruptedException ex) {
+                            LOG.error(
+                                "Swing worker that prolongs points was interrupted",
+                                ex);
+                            showError();
+                        } catch (ExecutionException ex) {
+                            LOG.error(
+                                "Error in execution of Swing Worker that prolongs points",
+                                ex);
+                            showError();
+                        }
+                    }
+                },
+                50);
+        }
+    }
     /**
      * DOCUMENT ME!
      *
@@ -1628,6 +2165,18 @@ public class PointNumberDialog extends javax.swing.JDialog {
         //~ Instance fields ----------------------------------------------------
 
         private int selectedCidsBeans = 0;
+        private final boolean showDatum;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PunktNummerTableModel object.
+         *
+         * @param  showDatum  DOCUMENT ME!
+         */
+        public PunktNummerTableModel(final boolean showDatum) {
+            this.showDatum = showDatum;
+        }
 
         //~ Methods ------------------------------------------------------------
 
@@ -1674,7 +2223,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             if (columnIndex == 0) {
                 return bean.isSelected();
             } else {
-                return bean.toString();
+                return "<html>" + bean.getPnr() + (showDatum ? (" [<i>" + bean.getAblaufdatum() + "</i>] ") : "");
             }
         }
 
@@ -1751,6 +2300,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         //~ Instance fields ----------------------------------------------------
 
         private final String pnr;
+        private final String ablaufdatum;
         private boolean isSelected = false;
 
         //~ Constructors -------------------------------------------------------
@@ -1758,10 +2308,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
         /**
          * Creates a new CheckListItem object.
          *
-         * @param  label  DOCUMENT ME!
+         * @param  label        DOCUMENT ME!
+         * @param  ablaufdatum  DOCUMENT ME!
          */
-        public CheckListItem(final String label) {
+        public CheckListItem(final String label, final String ablaufdatum) {
             this.pnr = label;
+            this.ablaufdatum = ablaufdatum;
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1789,9 +2341,27 @@ public class PointNumberDialog extends javax.swing.JDialog {
          *
          * @return  DOCUMENT ME!
          */
+        public String getPnr() {
+            return pnr;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getAblaufdatum() {
+            return ablaufdatum;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public String toString() {
-            return pnr;
+            return pnr + " (" + ablaufdatum + ")";
         }
     }
 
