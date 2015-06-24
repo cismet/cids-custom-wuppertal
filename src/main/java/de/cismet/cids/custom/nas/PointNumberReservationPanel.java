@@ -562,7 +562,9 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
-        // check anr
+        pnrDialog.warnIfNeeded();
+
+// check anr
         final String anr = pnrDialog.getAnr();
         if ((anr == null) || anr.isEmpty()) {
             JOptionPane.showMessageDialog(
@@ -693,6 +695,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     }
                                     pnrDialog.setResult(result);
                                     protokollPane.addMessage("Ok.", Styles.SUCCESS);
+                                    pnrDialog.setSuccess();
                                     protokollPane.setBusy(false);
                                     protokollPane.addMessage(
                                         "Reservierung für Antragsnummer: "
@@ -769,6 +772,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     if ((anrExists && pnrDialog.isErgaenzenMode())
                                                 || (!anrExists && !pnrDialog.isErgaenzenMode())) {
                                         protokollPane.addMessage("Ok.", Styles.SUCCESS);
+                                        pnrDialog.setSuccess();
                                         protokollPane.addMessage("Sende Reservierungsauftrag.", Styles.INFO);
 //                                startReservationWorker = true;
                                         reservationWorker.run();
