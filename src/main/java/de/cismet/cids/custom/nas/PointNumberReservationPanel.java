@@ -623,7 +623,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                     if (pnrDialog.isErgaenzenMode()) {
                         action = new ServerActionParameter(
                                 PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                                PointNumberReserverationServerAction.ACTION_TYPE.EXTEND_RESERVATION);
+                                PointNumberReserverationServerAction.ACTION_TYPE.PROLONG_RESERVATION);
                     } else {
                         action = new ServerActionParameter(
                                 PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
@@ -702,7 +702,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     protokollPane.addMessage("", Styles.INFO);
                                     for (final PointNumberReservation pnr : result.getPointNumbers()) {
                                         protokollPane.addMessage(
-                                            pnr.getPunktnummern()
+                                            pnr.getPunktnummer()
                                                     + " ("
                                                     + dateFormater.format(dateParser.parse(pnr.getAblaufDatum()))
                                                     + ")",
