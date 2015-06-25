@@ -120,7 +120,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private List<CheckListItem> punktnummern = new ArrayList<CheckListItem>();
     private PunktNummerTableModel releaseModel = new PunktNummerTableModel(false);
     private PunktNummerTableModel prolongModel = new PunktNummerTableModel(true);
-    private boolean hasBeenDownloaded = true;
+    private boolean hasBeenDownloadedOrIgnoredYet = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeSelectAll;
@@ -223,6 +223,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
                 @Override
                 public void stateChanged(final ChangeEvent e) {
+                    warnIfNeeded();
                     if ((tbpModus.getSelectedComponent().equals(pnlFreigeben))
                                 || (tbpModus.getSelectedComponent().equals(pnlVerlaengern))) {
                         loadPointNumbers();
@@ -231,12 +232,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                             tbpModus.getSelectedComponent();
                         pnl.checkNummerierungsbezirke();
                     }
-                }
-            });
-        tbpModus.addChangeListener(new ChangeListener() {
 
-                @Override
-                public void stateChanged(final ChangeEvent e) {
                     final DefaultComboBoxModel model = (DefaultComboBoxModel)cbAntragsNummer.getModel();
                     if (tbpModus.getSelectedComponent().equals(pnlReservieren)) {
                         model.setSelectedItem("");
@@ -1226,7 +1222,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
 
         DownloadManager.instance().add(download);
-        hasBeenDownloaded = true;
+        hasBeenDownloadedOrIgnoredYet = true;
     } //GEN-LAST:event_btnDownloadActionPerformed
 
     /**
@@ -1483,7 +1479,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * DOCUMENT ME!
      */
     public void setSuccess() {
-        hasBeenDownloaded = false;
+        hasBeenDownloadedOrIgnoredYet = false;
     }
 
     @Override
@@ -1496,12 +1492,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * DOCUMENT ME!
      */
     public void warnIfNeeded() {
-        if (!hasBeenDownloaded) {
+        if (!hasBeenDownloadedOrIgnoredYet) {
             final PointNumberWarnDialog d = new PointNumberWarnDialog(StaticSwingTools.getFirstParentFrame(this), true);
             StaticSwingTools.showDialog(d);
             if (d.isDownloadRequested()) {
                 btnDownloadActionPerformed(null);
             }
+            hasBeenDownloadedOrIgnoredYet = true;
         }
     }
 
@@ -2049,7 +2046,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                         + " verlängert:",
                                 BusyLoggingTextPane.Styles.SUCCESS);
                             setSuccess();
-                            hasBeenDownloaded = false;
+                            hasBeenDownloadedOrIgnoredYet = false;
                             protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
                             for (final PointNumberReservation pnr : result.getPointNumbers()) {
                                 protokollPane.addMessage(
