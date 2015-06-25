@@ -123,7 +123,7 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
                                     final PointNumberDialog dialog = new PointNumberDialog(
                                             StaticSwingTools.getParentFrame(
                                                 CismapBroker.getInstance().getMappingComponent()),
-                                            false);
+                                            true);
                                     StaticSwingTools.showDialog(dialog);
                                 }
                             });
