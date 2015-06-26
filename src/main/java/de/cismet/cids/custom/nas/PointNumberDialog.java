@@ -1664,6 +1664,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     ex);
                 showFreigabeError();
                 showVerlaengernError();
+            } catch (final CancellationException ex) {
+                LOG.info("Worker was interrupted", ex);
             }
         }
     }
@@ -1881,6 +1883,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
             } catch (ExecutionException ex) {
                 LOG.error("Error in execution of Swing Worker that releases points", ex);
                 showError();
+            } catch (final CancellationException ex) {
+                LOG.info("Worker was interrupted", ex);
             }
         }
     }
@@ -1967,6 +1971,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
             if ((result != null) && !result.isSuccessfull()) {
                 res.setSuccessful(false);
                 res.setProtokoll(result.getProtokoll());
+            } else {
+                final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+                for (final PointNumberReservation pnr : selectedValues) {
+                    pnr.setAblaufDatum(formatter.format(jXDatePicker1.getDate()));
+                }
+                res.setPointNumbers(selectedValues);
             }
             if ((result != null) && (result.getPointNumbers() != null)
                         && !selectedValues.isEmpty()) {
@@ -1974,7 +1984,6 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     res.setAntragsnummer(result.getAntragsnummer());
                 }
             }
-            res.setPointNumbers(selectedValues);
             return new Object[] { jXDatePicker1.getDate(), res };
         }
 
@@ -1987,6 +1996,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 final Object[] ret = get();
                 final Date datum = (Date)ret[0];
                 final PointNumberReservationRequest result = (PointNumberReservationRequest)ret[1];
+                for (final PointNumberReservation pnr : result.getPointNumbers()) {
+                    LOG.fatal(pnr);
+                }
                 setResult(result);
                 if ((result == null) || !result.isSuccessfull()) {
                     protokollPane.addMessage(
@@ -2032,6 +2044,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
             } catch (ExecutionException ex) {
                 LOG.error("Error in execution of Swing Worker that prolongs points", ex);
                 showError();
+            } catch (final CancellationException ex) {
+                LOG.info("Worker was interrupted", ex);
             }
         }
     }
