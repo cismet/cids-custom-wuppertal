@@ -23,6 +23,7 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserFinishedOn;
     private javax.swing.JLabel lblConditionMeasureTitle;
     private javax.swing.JLabel lblConditionsMeasures;
+    private javax.swing.JLabel lblContractor;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblFinishedOn;
@@ -39,6 +40,7 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelConditionsAndMeasures;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelData;
     private javax.swing.JTextPane txpDescription;
+    private javax.swing.JTextField txtContractor;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 
@@ -82,6 +84,8 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         txpDescription = new javax.swing.JTextPane();
         lblFinishedOn = new javax.swing.JLabel();
         defaultBindableDateChooserFinishedOn = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        lblContractor = new javax.swing.JLabel();
+        txtContractor = new javax.swing.JTextField();
         pnlConditionAndMeasures = new javax.swing.JPanel();
         semiRoundedPanelConditionsAndMeasures = new de.cismet.tools.gui.SemiRoundedPanel();
         lblConditionsMeasures = new javax.swing.JLabel();
@@ -183,7 +187,7 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         org.openide.awt.Mnemonics.setLocalizedText(lblDescription, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblDescription.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -194,7 +198,7 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -205,16 +209,35 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         org.openide.awt.Mnemonics.setLocalizedText(lblFinishedOn, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblFinishedOn.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblFinishedOn, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(defaultBindableDateChooserFinishedOn, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(lblContractor, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblContractor.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblContractor, gridBagConstraints);
+
+        txtContractor.setText(NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.txtContractor.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlData.add(defaultBindableDateChooserFinishedOn, gridBagConstraints);
+        pnlData.add(txtContractor, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
