@@ -101,10 +101,12 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         semiRoundedPanelConditionMeasure.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanelConditionMeasure.setLayout(new java.awt.GridBagLayout());
 
-        lblConditionMeasureTitle.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        lblConditionMeasureTitle.setFont(new java.awt.Font("Lucida Grande", 0, 14));                          // NOI18N
         lblConditionMeasureTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblConditionMeasureTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(lblConditionMeasureTitle, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblConditionMeasureTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblConditionMeasureTitle,
+            NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblConditionMeasureTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -116,7 +118,8 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.weightx = 1.0;
         pnlConditionMeasure.add(semiRoundedPanelConditionMeasure, gridBagConstraints);
 
-        pnlEmbeddedConditionMeasure.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        pnlEmbeddedConditionMeasure.setBorder(javax.swing.BorderFactory.createLineBorder(
+                new java.awt.Color(51, 51, 51)));
         pnlEmbeddedConditionMeasure.setOpaque(false);
         pnlEmbeddedConditionMeasure.setLayout(new java.awt.BorderLayout());
         pnlEmbeddedConditionMeasure.add(oab_Zustand_MassnahmeEditor, java.awt.BorderLayout.CENTER);
@@ -145,10 +148,12 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         semiRoundedPanelData.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanelData.setLayout(new java.awt.GridBagLayout());
 
-        lblData.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        lblData.setFont(new java.awt.Font("Lucida Grande", 0, 14));                          // NOI18N
         lblData.setForeground(new java.awt.Color(255, 255, 255));
         lblData.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(lblData, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblData.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblData,
+            NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblData.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -165,7 +170,9 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.weightx = 1.0;
         pnlData.add(semiRoundedPanelData, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblName, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblName.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblName,
+            NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -184,7 +191,9 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(txtName, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblDescription, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblDescription.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblDescription,
+            NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblDescription.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -206,7 +215,9 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(scpDescription, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblFinishedOn, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblFinishedOn.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFinishedOn,
+            NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblFinishedOn.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -221,7 +232,9 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(defaultBindableDateChooserFinishedOn, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblContractor, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblContractor.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblContractor,
+            NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblContractor.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -254,10 +267,12 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         semiRoundedPanelConditionsAndMeasures.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanelConditionsAndMeasures.setLayout(new java.awt.GridBagLayout());
 
-        lblConditionsMeasures.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        lblConditionsMeasures.setFont(new java.awt.Font("Lucida Grande", 0, 14));                          // NOI18N
         lblConditionsMeasures.setForeground(new java.awt.Color(255, 255, 255));
         lblConditionsMeasures.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(lblConditionsMeasures, NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblConditionsMeasures.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblConditionsMeasures,
+            NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.lblConditionsMeasures.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -276,10 +291,18 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         pnlConditionAndMeasures.add(semiRoundedPanelConditionsAndMeasures, gridBagConstraints);
 
         lstConditionsMeasures.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Ist", "Prognose", "Sanierung 1", "Sanierung 2", "Sanierung 3" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+
+                String[] strings = { "Ist", "Prognose", "Sanierung 1", "Sanierung 2", "Sanierung 3" };
+
+                @Override
+                public int getSize() {
+                    return strings.length;
+                }
+                @Override
+                public Object getElementAt(final int i) {
+                    return strings[i];
+                }
+            });
         scpConditionsMeasures.setViewportView(lstConditionsMeasures);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -299,5 +322,5 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.weighty = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
         add(pnlConditionAndMeasures, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 }
