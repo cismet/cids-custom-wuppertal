@@ -12,14 +12,13 @@ import org.openide.util.NbBundle;
 /**
  * DOCUMENT ME!
  *
- * @author   mscholl
- * @version  $Revision$, $Date$
+ * @author   martin.scholl@cismet.de
+ * @version  1.0
  */
 public class Oab_BerechnungEditor extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cboImportFinished;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAnnuality;
     private javax.swing.JLabel lblMaxWater;
     private javax.swing.JLabel lblMaxWaterCapUrl;
@@ -33,6 +32,7 @@ public class Oab_BerechnungEditor extends javax.swing.JPanel {
     private javax.swing.JPanel pnlWaterLevelCourse;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelMaxWater;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelWaterLevelCourse;
+    private javax.swing.JSeparator sepImports;
     private javax.swing.JSpinner spinAnnuality;
     private javax.swing.JTextField txtMaxWaterCapUrl;
     private javax.swing.JTextField txtMaxWaterGetMapUrl;
@@ -64,7 +64,7 @@ public class Oab_BerechnungEditor extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         cboImportFinished = new javax.swing.JCheckBox();
-        jSeparator1 = new javax.swing.JSeparator();
+        sepImports = new javax.swing.JSeparator();
         lblAnnuality = new javax.swing.JLabel();
         spinAnnuality = new javax.swing.JSpinner();
         pnlMaxWater = new javax.swing.JPanel();
@@ -97,27 +97,27 @@ public class Oab_BerechnungEditor extends javax.swing.JPanel {
             NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.cboImportFinished.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 4, 10, 10);
         add(cboImportFinished, gridBagConstraints);
 
-        jSeparator1.setOpaque(true);
+        sepImports.setOpaque(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 15);
-        add(jSeparator1, gridBagConstraints);
+        add(sepImports, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblAnnuality,
             NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblAnnuality.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(lblAnnuality, gridBagConstraints);
@@ -125,7 +125,7 @@ public class Oab_BerechnungEditor extends javax.swing.JPanel {
         spinAnnuality.setPreferredSize(new java.awt.Dimension(70, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(spinAnnuality, gridBagConstraints);
@@ -221,7 +221,7 @@ public class Oab_BerechnungEditor extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -314,7 +314,7 @@ public class Oab_BerechnungEditor extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;

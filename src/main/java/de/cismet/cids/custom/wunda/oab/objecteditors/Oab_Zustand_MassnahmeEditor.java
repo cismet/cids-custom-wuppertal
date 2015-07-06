@@ -19,29 +19,48 @@ import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
  */
 public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
 
+    //~ Instance fields --------------------------------------------------------
+
+    private final ActionListener editTinL;
+    private final ActionListener editBeL;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditBe;
+    private javax.swing.JButton btnEditTin;
     private javax.swing.JButton btnGotoProject;
+    private javax.swing.JCheckBox cboImportFinished;
     private javax.swing.JComboBox cboType;
+    private javax.swing.Box.Filler hFillImports;
     private javax.swing.JLabel lblBelongsToProject;
     private javax.swing.JLabel lblCalculationDetailTitle;
     private javax.swing.JLabel lblCalculations;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblGetMapUrl;
+    private javax.swing.JLabel lblLayerName;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblType;
+    private javax.swing.JLabel lblWmsCapUrl;
     private javax.swing.JList lstCalculations;
     private de.cismet.cids.custom.wunda.oab.objecteditors.Oab_BerechnungEditor oab_BerechnungEditor;
     private javax.swing.JPanel pnlCalculationDetail;
     private javax.swing.JPanel pnlCalculations;
     private javax.swing.JPanel pnlData;
+    private javax.swing.JPanel pnlEditDialog;
     private javax.swing.JPanel pnlEmbeddedCalculation;
+    private javax.swing.JPanel pnlImports;
     private javax.swing.JScrollPane scpCalculations;
     private javax.swing.JScrollPane scpDescription;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelCalculationDetail;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelCalculations;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelData;
+    private javax.swing.JSeparator sepImports;
     private javax.swing.JTextPane txpDescription;
+    private javax.swing.JTextField txtGetMapUrl;
+    private javax.swing.JTextField txtLayerName;
     private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtWmsCapUrl;
+    private javax.swing.Box.Filler vFillEdit;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -69,6 +88,16 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        pnlEditDialog = new javax.swing.JPanel();
+        lblWmsCapUrl = new javax.swing.JLabel();
+        lblLayerName = new javax.swing.JLabel();
+        lblGetMapUrl = new javax.swing.JLabel();
+        txtWmsCapUrl = new javax.swing.JTextField();
+        txtLayerName = new javax.swing.JTextField();
+        txtGetMapUrl = new javax.swing.JTextField();
+        vFillEdit = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         pnlCalculationDetail = new javax.swing.JPanel();
         semiRoundedPanelCalculationDetail = new de.cismet.tools.gui.SemiRoundedPanel();
         lblCalculationDetailTitle = new javax.swing.JLabel();
@@ -91,6 +120,92 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         lblCalculations = new javax.swing.JLabel();
         scpCalculations = new javax.swing.JScrollPane();
         lstCalculations = new javax.swing.JList();
+        pnlImports = new javax.swing.JPanel();
+        sepImports = new javax.swing.JSeparator();
+        cboImportFinished = new javax.swing.JCheckBox();
+        hFillImports = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        btnEditTin = new javax.swing.JButton();
+        btnEditBe = new javax.swing.JButton();
+
+        pnlEditDialog.setOpaque(false);
+        pnlEditDialog.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblWmsCapUrl,
+            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblWmsCapUrl.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEditDialog.add(lblWmsCapUrl, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLayerName,
+            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblLayerName.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEditDialog.add(lblLayerName, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGetMapUrl,
+            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblGetMapUrl.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEditDialog.add(lblGetMapUrl, gridBagConstraints);
+
+        txtWmsCapUrl.setText(NbBundle.getMessage(
+                Oab_Zustand_MassnahmeEditor.class,
+                "Oab_Zustand_MassnahmeEditor.txtWmsCapUrl.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEditDialog.add(txtWmsCapUrl, gridBagConstraints);
+
+        txtLayerName.setText(NbBundle.getMessage(
+                Oab_Zustand_MassnahmeEditor.class,
+                "Oab_Zustand_MassnahmeEditor.txtLayerName.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEditDialog.add(txtLayerName, gridBagConstraints);
+
+        txtGetMapUrl.setText(NbBundle.getMessage(
+                Oab_Zustand_MassnahmeEditor.class,
+                "Oab_Zustand_MassnahmeEditor.txtGetMapUrl.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEditDialog.add(txtGetMapUrl, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 1.0;
+        pnlEditDialog.add(vFillEdit, gridBagConstraints);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -136,7 +251,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.9;
         gridBagConstraints.weighty = 1.0;
