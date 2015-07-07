@@ -9,13 +9,17 @@ package de.cismet.cids.custom.wunda.oab.objecteditors;
 
 import org.openide.util.NbBundle;
 
+import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
+
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
+
 /**
  * DOCUMENT ME!
  *
  * @author   mscholl
  * @version  1.0
  */
-public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
+public class Oab_GewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserFrom;
@@ -26,6 +30,7 @@ public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblTo;
     private javax.swing.Box.Filler vFill;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -47,6 +52,7 @@ public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         lblFrom = new javax.swing.JLabel();
         lblTo = new javax.swing.JLabel();
@@ -97,18 +103,45 @@ public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         add(lblStatus, gridBagConstraints);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.von}"),
+                defaultBindableDateChooserFrom,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(15, 5, 5, 5);
         add(defaultBindableDateChooserFrom, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bis}"),
+                defaultBindableDateChooserTo,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(defaultBindableDateChooserTo, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gep_status}"),
+                defaultBindableReferenceComboStatus,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -125,5 +158,20 @@ public class Oab_GewaessereinzugsgebietEditor extends javax.swing.JPanel {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.weighty = 1.0;
         add(vFill, gridBagConstraints);
-    }                                                                // </editor-fold>//GEN-END:initComponents
+
+        bindingGroup.bind();
+    } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    protected void init() {
+        bindingGroup.unbind();
+
+        if (cidsBean != null) {
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                bindingGroup,
+                cidsBean);
+
+            bindingGroup.bind();
+        }
+    }
 }

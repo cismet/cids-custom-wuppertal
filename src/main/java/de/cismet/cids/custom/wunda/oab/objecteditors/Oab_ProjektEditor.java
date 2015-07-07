@@ -8,8 +8,21 @@
 package de.cismet.cids.custom.wunda.oab.objecteditors;
 
 import org.openide.util.NbBundle;
+import org.openide.util.WeakListeners;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.swing.DefaultListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 /**
  * DOCUMENT ME!
@@ -18,6 +31,10 @@ import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
  * @version  1.0
  */
 public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final ListSelectionListener condMeasSelL;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserFinishedOn;
@@ -42,6 +59,7 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
     private javax.swing.JTextPane txpDescription;
     private javax.swing.JTextField txtContractor;
     private javax.swing.JTextField txtName;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -51,13 +69,71 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
      */
     public Oab_ProjektEditor() {
         initComponents();
+
+        condMeasSelL = new ConditionMeasureSelectionL();
+
+        lstConditionsMeasures.addListSelectionListener(WeakListeners.create(
+                ListSelectionListener.class,
+                condMeasSelL,
+                lstConditionsMeasures));
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     protected void init() {
-        // noop (yet :D)
+        bindingGroup.unbind();
+
+        if (cidsBean != null) {
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                bindingGroup,
+                cidsBean);
+
+            bindingGroup.bind();
+
+            initConditionMeasuresList();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @throws  IllegalStateException  DOCUMENT ME!
+     */
+    private void initConditionMeasuresList() {
+        final List<CidsBean> c = cidsBean.getBeanCollectionProperty("zustaende_massnahmen"); // NOI18N
+
+        if ((c == null) || c.isEmpty()) {
+            throw new IllegalStateException("no conditions or measures found: " + cidsBean); // NOI18N
+        }
+
+        Collections.sort(c, new Comparator<CidsBean>() {
+
+                @Override
+                public int compare(final CidsBean o1, final CidsBean o2) {
+                    if ((o1 == null) || !(o1.getProperty("name") instanceof String) || (o2 == null) // NOI18N
+                                || !(o2.getProperty("name") instanceof String)) {                   // NOI18N
+                        throw new IllegalStateException(
+                            "bean without valid name [obj1="                                        // NOI18N
+                                    + o1
+                                    + "|obj2="                                                      // NOI18N
+                                    + o2
+                                    + "]");                                                         // NOI18N
+                    }
+
+                    return ((String)o1.getProperty("name")).compareTo( // NOI18N
+                            (String)o2.getProperty("name"));           // NOI18N
+                }
+            });
+
+        final DefaultListModel<CidsBean> dlm = new DefaultListModel<CidsBean>();
+        dlm.setSize(c.size());
+        for (int i = 0; i < c.size(); ++i) {
+            dlm.set(i, c.get(i));
+        }
+
+        lstConditionsMeasures.setModel(dlm);
+        lstConditionsMeasures.setSelectedIndex(0);
     }
 
     /**
@@ -68,6 +144,7 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         pnlConditionMeasure = new javax.swing.JPanel();
         semiRoundedPanelConditionMeasure = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -181,7 +258,14 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblName, gridBagConstraints);
 
-        txtName.setText(NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.txtName.text")); // NOI18N
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                txtName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -202,7 +286,14 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblDescription, gridBagConstraints);
 
-        txpDescription.setText(NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.txpDescription.text")); // NOI18N
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
+                txpDescription,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         scpDescription.setViewportView(txpDescription);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -224,6 +315,15 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblFinishedOn, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.abschluss}"),
+                defaultBindableDateChooserFinishedOn,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -243,7 +343,14 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblContractor, gridBagConstraints);
 
-        txtContractor.setText(NbBundle.getMessage(Oab_ProjektEditor.class, "Oab_ProjektEditor.txtContractor.text")); // NOI18N
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auftragnehmer}"),
+                txtContractor,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -322,5 +429,31 @@ public class Oab_ProjektEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.weighty = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
         add(pnlConditionAndMeasures, gridBagConstraints);
+
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class ConditionMeasureSelectionL implements ListSelectionListener {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void valueChanged(final ListSelectionEvent e) {
+            if (!e.getValueIsAdjusting()) {
+                final CidsBean bean = (CidsBean)lstConditionsMeasures.getSelectedValue();
+                if (bean == null) {
+                    throw new IllegalStateException("no condition or measure selected, this is illegal"); // NOI18N
+                }
+
+                oab_Zustand_MassnahmeEditor.setCidsBean(bean);
+            }
+        }
+    }
 }

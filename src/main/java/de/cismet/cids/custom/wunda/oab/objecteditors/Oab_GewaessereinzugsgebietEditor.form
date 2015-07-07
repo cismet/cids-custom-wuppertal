@@ -56,6 +56,9 @@
       </Constraints>
     </Component>
     <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="defaultBindableDateChooserFrom">
+      <BindingProperties>
+        <BindingProperty name="date" source="Form" sourcePath="${cidsBean.von}" target="defaultBindableDateChooserFrom" targetPath="date" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="15" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -63,6 +66,9 @@
       </Constraints>
     </Component>
     <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="defaultBindableDateChooserTo">
+      <BindingProperties>
+        <BindingProperty name="date" source="Form" sourcePath="${cidsBean.bis}" target="defaultBindableDateChooserTo" targetPath="date" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -70,6 +76,9 @@
       </Constraints>
     </Component>
     <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="defaultBindableReferenceComboStatus">
+      <BindingProperties>
+        <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.gep_status}" target="defaultBindableReferenceComboStatus" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
