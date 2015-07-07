@@ -11,7 +11,14 @@ import org.openide.util.NbBundle;
 
 import java.awt.Color;
 
+import java.util.Comparator;
+
+import javax.swing.event.EventListenerList;
+
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
+import de.cismet.cids.custom.wunda.oab.OabUtilities;
+
+import de.cismet.cids.dynamics.CidsBean;
 
 /**
  * DOCUMENT ME!
@@ -21,9 +28,15 @@ import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
  */
 public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
 
+    //~ Instance fields --------------------------------------------------------
+
+    // End of variables declaration
+
+    // only to hold strong reference to listeners
+    private EventListenerList refHolderList;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGotoProject;
-    private javax.swing.Box.Filler hFillCalcList;
     private javax.swing.Box.Filler hStaticFillCalcList;
     private javax.swing.JLabel lblBelongsToProject;
     private javax.swing.JLabel lblCalculations;
@@ -44,10 +57,12 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelData;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelMap;
     private javax.swing.JTextArea txaDescription;
-    private javax.swing.Box.Filler vFillCalcList;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
+
+    // only to hold strong reference to listeners
 
     /**
      * Creates new form OABProjectEditor.
@@ -56,15 +71,60 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
         initComponents();
 
         txaDescription.setBackground(new Color(0, 0, 0, 0));
-
-        // <HTML><FONT color=#000099><U>Varresbeck Projekt</U></FONT></HTML>
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     protected void init() {
-        // noop (yet :D)
+        bindingGroup.unbind();
+
+        if (cidsBean != null) {
+            refHolderList = new EventListenerList();
+
+            OabUtilities.initGotoBeanHyperlinkList(
+                cidsBean,
+                "berechnungen",  // NOI18N
+                "jaehrlichkeit", // NOI18N
+                "T",             // NOI18N
+                null,
+                new Comparator<CidsBean>() {
+
+                    @Override
+                    public int compare(final CidsBean o1, final CidsBean o2) {
+                        if ((o1 == null) || !(o1.getProperty("jaehrlichkeit") instanceof Integer) // NOI18N
+                                    || (o2 == null)
+                                    || !(o2.getProperty("jaehrlichkeit") instanceof Integer)) {   // NOI18N
+                            throw new IllegalStateException(
+                                "bean without valid jaehrlichkeit [obj1="                         // NOI18N
+                                        + o1
+                                        + "|obj2="                                                // NOI18N
+                                        + o2
+                                        + "]");                                                   // NOI18N
+                        }
+
+                        return ((Integer)o1.getProperty("jaehrlichkeit")).compareTo( // NOI18N
+                                (Integer)o2.getProperty("jaehrlichkeit"));           // NOI18N
+                    }
+                },
+                pnlCalcList,
+                refHolderList);
+
+            // TODO: add mapclick action
+            OabUtilities.initPreviewMap(
+                cidsBean,
+                "umschreibende_geometrie.geo_field", // NOI18N
+                map,
+                lblMapTitle,
+                null,
+                (String)cidsBean.getProperty("bruchkanten_simple_getmap")); // NOI18N
+
+            final CidsBean projectBean = (CidsBean)cidsBean.getProperty("projekt"); // NOI18N
+            btnGotoProject.setText((String)projectBean.getProperty("name"));        // NOI18N
+            OabUtilities.toGotoBeanHyperlinkButton(btnGotoProject, projectBean, refHolderList);
+
+            bindingGroup.bind();
+        }
     }
 
     /**
@@ -75,6 +135,7 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         pnlMap = new javax.swing.JPanel();
         semiRoundedPanelMap = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -96,12 +157,6 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
         semiRoundedPanelCalculations = new de.cismet.tools.gui.SemiRoundedPanel();
         lblCalculations = new javax.swing.JLabel();
         pnlCalcList = new javax.swing.JPanel();
-        vFillCalcList = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        hFillCalcList = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
         hStaticFillCalcList = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0),
                 new java.awt.Dimension(20, 0),
                 new java.awt.Dimension(20, 32767));
@@ -241,11 +296,14 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(btnGotoProject, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblNameValue,
-            NbBundle.getMessage(
-                Oab_Zustand_MassnahmeRenderer.class,
-                "Oab_Zustand_MassnahmeRenderer.lblNameValue.text")); // NOI18N
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                lblNameValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -260,6 +318,15 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
         txaDescription.setWrapStyleWord(true);
         txaDescription.setBorder(null);
         txaDescription.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
+                txaDescription,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         scpDescription.setViewportView(txaDescription);
 
         scpDescription.getViewport().setOpaque(false);
@@ -274,11 +341,14 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(scpDescription, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblTypeValue,
-            NbBundle.getMessage(
-                Oab_Zustand_MassnahmeRenderer.class,
-                "Oab_Zustand_MassnahmeRenderer.lblTypeValue.text")); // NOI18N
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.typ.name}"),
+                lblTypeValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -330,16 +400,6 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
         pnlCalcList.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlCalcList.add(vFillCalcList, gridBagConstraints);
-        pnlCalcList.add(hFillCalcList, new java.awt.GridBagConstraints());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -358,5 +418,7 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
         gridBagConstraints.weighty = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
         add(pnlCalculations, gridBagConstraints);
+
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 }
