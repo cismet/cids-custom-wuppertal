@@ -2525,7 +2525,7 @@
         </Einzelnachweisprodukt>
       </GUIEinzelnachweisprodukt>
        <GUIEinzelnachweisprodukt Antragsart="NW11" ID="LB.GDBNRW.A.BNWST" Name="Bestandsnachweis, stichtagsbezogen" SelektionsKriterium="Bestandskennzeichen, Stichtag" ProduktnameAuswertung="Bestandsnachweis stichtagsbezogen (G) NRW" ProduktnameGUI="Bestandsnachweis, stichtagsbez.">
-          <ProduktionsserverBuch URL="http://s102x280:80/AaaDhkWebService/AuftragsManager.asmx"/>
+          <ProduktionsserverBuch URL="http://s102w380:80/AaaDhkWebService/AuftragsManager.asmx"/>
           <Einzelnachweisprodukt ID="LB.GDBNRW.A.BNWST.1" Layout="NW11.xsl">
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
           </Einzelnachweisprodukt>
@@ -2569,7 +2569,7 @@
           </Einzelnachweisprodukt>
        </GUIEinzelnachweisprodukt>
        <GUIEinzelnachweisprodukt Antragsart="NW11" ID="LB.GDBNRW.I.BNWST" Name="Bestandsnachweis, stichtagsbezogen" SelektionsKriterium="Bestandskennzeichen, Stichtag" ProduktnameAuswertung="Bestandsnachweis stichtagsbezogen (G) NRW" ProduktnameGUI="Bestandsnachweis, stichtagsbez." Logo="http://localhost:81/AaaDhkWebService/logo-aaa-f.png">
-          <ProduktionsserverBuch URL="http://s102x280:80/AaaDhkWebService/AuftragsManager.asmx"/>
+          <ProduktionsserverBuch URL="http://s102w380:80/AaaDhkWebService/AuftragsManager.asmx"/>
           <Einzelnachweisprodukt ID="LB.GDBNRW.I.BNWST.1" Layout="NW11.xsl">
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
           </Einzelnachweisprodukt>
