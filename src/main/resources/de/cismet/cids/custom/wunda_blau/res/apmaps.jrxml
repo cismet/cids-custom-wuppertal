@@ -40,35 +40,35 @@
 				<staticText>
 					<reportElement x="110" y="24" width="197" height="35"/>
 					<textElement>
-						<font fontName="sansserif" size="12" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+						<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[Ressort Vermessung, Katasteramt und Geodaten (R102)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="307" y="3" width="240" height="42"/>
 					<textElement textAlignment="Right">
-						<font fontName="sansserif" size="16" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+						<font fontName="SansSerif" size="16" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[AP-Karten]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="110" y="3" width="158" height="21"/>
 					<textElement>
-						<font fontName="sansserif" size="16" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+						<font fontName="SansSerif" size="16" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[Stadt Wuppertal]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="110" y="59" width="158" height="20"/>
 					<textElement>
-						<font fontName="sansserif" size="12" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+						<font fontName="SansSerif" size="12" pdfFontName="Helvetica" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[Johannes-Rau-Platz 1]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="110" y="79" width="158" height="20"/>
 					<textElement>
-						<font fontName="sansserif" size="12" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+						<font fontName="SansSerif" size="12" pdfFontName="Helvetica" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[42275 Wuppertal]]></text>
 				</staticText>
