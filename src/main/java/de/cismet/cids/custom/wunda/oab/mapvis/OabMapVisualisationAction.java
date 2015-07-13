@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
+import de.cismet.cids.dynamics.CidsBean;
+
 import de.cismet.cismap.commons.SimpleGetFeatureInfoUrl;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -146,5 +148,14 @@ public class OabMapVisualisationAction extends AbstractAction {
      */
     public boolean isFeatureAdditionSelected() {
         return featureAdditionSelected;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getFeatureBean() {
+        return dialog.getFeatureBean();
     }
 }

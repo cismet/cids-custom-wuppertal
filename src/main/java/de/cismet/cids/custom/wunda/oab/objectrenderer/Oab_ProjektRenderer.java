@@ -15,6 +15,7 @@ import javax.swing.event.EventListenerList;
 
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 import de.cismet.cids.custom.wunda.oab.OabUtilities;
+import de.cismet.cids.custom.wunda.oab.mapvis.Oab_ProjektMapVisualisationProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -78,8 +79,13 @@ public class Oab_ProjektRenderer extends AbstractCidsBeanRenderer {
             refHolderList = new EventListenerList();
 
             OabUtilities.initGotoBeanHyperlinkList(cidsBean, "zustaende_massnahmen", pnlCMList, refHolderList); // NOI18N
-            // TODO: add mapclick action
-            OabUtilities.initPreviewMap(cidsBean, "umschreibende_geometrie.geo_field", map, lblMapTitle); // NOI18N
+            OabUtilities.initPreviewMap(
+                cidsBean,
+                "umschreibende_geometrie.geo_field",                                                            // NOI18N
+                map,
+                lblMapTitle,
+                new Oab_ProjektMapVisualisationProvider().buildAction(cidsBean),
+                (String[])null);
 
             final CidsBean catchmentBean = (CidsBean)cidsBean.getProperty("gewaessereinzugsgebiet"); // NOI18N
             btnGotoCatchment.setText((String)catchmentBean.getProperty("name"));                     // NOI18N

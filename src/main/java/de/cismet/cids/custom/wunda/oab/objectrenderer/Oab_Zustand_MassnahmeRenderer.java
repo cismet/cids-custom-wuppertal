@@ -17,6 +17,7 @@ import javax.swing.event.EventListenerList;
 
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 import de.cismet.cids.custom.wunda.oab.OabUtilities;
+import de.cismet.cids.custom.wunda.oab.mapvis.Oab_Zustand_MassnahmeMapVisualisationProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -110,13 +111,12 @@ public class Oab_Zustand_MassnahmeRenderer extends AbstractCidsBeanRenderer {
                 pnlCalcList,
                 refHolderList);
 
-            // TODO: add mapclick action
             OabUtilities.initPreviewMap(
                 cidsBean,
                 "umschreibende_geometrie.geo_field", // NOI18N
                 map,
                 lblMapTitle,
-                null,
+                new Oab_Zustand_MassnahmeMapVisualisationProvider().buildAction(cidsBean),
                 (String)cidsBean.getProperty("bruchkanten_simple_getmap")); // NOI18N
 
             final CidsBean projectBean = (CidsBean)cidsBean.getProperty("projekt"); // NOI18N

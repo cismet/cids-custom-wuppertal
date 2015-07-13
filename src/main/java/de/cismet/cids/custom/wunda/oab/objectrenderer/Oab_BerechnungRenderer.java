@@ -13,6 +13,7 @@ import javax.swing.event.EventListenerList;
 
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 import de.cismet.cids.custom.wunda.oab.OabUtilities;
+import de.cismet.cids.custom.wunda.oab.mapvis.Oab_BerechnungMapVisualisationProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -70,7 +71,7 @@ public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
                 "zustand_massnahme.umschreibende_geometrie.geo_field", // NOI18N
                 map,
                 lblMapTitle,
-                null,
+                new Oab_BerechnungMapVisualisationProvider().buildAction(cidsBean),
                 (String)cidsBean.getProperty("max_wasser_simple_getmap")); // NOI18N
 
             btnGotoCondMeas.setText((String)condMeasBean.getProperty("name")); // NOI18N
