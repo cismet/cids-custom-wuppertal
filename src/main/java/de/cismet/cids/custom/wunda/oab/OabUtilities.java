@@ -74,6 +74,11 @@ public class OabUtilities {
     public static final String BEAN_CLIENT_PROPERTY = "__prop_bean__";      // NOI18N
     public static final String GOTO_USEROBJECT_COMMAND = "GOTO_USEROBJECT"; // NOI18N
 
+    public static final String OAB_GEWAESSEREINZUGSGEBIET_TABLE_NAME = "OAB_GEWAESSEREINZUGSGEBIET"; // NOI18N
+    public static final String OAB_PROJEKT_TABLE_NAME = "OAB_PROJEKT";                               // NOI18N
+    public static final String OAB_ZUSTAND_MASSNAHME_TABLE_NAME = "OAB_ZUSTAND_MASSNAHME";           // NOI18N
+    public static final String OAB_BERECHNUNG_TABLE_NAME = "OAB_BERECHNUNG";                         // NOI18N
+
     //~ Constructors -----------------------------------------------------------
 
     /**
