@@ -7,7 +7,11 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
+
+import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -21,6 +25,7 @@ import org.jdesktop.beansbinding.Converter;
 import org.openide.util.NbBundle;
 import org.openide.util.WeakListeners;
 
+import java.awt.BasicStroke;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -44,16 +49,16 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.event.EventListenerList;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultXStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.cismap.commons.retrieval.RetrievalEvent;
 import de.cismet.cismap.commons.retrieval.RetrievalListener;
 
@@ -178,6 +183,35 @@ public class OabUtilities {
     }
 
     /**
+     * Re-fetches a cidsbean if the backlink is not set (e.g. if it is part of the collection of the parent).
+     *
+     * @param   source            DOCUMENT ME!
+     * @param   backlinkProperty  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IllegalStateException  DOCUMENT ME!
+     */
+    public static CidsBean getBean(final CidsBean source, final String backlinkProperty) {
+        // backlink not set due to 1:n
+        if (source.getProperty(backlinkProperty) == null) {
+            try {
+                final MetaObject mo = source.getMetaObject();
+                final MetaObject copy = SessionManager.getConnection()
+                            .getMetaObject(SessionManager.getSession().getUser(),
+                                mo.getID(),
+                                mo.getClassID(),
+                                mo.getDomain());
+                return copy.getBean();
+            } catch (final ConnectionException ex) {
+                throw new IllegalStateException("cannot re-fetch cidsbean", ex); // NOI18N
+            }
+        } else {
+            return source;
+        }
+    }
+
+    /**
      * DOCUMENT ME!
      *
      * @param   btn            DOCUMENT ME!
@@ -198,7 +232,9 @@ public class OabUtilities {
             throw new IllegalStateException("must only be called from EDT"); // NOI18N
         }
 
-        btn.setName("<html><font color=#000099><u>" + btn.getName() + "</u></font></html>"); // NOI18N
+        btn.setText("<html><font color=#000099><u>" + btn.getText() + "</u></font></html>"); // NOI18N
+        btn.setHorizontalAlignment(SwingConstants.LEFT);
+        btn.setHorizontalTextPosition(SwingConstants.LEFT);
         btn.setOpaque(false);
         btn.setBorderPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -364,14 +400,14 @@ public class OabUtilities {
                         + "]");            // NOI18N
         }
 
-        final XBoundingBox bbox = new XBoundingBox(geom.getEnvelope().buffer(2d), OabUtilities.EPSG, true);
+        final XBoundingBox bbox = new XBoundingBox(geom.getEnvelope().buffer(50d), OabUtilities.EPSG, true);
         final ActiveLayerModel mappingModel = new ActiveLayerModel();
         mappingModel.setSrs(new Crs(OabUtilities.EPSG, OabUtilities.EPSG, OabUtilities.EPSG, true, true));
         mappingModel.addHome(bbox);
 
         // TODO: backgroundlayer
-        final SimpleWMS backgroundLayer = new SimpleWMS(new SimpleWmsGetMapUrl("TODO"));
-        backgroundLayer.setName(""); // NOI18N
+        // final SimpleWMS backgroundLayer = new SimpleWMS(new SimpleWmsGetMapUrl("TODO"));
+        // backgroundLayer.setName(""); // NOI18N
 
         // TODO: additional layers
 
@@ -424,13 +460,21 @@ public class OabUtilities {
                     }
                 };
 
-            backgroundLayer.addRetrievalListener(rl);
+//            backgroundLayer.addRetrievalListener(rl);
         }
 
-        mappingModel.addLayer(backgroundLayer);
+//        mappingModel.addLayer(backgroundLayer);
 
         map.setMappingModel(mappingModel);
         map.gotoInitialBoundingBox();
+        final DefaultXStyledFeature feature = new DefaultXStyledFeature(
+                null,
+                "Geometrie",
+                "Polygon",
+                null,
+                new BasicStroke());
+        feature.setGeometry(geom);
+        map.getFeatureCollection().addFeature(feature);
 
         map.unlock();
         map.addCustomInputListener(GOTO_USEROBJECT_COMMAND, new PBasicInputEventHandler() { // NOI18N
@@ -446,6 +490,7 @@ public class OabUtilities {
                 }
             });
         map.setInteractionMode(GOTO_USEROBJECT_COMMAND); // NOI18N
+        map.gotoInitialBoundingBox();
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -495,7 +540,7 @@ public class OabUtilities {
                 if (cp instanceof CidsBean) {
                     ComponentRegistry.getRegistry()
                             .getDescriptionPane()
-                            .gotoMetaObject(((CidsBean)cp).getMetaObject(), null);
+                            .gotoMetaObject(((CidsBean)cp).getMetaObject(), ((CidsBean)cp).toString());
                 } else {
                     if (log.isDebugEnabled()) {
                         log.debug("source does not contain bean client property: " + source); // NOI18N

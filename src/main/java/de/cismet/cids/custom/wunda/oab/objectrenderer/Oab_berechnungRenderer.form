@@ -55,7 +55,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_BerechnungRenderer.lblMapTitle.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_berechnungRenderer.lblMapTitle.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -111,7 +111,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_BerechnungRenderer.lblData.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_berechnungRenderer.lblData.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -125,7 +125,7 @@
         <Component class="javax.swing.JLabel" name="lblAnnuality">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_BerechnungRenderer.lblAnnuality.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_berechnungRenderer.lblAnnuality.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -162,7 +162,7 @@
         <Component class="javax.swing.JLabel" name="lblBelongsToCondMeas">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_BerechnungRenderer.lblBelongsToCondMeas.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_berechnungRenderer.lblBelongsToCondMeas.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -174,7 +174,7 @@
         <Component class="javax.swing.JButton" name="btnGotoCondMeas">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_BerechnungRenderer.btnGotoCondMeas.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objectrenderer/Bundle.properties" key="Oab_berechnungRenderer.btnGotoCondMeas.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>

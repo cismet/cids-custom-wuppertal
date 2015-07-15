@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.mapvis;
 
+import Sirius.navigator.plugin.PluginRegistry;
+
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
@@ -14,12 +16,15 @@ import org.openide.util.NbBundle;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 
+import java.util.Arrays;
+
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.SimpleGetFeatureInfoUrl;
+import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
@@ -92,7 +97,11 @@ public class OabMapVisualisationAction extends AbstractAction {
 
                 if (dialog.isAddFeature()) {
                     if (isAutoAddFeatureToMap()) {
-                        map.getFeatureCollection().addFeature(new CidsFeature(dialog.getFeatureBean().getMetaObject()));
+                        final Feature feature = new CidsFeature(dialog.getFeatureBean().getMetaObject());
+                        map.getFeatureCollection().addFeature(feature);
+                        CismapBroker.getInstance()
+                                .getMappingComponent()
+                                .zoomToAFeatureCollection(Arrays.asList(feature), true, false);
                     } else {
                         featureAdditionSelected = true;
                     }
@@ -117,6 +126,12 @@ public class OabMapVisualisationAction extends AbstractAction {
                     final SimpleWMS layer = new SimpleWMS(new SimpleGetFeatureInfoUrl(dialog.getTsWaterGetMapUrl()));
                     map.getMappingModel().addLayer(layer);
                 }
+
+                PluginRegistry.getRegistry()
+                        .getPluginDescriptor("cismap")
+                        .getUIDescriptor("cismap")
+                        .getView()
+                        .makeVisible();
             } catch (final Exception ex) {
                 log.warn("illegal action setup, oab map visualisation state undefined", ex); // NOI18N
             }

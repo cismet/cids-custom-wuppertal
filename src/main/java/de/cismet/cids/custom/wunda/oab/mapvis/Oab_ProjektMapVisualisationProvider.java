@@ -7,7 +7,11 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.mapvis;
 
+import Sirius.navigator.plugin.PluginRegistry;
+
 import java.awt.event.ActionEvent;
+
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -43,10 +47,16 @@ public class Oab_ProjektMapVisualisationProvider implements MapVisualisationProv
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
+                    final Feature feature = new CidsFeature(bean.getMetaObject());
+                    CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeature(feature);
+                    PluginRegistry.getRegistry()
+                            .getPluginDescriptor("cismap")
+                            .getUIDescriptor("cismap")
+                            .getView()
+                            .makeVisible();
                     CismapBroker.getInstance()
                             .getMappingComponent()
-                            .getFeatureCollection()
-                            .addFeature(new CidsFeature(bean.getMetaObject()));
+                            .zoomToAFeatureCollection(Arrays.asList(feature), true, false);
                 }
             };
     }

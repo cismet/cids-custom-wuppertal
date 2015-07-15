@@ -7,7 +7,11 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.objectrenderer;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.openide.util.NbBundle;
+
+import java.awt.EventQueue;
 
 import javax.swing.event.EventListenerList;
 
@@ -23,7 +27,7 @@ import de.cismet.cids.dynamics.CidsBean;
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
+public class Oab_berechnungRenderer extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -51,7 +55,7 @@ public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
     /**
      * Creates new form OABProjectEditor.
      */
-    public Oab_BerechnungRenderer() {
+    public Oab_berechnungRenderer() {
         initComponents();
     }
 
@@ -59,25 +63,40 @@ public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
 
     @Override
     protected void init() {
-        bindingGroup.unbind();
+        cidsBean = OabUtilities.getBean(cidsBean, "zustand_massnahme"); // NOI18N
 
-        if (cidsBean != null) {
-            refHolderList = new EventListenerList();
+        final Runnable r = new Runnable() {
 
-            final CidsBean condMeasBean = (CidsBean)cidsBean.getProperty("zustand_massnahme"); // NOI18N
-            // TODO: add mapclick action
-            OabUtilities.initPreviewMap(
-                cidsBean,
-                "zustand_massnahme.umschreibende_geometrie.geo_field", // NOI18N
-                map,
-                lblMapTitle,
-                new Oab_BerechnungMapVisualisationProvider().buildAction(cidsBean),
-                (String)cidsBean.getProperty("max_wasser_simple_getmap")); // NOI18N
+                @Override
+                public void run() {
+                    bindingGroup.unbind();
 
-            btnGotoCondMeas.setText((String)condMeasBean.getProperty("name")); // NOI18N
-            OabUtilities.toGotoBeanHyperlinkButton(btnGotoCondMeas, condMeasBean, refHolderList);
+                    if (cidsBean != null) {
+                        refHolderList = new EventListenerList();
 
-            bindingGroup.bind();
+                        final CidsBean condMeasBean = (CidsBean)cidsBean.getProperty("zustand_massnahme"); // NOI18N
+
+                        // TODO: add mapclick action
+                        OabUtilities.initPreviewMap(
+                            cidsBean,
+                            "zustand_massnahme.umschreibende_geometrie.geo_field", // NOI18N
+                            map,
+                            lblMapTitle,
+                            new Oab_BerechnungMapVisualisationProvider().buildAction(cidsBean),
+                            (String)cidsBean.getProperty("max_wasser_simple_getmap")); // NOI18N
+
+                        btnGotoCondMeas.setText((String)condMeasBean.getProperty("name")); // NOI18N
+                        OabUtilities.toGotoBeanHyperlinkButton(btnGotoCondMeas, condMeasBean, refHolderList);
+
+                        bindingGroup.bind();
+                    }
+                }
+            };
+
+        if (EventQueue.isDispatchThread()) {
+            r.run();
+        } else {
+            EventQueue.invokeLater(r);
         }
     }
 
@@ -120,7 +139,7 @@ public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
         lblMapTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblMapTitle,
-            NbBundle.getMessage(Oab_BerechnungRenderer.class, "Oab_BerechnungRenderer.lblMapTitle.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungRenderer.class, "Oab_berechnungRenderer.lblMapTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -160,7 +179,7 @@ public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
         lblData.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblData,
-            NbBundle.getMessage(Oab_BerechnungRenderer.class, "Oab_BerechnungRenderer.lblData.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungRenderer.class, "Oab_berechnungRenderer.lblData.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -179,7 +198,7 @@ public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblAnnuality,
-            NbBundle.getMessage(Oab_BerechnungRenderer.class, "Oab_BerechnungRenderer.lblAnnuality.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungRenderer.class, "Oab_berechnungRenderer.lblAnnuality.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -213,7 +232,7 @@ public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblBelongsToCondMeas,
-            NbBundle.getMessage(Oab_BerechnungRenderer.class, "Oab_BerechnungRenderer.lblBelongsToCondMeas.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungRenderer.class, "Oab_berechnungRenderer.lblBelongsToCondMeas.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -223,7 +242,7 @@ public class Oab_BerechnungRenderer extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             btnGotoCondMeas,
-            NbBundle.getMessage(Oab_BerechnungRenderer.class, "Oab_BerechnungRenderer.btnGotoCondMeas.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungRenderer.class, "Oab_berechnungRenderer.btnGotoCondMeas.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;

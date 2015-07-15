@@ -7,15 +7,24 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.objectrenderer;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.middleware.types.MetaObject;
+
 import org.openide.util.NbBundle;
+
+import java.awt.Color;
+import java.awt.EventQueue;
 
 import javax.swing.event.EventListenerList;
 
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 import de.cismet.cids.custom.wunda.oab.OabUtilities;
-import de.cismet.cids.custom.wunda.oab.mapvis.Oab_GewaessereinzugsgebietMapVisualisationProvider;
+import de.cismet.cids.custom.wunda.oab.mapvis.Oab_ProjektMapVisualisationProvider;
+
+import de.cismet.cids.dynamics.CidsBean;
 
 /**
  * DOCUMENT ME!
@@ -23,7 +32,7 @@ import de.cismet.cids.custom.wunda.oab.mapvis.Oab_GewaessereinzugsgebietMapVisua
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
+public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -31,57 +40,84 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
     private EventListenerList refHolderList;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGotoCatchment;
     private javax.swing.Box.Filler hStaticFillCMList;
+    private javax.swing.JLabel lblBelongsToCatchment;
+    private javax.swing.JLabel lblConditionsMeasures;
+    private javax.swing.JLabel lblContractor;
+    private javax.swing.JLabel lblContractorValue;
     private javax.swing.JLabel lblData;
-    private javax.swing.JLabel lblFrom;
-    private javax.swing.JLabel lblFromValue;
+    private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblFinishedOn;
+    private javax.swing.JLabel lblFinishedOnValue;
     private javax.swing.JLabel lblMapTitle;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNameValue;
-    private javax.swing.JLabel lblProjects;
-    private javax.swing.JLabel lblStatus;
-    private javax.swing.JLabel lblStatusValue;
-    private javax.swing.JLabel lblTo;
-    private javax.swing.JLabel lblToValue;
     private de.cismet.cismap.commons.gui.MappingComponent map;
+    private javax.swing.JPanel pnlCMList;
+    private javax.swing.JPanel pnlConditionAndMeasures;
     private javax.swing.JPanel pnlData;
     private javax.swing.JPanel pnlMap;
-    private javax.swing.JPanel pnlProjects;
-    private javax.swing.JPanel pnlProjectsList;
+    private javax.swing.JScrollPane scpDescription;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelConditionsAndMeasures;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelData;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelMap;
-    private javax.swing.Box.Filler vFillData;
+    private javax.swing.JTextArea txaDescription;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Oab_Gewaessereinzugsgebiet.
+     * Creates new form OABProjectEditor.
      */
-    public Oab_GewaessereinzugsgebietRenderer() {
+    public Oab_projektRenderer() {
         initComponents();
+
+        txaDescription.setBackground(new Color(0, 0, 0, 0));
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     protected void init() {
-        bindingGroup.unbind();
-        if (cidsBean != null) {
-            refHolderList = new EventListenerList();
+        cidsBean = OabUtilities.getBean(cidsBean, "gewaessereinzugsgebiet");
 
-            OabUtilities.initGotoBeanHyperlinkList(cidsBean, "projekte", pnlProjectsList, refHolderList); // NOI18N
-            OabUtilities.initPreviewMap(
-                cidsBean,
-                "umschreibende_geometrie.geo_field",                                                      // NOI18N
-                map,
-                lblMapTitle,
-                new Oab_GewaessereinzugsgebietMapVisualisationProvider().buildAction(cidsBean),
-                (String[])null);
+        final Runnable r = new Runnable() {
 
-            bindingGroup.bind();
+                @Override
+                public void run() {
+                    bindingGroup.unbind();
+
+                    if (cidsBean != null) {
+                        refHolderList = new EventListenerList();
+
+                        OabUtilities.initGotoBeanHyperlinkList(
+                            cidsBean,
+                            "zustaende_massnahmen",
+                            pnlCMList,
+                            refHolderList);                      // NOI18N
+                        OabUtilities.initPreviewMap(
+                            cidsBean,
+                            "umschreibende_geometrie.geo_field", // NOI18N
+                            map,
+                            lblMapTitle,
+                            new Oab_ProjektMapVisualisationProvider().buildAction(cidsBean),
+                            (String[])null);
+
+                        final CidsBean catchmentBean = (CidsBean)cidsBean.getProperty("gewaessereinzugsgebiet"); // NOI18N
+                        btnGotoCatchment.setText((String)catchmentBean.getProperty("name"));                     // NOI18N
+                        OabUtilities.toGotoBeanHyperlinkButton(btnGotoCatchment, catchmentBean, refHolderList);
+
+                        bindingGroup.bind();
+                    }
+                }
+            };
+
+        if (EventQueue.isDispatchThread()) {
+            r.run();
+        } else {
+            EventQueue.invokeLater(r);
         }
     }
 
@@ -101,22 +137,22 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
         map = new de.cismet.cismap.commons.gui.MappingComponent();
         pnlData = new javax.swing.JPanel();
         lblName = new javax.swing.JLabel();
+        lblDescription = new javax.swing.JLabel();
         semiRoundedPanelData = new de.cismet.tools.gui.SemiRoundedPanel();
         lblData = new javax.swing.JLabel();
         lblNameValue = new javax.swing.JLabel();
-        lblFrom = new javax.swing.JLabel();
-        lblFromValue = new javax.swing.JLabel();
-        lblTo = new javax.swing.JLabel();
-        lblToValue = new javax.swing.JLabel();
-        lblStatus = new javax.swing.JLabel();
-        lblStatusValue = new javax.swing.JLabel();
-        vFillData = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        pnlProjects = new javax.swing.JPanel();
+        scpDescription = new javax.swing.JScrollPane();
+        txaDescription = new javax.swing.JTextArea();
+        lblFinishedOn = new javax.swing.JLabel();
+        lblFinishedOnValue = new javax.swing.JLabel();
+        lblContractor = new javax.swing.JLabel();
+        lblContractorValue = new javax.swing.JLabel();
+        lblBelongsToCatchment = new javax.swing.JLabel();
+        btnGotoCatchment = new javax.swing.JButton();
+        pnlConditionAndMeasures = new javax.swing.JPanel();
         semiRoundedPanelConditionsAndMeasures = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblProjects = new javax.swing.JLabel();
-        pnlProjectsList = new javax.swing.JPanel();
+        lblConditionsMeasures = new javax.swing.JLabel();
+        pnlCMList = new javax.swing.JPanel();
         hStaticFillCMList = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0),
                 new java.awt.Dimension(20, 0),
                 new java.awt.Dimension(20, 32767));
@@ -130,14 +166,12 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
         semiRoundedPanelMap.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanelMap.setLayout(new java.awt.GridBagLayout());
 
-        lblMapTitle.setFont(new java.awt.Font("Lucida Grande", 0, 14));  // NOI18N
+        lblMapTitle.setFont(new java.awt.Font("Lucida Grande", 0, 14));                              // NOI18N
         lblMapTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblMapTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblMapTitle,
-            NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietRenderer.class,
-                "Oab_GewaessereinzugsgebietRenderer.lblMapTitle.text")); // NOI18N
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblMapTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -171,9 +205,7 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblName,
-            NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietRenderer.class,
-                "Oab_GewaessereinzugsgebietRenderer.lblName.text")); // NOI18N
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -182,17 +214,26 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblName, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblDescription,
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblDescription.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblDescription, gridBagConstraints);
+
         semiRoundedPanelData.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanelData.setLayout(new java.awt.GridBagLayout());
 
-        lblData.setFont(new java.awt.Font("Lucida Grande", 0, 14));  // NOI18N
+        lblData.setFont(new java.awt.Font("Lucida Grande", 0, 14));                              // NOI18N
         lblData.setForeground(new java.awt.Color(255, 255, 255));
         lblData.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblData,
-            NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietRenderer.class,
-                "Oab_GewaessereinzugsgebietRenderer.lblData.text")); // NOI18N
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblData.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -225,97 +266,114 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblNameValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblFrom,
-            NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietRenderer.class,
-                "Oab_GewaessereinzugsgebietRenderer.lblFrom.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlData.add(lblFrom, gridBagConstraints);
+        scpDescription.setBorder(null);
+        scpDescription.setOpaque(false);
+
+        txaDescription.setEditable(false);
+        txaDescription.setColumns(20);
+        txaDescription.setLineWrap(true);
+        txaDescription.setRows(5);
+        txaDescription.setWrapStyleWord(true);
+        txaDescription.setBorder(null);
+        txaDescription.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txaDescription.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.von}"),
-                lblFromValue,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setConverter(new OabUtilities.DateToStringConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlData.add(lblFromValue, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblTo,
-            NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietRenderer.class,
-                "Oab_GewaessereinzugsgebietRenderer.lblTo.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlData.add(lblTo, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bis}"),
-                lblToValue,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setConverter(new OabUtilities.DateToStringConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlData.add(lblToValue, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblStatus,
-            NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietRenderer.class,
-                "Oab_GewaessereinzugsgebietRenderer.lblStatus.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlData.add(lblStatus, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gep_status.name}"),
-                lblStatusValue,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
+                txaDescription,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlData.add(lblStatusValue, gridBagConstraints);
+        scpDescription.setViewportView(txaDescription);
+
+        scpDescription.getViewport().setOpaque(false);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        pnlData.add(vFillData, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(scpDescription, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFinishedOn,
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblFinishedOn.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblFinishedOn, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.abschluss}"),
+                lblFinishedOnValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new OabUtilities.DateToStringConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblFinishedOnValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblContractor,
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblContractor.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblContractor, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auftragnehmer}"),
+                lblContractorValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblContractorValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBelongsToCatchment,
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblBelongsToCatchment.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblBelongsToCatchment, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnGotoCatchment,
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.btnGotoCatchment.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(btnGotoCatchment, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -326,20 +384,18 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(pnlData, gridBagConstraints);
 
-        pnlProjects.setOpaque(false);
-        pnlProjects.setLayout(new java.awt.GridBagLayout());
+        pnlConditionAndMeasures.setOpaque(false);
+        pnlConditionAndMeasures.setLayout(new java.awt.GridBagLayout());
 
         semiRoundedPanelConditionsAndMeasures.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanelConditionsAndMeasures.setLayout(new java.awt.GridBagLayout());
 
-        lblProjects.setFont(new java.awt.Font("Lucida Grande", 0, 14));  // NOI18N
-        lblProjects.setForeground(new java.awt.Color(255, 255, 255));
-        lblProjects.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblConditionsMeasures.setFont(new java.awt.Font("Lucida Grande", 0, 14));                              // NOI18N
+        lblConditionsMeasures.setForeground(new java.awt.Color(255, 255, 255));
+        lblConditionsMeasures.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
-            lblProjects,
-            NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietRenderer.class,
-                "Oab_GewaessereinzugsgebietRenderer.lblProjects.text")); // NOI18N
+            lblConditionsMeasures,
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblConditionsMeasures.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -347,7 +403,7 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        semiRoundedPanelConditionsAndMeasures.add(lblProjects, gridBagConstraints);
+        semiRoundedPanelConditionsAndMeasures.add(lblConditionsMeasures, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -355,30 +411,30 @@ public class Oab_GewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        pnlProjects.add(semiRoundedPanelConditionsAndMeasures, gridBagConstraints);
+        pnlConditionAndMeasures.add(semiRoundedPanelConditionsAndMeasures, gridBagConstraints);
 
-        pnlProjectsList.setOpaque(false);
-        pnlProjectsList.setLayout(new java.awt.GridBagLayout());
+        pnlCMList.setOpaque(false);
+        pnlCMList.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        pnlProjects.add(pnlProjectsList, gridBagConstraints);
+        pnlConditionAndMeasures.add(pnlCMList, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        pnlProjects.add(hStaticFillCMList, gridBagConstraints);
+        pnlConditionAndMeasures.add(hStaticFillCMList, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
-        add(pnlProjects, gridBagConstraints);
+        add(pnlConditionAndMeasures, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
