@@ -55,7 +55,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_ProjektEditor.lblConditionMeasureTitle.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_projektEditor.lblConditionMeasureTitle.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -85,7 +85,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
           <SubComponents>
-            <Component class="de.cismet.cids.custom.wunda.oab.objecteditors.Oab_Zustand_MassnahmeEditor" name="oab_Zustand_MassnahmeEditor">
+            <Component class="de.cismet.cids.custom.wunda.oab.objecteditors.Oab_zustand_massnahmeEditor" name="oab_zustand_massnahmeEditor">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                   <BorderConstraints direction="Center"/>
@@ -132,7 +132,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_ProjektEditor.lblData.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_projektEditor.lblData.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -146,7 +146,7 @@
         <Component class="javax.swing.JLabel" name="lblName">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_ProjektEditor.lblName.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_projektEditor.lblName.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -170,7 +170,7 @@
         <Component class="javax.swing.JLabel" name="lblDescription">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_ProjektEditor.lblDescription.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_projektEditor.lblDescription.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -203,7 +203,7 @@
         <Component class="javax.swing.JLabel" name="lblFinishedOn">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_ProjektEditor.lblFinishedOn.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_projektEditor.lblFinishedOn.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -214,7 +214,11 @@
         </Component>
         <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="defaultBindableDateChooserFinishedOn">
           <BindingProperties>
-            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.abschluss}" target="defaultBindableDateChooserFinishedOn" targetPath="date" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.abschluss}" target="defaultBindableDateChooserFinishedOn" targetPath="date" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new SqlDateToUtilDateConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -225,7 +229,7 @@
         <Component class="javax.swing.JLabel" name="lblContractor">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_ProjektEditor.lblContractor.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_projektEditor.lblContractor.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -284,7 +288,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_ProjektEditor.lblConditionsMeasures.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/wunda/oab/objecteditors/Bundle.properties" key="Oab_projektEditor.lblConditionsMeasures.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>

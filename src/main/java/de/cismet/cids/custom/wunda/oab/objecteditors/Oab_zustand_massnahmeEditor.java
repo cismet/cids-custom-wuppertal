@@ -7,9 +7,12 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.objecteditors;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.openide.util.NbBundle;
 import org.openide.util.WeakListeners;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -37,7 +40,7 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
+public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -64,7 +67,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
     private javax.swing.JLabel lblType;
     private javax.swing.JLabel lblWmsCapUrl;
     private javax.swing.JList lstCalculations;
-    private de.cismet.cids.custom.wunda.oab.objecteditors.Oab_BerechnungEditor oab_BerechnungEditor;
+    private de.cismet.cids.custom.wunda.oab.objecteditors.Oab_berechnungEditor oab_berechnungEditor;
     private javax.swing.JPanel pnlCalculationDetail;
     private javax.swing.JPanel pnlCalculations;
     private javax.swing.JPanel pnlData;
@@ -91,18 +94,18 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
     /**
      * Creates new form OABProjectEditor.
      */
-    public Oab_Zustand_MassnahmeEditor() {
+    public Oab_zustand_massnahmeEditor() {
         initComponents();
 
         editTinL = new EditWMSPropertiesListener(
                 "tin", // NOI18N
                 NbBundle.getMessage(
-                    Oab_Zustand_MassnahmeEditor.class,
+                    Oab_zustand_massnahmeEditor.class,
                     "Oab_Zustand_MassnahmeEditor.<init>.editTinL.title")); // NOI18N
         editBeL = new EditWMSPropertiesListener(
                 "bruchkanten", // NOI18N
                 NbBundle.getMessage(
-                    Oab_Zustand_MassnahmeEditor.class,
+                    Oab_zustand_massnahmeEditor.class,
                     "Oab_Zustand_MassnahmeEditor.<init>.editBeL.title")); // NOI18N
         calcSelL = new CalculationSelectionL();
         importChkL = new ImportCheckL();
@@ -198,7 +201,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         semiRoundedPanelCalculationDetail = new de.cismet.tools.gui.SemiRoundedPanel();
         lblCalculationDetailTitle = new javax.swing.JLabel();
         pnlEmbeddedCalculation = new javax.swing.JPanel();
-        oab_BerechnungEditor = new de.cismet.cids.custom.wunda.oab.objecteditors.Oab_BerechnungEditor();
+        oab_berechnungEditor = new de.cismet.cids.custom.wunda.oab.objecteditors.Oab_berechnungEditor();
         pnlData = new javax.swing.JPanel();
         lblName = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -230,7 +233,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblWmsCapUrl,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblWmsCapUrl.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblWmsCapUrl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -241,7 +244,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblLayerName,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblLayerName.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblLayerName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -252,7 +255,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblGetMapUrl,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblGetMapUrl.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblGetMapUrl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -262,8 +265,8 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         pnlEditDialog.add(lblGetMapUrl, gridBagConstraints);
 
         txtWmsCapUrl.setText(NbBundle.getMessage(
-                Oab_Zustand_MassnahmeEditor.class,
-                "Oab_Zustand_MassnahmeEditor.txtWmsCapUrl.text")); // NOI18N
+                Oab_zustand_massnahmeEditor.class,
+                "Oab_zustand_massnahmeEditor.txtWmsCapUrl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -274,8 +277,8 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         pnlEditDialog.add(txtWmsCapUrl, gridBagConstraints);
 
         txtLayerName.setText(NbBundle.getMessage(
-                Oab_Zustand_MassnahmeEditor.class,
-                "Oab_Zustand_MassnahmeEditor.txtLayerName.text")); // NOI18N
+                Oab_zustand_massnahmeEditor.class,
+                "Oab_zustand_massnahmeEditor.txtLayerName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -286,8 +289,8 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         pnlEditDialog.add(txtLayerName, gridBagConstraints);
 
         txtGetMapUrl.setText(NbBundle.getMessage(
-                Oab_Zustand_MassnahmeEditor.class,
-                "Oab_Zustand_MassnahmeEditor.txtGetMapUrl.text")); // NOI18N
+                Oab_zustand_massnahmeEditor.class,
+                "Oab_zustand_massnahmeEditor.txtGetMapUrl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -318,8 +321,8 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         org.openide.awt.Mnemonics.setLocalizedText(
             lblCalculationDetailTitle,
             NbBundle.getMessage(
-                Oab_Zustand_MassnahmeEditor.class,
-                "Oab_Zustand_MassnahmeEditor.lblCalculationDetailTitle.text"));       // NOI18N
+                Oab_zustand_massnahmeEditor.class,
+                "Oab_zustand_massnahmeEditor.lblCalculationDetailTitle.text"));       // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -334,7 +337,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         pnlEmbeddedCalculation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
         pnlEmbeddedCalculation.setOpaque(false);
         pnlEmbeddedCalculation.setLayout(new java.awt.BorderLayout());
-        pnlEmbeddedCalculation.add(oab_BerechnungEditor, java.awt.BorderLayout.CENTER);
+        pnlEmbeddedCalculation.add(oab_berechnungEditor, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -359,7 +362,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblName,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblName.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -387,7 +390,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblDescription,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblDescription.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblDescription.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -404,7 +407,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         lblData.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblData,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblData.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblData.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -443,7 +446,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblType,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblType.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblType.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -454,8 +457,8 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         org.openide.awt.Mnemonics.setLocalizedText(
             lblBelongsToProject,
             NbBundle.getMessage(
-                Oab_Zustand_MassnahmeEditor.class,
-                "Oab_Zustand_MassnahmeEditor.lblBelongsToProject.text")); // NOI18N
+                Oab_zustand_massnahmeEditor.class,
+                "Oab_zustand_massnahmeEditor.lblBelongsToProject.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -513,7 +516,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         lblCalculations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblCalculations,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.lblCalculations.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblCalculations.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -579,8 +582,8 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         org.openide.awt.Mnemonics.setLocalizedText(
             chkImportFinished,
             NbBundle.getMessage(
-                Oab_Zustand_MassnahmeEditor.class,
-                "Oab_Zustand_MassnahmeEditor.chkImportFinished.text")); // NOI18N
+                Oab_zustand_massnahmeEditor.class,
+                "Oab_zustand_massnahmeEditor.chkImportFinished.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -607,7 +610,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
                 getClass().getResource("/de/cismet/cids/custom/wunda/oab/objecteditors/map_16.png")));              // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnEditTin,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.btnEditTin.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.btnEditTin.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -619,7 +622,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
                 getClass().getResource("/de/cismet/cids/custom/wunda/oab/objecteditors/map_16.png")));             // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnEditBe,
-            NbBundle.getMessage(Oab_Zustand_MassnahmeEditor.class, "Oab_Zustand_MassnahmeEditor.btnEditBe.text")); // NOI18N
+            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.btnEditBe.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
@@ -649,39 +652,46 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
         @Override
         public void itemStateChanged(final ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                boolean allChecked = true;
-                final List<CidsBean> calculations = cidsBean.getBeanCollectionProperty("berechnungen"); // NOI18N
-                final Iterator<CidsBean> it = calculations.iterator();
+                // intentional invoke later in EDT to not confuse beansbinding
+                EventQueue.invokeLater(new Runnable() {
 
-                while (it.hasNext() && allChecked) {
-                    final Boolean completed = (Boolean)it.next().getProperty("import_vollstaendig"); // NOI18N
-                    if ((completed == null) || !completed) {
-                        allChecked = false;
-                    }
-                }
+                        @Override
+                        public void run() {
+                            boolean allChecked = true;
+                            final List<CidsBean> calculations = cidsBean.getBeanCollectionProperty("berechnungen"); // NOI18N
+                            final Iterator<CidsBean> it = calculations.iterator();
 
-                if (!allChecked) {
-                    final int answer = JOptionPane.showConfirmDialog(
-                            Oab_Zustand_MassnahmeEditor.this,
-                            NbBundle.getMessage(
-                                Oab_Zustand_MassnahmeEditor.class,
-                                "Oab_Zustand_MassnahmeEditor.ImportCheckL.itemStateChanged(ItemEvent).batchFinish.message"), // NOI18N
-                            NbBundle.getMessage(
-                                Oab_Zustand_MassnahmeEditor.class,
-                                "Oab_Zustand_MassnahmeEditor.ImportCheckL.itemStateChanged(ItemEvent).batchFinish.title"), // NOI18N
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
+                            while (it.hasNext() && allChecked) {
+                                final Boolean completed = (Boolean)it.next().getProperty("import_vollstaendig"); // NOI18N
+                                if ((completed == null) || !completed) {
+                                    allChecked = false;
+                                }
+                            }
 
-                    if (answer == JOptionPane.YES_OPTION) {
-                        for (final CidsBean bean : calculations) {
-                            try {
-                                bean.setProperty("import_vollstaendig", Boolean.TRUE);                       // NOI18N
-                            } catch (final Exception ex) {
-                                throw new IllegalStateException("unexpected exception at set property", ex); // NOI18N
+                            if (!allChecked) {
+                                final int answer = JOptionPane.showConfirmDialog(
+                                        Oab_zustand_massnahmeEditor.this,
+                                        NbBundle.getMessage(
+                                            Oab_zustand_massnahmeEditor.class,
+                                            "Oab_Zustand_MassnahmeEditor.ImportCheckL.itemStateChanged(ItemEvent).batchFinish.message"), // NOI18N
+                                        NbBundle.getMessage(
+                                            Oab_zustand_massnahmeEditor.class,
+                                            "Oab_Zustand_MassnahmeEditor.ImportCheckL.itemStateChanged(ItemEvent).batchFinish.title"), // NOI18N
+                                        JOptionPane.YES_NO_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE);
+
+                                if (answer == JOptionPane.YES_OPTION) {
+                                    for (final CidsBean bean : calculations) {
+                                        try {
+                                            bean.setProperty("import_vollstaendig", Boolean.TRUE);                       // NOI18N
+                                        } catch (final Exception ex) {
+                                            throw new IllegalStateException("unexpected exception at set property", ex); // NOI18N
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
-                }
+                    });
             }
         }
     }
@@ -703,7 +713,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
                     throw new IllegalStateException("no calculation selected, this is illegal"); // NOI18N
                 }
 
-                oab_BerechnungEditor.setCidsBean(bean);
+                oab_berechnungEditor.setCidsBean(bean);
             }
         }
     }
@@ -742,7 +752,7 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
             txtGetMapUrl.setText((String)cidsBean.getProperty(propPrefix + "_simple_getmap")); // NOI18N
 
             final int answer = JOptionPane.showConfirmDialog(
-                    Oab_Zustand_MassnahmeEditor.this,
+                    Oab_zustand_massnahmeEditor.this,
                     pnlEditDialog,
                     title,
                     JOptionPane.OK_CANCEL_OPTION,
@@ -750,6 +760,8 @@ public class Oab_Zustand_MassnahmeEditor extends AbstractCidsBeanRenderer {
             if (answer == JOptionPane.OK_OPTION) {
                 try {
                     cidsBean.setProperty(propPrefix + "_cap", txtWmsCapUrl.getText());           // NOI18N
+                    cidsBean.setProperty(propPrefix + "_layer_name", txtLayerName.getText());    // NOI18N
+                    cidsBean.setProperty(propPrefix + "_simple_getmap", txtGetMapUrl.getText()); // NOI18N
                 } catch (final Exception ex) {
                     throw new IllegalStateException("unexpected exception at set property", ex); // NOI18N
                 }

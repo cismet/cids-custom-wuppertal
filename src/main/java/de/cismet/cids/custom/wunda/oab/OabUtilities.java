@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Converter;
 
+import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.WeakListeners;
 
@@ -45,6 +46,7 @@ import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -72,6 +74,8 @@ public class OabUtilities {
 
     //~ Static fields/initializers ---------------------------------------------
 
+    private static final Logger log = Logger.getLogger(OabUtilities.class);
+
     public static final DateFormat COMMON_DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
     public static final int CRS = 25832;
     public static final String EPSG = "EPSG:" + CRS; // NOI18N
@@ -93,6 +97,18 @@ public class OabUtilities {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   c     DOCUMENT ME!
+     * @param   name  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ImageIcon loadImageIcon(final Class c, final String name) {
+        return ImageUtilities.loadImageIcon(c.getPackage().getName().replaceAll("\\.", "/") + "/" + name, false); // NOI18N
+    }
 
     /**
      * DOCUMENT ME!
@@ -310,8 +326,11 @@ public class OabUtilities {
         final List<CidsBean> c = sourceBean.getBeanCollectionProperty(collectionProperty); // NOI18N
 
         if ((c == null) || c.isEmpty()) {
-            throw new IllegalStateException("no collection found: [sourceBean=" + sourceBean + "|prop=" // NOI18N
-                        + collectionProperty + "]"); // NOI18N
+            if (log.isDebugEnabled()) {
+                log.debug("no collection found: [sourceBean=" + sourceBean + "|prop=" + collectionProperty + "]"); // NOI18N
+            }
+
+            return;
         }
 
         Collections.sort(c, sorter);

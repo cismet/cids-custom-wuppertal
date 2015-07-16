@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.objecteditors;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.openide.util.NbBundle;
 
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
@@ -17,7 +19,7 @@ import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
+public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkImportFinished;
@@ -51,7 +53,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
     /**
      * Creates new form Oab_BerechnungEditor.
      */
-    public Oab_BerechnungEditor() {
+    public Oab_berechnungEditor() {
         initComponents();
     }
 
@@ -104,7 +106,8 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             chkImportFinished,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.chkImportFinished.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.chkImportFinished.text")); // NOI18N
+        chkImportFinished.setContentAreaFilled(false);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -119,7 +122,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 4, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(chkImportFinished, gridBagConstraints);
 
         sepImports.setOpaque(true);
@@ -133,7 +136,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblAnnuality,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblAnnuality.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblAnnuality.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -169,7 +172,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
         lblMaxWater.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblMaxWater,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblMaxWater.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblMaxWater.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -186,7 +189,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblMaxWaterCapUrl,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblMaxWaterCapUrl.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblMaxWaterCapUrl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -212,7 +215,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblMaxWaterLayerName,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblMaxWaterLayerName.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblMaxWaterLayerName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -222,7 +225,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblMaxWaterGetMapUrl,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblMaxWaterGetMapUrl.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblMaxWaterGetMapUrl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -282,7 +285,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
         lblWaterLevelCourse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblWaterLevelCourse,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblWaterLevelCourse.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblWaterLevelCourse.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -297,7 +300,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblWLCourseCapUrl,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblWLCourseCapUrl.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblWLCourseCapUrl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -306,7 +309,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblWLCourseLayerName,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblWLCourseLayerName.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblWLCourseLayerName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -315,7 +318,7 @@ public class Oab_BerechnungEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblWLCourseGetMapUrl,
-            NbBundle.getMessage(Oab_BerechnungEditor.class, "Oab_BerechnungEditor.lblWLCourseGetMapUrl.text")); // NOI18N
+            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblWLCourseGetMapUrl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

@@ -7,11 +7,14 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.objecteditors;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.openide.util.NbBundle;
 
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 
 /**
  * DOCUMENT ME!
@@ -19,7 +22,7 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
  * @author   mscholl
  * @version  1.0
  */
-public class Oab_GewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer {
+public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserFrom;
@@ -38,7 +41,7 @@ public class Oab_GewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer {
     /**
      * Creates new form Oab_BerechnungEditor.
      */
-    public Oab_GewaessereinzugsgebietEditor() {
+    public Oab_gewaessereinzugsgebietEditor() {
         initComponents();
     }
 
@@ -73,8 +76,8 @@ public class Oab_GewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer {
         org.openide.awt.Mnemonics.setLocalizedText(
             lblFrom,
             NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietEditor.class,
-                "Oab_GewaessereinzugsgebietEditor.lblFrom.text")); // NOI18N
+                Oab_gewaessereinzugsgebietEditor.class,
+                "Oab_gewaessereinzugsgebietEditor.lblFrom.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -84,7 +87,7 @@ public class Oab_GewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblTo,
-            NbBundle.getMessage(Oab_GewaessereinzugsgebietEditor.class, "Oab_GewaessereinzugsgebietEditor.lblTo.text")); // NOI18N
+            NbBundle.getMessage(Oab_gewaessereinzugsgebietEditor.class, "Oab_gewaessereinzugsgebietEditor.lblTo.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -95,8 +98,8 @@ public class Oab_GewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer {
         org.openide.awt.Mnemonics.setLocalizedText(
             lblStatus,
             NbBundle.getMessage(
-                Oab_GewaessereinzugsgebietEditor.class,
-                "Oab_GewaessereinzugsgebietEditor.lblStatus.text")); // NOI18N
+                Oab_gewaessereinzugsgebietEditor.class,
+                "Oab_gewaessereinzugsgebietEditor.lblStatus.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -110,6 +113,7 @@ public class Oab_GewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.von}"),
                 defaultBindableDateChooserFrom,
                 org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(new SqlDateToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -125,6 +129,7 @@ public class Oab_GewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bis}"),
                 defaultBindableDateChooserTo,
                 org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(new SqlDateToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
