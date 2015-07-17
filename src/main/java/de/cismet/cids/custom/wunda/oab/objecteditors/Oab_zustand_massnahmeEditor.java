@@ -61,7 +61,6 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
     private javax.swing.JLabel lblCalculations;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblDescription;
-    private javax.swing.JLabel lblGetMapUrl;
     private javax.swing.JLabel lblLayerName;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblType;
@@ -81,7 +80,6 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanelData;
     private javax.swing.JSeparator sepImports;
     private javax.swing.JTextPane txpDescription;
-    private javax.swing.JTextField txtGetMapUrl;
     private javax.swing.JTextField txtLayerName;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtWmsCapUrl;
@@ -190,10 +188,8 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
         pnlEditDialog = new javax.swing.JPanel();
         lblWmsCapUrl = new javax.swing.JLabel();
         lblLayerName = new javax.swing.JLabel();
-        lblGetMapUrl = new javax.swing.JLabel();
         txtWmsCapUrl = new javax.swing.JTextField();
         txtLayerName = new javax.swing.JTextField();
-        txtGetMapUrl = new javax.swing.JTextField();
         vFillEdit = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -253,17 +249,6 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEditDialog.add(lblLayerName, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblGetMapUrl,
-            NbBundle.getMessage(Oab_zustand_massnahmeEditor.class, "Oab_zustand_massnahmeEditor.lblGetMapUrl.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEditDialog.add(lblGetMapUrl, gridBagConstraints);
-
         txtWmsCapUrl.setText(NbBundle.getMessage(
                 Oab_zustand_massnahmeEditor.class,
                 "Oab_zustand_massnahmeEditor.txtWmsCapUrl.text")); // NOI18N
@@ -287,18 +272,6 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEditDialog.add(txtLayerName, gridBagConstraints);
-
-        txtGetMapUrl.setText(NbBundle.getMessage(
-                Oab_zustand_massnahmeEditor.class,
-                "Oab_zustand_massnahmeEditor.txtGetMapUrl.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEditDialog.add(txtGetMapUrl, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -747,9 +720,8 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-            txtWmsCapUrl.setText((String)cidsBean.getProperty(propPrefix + "_cap"));           // NOI18N
-            txtLayerName.setText((String)cidsBean.getProperty(propPrefix + "_layer_name"));    // NOI18N
-            txtGetMapUrl.setText((String)cidsBean.getProperty(propPrefix + "_simple_getmap")); // NOI18N
+            txtWmsCapUrl.setText((String)cidsBean.getProperty(propPrefix + "_cap"));        // NOI18N
+            txtLayerName.setText((String)cidsBean.getProperty(propPrefix + "_layer_name")); // NOI18N
 
             final int answer = JOptionPane.showConfirmDialog(
                     Oab_zustand_massnahmeEditor.this,
@@ -761,7 +733,6 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
                 try {
                     cidsBean.setProperty(propPrefix + "_cap", txtWmsCapUrl.getText());           // NOI18N
                     cidsBean.setProperty(propPrefix + "_layer_name", txtLayerName.getText());    // NOI18N
-                    cidsBean.setProperty(propPrefix + "_simple_getmap", txtGetMapUrl.getText()); // NOI18N
                 } catch (final Exception ex) {
                     throw new IllegalStateException("unexpected exception at set property", ex); // NOI18N
                 }

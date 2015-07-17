@@ -26,10 +26,8 @@ public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements Re
     private javax.swing.JLabel lblAnnuality;
     private javax.swing.JLabel lblMaxWater;
     private javax.swing.JLabel lblMaxWaterCapUrl;
-    private javax.swing.JLabel lblMaxWaterGetMapUrl;
     private javax.swing.JLabel lblMaxWaterLayerName;
     private javax.swing.JLabel lblWLCourseCapUrl;
-    private javax.swing.JLabel lblWLCourseGetMapUrl;
     private javax.swing.JLabel lblWLCourseLayerName;
     private javax.swing.JLabel lblWaterLevelCourse;
     private javax.swing.JPanel pnlMaxWater;
@@ -39,10 +37,8 @@ public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements Re
     private javax.swing.JSeparator sepImports;
     private javax.swing.JSpinner spinAnnuality;
     private javax.swing.JTextField txtMaxWaterCapUrl;
-    private javax.swing.JTextField txtMaxWaterGetMapUrl;
     private javax.swing.JTextField txtMaxWaterLayerName;
     private javax.swing.JTextField txtWLCourseCapUrl;
-    private javax.swing.JTextField txtWLCourseGetMapUrl;
     private javax.swing.JTextField txtWLCourseLayerName;
     private javax.swing.Box.Filler vFill;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -85,18 +81,14 @@ public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements Re
         lblMaxWaterCapUrl = new javax.swing.JLabel();
         txtMaxWaterCapUrl = new javax.swing.JTextField();
         lblMaxWaterLayerName = new javax.swing.JLabel();
-        lblMaxWaterGetMapUrl = new javax.swing.JLabel();
         txtMaxWaterLayerName = new javax.swing.JTextField();
-        txtMaxWaterGetMapUrl = new javax.swing.JTextField();
         pnlWaterLevelCourse = new javax.swing.JPanel();
         semiRoundedPanelWaterLevelCourse = new de.cismet.tools.gui.SemiRoundedPanel();
         lblWaterLevelCourse = new javax.swing.JLabel();
         lblWLCourseCapUrl = new javax.swing.JLabel();
         lblWLCourseLayerName = new javax.swing.JLabel();
-        lblWLCourseGetMapUrl = new javax.swing.JLabel();
         txtWLCourseCapUrl = new javax.swing.JTextField();
         txtWLCourseLayerName = new javax.swing.JTextField();
-        txtWLCourseGetMapUrl = new javax.swing.JTextField();
         vFill = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -223,16 +215,6 @@ public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements Re
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlMaxWater.add(lblMaxWaterLayerName, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblMaxWaterGetMapUrl,
-            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblMaxWaterGetMapUrl.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlMaxWater.add(lblMaxWaterGetMapUrl, gridBagConstraints);
-
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -248,22 +230,6 @@ public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements Re
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlMaxWater.add(txtMaxWaterLayerName, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.max_wasser_simple_getmap}"),
-                txtMaxWaterGetMapUrl,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlMaxWater.add(txtMaxWaterGetMapUrl, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -316,15 +282,6 @@ public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements Re
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlWaterLevelCourse.add(lblWLCourseLayerName, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblWLCourseGetMapUrl,
-            NbBundle.getMessage(Oab_berechnungEditor.class, "Oab_berechnungEditor.lblWLCourseGetMapUrl.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlWaterLevelCourse.add(lblWLCourseGetMapUrl, gridBagConstraints);
-
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -356,22 +313,6 @@ public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements Re
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlWaterLevelCourse.add(txtWLCourseLayerName, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zr_wasser_simple_getmap}"),
-                txtWLCourseGetMapUrl,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlWaterLevelCourse.add(txtWLCourseGetMapUrl, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
