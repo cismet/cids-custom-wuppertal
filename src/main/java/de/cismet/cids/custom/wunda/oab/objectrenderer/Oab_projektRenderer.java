@@ -26,6 +26,8 @@ import de.cismet.cids.custom.wunda.oab.mapvis.Oab_ProjektMapVisualisationProvide
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cismap.commons.RetrievalServiceLayer;
+
 /**
  * DOCUMENT ME!
  *
@@ -103,7 +105,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
                             map,
                             lblMapTitle,
                             new Oab_ProjektMapVisualisationProvider().buildAction(cidsBean),
-                            (String[])null);
+                            (RetrievalServiceLayer[])null);
 
                         final CidsBean catchmentBean = (CidsBean)cidsBean.getProperty("gewaessereinzugsgebiet"); // NOI18N
                         btnGotoCatchment.setText((String)catchmentBean.getProperty("name"));                     // NOI18N

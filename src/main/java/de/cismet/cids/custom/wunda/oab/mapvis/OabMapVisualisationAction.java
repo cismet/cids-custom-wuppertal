@@ -21,13 +21,13 @@ import java.util.Arrays;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
+import de.cismet.cids.custom.wunda.oab.OabUtilities;
+
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cismap.commons.SimpleGetFeatureInfoUrl;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
@@ -108,23 +108,27 @@ public class OabMapVisualisationAction extends AbstractAction {
                 }
 
                 if (dialog.isAddTin()) {
-                    final SimpleWMS layer = new SimpleWMS(new SimpleGetFeatureInfoUrl(dialog.getTinGetMapUrl()));
-                    map.getMappingModel().addLayer(layer);
+                    final String cap = dialog.getTinCapabilitiesUrl();
+                    final String lname = dialog.getTinLayername();
+                    map.getMappingModel().addLayer(OabUtilities.createWMSLayer(cap, lname));
                 }
 
                 if (dialog.isAddBE()) {
-                    final SimpleWMS layer = new SimpleWMS(new SimpleGetFeatureInfoUrl(dialog.getBeGetMapUrl()));
-                    map.getMappingModel().addLayer(layer);
+                    final String cap = dialog.getBeCapabilitiesUrl();
+                    final String lname = dialog.getBeLayername();
+                    map.getMappingModel().addLayer(OabUtilities.createWMSLayer(cap, lname));
                 }
 
                 if (dialog.isAddMaxWater()) {
-                    final SimpleWMS layer = new SimpleWMS(new SimpleGetFeatureInfoUrl(dialog.getMaxWaterGetMapUrl()));
-                    map.getMappingModel().addLayer(layer);
+                    final String cap = dialog.getMaxWaterCapabilitiesUrl();
+                    final String lname = dialog.getMaxWaterLayername();
+                    map.getMappingModel().addLayer(OabUtilities.createWMSLayer(cap, lname));
                 }
 
                 if (dialog.isAddTSWater()) {
-                    final SimpleWMS layer = new SimpleWMS(new SimpleGetFeatureInfoUrl(dialog.getTsWaterGetMapUrl()));
-                    map.getMappingModel().addLayer(layer);
+                    final String cap = dialog.getTsWaterCapabilitiesUrl();
+                    final String lname = dialog.getTsWaterLayername();
+                    map.getMappingModel().addLayer(OabUtilities.createWMSLayer(cap, lname));
                 }
 
                 PluginRegistry.getRegistry()

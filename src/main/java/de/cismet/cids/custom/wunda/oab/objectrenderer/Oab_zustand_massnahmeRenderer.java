@@ -122,11 +122,13 @@ public class Oab_zustand_massnahmeRenderer extends AbstractCidsBeanRenderer impl
 
                         OabUtilities.initPreviewMap(
                             cidsBean,
-                            "umschreibende_geometrie.geo_field", // NOI18N
+                            "umschreibende_geometrie.geo_field",                             // NOI18N
                             map,
                             lblMapTitle,
                             new Oab_Zustand_MassnahmeMapVisualisationProvider().buildAction(cidsBean),
-                            (String)cidsBean.getProperty("bruchkanten_simple_getmap")); // NOI18N
+                            OabUtilities.createWMSLayer(
+                                (String)cidsBean.getProperty("bruchkanten_cap"),             // NOI18N
+                                (String)cidsBean.getProperty("bruchkanten_layer_name")));    // NOI18N
 
                         final CidsBean projectBean = (CidsBean)cidsBean.getProperty("projekt"); // NOI18N
                         btnGotoProject.setText((String)projectBean.getProperty("name"));        // NOI18N

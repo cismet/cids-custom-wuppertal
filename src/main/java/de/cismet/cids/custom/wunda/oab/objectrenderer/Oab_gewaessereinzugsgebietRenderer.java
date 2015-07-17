@@ -19,6 +19,8 @@ import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 import de.cismet.cids.custom.wunda.oab.OabUtilities;
 import de.cismet.cids.custom.wunda.oab.mapvis.Oab_GewaessereinzugsgebietMapVisualisationProvider;
 
+import de.cismet.cismap.commons.RetrievalServiceLayer;
+
 /**
  * DOCUMENT ME!
  *
@@ -86,7 +88,7 @@ public class Oab_gewaessereinzugsgebietRenderer extends AbstractCidsBeanRenderer
                             map,
                             lblMapTitle,
                             new Oab_GewaessereinzugsgebietMapVisualisationProvider().buildAction(cidsBean),
-                            (String[])null);
+                            (RetrievalServiceLayer[])null);
 
                         bindingGroup.bind();
                     }

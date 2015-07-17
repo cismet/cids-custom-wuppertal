@@ -76,14 +76,15 @@ public class Oab_berechnungRenderer extends AbstractCidsBeanRenderer implements 
 
                         final CidsBean condMeasBean = (CidsBean)cidsBean.getProperty("zustand_massnahme"); // NOI18N
 
-                        // TODO: add mapclick action
                         OabUtilities.initPreviewMap(
                             cidsBean,
-                            "zustand_massnahme.umschreibende_geometrie.geo_field", // NOI18N
+                            "zustand_massnahme.umschreibende_geometrie.geo_field",          // NOI18N
                             map,
                             lblMapTitle,
                             new Oab_BerechnungMapVisualisationProvider().buildAction(cidsBean),
-                            (String)cidsBean.getProperty("max_wasser_simple_getmap")); // NOI18N
+                            OabUtilities.createWMSLayer(
+                                (String)cidsBean.getProperty("max_wasser_cap"),             // NOI18N
+                                (String)cidsBean.getProperty("max_wasser_layer_name")));    // NOI18N
 
                         btnGotoCondMeas.setText((String)condMeasBean.getProperty("name")); // NOI18N
                         OabUtilities.toGotoBeanHyperlinkButton(btnGotoCondMeas, condMeasBean, refHolderList);
@@ -141,8 +142,6 @@ public class Oab_berechnungRenderer extends AbstractCidsBeanRenderer implements 
             lblMapTitle,
             NbBundle.getMessage(Oab_berechnungRenderer.class, "Oab_berechnungRenderer.lblMapTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         semiRoundedPanelMap.add(lblMapTitle, gridBagConstraints);
 

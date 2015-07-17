@@ -22,10 +22,14 @@ public class OabMapVisualisationDialog extends javax.swing.JPanel {
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean featureBean;
-    private String tinGetMapUrl;
-    private String beGetMapUrl;
-    private String maxWaterGetMapUrl;
-    private String tsWaterGetMapUrl;
+    private String tinCapabilitiesUrl;
+    private String tinLayername;
+    private String beCapabilitiesUrl;
+    private String beLayername;
+    private String maxWaterCapabilitiesUrl;
+    private String maxWaterLayername;
+    private String tsWaterCapabilitiesUrl;
+    private String tsWaterLayername;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkBE;
@@ -135,35 +139,17 @@ public class OabMapVisualisationDialog extends javax.swing.JPanel {
      *
      * @return  DOCUMENT ME!
      */
-    public String getTinGetMapUrl() {
-        return tinGetMapUrl;
+    public String getTinCapabilitiesUrl() {
+        return tinCapabilitiesUrl;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  tinGetMapUrl  DOCUMENT ME!
+     * @param  tinCapabilitiesUrl  DOCUMENT ME!
      */
-    public void setTinGetMapUrl(final String tinGetMapUrl) {
-        this.tinGetMapUrl = tinGetMapUrl;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getBeGetMapUrl() {
-        return beGetMapUrl;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  beGetMapUrl  DOCUMENT ME!
-     */
-    public void setBeGetMapUrl(final String beGetMapUrl) {
-        this.beGetMapUrl = beGetMapUrl;
+    public void setTinCapabilitiesUrl(final String tinCapabilitiesUrl) {
+        this.tinCapabilitiesUrl = tinCapabilitiesUrl;
     }
 
     /**
@@ -171,17 +157,17 @@ public class OabMapVisualisationDialog extends javax.swing.JPanel {
      *
      * @return  DOCUMENT ME!
      */
-    public String getMaxWaterGetMapUrl() {
-        return maxWaterGetMapUrl;
+    public String getBeCapabilitiesUrl() {
+        return beCapabilitiesUrl;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  maxWaterGetMapUrl  DOCUMENT ME!
+     * @param  beCapabilitiesUrl  DOCUMENT ME!
      */
-    public void setMaxWaterGetMapUrl(final String maxWaterGetMapUrl) {
-        this.maxWaterGetMapUrl = maxWaterGetMapUrl;
+    public void setBeCapabilitiesUrl(final String beCapabilitiesUrl) {
+        this.beCapabilitiesUrl = beCapabilitiesUrl;
     }
 
     /**
@@ -189,17 +175,107 @@ public class OabMapVisualisationDialog extends javax.swing.JPanel {
      *
      * @return  DOCUMENT ME!
      */
-    public String getTsWaterGetMapUrl() {
-        return tsWaterGetMapUrl;
+    public String getMaxWaterCapabilitiesUrl() {
+        return maxWaterCapabilitiesUrl;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  tsWaterGetMapUrl  DOCUMENT ME!
+     * @param  maxWaterCapabilitiesUrl  DOCUMENT ME!
      */
-    public void setTsWaterGetMapUrl(final String tsWaterGetMapUrl) {
-        this.tsWaterGetMapUrl = tsWaterGetMapUrl;
+    public void setMaxWaterCapabilitiesUrl(final String maxWaterCapabilitiesUrl) {
+        this.maxWaterCapabilitiesUrl = maxWaterCapabilitiesUrl;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getTsWaterCapabilitiesUrl() {
+        return tsWaterCapabilitiesUrl;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tsWaterCapabilitiesUrl  DOCUMENT ME!
+     */
+    public void setTsWaterCapabilitiesUrl(final String tsWaterCapabilitiesUrl) {
+        this.tsWaterCapabilitiesUrl = tsWaterCapabilitiesUrl;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getTinLayername() {
+        return tinLayername;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tinLayername  DOCUMENT ME!
+     */
+    public void setTinLayername(final String tinLayername) {
+        this.tinLayername = tinLayername;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getBeLayername() {
+        return beLayername;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beLayername  DOCUMENT ME!
+     */
+    public void setBeLayername(final String beLayername) {
+        this.beLayername = beLayername;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getMaxWaterLayername() {
+        return maxWaterLayername;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  maxWaterLayername  DOCUMENT ME!
+     */
+    public void setMaxWaterLayername(final String maxWaterLayername) {
+        this.maxWaterLayername = maxWaterLayername;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getTsWaterLayername() {
+        return tsWaterLayername;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tsWaterLayername  DOCUMENT ME!
+     */
+    public void setTsWaterLayername(final String tsWaterLayername) {
+        this.tsWaterLayername = tsWaterLayername;
     }
 
     /**

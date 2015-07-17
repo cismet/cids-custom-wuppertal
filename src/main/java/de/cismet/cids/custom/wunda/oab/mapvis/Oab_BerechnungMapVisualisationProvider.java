@@ -26,13 +26,17 @@ public class Oab_BerechnungMapVisualisationProvider extends AbstractOabVisualisa
         final OabMapVisualisationDialog dialog = new OabMapVisualisationDialog();
         dialog.setFeatureBean((CidsBean)bean.getProperty("zustand_massnahme"));
         dialog.setBeVisible(true);
-        dialog.setBeGetMapUrl((String)bean.getProperty("zustand_massnahme.bruchkanten_simple_getmap")); // NOI18N
+        dialog.setBeCapabilitiesUrl((String)bean.getProperty("zustand_massnahme.bruchkanten_cap"));  // NOI18N
+        dialog.setBeLayername((String)bean.getProperty("zustand_massnahme.bruchkanten_layer_name")); // NOI18N
         dialog.setTinVisible(true);
-        dialog.setTinGetMapUrl((String)bean.getProperty("zustand_massnahme.tin_simple_getmap"));        // NOI18N
+        dialog.setTinCapabilitiesUrl((String)bean.getProperty("zustand_massnahme.tin_cap"));         // NOI18N
+        dialog.setTinLayername((String)bean.getProperty("zustand_massnahme.tin_layer_name"));        // NOI18N
         dialog.setMaxWaterVisible(true);
-        dialog.setMaxWaterGetMapUrl((String)bean.getProperty("max_wasser_simple_getmap"));              // NOI18N
+        dialog.setMaxWaterCapabilitiesUrl((String)bean.getProperty("max_wasser_cap"));               // NOI18N
+        dialog.setMaxWaterLayername((String)bean.getProperty("max_wasser_layer_name"));              // NOI18N
         dialog.setTSWaterVisible(true);
-        dialog.setTsWaterGetMapUrl((String)bean.getProperty("zr_wasser_simple_getmap"));                // NOI18N
+        dialog.setTsWaterCapabilitiesUrl((String)bean.getProperty("zr_wasser_cap"));                 // NOI18N
+        dialog.setTsWaterLayername((String)bean.getProperty("zr_wasser_layer_name"));                // NOI18N
 
         return new OabMapVisualisationAction(ComponentRegistry.getRegistry().getMainWindow(), dialog);
     }

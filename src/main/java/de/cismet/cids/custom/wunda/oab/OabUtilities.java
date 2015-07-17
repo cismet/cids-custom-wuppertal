@@ -27,6 +27,7 @@ import org.openide.util.NbBundle;
 import org.openide.util.WeakListeners;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -39,10 +40,12 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.MissingResourceException;
 
 import javax.swing.Action;
 import javax.swing.Box;
@@ -53,16 +56,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.event.EventListenerList;
+import javax.swing.tree.TreePath;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.Crs;
+import de.cismet.cismap.commons.RetrievalServiceLayer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultXStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.retrieval.RetrievalEvent;
-import de.cismet.cismap.commons.retrieval.RetrievalListener;
+import de.cismet.cismap.commons.raster.wms.SlidableWMSServiceLayerGroup;
+import de.cismet.cismap.commons.raster.wms.WMSServiceLayer;
+import de.cismet.cismap.commons.wms.capabilities.Layer;
+import de.cismet.cismap.commons.wms.capabilities.WMSCapabilities;
+import de.cismet.cismap.commons.wms.capabilities.WMSCapabilitiesFactory;
 
 /**
  * DOCUMENT ME!
@@ -87,6 +95,11 @@ public class OabUtilities {
     public static final String OAB_PROJEKT_TABLE_NAME = "OAB_PROJEKT";                               // NOI18N
     public static final String OAB_ZUSTAND_MASSNAHME_TABLE_NAME = "OAB_ZUSTAND_MASSNAHME";           // NOI18N
     public static final String OAB_BERECHNUNG_TABLE_NAME = "OAB_BERECHNUNG";                         // NOI18N
+
+    public static final String OAB_PREVIEW_BACKGROUND_LAYER_CAP_PREFIX =
+        "OabUtilities.previewWMS.backgroundLayer.capabilities."; // NOI18N
+    public static final String OAB_PREVIEW_BACKGROUND_LAYER_NAME_PREFIX =
+        "OabUtilities.previewWMS.backgroundLayer.layername.";    // NOI18N
 
     //~ Constructors -----------------------------------------------------------
 
@@ -383,18 +396,18 @@ public class OabUtilities {
             final String geomProperty,
             final MappingComponent map,
             final JLabel titleComponent) {
-        initPreviewMap(sourceBean, geomProperty, map, titleComponent, null, (String[])null);
+        initPreviewMap(sourceBean, geomProperty, map, titleComponent, null, (RetrievalServiceLayer[])null);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   sourceBean           DOCUMENT ME!
-     * @param   geomProperty         DOCUMENT ME!
-     * @param   map                  DOCUMENT ME!
-     * @param   titleComponent       DOCUMENT ME!
-     * @param   mapClickAction       DOCUMENT ME!
-     * @param   additionalSimpleWms  DOCUMENT ME!
+     * @param   sourceBean        DOCUMENT ME!
+     * @param   geomProperty      DOCUMENT ME!
+     * @param   map               DOCUMENT ME!
+     * @param   titleComponent    DOCUMENT ME!
+     * @param   mapClickAction    DOCUMENT ME!
+     * @param   additionalLayers  DOCUMENT ME!
      *
      * @throws  IllegalArgumentException  DOCUMENT ME!
      * @throws  IllegalStateException     DOCUMENT ME!
@@ -404,7 +417,7 @@ public class OabUtilities {
             final MappingComponent map,
             final JLabel titleComponent,
             final Action mapClickAction,
-            final String... additionalSimpleWms) {
+            final RetrievalServiceLayer... additionalLayers) {
         if ((sourceBean == null) || (geomProperty == null) || (map == null)) {
             throw new IllegalArgumentException("null arguments not allowed"); // NOI18N
         }
@@ -424,74 +437,34 @@ public class OabUtilities {
         mappingModel.setSrs(new Crs(OabUtilities.EPSG, OabUtilities.EPSG, OabUtilities.EPSG, true, true));
         mappingModel.addHome(bbox);
 
-        // TODO: backgroundlayer
-        // final SimpleWMS backgroundLayer = new SimpleWMS(new SimpleWmsGetMapUrl("TODO"));
-        // backgroundLayer.setName(""); // NOI18N
+        final List<RetrievalServiceLayer> backgroundLayers = createBackgroupLayers();
 
-        // TODO: additional layers
-
-        if (titleComponent != null) {
-            final RetrievalListener rl = new RetrievalListener() {
-
-                    private final transient String text = titleComponent.getText();
-
-                    private void setTitleText(final String suffix) {
-                        EventQueue.invokeLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    titleComponent.setText(text + suffix);
-                                }
-                            });
-                    }
-
-                    @Override
-                    public void retrievalStarted(final RetrievalEvent e) {
-                        setTitleText(NbBundle.getMessage(
-                                OabUtilities.class,
-                                "OabUtilities.initPreviewMap(CidsBean,String,MappingComponent,JLabel,Action,String...).rl.retrievalStarted(RetrievalEvent).titleSuffix")); // NOI18N
-                    }
-
-                    @Override
-                    public void retrievalError(final RetrievalEvent re) {
-                        setTitleText(NbBundle.getMessage(
-                                OabUtilities.class,
-                                "OabUtilities.initPreviewMap(CidsBean,String,MappingComponent,JLabel,Action,String...).rl.retrievalError(RetrievalEvent).titleSuffix")); // NOI18N
-                    }
-
-                    @Override
-                    public void retrievalProgress(final RetrievalEvent e) {
-                        // noop
-                    }
-
-                    @Override
-                    public void retrievalComplete(final RetrievalEvent e) {
-                        setTitleText(NbBundle.getMessage(
-                                OabUtilities.class,
-                                "OabUtilities.initPreviewMap(CidsBean,String,MappingComponent,JLabel,Action,String...).rl.retrievalComplete(RetrievalEvent).titleSuffix")); // NOI18N
-                    }
-
-                    @Override
-                    public void retrievalAborted(final RetrievalEvent e) {
-                        setTitleText(NbBundle.getMessage(
-                                OabUtilities.class,
-                                "OabUtilities.initPreviewMap(CidsBean,String,MappingComponent,JLabel,Action,String...).rl.retrievalAborted(RetrievalEvent).titleSuffix")); // NOI18N
-                    }
-                };
-
-//            backgroundLayer.addRetrievalListener(rl);
+        if (backgroundLayers != null) {
+            for (final RetrievalServiceLayer backgroundLayer : backgroundLayers) {
+                if (backgroundLayer != null) {
+                    mappingModel.addLayer(backgroundLayer);
+                }
+            }
         }
 
-//        mappingModel.addLayer(backgroundLayer);
+        if (additionalLayers != null) {
+            for (final RetrievalServiceLayer additionalLayer : additionalLayers) {
+                if (additionalLayer != null) {
+                    mappingModel.addLayer(additionalLayer);
+                }
+            }
+        }
 
         map.setMappingModel(mappingModel);
         map.gotoInitialBoundingBox();
         final DefaultXStyledFeature feature = new DefaultXStyledFeature(
                 null,
-                "Geometrie",
-                "Polygon",
+                "Geometrie", // NOI18N
+                "Polygon", // NOI18N
                 null,
                 new BasicStroke());
+        feature.setFillingPaint(Color.RED);
+        feature.setTransparency(0.2f);
         feature.setGeometry(geom);
         map.getFeatureCollection().addFeature(feature);
 
@@ -510,6 +483,151 @@ public class OabUtilities {
             });
         map.setInteractionMode(GOTO_USEROBJECT_COMMAND); // NOI18N
         map.gotoInitialBoundingBox();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static List<RetrievalServiceLayer> createBackgroupLayers() {
+        boolean layerfound = true;
+        int i = 0;
+        final List<RetrievalServiceLayer> mapServices = new ArrayList<RetrievalServiceLayer>();
+        while (layerfound) {
+            // starting with one
+            i++;
+
+            String capLink = null;
+            String name = null;
+            try {
+                capLink = NbBundle.getMessage(OabUtilities.class, OAB_PREVIEW_BACKGROUND_LAYER_CAP_PREFIX + i);
+                name = NbBundle.getMessage(OabUtilities.class, OAB_PREVIEW_BACKGROUND_LAYER_NAME_PREFIX + i);
+            } catch (final MissingResourceException ex) {
+                // noop, the layer is simply not there
+            }
+
+            if ((capLink == null) || (name == null)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("no link or name found: [capLink=" + capLink + "|name=" + name + "|capProp=" // NOI18N
+                                + OAB_PREVIEW_BACKGROUND_LAYER_CAP_PREFIX + i + "|nameProp=" // NOI18N
+                                + OAB_PREVIEW_BACKGROUND_LAYER_NAME_PREFIX + i + "]"); // NOI18N
+                }
+                layerfound = false;
+            } else {
+                final RetrievalServiceLayer layer = createWMSLayer(capLink, name);
+                if (layer != null) {
+                    mapServices.add(layer);
+                }
+            }
+        }
+
+        return mapServices;
+    }
+
+    /**
+     * Creates a <code>RetrievalServiceLayer</code> from a wms capabilities link and a layername. Returns <code>
+     * null</code> if the wms capabilities do not list a layer with the corresponding name. Throws <code>
+     * IllegalArgumentException</code> if a {@link WMSCapabilities} object cannot be created from the provided link for
+     * any reason.
+     *
+     * @param   capabilities  DOCUMENT ME!
+     * @param   layername     DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
+     */
+    public static RetrievalServiceLayer createWMSLayer(final String capabilities, final String layername) {
+        if ((capabilities == null) || (layername == null)) {
+            throw new IllegalArgumentException("no argument must be null"); // NOI18N
+        }
+
+        final WMSCapabilitiesFactory capFactory = new WMSCapabilitiesFactory();
+        final WMSCapabilities caps;
+        try {
+            caps = capFactory.createCapabilities(capabilities);
+        } catch (final Exception ex) {
+            log.warn("improper capabilities link: " + capabilities, ex); // NOI18N
+            return null;
+        }
+
+        final Layer rootLayer = caps.getLayer();
+        TreePath layerPath = new TreePath(rootLayer);
+        if (!layername.equals(rootLayer.getName())) {
+            layerPath = findLayer(layerPath, layername);
+        }
+
+        final RetrievalServiceLayer service;
+        if (layerPath == null) {
+            service = null;
+        } else {
+            final List path = new ArrayList(1);
+            path.add(layerPath);
+
+            if (isSlidableWMSLayer((Layer)layerPath.getLastPathComponent())) {
+                // a slidable layergroup
+                service = new SlidableWMSServiceLayerGroup(path);
+            } else {
+                service = new WMSServiceLayer(path);
+                ((WMSServiceLayer)service).setWmsCapabilities(caps);
+            }
+        }
+
+        return service;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   layer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
+     */
+    public static boolean isSlidableWMSLayer(final Layer layer) {
+        if (layer == null) {
+            throw new IllegalArgumentException("layer must not be null"); // NOI18N
+        }
+
+        boolean slidable = layer.getName().endsWith("[]"); // NOI18N
+
+        if (!slidable) {
+            final String[] keywords = layer.getKeywords();
+            if (keywords != null) {
+                for (int i = 0; (i < keywords.length) && !slidable; ++i) {
+                    slidable = "cismapSlidingLayerGroup".equals(keywords[i]); // NOI18N
+                }
+            }
+        }
+
+        return slidable;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   path       DOCUMENT ME!
+     * @param   layername  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static TreePath findLayer(final TreePath path, final String layername) {
+        final Layer[] layers = ((Layer)path.getLastPathComponent()).getChildren();
+
+        TreePath result = null;
+
+        for (int i = 0; (i < layers.length) && (result == null); ++i) {
+            final TreePath newPath = path.pathByAddingChild(layers[i]);
+            if (layername.equals(layers[i].getName())) {
+                result = newPath;
+            } else {
+                result = findLayer(newPath, layername);
+            }
+        }
+
+        return result;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -26,9 +26,11 @@ public class Oab_Zustand_MassnahmeMapVisualisationProvider extends AbstractOabVi
         final OabMapVisualisationDialog dialog = new OabMapVisualisationDialog();
         dialog.setFeatureBean(bean);
         dialog.setTinVisible(true);
-        dialog.setTinGetMapUrl((String)bean.getProperty("tin_simple_getmap"));        // NOI18N
+        dialog.setTinCapabilitiesUrl((String)bean.getProperty("tin_cap"));         // NOI18N
+        dialog.setTinLayername((String)bean.getProperty("tin_layer_name"));        // NOI18N
         dialog.setBeVisible(true);
-        dialog.setBeGetMapUrl((String)bean.getProperty("bruchkanten_simple_getmap")); // NOI18N
+        dialog.setBeCapabilitiesUrl((String)bean.getProperty("bruchkanten_cap"));  // NOI18N
+        dialog.setBeLayername((String)bean.getProperty("bruchkanten_layer_name")); // NOI18N
         dialog.setMaxWaterVisible(false);
         dialog.setTSWaterVisible(false);
 
