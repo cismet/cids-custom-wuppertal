@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import org.openide.util.Exceptions;
 
 import java.io.IOException;
 
@@ -543,6 +542,7 @@ public class BillingPopup extends javax.swing.JDialog {
             cb.setProperty("projektbezeichnung", txtProjektbez.getText());
             cb.setProperty("request", request);
             cb.setProperty("verwendungskey", currentUsage.getKey());
+            cb.setProperty("abgerechnet", Boolean.FALSE);
             cb.persist();
 
             // Nebenläufigkeit my arse
