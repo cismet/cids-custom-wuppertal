@@ -104,6 +104,14 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    protected BillingStatisticsDataSourceAccumulation createDataSourceAccumulation() {
+        final BillingStatisticsDataSourceAccumulation dataSourceAccumulation =
+            new BillingJahresberichtDataSourceAccumulation(billingBeans, year);
+        dataSourceAccumulation.fetchSearchResults();
+        return dataSourceAccumulation;
+    }
+
+    @Override
     protected String getReportUrl() {
         return REPORT_URL;
     }
