@@ -238,11 +238,9 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtContractor">
+        <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="defaultBindableReferenceComboContractor">
           <BindingProperties>
-            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.auftragnehmer}" target="txtContractor" targetPath="text" updateStrategy="0" immediately="false">
-              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-            </BindingProperty>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.auftragnehmer}" target="defaultBindableReferenceComboContractor" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

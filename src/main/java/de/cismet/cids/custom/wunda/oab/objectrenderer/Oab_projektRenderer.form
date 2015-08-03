@@ -238,7 +238,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblContractorValue">
           <BindingProperties>
-            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.auftragnehmer}" target="lblContractorValue" targetPath="text" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.auftragnehmer.name}" target="lblContractorValue" targetPath="text" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
