@@ -41,6 +41,8 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
     private javax.swing.JButton btnGotoCatchment;
     private javax.swing.Box.Filler hStaticFillCMList;
     private javax.swing.JLabel lblBelongsToCatchment;
+    private javax.swing.JLabel lblCalculationModel;
+    private javax.swing.JLabel lblCalculationModelValue;
     private javax.swing.JLabel lblConditionsMeasures;
     private javax.swing.JLabel lblContractor;
     private javax.swing.JLabel lblContractorValue;
@@ -163,6 +165,8 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
         lblStateVerdisValue = new javax.swing.JLabel();
         lblSewerNetworkModel = new javax.swing.JLabel();
         lblSewerNetworkModelValue = new javax.swing.JLabel();
+        lblCalculationModel = new javax.swing.JLabel();
+        lblCalculationModelValue = new javax.swing.JLabel();
         pnlConditionAndMeasures = new javax.swing.JPanel();
         semiRoundedPanelConditionsAndMeasures = new de.cismet.tools.gui.SemiRoundedPanel();
         lblConditionsMeasures = new javax.swing.JLabel();
@@ -233,7 +237,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
             NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblDescription.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -306,7 +310,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -319,7 +323,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
             NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblFinishedOn.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblFinishedOn, gridBagConstraints);
@@ -335,7 +339,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -373,7 +377,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
             NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblBelongsToCatchment.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -384,7 +388,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
             NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.btnGotoCatchment.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(btnGotoCatchment, gridBagConstraints);
@@ -394,7 +398,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
             NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblStateDEM.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblStateDEM, gridBagConstraints);
@@ -409,7 +413,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblStateDEMValue, gridBagConstraints);
@@ -419,7 +423,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
             NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblStateAlkis.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblStateAlkis, gridBagConstraints);
@@ -435,7 +439,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblStateAlkisValue, gridBagConstraints);
@@ -445,7 +449,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
             NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblStateVerdis.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblStateVerdis, gridBagConstraints);
@@ -461,7 +465,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblStateVerdisValue, gridBagConstraints);
@@ -471,7 +475,7 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
             NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblSewerNetworkModel.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblSewerNetworkModel, gridBagConstraints);
@@ -486,10 +490,35 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlData.add(lblSewerNetworkModelValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblCalculationModel,
+            NbBundle.getMessage(Oab_projektRenderer.class, "Oab_projektRenderer.lblCalculationModel.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblCalculationModel, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.berechnungsverfahren.name}"),
+                lblCalculationModelValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlData.add(lblCalculationModelValue, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
