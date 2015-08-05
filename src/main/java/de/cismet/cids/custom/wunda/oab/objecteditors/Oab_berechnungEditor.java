@@ -93,7 +93,9 @@ public class Oab_berechnungEditor extends AbstractCidsBeanRenderer implements Re
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
 
+        setMinimumSize(new java.awt.Dimension(300, 300));
         setOpaque(false);
+        setPreferredSize(new java.awt.Dimension(334, 322));
         setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
