@@ -11,10 +11,14 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import org.openide.util.NbBundle;
 
+import javax.swing.JComponent;
+
 import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
+
+import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
  * DOCUMENT ME!
@@ -22,7 +26,8 @@ import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
  * @author   mscholl
  * @version  1.0
  */
-public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
+public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
+    TitleComponentProvider {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserFrom;
@@ -31,7 +36,9 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
     private javax.swing.Box.Filler hFill;
     private javax.swing.JLabel lblFrom;
     private javax.swing.JLabel lblStatus;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTo;
+    private javax.swing.JPanel pnlTitle;
     private javax.swing.Box.Filler vFill;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -57,6 +64,8 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        pnlTitle = new javax.swing.JPanel();
+        lblTitle = new javax.swing.JLabel();
         lblFrom = new javax.swing.JLabel();
         lblTo = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
@@ -69,6 +78,15 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
         vFill = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+
+        pnlTitle.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTitle,
+            NbBundle.getMessage(
+                Oab_gewaessereinzugsgebietEditor.class,
+                "Oab_gewaessereinzugsgebietEditor.lblTitle.text")); // NOI18N
+        pnlTitle.add(lblTitle, new java.awt.GridBagConstraints());
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -176,7 +194,24 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
                 bindingGroup,
                 cidsBean);
 
+            setTitle((String)cidsBean.getProperty("name")); // NOI18N
+
             bindingGroup.bind();
         }
+    }
+
+    @Override
+    public JComponent getTitleComponent() {
+        return pnlTitle;
+    }
+
+    @Override
+    public void setTitle(final String title) {
+        lblTitle.setText(title);
+    }
+
+    @Override
+    public String getTitle() {
+        return lblTitle.getText();
     }
 }
