@@ -252,29 +252,29 @@ public class JahresberichtDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         setVisible(false);
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         final int year = (Integer)spnYear.getValue();
         final Date now = new Date();
 
         final Calendar calendar = Calendar.getInstance();
         calendar.clear();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.MONTH, 0);
+        calendar.set(Calendar.MONTH, Calendar.JANUARY);
         calendar.set(Calendar.YEAR, year);
         final Date fromDate = calendar.getTime();
 
         calendar.clear();
         calendar.set(Calendar.DAY_OF_MONTH, 31);
-        calendar.set(Calendar.MONTH, 12);
+        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
         calendar.set(Calendar.YEAR, year);
         Date tmpTillDate = calendar.getTime();
 
@@ -339,7 +339,7 @@ public class JahresberichtDialog extends javax.swing.JDialog {
                     }
                 }
             }.execute();
-    } //GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
