@@ -953,9 +953,11 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     cbScales.setSelectedIndex(scaleIndex);
                     chkRotation.setSelected(false);
                 } finally {
-                    cbFormat.addActionListener(updatePrintingGeometryAction);
-                    cbScales.addActionListener(updatePrintingGeometryAction);
-                    chkRotation.addActionListener(updatePrintingGeometryAction);
+                    if (isVisible()) {
+                        cbFormat.addActionListener(updatePrintingGeometryAction);
+                        cbScales.addActionListener(updatePrintingGeometryAction);
+                        chkRotation.addActionListener(updatePrintingGeometryAction);
+                    }
                 }
                 updatePrintingGeometryAction.actionPerformed(null);
                 return true;
