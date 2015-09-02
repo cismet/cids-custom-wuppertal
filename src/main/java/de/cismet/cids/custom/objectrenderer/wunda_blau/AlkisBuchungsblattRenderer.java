@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
@@ -1214,7 +1215,10 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     }
                 }
                 final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode_Anhang);
-                final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
+                final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                        queryID,
+                        product,
+                        AlkisUtils.getFertigungsVermerk());
 
                 if (url != null) {
                     if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
