@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
@@ -1214,7 +1215,10 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     }
                 }
                 final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode_Anhang);
-                final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
+                final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                        queryID,
+                        product,
+                        AlkisUtils.getFertigungsVermerk());
 
                 if (url != null) {
                     if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
@@ -2017,9 +2021,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         protected Buchungsblatt doInBackground() throws Exception {
             Buchungsblatt buchungsblatt;
             if (infoService != null) {
-                buchungsblatt = infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
+                final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(soapProvider.getIdentityCard(),
                         soapProvider.getService(),
                         fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));
+                buchungsblatt = infoService.getBuchungsblattWithUUID(soapProvider.getIdentityCard(),
+                        soapProvider.getService(),
+                        uuids[0],
+                        true);
             } else {
                 buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisBuchungsblattRenderer
                                 .fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));

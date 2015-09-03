@@ -54,43 +54,46 @@ public class BillingPopup extends javax.swing.JDialog {
 
     public static final String MODE_CONFIG_ATTR = "billing.mode@WUNDA_BLAU";
     public static final String ALLOWED_USAGE_CONFIG_ATTR = "billing.allowed.usage@WUNDA_BLAU";
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             BillingPopup.class);
-    private static BillingInfo billingInfo;
-    private static HashMap<String, Modus> modi = new HashMap<String, Modus>();
-    private static HashMap<String, Product> products = new HashMap<String, Product>();
-    private static HashMap<String, Usage> usages = new HashMap<String, Usage>();
-    private static HashMap<String, ProductGroup> productGroups = new HashMap<String, ProductGroup>();
+    private static final BillingInfo billingInfo;
+    private static final HashMap<String, Modus> modi = new HashMap<String, Modus>();
+    private static final HashMap<String, Product> products = new HashMap<String, Product>();
+    private static final HashMap<String, Usage> usages = new HashMap<String, Usage>();
+    private static final HashMap<String, ProductGroup> productGroups = new HashMap<String, ProductGroup>();
 
     static {
+        BillingInfo billingInfoTmp;
         try {
-            billingInfo = mapper.readValue(BillingPopup.class.getResourceAsStream(
+            billingInfoTmp = mapper.readValue(BillingPopup.class.getResourceAsStream(
                         "/de/cismet/cids/custom/billing/billing.json"),
                     BillingInfo.class);
 
-            final ArrayList<Modus> lm = billingInfo.getModi();
+            final ArrayList<Modus> lm = billingInfoTmp.getModi();
             for (final Modus m : lm) {
                 modi.put(m.getKey(), m);
             }
-            final ArrayList<Product> lp = billingInfo.getProducts();
+            final ArrayList<Product> lp = billingInfoTmp.getProducts();
             for (final Product p : lp) {
                 products.put(p.getId(), p);
             }
-            final ArrayList<Usage> lu = billingInfo.getUsages();
+            final ArrayList<Usage> lu = billingInfoTmp.getUsages();
             for (final Usage u : lu) {
                 usages.put(u.getKey(), u);
             }
-            final ArrayList<ProductGroup> lpg = billingInfo.getProductGroups();
+            final ArrayList<ProductGroup> lpg = billingInfoTmp.getProductGroups();
             for (final ProductGroup pg : lpg) {
                 productGroups.put(pg.getKey(), pg);
             }
         } catch (IOException ioException) {
             LOG.error("Error when trying to read the billingInfo.json", ioException);
+            billingInfoTmp = null;
         }
+        billingInfo = billingInfoTmp;
     }
 
-    private static BillingPopup instance = null;
+    private static BillingPopup INSTANCE = null;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -106,7 +109,7 @@ public class BillingPopup extends javax.swing.JDialog {
     CidsBean logEntry = null;
     String berechnungPrefix = "";
 
-    private ImageIcon money = new javax.swing.ImageIcon(
+    private final ImageIcon money = new javax.swing.ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/billing/money--exclamation.png"));
     private double rawPrice = 0;
     private double nettoPrice = 0;
@@ -178,15 +181,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String request,
             final Geometry geom,
             final ProductGroupAmount... amounts) throws Exception {
-        if (instance == null) {
-            JFrame f = null;
-            try {
-                f = ComponentRegistry.getRegistry().getMainWindow();
-            } catch (Exception e) {
-                // Developmenttime
-            }
-            instance = new BillingPopup(f, true);
-        }
+        final BillingPopup instance = getInstance();
         final User user = SessionManager.getSession().getUser();
         final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
         if (modus != null) {
@@ -217,15 +212,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String gBuchNr,
             final Geometry geom,
             final ProductGroupAmount... amounts) throws Exception {
-        if (instance == null) {
-            JFrame f = null;
-            try {
-                f = ComponentRegistry.getRegistry().getMainWindow();
-            } catch (Exception e) {
-                // Developmenttime
-            }
-            instance = new BillingPopup(f, true);
-        }
+        final BillingPopup instance = getInstance();
         instance.txtGBuchNr.setText(gBuchNr);
         final User user = SessionManager.getSession().getUser();
         final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
@@ -559,6 +546,24 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @return  DOCUMENT ME!
      */
+    public static BillingPopup getInstance() {
+        if (INSTANCE == null) {
+            JFrame f = null;
+            try {
+                f = ComponentRegistry.getRegistry().getMainWindow();
+            } catch (Exception e) {
+                // Developmenttime
+            }
+            INSTANCE = new BillingPopup(f, true);
+        }
+        return INSTANCE;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public CidsBean getExternalUser() {
         final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
         if (MB_MC == null) {
@@ -635,6 +640,15 @@ public class BillingPopup extends javax.swing.JDialog {
         } else {
             currentUsage = null;
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Usage getCurrentUsage() {
+        return currentUsage;
     }
 
     /**
@@ -803,7 +817,7 @@ public class BillingPopup extends javax.swing.JDialog {
             "WUNDA_BLAU",
             "Administratoren",
             "admin",
-            "kif");
+            "buggalo");
         final boolean t = doBilling(
                 "fsnw",
                 "request",

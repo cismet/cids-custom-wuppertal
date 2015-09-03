@@ -45,6 +45,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.wunda_blau.search.actions.ServerAlkisSoapAction;
@@ -225,6 +226,26 @@ public class AlkisUtils {
         } else {
             return "";
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    public static String getFertigungsVermerk() throws ConnectionException {
+        final String fertigungsVermerk;
+        if ("WV ein".equals(BillingPopup.getInstance().getCurrentUsage().getKey())) {
+            fertigungsVermerk = SessionManager.getConnection()
+                        .getConfigAttr(
+                                SessionManager.getSession().getUser(),
+                                "custom.alkis.fertigungsVermerk@WUNDA_BLAU");
+        } else {
+            fertigungsVermerk = null;
+        }
+        return fertigungsVermerk;
     }
 
     /**
