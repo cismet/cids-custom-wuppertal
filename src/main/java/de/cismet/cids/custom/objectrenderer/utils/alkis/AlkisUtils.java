@@ -237,7 +237,8 @@ public class AlkisUtils {
      */
     public static String getFertigungsVermerk() throws ConnectionException {
         final String fertigungsVermerk;
-        if ("WV ein".equals(BillingPopup.getInstance().getCurrentUsage().getKey())) {
+        if ((BillingPopup.getInstance().getCurrentUsage() != null)
+                    && "WV ein".equals(BillingPopup.getInstance().getCurrentUsage().getKey())) {
             fertigungsVermerk = SessionManager.getConnection()
                         .getConfigAttr(
                                 SessionManager.getSession().getUser(),
