@@ -945,9 +945,21 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                             currentLayout.width,
                             currentLayout.heigth,
                             currentMassstab)) {
-                cbFormat.setSelectedIndex(i);
-                cbScales.setSelectedIndex(scaleIndex);
-                chkRotation.setSelected(false);
+                cbFormat.removeActionListener(updatePrintingGeometryAction);
+                cbScales.removeActionListener(updatePrintingGeometryAction);
+                chkRotation.removeActionListener(updatePrintingGeometryAction);
+                try {
+                    cbFormat.setSelectedIndex(i);
+                    cbScales.setSelectedIndex(scaleIndex);
+                    chkRotation.setSelected(false);
+                } finally {
+                    if (isVisible()) {
+                        cbFormat.addActionListener(updatePrintingGeometryAction);
+                        cbScales.addActionListener(updatePrintingGeometryAction);
+                        chkRotation.addActionListener(updatePrintingGeometryAction);
+                    }
+                }
+                updatePrintingGeometryAction.actionPerformed(null);
                 return true;
             }
         }
