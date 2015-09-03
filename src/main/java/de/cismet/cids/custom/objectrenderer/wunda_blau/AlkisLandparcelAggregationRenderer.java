@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -25,7 +26,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.Collection;
@@ -636,7 +636,10 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
             if ((parcelCode != null) && (parcelCode.length() > 0)) {
                 try {
-                    url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
+                    url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                            parcelCode,
+                            product,
+                            AlkisUtils.getFertigungsVermerk());
 
                     if (url != null) {
                         final String filename = product + "." + parcelCode.replace("/", "--");
@@ -690,8 +693,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
             if (parcelCode.length() > 0) {
                 try {
-                    url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode);
-                } catch (MalformedURLException ex) {
+                    url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode, AlkisUtils.getFertigungsVermerk());
+                } catch (final Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: Kartenprodukt",
                         ex,

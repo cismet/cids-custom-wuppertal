@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
@@ -647,7 +648,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
-                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
+                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product, AlkisUtils.getFertigungsVermerk());
 
                 if (url != null) {
                     String filename = product + "." + buchungsblattCode.replace("/", "--").trim();

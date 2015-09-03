@@ -44,7 +44,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.Collection;
@@ -683,8 +682,10 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         URL url = null;
         if ((parcelCode != null) && (parcelCode.length() > 0)) {
             try {
-                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
-//                BillingPopup.doBilling(SessionManager.getSession().getUser(), product, url.toString(), (Geometry)null, new ProductGroupAmount("ea",1));
+                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                        parcelCode,
+                        product,
+                        AlkisUtils.getFertigungsVermerk());
                 if (url != null) {
                     if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                         return;
@@ -723,9 +724,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         final String parcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBean);
         try {
             if (parcelCode.length() > 0) {
-                url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode);
+                url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode, AlkisUtils.getFertigungsVermerk());
             }
-        } catch (MalformedURLException ex) {
+        } catch (final Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
                 "Fehler beim Aufruf des Produkts: Kartenprodukt",
                 ex,

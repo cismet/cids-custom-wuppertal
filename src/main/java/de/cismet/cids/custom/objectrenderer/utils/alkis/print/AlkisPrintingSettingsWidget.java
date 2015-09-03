@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 
@@ -1053,7 +1054,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     toInt(center.getY()),
                     taAdditionalText.getText(),
                     txtAuftragsnummer.getText().replaceAll("\\?", ""),
-                    false);
+                    false,
+                    AlkisUtils.getFertigungsVermerk());
 
             if (url != null) {
                 try {
