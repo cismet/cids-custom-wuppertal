@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.reports.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -21,8 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.SwingWorker;
-
-import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportServerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -48,26 +44,26 @@ public class BillingStatisticsReport {
 
     //~ Instance fields --------------------------------------------------------
 
+    protected Date from;
+    protected Date till;
+    protected int amountTotalDownloads;
+    protected int amountWithCosts;
+    protected int amountWithoutCosts;
+    protected int amountVUamtlicherLageplan;
+    protected int amountVUhoheitlicheVermessung;
+    protected int amountVUsonstige;
+    protected int amountVUamtlicherLageplanGB = 0;
+    protected int amountVUhoheitlicheVermessungGB = 0;
+    protected int amountVUsonstigeGB = 0;
+    protected int amountWithCostsVU = 0;
+    protected int amountWithCostsWiederver = 0;
+    protected double earningsWithCostsVU = 0;
+    protected double earningsWithCostsWiederver = 0;
+    protected int amountWiederverkaeufe = 0;
+    protected int amountWiederverkaeufeGB = 0;
+
     SwingWorker<JasperPrint, Void> downloadWorker;
     Collection<CidsBean> billingBeans;
-
-    private Date from;
-    private Date till;
-    private int amountTotalDownloads;
-    private int amountWithCosts;
-    private int amountWithoutCosts;
-    private int amountVUamtlicherLageplan;
-    private int amountVUhoheitlicheVermessung;
-    private int amountVUsonstige;
-    private int amountVUamtlicherLageplanGB = 0;
-    private int amountVUhoheitlicheVermessungGB = 0;
-    private int amountVUsonstigeGB = 0;
-    private int amountWithCostsVU = 0;
-    private int amountWithCostsWiederver = 0;
-    private double earningsWithCostsVU = 0;
-    private double earningsWithCostsWiederver = 0;
-    private int amountWiederverkaeufe = 0;
-    private int amountWiederverkaeufeGB = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -135,6 +131,33 @@ public class BillingStatisticsReport {
 
     /**
      * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected String getReportUrl() {
+        return REPORT_URL;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected String getFilename() {
+        return "buchungen_geschaeftsstatistik";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected String getTitle() {
+        return "Buchungen: Geschäftsstatistik";
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     public void generateReport() {
         final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
@@ -159,18 +182,30 @@ public class BillingStatisticsReport {
 
         if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
             final String jobname = DownloadManagerDialog.getJobname();
-            final String filename = "buchungen_geschaeftsstatistik";
-            final String title = "Buchungen: Geschäftsstatistik";
+            final String filename = getFilename();
+            final String title = getTitle();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
-                            REPORT_URL,
+                            getReportUrl(),
                             parametersGenerator,
                             dataSourceGenerator,
                             jobname,
                             title,
                             filename));
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected BillingStatisticsDataSourceAccumulation createDataSourceAccumulation() {
+        final BillingStatisticsDataSourceAccumulation dataSourceAccumulation =
+            new BillingStatisticsDataSourceAccumulation(billingBeans);
+        dataSourceAccumulation.fetchSearchResults();
+        return dataSourceAccumulation;
     }
 
     /**
@@ -188,7 +223,7 @@ public class BillingStatisticsReport {
             params.put("till", till);
         }
 
-        params.put("dataSourceCollection", new DataSourceAccumulation(billingBeans));
+        params.put("dataSourceCollection", createDataSourceAccumulation());
 
         params.put("amountTotalDownloads", amountTotalDownloads);
         params.put("amountWithCosts", amountWithCosts);
@@ -230,138 +265,5 @@ public class BillingStatisticsReport {
             sb.append(item.getPrimaryKeyValue());
         }
         return sb.toString();
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * A accumulation of JRDataSource which is used by the statistics report to provide each of its subreports with the
-     * correct JRDataSource. The needed data for the creation of the JRDataSources is fetched via a ServerSearch once,
-     * although this ServerSearch uses multiple queries.
-     *
-     * @version  $Revision$, $Date$
-     * @see      BillingStatisticsReportServerSearch
-     */
-    public class DataSourceAccumulation {
-
-        //~ Instance fields ----------------------------------------------------
-
-        HashMap<String, Collection> searchResults;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new DataSourceCollection object.
-         *
-         * @param  billingBeans  DOCUMENT ME!
-         */
-        public DataSourceAccumulation(final Collection<CidsBean> billingBeans) {
-            searchResults = fetchSearchResults();
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public JRDataSource getKundeBranche() {
-            return getResource(BillingStatisticsReportServerSearch.BRANCHEN_AMOUNTS);
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public JRDataSource getKundenAntraege() {
-            return getResource(BillingStatisticsReportServerSearch.ANTRAEGE_AMOUNTS);
-        }
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public JRDataSource getAnzahlDownloads() {
-            return getResource(BillingStatisticsReportServerSearch.DOWNLOADS_AMOUNTS);
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public JRDataSource getKundenUmsatz() {
-            return getResource(BillingStatisticsReportServerSearch.KUNDEN_UMSATZ);
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public JRDataSource getProdukteCommonDownloads() {
-            return getResource(BillingStatisticsReportServerSearch.PRODUKTE_COMMON_DOWNLOADS);
-        }
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public JRDataSource getProdukteDownloads() {
-            return getResource(BillingStatisticsReportServerSearch.PRODUKTE_DOWNLOADS);
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public JRDataSource getProdukteEinnahmen() {
-            return getResource(BillingStatisticsReportServerSearch.PRODUKTE_EINNAHMEN);
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public JRDataSource getEinnahmen() {
-            return getResource(BillingStatisticsReportServerSearch.EINNAHMEN);
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param   key  DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        private JRDataSource getResource(final String key) {
-            return new JRBeanCollectionDataSource(searchResults.get(key),
-                    false);
-        }
-
-        /**
-         * Gets the data for the charts, if something goes wrong an empty HashMap is returned.
-         *
-         * @return  DOCUMENT ME!
-         */
-        private HashMap<String, Collection> fetchSearchResults() {
-            try {
-                final String ids = joinCidsBeanIds(billingBeans, ", ");
-                final BillingStatisticsReportServerSearch search = new BillingStatisticsReportServerSearch(
-                        SessionManager.getSession().getUser(),
-                        ids);
-                final Collection searchResultsCol = SessionManager.getConnection()
-                            .customServerSearch(SessionManager.getSession().getUser(), search);
-                // get the HashMap from the search results, it is supposed that it is the only result.
-                return (HashMap<String, Collection>)searchResultsCol.iterator().next();
-            } catch (ConnectionException ex) {
-                LOG.error("Could not fetch the data for the report.", ex);
-            }
-            return new HashMap<String, Collection>();
-        }
     }
 }
