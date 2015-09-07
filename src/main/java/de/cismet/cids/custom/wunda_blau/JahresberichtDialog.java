@@ -252,16 +252,16 @@ public class JahresberichtDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         setVisible(false);
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
         final int year = (Integer)spnYear.getValue();
         final Date now = new Date();
 
@@ -339,7 +339,7 @@ public class JahresberichtDialog extends javax.swing.JDialog {
                     }
                 }
             }.execute();
-    }//GEN-LAST:event_btnOkActionPerformed
+    } //GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!

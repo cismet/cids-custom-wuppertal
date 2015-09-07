@@ -94,6 +94,7 @@ public class JahresberichtCExtProvider implements CExtProvider<AbstractAction> {
 
                 if ((moNode != null)
                             && (moNode.getUserObject() != null)
+                            && (moNode.getUserObject() instanceof MetaNode)
                             && "de.cismet.custom.wunda_blau.nodes.Buchungen".equals(
                                 ((MetaNode)moNode.getUserObject()).getArtificialId())) {
                     final AbstractAction action = new JahresberichtAction();
