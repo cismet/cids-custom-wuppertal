@@ -34,8 +34,10 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -648,7 +650,14 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
-                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product, AlkisUtils.getFertigungsVermerk());
+                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product, null);
+
+                final URL urlFertigungsvermerk = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                        queryID,
+                        product,
+                        AlkisUtils.getFertigungsVermerk("WV ein"));
+                final Map<String, String> requestPerUsage = new HashMap<String, String>();
+                requestPerUsage.put("WV ein", (urlFertigungsvermerk != null) ? urlFertigungsvermerk.toString() : null);
 
                 if (url != null) {
                     String filename = product + "." + buchungsblattCode.replace("/", "--").trim();

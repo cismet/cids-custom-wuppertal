@@ -32,8 +32,10 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.prefs.BackingStoreException;
@@ -1055,7 +1057,20 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     taAdditionalText.getText(),
                     txtAuftragsnummer.getText().replaceAll("\\?", ""),
                     false,
-                    AlkisUtils.getFertigungsVermerk());
+                    null);
+
+            final URL urlFertigungsvermerk = AlkisUtils.PRODUCTS.productKarteUrl(
+                    landParcelCode,
+                    selectedProduct,
+                    toInt(rotationAngle),
+                    toInt(center.getX()),
+                    toInt(center.getY()),
+                    taAdditionalText.getText(),
+                    txtAuftragsnummer.getText().replaceAll("\\?", ""),
+                    false,
+                    AlkisUtils.getFertigungsVermerk(null));
+            final Map<String, String> requestPerUsage = new HashMap<String, String>();
+            requestPerUsage.put("WV ein", (urlFertigungsvermerk != null) ? urlFertigungsvermerk.toString() : null);
 
             if (url != null) {
                 try {
@@ -1300,6 +1315,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                         if (BillingPopup.doBilling(
                                         product,
                                         url.toString(),
+                                        requestPerUsage,
                                         (Geometry)null,
                                         new ProductGroupAmount(prGroup, 1))) {
                             doDownload(url, selectedProduct.getCode(), landParcelCode);

@@ -639,7 +639,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
                             parcelCode,
                             product,
-                            AlkisUtils.getFertigungsVermerk());
+                            AlkisUtils.getFertigungsVermerk("WV ein"));
 
                     if (url != null) {
                         final String filename = product + "." + parcelCode.replace("/", "--");
@@ -693,7 +693,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
             if (parcelCode.length() > 0) {
                 try {
-                    url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode, AlkisUtils.getFertigungsVermerk());
+                    url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode, AlkisUtils.getFertigungsVermerk("WV ein"));
                 } catch (final Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: Kartenprodukt",

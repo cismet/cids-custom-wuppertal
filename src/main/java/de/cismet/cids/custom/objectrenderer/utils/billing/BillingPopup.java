@@ -26,6 +26,7 @@ import java.text.NumberFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -104,7 +105,8 @@ public class BillingPopup extends javax.swing.JDialog {
      * E.g. an URL to a webservice such that an alkis product can be downloaded again in the
      * {@link BillingKundeRenderer}
      */
-    String request = null;
+    String defaultRequest = null;
+    Map<String, String> requestPerUsage;
     Geometry geom = null;
     CidsBean logEntry = null;
     String berechnungPrefix = "";
@@ -181,11 +183,33 @@ public class BillingPopup extends javax.swing.JDialog {
             final String request,
             final Geometry geom,
             final ProductGroupAmount... amounts) throws Exception {
+        return doBilling(product, request, (Map)null, geom, amounts);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product          DOCUMENT ME!
+     * @param   defaultRequest   DOCUMENT ME!
+     * @param   requestPerUsage  DOCUMENT ME!
+     * @param   geom             DOCUMENT ME!
+     * @param   amounts          DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static boolean doBilling(
+            final String product,
+            final String defaultRequest,
+            final Map<String, String> requestPerUsage,
+            final Geometry geom,
+            final ProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         final User user = SessionManager.getSession().getUser();
         final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
         if (modus != null) {
-            instance.initialize(product, request, geom, amounts);
+            instance.initialize(product, defaultRequest, requestPerUsage, geom, amounts);
             return instance.shouldGoOn;
         } else {
             return true;
@@ -212,12 +236,36 @@ public class BillingPopup extends javax.swing.JDialog {
             final String gBuchNr,
             final Geometry geom,
             final ProductGroupAmount... amounts) throws Exception {
+        return doBilling(product, request, null, gBuchNr, geom, amounts);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product          DOCUMENT ME!
+     * @param   defaultRequest   DOCUMENT ME!
+     * @param   requestPerUsage  DOCUMENT ME!
+     * @param   gBuchNr          DOCUMENT ME!
+     * @param   geom             DOCUMENT ME!
+     * @param   amounts          DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static boolean doBilling(
+            final String product,
+            final String defaultRequest,
+            final Map<String, String> requestPerUsage,
+            final String gBuchNr,
+            final Geometry geom,
+            final ProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         instance.txtGBuchNr.setText(gBuchNr);
         final User user = SessionManager.getSession().getUser();
         final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
         if (modus != null) {
-            instance.initialize(product, request, geom, amounts);
+            instance.initialize(product, defaultRequest, requestPerUsage, geom, amounts);
             return instance.shouldGoOn;
         } else {
             return true;
@@ -526,6 +574,13 @@ public class BillingPopup extends javax.swing.JDialog {
             cb.setProperty("berechnung", txtBerechnung.getText().trim());
             cb.setProperty("verwendungszweck", currentUsage.getName());
             cb.setProperty("projektbezeichnung", txtProjektbez.getText());
+            final String usageKey = currentUsage.getKey();
+            final String request;
+            if ((requestPerUsage != null) && requestPerUsage.containsKey(usageKey)) {
+                request = requestPerUsage.get(usageKey);
+            } else {
+                request = defaultRequest;
+            }
             cb.setProperty("request", request);
             cb.setProperty("verwendungskey", currentUsage.getKey());
             cb.setProperty("abgerechnet", Boolean.FALSE);
@@ -703,17 +758,19 @@ public class BillingPopup extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param   product  DOCUMENT ME!
-     * @param   request  DOCUMENT ME!
-     * @param   geom     DOCUMENT ME!
-     * @param   amounts  DOCUMENT ME!
+     * @param   product          DOCUMENT ME!
+     * @param   defaultRequest   DOCUMENT ME!
+     * @param   requestPerUsage  DOCUMENT ME!
+     * @param   geom             DOCUMENT ME!
+     * @param   amounts          DOCUMENT ME!
      *
      * @throws  Exception                 DOCUMENT ME!
      * @throws  IllegalArgumentException  DOCUMENT ME!
      */
     private void initialize(
             final String product,
-            final String request,
+            final String defaultRequest,
+            final Map<String, String> requestPerUsage,
             final Geometry geom,
             final ProductGroupAmount... amounts) throws Exception {
         final User user = SessionManager.getSession().getUser();
@@ -781,7 +838,8 @@ public class BillingPopup extends javax.swing.JDialog {
 
         calculateNettoPrice();
 
-        this.request = request;
+        this.defaultRequest = defaultRequest;
+        this.requestPerUsage = requestPerUsage;
 
         pack();
         setVisible(true);

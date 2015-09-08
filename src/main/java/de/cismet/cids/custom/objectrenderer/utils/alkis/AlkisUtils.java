@@ -231,14 +231,17 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   usageKey  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static String getFertigungsVermerk() throws ConnectionException {
+    public static String getFertigungsVermerk(final String usageKey) throws ConnectionException {
         final String fertigungsVermerk;
-        if ((BillingPopup.getInstance().getCurrentUsage() != null)
-                    && "WV ein".equals(BillingPopup.getInstance().getCurrentUsage().getKey())) {
+        final String currentUsageKey = (BillingPopup.getInstance().getCurrentUsage() != null)
+            ? BillingPopup.getInstance().getCurrentUsage().getKey() : null;
+        if ((usageKey == null) || (usageKey.equals(currentUsageKey))) {
             fertigungsVermerk = SessionManager.getConnection()
                         .getConfigAttr(
                                 SessionManager.getSession().getUser(),

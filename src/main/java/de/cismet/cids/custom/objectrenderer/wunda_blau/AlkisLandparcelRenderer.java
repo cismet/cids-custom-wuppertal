@@ -685,7 +685,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
                         parcelCode,
                         product,
-                        AlkisUtils.getFertigungsVermerk());
+                        AlkisUtils.getFertigungsVermerk("WV ein"));
                 if (url != null) {
                     if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                         return;
@@ -724,7 +724,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         final String parcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBean);
         try {
             if (parcelCode.length() > 0) {
-                url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode, AlkisUtils.getFertigungsVermerk());
+                url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode, AlkisUtils.getFertigungsVermerk("WV ein"));
             }
         } catch (final Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
