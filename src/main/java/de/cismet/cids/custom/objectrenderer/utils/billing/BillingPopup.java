@@ -574,14 +574,7 @@ public class BillingPopup extends javax.swing.JDialog {
             cb.setProperty("berechnung", txtBerechnung.getText().trim());
             cb.setProperty("verwendungszweck", currentUsage.getName());
             cb.setProperty("projektbezeichnung", txtProjektbez.getText());
-            final String usageKey = currentUsage.getKey();
-            final String request;
-            if ((requestPerUsage != null) && requestPerUsage.containsKey(usageKey)) {
-                request = requestPerUsage.get(usageKey);
-            } else {
-                request = defaultRequest;
-            }
-            cb.setProperty("request", request);
+            cb.setProperty("request", getCurrentRequest());
             cb.setProperty("verwendungskey", currentUsage.getKey());
             cb.setProperty("abgerechnet", Boolean.FALSE);
             cb.persist();
@@ -594,6 +587,20 @@ public class BillingPopup extends javax.swing.JDialog {
         }
         // the end
         setVisible(false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getCurrentRequest() {
+        final String usageKey = currentUsage.getKey();
+        if ((requestPerUsage != null) && requestPerUsage.containsKey(usageKey)) {
+            return requestPerUsage.get(usageKey);
+        } else {
+            return defaultRequest;
+        }
     }
 
     /**

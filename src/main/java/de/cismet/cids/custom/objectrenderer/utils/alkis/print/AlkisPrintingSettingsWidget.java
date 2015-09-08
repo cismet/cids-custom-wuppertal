@@ -1318,7 +1318,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                                         requestPerUsage,
                                         (Geometry)null,
                                         new ProductGroupAmount(prGroup, 1))) {
-                            doDownload(url, selectedProduct.getCode(), landParcelCode);
+                            doDownload(new URL(BillingPopup.getInstance().getCurrentRequest()),
+                                selectedProduct.getCode(),
+                                landParcelCode);
                         }
                     } else {
                         log.info("no product or productgroup is matching");
