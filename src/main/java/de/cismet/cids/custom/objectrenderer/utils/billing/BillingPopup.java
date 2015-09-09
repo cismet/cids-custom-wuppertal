@@ -595,7 +595,7 @@ public class BillingPopup extends javax.swing.JDialog {
      * @return  DOCUMENT ME!
      */
     public String getCurrentRequest() {
-        final String usageKey = currentUsage.getKey();
+        final String usageKey = (currentUsage != null) ? currentUsage.getKey() : null;
         if ((requestPerUsage != null) && requestPerUsage.containsKey(usageKey)) {
             return requestPerUsage.get(usageKey);
         } else {
