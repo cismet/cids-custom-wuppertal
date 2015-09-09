@@ -212,6 +212,7 @@ public class BillingPopup extends javax.swing.JDialog {
             instance.initialize(product, defaultRequest, requestPerUsage, geom, amounts);
             return instance.shouldGoOn;
         } else {
+            instance.defaultRequest = defaultRequest;
             return true;
         }
     }
@@ -268,6 +269,7 @@ public class BillingPopup extends javax.swing.JDialog {
             instance.initialize(product, defaultRequest, requestPerUsage, geom, amounts);
             return instance.shouldGoOn;
         } else {
+            instance.defaultRequest = defaultRequest;
             return true;
         }
     }
