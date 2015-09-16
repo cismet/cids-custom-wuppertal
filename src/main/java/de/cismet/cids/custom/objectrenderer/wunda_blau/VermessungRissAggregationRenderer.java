@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -397,9 +398,9 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     if (typeObj instanceof String) {
                         type = (String)typeObj;
 
+                        final HashMap<String, Integer> pricegroups = new HashMap<String, Integer>();
+
                         try {
-                            int dinA3Orless = 0;
-                            int dinA2Orbigger = 0;
                             for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
                                 final boolean isDocumentAvailable;
                                 if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
@@ -410,17 +411,23 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     isDocumentAvailable = false;
                                 }
                                 if (isDocumentAvailable) {
-                                    final CidsBean format = (CidsBean)selectedVermessungsriss.getProperty("format");
-                                    if (format != null) {
-                                        if (format.getProperty("name").equals("2")) {
-                                            dinA2Orbigger++;
-                                        } else {
-                                            dinA3Orless++;
-                                        }
+                                    final String pricegroup = (String)selectedVermessungsriss.getProperty(
+                                            "format.pricegroup");
+                                    Integer amount = pricegroups.get(pricegroup);
+                                    if (amount == null) {
+                                        pricegroups.put(pricegroup, 1);
                                     } else {
-                                        dinA3Orless++;
+                                        final Integer newAmount = amount++;
+                                        pricegroups.put(pricegroup, newAmount);
                                     }
                                 }
+                            }
+                            final Set<String> keys = pricegroups.keySet();
+                            final ProductGroupAmount[] amounts = new ProductGroupAmount[keys.size()];
+                            int i = 0;
+                            for (final String k : keys) {
+                                amounts[i] = new ProductGroupAmount(k, pricegroups.get(k));
+                                i++;
                             }
 
                             if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
@@ -428,8 +435,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                                 "vrpdf",
                                                 "no.yet",
                                                 (Geometry)null,
-                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
-                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
+                                                amounts)) {
                                     downloadProducts(
                                         selectedVermessungsrisse,
                                         type,
@@ -440,8 +446,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                                 "doklapdf",
                                                 "no.yet",
                                                 (Geometry)null,
-                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
-                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
+                                                amounts)) {
                                     downloadProducts(
                                         selectedVermessungsrisse,
                                         type,
