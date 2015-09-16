@@ -413,11 +413,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 if (isDocumentAvailable) {
                                     final String pricegroup = (String)selectedVermessungsriss.getProperty(
                                             "format.pricegroup");
-                                    Integer amount = pricegroups.get(pricegroup);
+                                    final Integer amount = pricegroups.get(pricegroup);
                                     if (amount == null) {
                                         pricegroups.put(pricegroup, 1);
                                     } else {
-                                        final Integer newAmount = amount++;
+                                        final Integer newAmount = amount + 1;
                                         pricegroups.put(pricegroup, newAmount);
                                     }
                                 }
