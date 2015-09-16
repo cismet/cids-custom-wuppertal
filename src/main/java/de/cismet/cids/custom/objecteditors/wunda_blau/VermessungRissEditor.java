@@ -1383,12 +1383,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 } else {
                     downloadURL = documentURLs[currentDocument];
                 }
-                String priceGroup = "eadoc_a3";
-                final CidsBean format = (CidsBean)cidsBean.getProperty("format");
-                if ((format != null) && format.getProperty("name").equals("2")) {
-                    priceGroup = "eadoc_a2-a0";
-                }
-
+                final String priceGroup = (String)cidsBean.getProperty("format.pricegroup");
                 if (currentDocument == VERMESSUNGSRISS) {
                     if (BillingPopup.doBilling(
                                     "vrpdf",
