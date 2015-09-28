@@ -35,9 +35,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -47,6 +50,8 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -61,7 +66,11 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.Download;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
@@ -349,19 +358,67 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }//GEN-LAST:event_tblRisseFocusLost
+    }                                                                     //GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
-       
-    }//GEN-LAST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+        final Collection<CidsBean> selectedBaulasten = getSelectedBaulasten();
+
+        if (selectedBaulasten.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(this),
+                "Bitte wählen Sie Baulasten zur Report-Generierung aus.",
+                "Keine Baulasten gewählt",
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    final Object typeObj = cmbType.getSelectedItem();
+                    final BaulastenReportGenerator.Type type;
+                    if (typeObj instanceof BaulastenReportGenerator.Type) {
+                        type = (BaulastenReportGenerator.Type)typeObj;
+
+                        try {
+                            if (BillingPopup.doBilling(
+                                            "bla",
+                                            "no.yet",
+                                            (Geometry)null,
+                                            new ProductGroupAmount("ea_bla", selectedBaulasten.size()))) {
+                                if (DownloadManagerDialog.showAskingForUserTitle(
+                                                Alb_baulastAggregationRendererPanel.this)) {
+                                    String projectname = txtProjectname.getText();
+                                    if ((projectname == null) || (projectname.trim().length() == 0)) {
+                                        projectname = type.toString();
+                                    }
+                                    final Download download = BaulastenReportGenerator.generateDownload(
+                                            type,
+                                            selectedBaulasten,
+                                            txtJobnumber.getText(),
+                                            projectname);
+                                    DownloadManager.instance().add(download);
+                                }
+                            }
+                        } catch (Exception e) {
+                            LOG.error("Error when trying to produce a alkis product", e);
+                        }
+                    } else {
+                        LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
+                    }
+                    return null;
+                }
+            }.execute();
+    } //GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -433,7 +490,13 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
         tableSorter.setSortKeys(sortKeys);
 
-        final boolean enabled = false;
+        final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
+        items.add(BaulastenReportGenerator.Type.TEXTBLATT);
+        items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN);
+        items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER);
+        final boolean enabled = BillingPopup.isBillingAllowed() && !items.isEmpty();
+
+        cmbType.setModel(new DefaultComboBoxModel(items.toArray(new BaulastenReportGenerator.Type[0])));
         cmbType.setEnabled(enabled);
         btnGenerateReport.setEnabled(enabled);
         txtJobnumber.setEnabled(enabled);
