@@ -71,6 +71,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * DOCUMENT ME!
@@ -358,17 +360,17 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedBaulasten = getSelectedBaulasten();
 
         if (selectedBaulasten.isEmpty()) {
@@ -418,7 +420,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                     return null;
                 }
             }.execute();
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -524,12 +526,14 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         if (baulast != null) {
             final Object[] result = new Object[AGR_COMLUMN_NAMES.length];
             result[0] = Boolean.TRUE;
-
+            final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
             for (int i = 0; i < AGR_PROPERTY_NAMES.length; ++i) {
                 final Object property = baulast.getProperty(AGR_PROPERTY_NAMES[i]);
                 final String propertyString;
                 if (property instanceof Boolean) {
                     propertyString = ((Boolean)property) ? "ja" : "nein";
+                } else if (property instanceof Date) {                    
+                    propertyString = sdf.format((Date)property);
                 } else {
                     propertyString = ObjectRendererUtils.propertyPrettyPrint(property);
                 }
