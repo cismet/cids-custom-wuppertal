@@ -9,13 +9,19 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import org.apache.commons.io.IOUtils;
 
+import org.openide.util.Exceptions;
+
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+
+import de.cismet.cids.dynamics.CidsBean;
 
 /**
  * DOCUMENT ME!
@@ -39,7 +45,22 @@ public final class BaulastenPictureFinder {
     /**
      * DOCUMENT ME!
      *
-     * @param   blattnummer     picture DOCUMENT ME!
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<URL> findPlanPicture(final CidsBean cidsBean) {
+        final String picturePath = getPlanPictureFilename(cidsBean);
+        if (log.isDebugEnabled()) {
+            log.debug("findPlanPicture: " + picturePath);
+        }
+        return probeWebserverForRightSuffix(picturePath);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   blattnummer     DOCUMENT ME!
      * @param   laufendeNummer  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -48,6 +69,21 @@ public final class BaulastenPictureFinder {
         final String picturePath = getPlanPictureFilename(blattnummer, laufendeNummer);
         if (log.isDebugEnabled()) {
             log.debug("findPlanPicture: " + picturePath);
+        }
+        return probeWebserverForRightSuffix(picturePath);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<URL> findTextblattPicture(final CidsBean cidsBean) {
+        final String picturePath = getTextblattPictureFilename(cidsBean);
+        if (log.isDebugEnabled()) {
+            log.debug("findTextblattPicture: " + picturePath);
         }
         return probeWebserverForRightSuffix(picturePath);
     }
@@ -66,6 +102,25 @@ public final class BaulastenPictureFinder {
             log.debug("findTextblattPicture: " + picturePath);
         }
         return probeWebserverForRightSuffix(picturePath);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getTextblattPictureFilename(final CidsBean cidsBean) {
+        final String picturePath = (String)cidsBean.getProperty("textblatt");
+        final String blattnummer = (String)cidsBean.getProperty("blattnummer");
+        final String laufendeNummer = (String)cidsBean.getProperty("laufende_nummer");
+        if (picturePath != null) {
+            return new StringBuffer(PATH).append(picturePath).append(".").toString();
+        } else {
+            final String ret = getObjectFilename(blattnummer, laufendeNummer);
+            return (ret != null) ? new StringBuffer(ret).append("b.").toString() : null;
+        }
     }
 
     /**
@@ -174,6 +229,25 @@ public final class BaulastenPictureFinder {
         final String numberS = filename.substring(0, 6);
         final int number = new Integer(numberS);
         return new StringBuffer(getFolder(number)).append(SEP).append(filename).append('.').toString();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getPlanPictureFilename(final CidsBean cidsBean) {
+        final String picturePath = (String)cidsBean.getProperty("lageplan");
+        final String blattnummer = (String)cidsBean.getProperty("blattnummer");
+        final String laufendeNummer = (String)cidsBean.getProperty("laufende_nummer");
+        if (picturePath != null) {
+            return new StringBuffer(PATH).append(picturePath).append(".").toString();
+        } else {
+            final String ret = getObjectFilename(blattnummer, laufendeNummer);
+            return (ret != null) ? new StringBuffer(ret).append("p.").toString() : null;
+        }
     }
 
     /**

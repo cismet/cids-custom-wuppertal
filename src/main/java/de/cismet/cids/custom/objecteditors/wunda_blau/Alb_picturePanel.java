@@ -1129,11 +1129,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         if (documentURLs[currentDocument] == null) {
             showAlert(true);
             showMeasurePanel();
-            return;
         } else {
-            final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-            final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
-            final String filename = BaulastenPictureFinder.getPlanPictureFilename(blattnummer, lfdNummer);
+            final String filename = BaulastenPictureFinder.getPlanPictureFilename(getCidsBean());
             pictureReaderWorker = new PictureReaderWorker(documentURLs[currentDocument]);
             CismetThreadPool.execute(pictureReaderWorker);
         }
@@ -1170,9 +1167,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             showMeasurePanel();
             return;
         } else {
-            final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-            final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
-            final String filename = BaulastenPictureFinder.getTextblattPictureFilename(blattnummer, lfdNummer);
+//            final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
+//            final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
+//            final String filename = BaulastenPictureFinder.getTextblattPictureFilename(blattnummer, lfdNummer);
             pictureReaderWorker = new PictureReaderWorker(documentURLs[currentDocument]);
             CismetThreadPool.execute(pictureReaderWorker);
         }
@@ -1208,12 +1205,10 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * @return  DOCUMENT ME!
      */
     private String getDocumentFilename() {
-        final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-        final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
         if (currentDocument == LAGEPLAN_DOCUMENT) {
-            return BaulastenPictureFinder.getPlanPictureFilename(blattnummer, lfdNummer);
+            return BaulastenPictureFinder.getPlanPictureFilename(getCidsBean());
         } else {
-            return BaulastenPictureFinder.getTextblattPictureFilename(blattnummer, lfdNummer);
+            return BaulastenPictureFinder.getTextblattPictureFilename(getCidsBean());
         }
     }
 
@@ -1610,11 +1605,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 //            }
 //            else {
 
-            String blattnummer = (String) getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-            String lfdNummer = (String) getCidsBean().getProperty(LFDNUMMER_PROPERTY);
-
-            result[TEXTBLATT_DOCUMENT] = BaulastenPictureFinder.findTextblattPicture(blattnummer, lfdNummer);
-            result[LAGEPLAN_DOCUMENT] = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
+            result[TEXTBLATT_DOCUMENT] = BaulastenPictureFinder.findTextblattPicture(getCidsBean());
+            result[LAGEPLAN_DOCUMENT] = BaulastenPictureFinder.findPlanPicture(getCidsBean());
 
             log.debug("Textblätter:" + result[TEXTBLATT_DOCUMENT]);
             log.debug("Lagepläne:" + result[LAGEPLAN_DOCUMENT]);
