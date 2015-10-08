@@ -12,9 +12,24 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.jfif.JfifDescriptor;
+import com.drew.metadata.jfif.JfifDirectory;
+import com.drew.metadata.jpeg.JpegDescriptor;
+import com.drew.metadata.jpeg.JpegDirectory;
+
+import com.twelvemonkeys.imageio.metadata.CompoundDirectory;
+import com.twelvemonkeys.imageio.metadata.Entry;
+import com.twelvemonkeys.imageio.metadata.exif.EXIFReader;
+import com.twelvemonkeys.imageio.metadata.exif.Rational;
+import com.twelvemonkeys.imageio.metadata.exif.TIFF;
+
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
+
+import java.io.InputStream;
 
 import java.net.URL;
 
@@ -24,6 +39,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 
@@ -54,6 +71,23 @@ public class BaulastenReportGenerator {
     private static final String PARAMETER_IMAGEAVAILABLE = "IMAGEAVAILABLE";
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             BaulastenReportGenerator.class);
+
+    static final double INCH_IN_MM = 25.4;
+
+    static final int MAX_WIDTH_DINA4 = 210;
+    static final int MAX_HEIGHT_DINA4 = 297;
+
+    static final int MAX_WIDTH_DINA3 = 297;
+    static final int MAX_HEIGHT_DINA3 = 420;
+
+    static final int MAX_WIDTH_DINA2 = 420;
+    static final int MAX_HEIGHT_DINA2 = 594;
+
+    static final int MAX_WIDTH_DINA1 = 594;
+    static final int MAX_HEIGHT_DINA1 = 841;
+
+    static final int MAX_WIDTH_DINA0 = 841;
+    static final int MAX_HEIGHT_DINA0 = 1189;
 
     //~ Enums ------------------------------------------------------------------
 
@@ -98,6 +132,70 @@ public class BaulastenReportGenerator {
     /**
      * DOCUMENT ME!
      *
+     * @param   dir  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MetadataInfo createMetadataInfoFromTiff(final com.twelvemonkeys.imageio.metadata.Directory dir) {
+        if (dir == null) {
+            return null;
+        }
+        final Entry pageNumberEntry = dir.getEntryById(TIFF.TAG_PAGE_NUMBER);
+        final Entry imageWidthEntry = dir.getEntryById(TIFF.TAG_IMAGE_WIDTH);
+        final Entry imageHeightEntry = dir.getEntryById(TIFF.TAG_IMAGE_HEIGHT);
+        final Entry xResolutionEntry = dir.getEntryById(TIFF.TAG_X_RESOLUTION);
+        final Entry yResolutionEntry = dir.getEntryById(TIFF.TAG_Y_RESOLUTION);
+        try {
+            final int pageNumber = ((int[])pageNumberEntry.getValue())[0] + 1;
+            final long imageWidth = (Long)imageWidthEntry.getValue();
+            final long imageHeight = (Long)imageHeightEntry.getValue();
+            final int xResolution = ((Rational)xResolutionEntry.getValue()).intValue();
+            final int yResolution = ((Rational)yResolutionEntry.getValue()).intValue();
+
+            return new MetadataInfo(pageNumber, imageWidth, imageHeight, xResolution, yResolution);
+        } catch (final Exception ex) {
+            LOG.info("could not extract metadata for this page", ex);
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   metadata  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MetadataInfo createMetadataInfoFromJpeg(final Metadata metadata) {
+        final JpegDirectory jpegDirectory = metadata.getFirstDirectoryOfType(JpegDirectory.class);
+        final JfifDirectory jfifDirectory = metadata.getFirstDirectoryOfType(JfifDirectory.class);
+
+        final JpegDescriptor descJPeg = new JpegDescriptor(jpegDirectory);
+
+        final String widthDesc = descJPeg.getImageWidthDescription();
+        final String heightDesc = descJPeg.getImageHeightDescription();
+
+        final JfifDescriptor descJFif = new JfifDescriptor(jfifDirectory);
+
+//                                            final String unitDesc = descJFif.getImageResUnitsDescription();
+        final String xResDesc = descJFif.getImageResXDescription();
+        final String yResDesc = descJFif.getImageResYDescription();
+
+        if ((widthDesc != null) && (heightDesc != null) && (xResDesc != null) && (yResDesc != null)) {
+            final long width = Long.parseLong(widthDesc.replaceAll(" pixels", ""));
+            final long height = Long.parseLong(heightDesc.replaceAll(" pixels", ""));
+            final int dpiX = Integer.parseInt(xResDesc.replaceAll(" dots", ""));
+            final int dpiY = Integer.parseInt(yResDesc.replaceAll(" dots", ""));
+
+            return new MetadataInfo(1, width, height, dpiX, dpiY);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   type               DOCUMENT ME!
      * @param   selectedBaulasten  DOCUMENT ME!
      * @param   jobnumber          DOCUMENT ME!
@@ -116,21 +214,82 @@ public class BaulastenReportGenerator {
                 public Collection<? extends Download> fetchDownloads() throws Exception {
                     final Collection<BaulastReportBean> reportBeans = new LinkedList<BaulastReportBean>();
                     final Collection<BaulastImageReportBean> imageBeans = new LinkedList<BaulastImageReportBean>();
+                    final Collection<BaulastPlotempfehlungReportBean> plotBeans =
+                        new LinkedList<BaulastPlotempfehlungReportBean>();
                     final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
 
                     final Map startingPages = new HashMap();
-                    int startingPage = 2;
-                    if (selectedBaulasten.size() > 27) {
-                        startingPage += Math.ceil((selectedBaulasten.size() - 27D) / 37D);
-                    }
+                    int tileTableRows = 10 + selectedBaulasten.size();
 
                     final Map imageAvailable = new HashMap();
+
+                    if (Type.TEXTBLATT_PLAN_RASTER.equals(type)) {
+                        int rasterPages = 0;
+                        for (final CidsBean selectedBaulast : selectedBaulasten) {
+                            final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
+                                    selectedBaulast);
+
+                            additionalFilesToDownload.addAll(urlListRasterdaten);
+                            for (final URL url : urlListRasterdaten) {
+//
+//                                final MultiPagePictureReader reader = new MultiPagePictureReader(new File(
+//                                            "/home/jruiz/Downloads/000509-02p.tif"));
+                                final MultiPagePictureReader reader = new MultiPagePictureReader(url, false, false);
+
+                                final EXIFReader exif = new EXIFReader();
+
+                                final Map<Integer, MetadataInfo> metadatainfoPerPage = new HashMap();
+
+                                final InputStream is = reader.getInputStream();
+                                if (MultiPagePictureReader.CODEC_JPEG.equals(reader.getCodec())) {
+                                    final Metadata metadata = ImageMetadataReader.readMetadata(is);
+                                    final MetadataInfo metadataInfo = createMetadataInfoFromJpeg(metadata);
+                                    if (metadataInfo != null) {
+                                        metadatainfoPerPage.put(metadataInfo.getPageNumber(), metadataInfo);
+                                    }
+                                } else if (MultiPagePictureReader.CODEC_TIFF.equals(reader.getCodec())) {
+                                    final com.twelvemonkeys.imageio.metadata.Directory dir = exif.read(ImageIO
+                                                    .createImageInputStream(is));
+                                    final CompoundDirectory dirs = (CompoundDirectory)dir;
+                                    for (int i = 0; i < dirs.directoryCount(); i++) {
+                                        final com.twelvemonkeys.imageio.metadata.Directory subDir = dirs.getDirectory(
+                                                i);
+                                        final MetadataInfo metadataInfo = createMetadataInfoFromTiff(subDir);
+                                        if (metadataInfo != null) {
+                                            metadatainfoPerPage.put(metadataInfo.getPageNumber(), metadataInfo);
+                                        }
+                                    }
+                                }
+
+                                for (int page = 1; page <= reader.getNumberOfPages(); page++) {
+                                    final MetadataInfo metadataInfo = metadatainfoPerPage.get(page);
+
+                                    final String plotempfehlung = (metadataInfo != null)
+                                        ? calculateDinFormat(metadataInfo.getWidth(),
+                                            metadataInfo.getHeight(),
+                                            metadataInfo.getDpiWidth(),
+                                            metadataInfo.getDpiHeight()) : null;
+                                    plotBeans.add(new BaulastPlotempfehlungReportBean(
+                                            page,
+                                            reader.getNumberOfPages(),
+                                            url.getFile().substring(url.getFile().lastIndexOf("/") + 1),
+                                            (String)selectedBaulast.getProperty("blattnummer"),
+                                            (String)selectedBaulast.getProperty("laufende_nummer"),
+                                            (plotempfehlung != null) ? plotempfehlung : "-"));
+                                }
+                                rasterPages += reader.getNumberOfPages();
+                            }
+                        }
+                        tileTableRows += 5 + rasterPages;                                                    
+                    }
+                    int startingPage = 2 + (int)(tileTableRows / 37);
 
                     for (final CidsBean selectedBaulast : selectedBaulasten) {
                         final List<URL> urlListTextblatt = new ArrayList<URL>();
                         final List<URL> urlListLageplan = new ArrayList<URL>();
                         try {
-                            urlListTextblatt.addAll(BaulastenPictureFinder.findTextblattPicture(selectedBaulast));
+                            urlListTextblatt.addAll(BaulastenPictureFinder.findReducedTextblattPicture(
+                                    selectedBaulast));
                         } catch (final Exception ex) {
                             // TODO: User feedback?
                             LOG.warn("Could not include raster document for baulast '"
@@ -141,27 +300,25 @@ public class BaulastenReportGenerator {
                         }
 
                         if (Type.TEXTBLATT_PLAN.equals(type) || Type.TEXTBLATT_PLAN_RASTER.equals(type)) {
-                            urlListLageplan.addAll(BaulastenPictureFinder.findPlanPicture(selectedBaulast));
+                            urlListLageplan.addAll(BaulastenPictureFinder.findReducedPlanPicture(selectedBaulast));
                         }
                         if (urlListTextblatt.isEmpty()) {
                             LOG.info("No document URLS found for the Baulasten report");
                         }
-                        MultiPagePictureReader reader = null;
                         int pageCount = 0;
                         final List<URL> urlList = new ArrayList<URL>(urlListTextblatt);
                         urlList.addAll(urlListLageplan);
                         for (final URL url : urlList) {
                             try {
-                                reader = new MultiPagePictureReader(url, false, false);
+//                                final MultiPagePictureReader reader = new MultiPagePictureReader(new File(
+//                                            "/home/jruiz/Downloads/000509-02p.tif"));
+                                final MultiPagePictureReader reader = new MultiPagePictureReader(url, false, false);
                                 for (int i = 0; i < reader.getNumberOfPages(); i++) {
                                     imageBeans.add(new BaulastImageReportBean(
                                             i,
                                             reader));
                                 }
                                 pageCount += reader.getNumberOfPages();
-                                if (Type.TEXTBLATT_PLAN_RASTER.equals(type) && urlListLageplan.contains(url)) {
-                                    additionalFilesToDownload.add(url);
-                                }
                             } catch (final Exception ex) {
                                 LOG.warn("Could not read document from URL '" + url.toExternalForm()
                                             + "'. Skipping this url.",
@@ -171,10 +328,10 @@ public class BaulastenReportGenerator {
 
                         imageAvailable.put(selectedBaulast.getProperty("id"), pageCount > 0);
 
-                        if (reader == null) {
-                            // Couldn't open any image.
-                            continue;
-                        }
+//                        if (reader == null) {
+//                            // Couldn't open any image.
+//                            continue;
+//                        }
 
                         final String startingPageString = Integer.toString(startingPage);
 
@@ -184,7 +341,8 @@ public class BaulastenReportGenerator {
 
                     reportBeans.add(new BaulastReportBean(
                             selectedBaulasten,
-                            imageBeans));
+                            imageBeans,
+                            plotBeans));
                     final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
 
                     final HashMap parameters = new HashMap();
@@ -232,6 +390,46 @@ public class BaulastenReportGenerator {
         return new BackgroundTaskMultipleDownload(null, projectname, fetchDownloadsTask);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   pixX  DOCUMENT ME!
+     * @param   pixY  DOCUMENT ME!
+     * @param   dpiX  DOCUMENT ME!
+     * @param   dpiY  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String calculateDinFormat(final long pixX, final long pixY, final int dpiX, final int dpiY) {
+        if ((dpiX > 0) && (dpiY > 0)) {
+            final double mmX = (pixX / dpiX) * INCH_IN_MM;
+            final double mmY = (pixY / dpiY) * INCH_IN_MM;
+
+            final double cmWidth = (mmX <= mmY) ? mmX : mmY;
+            final double cmHeight = (mmX <= mmY) ? mmY : mmX;
+
+            final String format = (mmX <= mmY) ? "Hochformat" : "Querformat";
+
+            final String din;
+            if ((cmWidth < MAX_WIDTH_DINA4) && (cmHeight < MAX_HEIGHT_DINA4)) {
+                din = "DIN A4";
+            } else if ((cmWidth < MAX_WIDTH_DINA3) && (cmHeight < MAX_HEIGHT_DINA3)) {
+                din = "DIN A3";
+            } else if ((cmWidth < MAX_WIDTH_DINA2) && (cmHeight < MAX_HEIGHT_DINA2)) {
+                din = "DIN A2";
+            } else if ((cmWidth < MAX_WIDTH_DINA1) && (cmHeight < MAX_HEIGHT_DINA1)) {
+                din = "DIN A1";
+            } else if ((cmWidth < MAX_WIDTH_DINA0) && (cmHeight < MAX_HEIGHT_DINA0)) {
+                din = "DIN A0";
+            } else {
+                return null;
+            }
+            return din + " " + format;
+        } else {
+            return null;
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -239,46 +437,15 @@ public class BaulastenReportGenerator {
      *
      * @version  $Revision$, $Date$
      */
+    @lombok.Getter
+    @lombok.AllArgsConstructor
     public static class BaulastReportBean {
 
         //~ Instance fields ----------------------------------------------------
 
         private final Collection<CidsBean> baulasten;
         private final Collection<BaulastImageReportBean> images;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new BaulastenReportBean object.
-         *
-         * @param  baulasten  DOCUMENT ME!
-         * @param  images     DOCUMENT ME!
-         */
-        public BaulastReportBean(final Collection<CidsBean> baulasten,
-                final Collection<BaulastImageReportBean> images) {
-            this.baulasten = baulasten;
-            this.images = images;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Collection<CidsBean> getBaulasten() {
-            return baulasten;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Collection<BaulastImageReportBean> getImages() {
-            return images;
-        }
+        private final Collection<BaulastPlotempfehlungReportBean> plotempfehlungen;
     }
 
     /**
@@ -286,45 +453,51 @@ public class BaulastenReportGenerator {
      *
      * @version  $Revision$, $Date$
      */
+    @lombok.Getter
+    @lombok.AllArgsConstructor
     public static class BaulastImageReportBean {
 
         //~ Instance fields ----------------------------------------------------
 
         private final Integer page;
         private final MultiPagePictureReader reader;
+    }
 
-        //~ Constructors -------------------------------------------------------
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @lombok.Getter
+    @lombok.AllArgsConstructor
+    public static class BaulastPlotempfehlungReportBean {
 
-        /**
-         * Creates a new BaulastblattReportBean object.
-         *
-         * @param  page    DOCUMENT ME!
-         * @param  reader  DOCUMENT ME!
-         */
-        public BaulastImageReportBean(final Integer page,
-                final MultiPagePictureReader reader) {
-            this.page = page;
-            this.reader = reader;
-        }
+        //~ Instance fields ----------------------------------------------------
 
-        //~ Methods ------------------------------------------------------------
+        private final Integer page;
+        private final Integer totalPages;
+        private final String fileName;
+        private final String blattnummer;
+        private final String laufende_nummer;
+        private final String plotempfehlung;
+    }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Integer getPage() {
-            return page;
-        }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @lombok.Getter
+    @lombok.Setter
+    @lombok.AllArgsConstructor
+    public static class MetadataInfo {
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public MultiPagePictureReader getReader() {
-            return reader;
-        }
+        //~ Instance fields ----------------------------------------------------
+
+        private int pageNumber;
+        private long width;
+        private long height;
+        private int dpiWidth;
+        private int dpiHeight;
     }
 }

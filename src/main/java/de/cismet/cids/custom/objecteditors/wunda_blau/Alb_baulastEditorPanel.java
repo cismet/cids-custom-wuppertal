@@ -72,7 +72,6 @@ import javax.swing.text.DefaultFormatterFactory;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.wunda_blau.search.BaulastCreateSearchGeometryListener;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -206,6 +205,15 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         this.editableComponents = new ArrayList<JComponent>();
         initComponents();
         initEditableComponents();
+//        final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
+//        items.add(BaulastenReportGenerator.Type.TEXTBLATT);
+//        items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN);
+//        items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER);
+//        final boolean enabled = BillingPopup.isBillingAllowed() && !items.isEmpty();
+//
+//        cmbType.setModel(new DefaultComboBoxModel(items.toArray(new BaulastenReportGenerator.Type[0])));
+//        cmbType.setEnabled(enabled);
+
         fsDialoge = new FlurstueckSelectionDialoge() {
 
                 @Override
@@ -635,6 +643,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         lblDescBefristungsdatum.setText("Befristungsdatum:");
 
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.befristungsdatum}!=null"),
+                lblDescBefristungsdatum,
+                org.jdesktop.beansbinding.BeanProperty.create("opaque"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -803,7 +819,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         lblDescBaulastart.setText("Arten:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(lblDescBaulastart, gridBagConstraints);
@@ -824,7 +840,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -875,7 +891,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(panArtControls, gridBagConstraints);
 

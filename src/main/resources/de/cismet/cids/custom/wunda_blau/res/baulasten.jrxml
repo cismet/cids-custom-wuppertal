@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Baulasten" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" scriptletClass="de.cismet.cids.custom.objectrenderer.wunda_blau.VermessungRissReportScriptlet" uuid="35bae2a7-1b15-4850-a139-ee769bb95ba6">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.0000000000000007"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="601"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["E:\\Dropbox\\NetBeansProjects\\de\\cismet\\cids\\custom\\wupp\\cids-custom-wuppertal\\src\\main\\resources\\de\\cismet\\cids\\custom\\wunda_blau\\res\\"]]></defaultValueExpression>
 	</parameter>
@@ -18,6 +18,7 @@
 	<field name="images" class="java.util.Collection">
 		<fieldDescription><![CDATA[images]]></fieldDescription>
 	</field>
+	<field name="plotempfehlungen" class="java.util.Collection"/>
 	<variable name="DATE" class="java.util.Date" calculation="First">
 		<variableExpression><![CDATA[new Date()]]></variableExpression>
 	</variable>
@@ -38,9 +39,9 @@
 		</band>
 	</background>
 	<title>
-		<band height="750">
+		<band height="210">
 			<subreport>
-				<reportElement x="0" y="130" width="555" height="600" uuid="8fb35219-2a9c-4739-851c-f6c83a2c3789"/>
+				<reportElement x="0" y="130" width="555" height="20" uuid="8fb35219-2a9c-4739-851c-f6c83a2c3789"/>
 				<subreportParameter name="STARTINGPAGES">
 					<subreportParameterExpression><![CDATA[$P{STARTINGPAGES}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -54,7 +55,7 @@
 				<subreportExpression><![CDATA["de/cismet/cids/custom/wunda_blau/res/baulasten_overview.jasper"]]></subreportExpression>
 			</subreport>
 			<break>
-				<reportElement x="0" y="749" width="100" height="1" uuid="81353579-6956-4f08-92df-afd145a87107">
+				<reportElement x="0" y="200" width="100" height="1" uuid="81353579-6956-4f08-92df-afd145a87107">
 					<printWhenExpression><![CDATA[!$P{IMAGEAVAILABLE}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 			</break>
@@ -122,6 +123,11 @@
 			<line>
 				<reportElement x="0" y="111" width="555" height="1" uuid="e7130a59-c8e0-4a8c-b8c8-9d9160a69e86"/>
 			</line>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="170" width="555" height="20" uuid="3165109a-2ec8-4445-a5d3-39f0370842d6"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{plotempfehlungen}, false)]]></dataSourceExpression>
+				<subreportExpression><![CDATA["de/cismet/cids/custom/wunda_blau/res/baulasten_plotempfehlung.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</title>
 	<detail>
