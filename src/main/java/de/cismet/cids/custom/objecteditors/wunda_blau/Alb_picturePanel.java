@@ -1560,6 +1560,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      *
      * @version  $Revision$, $Date$
      */
+
     //J-
     final class FileSearchWorker extends SwingWorker<List[], Void> {
 
