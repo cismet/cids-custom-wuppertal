@@ -1768,10 +1768,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                     int lastIndex = -1;
 
-                    @Override
                     /**
                      * Draw the marker.
                      */
+                    @Override
                     public void mouseMoved(final MouseEvent e) {
                         if ((lastIndex >= 0) && (lastIndex < PictureSelectionJGrid.this.getModel().getSize())) {
                             final Object o = PictureSelectionJGrid.this.getModel().getElementAt(lastIndex);
