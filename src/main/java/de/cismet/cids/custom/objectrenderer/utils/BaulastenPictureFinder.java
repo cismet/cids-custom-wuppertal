@@ -9,7 +9,6 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import org.apache.commons.io.IOUtils;
 
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 
