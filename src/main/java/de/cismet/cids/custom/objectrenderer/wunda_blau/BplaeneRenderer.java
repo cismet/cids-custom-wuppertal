@@ -38,8 +38,7 @@ public class BplaeneRenderer extends BlurredMapObjectRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
-    @CidsRendererTitle
-    public String compTitle;
+    @CidsRendererTitle public String compTitle;
     @CidsAttribute("STATUS")
     public Object status = "";
     @CidsAttribute("NAMEPLUS")
