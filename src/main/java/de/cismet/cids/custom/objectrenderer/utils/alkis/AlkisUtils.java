@@ -444,7 +444,7 @@ public class AlkisUtils {
     public static String arrayToSeparatedString(final String[] strings, final String separator) {
         if (strings != null) {
             final StringBuilder result = new StringBuilder();
-            for (int i = 0; i < strings.length; ++i) {
+            for (int i = 0; i < strings.length; i++) {
                 result.append(strings[i]);
                 if ((i + 1) < strings.length) {
                     result.append(separator);

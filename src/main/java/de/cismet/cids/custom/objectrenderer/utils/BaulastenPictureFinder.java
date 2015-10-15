@@ -76,7 +76,7 @@ public final class BaulastenPictureFinder {
      * @return  DOCUMENT ME!
      */
     public static List<URL> findReducedPlanPicture(final CidsBean cidsBean) {
-        return findPlanPicture(false, cidsBean);
+        return findPlanPicture(true, cidsBean);
     }
 
     /**
@@ -419,7 +419,7 @@ public final class BaulastenPictureFinder {
             int counter = 1;
             boolean picfound = true;
             while (picfound) {
-                final String tmp = fileWithoutSuffix.substring(0, fileWithoutSuffix.lastIndexOf(".") - 1);
+                final String tmp = fileWithoutSuffix.substring(0, fileWithoutSuffix.lastIndexOf("."));
                 final String urlString = tmp + SUFFIX_REDUCED_SIZE + String.format("%02d", counter)
                             + EXTENSION_REDUCED_SIZE;
                 try {
