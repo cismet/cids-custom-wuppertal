@@ -280,7 +280,7 @@ public class BaulastenReportGenerator {
                                 rasterPages += reader.getNumberOfPages();
                             }
                         }
-                        tileTableRows += 5 + rasterPages;                                                    
+                        tileTableRows += 5 + rasterPages;
                     }
                     int startingPage = 2 + (int)(tileTableRows / 37);
 

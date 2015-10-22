@@ -454,7 +454,8 @@ public final class BaulastenPictureFinder {
             int counter = 1;
             boolean picfound = true;
             while (picfound) {
-                final String urlString = fileWithoutSuffix.substring(0, fileWithoutSuffix.lastIndexOf(".")) + SUFFIX_REDUCED_SIZE + String.format("%02d", counter) + "." + EXTENSION_REDUCED_SIZE;
+                final String urlString = fileWithoutSuffix.substring(0, fileWithoutSuffix.lastIndexOf("."))
+                            + SUFFIX_REDUCED_SIZE + String.format("%02d", counter) + "." + EXTENSION_REDUCED_SIZE;
                 try {
                     final URL objectURL = new URL(urlString);
                     final HttpURLConnection huc = (HttpURLConnection)objectURL.openConnection();
