@@ -1425,11 +1425,13 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                         cidsBean.setProperty("pruefdatum", zeit);
                         cidsBean.setProperty(
                             "pruefkommentar",
-                            "Von "
+                            DateFormat.getDateInstance().format(zeit)
+                                    + " deaktiviert ("
                                     + name
-                                    + " am "
-                                    + DateFormat.getDateInstance().format(zeit)
-                                    + " auf ungeprüft gesetzt");
+                                    + ")"
+                                    + ((oldPruefdatum != null)
+                                        ? (" - letzte Prüfung: " + DateFormat.getDateInstance().format(oldPruefdatum)
+                                            + " " + oldGeprueft_Von) : ""));
                     } catch (Exception ex) {
                         Log.error("cannot set CidsBean property", ex);
                     }
