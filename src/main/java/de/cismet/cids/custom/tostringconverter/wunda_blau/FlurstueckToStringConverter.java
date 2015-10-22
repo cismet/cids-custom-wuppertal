@@ -11,6 +11,7 @@
  */
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 
+import static de.cismet.cids.custom.tostringconverter.wunda_blau.Alb_flurstueck_kickerToStringConverter.HISTORISCH;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.CustomToStringConverter;
@@ -43,6 +44,12 @@ public class FlurstueckToStringConverter extends CustomToStringConverter {
         } else {
             result.append("0");
         }
+        
+        final Object hist_date = cidsBean.getProperty("historisch");
+        if (hist_date != null) {
+            result.append(HISTORISCH);
+        }
+        
         return result.toString();
     }
 }
