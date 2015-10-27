@@ -568,6 +568,7 @@ public class OabUtilities {
             if (isSlidableWMSLayer((Layer)layerPath.getLastPathComponent())) {
                 // a slidable layergroup
                 service = new SlidableWMSServiceLayerGroup(path);
+                ((SlidableWMSServiceLayerGroup)service).setWmsCapabilities(caps);
             } else {
                 service = new WMSServiceLayer(path);
                 ((WMSServiceLayer)service).setWmsCapabilities(caps);
