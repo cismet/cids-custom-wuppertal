@@ -152,7 +152,15 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             } catch (Exception ex) {
                 log.error(ex, ex);
             }
-            flurstuecksFilterModel = new DefaultListModel();
+            flurstuecksFilterModel = new DefaultListModel() {
+
+                    @Override
+                    public void addElement(final Object element) {
+                        if (!this.contains(element)) {
+                            super.addElement(element);
+                        }
+                    }
+                };
             lstFlurstueck.setModel(flurstuecksFilterModel);
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbArt);
 
