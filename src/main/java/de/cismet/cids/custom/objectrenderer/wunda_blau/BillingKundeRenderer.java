@@ -41,6 +41,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,6 +55,8 @@ import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
@@ -192,6 +196,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             cboBillDownloads.setSelected(false);
             cboBillDownloads.setEnabled(false);
         }
+
+        tblBillings.getRowSorter().toggleSortOrder(6);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -660,6 +666,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(453, 275));
 
+        tblBillings.setAutoCreateRowSorter(true);
         tblBillings.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
                     { null, null, null, null },
@@ -668,6 +675,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                     { null, null, null, null }
                 },
                 new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+        tblBillings.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+
+                @Override
+                public void mouseMoved(final java.awt.event.MouseEvent evt) {
+                    tblBillingsMouseMoved(evt);
+                }
+            });
         tblBillings.addMouseListener(new java.awt.event.MouseAdapter() {
 
                 @Override
@@ -679,34 +693,29 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                     tblBillingsMouseExited(evt);
                 }
             });
-        tblBillings.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-
-                @Override
-                public void mouseMoved(final java.awt.event.MouseEvent evt) {
-                    tblBillingsMouseMoved(evt);
-                }
-            });
         jScrollPane1.setViewportView(tblBillings);
-        tblBillings.getColumnModel()
-                .getColumn(0)
-                .setHeaderValue(org.openide.util.NbBundle.getMessage(
-                        BillingKundeRenderer.class,
-                        "BillingKundeRenderer.tblBillings.columnModel.title0")); // NOI18N
-        tblBillings.getColumnModel()
-                .getColumn(1)
-                .setHeaderValue(org.openide.util.NbBundle.getMessage(
-                        BillingKundeRenderer.class,
-                        "BillingKundeRenderer.tblBillings.columnModel.title1")); // NOI18N
-        tblBillings.getColumnModel()
-                .getColumn(2)
-                .setHeaderValue(org.openide.util.NbBundle.getMessage(
-                        BillingKundeRenderer.class,
-                        "BillingKundeRenderer.tblBillings.columnModel.title2")); // NOI18N
-        tblBillings.getColumnModel()
-                .getColumn(3)
-                .setHeaderValue(org.openide.util.NbBundle.getMessage(
-                        BillingKundeRenderer.class,
-                        "BillingKundeRenderer.tblBillings.columnModel.title3")); // NOI18N
+        if (tblBillings.getColumnModel().getColumnCount() > 0) {
+            tblBillings.getColumnModel()
+                    .getColumn(0)
+                    .setHeaderValue(org.openide.util.NbBundle.getMessage(
+                            BillingKundeRenderer.class,
+                            "BillingKundeRenderer.tblBillings.columnModel.title0")); // NOI18N
+            tblBillings.getColumnModel()
+                    .getColumn(1)
+                    .setHeaderValue(org.openide.util.NbBundle.getMessage(
+                            BillingKundeRenderer.class,
+                            "BillingKundeRenderer.tblBillings.columnModel.title1")); // NOI18N
+            tblBillings.getColumnModel()
+                    .getColumn(2)
+                    .setHeaderValue(org.openide.util.NbBundle.getMessage(
+                            BillingKundeRenderer.class,
+                            "BillingKundeRenderer.tblBillings.columnModel.title2")); // NOI18N
+            tblBillings.getColumnModel()
+                    .getColumn(3)
+                    .setHeaderValue(org.openide.util.NbBundle.getMessage(
+                            BillingKundeRenderer.class,
+                            "BillingKundeRenderer.tblBillings.columnModel.title3")); // NOI18N
+        }
         tblBillings.setDefaultRenderer(Usage.class, new UsageRenderer());
         tblBillings.setDefaultRenderer(DateRequestTuple.class, new DateRequestTupleRenderer());
 
@@ -842,12 +851,34 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     /**
      * DOCUMENT ME!
      *
+     * @param   billingBeans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private List<CidsBean> getSortedBillingBeans(final List<CidsBean> billingBeans) {
+        final List<CidsBean> sortedFilteredBuchungen = new ArrayList(billingBeans);
+        Collections.sort(sortedFilteredBuchungen, new Comparator<CidsBean>() {
+
+                @Override
+                public int compare(final CidsBean o1, final CidsBean o2) {
+                    final int i1 = tblBillings.convertRowIndexToView(billingBeans.indexOf(o1));
+                    final int i2 = tblBillings.convertRowIndexToView(billingBeans.indexOf(o2));
+                    return Integer.compare(i1, i2);
+                }
+            });
+
+        return sortedFilteredBuchungen;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  evt  DOCUMENT ME!
      */
     private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
         final PrintBillingReportForCustomer printBillingReportForCustomer = new PrintBillingReportForCustomer(
                 cidsBean,
-                filteredBuchungen,
+                getSortedBillingBeans(filteredBuchungen),
                 fromDate_tillDate,
                 true,
                 cboBillDownloads.isSelected(),
@@ -876,7 +907,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
         new PrintBillingReportForCustomer(
             cidsBean,
-            filteredBuchungen,
+            getSortedBillingBeans(filteredBuchungen),
             fromDate_tillDate,
             false,
             cboBillDownloads.isSelected(),
@@ -1211,6 +1242,12 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                             filteredBuchungen = billingBeans;
                             fillBillingTable(billingBeans);
                             lblFilterResult.setText(generateFilterResultText(billingBeans));
+
+                            final List<RowSorter.SortKey> keys = new ArrayList<RowSorter.SortKey>();
+                            final RowSorter.SortKey sortKey = new RowSorter.SortKey(6, SortOrder.ASCENDING);
+                            keys.add(sortKey);
+                            tblBillings.getRowSorter().setSortKeys(keys);
+                            ((TableRowSorter)tblBillings.getRowSorter()).sort();
                         }
                     } catch (InterruptedException ex) {
                         LOG.error("Error while filtering the billings.", ex);
