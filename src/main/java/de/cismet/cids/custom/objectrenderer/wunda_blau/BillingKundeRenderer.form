@@ -511,6 +511,7 @@
               <SubComponents>
                 <Component class="javax.swing.JTable" name="tblBillings">
                   <Properties>
+                    <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="4" rowCount="4">
                         <Column editable="true" title="Title 1" type="java.lang.Object"/>
@@ -556,9 +557,9 @@
                     </Property>
                   </Properties>
                   <Events>
+                    <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="tblBillingsMouseMoved"/>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblBillingsMouseClicked"/>
                     <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblBillingsMouseExited"/>
-                    <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="tblBillingsMouseMoved"/>
                   </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblBillings.setDefaultRenderer(Usage.class, new UsageRenderer());&#xa;tblBillings.setDefaultRenderer(DateRequestTuple.class, new DateRequestTupleRenderer());"/>
