@@ -74,20 +74,20 @@ public class BaulastenReportGenerator {
 
     static final double INCH_IN_MM = 25.4;
 
-    static final int MAX_WIDTH_DINA4 = 210;
-    static final int MAX_HEIGHT_DINA4 = 297;
+    static final int MAX_WIDTH_DINA4 = 170;
+    static final int MAX_HEIGHT_DINA4 = 257;
 
-    static final int MAX_WIDTH_DINA3 = 297;
-    static final int MAX_HEIGHT_DINA3 = 420;
+    static final int MAX_WIDTH_DINA3 = 257;
+    static final int MAX_HEIGHT_DINA3 = 380;
 
-    static final int MAX_WIDTH_DINA2 = 420;
-    static final int MAX_HEIGHT_DINA2 = 594;
+    static final int MAX_WIDTH_DINA2 = 380;
+    static final int MAX_HEIGHT_DINA2 = 554;
 
-    static final int MAX_WIDTH_DINA1 = 594;
-    static final int MAX_HEIGHT_DINA1 = 841;
+    static final int MAX_WIDTH_DINA1 = 554;
+    static final int MAX_HEIGHT_DINA1 = 801;
 
-    static final int MAX_WIDTH_DINA0 = 841;
-    static final int MAX_HEIGHT_DINA0 = 1189;
+    static final int MAX_WIDTH_DINA0 = 801;
+    static final int MAX_HEIGHT_DINA0 = 1149;
 
     //~ Enums ------------------------------------------------------------------
 
