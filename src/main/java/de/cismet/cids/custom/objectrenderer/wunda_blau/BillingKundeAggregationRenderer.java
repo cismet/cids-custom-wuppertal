@@ -35,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -679,7 +681,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             for (final CidsBean kundeBean : customers) {
                 new PrintBillingReportForCustomer(
                     kundeBean,
-                    billingsOfCustomers.get(kundeBean),
+                    getSortedBillingBeans(billingsOfCustomers.get(kundeBean)),
                     fromDate_tillDate,
                     false,
                     cboBillDownloads.isSelected(),
@@ -688,6 +690,36 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             }
         }
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   billingBeans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private List<CidsBean> getSortedBillingBeans(final Collection<CidsBean> billingBeans) {
+        final List<CidsBean> sortedFilteredBuchungen = new ArrayList(billingBeans);
+        Collections.sort(sortedFilteredBuchungen, new Comparator<CidsBean>() {
+
+                @Override
+                public int compare(final CidsBean o1, final CidsBean o2) {
+                    final Date d1 = (Date)o1.getProperty("ts");
+                    final Date d2 = (Date)o2.getProperty("ts");
+                    if ((d1 != null) && (d2 != null)) {
+                        return d1.compareTo(d2);
+                    } else if ((d1 == null) && (d2 != null)) {
+                        return -1;
+                    } else if ((d2 == null) && (d1 != null)) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+        return sortedFilteredBuchungen;
+    }
 
     /**
      * DOCUMENT ME!
@@ -711,7 +743,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             for (final CidsBean kundeBean : customers) {
                 final PrintBillingReportForCustomer printBillingReportForCustomer = new PrintBillingReportForCustomer(
                         kundeBean,
-                        billingsOfCustomers.get(kundeBean),
+                        getSortedBillingBeans(billingsOfCustomers.get(kundeBean)),
                         fromDate_tillDate,
                         true,
                         cboBillDownloads.isSelected(),
