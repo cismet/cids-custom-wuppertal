@@ -180,8 +180,8 @@ public class BillingStatisticsReport {
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String filename = getFilename();
             final String title = getTitle();
 

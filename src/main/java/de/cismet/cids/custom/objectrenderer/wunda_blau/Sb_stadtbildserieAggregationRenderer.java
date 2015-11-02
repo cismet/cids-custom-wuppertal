@@ -734,42 +734,42 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinActionPerformed
+    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinActionPerformed
         moveSelectedStadtbildserienToOtherGrid(grdStadtbildserien, grdBin);
-    }                                                                          //GEN-LAST:event_btnBinActionPerformed
+    }//GEN-LAST:event_btnBinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinRecycleActionPerformed
+    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinRecycleActionPerformed
         moveSelectedStadtbildserienToOtherGrid(grdBin, grdStadtbildserien);
-    }                                                                                 //GEN-LAST:event_btnBinRecycleActionPerformed
+    }//GEN-LAST:event_btnBinRecycleActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldSizeStateChanged
+    private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldSizeStateChanged
         grdStadtbildserien.setFixedCellDimension(sldSize.getValue());
         grdStadtbildserien.ensureIndexIsVisible(grdStadtbildserien.getSelectedIndex());
         grdBin.setFixedCellDimension(sldSize.getValue());
         grdBin.ensureIndexIsVisible(grdBin.getSelectedIndex());
         grdWarenkorb.setFixedCellDimension(sldSize.getValue());
         grdWarenkorb.ensureIndexIsVisible(grdWarenkorb.getSelectedIndex());
-    }                                                                           //GEN-LAST:event_sldSizeStateChanged
+    }//GEN-LAST:event_sldSizeStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnSlideActionPerformed
+    private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnSlideActionPerformed
         showInfoPanel(!pnlInfoPanels.isVisible());
         wasInfoPanelVisibleBeforeSwitch = pnlInfoPanels.isVisible();
-    }                                                                             //GEN-LAST:event_tbtnSlideActionPerformed
+    }//GEN-LAST:event_tbtnSlideActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -841,8 +841,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String filename = "Stadtbilder_Serienauszug";
             final String downloadTitle = "Stadtbilder Serienauszug";
 
@@ -923,8 +923,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String filename = "Stadtbilder_Einzelbilderauszug";
             final String downloadTitle = "Stadtbilder Einzelbilderauszug";
 
@@ -958,43 +958,43 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblSwitchToSerieMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblSwitchToSerieMouseClicked
+    private void lblSwitchToSerieMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSwitchToSerieMouseClicked
         switchToSerie();
-    }                                                                                //GEN-LAST:event_lblSwitchToSerieMouseClicked
+    }//GEN-LAST:event_lblSwitchToSerieMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblSwitchToBinMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblSwitchToBinMouseClicked
+    private void lblSwitchToBinMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSwitchToBinMouseClicked
         switchToBin();
-    }                                                                              //GEN-LAST:event_lblSwitchToBinMouseClicked
+    }//GEN-LAST:event_lblSwitchToBinMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblMiddleMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblMiddleMouseClicked
+    private void lblMiddleMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMiddleMouseClicked
         switchToWarenkorb();
-    }                                                                         //GEN-LAST:event_lblMiddleMouseClicked
+    }//GEN-LAST:event_lblMiddleMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveWarenkorbActionPerformed
+    private void btnRemoveWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveWarenkorbActionPerformed
         ((Sb_SingleStadtbildJGrid)grdWarenkorb).unchoseStadtbilderSelectedInTheGrid();
         grdWarenkorb.getSelectionModel().clearSelection();
-    }                                                                                      //GEN-LAST:event_btnRemoveWarenkorbActionPerformed
+    }//GEN-LAST:event_btnRemoveWarenkorbActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     private void downladVorauswahl() {
-        final String jobname = DownloadManagerDialog.getJobname();
+        final String jobname = DownloadManagerDialog.getInstance().getJobName();
         // create an array with Sb_stadtbildserieGridObject of the current vorschau.
         final Sb_stadtbildserieGridObject[] gridObjectArr =
             new Sb_stadtbildserieGridObject[grdStadtbildserien.getModel().getSize()];
@@ -1045,7 +1045,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "not.yet",
                                         (Geometry)null,
                                         new ProductGroupAmount("ea", amountDownloads))
-                                    && DownloadManagerDialog.showAskingForUserTitle(
+                                    && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
                             if (amountDownloads == 1) {
                                 DownloadManager.instance().add(downloads.get(0));
@@ -1064,7 +1064,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      * DOCUMENT ME!
      */
     private void downladWarenkorb() {
-        final String jobname = DownloadManagerDialog.getJobname();
+        final String jobname = DownloadManagerDialog.getInstance().getJobName();
         // create an array with Sb_stadtbildserieGridObject of the current vorschau.
         final Sb_stadtbildserieGridObject[] gridObjectArr =
             new Sb_stadtbildserieGridObject[grdStadtbildserien.getModel().getSize()];
@@ -1115,7 +1115,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "not.yet",
                                         (Geometry)null,
                                         new ProductGroupAmount("ea", amountDownloads))
-                                    && DownloadManagerDialog.showAskingForUserTitle(
+                                    && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
                             if (amountDownloads == 1) {
                                 DownloadManager.instance().add(downloads.get(0));
@@ -1136,7 +1136,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMoveSerienToWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMoveSerienToWarenkorbActionPerformed
+    private void btnMoveSerienToWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveSerienToWarenkorbActionPerformed
         // select every Stadtbild of the selected Stadtbildserien
         final List<Sb_stadtbildserieGridObject> selectedStadtbildserien = grdStadtbildserien.getSelectedValuesList();
         for (final Sb_stadtbildserieGridObject stadtbildserie : selectedStadtbildserien) {
@@ -1147,7 +1147,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         updateFooterLabels();
         setEnableHighResDownload();
         warenkorbReportAction.setEnabled(this.getSelectedStadtbilderAmount() > 0);
-    } //GEN-LAST:event_btnMoveSerienToWarenkorbActionPerformed
+    }//GEN-LAST:event_btnMoveSerienToWarenkorbActionPerformed
 
     /**
      * DOCUMENT ME!

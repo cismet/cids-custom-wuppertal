@@ -376,7 +376,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisNRWActionPerformed
+    private void jxlBestandsnachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisNRWActionPerformed
         try {
             int stueck = 0;
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
@@ -394,14 +394,14 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    } //GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
+    }//GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisKommunalActionPerformed
+    private void jxlBestandsnachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisKommunalActionPerformed
         try {
             int stueck = 0;
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
@@ -419,35 +419,35 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    } //GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
+    }//GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisKommunalInternActionPerformed
+    private void jxlBestandsnachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisKommunalInternActionPerformed
         downloadEinzelnachweisProduct(jxlBestandsnachweisKommunalIntern.getText(),
             AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF,
             PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
-    }                                                                                                     //GEN-LAST:event_jxlBestandsnachweisKommunalInternActionPerformed
+    }//GEN-LAST:event_jxlBestandsnachweisKommunalInternActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBuchungsblaetterFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblBuchungsblaetterFocusLost
+    private void tblBuchungsblaetterFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblBuchungsblaetterFocusLost
         map.gotoInitialBoundingBox();
         tblBuchungsblaetter.clearSelection();
-    }                                                                                //GEN-LAST:event_tblBuchungsblaetterFocusLost
+    }//GEN-LAST:event_tblBuchungsblaetterFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlBestandsnachweisStichtagNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisStichtagNRWActionPerformed
+    private void hlBestandsnachweisStichtagNRWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisStichtagNRWActionPerformed
         try {
             int stueck = 0;
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
@@ -478,7 +478,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                     }
 
                     String jobname = hlBestandsnachweisStichtagNRW.getText();
-                    if (DownloadManagerDialog.showAskingForUserTitle(this)) {
+                    if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
 //                        jobname = DownloadManagerDialog.getJobname();
                     }
                     if (downloads.size() > 1) {
@@ -495,7 +495,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    } //GEN-LAST:event_hlBestandsnachweisStichtagNRWActionPerformed
+    }//GEN-LAST:event_hlBestandsnachweisStichtagNRWActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
@@ -628,10 +628,10 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             // return;
         }
 
-        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
+        if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
             return;
         }
-        final String jobname = DownloadManagerDialog.getJobname();
+        final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
         final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
 

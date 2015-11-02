@@ -318,7 +318,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
@@ -424,7 +424,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
             }
         }
-    } //GEN-LAST:event_btnCreateActionPerformed
+    }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -465,38 +465,38 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReleaseActionPerformed
+    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReleaseActionPerformed
         gehaltenePunkte.clear();
         setCidsBeans(pureSelectionCidsBeans);
         btnRelease.setEnabled(false);
-    }                                                                              //GEN-LAST:event_btnReleaseActionPerformed
+    }//GEN-LAST:event_btnReleaseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRememberActionPerformed
+    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRememberActionPerformed
         gehaltenePunkte.addAll(cidsBeans);
         btnRelease.setEnabled(true);
-    }                                                                               //GEN-LAST:event_btnRememberActionPerformed
+    }//GEN-LAST:event_btnRememberActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblAggregationFocusLost
+    private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblAggregationFocusLost
         animateToOverview();
         tblAggregation.clearSelection();
-    }                                                                           //GEN-LAST:event_tblAggregationFocusLost
+    }//GEN-LAST:event_tblAggregationFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -515,7 +515,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
@@ -841,8 +841,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(AlkisPointAggregationRenderer.this)) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
@@ -1038,7 +1038,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     try {
                         final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
                         if ((url != null) && (url.trim().length() > 0)) {
-                            if (!DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
+                            if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(AlkisPointAggregationRenderer.this)) {
                                 return;
                             }
 
@@ -1049,7 +1049,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 download = new HttpDownload(
                                         new URL(url),
                                         "",
-                                        DownloadManagerDialog.getJobname(),
+                                        DownloadManagerDialog.getInstance().getJobName(),
                                         "Punktnachweis",
                                         code,
                                         extension);
@@ -1059,7 +1059,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                         new URL(url.substring(0, parameterPosition)),
                                         parameters,
                                         POST_HEADER,
-                                        DownloadManagerDialog.getJobname(),
+                                        DownloadManagerDialog.getInstance().getJobName(),
                                         "Punktnachweis",
                                         code,
                                         extension);

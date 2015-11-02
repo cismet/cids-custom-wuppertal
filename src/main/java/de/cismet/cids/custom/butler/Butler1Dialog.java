@@ -573,7 +573,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -661,9 +661,8 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     }
                     // for each product tab we have to create one download
                     final StringBuilder jobnameBuilder = new StringBuilder();
-                    if (DownloadManagerDialog.showAskingForUserTitle(
-                                    CismapBroker.getInstance().getMappingComponent())) {
-                        final String jobname = DownloadManagerDialog.getJobname();
+                    if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(CismapBroker.getInstance().getMappingComponent())) {
+                        final String jobname = DownloadManagerDialog.getInstance().getJobName();
                         if (jobname == null) {
                             jobnameBuilder.append("");
                         } else {
@@ -708,14 +707,14 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     Butler1Dialog.this.dispose();
                 }
             });
-    } //GEN-LAST:event_btnCreateActionPerformed
+    }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
+    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSizeActionPerformed
         final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
         if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")
                     && (selectedBox != selectedRectBox)) {
@@ -736,23 +735,23 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         } else {
             firstUpperTFChange = false;
         }
-    }                                                                          //GEN-LAST:event_cbSizeActionPerformed
+    }//GEN-LAST:event_cbSizeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();                                                           // TODO add your handling code here:
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomsActionPerformed
+    private void cbGeomsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGeomsActionPerformed
         final Object obj = cbGeoms.getSelectedItem();
         if ((obj != null) && (obj instanceof Geometry)) {
             removeDocumentListeners();
@@ -792,7 +791,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             changeMap();
             addDocumentListeners();
         }
-    }                                                                           //GEN-LAST:event_cbGeomsActionPerformed
+    }//GEN-LAST:event_cbGeomsActionPerformed
 
     /**
      * DOCUMENT ME!
