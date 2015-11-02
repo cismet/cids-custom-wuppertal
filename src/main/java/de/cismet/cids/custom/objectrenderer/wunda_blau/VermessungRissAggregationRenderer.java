@@ -363,17 +363,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -464,7 +464,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     return null;
                 }
             }.execute();
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -476,7 +476,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse,
             final String type,
             final String host) {
-        if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissAggregationRenderer.this)) {
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(VermessungRissAggregationRenderer.this)) {
             String projectname = txtProjectname.getText();
             if ((projectname == null) || (projectname.trim().length() == 0)) {
                 projectname = type;
@@ -642,7 +642,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         .getResourceAsStream(
                                             "/de/cismet/cids/custom/wunda_blau/res/vermessungsrisse.jasper"));
 
-                        final String jobname = DownloadManagerDialog.getJobname();
+                        final String jobname = DownloadManagerDialog.getInstance().getJobName();
                         final JasperDownload jasperDownload = new JasperDownload(
                                 jasperReport,
                                 parameters,
@@ -683,7 +683,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -702,7 +702,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!

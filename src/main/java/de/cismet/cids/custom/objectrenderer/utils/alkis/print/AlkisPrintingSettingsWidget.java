@@ -805,17 +805,17 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
+    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
         super.dispose();
-    }                                                                         //GEN-LAST:event_cmdOkActionPerformed
+    }//GEN-LAST:event_cmdOkActionPerformed
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
+    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
         dispose();
-    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
+    }//GEN-LAST:event_cmdCancelActionPerformed
 
     @Override
     public void dispose() {
@@ -829,53 +829,53 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final int[] sel = lstFlurstuecke.getSelectedIndices();
         for (int i = sel.length; --i >= 0;) {
             alkisObjectListModel.removeElementAt(sel[i]);
         }
         updateFormatProposal();
         syncOkButtonWithListStatus();
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbClazzActionPerformed
+    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClazzActionPerformed
         cbProduct.setModel(getProductTypeModel());
         cbProductActionPerformed(null);
         updateFormatProposal();
-    }                                                                           //GEN-LAST:event_cbClazzActionPerformed
+    }//GEN-LAST:event_cbClazzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbProductActionPerformed
+    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductActionPerformed
         final ComboBoxModel[] models = getProductDetailModels();
         cbFormat.setModel(models[0]);
         cbScales.setModel(models[1]);
         updateFormatProposal();
-    }                                                                             //GEN-LAST:event_cbProductActionPerformed
+    }//GEN-LAST:event_cbProductActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbScalesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbScalesActionPerformed
-    }                                                                            //GEN-LAST:event_cbScalesActionPerformed
+    private void cbScalesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbScalesActionPerformed
+    }//GEN-LAST:event_cbScalesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbFormatActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFormatActionPerformed
-    }                                                                            //GEN-LAST:event_cbFormatActionPerformed
+    private void cbFormatActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFormatActionPerformed
+    }//GEN-LAST:event_cbFormatActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1351,7 +1351,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  landparcelCode  DOCUMENT ME!
      */
     private void doDownload(final URL url, final String product, final String landparcelCode) {
-        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
+        if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
             return;
         }
 
@@ -1364,7 +1364,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final HttpDownload download = new HttpDownload(
                 url,
                 "",
-                DownloadManagerDialog.getJobname(),
+                DownloadManagerDialog.getInstance().getJobName(),
                 "ALKIS-Druck",
                 filename,
                 ".pdf");

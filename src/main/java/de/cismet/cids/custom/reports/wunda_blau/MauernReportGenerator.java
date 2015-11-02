@@ -91,8 +91,8 @@ public class MauernReportGenerator {
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(parent)) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
@@ -135,8 +135,8 @@ public class MauernReportGenerator {
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(parent)) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
             DownloadManager.instance()
                     .add(new JasperReportExcelDownload(
