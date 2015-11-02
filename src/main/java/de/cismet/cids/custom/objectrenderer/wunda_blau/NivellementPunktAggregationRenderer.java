@@ -324,17 +324,17 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblPunkteFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblPunkteFocusLost
+    private void tblPunkteFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblPunkteFocusLost
         tblPunkte.clearSelection();
         animateToOverview();
-    }                                                                      //GEN-LAST:event_tblPunkteFocusLost
+    }//GEN-LAST:event_tblPunkteFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedNivellementPunkte = getSelectedNivellementPunkte();
 
         if (selectedNivellementPunkte.isEmpty()) {
@@ -362,7 +362,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -386,12 +386,12 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         parameters.put(PARAMETER_JOBNUMBER, txtJobnumber.getText());
         parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
 
-        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktAggregationRenderer.this)) {
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(NivellementPunktAggregationRenderer.this)) {
             String projectname = txtProjectname.getText();
             if ((projectname == null) || (projectname.trim().length() == 0)) {
                 projectname = "Nivellement-Punkte";
             }
-            final String jobname = DownloadManagerDialog.getJobname();
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
@@ -409,7 +409,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -428,7 +428,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!

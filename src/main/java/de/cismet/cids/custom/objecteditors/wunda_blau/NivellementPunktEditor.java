@@ -891,34 +891,34 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
+    }//GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
+    }//GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         try {
             if (BillingPopup.doBilling(
                             "nivppdf",
@@ -931,7 +931,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    }                                                                           //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -952,14 +952,14 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
                     @Override
                     public void run() {
-                        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
+                        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(NivellementPunktEditor.this)) {
                             final String filename = urlOfDocument.substring(urlOfDocument.lastIndexOf("/") + 1);
                             DownloadManager.instance()
                                     .add(
                                         new HttpDownload(
                                             url,
                                             "",
-                                            DownloadManagerDialog.getJobname(),
+                                            DownloadManagerDialog.getInstance().getJobName(),
                                             "NivP-Beschreibung",
                                             filename.substring(0, filename.lastIndexOf(".")),
                                             filename.substring(filename.lastIndexOf("."))));
@@ -974,47 +974,47 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDGKBlattnummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDGKBlattnummerFocusLost
+    private void txtDGKBlattnummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDGKBlattnummerFocusLost
         if ((oldDgkBlattnummer != null) && !oldDgkBlattnummer.equals(txtDGKBlattnummer.getText())) {
             refreshImage();
         }
-    }                                                                              //GEN-LAST:event_txtDGKBlattnummerFocusLost
+    }//GEN-LAST:event_txtDGKBlattnummerFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLaufendeNummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLaufendeNummerFocusLost
+    private void txtLaufendeNummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLaufendeNummerFocusLost
         if ((oldLaufendeNummer != null) && !oldLaufendeNummer.equals(txtLaufendeNummer.getText())) {
             refreshImage();
         }
-    }                                                                              //GEN-LAST:event_txtLaufendeNummerFocusLost
+    }//GEN-LAST:event_txtLaufendeNummerFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDGKBlattnummerFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDGKBlattnummerFocusGained
+    private void txtDGKBlattnummerFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDGKBlattnummerFocusGained
         oldDgkBlattnummer = txtDGKBlattnummer.getText();
-    }                                                                                //GEN-LAST:event_txtDGKBlattnummerFocusGained
+    }//GEN-LAST:event_txtDGKBlattnummerFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLaufendeNummerFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLaufendeNummerFocusGained
+    private void txtLaufendeNummerFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLaufendeNummerFocusGained
         oldLaufendeNummer = txtLaufendeNummer.getText();
-    }                                                                                //GEN-LAST:event_txtLaufendeNummerFocusGained
+    }//GEN-LAST:event_txtLaufendeNummerFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         try {
             if (BillingPopup.doBilling(
                             "nivppdf",
@@ -1027,7 +1027,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1048,8 +1048,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(NivellementPunktEditor.this)) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
