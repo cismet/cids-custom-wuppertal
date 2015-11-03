@@ -41,6 +41,7 @@ import java.beans.PropertyChangeListener;
 
 import java.net.URL;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +60,9 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -93,6 +97,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_picturePanel.class);
+
+    private static final String REPORT_ACTION_TAG_BLATT = "baulast.report.blatt@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_PLAN = "baulast.report.plan@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_RASTER = "baulast.report.raster@WUNDA_BLAU";
+    private static final String OPEN_ACTION_TAG = "baulast.renderer.openbuttonenabled@WUNDA_BLAU";
+
 //    private static final String[] MD5_PROPERTY_NAMES = new String[]{"lageplan_md5", "textblatt_md5"};
     private static final String TEXTBLATT_PROPERTY = "textblatt";
     private static final String LAGEPLAN_PROPERTY = "lageplan";
@@ -167,8 +177,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink2;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink3;
     private org.jdesktop.swingx.JXBusyLabel jxLBusyMeasure;
     private org.jdesktop.swingx.JXHyperlink jxlUmleitung;
     private javax.swing.JLabel lblArea;
@@ -180,6 +194,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblUmleitung2;
     private javax.swing.JList lstPictures;
     private de.cismet.tools.gui.panels.LayeredAlertPanel measureComponentPanel;
+    private de.cismet.tools.gui.RoundedPanel panBlattberichte;
     private javax.swing.JPanel panCenter;
     private javax.swing.JPanel panPicNavigation;
     private javax.swing.JPanel pnlAlert;
@@ -197,6 +212,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel5;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel6;
     private de.cismet.tools.gui.RoundedPanel spDocuments;
     private javax.swing.JToggleButton togCalibrate;
     private javax.swing.JToggleButton togMessenLine;
@@ -275,6 +291,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     }
                 }
             });
+
+        jXHyperlink1.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT)
+                    && BillingPopup.isBillingAllowed());
+        jXHyperlink2.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN)
+                    && BillingPopup.isBillingAllowed());
+        jXHyperlink3.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER)
+                    && BillingPopup.isBillingAllowed());
+        btnOpen.setEnabled(ObjectRendererUtils.checkActionTag(OPEN_ACTION_TAG));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -393,6 +417,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
         btnOpen = new javax.swing.JButton();
+        panBlattberichte = new de.cismet.tools.gui.RoundedPanel();
+        semiRoundedPanel6 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
+        jXHyperlink2 = new org.jdesktop.swingx.JXHyperlink();
+        jXHyperlink3 = new org.jdesktop.swingx.JXHyperlink();
         panCenter = new javax.swing.JPanel();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlAlert);
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -454,9 +484,10 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(800, 700));
         setLayout(new java.awt.BorderLayout());
 
-        panPicNavigation.setMinimumSize(new java.awt.Dimension(140, 216));
+        panPicNavigation.setMinimumSize(new java.awt.Dimension(200, 216));
+        panPicNavigation.setName(""); // NOI18N
         panPicNavigation.setOpaque(false);
-        panPicNavigation.setPreferredSize(new java.awt.Dimension(140, 216));
+        panPicNavigation.setPreferredSize(new java.awt.Dimension(200, 216));
         panPicNavigation.setLayout(new java.awt.GridBagLayout());
 
         spDocuments.setLayout(new java.awt.GridBagLayout());
@@ -516,15 +547,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 7);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 7);
         panPicNavigation.add(spDocuments, gridBagConstraints);
 
-        rpSeiten.setMaximumSize(new java.awt.Dimension(75, 140));
-        rpSeiten.setMinimumSize(new java.awt.Dimension(75, 140));
-        rpSeiten.setPreferredSize(new java.awt.Dimension(75, 140));
+        rpSeiten.setMaximumSize(new java.awt.Dimension(75, 200));
+        rpSeiten.setMinimumSize(new java.awt.Dimension(75, 200));
+        rpSeiten.setPreferredSize(new java.awt.Dimension(75, 200));
 
         scpPictureList.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         scpPictureList.setMaximumSize(new java.awt.Dimension(75, 125));
@@ -557,8 +587,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 7);
         panPicNavigation.add(rpSeiten, gridBagConstraints);
 
@@ -616,7 +647,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 7);
         panPicNavigation.add(rpMessdaten, gridBagConstraints);
@@ -624,7 +655,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         jPanel1.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.weighty = 1.0;
         panPicNavigation.add(jPanel1, gridBagConstraints);
 
@@ -791,10 +822,89 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 7);
         panPicNavigation.add(rpControls, gridBagConstraints);
+
+        panBlattberichte.setLayout(new java.awt.GridBagLayout());
+
+        semiRoundedPanel6.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Baulastbericht");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        semiRoundedPanel6.add(jLabel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panBlattberichte.add(semiRoundedPanel6, gridBagConstraints);
+
+        jXHyperlink1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        jXHyperlink1.setText("mit Textblättern");
+        jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        panBlattberichte.add(jXHyperlink1, gridBagConstraints);
+
+        jXHyperlink2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        jXHyperlink2.setText("<html>mit Textblättern<br/> und Plänen");
+        jXHyperlink2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        panBlattberichte.add(jXHyperlink2, gridBagConstraints);
+
+        jXHyperlink3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        jXHyperlink3.setText("<html>mit Textblatt, Plan und<br/>Rasterdokumenten");
+        jXHyperlink3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        panBlattberichte.add(jXHyperlink3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 7);
+        panPicNavigation.add(panBlattberichte, gridBagConstraints);
 
         add(panPicNavigation, java.awt.BorderLayout.WEST);
 
@@ -1018,6 +1128,45 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         this.validate();
         this.repaint();
     } //GEN-LAST:event_jxlUmleitungActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink3ActionPerformed
+        Alb_baulastReportDialog.getInstance()
+                .showAndDoDownload(
+                    BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER,
+                    Arrays.asList(new CidsBean[] { cidsBean }),
+                    this);
+    }                                                                                //GEN-LAST:event_jXHyperlink3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+        Alb_baulastReportDialog.getInstance()
+                .showAndDoDownload(
+                    BaulastenReportGenerator.Type.TEXTBLATT,
+                    Arrays.asList(new CidsBean[] { cidsBean }),
+                    this);
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
+        Alb_baulastReportDialog.getInstance()
+                .showAndDoDownload(
+                    BaulastenReportGenerator.Type.TEXTBLATT_PLAN,
+                    Arrays.asList(new CidsBean[] { cidsBean }),
+                    this);
+    }                                                                                //GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
      * DOCUMENT ME!

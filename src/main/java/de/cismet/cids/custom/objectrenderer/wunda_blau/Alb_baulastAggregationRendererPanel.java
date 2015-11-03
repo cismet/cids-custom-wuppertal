@@ -91,6 +91,10 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     private static final Color BEIDES_COLOR = Color.RED;
     private static final double BUFFER = 0.005;
 
+    private static final String REPORT_ACTION_TAG_BLATT = "baulast.report.blatt@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_PLAN = "baulast.report.plan@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_RASTER = "baulast.report.raster@WUNDA_BLAU";
+
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Alb_baulastAggregationRendererPanel.class);
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -361,17 +365,17 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedBaulasten = getSelectedBaulasten();
 
         if (selectedBaulasten.isEmpty()) {
@@ -398,7 +402,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                             "no.yet",
                                             (Geometry)null,
                                             new ProductGroupAmount("ea_bla", selectedBaulasten.size()))) {
-                                if (DownloadManagerDialog.showAskingForUserTitle(
+                                if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                                 Alb_baulastAggregationRendererPanel.this)) {
                                     String projectname = txtProjectname.getText();
                                     if ((projectname == null) || (projectname.trim().length() == 0)) {
@@ -421,7 +425,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                     return null;
                 }
             }.execute();
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -494,9 +498,15 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         tableSorter.setSortKeys(sortKeys);
 
         final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
-        items.add(BaulastenReportGenerator.Type.TEXTBLATT);
-        items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN);
-        items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER);
+        if (ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && BillingPopup.isBillingAllowed()) {
+            items.add(BaulastenReportGenerator.Type.TEXTBLATT);
+        }
+        if (ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && BillingPopup.isBillingAllowed()) {
+            items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN);
+        }
+        if (ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && BillingPopup.isBillingAllowed()) {
+            items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER);
+        }
         final boolean enabled = BillingPopup.isBillingAllowed() && !items.isEmpty();
 
         cmbType.setModel(new DefaultComboBoxModel(items.toArray(new BaulastenReportGenerator.Type[0])));

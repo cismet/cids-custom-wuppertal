@@ -72,16 +72,25 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     private static final String WEB_DAV_PASSWORD;
 
     static {
-        final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
-        String pass = bundle.getString("password");
+        String user = "";
+        String pass = "";
+        String dir = "";
 
-        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-            pass = PasswordEncrypter.decryptString(pass);
+        try {
+            final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
+            pass = bundle.getString("password");
+            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
+                pass = PasswordEncrypter.decryptString(pass);
+            }
+            user = bundle.getString("user");
+            dir = bundle.getString("url_baulasten");
+        } catch (final Exception ex) {
+            LOG.warn("could not load props from bundle", ex);
         }
 
         WEB_DAV_PASSWORD = pass;
-        WEB_DAV_USER = bundle.getString("user");
-        BAULASTEN_DIRECTORY = bundle.getString("url_baulasten");
+        WEB_DAV_USER = user;
+        BAULASTEN_DIRECTORY = dir;
     }
 
     //~ Enums ------------------------------------------------------------------
