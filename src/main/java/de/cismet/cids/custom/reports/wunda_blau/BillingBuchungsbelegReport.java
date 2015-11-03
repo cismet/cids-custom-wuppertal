@@ -329,7 +329,8 @@ public class BillingBuchungsbelegReport {
                 }
             };
 
-        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(ComponentRegistry.getRegistry().getMainWindow())) {
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
             String filename;
             String title;
