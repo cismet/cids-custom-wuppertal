@@ -226,10 +226,10 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     pointFeatures.add(dsf);
                 }
             }
-            final PFeature pf = new PFeature(f, map);
-            if (!pf.hasHole()) {
-                geomWrappers.add(new GeomWrapper(f.getGeometry().buffer(buffer), name, selected));
-            }
+//            final PFeature pf = new PFeature(f, map);
+//            if (!pf.hasHole()) {
+            geomWrappers.add(new GeomWrapper(f.getGeometry().buffer(buffer), name, selected));
+//            }
 //            }
         }
         tableModel = new NasTableModel();
