@@ -237,12 +237,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             lblBearbeitetAm.setVisible(false);
         }
 
-        jXHyperlink1.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT)
-                    && BillingPopup.isBillingAllowed());
-        jXHyperlink2.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN)
-                    && BillingPopup.isBillingAllowed());
-        jXHyperlink3.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER)
-                    && BillingPopup.isBillingAllowed());
+        try {
+            jXHyperlink1.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT)
+                        && BillingPopup.isBillingAllowed());
+            jXHyperlink2.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN)
+                        && BillingPopup.isBillingAllowed());
+            jXHyperlink3.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER)
+                        && BillingPopup.isBillingAllowed());
+        } catch (final Exception ex) {
+            // needed for netbeans gui editor
+            log.info("exception while checking action tags", ex);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
