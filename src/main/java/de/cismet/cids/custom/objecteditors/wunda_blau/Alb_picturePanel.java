@@ -53,6 +53,7 @@ import java.util.logging.Level;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
@@ -85,8 +86,6 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import de.cismet.tools.gui.panels.AlertPanel;
 import de.cismet.tools.gui.panels.LayeredAlertPanel;
-
-import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastblattEditor.log;
 
 /**
  * DOCUMENT ME!
@@ -169,6 +168,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private PictureReaderWorker pictureReaderWorker;
     private boolean umleitungChangedFlag = false;
     private boolean showUmleitung = true;
+    private boolean showDocTypePanelEnabled = true;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrpDocs;
     private javax.swing.JButton btnHome;
@@ -231,16 +231,18 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * Creates new form Alb_picturePanel.
      */
     public Alb_picturePanel() {
-        this(false);
+        this(false, true);
     }
 
     /**
      * Creates a new Alb_picturePanel object.
      *
-     * @param  selfPersisting  DOCUMENT ME!
+     * @param  selfPersisting           DOCUMENT ME!
+     * @param  showDocTypePanelEnabled  DOCUMENT ME!
      */
-    public Alb_picturePanel(final boolean selfPersisting) {
+    public Alb_picturePanel(final boolean selfPersisting, final boolean showDocTypePanelEnabled) {
         this.selfPersisting = selfPersisting;
+        this.showDocTypePanelEnabled = showDocTypePanelEnabled;
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
@@ -611,8 +613,6 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         btnGrpDocs.add(btnPlan);
         btnPlan.setText("Plan");
-        btnPlan.setMaximumSize(new java.awt.Dimension(53, 33));
-        btnPlan.setMinimumSize(new java.awt.Dimension(53, 33));
         btnPlan.setPreferredSize(new java.awt.Dimension(53, 33));
         btnPlan.addActionListener(new java.awt.event.ActionListener() {
 
@@ -626,8 +626,6 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         btnGrpDocs.add(btnTextblatt);
         btnTextblatt.setSelected(true);
         btnTextblatt.setText("Textblatt");
-        btnTextblatt.setMaximumSize(new java.awt.Dimension(53, 33));
-        btnTextblatt.setMinimumSize(new java.awt.Dimension(53, 33));
         btnTextblatt.setPreferredSize(new java.awt.Dimension(53, 33));
         btnTextblatt.addActionListener(new java.awt.event.ActionListener() {
 
@@ -646,13 +644,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         spDocuments.add(jPanel2, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 7);
-        panPicNavigation.add(spDocuments, gridBagConstraints);
+        if (showDocTypePanelEnabled) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 7);
+            panPicNavigation.add(spDocuments, gridBagConstraints);
+        }
 
         rpSeiten.setLayout(new java.awt.GridBagLayout());
 
@@ -717,7 +717,6 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         rpControls.add(semiRoundedPanel4, gridBagConstraints);
 
-        jPanel3.setMaximumSize(new java.awt.Dimension(127, 282));
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridLayout(0, 1, 5, 5));
 
@@ -727,6 +726,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         btnOpen.setToolTipText("Download zum Öffnen in externer Anwendung");
         btnOpen.setFocusPainted(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnOpen.setMinimumSize(new java.awt.Dimension(89, 29));
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -744,6 +744,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         togCalibrate.setEnabled(false);
         togCalibrate.setFocusPainted(false);
         togCalibrate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togCalibrate.setMinimumSize(new java.awt.Dimension(89, 29));
         togCalibrate.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -760,6 +761,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         togMessenPoly.setToolTipText("Messen (Polygon)");
         togMessenPoly.setFocusPainted(false);
         togMessenPoly.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togMessenPoly.setMinimumSize(new java.awt.Dimension(89, 29));
         togMessenPoly.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -776,6 +778,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         togMessenLine.setToolTipText("Messen (Linie)");
         togMessenLine.setFocusPainted(false);
         togMessenLine.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togMessenLine.setMinimumSize(new java.awt.Dimension(89, 29));
         togMessenLine.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -792,6 +795,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         togZoom.setToolTipText("Zoomen");
         togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togZoom.setMinimumSize(new java.awt.Dimension(89, 29));
         togZoom.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -809,6 +813,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         togPan.setToolTipText("Verschieben");
         togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togPan.setMinimumSize(new java.awt.Dimension(89, 29));
         togPan.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -824,6 +829,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         btnHome.setToolTipText("Übersicht");
         btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnHome.setMinimumSize(new java.awt.Dimension(89, 29));
         btnHome.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1554,6 +1560,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             alert.setContent(alertWarnMessage);
             alert.setVisible(show);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JPanel getDocTypePanel() {
+        return jPanel2;
     }
 
     /**
