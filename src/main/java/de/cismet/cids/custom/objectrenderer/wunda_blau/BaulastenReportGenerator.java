@@ -132,11 +132,13 @@ public class BaulastenReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param   dir  DOCUMENT ME!
+     * @param   dir                 DOCUMENT ME!
+     * @param   fallbackPageNumber  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static MetadataInfo createMetadataInfoFromTiff(final com.twelvemonkeys.imageio.metadata.Directory dir) {
+    public static MetadataInfo createMetadataInfoFromTiff(final com.twelvemonkeys.imageio.metadata.Directory dir,
+            final int fallbackPageNumber) {
         if (dir == null) {
             return null;
         }
@@ -145,8 +147,10 @@ public class BaulastenReportGenerator {
         final Entry imageHeightEntry = dir.getEntryById(TIFF.TAG_IMAGE_HEIGHT);
         final Entry xResolutionEntry = dir.getEntryById(TIFF.TAG_X_RESOLUTION);
         final Entry yResolutionEntry = dir.getEntryById(TIFF.TAG_Y_RESOLUTION);
+
+        final int pageNumber = (pageNumberEntry != null) ? (((int[])pageNumberEntry.getValue())[0] + 1)
+                                                         : fallbackPageNumber;
         try {
-            final int pageNumber = ((int[])pageNumberEntry.getValue())[0] + 1;
             final long imageWidth = (Long)imageWidthEntry.getValue();
             final long imageHeight = (Long)imageHeightEntry.getValue();
             final int xResolution = ((Rational)xResolutionEntry.getValue()).intValue();
@@ -254,7 +258,7 @@ public class BaulastenReportGenerator {
                                     for (int i = 0; i < dirs.directoryCount(); i++) {
                                         final com.twelvemonkeys.imageio.metadata.Directory subDir = dirs.getDirectory(
                                                 i);
-                                        final MetadataInfo metadataInfo = createMetadataInfoFromTiff(subDir);
+                                        final MetadataInfo metadataInfo = createMetadataInfoFromTiff(subDir, i + 1);
                                         if (metadataInfo != null) {
                                             metadatainfoPerPage.put(metadataInfo.getPageNumber(), metadataInfo);
                                         }
