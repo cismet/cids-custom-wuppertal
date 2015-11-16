@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 
+import java.io.File;
 import java.io.InputStream;
 
 import java.net.URL;
@@ -49,6 +50,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cismap.commons.gui.printing.JasperDownload;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
+import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -151,8 +153,8 @@ public class BaulastenReportGenerator {
         final int pageNumber = (pageNumberEntry != null) ? (((int[])pageNumberEntry.getValue())[0] + 1)
                                                          : fallbackPageNumber;
         try {
-            final long imageWidth = (Long)imageWidthEntry.getValue();
-            final long imageHeight = (Long)imageHeightEntry.getValue();
+            final int imageWidth = Integer.parseInt(imageWidthEntry.getValue().toString());
+            final int imageHeight = Integer.parseInt(imageHeightEntry.getValue().toString());
             final int xResolution = ((Rational)xResolutionEntry.getValue()).intValue();
             final int yResolution = ((Rational)yResolutionEntry.getValue()).intValue();
 
