@@ -134,13 +134,11 @@ public class BaulastenReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param   dir                 DOCUMENT ME!
-     * @param   fallbackPageNumber  DOCUMENT ME!
+     * @param   dir  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static MetadataInfo createMetadataInfoFromTiff(final com.twelvemonkeys.imageio.metadata.Directory dir,
-            final int fallbackPageNumber) {
+    public static MetadataInfo createMetadataInfoFromTiff(final com.twelvemonkeys.imageio.metadata.Directory dir) {
         if (dir == null) {
             return null;
         }
@@ -150,8 +148,7 @@ public class BaulastenReportGenerator {
         final Entry xResolutionEntry = dir.getEntryById(TIFF.TAG_X_RESOLUTION);
         final Entry yResolutionEntry = dir.getEntryById(TIFF.TAG_Y_RESOLUTION);
 
-        final int pageNumber = (pageNumberEntry != null) ? (((int[])pageNumberEntry.getValue())[0] + 1)
-                                                         : fallbackPageNumber;
+        final int pageNumber = (pageNumberEntry != null) ? (((int[])pageNumberEntry.getValue())[0] + 1) : -1;
         try {
             final int imageWidth = Integer.parseInt(imageWidthEntry.getValue().toString());
             final int imageHeight = Integer.parseInt(imageHeightEntry.getValue().toString());
@@ -256,14 +253,41 @@ public class BaulastenReportGenerator {
                                 } else if (MultiPagePictureReader.CODEC_TIFF.equals(reader.getCodec())) {
                                     final com.twelvemonkeys.imageio.metadata.Directory dir = exif.read(ImageIO
                                                     .createImageInputStream(is));
+                                    final Map<Integer, MetadataInfo> metadataInfoPerPageFallBack = new HashMap();
                                     final CompoundDirectory dirs = (CompoundDirectory)dir;
+                                    boolean exifPageError = false;
                                     for (int i = 0; i < dirs.directoryCount(); i++) {
                                         final com.twelvemonkeys.imageio.metadata.Directory subDir = dirs.getDirectory(
                                                 i);
-                                        final MetadataInfo metadataInfo = createMetadataInfoFromTiff(subDir, i + 1);
+                                        final MetadataInfo metadataInfo = createMetadataInfoFromTiff(subDir);
                                         if (metadataInfo != null) {
+                                            if ((metadataInfo.getPageNumber() <= 0)
+                                                        || (metadataInfo.getPageNumber() > dirs.directoryCount())
+                                                        || metadataInfoPerPageFallBack.keySet().contains(
+                                                            metadataInfo.getPageNumber())) {
+                                                // between 1 and max, and not a duplicate
+                                                exifPageError = true;
+                                            }
                                             metadatainfoPerPage.put(metadataInfo.getPageNumber(), metadataInfo);
+                                            metadataInfoPerPageFallBack.put(i + 1, metadataInfo);
+                                        } else {
+                                            exifPageError = true;
                                         }
+                                    }
+                                    if (metadataInfoPerPageFallBack.size() != dirs.directoryCount()) {
+                                        // missing exif data ?
+                                        exifPageError = true;
+                                    }
+                                    if (exifPageError) {
+                                        // correct the pagenumber
+                                        for (final int pageNumber : metadataInfoPerPageFallBack.keySet()) {
+                                            final MetadataInfo metadataInfo = metadataInfoPerPageFallBack.get(
+                                                    pageNumber);
+                                            metadataInfo.setPageNumber(pageNumber);
+                                        }
+                                        // using the fallback hashmap
+                                        metadatainfoPerPage.clear();
+                                        metadatainfoPerPage.putAll(metadataInfoPerPageFallBack);
                                     }
                                 }
 
