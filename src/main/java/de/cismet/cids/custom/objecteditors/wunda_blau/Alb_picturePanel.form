@@ -252,7 +252,7 @@
                 <Component class="org.jdesktop.swingx.JXHyperlink" name="jXHyperlink3">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf_blr.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;html&gt;mit Textblatt, Plan und&lt;br/&gt;Rasterdokumenten"/>
                   </Properties>

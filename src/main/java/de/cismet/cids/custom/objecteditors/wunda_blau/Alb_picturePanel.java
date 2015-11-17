@@ -561,7 +561,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
         jPanel4.add(jXHyperlink2, gridBagConstraints);
 
-        jXHyperlink3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        jXHyperlink3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf_blr.png"))); // NOI18N
         jXHyperlink3.setText("<html>mit Textblatt, Plan und<br/>Rasterdokumenten");
         jXHyperlink3.addActionListener(new java.awt.event.ActionListener() {
 

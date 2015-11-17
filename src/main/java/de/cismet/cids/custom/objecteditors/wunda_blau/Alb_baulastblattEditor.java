@@ -871,7 +871,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
         panBlattberichte.add(jXHyperlink2, gridBagConstraints);
 
-        jXHyperlink3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        jXHyperlink3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf_blr.png"))); // NOI18N
         jXHyperlink3.setText("<html>mit Textblättern, Plänen<br/>und Rasterdateien");
         jXHyperlink3.addActionListener(new java.awt.event.ActionListener() {
 
