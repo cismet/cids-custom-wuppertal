@@ -1034,6 +1034,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         final int laufendeNr = Integer.parseInt(userInput);
 
                         final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
+                        newBean.setProperty("geprueft", false);
                         newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
                         newBean.setProperty("blattnummer", txtBlattnummer.getText());
                         newBean.setProperty("bearbeitet_von", SessionManager.getSession().getUser().getName());
