@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UebersichtBaulasten" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportScriptlet" uuid="1bac6412-4c0b-4e58-ad48-7da27f1409be">
+	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="TYPE" class="java.lang.String"/>
+	<parameter name="STARTINGPAGES" class="java.util.Map"/>
+	<parameter name="IMAGEAVAILABLE" class="java.util.Map"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="blattnummer" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="laufende_nummer" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="art" class="java.util.List">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="eintragungsdatum" class="java.util.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="befristungsdatum" class="java.util.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="geschlossen_am" class="java.util.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="loeschungsdatum" class="java.util.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="geprueft" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<title>
+		<band height="70">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="25" uuid="212ba807-7c66-4708-9065-c29c4936e829"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Enthaltene Baulasten]]></text>
+			</staticText>
+			<line>
+				<reportElement x="5" y="69" width="545" height="1" forecolor="#C0C0C0" uuid="3121b21a-faf0-4c94-bae6-2321733609c5"/>
+			</line>
+			<staticText>
+				<reportElement x="52" y="39" width="451" height="30" uuid="63c4451e-1976-4b9e-9998-db1244cbfc43"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Etwaige Abbildungen in diesem Dokument werden nur in reduzierter Auflösung dargestellt. Baulasten, die als nicht geprüft dargestellt werden, befinden sich derzeit im Berabeitungszugriff.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="5" y="39" width="545" height="1" forecolor="#C0C0C0" uuid="f3bdbfc6-cf24-4c86-b275-babbf085723c"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="25" width="555" height="15" uuid="9eeef841-4b12-4516-8959-67d888d042cd"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TYPE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="46">
+			<line>
+				<reportElement x="5" y="44" width="545" height="1" uuid="c5d6c1f7-78a8-4823-a094-d4640b9248de"/>
+			</line>
+			<staticText>
+				<reportElement x="5" y="0" width="79" height="40" uuid="2f3f1d00-20c7-4fb8-8f1f-bfc7e15f1e38"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Blattnummer]]></text>
+			</staticText>
+			<line>
+				<reportElement x="84" y="15" width="1" height="30" uuid="a21dc7a4-9329-4562-b2ad-61b8b8a70f2a"/>
+			</line>
+			<staticText>
+				<reportElement x="85" y="0" width="44" height="40" uuid="5aba1b2b-921a-4a7a-a9e1-86b9eeac516d"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[lfd. Nr.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="129" y="15" width="1" height="30" uuid="0dabd9ee-c953-4046-8d4f-10f06e980d77"/>
+			</line>
+			<staticText>
+				<reportElement x="130" y="0" width="49" height="40" uuid="71cba0a2-54b5-468d-9b75-55f694b23f83"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ab Seite]]></text>
+			</staticText>
+			<line>
+				<reportElement x="179" y="15" width="1" height="30" uuid="2b202ed7-2fbf-4971-8e62-b1b46f7f0a5f"/>
+			</line>
+			<staticText>
+				<reportElement x="180" y="0" width="79" height="40" uuid="65eeaa45-14e0-44fc-b604-0eff85ef908f"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Art]]></text>
+			</staticText>
+			<line>
+				<reportElement x="259" y="15" width="1" height="30" uuid="d4245e36-89a2-4eec-a703-e848bc77819b"/>
+			</line>
+			<staticText>
+				<reportElement x="260" y="0" width="59" height="40" uuid="7a05eb8b-184c-4503-913d-4174ce5b5fb8"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Eintragung]]></text>
+			</staticText>
+			<line>
+				<reportElement x="319" y="15" width="1" height="30" uuid="119bd1c8-7c0f-4bf6-90a6-bbd460ee90eb"/>
+			</line>
+			<staticText>
+				<reportElement x="320" y="0" width="59" height="40" uuid="bc7efb25-e9ca-4955-9cac-f0fb4ed9212a"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Befristung]]></text>
+			</staticText>
+			<line>
+				<reportElement x="379" y="15" width="1" height="30" uuid="39955cad-6010-495d-be56-7f0abb8010cf"/>
+			</line>
+			<staticText>
+				<reportElement x="380" y="0" width="59" height="40" uuid="e265409d-cafd-40c6-86c1-8139107ed220"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Schließung]]></text>
+			</staticText>
+			<line>
+				<reportElement x="439" y="15" width="1" height="30" uuid="517569a7-b573-4ed8-ac91-f054cff263d0"/>
+			</line>
+			<staticText>
+				<reportElement x="440" y="0" width="59" height="40" uuid="36c653db-37f4-4df8-9050-3be4e159441b"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Löschung]]></text>
+			</staticText>
+			<line>
+				<reportElement x="499" y="15" width="1" height="30" uuid="886bfff6-c692-4f9a-bb0c-27dade3179bd"/>
+			</line>
+			<staticText>
+				<reportElement x="500" y="0" width="49" height="40" uuid="a7306a93-5012-43b2-b031-aa9d01995400"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Geprüft]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<rectangle>
+				<reportElement x="5" y="1" width="545" height="18" backcolor="#C0C0C0" uuid="fd3c5d30-06fa-40dc-a5c9-2eb58e47ffdf">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!((Boolean)$P{IMAGEAVAILABLE}.get($F{id})).booleanValue())]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="5" y="0" width="79" height="20" uuid="8e90c3ab-2f91-4ea1-86b0-39a49e4f2d7c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{blattnummer}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="84" y="0" width="1" height="20" uuid="886a0c7f-3368-4126-9060-8c030f14c378"/>
+			</line>
+			<textField>
+				<reportElement x="85" y="0" width="44" height="20" uuid="ed8daf67-07ac-4773-bd3d-25fbfd48dd53"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laufende_nummer}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="129" y="0" width="1" height="20" uuid="4876891c-7b32-424b-992f-463138244851"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="130" y="0" width="49" height="20" uuid="d5c650f7-9dc4-499b-8234-ef5dd6e18417"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{STARTINGPAGES}.get($F{id}) != null) ? $P{STARTINGPAGES}.get($F{id}) : "-"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="179" y="0" width="1" height="20" uuid="17ca26f6-2c48-4eed-9426-24596bf7b6b0"/>
+			</line>
+			<textField>
+				<reportElement x="180" y="0" width="79" height="20" uuid="fc18ec43-d4d3-473c-9112-0d91725a4aed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils.propertyPrettyPrint($F{art})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="259" y="0" width="1" height="20" uuid="e47e45a3-c676-40f9-954a-1044380b19f6"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="260" y="0" width="59" height="20" uuid="6b79509c-c73b-4ac7-91d4-5c5b0331847c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format($F{eintragungsdatum})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="319" y="0" width="1" height="20" uuid="c8969a7c-63cb-47ef-8d25-e1723acf8405"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="320" y="0" width="59" height="20" uuid="b09cd979-5936-4681-a77e-321c3ce71277"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format($F{befristungsdatum})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="379" y="0" width="1" height="20" uuid="33a0d79e-cf4a-4b07-a0da-2ebc79f905ad"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="0" width="59" height="20" uuid="c7b6adac-5d26-4690-9de7-3701e0b6eefb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format($F{geschlossen_am})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="439" y="0" width="1" height="20" uuid="06c4d713-1706-4189-8122-803b8b209caa"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="440" y="0" width="59" height="20" uuid="191713ad-016a-4830-8417-ffece9479ba1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format($F{loeschungsdatum})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="499" y="0" width="1" height="20" uuid="55e42b34-e871-4d22-9b6b-59692ad8839e"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="500" y="0" width="49" height="20" uuid="f024b374-6f95-41e8-9e51-19478016df2e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{geprueft}) ? "ja" : "nein"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
