@@ -12,6 +12,11 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
+import Sirius.server.newuser.User;
+
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.jfif.JfifDescriptor;
@@ -26,11 +31,8 @@ import com.twelvemonkeys.imageio.metadata.exif.Rational;
 import com.twelvemonkeys.imageio.metadata.exif.TIFF;
 
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
 
-import java.io.File;
 import java.io.InputStream;
 
 import java.net.URL;
@@ -45,14 +47,13 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
-import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -73,6 +74,7 @@ public class BaulastenReportGenerator {
     private static final String PARAMETER_TYPE = "TYPE";
     private static final String PARAMETER_STARTINGPAGES = "STARTINGPAGES";
     private static final String PARAMETER_IMAGEAVAILABLE = "IMAGEAVAILABLE";
+    private static final String PARAMETER_FABRICATIONNOTICE = "FABRICATIONNOTICE";
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             BaulastenReportGenerator.class);
 
@@ -132,6 +134,32 @@ public class BaulastenReportGenerator {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   user  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    public static String createFertigungsVermerk(final User user) throws ConnectionException {
+        final String fertigungsVermerk = SessionManager.getConnection()
+                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU");
+        if (fertigungsVermerk != null) {
+            return fertigungsVermerk;
+        } else {
+            final CidsBean billingLogin = (CidsBean)BillingPopup.getInstance().getExternalUser(user);
+            if (billingLogin != null) {
+                final CidsBean billingKunde = (CidsBean)billingLogin.getProperty("kunde");
+                if (billingKunde != null) {
+                    return (String)billingKunde.getProperty("name");
+                }
+            }
+            return user.getName();
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -447,8 +475,12 @@ public class BaulastenReportGenerator {
                         parameters.put(PARAMETER_TYPE, type.toString());
                         parameters.put(PARAMETER_STARTINGPAGES, startingPages);
                         parameters.put(PARAMETER_IMAGEAVAILABLE, imageAvailable);
+                        parameters.put(
+                            PARAMETER_FABRICATIONNOTICE,
+                            createFertigungsVermerk(SessionManager.getSession().getUser()));
                         return new JRBeanCollectionDataSource(reportBeans);
                     } catch (final Exception ex) {
+                        LOG.warn(ex, ex);
                         return null;
                     }
                 }
