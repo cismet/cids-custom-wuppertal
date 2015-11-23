@@ -629,6 +629,17 @@ public class BillingPopup extends javax.swing.JDialog {
      * @return  DOCUMENT ME!
      */
     public CidsBean getExternalUser() {
+        return getExternalUser(SessionManager.getSession().getUser());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   user  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getExternalUser(final User user) {
         final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
         if (MB_MC == null) {
             if (LOG.isDebugEnabled()) {
@@ -639,7 +650,7 @@ public class BillingPopup extends javax.swing.JDialog {
         }
         String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
         query += "FROM " + MB_MC.getTableName();
-        query += " WHERE name = '" + SessionManager.getSession().getUser().getName() + "'";
+        query += " WHERE name = '" + user.getName() + "'";
 
         CidsBean externalUser = null;
         try {
