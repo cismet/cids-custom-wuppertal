@@ -157,7 +157,7 @@ public class BaulastenReportGenerator {
                     return (String)billingKunde.getProperty("name");
                 }
             }
-            return user.getName();
+            return "";
         }
     }
 
