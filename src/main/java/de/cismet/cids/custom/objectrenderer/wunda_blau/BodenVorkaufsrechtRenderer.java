@@ -13,7 +13,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.Boden_vorkaufsrechtEditor;
+import de.cismet.cids.custom.objecteditors.wunda_blau.BodenVorkaufsrechtEditor;
 
 /**
  * DOCUMENT ME!
@@ -21,14 +21,14 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.Boden_vorkaufsrechtEditor;
  * @author   verkenis
  * @version  $Revision$, $Date$
  */
-public class Boden_vorkaufsrechtRenderer extends Boden_vorkaufsrechtEditor {
+public class BodenVorkaufsrechtRenderer extends BodenVorkaufsrechtEditor {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new Alb_baulastRenderer object.
      */
-    public Boden_vorkaufsrechtRenderer() {
+    public BodenVorkaufsrechtRenderer() {
         super(false);
     }
 

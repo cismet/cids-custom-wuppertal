@@ -711,7 +711,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_area}"),
                 cbGeomArea,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "");
         binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomArea).getConverter());
         bindingGroup.addBinding(binding);
 
