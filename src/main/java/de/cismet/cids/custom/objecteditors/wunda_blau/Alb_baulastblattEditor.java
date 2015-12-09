@@ -109,9 +109,9 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     private static final String FLURSTUECKE_BEGUENSTIGT = "flurstuecke_beguenstigt";
     private static final String ACTION_TAG = "custom.baulast.document@WUNDA_BLAU";
 
-    private static final String REPORT_ACTION_TAG_BLATT = "baulast.report.blatt@WUNDA_BLAU";
-    private static final String REPORT_ACTION_TAG_PLAN = "baulast.report.plan@WUNDA_BLAU";
-    private static final String REPORT_ACTION_TAG_RASTER = "baulast.report.raster@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_BLATT = "baulast.report.blatt_disabled@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_PLAN = "baulast.report.plan_disabled@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_RASTER = "baulast.report.raster_disabled@WUNDA_BLAU";
 
     private static final Converter<java.sql.Date, String> DATE_TO_STRING = new Converter<Date, String>() {
 
@@ -243,11 +243,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         }
 
         try {
-            jXHyperlink1.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT)
+            jXHyperlink1.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT)
                         && BillingPopup.isBillingAllowed());
-            jXHyperlink2.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN)
+            jXHyperlink2.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN)
                         && BillingPopup.isBillingAllowed());
-            jXHyperlink3.setEnabled(ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER)
+            jXHyperlink3.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER)
                         && BillingPopup.isBillingAllowed());
         } catch (final Exception ex) {
             // needed for netbeans gui editor
@@ -987,7 +987,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLaufendeNummernValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstLaufendeNummernValueChanged
+    private void lstLaufendeNummernValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLaufendeNummernValueChanged
         final Object selectionObj = lstLaufendeNummern.getSelectedValue();
         if (selectionObj instanceof CidsBean) {
             bindingGroup.getBinding("bearbeitet_von").unbind();
@@ -1010,14 +1010,14 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             }
         }
         panBaulastEditor.setAllSelectedMetaObjects(selectedObjects);
-    }                                                                                             //GEN-LAST:event_lstLaufendeNummernValueChanged
+    }//GEN-LAST:event_lstLaufendeNummernValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddLaufendeNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummerActionPerformed
+    private void btnAddLaufendeNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLaufendeNummerActionPerformed
         try {
             final Collection<CidsBean> baulasten = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
             if (baulasten != null) {
@@ -1060,7 +1060,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 ex,
                 this);
         }
-    } //GEN-LAST:event_btnAddLaufendeNummerActionPerformed
+    }//GEN-LAST:event_btnAddLaufendeNummerActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1112,7 +1112,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLaufendeNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveLaufendeNummerActionPerformed
+    private void btnRemoveLaufendeNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLaufendeNummerActionPerformed
         final Object selection = lstLaufendeNummern.getSelectedValue();
         if (selection instanceof CidsBean) {
             try {
@@ -1178,37 +1178,37 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Löschen", e, this);
             }
         }
-    } //GEN-LAST:event_btnRemoveLaufendeNummerActionPerformed
+    }//GEN-LAST:event_btnRemoveLaufendeNummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-    }                                                                       //GEN-LAST:event_lblBackMouseClicked
+    }//GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, "card1");
         alb_picturePanel.getDocTypePanel().setVisible(false);
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }                                                                           //GEN-LAST:event_btnBackActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, "card2");
         alb_picturePanel.getDocTypePanel().setVisible(true);
         btnBack.setEnabled(true);
@@ -1226,37 +1226,37 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         }
         alb_picturePanel.clearCollisionWarning();
 //        alb_picturePanel.zoomToFeatureCollection();
-    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
+    }//GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-    }                                                                       //GEN-LAST:event_lblForwMouseClicked
+    }//GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPasteBaulastActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPasteBaulastActionPerformed
+    private void btnPasteBaulastActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteBaulastActionPerformed
         final CidsBean currentBaulastBean = panBaulastEditor.getCidsBean();
         try {
             EditorBeanInitializerStore.getInstance().initialize(currentBaulastBean);
         } catch (Exception ex) {
             log.error(ex, ex);
         }
-    }                                                                                   //GEN-LAST:event_btnPasteBaulastActionPerformed
+    }//GEN-LAST:event_btnPasteBaulastActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCopyBaulastActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCopyBaulastActionPerformed
+    private void btnCopyBaulastActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyBaulastActionPerformed
         final CidsBean currentBaulastBean = panBaulastEditor.getCidsBean();
         EditorBeanInitializerStore.getInstance()
                 .registerInitializer(currentBaulastBean.getMetaObject().getMetaClass(),
@@ -1292,17 +1292,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         }
                     });
         btnPasteBaulast.setEnabled(isPastePossible());
-    } //GEN-LAST:event_btnCopyBaulastActionPerformed
+    }//GEN-LAST:event_btnCopyBaulastActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBlattInMapMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBlattInMapMouseClicked
+    private void lblBlattInMapMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBlattInMapMouseClicked
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, true);
-    }                                                                             //GEN-LAST:event_lblBlattInMapMouseClicked
+    }//GEN-LAST:event_lblBlattInMapMouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1319,39 +1319,39 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBlattnummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBlattnummerFocusLost
+    private void txtBlattnummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBlattnummerFocusLost
         correctBlattnummer();
-    }                                                                           //GEN-LAST:event_txtBlattnummerFocusLost
+    }//GEN-LAST:event_txtBlattnummerFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(BaulastenReportGenerator.Type.TEXTBLATT, baulastenBeans, this);
-    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
+    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink2ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(BaulastenReportGenerator.Type.TEXTBLATT_PLAN, baulastenBeans, this);
-    }                                                                                //GEN-LAST:event_jXHyperlink2ActionPerformed
+    }//GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink3ActionPerformed
+    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink3ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER, baulastenBeans, this);
-    }                                                                                //GEN-LAST:event_jXHyperlink3ActionPerformed
+    }//GEN-LAST:event_jXHyperlink3ActionPerformed
 
     /**
      * DOCUMENT ME!
