@@ -229,6 +229,55 @@ public class BaulastenReportGenerator {
     /**
      * DOCUMENT ME!
      *
+     * @param   jobname            DOCUMENT ME!
+     * @param   selectedBaulasten  DOCUMENT ME!
+     * @param   jobnumber          DOCUMENT ME!
+     * @param   projectname        DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static Collection<? extends Download> generateRasterDownloads(
+            final String jobname,
+            final Collection<CidsBean> selectedBaulasten,
+            final String jobnumber,
+            final String projectname) throws Exception {
+        final Collection<Download> downloads = new ArrayList<Download>();
+        downloads.add(createJasperDownload(
+                Type.TEXTBLATT_PLAN_RASTER,
+                selectedBaulasten,
+                jobname,
+                jobnumber,
+                projectname));
+
+        final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
+        for (final CidsBean selectedBaulast : selectedBaulasten) {
+            final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
+                    selectedBaulast);
+            additionalFilesToDownload.addAll(urlListRasterdaten);
+        }
+
+        for (final URL additionalFileToDownload : additionalFilesToDownload) {
+            final String file = additionalFileToDownload.getFile()
+                        .substring(additionalFileToDownload.getFile().lastIndexOf('/') + 1);
+            final String filename = file.substring(0, file.lastIndexOf('.'));
+            final String extension = file.substring(file.lastIndexOf('.'));
+
+            downloads.add(new HttpDownload(
+                    additionalFileToDownload,
+                    null,
+                    jobname,
+                    file,
+                    filename,
+                    extension));
+        }
+        return downloads;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   type               DOCUMENT ME!
      * @param   selectedBaulasten  DOCUMENT ME!
      * @param   jobnumber          DOCUMENT ME!
@@ -249,36 +298,7 @@ public class BaulastenReportGenerator {
 
                     @Override
                     public Collection<? extends Download> fetchDownloads() throws Exception {
-                        final Collection<Download> downloads = new ArrayList<Download>();
-                        downloads.add(createJasperDownload(
-                                type,
-                                selectedBaulasten,
-                                jobname,
-                                jobnumber,
-                                projectname));
-
-                        final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
-                        for (final CidsBean selectedBaulast : selectedBaulasten) {
-                            final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
-                                    selectedBaulast);
-                            additionalFilesToDownload.addAll(urlListRasterdaten);
-                        }
-
-                        for (final URL additionalFileToDownload : additionalFilesToDownload) {
-                            final String file = additionalFileToDownload.getFile()
-                                        .substring(additionalFileToDownload.getFile().lastIndexOf('/') + 1);
-                            final String filename = file.substring(0, file.lastIndexOf('.'));
-                            final String extension = file.substring(file.lastIndexOf('.'));
-
-                            downloads.add(new HttpDownload(
-                                    additionalFileToDownload,
-                                    null,
-                                    jobname,
-                                    file,
-                                    filename,
-                                    extension));
-                        }
-                        return downloads;
+                        return generateRasterDownloads(jobname, selectedBaulasten, jobnumber, projectname);
                     }
                 };
             return new BackgroundTaskMultipleDownload(null, projectname, fetchDownloadsTask);

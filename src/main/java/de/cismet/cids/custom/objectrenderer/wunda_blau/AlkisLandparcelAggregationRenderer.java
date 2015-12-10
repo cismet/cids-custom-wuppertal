@@ -28,6 +28,7 @@ import java.awt.EventQueue;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -47,6 +48,7 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -111,6 +113,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private Thread mapThread;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXHyperlink jxlBaulastBescheinigung;
     private org.jdesktop.swingx.JXHyperlink jxlFlurstuecksnachweis;
     private org.jdesktop.swingx.JXHyperlink jxlKarte;
     private org.jdesktop.swingx.JXHyperlink jxlNachweisKommunal;
@@ -174,6 +177,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         jxlNachweisKommunal = new org.jdesktop.swingx.JXHyperlink();
         jxlNachweisKommunalIntern = new org.jdesktop.swingx.JXHyperlink();
         jxlKarte = new org.jdesktop.swingx.JXHyperlink();
+        jxlBaulastBescheinigung = new org.jdesktop.swingx.JXHyperlink();
         pnlMap = new javax.swing.JPanel();
         pnlLandparcels = new RoundedPanel();
         srpHeaderLandparcels = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -296,11 +300,31 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 10, 10);
         pnlButtons.add(jxlKarte, gridBagConstraints);
+
+        jxlBaulastBescheinigung.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png")));    // NOI18N
+        jxlBaulastBescheinigung.setText(org.openide.util.NbBundle.getMessage(
+                AlkisLandparcelAggregationRenderer.class,
+                "AlkisLandparcelAggregationRenderer.jxlBaulastBescheinigung.text")); // NOI18N
+        jxlBaulastBescheinigung.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jxlBaulastBescheinigungActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
+        pnlButtons.add(jxlBaulastBescheinigung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -479,6 +503,27 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         map.gotoInitialBoundingBox();
         tblLandparcels.clearSelection();
     }                                                                           //GEN-LAST:event_tblLandparcelsFocusLost
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
+//        if (!ObjectRendererUtils.checkActionTag(actionTag)) {
+//            showNoProductPermissionWarning();
+//            return;
+//        }
+
+        final Collection<CidsBean> selectedFlurstuecke = new ArrayList<CidsBean>();
+        for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+            if (cidsBeanWrapper.isSelected()) {
+                selectedFlurstuecke.add(cidsBeanWrapper.getCidsBean());
+            }
+        }
+
+        BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, this);
+    } //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
