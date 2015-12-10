@@ -676,7 +676,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      */
     private Map<String, Set<CidsBean>> createGrundstueckeToFlurstueckeMap(final Set<CidsBean> flurstuecke)
             throws Exception {
-        addMessage("\n===\nZuordnung der Baulasten zu Grundstücken...");
+        addMessage("\n===\nZuordnung der Flurstücke zu Grundstücken...");
 
         final Map<String, Set<CidsBean>> grundstueckeToFlurstueckeMap = new HashMap<String, Set<CidsBean>>();
         for (final CidsBean flurstueckBean : flurstuecke) {
