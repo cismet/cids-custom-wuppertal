@@ -9,7 +9,6 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import org.apache.commons.io.IOUtils;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -18,6 +17,8 @@ import java.util.List;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.security.WebAccessManager;
 
 /**
  * DOCUMENT ME!
@@ -458,16 +459,7 @@ public final class BaulastenPictureFinder {
                             + SUFFIX_REDUCED_SIZE + String.format("%02d", counter) + "." + EXTENSION_REDUCED_SIZE;
                 try {
                     final URL objectURL = new URL(urlString);
-                    final HttpURLConnection huc = (HttpURLConnection)objectURL.openConnection();
-                    huc.setRequestMethod("GET");
-                    huc.connect();
-                    final int reponse = huc.getResponseCode();
-                    if (reponse == 200) {
-                        results.add(objectURL);
-                        picfound = true;
-                    } else {
-                        picfound = false;
-                    }
+                    picfound = WebAccessManager.getInstance().checkIfURLaccessible(objectURL);
                 } catch (Exception ex) {
                     log.error("Problem occured, during checking for " + urlString, ex);
                     picfound = false;
@@ -478,12 +470,7 @@ public final class BaulastenPictureFinder {
             for (final String suffix : SUFFIXE) {
                 try {
                     final URL objectURL = new URL(fileWithoutSuffix + suffix);
-
-                    final HttpURLConnection huc = (HttpURLConnection)objectURL.openConnection();
-                    huc.setRequestMethod("GET");
-                    huc.connect();
-                    final int reponse = huc.getResponseCode();
-                    if (reponse == 200) {
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
                         results.add(objectURL);
                     }
                 } catch (Exception ex) {
@@ -499,12 +486,8 @@ public final class BaulastenPictureFinder {
             if (recursionDepth < 3) {
                 try {
                     final URL objectURL = new URL(fileWithoutSuffix + LINKEXTENSION);
-                    final HttpURLConnection huc = (HttpURLConnection)objectURL.openConnection();
-                    huc.setRequestMethod("GET");
-                    huc.connect();
-                    final int reponse = huc.getResponseCode();
-                    if (reponse == 200) {
-                        final String link = IOUtils.toString(huc.getInputStream());
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
+                        final String link = IOUtils.toString(WebAccessManager.getInstance().doRequest(objectURL));
                         return probeWebserverForRightSuffix(
                                 getObjectPath(link.trim(), checkReducedSize),
                                 recursionDepth
