@@ -460,6 +460,9 @@ public final class BaulastenPictureFinder {
                 try {
                     final URL objectURL = new URL(urlString);
                     picfound = WebAccessManager.getInstance().checkIfURLaccessible(objectURL);
+                    if (picfound) {
+                        results.add(objectURL);
+                    }
                 } catch (Exception ex) {
                     log.error("Problem occured, during checking for " + urlString, ex);
                     picfound = false;
