@@ -35,6 +35,9 @@ import org.apache.log4j.Logger;
 
 import java.awt.Component;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -70,6 +73,7 @@ import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -88,7 +92,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static Logger LOG = Logger.getLogger(BaulastBescheinigungDialog.class);
+    public static final Logger LOG = Logger.getLogger(BaulastBescheinigungDialog.class);
 
     private static BaulastBescheinigungDialog INSTANCE;
 
@@ -98,10 +102,26 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     private static final String PARAMETER_HAS_BEGUENSTIGT = "HAS_BEGUENSTIGT";
     private static final String PARAMETER_FABRICATIONNOTICE = "FABRICATIONNOTICE";
 
+    private static final SOAPAccessProvider SOAP_PROVIDER;
+    private static final ALKISInfoServices INFO_SERVICE;
+
+    static {
+        SOAPAccessProvider soapProvider = null;
+        ALKISInfoServices infoService = null;
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+            try {
+                soapProvider = new SOAPAccessProvider();
+                infoService = soapProvider.getAlkisInfoService();
+            } catch (final Exception ex) {
+                LOG.warn("error while creating ALKISInfoServices", ex);
+            }
+        }
+        SOAP_PROVIDER = soapProvider;
+        INFO_SERVICE = infoService;
+    }
+
     //~ Instance fields --------------------------------------------------------
 
-    private final SOAPAccessProvider soapProvider;
-    private final ALKISInfoServices infoService;
     private final Collection<ProductGroupAmount> prodAmounts = new ArrayList<ProductGroupAmount>();
     private final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap =
         new HashMap<CidsBean, Set<CidsBean>>();
@@ -109,7 +129,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         new HashMap<CidsBean, Set<CidsBean>>();
 
     private SwingWorker worker;
-    private Set<CidsBean> flurstuecke;
+    private Collection<CidsBean> flurstuecke;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -136,20 +156,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     private BaulastBescheinigungDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
         initComponents();
-
-        SOAPAccessProvider soapProvider = null;
-        ALKISInfoServices infoService = null;
-
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
-            try {
-                soapProvider = new SOAPAccessProvider();
-                infoService = soapProvider.getAlkisInfoService();
-            } catch (final Exception ex) {
-                LOG.warn("error while creating ALKISInfoServices", ex);
-            }
-        }
-        this.soapProvider = soapProvider;
-        this.infoService = infoService;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -171,8 +177,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  message  DOCUMENT ME!
      */
-    public void addMessage(final String message) {
-        protokollPane.addMessage(message, BusyLoggingTextPane.Styles.INFO);
+    public static void addMessage(final String message) {
+        getInstance().protokollPane.addMessage(message, BusyLoggingTextPane.Styles.INFO);
     }
 
     /**
@@ -330,15 +336,16 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      * @param  parent       DOCUMENT ME!
      */
     public void show(final Collection<CidsBean> flurstuecke, final Component parent) {
-        this.flurstuecke = new HashSet<CidsBean>(flurstuecke);
-
+        final List<CidsBean> flurstueckeList = new ArrayList<CidsBean>(new HashSet<CidsBean>(flurstuecke));
         prodAmounts.clear();
         flurstueckeToBaulastenBelastetMap.clear();
         flurstueckeToBaulastenBeguenstigtMap.clear();
 
         jTextField2.setText(new SimpleDateFormat("yy").format(new Date()) + "-");
 
-        prepareDownload();
+        this.flurstuecke = flurstueckeList;
+
+        prepareDownload(flurstueckeList);
 
         StaticSwingTools.showDialog(this);
     }
@@ -355,8 +362,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  flurstuecke  DOCUMENT ME!
      */
-    public void prepareDownload() {
+    public void prepareDownload(final List<CidsBean> flurstuecke) {
         try {
             if ((worker != null) && !worker.isDone()) {
                 worker.cancel(true);
@@ -374,16 +383,31 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
                     @Override
                     protected Collection<ProductGroupAmount> doInBackground() throws Exception {
+                        addMessage("Baulastbescheinigungs-Protokoll für "
+                                    + ((flurstuecke.size() == 1) ? "folgendes Flurstück" : "folgende Flurstücke")
+                                    + ":");
+
+                        Collections.sort(flurstuecke, new Comparator<CidsBean>() {
+
+                                @Override
+                                public int compare(final CidsBean o1, final CidsBean o2) {
+                                    final String s1 = (o1 == null) ? "" : (String)o1.getProperty("alkis_id");
+                                    final String s2 = (o2 == null) ? "" : (String)o2.getProperty("alkis_id");
+                                    return s1.compareTo(s2);
+                                }
+                            });
+
+                        for (final CidsBean flurstueck : flurstuecke) {
+                            addMessage(" * " + flurstueck);
+                        }
+
                         final Map<String, Set<CidsBean>> grundstueckeToFlurstueckeMap =
                             createGrundstueckeToFlurstueckeMap(flurstuecke);
 
-                        // belastete Baulasten pro Flurstück
-                        flurstueckeToBaulastenBelastetMap.putAll(createFlurstueckeToBaulastenMap(flurstuecke, true));
-
-                        // begünstigte Baulasten pro Flurstück
-                        flurstueckeToBaulastenBeguenstigtMap.putAll(createFlurstueckeToBaulastenMap(
-                                flurstuecke,
-                                false));
+                        fillFlurstueckeToBaulastenMaps(
+                            flurstuecke,
+                            flurstueckeToBaulastenBelastetMap,
+                            flurstueckeToBaulastenBeguenstigtMap);
 
                         final Collection<ProductGroupAmount> prodAmounts = createBilling(
                                 grundstueckeToFlurstueckeMap,
@@ -413,6 +437,27 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         } catch (final Exception ex) {
             LOG.fatal(ex, ex);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   flurstuecke                           DOCUMENT ME!
+     * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
+     * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private static void fillFlurstueckeToBaulastenMaps(final Collection<CidsBean> flurstuecke,
+            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap,
+            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) throws Exception {
+        addMessage("\n===");
+
+        // belastete Baulasten pro Flurstück
+        flurstueckeToBaulastenBelastetMap.putAll(createFlurstueckeToBaulastenMap(flurstuecke, true));
+
+        // begünstigte Baulasten pro Flurstück
+        flurstueckeToBaulastenBeguenstigtMap.putAll(createFlurstueckeToBaulastenMap(flurstuecke, false));
     }
 
     /**
@@ -509,7 +554,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                 System.exit(0);
                             }
                         });
-                    dialog.show(dialog.createFlurstuecke(), new javax.swing.JFrame());
+                    dialog.show(BaulastBescheinigungDialog.createTestFlurstuecke(), new javax.swing.JFrame());
                 }
             });
     }
@@ -517,24 +562,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param   projectdescription  DOCUMENT ME!
-     * @param   jobnumber           DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    public boolean calculateBillingAndDownload(final String projectdescription, final String jobnumber)
-            throws Exception {
-        return false;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
-    private Set<CidsBean> createFlurstuecke() {
+    private static Set<CidsBean> createTestFlurstuecke() {
         final String query = "select %d, id \n"
                     + "from alkis_landparcel \n"
                     + "where gemarkung ilike 'Barmen' and flur ilike '224' and fstck_zaehler ilike '0012%%'";
@@ -576,7 +606,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Set<CidsBean> flurstuecke,
+    private static Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Collection<CidsBean> flurstuecke,
             final boolean belastet) throws Exception {
         final String queryBeguenstigt = "SELECT %d, alb_baulast.%s \n"
                     + "FROM alb_baulast_flurstuecke_beguenstigt, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
@@ -600,10 +630,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
         final String query = belastet ? queryBelastet : queryBeguenstigt;
 
-        addMessage("\n===\nSuche der " + ((belastet) ? "belastenden" : "begünstigenden") + " Baulasten von:");
+        addMessage("\nSuche der " + ((belastet) ? "belastenden" : "begünstigenden") + " Baulasten von:");
         final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenMap = new HashMap<CidsBean, Set<CidsBean>>();
         for (final CidsBean flurstueck : flurstuecke) {
-            addMessage(" * Flurstück: " + flurstueck + "...");
+            addMessage(" * Flurstück: " + flurstueck + " ...");
             final Set<CidsBean> baulasten = new HashSet<CidsBean>();
             try {
                 final String alkisId = (String)flurstueck.getProperty("alkis_id");
@@ -645,7 +675,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @return  DOCUMENT ME!
      */
-    private Set<BescheinigungsGruppeBean> createBescheinigungsGruppen(final Set<CidsBean> flurstuecke,
+    private static Set<BescheinigungsGruppeBean> createBescheinigungsGruppen(final Collection<CidsBean> flurstuecke,
             final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap,
             final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap) {
         final Map<String, BescheinigungsGruppeBean> gruppeMap = new HashMap<String, BescheinigungsGruppeBean>();
@@ -667,6 +697,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 gruppeMap.values());
 
         addMessage("Anzahl Bescheinigungsgruppen: " + bescheinigungsgruppen.size());
+        for (final BescheinigungsGruppeBean gruppe : bescheinigungsgruppen) {
+            addMessage(" * " + gruppe.toString());
+        }
         return bescheinigungsgruppen;
     }
 
@@ -680,18 +713,19 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      * @throws  Exception             DOCUMENT ME!
      * @throws  InterruptedException  DOCUMENT ME!
      */
-    private Map<String, Set<CidsBean>> createGrundstueckeToFlurstueckeMap(final Set<CidsBean> flurstuecke)
+    private static Map<String, Set<CidsBean>> createGrundstueckeToFlurstueckeMap(final Collection<CidsBean> flurstuecke)
             throws Exception {
-        addMessage("\n===\nZuordnung der Flurstücke zu Grundstücken...");
+        addMessage("\n===\n\nZuordnung der Flurstücke zu Grundstücken...");
 
         final Map<String, Set<CidsBean>> grundstueckeToFlurstueckeMap = new HashMap<String, Set<CidsBean>>();
+
         for (final CidsBean flurstueckBean : flurstuecke) {
             final List<CidsBean> buchungsblaetter = new ArrayList<CidsBean>(
                     flurstueckBean.getBeanCollectionProperty("buchungsblaetter"));
             if (buchungsblaetter.size() == 1) {
-                addMessage("---\nFlurstück: " + flurstueckBean + " (1 Buchungsblatt):");
+                addMessage("\nFlurstück: " + flurstueckBean + " (1 Buchungsblatt):");
             } else {
-                addMessage("---\nFlurstück: " + flurstueckBean + " (" + buchungsblaetter.size()
+                addMessage("\nFlurstück: " + flurstueckBean + " (" + buchungsblaetter.size()
                             + " Buchungsblätter):");
             }
             Collections.sort(buchungsblaetter, new Comparator<CidsBean>() {
@@ -711,7 +745,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                     if (Thread.currentThread().isInterrupted()) {
                         throw new InterruptedException();
                     }
-                    addMessage(" * analysiere Buchunbgsblatt " + buchungsblattBean + "...");
+                    addMessage(" * analysiere Buchunbgsblatt " + buchungsblattBean + " ...");
                     final Buchungsblatt buchungsblatt = getBuchungsblatt(buchungsblattBean);
 
                     if (Thread.currentThread().isInterrupted()) {
@@ -795,7 +829,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private Download createBescheinigungPdf(final BescheinigungsGruppeBean bescheinigungsGruppe,
+    private static Download createBescheinigungPdf(final BescheinigungsGruppeBean bescheinigungsGruppe,
             final String jobname,
             final int number,
             final int max) throws Exception {
@@ -867,7 +901,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @return  DOCUMENT ME!
      */
-    private Collection<ProductGroupAmount> createBilling(
+    private static Collection<ProductGroupAmount> createBilling(
             final Map<String, Set<CidsBean>> grundstueckeToFlurstueckeMap,
             final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap,
             final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) {
@@ -875,8 +909,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         Collections.sort(keys);
 
         final int anzahlGrundstuecke = grundstueckeToFlurstueckeMap.size();
-        addMessage("\n===\nGebührenberechnung für " + anzahlGrundstuecke + " "
-                    + ((anzahlGrundstuecke == 1) ? "Grundstück" : "Grundstücke") + "...");
+        if (anzahlGrundstuecke == 1) {
+            addMessage("\n===\n\nBescheinigungsart des Grundstücks:");
+        } else {
+            addMessage("\n===\n\nBescheinigungsarten der " + anzahlGrundstuecke + " ermittelten Grundstücke:");
+        }
 
         final Collection<ProductGroupAmount> prodAmounts = new ArrayList<ProductGroupAmount>();
 
@@ -957,7 +994,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private Buchungsblatt getBuchungsblatt(final CidsBean buchungsblattBean) throws Exception {
+    private static Buchungsblatt getBuchungsblatt(final CidsBean buchungsblattBean) throws Exception {
         Buchungsblatt buchungsblatt = null;
 
         if (buchungsblattBean != null) {
@@ -965,13 +1002,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
             if (buchungsblatt == null) {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
-                    if (infoService != null) {
-                        final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(
-                                soapProvider.getIdentityCard(),
-                                soapProvider.getService(),
+                    if (INFO_SERVICE != null) {
+                        final String[] uuids = INFO_SERVICE.translateBuchungsblattCodeIntoUUIds(
+                                SOAP_PROVIDER.getIdentityCard(),
+                                SOAP_PROVIDER.getService(),
                                 AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
-                        buchungsblatt = infoService.getBuchungsblattWithUUID(soapProvider.getIdentityCard(),
-                                soapProvider.getService(),
+                        buchungsblatt = INFO_SERVICE.getBuchungsblattWithUUID(SOAP_PROVIDER.getIdentityCard(),
+                                SOAP_PROVIDER.getService(),
                                 uuids[0],
                                 true);
                     } else {
@@ -1002,7 +1039,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      */
     public Download generateDownload(final String projectdescription,
             final String jobnumber,
-            final Set<CidsBean> flurstuecke,
+            final Collection<CidsBean> flurstuecke,
             final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap,
             final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) throws Exception {
         final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -1018,6 +1055,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                 flurstuecke,
                                 flurstueckeToBaulastenBeguenstigtMap,
                                 flurstueckeToBaulastenBelastetMap);
+
+                        downloads.add(new TxtDownload(
+                                protokollPane.getText(),
+                                jobname,
+                                "Baulastbescheinigung-Protokoll",
+                                "baulastbescheinigung_protokoll",
+                                ".txt"));
 
                         if (bescheinigungsgruppen != null) {
                             // Download: Berichte für alle Bescheinigungsgruppen
@@ -1167,7 +1211,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
             boolean first = true;
             for (final BaulastBean baulast : sortedBeguenstigt) {
                 if (!first) {
-                    sb.append(";");
+                    sb.append(", ");
                     first = false;
                 }
                 sb.append(baulast.toString());
@@ -1258,7 +1302,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @version  $Revision$, $Date$
      */
-    class BaBeException extends Exception {
+    static class BaBeException extends Exception {
 
         //~ Constructors -------------------------------------------------------
 
@@ -1269,6 +1313,78 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
          */
         public BaBeException(final String message) {
             super(message);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class TxtDownload extends AbstractDownload {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final String content;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new TxtDownload object.
+         *
+         * @param  content    DOCUMENT ME!
+         * @param  directory  DOCUMENT ME!
+         * @param  title      DOCUMENT ME!
+         * @param  filename   DOCUMENT ME!
+         * @param  extension  DOCUMENT ME!
+         */
+        public TxtDownload(
+                final String content,
+                final String directory,
+                final String title,
+                final String filename,
+                final String extension) {
+            this.content = content;
+            this.directory = directory;
+            this.title = title;
+
+            status = State.WAITING;
+
+            determineDestinationFile(filename, extension);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void run() {
+            if (status != State.WAITING) {
+                return;
+            }
+
+            status = State.RUNNING;
+
+            stateChanged();
+
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(fileToSaveTo, false));
+                writer.write(content);
+            } catch (Exception ex) {
+                error(ex);
+            } finally {
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    } catch (Exception e) {
+                        log.warn("Exception occured while closing file.", e);
+                    }
+                }
+            }
+
+            if (status == State.RUNNING) {
+                status = State.COMPLETED;
+                stateChanged();
+            }
         }
     }
 }
