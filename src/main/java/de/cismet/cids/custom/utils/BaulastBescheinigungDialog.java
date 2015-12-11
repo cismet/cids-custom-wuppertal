@@ -578,19 +578,21 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      */
     private Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Set<CidsBean> flurstuecke,
             final boolean belastet) throws Exception {
-        final String queryBeguenstigt = "select %d, alb_baulast.%s \n"
-                    + "from alb_baulast_flurstuecke_beguenstigt, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
-                    + "where alb_baulast.id = alb_baulast_flurstuecke_beguenstigt.baulast_reference \n"
-                    + "and alb_baulast_flurstuecke_beguenstigt.flurstueck = alb_flurstueck_kicker.id \n"
-                    + "and alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
-                    + "and flurstueck.alkis_id ilike '%s'";
+        final String queryBeguenstigt = "SELECT %d, alb_baulast.%s \n"
+                    + "FROM alb_baulast_flurstuecke_beguenstigt, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
+                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_beguenstigt.baulast_reference \n"
+                    + "AND alb_baulast_flurstuecke_beguenstigt.flurstueck = alb_flurstueck_kicker.id \n"
+                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
+                    + "AND flurstueck.alkis_id ilike '%s' \n"
+                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
 
-        final String queryBelastet = "select %d, alb_baulast.%s \n"
-                    + "from alb_baulast_flurstuecke_belastet, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
-                    + "where alb_baulast.id = alb_baulast_flurstuecke_belastet.baulast_reference \n"
-                    + "and alb_baulast_flurstuecke_belastet.flurstueck = alb_flurstueck_kicker.id \n"
-                    + "and alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
-                    + "and flurstueck.alkis_id ilike '%s'";
+        final String queryBelastet = "SELECT %d, alb_baulast.%s \n"
+                    + "FROM alb_baulast_flurstuecke_belastet, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
+                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_belastet.baulast_reference \n"
+                    + "AND alb_baulast_flurstuecke_belastet.flurstueck = alb_flurstueck_kicker.id \n"
+                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
+                    + "AND flurstueck.alkis_id ilike '%s' \n"
+                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
 
         final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
@@ -702,7 +704,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                     }
                 });
 
-            final Set<String> teileigentumAlreadyCounted = new HashSet<String>();
+            boolean teileigentumAlreadyCounted = false;
 
             for (final CidsBean buchungsblattBean : buchungsblaetter) {
                 if (buchungsblattBean != null) {
@@ -743,7 +745,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             }
                         }
                         if (flurstueckPartOfStelle) {
-                            final String lfn = buchungsstelle.getSequentialNumber();
                             final String key = buchungsstelle.getSequentialNumber() + "/"
                                         + buchungsblatt.getBuchungsblattCode();
 
@@ -755,13 +756,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             }
 
                             if ("Wohnungs-/Teileigentum".equals(buchungsart)) {
-                                if (teileigentumAlreadyCounted.contains(lfn)) {
+                                if (teileigentumAlreadyCounted) {
                                     addMessage("   -> ignoriere " + key + " aufgrund der Buchungsart ("
                                                 + buchungsart
                                                 + ")");
                                     continue;
                                 } else {
-                                    teileigentumAlreadyCounted.add(lfn);
+                                    teileigentumAlreadyCounted = true;
                                 }
                             }
 
