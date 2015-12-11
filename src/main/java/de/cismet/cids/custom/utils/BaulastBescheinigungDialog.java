@@ -398,8 +398,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             prodAmounts.addAll(get());
                             jButton1.setEnabled(true);
                         } catch (final Exception ex) {
-                            LOG.fatal(ex, ex);
-                            addError("Es ist ein Fehler aufgetreten");
+                            if (ex.getCause() instanceof BaBeException) {
+                                addError(ex.getCause().getMessage());
+                            } else {
+                                LOG.error(ex, ex);
+                                addError("Es ist ein Fehler aufgetreten: " + ex.getMessage());
+                            }
                         } finally {
                             protokollPane.setBusy(false);
                         }
@@ -616,8 +620,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                     final CidsBean baulast = mo.getBean();
                     final Boolean geprueft = (Boolean)baulast.getProperty("geprueft");
                     if ((geprueft == null) || (geprueft == false)) {
-                        throw new Exception(
-                            "Zu den an gegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltene Baulasten im Bearbeitungszugriff befinden");
+                        throw new BaBeException(
+                            "Zu den an gegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltene Baulasten im Bearbeitungszugriff befinden.");
                     }
                     addMessage("   => Baulast: " + baulast);
                     baulasten.add(baulast);
@@ -1031,13 +1035,14 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                         for (final Set<CidsBean> baulasten : flurstueckeToBaulastenBelastetMap.values()) {
                             allBaulasten.addAll(baulasten);
                         }
-
-                        // Download: Bericht für alle Baulasten
-                        downloads.addAll(BaulastenReportGenerator.generateRasterDownloads(
-                                jobname,
-                                allBaulasten,
-                                jobnumber,
-                                projectdescription));
+                        if (!allBaulasten.isEmpty()) {
+                            // Download: Bericht für alle Baulasten
+                            downloads.addAll(BaulastenReportGenerator.generateRasterDownloads(
+                                    jobname,
+                                    allBaulasten,
+                                    jobnumber,
+                                    projectdescription));
+                        }
                     } catch (final Exception ex) {
                         LOG.fatal(ex, ex);
                     }
@@ -1244,6 +1249,25 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
             final String nenner = (String)flurstueck.getProperty("fstck_nenner");
             this.nummer = (String)flurstueck.getProperty("fstck_zaehler") + ((nenner != null) ? ("/"
                                 + nenner) : "");
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class BaBeException extends Exception {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new BaBeException object.
+         *
+         * @param  message  DOCUMENT ME!
+         */
+        public BaBeException(final String message) {
+            super(message);
         }
     }
 }
