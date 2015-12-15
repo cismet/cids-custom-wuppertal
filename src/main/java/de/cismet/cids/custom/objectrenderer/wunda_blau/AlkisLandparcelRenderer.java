@@ -138,6 +138,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN =
         "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED =
+        "baulast.report.bescheinigung_disabled@WUNDA_BLAU";
     //
     private static final String BUCHUNGSBLATT_TABLE = "alkis_buchungsblatt";
     private static final String DOMAIN = "WUNDA_BLAU";
@@ -437,6 +439,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
         hlFlurstuecksEigentumsnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW));
+        hlBaulastbescheinigung.setEnabled(!ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED));
     }
 
     //~ Methods ----------------------------------------------------------------

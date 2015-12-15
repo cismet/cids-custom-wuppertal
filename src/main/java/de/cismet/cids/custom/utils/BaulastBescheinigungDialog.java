@@ -51,7 +51,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.text.BadLocationException;
 
@@ -132,6 +134,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     private Collection<CidsBean> flurstuecke;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private de.cismet.commons.gui.progress.BusyStatusPanel busyStatusPanel1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -139,6 +142,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
@@ -200,38 +208,31 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        protokollPane = new de.cismet.commons.gui.progress.BusyLoggingTextPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
+        jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        busyStatusPanel1 = new de.cismet.commons.gui.progress.BusyStatusPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        protokollPane = new de.cismet.commons.gui.progress.BusyLoggingTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(
                 BaulastBescheinigungDialog.class,
                 "BaulastBescheinigungDialog.title")); // NOI18N
-        setPreferredSize(new java.awt.Dimension(500, 300));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
-
-        protokollPane.setEditable(false);
-        jScrollPane1.setViewportView(protokollPane);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel3.add(jScrollPane1, gridBagConstraints);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -282,6 +283,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel3.add(jPanel1, gridBagConstraints);
 
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
         jPanel2.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -313,11 +316,72 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         jPanel2.add(jButton1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        jPanel4.add(jPanel2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(jPanel7, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel3.add(jPanel2, gridBagConstraints);
+        jPanel3.add(jPanel4, gridBagConstraints);
+
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+
+        jPanel5.setMinimumSize(new java.awt.Dimension(450, 31));
+        jPanel5.setPreferredSize(new java.awt.Dimension(450, 31));
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        busyStatusPanel1.setStatusMessage(org.openide.util.NbBundle.getMessage(
+                BaulastBescheinigungDialog.class,
+                "BaulastBescheinigungDialog.busyStatusPanel1.statusMessage")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel5.add(busyStatusPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        jPanel5.add(jPanel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel8.add(jPanel5, gridBagConstraints);
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 300));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 250));
+
+        protokollPane.setEditable(false);
+        jScrollPane1.setViewportView(protokollPane);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel8.add(jScrollPane1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel3.add(jPanel8, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -366,6 +430,15 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      * @param  flurstuecke  DOCUMENT ME!
      */
     public void prepareDownload(final List<CidsBean> flurstuecke) {
+        String checkProtokollPane = null;
+        try {
+            checkProtokollPane = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "baulast.bescheinigung.protokollpane_enabled");
+        } catch (ConnectionException ex) {
+        }
+        jScrollPane1.setVisible(checkProtokollPane != null);
+
         try {
             if ((worker != null) && !worker.isDone()) {
                 worker.cancel(true);
@@ -378,6 +451,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
             }
             jButton1.setEnabled(false);
             protokollPane.setBusy(true);
+            busyStatusPanel1.setBusy(true);
+
+            pack();
+
+            setStatusMessage("Bescheinigung wird vorbereitet...");
 
             worker = new SwingWorker<Collection<ProductGroupAmount>, Void>() {
 
@@ -401,13 +479,19 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             addMessage(" * " + flurstueck);
                         }
 
+                        setStatusMessage("Buchungsblätter werden analysiert...");
+
                         final Map<String, Set<CidsBean>> grundstueckeToFlurstueckeMap =
                             createGrundstueckeToFlurstueckeMap(flurstuecke);
+
+                        setStatusMessage("Baulasten werden gesucht...");
 
                         fillFlurstueckeToBaulastenMaps(
                             flurstuecke,
                             flurstueckeToBaulastenBelastetMap,
                             flurstueckeToBaulastenBeguenstigtMap);
+
+                        setStatusMessage("Gebühr wird berechnet...");
 
                         final Collection<ProductGroupAmount> prodAmounts = createBilling(
                                 grundstueckeToFlurstueckeMap,
@@ -422,14 +506,30 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             prodAmounts.addAll(get());
                             jButton1.setEnabled(true);
                         } catch (final Exception ex) {
+                            final String errMessage;
+                            final Throwable exception;
                             if (ex.getCause() instanceof BaBeException) {
-                                addError(ex.getCause().getMessage());
+                                exception = ex.getCause();
+                                errMessage = exception.getMessage();
+                                addError(errMessage);
                             } else {
+                                exception = ex;
                                 LOG.error(ex, ex);
-                                addError("Es ist ein Fehler aufgetreten: " + ex.getMessage());
+                                errMessage = exception.getMessage();
+                                addError("Es ist ein Fehler aufgetreten: " + errMessage);
+                            }
+                            if (!(ex instanceof CancellationException)) {
+                                JOptionPane.showMessageDialog(
+                                    BaulastBescheinigungDialog.this,
+                                    errMessage,
+                                    "Es ist ein Fehler aufgetreten.",
+                                    JOptionPane.ERROR_MESSAGE);
+                                setStatusMessage("Es ist ein Fehler aufgetreten.");
                             }
                         } finally {
+                            busyStatusPanel1.setBusy(false);
                             protokollPane.setBusy(false);
+                            setStatusMessage("Die Bescheinigung kann jetzt erzeugt werden.");
                         }
                     }
                 };
@@ -469,7 +569,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
         try {
             if (BillingPopup.doBilling(
-                            "blab_besch",
+                            "blab_be",
                             "no.yet",
                             (Geometry)null,
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
@@ -664,6 +764,15 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
             }
         }
         return flurstueckeToBaulastenMap;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  message  DOCUMENT ME!
+     */
+    private void setStatusMessage(final String message) {
+        busyStatusPanel1.setStatusMessage(message);
     }
 
     /**

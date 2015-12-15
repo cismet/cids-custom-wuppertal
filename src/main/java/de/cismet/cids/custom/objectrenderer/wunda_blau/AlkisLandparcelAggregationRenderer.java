@@ -93,6 +93,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN =
         "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED =
+        "baulast.report.bescheinigung_disabled@WUNDA_BLAU";
 
     private static final Color[] COLORS = new Color[] {
             new Color(247, 150, 70, 192),
@@ -647,6 +649,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         jxlNachweisNRW.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
                         PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
+        jxlBaulastBescheinigung.setEnabled(enable
+                    && !ObjectRendererUtils.checkActionTag(
+                        PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && BillingPopup.isBillingAllowed());
     }
 
     /**
