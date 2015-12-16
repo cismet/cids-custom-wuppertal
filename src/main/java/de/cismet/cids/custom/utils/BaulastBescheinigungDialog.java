@@ -847,9 +847,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                     }
                 });
 
-            boolean teileigentumAlreadyCounted = false;
+//            boolean teileigentumAlreadyCounted = false;
 
+            boolean grundstueckFound = false;
             for (final CidsBean buchungsblattBean : buchungsblaetter) {
+                if (grundstueckFound) {
+                    break; // we are done
+                }
                 if (buchungsblattBean != null) {
                     if (Thread.currentThread().isInterrupted()) {
                         throw new InterruptedException();
@@ -872,6 +876,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                         });
 
                     for (final Buchungsstelle buchungsstelle : buchungsstellen) {
+                        if (grundstueckFound) {
+                            break; // we are done
+                        }
                         if (Thread.currentThread().isInterrupted()) {
                             throw new InterruptedException();
                         }
@@ -898,16 +905,16 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                 continue;
                             }
 
-                            if ("Wohnungs-/Teileigentum".equals(buchungsart)) {
-                                if (teileigentumAlreadyCounted) {
-                                    addMessage("   -> ignoriere " + key + " aufgrund der Buchungsart ("
-                                                + buchungsart
-                                                + ")");
-                                    continue;
-                                } else {
-                                    teileigentumAlreadyCounted = true;
-                                }
-                            }
+//                            if ("Wohnungs-/Teileigentum".equals(buchungsart)) {
+//                                if (teileigentumAlreadyCounted) {
+//                                    addMessage("   -> ignoriere " + key + " aufgrund der Buchungsart ("
+//                                                + buchungsart
+//                                                + ")");
+//                                    continue;
+//                                } else {
+//                                    teileigentumAlreadyCounted = true;
+//                                }
+//                            }
 
                             if (!grundstueckeToFlurstueckeMap.containsKey(key)) {
                                 grundstueckeToFlurstueckeMap.put(key, new HashSet<CidsBean>());
@@ -918,11 +925,47 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             addMessage("   => füge Flurstück " + flurstueckBean + " zu Grundstück " + key + "hinzu"
                                         + buchungsartSuffix);
                             grundstueckeToFlurstueckeMap.get(key).add(flurstueckBean);
+                            grundstueckFound = true;
                         }
                     }
                 }
             }
         }
+//
+//        boolean first = true;
+//
+//        final Set<String> keys = new HashSet<String>(grundstueckeToFlurstueckeMap.keySet());
+//        for (final String key : keys) {
+//            final Set<CidsBean> flurstueckeToCheck = new HashSet<CidsBean>(grundstueckeToFlurstueckeMap.get(key));
+//            for (final String innerKey : keys) {
+//                if (flurstueckeToCheck.isEmpty()) {
+//                    break;
+//                }
+//                if (!innerKey.equals(key)) {
+//                    if (grundstueckeToFlurstueckeMap.containsKey(innerKey)) {
+//                        for (final CidsBean flurstueck : grundstueckeToFlurstueckeMap.get(innerKey)) {
+//                            if (flurstueckeToCheck.contains(flurstueck)) {
+//                                flurstueckeToCheck.remove(flurstueck);
+//                                if (flurstueckeToCheck.isEmpty()) {
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            // all flurstueck found in another grundstueck(e);
+//            if (flurstueckeToCheck.isEmpty()) {
+//                if (first) {
+//                    addMessage("\n");
+//                    first = false;
+//                }
+//                addMessage("Entferne Grundstück " + key
+//                            + " da alle enthaltenen Flurstücke bereits anderen Grundstücken zugeordnet wurden.");
+//                grundstueckeToFlurstueckeMap.remove(key);
+//            }
+//        }
+
         return grundstueckeToFlurstueckeMap;
     }
 
@@ -1032,45 +1075,48 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         int anzahlPositiv3 = 0;
 
         for (final String key : keys) {
-            boolean first = true;
+            if (grundstueckeToFlurstueckeMap.containsKey(key)) {
+                boolean first = true;
 
-            final Set<CidsBean> flurstuecke = grundstueckeToFlurstueckeMap.get(key);
+                final Set<CidsBean> flurstuecke = grundstueckeToFlurstueckeMap.get(key);
 
-            final Set<CidsBean> baulasten = new HashSet<CidsBean>();
-            for (final CidsBean flurstueck : flurstuecke) {
-                final Set<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
-                final Set<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(flurstueck);
-                baulasten.addAll(baulastenBelastet);
-                baulasten.addAll(baulastenBeguenstigt);
-            }
-
-            final StringBuffer sb = new StringBuffer();
-            for (final CidsBean baulast : baulasten) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append(", ");
+                final Set<CidsBean> baulasten = new HashSet<CidsBean>();
+                for (final CidsBean flurstueck : flurstuecke) {
+                    final Set<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
+                    final Set<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(flurstueck);
+                    baulasten.addAll(baulastenBelastet);
+                    baulasten.addAll(baulastenBeguenstigt);
                 }
-                sb.append(baulast);
-            }
-            final String baulastenString = sb.toString();
 
-            final int numOfBaulasten = baulasten.size();
-            if (numOfBaulasten == 0) {
-                addMessage(" * Grundstück " + key + " => Negativ-Bescheinigung");
-                anzahlNegativ++;
-            } else if (numOfBaulasten == 1) {
-                addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für eine Baulast (" + baulastenString
-                            + ")");
-                anzahlPositiv1++;
-            } else if (numOfBaulasten == 2) {
-                addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für zwei Baulasten (" + baulastenString
-                            + ")");
-                anzahlPositiv2++;
-            } else {
-                addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für drei oder mehr Baulasten ("
-                            + baulastenString + ")");
-                anzahlPositiv3++;
+                final StringBuffer sb = new StringBuffer();
+                for (final CidsBean baulast : baulasten) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append(", ");
+                    }
+                    sb.append(baulast);
+                }
+                final String baulastenString = sb.toString();
+
+                final int numOfBaulasten = baulasten.size();
+                if (numOfBaulasten == 0) {
+                    addMessage(" * Grundstück " + key + " => Negativ-Bescheinigung");
+                    anzahlNegativ++;
+                } else if (numOfBaulasten == 1) {
+                    addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für eine Baulast (" + baulastenString
+                                + ")");
+                    anzahlPositiv1++;
+                } else if (numOfBaulasten == 2) {
+                    addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für zwei Baulasten ("
+                                + baulastenString
+                                + ")");
+                    anzahlPositiv2++;
+                } else {
+                    addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für drei oder mehr Baulasten ("
+                                + baulastenString + ")");
+                    anzahlPositiv3++;
+                }
             }
         }
 
