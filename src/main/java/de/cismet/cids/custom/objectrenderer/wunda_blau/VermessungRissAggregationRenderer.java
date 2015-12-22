@@ -784,7 +784,10 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
             tableSorter.setSortKeys(sortKeys);
 
-            final boolean enabled = BillingPopup.isBillingAllowed()
+            final boolean billingAllowed = BillingPopup.isBillingAllowed("doklapdf")
+                        || BillingPopup.isBillingAllowed("vrpdf");
+
+            final boolean enabled = billingAllowed
                         && ((allowErgaenzendeDokumenteReport && allowVermessungsrisseReport)
                             || allowErgaenzendeDokumenteReport || allowVermessungsrisseReport);
             if (allowErgaenzendeDokumenteReport && allowVermessungsrisseReport) {

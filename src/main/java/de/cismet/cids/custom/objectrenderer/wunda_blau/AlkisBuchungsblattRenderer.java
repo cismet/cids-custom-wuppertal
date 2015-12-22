@@ -316,12 +316,15 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         panProdukteHTML.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
 
+        final boolean billingAllowedBeNw = BillingPopup.isBillingAllowed("benw");
+        final boolean billingAllowedBeKom = BillingPopup.isBillingAllowed("bekom");
+        final boolean billingAllowedGrNw = BillingPopup.isBillingAllowed("grnw");
         hlBestandsnachweisKomPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && billingAllowedBeKom);
         hlBestandsnachweisKomHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM));
         hlBestandsnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW) && billingAllowedBeNw);
         hlBestandsnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW));
         hlBestandsnachweisKomInternPdf.setEnabled(ObjectRendererUtils.checkActionTag(
@@ -329,7 +332,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         hlBestandsnachweisKomInternHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
         hlGrundstuecksnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW) && billingAllowedGrNw);
         hlGrundstuecksnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW));
     }
