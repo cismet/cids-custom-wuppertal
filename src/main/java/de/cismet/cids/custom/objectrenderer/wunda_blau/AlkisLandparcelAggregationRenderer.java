@@ -636,22 +636,27 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  enable  DOCUMENT ME!
      */
     private void changeButtonAvailability(final boolean enable) {
+        final boolean billingAllowedFsueKom = BillingPopup.isBillingAllowed("fsuekom");
+        final boolean billingAllowedFsueNw = BillingPopup.isBillingAllowed("fsuenw");
+        final boolean billingAllowedFsNw = BillingPopup.isBillingAllowed("fsnw");
+        final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be");
+
         jxlKarte.setEnabled(enable && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
         jxlFlurstuecksnachweis.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
-                    && BillingPopup.isBillingAllowed());
+                    && billingAllowedFsNw);
         jxlNachweisKommunal.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && billingAllowedFsueKom);
         jxlNachweisKommunalIntern.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
                         PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
         jxlNachweisNRW.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
+                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && billingAllowedFsueNw);
         jxlBaulastBescheinigung.setEnabled(enable
                     && !ObjectRendererUtils.checkActionTag(
-                        PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && BillingPopup.isBillingAllowed());
+                        PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && billingAllowedBlab_be);
     }
 
     /**

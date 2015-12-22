@@ -1457,13 +1457,14 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
             measuringComponent.reset();
             if ((document != null) && !isCancelled()) {
+                final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
                 measuringComponent.setVisible(true);
                 lblMissingRasterdocument.setVisible(false);
                 measuringComponent.addImage(document);
                 measuringComponent.zoomToFeatureCollection();
                 btnHome.setEnabled(true);
-                btnOpen.setEnabled(BillingPopup.isBillingAllowed());
-                btnReport.setEnabled(BillingPopup.isBillingAllowed());
+                btnOpen.setEnabled(billingAllowed);
+                btnReport.setEnabled(billingAllowed);
                 togPan.setEnabled(true);
                 togZoom.setEnabled(true);
             } else {

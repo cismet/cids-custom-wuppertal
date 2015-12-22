@@ -142,7 +142,9 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         tblPunkte.getSelectionModel().addListSelectionListener(new TableSelectionListener());
         tableComparator = new TableModelIndexConvertingToViewIndexComparator((tblPunkte));
 
-        btnGenerateReport.setEnabled(BillingPopup.isBillingAllowed());
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+
+        btnGenerateReport.setEnabled(billingAllowed);
     }
 
     //~ Methods ----------------------------------------------------------------
