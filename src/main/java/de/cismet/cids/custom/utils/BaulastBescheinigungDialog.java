@@ -419,10 +419,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         doDownload();
         setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -502,10 +502,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
                     @Override
                     protected void done() {
+                        boolean errorOccurred = false;
                         try {
                             prodAmounts.addAll(get());
-                            jButton1.setEnabled(true);
                         } catch (final Exception ex) {
+                            errorOccurred = true;
                             final String errMessage;
                             final Throwable exception;
                             if (ex.getCause() instanceof BaBeException) {
@@ -524,12 +525,16 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                     errMessage,
                                     "Es ist ein Fehler aufgetreten.",
                                     JOptionPane.ERROR_MESSAGE);
-                                setStatusMessage("Es ist ein Fehler aufgetreten.");
                             }
                         } finally {
+                            if (errorOccurred) {
+                                setStatusMessage("Es ist ein Fehler aufgetreten.");
+                            } else {
+                                setStatusMessage("Die Bescheinigung kann jetzt erzeugt werden.");
+                            }
                             busyStatusPanel1.setBusy(false);
                             protokollPane.setBusy(false);
-                            setStatusMessage("Die Bescheinigung kann jetzt erzeugt werden.");
+                            jButton1.setEnabled(!errorOccurred);
                         }
                     }
                 };
@@ -593,12 +598,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
         if ((worker != null) && !worker.isDone()) {
             worker.cancel(true);
         }
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
