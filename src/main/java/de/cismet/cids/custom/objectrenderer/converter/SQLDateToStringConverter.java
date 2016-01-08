@@ -13,6 +13,7 @@ package de.cismet.cids.custom.objectrenderer.converter;
 
 import org.jdesktop.beansbinding.Converter;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -27,6 +28,37 @@ public class SQLDateToStringConverter extends Converter<java.sql.Date, String> {
     //~ Static fields/initializers ---------------------------------------------
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final DateFormat dateFormat;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new SQLDateToStringConverter object.
+     */
+    public SQLDateToStringConverter() {
+        this(DATE_FORMAT);
+    }
+
+    /**
+     * Creates a new SQLDateToStringConverter object.
+     *
+     * @param  simpleDateFormatString  DOCUMENT ME!
+     */
+    public SQLDateToStringConverter(final String simpleDateFormatString) {
+        this(new SimpleDateFormat(simpleDateFormatString));
+    }
+
+    /**
+     * Creates a new SQLDateToStringConverter object.
+     *
+     * @param  dateFormat  DOCUMENT ME!
+     */
+    public SQLDateToStringConverter(final DateFormat dateFormat) {
+        this.dateFormat = dateFormat;
+    }
 
     //~ Methods ----------------------------------------------------------------
 
