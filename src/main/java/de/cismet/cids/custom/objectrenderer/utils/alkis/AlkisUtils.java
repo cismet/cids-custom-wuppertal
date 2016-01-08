@@ -64,10 +64,7 @@ public class AlkisUtils {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final AlkisProducts PRODUCTS = new AlkisProducts(
-            AlkisConstants.COMMONS.USER,
-            AlkisConstants.COMMONS.PASSWORD,
-            AlkisConstants.COMMONS.SERVICE);
+    public static final AlkisProducts PRODUCTS = AlkisProducts.getInstance();
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     public static final String ALKIS_SOAP_OVER_CSA = "alkisSoapTunnelAction";
