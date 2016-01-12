@@ -239,15 +239,6 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblStatusValue">
-                  <BindingProperties>
-                    <BindingProperty name="text" source="Form" sourcePath="${cidsBean.erledigt}" target="lblStatusValue" targetPath="text" updateStrategy="0" immediately="false">
-                      <Property name="nullValue" type="java.lang.String" value="-"/>
-                      <Property name="incompletePathValue" type="java.lang.String" value="-"/>
-                      <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                        <Connection code="CONVERTER_STATUS" type="code"/>
-                      </Property>
-                    </BindingProperty>
-                  </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                       <GridBagConstraints gridX="1" gridY="-1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="21" weightX="1.0" weightY="0.0"/>

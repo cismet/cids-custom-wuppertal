@@ -476,18 +476,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblStatus, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.erledigt}"),
-                lblStatusValue,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
-        binding.setConverter(CONVERTER_STATUS);
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1052,6 +1040,18 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         this.cidsBean = cidsBean;
 
         if (cidsBean != null) {
+            final String statusText;
+            final Boolean erledigt = (Boolean)cidsBean.getProperty("erledigt");
+            final String fehler = (String)cidsBean.getProperty("fehler");
+            if (fehler != null) {
+                statusText = "Fehler";
+            } else if (Boolean.TRUE.equals(erledigt)) {
+                statusText = "erledigt";
+            } else {
+                statusText = "in Bearbeitung";
+            }
+            lblStatusValue.setText(statusText);
+
             new SwingWorker<CidsBean, Void>() {
 
                     @Override
