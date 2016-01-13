@@ -58,9 +58,6 @@ public class FsStatusBearbeitetAction extends AbstractCidsBeanAction {
         try {
             final MetaObject mo = getCidsBean().getMetaObject();
             final MetaObjectNode mon = new MetaObjectNode(mo.getDomain(), mo.getId(), mo.getClassID());
-            final ServerActionParameter<MetaObjectNode> paramMon = new ServerActionParameter<MetaObjectNode>(
-                    FormSolutionBestellungChangeStatusServerAction.PARAMETER_TYPE.METAOBJECTNODE.toString(),
-                    mon);
             final ServerActionParameter<Boolean> paramErledigt = new ServerActionParameter<Boolean>(
                     FormSolutionBestellungChangeStatusServerAction.PARAMETER_TYPE.ERLEDIGT.toString(),
                     true);
@@ -69,8 +66,7 @@ public class FsStatusBearbeitetAction extends AbstractCidsBeanAction {
                     .executeTask(SessionManager.getSession().getUser(),
                         FormSolutionBestellungChangeStatusServerAction.TASK_NAME,
                         "WUNDA_BLAU",
-                        null,
-                        paramMon,
+                        mon,
                         paramErledigt);
         } catch (final Exception ex) {
             LOG.error(ex, ex);

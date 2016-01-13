@@ -316,9 +316,9 @@ public class PrintBillingReportForCustomer {
     private void markBillings() {
         if (isRechnungsanlage && markBillingsAsBilled) {
             for (final CidsBean billing : billingsBeans) {
-                try {            
+                try {
                     billing.setProperty("abrechnungsdatum", new Date());
-                    billing.setProperty("abgerechnet", Boolean.TRUE);                    
+                    billing.setProperty("abgerechnet", Boolean.TRUE);
                     billing.persist();
                 } catch (Exception ex) {
                     LOG.error("Error while setting value or persisting of billing.", ex);
