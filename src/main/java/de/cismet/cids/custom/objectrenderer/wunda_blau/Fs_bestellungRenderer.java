@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -25,6 +26,8 @@ import edu.umd.cs.piccolo.event.PInputEvent;
 
 import org.jdesktop.beansbinding.Converter;
 
+import org.openide.util.Exceptions;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 
@@ -33,14 +36,19 @@ import java.text.DateFormat;
 import java.util.Collection;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.server.actions.DownloadFileAction;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -56,7 +64,12 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.ByteArrayDownload;
+import de.cismet.tools.gui.downloadmanager.Download;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
@@ -121,6 +134,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private org.jdesktop.swingx.JXHyperlink hlEMailValue;
     private org.jdesktop.swingx.JXHyperlink hlFlurstueckValue;
     private org.jdesktop.swingx.JXHyperlink hlProduktValue;
+    private org.jdesktop.swingx.JXHyperlink hlStatusErrorDetails;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -279,6 +293,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblBezugswegValue = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
         lblStatusValue = new javax.swing.JLabel();
+        hlStatusErrorDetails = new org.jdesktop.swingx.JXHyperlink();
         lblFlurstueck = new javax.swing.JLabel();
         hlFlurstueckValue = new org.jdesktop.swingx.JXHyperlink();
         lblProdukt = new javax.swing.JLabel();
@@ -402,6 +417,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -432,6 +448,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -462,6 +479,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -480,9 +498,29 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblStatusValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            hlStatusErrorDetails,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.hlStatusErrorDetails.text")); // NOI18N
+        hlStatusErrorDetails.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlStatusErrorDetailsActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(hlStatusErrorDetails, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblFlurstueck,
@@ -521,6 +559,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -539,7 +578,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_produkt.fk_typ.name != null}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.produkt_dateipfad != null}"),
                 hlProduktValue,
                 org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
@@ -554,8 +593,16 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
+        hlProduktValue.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlProduktValueActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -1028,6 +1075,56 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         }
     }                                                                                //GEN-LAST:event_hlEMailValueActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlProduktValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlProduktValueActionPerformed
+        final String filePath = (String)cidsBean.getProperty("produkt_dateipfad");
+        final String fileName = (String)cidsBean.getProperty("produkt_dateiname_orig");
+        if (filePath != null) {
+            final Object ret;
+            try {
+                final MetaObject mo = getCidsBean().getMetaObject();
+                final MetaObjectNode mon = new MetaObjectNode(mo.getDomain(), mo.getId(), mo.getClassID());
+
+                final int extPos = fileName.lastIndexOf(".");
+                final String pureName = fileName.substring(0, extPos);
+                final String ext = fileName.substring(extPos);
+
+                if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(Fs_bestellungRenderer.this)) {
+                    final String path = DownloadManagerDialog.getInstance().getJobName();
+                    final Download download = new ByteArrayActionDownload(
+                            FormSolutionDownloadBestellungAction.TASK_NAME,
+                            mon,
+                            null,
+                            "Bestellung: "
+                                    + title,
+                            path,
+                            pureName,
+                            ext);
+                    DownloadManager.instance().add(download);
+                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            }
+        }
+    } //GEN-LAST:event_hlProduktValueActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlStatusErrorDetailsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlStatusErrorDetailsActionPerformed
+        JOptionPane.showMessageDialog(
+            this,
+            (String)cidsBean.getProperty("fehler"),
+            "Fehler bei der Produkt-Bestellung",
+            JOptionPane.ERROR_MESSAGE);
+    }                                                                                        //GEN-LAST:event_hlStatusErrorDetailsActionPerformed
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -1051,6 +1148,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 statusText = "in Bearbeitung";
             }
             lblStatusValue.setText(statusText);
+            hlStatusErrorDetails.setVisible(fehler != null);
 
             new SwingWorker<CidsBean, Void>() {
 
