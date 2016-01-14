@@ -19,36 +19,45 @@ import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
 import org.jdesktop.beansbinding.Converter;
-
-import org.openide.util.Exceptions;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.Color;
 import java.awt.EventQueue;
 
+import java.io.IOException;
+
+import java.sql.Timestamp;
+
 import java.text.DateFormat;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.logging.Level;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
+import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.actions.DownloadFileAction;
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -64,9 +73,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.FooterComponentProvider;
-import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
-import de.cismet.tools.gui.downloadmanager.ByteArrayDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -126,6 +133,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
     //~ Instance fields --------------------------------------------------------
 
+    private final ObjectMapper MAPPER = new ObjectMapper();
+
     private String title;
     private CidsBean cidsBean;
     private MetaObjectNode flurstueckMon;
@@ -135,11 +144,14 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private org.jdesktop.swingx.JXHyperlink hlFlurstueckValue;
     private org.jdesktop.swingx.JXHyperlink hlProduktValue;
     private org.jdesktop.swingx.JXHyperlink hlStatusErrorDetails;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel labInfoTitle;
     private javax.swing.JLabel labInfoTitle1;
     private javax.swing.JLabel labInfoTitle2;
@@ -180,7 +192,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JPanel panLieferanschrift;
     private javax.swing.JPanel panMain;
     private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panProduktValue;
     private javax.swing.JPanel panRechnungsanschrift;
+    private javax.swing.JPanel panStatusValue;
     private javax.swing.JPanel panTitle;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
@@ -280,6 +294,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblTitleValue = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         panMain = new javax.swing.JPanel();
         panInfo = new javax.swing.JPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -292,12 +307,16 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblBezugsweg = new javax.swing.JLabel();
         lblBezugswegValue = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
+        panStatusValue = new javax.swing.JPanel();
         lblStatusValue = new javax.swing.JLabel();
         hlStatusErrorDetails = new org.jdesktop.swingx.JXHyperlink();
+        jPanel6 = new javax.swing.JPanel();
         lblFlurstueck = new javax.swing.JLabel();
         hlFlurstueckValue = new org.jdesktop.swingx.JXHyperlink();
         lblProdukt = new javax.swing.JLabel();
+        panProduktValue = new javax.swing.JPanel();
         hlProduktValue = new org.jdesktop.swingx.JXHyperlink();
+        jPanel5 = new javax.swing.JPanel();
         panMap = new javax.swing.JPanel();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
         panAdressen = new javax.swing.JPanel();
@@ -364,6 +383,23 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jLabel1.text")); // NOI18N
         panFooter.add(jLabel1, new java.awt.GridBagConstraints());
 
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panFooter.add(jButton1, gridBagConstraints);
+
         setLayout(new java.awt.GridBagLayout());
 
         panMain.setOpaque(false);
@@ -401,7 +437,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblTransId.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTransId, gridBagConstraints);
 
@@ -417,9 +453,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTransIdValue, gridBagConstraints);
@@ -431,26 +467,26 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 "Fs_bestellungRenderer.lblEingegangenAm.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblEingegangenAm, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingegangen_am}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingang_ts}"),
                 lblEingegangenAmValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
-        binding.setConverter(new SQLDateToStringConverter(DATE_FORMAT));
+        binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblEingegangenAmValue, gridBagConstraints);
@@ -462,7 +498,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 "Fs_bestellungRenderer.lblBezugsweg.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblBezugsweg, gridBagConstraints);
 
@@ -479,9 +515,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblBezugswegValue, gridBagConstraints);
@@ -491,15 +527,27 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblStatus.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblStatus, gridBagConstraints);
+
+        panStatusValue.setMinimumSize(new java.awt.Dimension(79, 1));
+        panStatusValue.setOpaque(false);
+        panStatusValue.setPreferredSize(new java.awt.Dimension(100, 1));
+        panStatusValue.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStatusValue,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblStatusValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblStatusValue, gridBagConstraints);
+        panStatusValue.add(lblStatusValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             hlStatusErrorDetails,
@@ -514,13 +562,35 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panStatusValue.add(hlStatusErrorDetails, gridBagConstraints);
+
+        jPanel6.setOpaque(false);
+
+        final javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(hlStatusErrorDetails, gridBagConstraints);
+        panStatusValue.add(jPanel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(panStatusValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblFlurstueck,
@@ -529,7 +599,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 "Fs_bestellungRenderer.lblFlurstueck.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblFlurstueck, gridBagConstraints);
 
@@ -559,9 +629,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(hlFlurstueckValue, gridBagConstraints);
@@ -571,9 +641,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblProdukt.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblProdukt, gridBagConstraints);
+
+        panProduktValue.setOpaque(false);
+        panProduktValue.setLayout(new java.awt.GridBagLayout());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -601,13 +674,37 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(hlProduktValue, gridBagConstraints);
+        panProduktValue.add(hlProduktValue, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(panProduktValue, gridBagConstraints);
+
+        jPanel5.setOpaque(false);
+
+        final javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(jPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -672,7 +769,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaFirma, gridBagConstraints);
 
@@ -689,7 +786,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaFirmaValue, gridBagConstraints);
@@ -700,7 +797,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaName, gridBagConstraints);
 
@@ -718,7 +815,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaNameValue, gridBagConstraints);
@@ -731,7 +828,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaStrasse, gridBagConstraints);
 
@@ -749,7 +846,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaStrasseValue, gridBagConstraints);
@@ -760,7 +857,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaOrt, gridBagConstraints);
 
@@ -778,7 +875,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaOrtValue, gridBagConstraints);
@@ -789,7 +886,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblEMail, gridBagConstraints);
 
@@ -820,7 +917,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(hlEMailValue, gridBagConstraints);
@@ -868,7 +965,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblRaFirma, gridBagConstraints);
 
@@ -885,7 +982,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblRaFirmaValue, gridBagConstraints);
@@ -896,7 +993,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblName, gridBagConstraints);
 
@@ -914,7 +1011,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblNameValue, gridBagConstraints);
@@ -925,7 +1022,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblStrasse, gridBagConstraints);
 
@@ -943,7 +1040,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblStrasseValue, gridBagConstraints);
@@ -954,7 +1051,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblOrt, gridBagConstraints);
 
@@ -972,7 +1069,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblOrtValue, gridBagConstraints);
@@ -1025,7 +1122,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         panFillerLayout.setHorizontalGroup(
             panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                846,
+                0,
                 Short.MAX_VALUE));
         panFillerLayout.setVerticalGroup(
             panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
@@ -1118,12 +1215,78 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      * @param  evt  DOCUMENT ME!
      */
     private void hlStatusErrorDetailsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlStatusErrorDetailsActionPerformed
+        final String exceptionJson = (String)cidsBean.getProperty("exception");
+        final String fehler = (String)cidsBean.getProperty("fehler");
+        final Timestamp fehler_ts = (Timestamp)cidsBean.getProperty("fehler_ts");
+        final String fehler_time = (fehler_ts != null) ? ("(" + DATE_FORMAT.format(fehler_ts) + ") ") : "";
+
+        Exception ex = null;
+        if (exceptionJson != null) {
+            try {
+                ex = MAPPER.readValue(exceptionJson, Exception.class);
+            } catch (final IOException ex1) {
+                LOG.error(ex1, ex1);
+            }
+        }
+
+        final ErrorInfo info = new ErrorInfo(
+                fehler_time
+                        + "Fehler beim Bearbeiten",
+                fehler,
+                null,
+                null,
+                ex,
+                Level.SEVERE,
+                null);
+        JXErrorPane.showDialog(this, info);
+    } //GEN-LAST:event_hlStatusErrorDetailsActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    final MetaObject mo = cidsBean.getMetaObject();
+                    final MetaObjectNode mon = new MetaObjectNode(mo.getDomain(), mo.getId(), mo.getClassID());
+
+                    final ServerActionParameter<Collection<MetaObjectNode>> paramMon =
+                        new ServerActionParameter<Collection<MetaObjectNode>>(
+                            FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.METAOBJECTNODES.toString(),
+                            Arrays.asList(mon));
+                    final ServerActionParameter<Integer> paramStep = new ServerActionParameter<Integer>(
+                            FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.STEP_TO_EXECUTE.toString(),
+                            FormSolutionServerNewStuffAvailableAction.STATUS_DOWNLOAD);
+
+                    try {
+                        SessionManager.getConnection()
+                                .executeTask(SessionManager.getSession().getUser(),
+                                    FormSolutionServerNewStuffAvailableAction.TASK_NAME,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramMon,
+                                    paramStep);
+                    } catch (final ConnectionException ex3) {
+                        LOG.error(ex3, ex3);
+                    }
+                    return null;
+                }
+            }.execute();
+
         JOptionPane.showMessageDialog(
             this,
-            (String)cidsBean.getProperty("fehler"),
-            "Fehler bei der Produkt-Bestellung",
-            JOptionPane.ERROR_MESSAGE);
-    }                                                                                        //GEN-LAST:event_hlStatusErrorDetailsActionPerformed
+            "<html><body>"
+                    + "Der Server versucht nun erneut, das<br>"
+                    + "Produkt zu erzeugen...<br><br>"
+                    + "Sie können dieses Fenstern schließen,<br>"
+                    + "und den Status später erneut anfragen.",
+            "Produkt wird neu erzeugt",
+            JOptionPane.INFORMATION_MESSAGE);
+    } //GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -1140,14 +1303,16 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             final String statusText;
             final Boolean erledigt = (Boolean)cidsBean.getProperty("erledigt");
             final String fehler = (String)cidsBean.getProperty("fehler");
+
             if (fehler != null) {
-                statusText = "Fehler";
+                statusText = "Fehler: " + fehler;
             } else if (Boolean.TRUE.equals(erledigt)) {
                 statusText = "erledigt";
             } else {
                 statusText = "in Bearbeitung";
             }
             lblStatusValue.setText(statusText);
+
             hlStatusErrorDetails.setVisible(fehler != null);
 
             new SwingWorker<CidsBean, Void>() {
