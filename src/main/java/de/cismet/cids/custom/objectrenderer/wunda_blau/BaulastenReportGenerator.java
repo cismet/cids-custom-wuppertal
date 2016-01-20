@@ -281,7 +281,7 @@ public class BaulastenReportGenerator {
                         return downloads;
                     }
                 };
-            return new BackgroundTaskMultipleDownload(null, projectname, fetchDownloadsTask);
+            return new BackgroundTaskMultipleDownload(null, jobname, fetchDownloadsTask);
         } else {
             return createJasperDownload(type, selectedBaulasten, jobname, jobnumber, projectname);
         }
