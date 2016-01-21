@@ -48,12 +48,14 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.formsolutions.FSReloadBestellungenDialog;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -73,6 +75,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -295,7 +298,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblTitleValue = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         panMain = new javax.swing.JPanel();
         panInfo = new javax.swing.JPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -317,6 +319,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblProdukt = new javax.swing.JLabel();
         panProduktValue = new javax.swing.JPanel();
         hlProduktValue = new org.jdesktop.swingx.JXHyperlink();
+        jButton1 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         panMap = new javax.swing.JPanel();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
@@ -355,7 +358,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblTitle, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTitle,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
@@ -363,7 +368,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblTitleValue.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblTitleValue.setForeground(new java.awt.Color(255, 255, 255));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${title}"), lblTitleValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${title}"),
+                lblTitleValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -374,21 +384,10 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jLabel1.text")); // NOI18N
         panFooter.add(jLabel1, new java.awt.GridBagConstraints());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panFooter.add(jButton1, gridBagConstraints);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -402,7 +401,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
 
         labInfoTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(labInfoTitle, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.labInfoTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            labInfoTitle,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.labInfoTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -418,14 +421,21 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblTransId, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblTransId.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTransId,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblTransId.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTransId, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.transid}"), lblTransIdValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.transid}"),
+                lblTransIdValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -439,14 +449,23 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTransIdValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblEingegangenAm, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblEingegangenAm.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblEingegangenAm,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblEingegangenAm.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblEingegangenAm, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingang_ts}"), lblEingegangenAmValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingang_ts}"),
+                lblEingegangenAmValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
@@ -461,14 +480,23 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblEingegangenAmValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblBezugsweg, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblBezugsweg.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBezugsweg,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblBezugsweg.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblBezugsweg, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.postweg}"), lblBezugswegValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.postweg}"),
+                lblBezugswegValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         binding.setConverter(CONVERTER_BEZUGSWEG);
@@ -483,7 +511,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblBezugswegValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblStatus, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblStatus.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStatus,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblStatus.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
@@ -495,7 +525,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         panStatusValue.setPreferredSize(new java.awt.Dimension(100, 1));
         panStatusValue.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblStatusValue, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblStatusValue.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStatusValue,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblStatusValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -504,12 +538,18 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panStatusValue.add(lblStatusValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(hlStatusErrorDetails, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.hlStatusErrorDetails.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            hlStatusErrorDetails,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.hlStatusErrorDetails.text")); // NOI18N
         hlStatusErrorDetails.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hlStatusErrorDetailsActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlStatusErrorDetailsActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -520,16 +560,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         jPanel6.setOpaque(false);
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        final javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -545,25 +581,34 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(panStatusValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblFlurstueck, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblFlurstueck.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFlurstueck,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblFlurstueck.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblFlurstueck, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.landparcelcode != null}"), hlFlurstueckValue, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.landparcelcode}"), hlFlurstueckValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.landparcelcode}"),
+                hlFlurstueckValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         hlFlurstueckValue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hlFlurstueckValueActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlFlurstueckValueActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -573,7 +618,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(hlFlurstueckValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblProdukt, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblProdukt.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblProdukt,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblProdukt.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
@@ -583,18 +630,24 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         panProduktValue.setOpaque(false);
         panProduktValue.setLayout(new java.awt.GridBagLayout());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.produkt_dateipfad != null}"), hlProduktValue, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_produkt.fk_typ.name}, ${cidsBean.fk_produkt.fk_format.format}, 1:${cidsBean.massstab}"), hlProduktValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_produkt.fk_typ.name}, ${cidsBean.fk_produkt.fk_format.format}, 1:${cidsBean.massstab}"),
+                hlProduktValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         hlProduktValue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hlProduktValueActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlProduktValueActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -603,6 +656,29 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panProduktValue.add(hlProduktValue, gridBagConstraints);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/stock_refresh.png")));              // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jButton1.text")); // NOI18N
+        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.jButton1.toolTipText"));                                                        // NOI18N
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setFocusPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        panProduktValue.add(jButton1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -613,16 +689,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         jPanel5.setOpaque(false);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        final javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -669,7 +741,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         semiRoundedPanel2.setLayout(new java.awt.GridBagLayout());
 
         labInfoTitle1.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(labInfoTitle1, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.labInfoTitle1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            labInfoTitle1,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.labInfoTitle1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -685,7 +761,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblLaFirma, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLaFirma.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLaFirma,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLaFirma.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -693,7 +771,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaFirma, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_versand.firma}"), lblLaFirmaValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_versand.firma}"),
+                lblLaFirmaValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -706,7 +789,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaFirmaValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblLaName, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLaName.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLaName,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLaName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -714,7 +799,13 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaName, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_versand.name}"), lblLaNameValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_versand.name}"),
+                lblLaNameValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -727,7 +818,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaNameValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblLaStrasse, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLaStrasse.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLaStrasse,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblLaStrasse.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -735,7 +830,13 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaStrasse, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_versand.strasse} ${cidsBean.fk_adresse_versand.hausnummer}"), lblLaStrasseValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_adresse_versand.strasse} ${cidsBean.fk_adresse_versand.hausnummer}"),
+                lblLaStrasseValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -748,7 +849,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaStrasseValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblLaOrt, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLaOrt.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLaOrt,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLaOrt.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -756,7 +859,13 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaOrt, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_versand.plz} ${cidsBean.fk_adresse_versand.ort}"), lblLaOrtValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_adresse_versand.plz} ${cidsBean.fk_adresse_versand.ort}"),
+                lblLaOrtValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -769,7 +878,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaOrtValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblEMail, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblEMail.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblEMail,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblEMail.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -777,18 +888,30 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblEMail, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.email != null}"), hlEMailValue, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.email != null}"),
+                hlEMailValue,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.email}"), hlEMailValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.email}"),
+                hlEMailValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         hlEMailValue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hlEMailValueActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlEMailValueActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -814,7 +937,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         semiRoundedPanel3.setLayout(new java.awt.GridBagLayout());
 
         labInfoTitle2.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(labInfoTitle2, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.labInfoTitle2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            labInfoTitle2,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.labInfoTitle2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -830,7 +957,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblRaFirma, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblRaFirma.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblRaFirma,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblRaFirma.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -838,7 +967,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblRaFirma, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_rechnung.firma}"), lblRaFirmaValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_rechnung.firma}"),
+                lblRaFirmaValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -851,7 +985,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblRaFirmaValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblName, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblName.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblName,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -859,7 +995,13 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblName, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_rechnung.vorname} ${cidsBean.fk_adresse_rechnung.name}"), lblNameValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_adresse_rechnung.vorname} ${cidsBean.fk_adresse_rechnung.name}"),
+                lblNameValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -872,7 +1014,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblNameValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblStrasse, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblStrasse.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStrasse,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblStrasse.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -880,7 +1024,13 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblStrasse, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_rechnung.strasse} ${cidsBean.fk_adresse_rechnung.hausnummer}"), lblStrasseValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_adresse_rechnung.strasse} ${cidsBean.fk_adresse_rechnung.hausnummer}"),
+                lblStrasseValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -893,7 +1043,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblStrasseValue, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblOrt, org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblOrt.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblOrt,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblOrt.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -901,7 +1053,13 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblOrt, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_rechnung.plz} ${cidsBean.fk_adresse_rechnung.ort}"), lblOrtValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_adresse_rechnung.plz} ${cidsBean.fk_adresse_rechnung.ort}"),
+                lblOrtValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -916,16 +1074,15 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         jPanel4.setOpaque(false);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        final javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 403, Short.MAX_VALUE)
-        );
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                403,
+                Short.MAX_VALUE));
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -958,16 +1115,18 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         panFiller.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerLayout = new javax.swing.GroupLayout(panFiller);
+        final javax.swing.GroupLayout panFillerLayout = new javax.swing.GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
         panFillerLayout.setHorizontalGroup(
-            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerLayout.setVerticalGroup(
-            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -985,38 +1144,38 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         add(panMain, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlFlurstueckValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstueckValueActionPerformed
+    private void hlFlurstueckValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstueckValueActionPerformed
         if (flurstueckMon != null) {
             ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(flurstueckMon, false);
         }
-    }//GEN-LAST:event_hlFlurstueckValueActionPerformed
+    }                                                                                     //GEN-LAST:event_hlFlurstueckValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlEMailValueActionPerformed
+    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlEMailValueActionPerformed
         try {
             BrowserLauncher.openURL("mailto:" + (String)cidsBean.getProperty("email"));
         } catch (Exception ex) {
             LOG.warn("could not open mailto link", ex);
         }
-    }//GEN-LAST:event_hlEMailValueActionPerformed
+    }                                                                                //GEN-LAST:event_hlEMailValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlProduktValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlProduktValueActionPerformed
+    private void hlProduktValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlProduktValueActionPerformed
         final String filePath = (String)cidsBean.getProperty("produkt_dateipfad");
         final String fileName = (String)cidsBean.getProperty("produkt_dateiname_orig");
         if (filePath != null) {
@@ -1046,14 +1205,14 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 LOG.error(ex, ex);
             }
         }
-    }//GEN-LAST:event_hlProduktValueActionPerformed
+    } //GEN-LAST:event_hlProduktValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlStatusErrorDetailsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlStatusErrorDetailsActionPerformed
+    private void hlStatusErrorDetailsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlStatusErrorDetailsActionPerformed
         final String exceptionJson = (String)cidsBean.getProperty("exception");
         final String fehler = (String)cidsBean.getProperty("fehler");
         final Timestamp fehler_ts = (Timestamp)cidsBean.getProperty("fehler_ts");
@@ -1078,54 +1237,16 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 Level.SEVERE,
                 null);
         JXErrorPane.showDialog(this, info);
-    }//GEN-LAST:event_hlStatusErrorDetailsActionPerformed
+    } //GEN-LAST:event_hlStatusErrorDetailsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new SwingWorker<Void, Void>() {
-
-                @Override
-                protected Void doInBackground() throws Exception {
-                    final MetaObject mo = cidsBean.getMetaObject();
-                    final MetaObjectNode mon = new MetaObjectNode(mo.getDomain(), mo.getId(), mo.getClassID());
-
-                    final ServerActionParameter<Collection<MetaObjectNode>> paramMon =
-                        new ServerActionParameter<Collection<MetaObjectNode>>(
-                            FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.METAOBJECTNODES.toString(),
-                            Arrays.asList(mon));
-                    final ServerActionParameter<Integer> paramStep = new ServerActionParameter<Integer>(
-                            FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.STEP_TO_EXECUTE.toString(),
-                            FormSolutionServerNewStuffAvailableAction.STATUS_DOWNLOAD);
-
-                    try {
-                        SessionManager.getConnection()
-                                .executeTask(SessionManager.getSession().getUser(),
-                                    FormSolutionServerNewStuffAvailableAction.TASK_NAME,
-                                    "WUNDA_BLAU",
-                                    null,
-                                    paramMon,
-                                    paramStep);
-                    } catch (final ConnectionException ex3) {
-                        LOG.error(ex3, ex3);
-                    }
-                    return null;
-                }
-            }.execute();
-
-        JOptionPane.showMessageDialog(
-            this,
-            "<html><body>"
-                    + "Der Server versucht nun erneut, das<br>"
-                    + "Produkt zu erzeugen...<br><br>"
-                    + "Sie können dieses Fenstern schließen,<br>"
-                    + "und den Status später erneut anfragen.",
-            "Produkt wird neu erzeugt",
-            JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean));
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -1135,7 +1256,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
-        this.flurstueckMon = null;
+        setFlurstueckMon(null);
         this.cidsBean = cidsBean;
 
         if (cidsBean != null) {
@@ -1161,6 +1282,45 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         }
 
         bindingGroup.bind();
+
+        new SwingWorker<MetaObjectNode, Void>() {
+
+                @Override
+                protected MetaObjectNode doInBackground() throws Exception {
+                    final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
+                            CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
+                            CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
+                            (String)cidsBean.getProperty("landparcelcode"),
+                            null);
+                    final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                .customServerSearch(SessionManager.getSession().getUser(), search);
+                    if (!mons.isEmpty()) {
+                        return mons.iterator().next();
+                    } else {
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        setFlurstueckMon(get());
+                    } catch (final Exception ex) {
+                        LOG.warn(ex, ex);
+                    }
+                }
+            }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  flurstueckMon  DOCUMENT ME!
+     */
+    private void setFlurstueckMon(final MetaObjectNode flurstueckMon) {
+        this.flurstueckMon = flurstueckMon;
+        jButton1.setEnabled(flurstueckMon != null);
+        hlFlurstueckValue.setEnabled(flurstueckMon != null);
     }
 
     @Override
