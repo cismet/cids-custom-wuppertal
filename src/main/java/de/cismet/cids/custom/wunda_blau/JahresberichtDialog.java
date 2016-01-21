@@ -120,40 +120,21 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         btnOk = new javax.swing.JButton();
         jProgressBar1 = new javax.swing.JProgressBar();
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblNoBillingsText,
-            org.openide.util.NbBundle.getMessage(
-                JahresberichtDialog.class,
-                "JahresberichtDialog.lblNoBillingsText.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblNoBillingsText, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.lblNoBillingsText.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblNoBillingsTitle,
-            org.openide.util.NbBundle.getMessage(
-                JahresberichtDialog.class,
-                "JahresberichtDialog.lblNoBillingsTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblNoBillingsTitle, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.lblNoBillingsTitle.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblErrorBillingsText,
-            org.openide.util.NbBundle.getMessage(
-                JahresberichtDialog.class,
-                "JahresberichtDialog.lblErrorBillingsText.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblErrorBillingsText, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.lblErrorBillingsText.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblErrorBillingsTitle,
-            org.openide.util.NbBundle.getMessage(
-                JahresberichtDialog.class,
-                "JahresberichtDialog.lblErrorBillingsTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblErrorBillingsTitle, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.lblErrorBillingsTitle.text")); // NOI18N
 
         setTitle(org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.title")); // NOI18N
-        setPreferredSize(new java.awt.Dimension(400, 200));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -167,9 +148,7 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(spnYear, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
-            org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -179,9 +158,7 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
         jPanel1.add(jLabel2, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel3,
-            org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel3.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -194,28 +171,20 @@ public class JahresberichtDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnCancel,
-            org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.btnCancel.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCancel, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnCancelActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnCancel);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnOk,
-            org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.btnOk.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnOk, org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.btnOk.text")); // NOI18N
         btnOk.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnOkActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnOk);
         getRootPane().setDefaultButton(btnOk);
 
@@ -226,9 +195,7 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jProgressBar1.setString(org.openide.util.NbBundle.getMessage(
-                JahresberichtDialog.class,
-                "JahresberichtDialog.jProgressBar1.string")); // NOI18N
+        jProgressBar1.setString(org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jProgressBar1.string")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -245,23 +212,23 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         getContentPane().add(jPanel1, gridBagConstraints);
 
         pack();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         setVisible(false);
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         final int year = (Integer)spnYear.getValue();
         final Date now = new Date();
 
@@ -339,7 +306,7 @@ public class JahresberichtDialog extends javax.swing.JDialog {
                     }
                 }
             }.execute();
-    } //GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
