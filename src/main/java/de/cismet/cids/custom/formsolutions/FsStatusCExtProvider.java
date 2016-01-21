@@ -11,6 +11,9 @@
  */
 package de.cismet.cids.custom.formsolutions;
 
+import Sirius.navigator.types.treenode.PureTreeNode;
+import Sirius.navigator.types.treenode.RootTreeNode;
+
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
@@ -21,6 +24,8 @@ import org.openide.util.lookup.ServiceProvider;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.swing.tree.TreeNode;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -84,26 +89,35 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
                 ctxObject = ctxReference;
             }
 
-            final MetaClass mc;
-            final CidsBean ctxBean;
-            if (ctxObject instanceof CidsBean) {
-                ctxBean = (CidsBean)ctxObject;
-                mc = ctxBean.getMetaObject().getMetaClass();
-            } else if (ctxObject instanceof MetaObject) {
-                final MetaObject mo = (MetaObject)ctxObject;
-                ctxBean = mo.getBean();
-                mc = mo.getMetaClass();
+            if (ctxObject instanceof PureTreeNode) {
+                final PureTreeNode ptn = (PureTreeNode)ctxObject;
+                final TreeNode parent = ptn.getParent();
+                if ((parent instanceof RootTreeNode) && (ptn.getID() == 281001105)) {
+                    actions.add(new FsReloadBestellungenAction(ptn));
+                }
             } else {
-                ctxBean = null;
-                mc = null;
-            }
+                final MetaClass mc;
+                final CidsBean ctxBean;
+                if (ctxObject instanceof CidsBean) {
+                    ctxBean = (CidsBean)ctxObject;
+                    mc = ctxBean.getMetaObject().getMetaClass();
+                } else if (ctxObject instanceof MetaObject) {
+                    final MetaObject mo = (MetaObject)ctxObject;
+                    ctxBean = mo.getBean();
+                    mc = mo.getMetaClass();
+                } else {
+                    ctxBean = null;
+                    mc = null;
+                }
 
-            if (((mc != null) && (ctxBean != null)) && ("fs_bestellung".equalsIgnoreCase(mc.getTableName()))
-                        && (ctxBean.getProperty("fehler") == null)
-                        && ((Boolean)ctxBean.getProperty("postweg")) && !((Boolean)ctxBean.getProperty("erledigt"))) {
-                final CidsBeanAction action1 = new FsStatusBearbeitetAction();
-                action1.setCidsBean(ctxBean);
-                actions.add(action1);
+                if (((mc != null) && (ctxBean != null)) && ("fs_bestellung".equalsIgnoreCase(mc.getTableName()))
+                            && (ctxBean.getProperty("fehler") == null)
+                            && ((Boolean)ctxBean.getProperty("postweg"))
+                            && !((Boolean)ctxBean.getProperty("erledigt"))) {
+                    final CidsBeanAction action1 = new FsStatusBearbeitetAction();
+                    action1.setCidsBean(ctxBean);
+                    actions.add(action1);
+                }
             }
         }
         return actions;
