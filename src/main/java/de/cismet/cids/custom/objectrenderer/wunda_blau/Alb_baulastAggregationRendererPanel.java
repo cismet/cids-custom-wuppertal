@@ -406,7 +406,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                                 Alb_baulastAggregationRendererPanel.this)) {
                                     String projectname = txtProjectname.getText();
                                     if ((projectname == null) || (projectname.trim().length() == 0)) {
-                                        projectname = type.toString();
+                                        projectname = "";
                                     }
                                     final Download download = BaulastenReportGenerator.generateDownload(
                                             type,
