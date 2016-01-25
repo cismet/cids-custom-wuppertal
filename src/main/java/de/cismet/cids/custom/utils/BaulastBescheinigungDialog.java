@@ -419,10 +419,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         doDownload();
         setVisible(false);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -598,12 +598,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
         if ((worker != null) && !worker.isDone()) {
             worker.cancel(true);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1029,22 +1029,19 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 }
             };
 
-        final String dateString = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        final Collection<FlurstueckBean> fls = bescheinigungsGruppe.getFlurstuecke();
+        final String title = "Bescheinigung " + fls.iterator().next().getAlkisId() + ((fls.size() > 1) ? " (ua)" : "")
+                    + " " + number + "/" + max;
+        final String fileName = "bescheinigung_" + fls.iterator().next().getAlkisId() + ((fls.size() > 1) ? ".ua" : "")
+                    + "_" + number;
+
         final JasperReportDownload download = new JasperReportDownload(
                 "/de/cismet/cids/custom/wunda_blau/res/baulastbescheinigung.jasper",
                 parametersGenerator,
                 dataSourceGenerator,
                 jobname,
-                "Bescheinigung "
-                        + dateString
-                        + " "
-                        + number
-                        + "/"
-                        + max,
-                "bescheinigung_"
-                        + dateString
-                        + "_"
-                        + number);
+                title,
+                fileName);
 
         return download;
     }
@@ -1437,6 +1434,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
         //~ Instance fields ----------------------------------------------------
 
+        private final String alkisId;
         private final String gemarkung;
         private final String flur;
         private final String nummer;
@@ -1449,6 +1447,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
          * @param  flurstueck  DOCUMENT ME!
          */
         public FlurstueckBean(final CidsBean flurstueck) {
+            this.alkisId = (String)flurstueck.getProperty("alkis_id");
             this.gemarkung = (String)flurstueck.getProperty("gemarkung");
             this.flur = (String)flurstueck.getProperty("flur");
             final String nenner = (String)flurstueck.getProperty("fstck_nenner");
