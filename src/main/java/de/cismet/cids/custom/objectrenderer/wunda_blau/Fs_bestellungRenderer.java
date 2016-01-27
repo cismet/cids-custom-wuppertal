@@ -664,8 +664,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
                 Fs_bestellungRenderer.class,
                 "Fs_bestellungRenderer.jButton1.toolTipText"));                                                        // NOI18N
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
         jButton1.setFocusPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
 
