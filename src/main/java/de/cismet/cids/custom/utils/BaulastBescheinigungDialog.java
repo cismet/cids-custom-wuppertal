@@ -17,6 +17,7 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -65,6 +66,9 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
+import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
+import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -98,7 +102,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
     private static BaulastBescheinigungDialog INSTANCE;
 
-    private static final Map<CidsBean, Buchungsblatt> buchungsblattCache = new HashMap<CidsBean, Buchungsblatt>();
+    private static final Map<CidsBean, Buchungsblatt> BUCHUNGSBLATT_CACHE = new HashMap<CidsBean, Buchungsblatt>();
 
     private static final String PARAMETER_HAS_BELASTET = "HAS_BELASTET";
     private static final String PARAMETER_HAS_BEGUENSTIGT = "HAS_BEGUENSTIGT";
@@ -677,9 +681,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         final MetaClass mcFlurstueck = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
                 "alkis_landparcel");
-//        final MetaClass mcFlurstueck = ClassCacheMultiple.getMetaClass(
-//                "WUNDA_BLAU",
-//                "alb_flurstueck_kicker");
 
         final Set<CidsBean> flurstuecke = new HashSet<CidsBean>();
         try {
@@ -713,52 +714,52 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      */
     private static Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Collection<CidsBean> flurstuecke,
             final boolean belastet) throws Exception {
-        final String queryBeguenstigt = "SELECT %d, alb_baulast.%s \n"
-                    + "FROM alb_baulast_flurstuecke_beguenstigt, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
-                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_beguenstigt.baulast_reference \n"
-                    + "AND alb_baulast_flurstuecke_beguenstigt.flurstueck = alb_flurstueck_kicker.id \n"
-                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
-                    + "AND flurstueck.alkis_id ilike '%s' \n"
-                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
-
-        final String queryBelastet = "SELECT %d, alb_baulast.%s \n"
-                    + "FROM alb_baulast_flurstuecke_belastet, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
-                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_belastet.baulast_reference \n"
-                    + "AND alb_baulast_flurstuecke_belastet.flurstueck = alb_flurstueck_kicker.id \n"
-                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
-                    + "AND flurstueck.alkis_id ilike '%s' \n"
-                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
-
-        final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
-                "WUNDA_BLAU",
-                "alb_baulast");
-
-        final String query = belastet ? queryBelastet : queryBeguenstigt;
-
-        addMessage("\nSuche der " + ((belastet) ? "belastenden" : "begünstigenden") + " Baulasten von:");
+        addMessage("\n===");
+        addMessage("\nSuche der Baulasten von:");
         final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenMap = new HashMap<CidsBean, Set<CidsBean>>();
         for (final CidsBean flurstueck : flurstuecke) {
             addMessage(" * Flurstück: " + flurstueck + " ...");
             final Set<CidsBean> baulasten = new HashSet<CidsBean>();
             try {
-                final String alkisId = (String)flurstueck.getProperty("alkis_id");
+                final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
+                        "WUNDA_BLAU",
+                        "alb_baulast");
+                final BaulastSearchInfo searchInfo = new BaulastSearchInfo();
+                final Integer gemarkung = Integer.parseInt(((String)flurstueck.getProperty("alkis_id")).substring(
+                            2,
+                            6));
+                final String flur = Integer.toString(Integer.parseInt((String)flurstueck.getProperty("flur")));
+                final String zaehler = Integer.toString(Integer.parseInt(
+                            (String)flurstueck.getProperty("fstck_zaehler")));
+                final String nenner = (flurstueck.getProperty("fstck_nenner") == null)
+                    ? "0" : Integer.toString(Integer.parseInt((String)flurstueck.getProperty("fstck_nenner")));
+
+                final FlurstueckInfo fsi = new FlurstueckInfo(gemarkung, flur, zaehler, nenner);
+                searchInfo.setFlurstuecke(Arrays.asList(fsi));
+                searchInfo.setResult(CidsBaulastSearchStatement.Result.BAULAST);
+                searchInfo.setBelastet(belastet);
+                searchInfo.setBeguenstigt(!belastet);
+                final CidsBaulastSearchStatement search = new CidsBaulastSearchStatement(
+                        searchInfo,
+                        mcBaulast.getId(),
+                        -1);
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
-                final MetaObject[] mos = SessionManager.getProxy()
-                            .getMetaObjectByQuery(String.format(
-                                    query,
-                                    mcBaulast.getID(),
-                                    mcBaulast.getPrimaryKey(),
-                                    alkisId),
-                                0);
-                for (final MetaObject mo : mos) {
+                final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(search);
+                for (final MetaObjectNode mon : mons) {
+                    if (mon.getName().startsWith("indirekt: ")) {
+                        throw new BaBeException(
+                            "Zu den angegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
+                    }
+                    final MetaObject mo = SessionManager.getProxy()
+                                .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
                     final CidsBean baulast = mo.getBean();
                     final Boolean geprueft = (Boolean)baulast.getProperty("geprueft");
                     if ((geprueft == null) || (geprueft == false)) {
                         throw new BaBeException(
-                            "Zu denan gegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
+                            "Zu den angegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
                     }
                     addMessage("   => Baulast: " + baulast);
                     baulasten.add(baulast);
@@ -1155,7 +1156,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         Buchungsblatt buchungsblatt = null;
 
         if (buchungsblattBean != null) {
-            buchungsblatt = buchungsblattCache.get(buchungsblattBean);
+            buchungsblatt = BUCHUNGSBLATT_CACHE.get(buchungsblattBean);
             if (buchungsblatt == null) {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
@@ -1173,7 +1174,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                 AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
                     }
 
-                    buchungsblattCache.put(buchungsblattBean, buchungsblatt);
+                    BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);
                 }
             }
         }

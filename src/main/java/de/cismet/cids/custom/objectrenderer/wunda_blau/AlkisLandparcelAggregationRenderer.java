@@ -93,6 +93,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN =
         "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED =
+        "baulast.report.bescheinigung_enabled@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED =
         "baulast.report.bescheinigung_disabled@WUNDA_BLAU";
 
@@ -655,6 +657,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     && ObjectRendererUtils.checkActionTag(
                         PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && billingAllowedFsueNw);
         jxlBaulastBescheinigung.setEnabled(enable
+                    && ObjectRendererUtils.checkActionTag(
+                        PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
                     && !ObjectRendererUtils.checkActionTag(
                         PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && billingAllowedBlab_be);
     }
