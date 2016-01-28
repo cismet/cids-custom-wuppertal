@@ -423,10 +423,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         doDownload();
         setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -602,12 +602,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
         if ((worker != null) && !worker.isDone()) {
             worker.cancel(true);
         }
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -714,16 +714,34 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      */
     private static Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Collection<CidsBean> flurstuecke,
             final boolean belastet) throws Exception {
-        addMessage("\n===");
-        addMessage("\nSuche der Baulasten von:");
+        final String queryBeguenstigt = "SELECT %d, alb_baulast.%s \n"
+                    + "FROM alb_baulast_flurstuecke_beguenstigt, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
+                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_beguenstigt.baulast_reference \n"
+                    + "AND alb_baulast_flurstuecke_beguenstigt.flurstueck = alb_flurstueck_kicker.id \n"
+                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
+                    + "AND flurstueck.alkis_id ilike '%s' \n"
+                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
+
+        final String queryBelastet = "SELECT %d, alb_baulast.%s \n"
+                    + "FROM alb_baulast_flurstuecke_belastet, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
+                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_belastet.baulast_reference \n"
+                    + "AND alb_baulast_flurstuecke_belastet.flurstueck = alb_flurstueck_kicker.id \n"
+                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
+                    + "AND flurstueck.alkis_id ilike '%s' \n"
+                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
+
+        final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "alb_baulast");
+
+        final String query = belastet ? queryBelastet : queryBeguenstigt;
+
+        addMessage("\nSuche der " + ((belastet) ? "belastenden" : "begünstigenden") + " Baulasten von:");
         final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenMap = new HashMap<CidsBean, Set<CidsBean>>();
         for (final CidsBean flurstueck : flurstuecke) {
             addMessage(" * Flurstück: " + flurstueck + " ...");
             final Set<CidsBean> baulasten = new HashSet<CidsBean>();
             try {
-                final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
-                        "WUNDA_BLAU",
-                        "alb_baulast");
                 final BaulastSearchInfo searchInfo = new BaulastSearchInfo();
                 final Integer gemarkung = Integer.parseInt(((String)flurstueck.getProperty("alkis_id")).substring(
                             2,
@@ -753,8 +771,21 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                         throw new BaBeException(
                             "Zu den angegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
                     }
-                    final MetaObject mo = SessionManager.getProxy()
-                                .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                }
+
+                final String alkisId = (String)flurstueck.getProperty("alkis_id");
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+                final MetaObject[] mos = SessionManager.getProxy()
+                            .getMetaObjectByQuery(String.format(
+                                    query,
+                                    mcBaulast.getID(),
+                                    mcBaulast.getPrimaryKey(),
+                                    alkisId),
+                                0);
+                for (final MetaObject mo : mos) {
                     final CidsBean baulast = mo.getBean();
                     final Boolean geprueft = (Boolean)baulast.getProperty("geprueft");
                     if ((geprueft == null) || (geprueft == false)) {
@@ -1033,7 +1064,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         final Collection<FlurstueckBean> fls = bescheinigungsGruppe.getFlurstuecke();
         final String title = "Bescheinigung " + fls.iterator().next().getAlkisId() + ((fls.size() > 1) ? " (ua)" : "")
                     + " " + number + "/" + max;
-        final String fileName = "bescheinigung_" + fls.iterator().next().getAlkisId() + ((fls.size() > 1) ? ".ua" : "")
+        final String fileName = "bescheinigung_" + fls.iterator().next().getAlkisId().replace("/", "--")
+                    + ((fls.size() > 1) ? ".ua" : "")
                     + "_" + number;
 
         final JasperReportDownload download = new JasperReportDownload(
