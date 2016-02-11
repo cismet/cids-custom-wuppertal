@@ -39,6 +39,8 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -333,19 +335,36 @@ public class BaulastenReportGenerator {
                 @Override
                 public JRDataSource generateDataSource() {
                     try {
+                        final List<CidsBean> sortedBaulasten = new ArrayList<CidsBean>(selectedBaulasten);
+                        Collections.sort(sortedBaulasten, new Comparator<CidsBean>() {
+
+                                @Override
+                                public int compare(final CidsBean o1, final CidsBean o2) {
+                                    final String s1 = (o1 == null)
+                                        ? ""
+                                        : ((String)o1.getProperty("blattnummer") + "/"
+                                                    + (String)o1.getProperty("laufende_nummer"));
+                                    final String s2 = (o2 == null)
+                                        ? ""
+                                        : ((String)o2.getProperty("blattnummer") + "/"
+                                                    + (String)o2.getProperty("laufende_nummer"));
+                                    return (s1).compareToIgnoreCase(s2);
+                                }
+                            });
+
                         final Collection<BaulastReportBean> reportBeans = new LinkedList<BaulastReportBean>();
                         final Collection<BaulastImageReportBean> imageBeans = new LinkedList<BaulastImageReportBean>();
                         final Collection<BaulastPlotempfehlungReportBean> plotBeans =
                             new LinkedList<BaulastPlotempfehlungReportBean>();
 
                         final Map startingPages = new HashMap();
-                        int tileTableRows = 10 + selectedBaulasten.size();
+                        int tileTableRows = 10 + sortedBaulasten.size();
 
                         final Map imageAvailable = new HashMap();
 
                         if (Type.TEXTBLATT_PLAN_RASTER.equals(type)) {
                             int rasterPages = 0;
-                            for (final CidsBean selectedBaulast : selectedBaulasten) {
+                            for (final CidsBean selectedBaulast : sortedBaulasten) {
                                 final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
                                         selectedBaulast);
 
@@ -431,7 +450,7 @@ public class BaulastenReportGenerator {
                         }
                         int startingPage = 2 + (int)(tileTableRows / 37);
 
-                        for (final CidsBean selectedBaulast : selectedBaulasten) {
+                        for (final CidsBean selectedBaulast : sortedBaulasten) {
                             final List<URL> urlListTextblatt = new ArrayList<URL>();
                             final List<URL> urlListLageplan = new ArrayList<URL>();
                             try {
@@ -486,7 +505,7 @@ public class BaulastenReportGenerator {
                         }
 
                         reportBeans.add(new BaulastReportBean(
-                                selectedBaulasten,
+                                sortedBaulasten,
                                 imageBeans,
                                 plotBeans));
 
