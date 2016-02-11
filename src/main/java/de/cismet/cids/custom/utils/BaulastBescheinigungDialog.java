@@ -104,6 +104,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
     private static final Map<CidsBean, Buchungsblatt> BUCHUNGSBLATT_CACHE = new HashMap<CidsBean, Buchungsblatt>();
 
+    private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
+    private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_HAS_BELASTET = "HAS_BELASTET";
     private static final String PARAMETER_HAS_BEGUENSTIGT = "HAS_BEGUENSTIGT";
     private static final String PARAMETER_FABRICATIONNOTICE = "FABRICATIONNOTICE";
@@ -423,10 +425,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         doDownload();
         setVisible(false);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -602,12 +604,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
         if ((worker != null) && !worker.isDone()) {
             worker.cancel(true);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -746,7 +748,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 final Integer gemarkung = Integer.parseInt(((String)flurstueck.getProperty("alkis_id")).substring(
                             2,
                             6));
-                final String flur = Integer.toString(Integer.parseInt((String)flurstueck.getProperty("flur")));
+                final String flur = (String)flurstueck.getProperty("flur");
                 final String zaehler = Integer.toString(Integer.parseInt(
                             (String)flurstueck.getProperty("fstck_zaehler")));
                 final String nenner = (flurstueck.getProperty("fstck_nenner") == null)
@@ -757,6 +759,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 searchInfo.setResult(CidsBaulastSearchStatement.Result.BAULAST);
                 searchInfo.setBelastet(belastet);
                 searchInfo.setBeguenstigt(!belastet);
+                searchInfo.setBlattnummer("");
+                searchInfo.setArt("");
                 final CidsBaulastSearchStatement search = new CidsBaulastSearchStatement(
                         searchInfo,
                         mcBaulast.getId(),
@@ -1011,6 +1015,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param   bescheinigungsGruppe  DOCUMENT ME!
      * @param   jobname               DOCUMENT ME!
+     * @param   jobnumber             DOCUMENT ME!
+     * @param   projectName           DOCUMENT ME!
      * @param   number                projectname DOCUMENT ME!
      * @param   max                   DOCUMENT ME!
      *
@@ -1020,6 +1026,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      */
     private static Download createBescheinigungPdf(final BescheinigungsGruppeBean bescheinigungsGruppe,
             final String jobname,
+            final String jobnumber,
+            final String projectName,
             final int number,
             final int max) throws Exception {
         final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
@@ -1046,6 +1054,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 public Map generateParamters() {
                     try {
                         final HashMap parameters = new HashMap();
+                        parameters.put(PARAMETER_JOBNUMBER, jobnumber);
+                        parameters.put(PARAMETER_PROJECTNAME, projectName);
+
                         parameters.put(PARAMETER_HAS_BELASTET, !bescheinigungsGruppe.getBaulastenBelastet().isEmpty());
                         parameters.put(
                             PARAMETER_HAS_BEGUENSTIGT,
@@ -1258,7 +1269,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             int number = 0;
                             final int max = bescheinigungsgruppen.size();
                             for (final BescheinigungsGruppeBean bescheinigungsGruppe : bescheinigungsgruppen) {
-                                downloads.add(createBescheinigungPdf(bescheinigungsGruppe, jobname, ++number, max));
+                                downloads.add(createBescheinigungPdf(
+                                        bescheinigungsGruppe,
+                                        jobname,
+                                        jobnumber,
+                                        projectdescription,
+                                        ++number,
+                                        max));
                             }
                         }
 
