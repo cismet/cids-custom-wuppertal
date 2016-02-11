@@ -9,9 +9,9 @@
 	<parameter name="HAS_BELASTET" class="java.lang.Boolean"/>
 	<parameter name="HAS_BEGUENSTIGT" class="java.lang.Boolean"/>
 	<parameter name="FABRICATIONNOTICE" class="java.lang.String"/>
-	<field name="flurstuecke" class="java.util.Set"/>
-	<field name="baulastenBelastet" class="java.util.Set"/>
-	<field name="baulastenBeguenstigt" class="java.util.Set"/>
+	<field name="flurstuecke" class="java.util.Collection"/>
+	<field name="baulastenBelastet" class="java.util.Collection"/>
+	<field name="baulastenBeguenstigt" class="java.util.Collection"/>
 	<variable name="DATE" class="java.util.Date" calculation="First">
 		<variableExpression><![CDATA[new Date()]]></variableExpression>
 	</variable>

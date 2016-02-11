@@ -889,7 +889,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 });
 
 //            boolean teileigentumAlreadyCounted = false;
-
             boolean grundstueckFound = false;
             for (final CidsBean buchungsblattBean : buchungsblaetter) {
                 if (grundstueckFound) {
@@ -956,7 +955,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 //                                    teileigentumAlreadyCounted = true;
 //                                }
 //                            }
-
                             if (!grundstueckeToFlurstueckeMap.containsKey(key)) {
                                 grundstueckeToFlurstueckeMap.put(key, new HashSet<CidsBean>());
                             }
@@ -1088,6 +1086,28 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 fileName);
 
         return download;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   s1  DOCUMENT ME!
+     * @param   s2  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static int compareString(final String s1, final String s2) {
+        if (s1 == null) {
+            if (s2 == null) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else if (s1.equals(s2)) {
+            return 0;
+        } else {
+            return s1.compareTo(s2);
+        }
     }
 
     /**
@@ -1365,9 +1385,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
         //~ Instance fields ----------------------------------------------------
 
-        private final Set<FlurstueckBean> flurstuecke;
-        private final Set<BaulastBean> baulastenBeguenstigt;
-        private final Set<BaulastBean> baulastenBelastet;
+        private final List<FlurstueckBean> flurstuecke;
+        private final List<BaulastBean> baulastenBeguenstigt;
+        private final List<BaulastBean> baulastenBelastet;
 
         //~ Constructors -------------------------------------------------------
 
@@ -1392,18 +1412,64 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         public BescheinigungsGruppeBean(final Set<CidsBean> flurstuecke,
                 final Set<CidsBean> baulastenBeguenstigt,
                 final Set<CidsBean> baulastenBelastet) {
-            this.flurstuecke = new HashSet<FlurstueckBean>();
+            this.flurstuecke = new ArrayList<FlurstueckBean>();
             for (final CidsBean flurstueck : flurstuecke) {
                 this.flurstuecke.add(new FlurstueckBean(flurstueck));
             }
-            this.baulastenBeguenstigt = new HashSet<BaulastBean>();
+
+            this.baulastenBeguenstigt = new ArrayList<BaulastBean>();
             for (final CidsBean baulastBeguenstigt : baulastenBeguenstigt) {
                 this.baulastenBeguenstigt.add(new BaulastBean(baulastBeguenstigt));
             }
-            this.baulastenBelastet = new HashSet<BaulastBean>();
+            this.baulastenBelastet = new ArrayList<BaulastBean>();
             for (final CidsBean baulastBelastet : baulastenBelastet) {
                 this.baulastenBelastet.add(new BaulastBean(baulastBelastet));
             }
+
+            Collections.sort(this.flurstuecke, new Comparator<FlurstueckBean>() {
+
+                    @Override
+                    public int compare(final FlurstueckBean o1, final FlurstueckBean o2) {
+                        final int compareGemarkung = compareString(o1.getGemarkung(), o2.getGemarkung());
+                        if (compareGemarkung != 0) {
+                            return compareGemarkung;
+                        } else {
+                            final int compareFlur = compareString(o1.getFlur(), o2.getFlur());
+                            if (compareFlur != 0) {
+                                return compareFlur;
+                            } else {
+                                final int compareNummer = compareString(o1.getNummer(), o2.getNummer());
+                                if (compareNummer != 0) {
+                                    return compareNummer;
+                                } else {
+                                    return 0;
+                                }
+                            }
+                        }
+                    }
+                });
+
+            final Comparator<BaulastBean> baulastBeanComparator = new Comparator<BaulastBean>() {
+
+                    @Override
+                    public int compare(final BaulastBean o1, final BaulastBean o2) {
+                        final int compareBlattnummer = compareString(o1.getBlattnummer(), o2.getBlattnummer());
+                        if (compareBlattnummer != 0) {
+                            return compareBlattnummer;
+                        } else {
+                            final int compareLaufendenummer = compareString(o1.getLaufende_nummer(),
+                                    o2.getLaufende_nummer());
+                            if (compareLaufendenummer != 0) {
+                                return compareLaufendenummer;
+                            } else {
+                                return 0;
+                            }
+                        }
+                    }
+                };
+
+            Collections.sort(this.baulastenBeguenstigt, baulastBeanComparator);
+            Collections.sort(this.baulastenBelastet, baulastBeanComparator);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1488,6 +1554,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         private final String gemarkung;
         private final String flur;
         private final String nummer;
+        private final String lage;
 
         //~ Constructors -------------------------------------------------------
 
@@ -1503,6 +1570,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
             final String nenner = (String)flurstueck.getProperty("fstck_nenner");
             this.nummer = (String)flurstueck.getProperty("fstck_zaehler") + ((nenner != null) ? ("/"
                                 + nenner) : "");
+            this.lage = "";
         }
     }
 
