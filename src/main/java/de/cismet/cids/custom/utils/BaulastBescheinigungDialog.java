@@ -1570,7 +1570,21 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
             final String nenner = (String)flurstueck.getProperty("fstck_nenner");
             this.nummer = (String)flurstueck.getProperty("fstck_zaehler") + ((nenner != null) ? ("/"
                                 + nenner) : "");
-            this.lage = "";
+            final Collection<CidsBean> adressen = flurstueck.getBeanCollectionProperty("adressen");
+            if (adressen.isEmpty()) {
+                this.lage = "";
+            } else {
+                final Set<String> strassen = new HashSet<String>();
+                for (final CidsBean adresse : adressen) {
+                    strassen.add((String)adresse.getProperty("strasse"));
+                }
+                final String strasse = strassen.iterator().next();
+                if (strassen.size() == 1) {
+                    this.lage = strasse;
+                } else {
+                    this.lage = strasse + " u.a.";
+                }
+            }
         }
     }
 
