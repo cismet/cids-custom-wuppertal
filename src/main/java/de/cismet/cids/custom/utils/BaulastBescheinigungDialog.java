@@ -1584,15 +1584,16 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                         if (!hausnummernMap.containsKey(strasse)) {
                             hausnummernMap.put(strasse, new ArrayList<String>());
                         }
-                        final Collection<String> hausnummern = hausnummernMap.get(strasse);
+                        final List<String> hausnummern = (List)hausnummernMap.get(strasse);
                         hausnummern.add(hausnummer);
                     }
                 }
                 final String strasse = strassen.iterator().next();
                 final StringBuffer sb = new StringBuffer(strasse);
                 boolean first = true;
-                final Collection<String> hausnummern = hausnummernMap.get(strasse);
+                final List<String> hausnummern = (List)hausnummernMap.get(strasse);
                 if (hausnummern != null) {
+                    Collections.sort(hausnummern);
                     sb.append(" ");
                     for (final String hausnummer : hausnummern) {
                         if (!first) {
