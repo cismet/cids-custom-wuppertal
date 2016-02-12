@@ -633,12 +633,17 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.produkt_dateipfad != null}"),
+                hlProduktValue,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
                 org.jdesktop.beansbinding.ELProperty.create(
                     "${cidsBean.fk_produkt.fk_typ.name}, ${cidsBean.fk_produkt.fk_format.format}, 1:${cidsBean.massstab}"),
                 hlProduktValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         hlProduktValue.addActionListener(new java.awt.event.ActionListener() {
@@ -1177,7 +1182,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         final String filePath = (String)cidsBean.getProperty("produkt_dateipfad");
         final String fileName = (String)cidsBean.getProperty("produkt_dateiname_orig");
         if (filePath != null) {
-            final Object ret;
             try {
                 final MetaObject mo = getCidsBean().getMetaObject();
                 final MetaObjectNode mon = new MetaObjectNode(mo.getDomain(), mo.getId(), mo.getClassID());
