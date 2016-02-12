@@ -1575,15 +1575,37 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 this.lage = "";
             } else {
                 final Set<String> strassen = new HashSet<String>();
+                final Map<String, Collection<String>> hausnummernMap = new HashMap<String, Collection<String>>();
                 for (final CidsBean adresse : adressen) {
-                    strassen.add((String)adresse.getProperty("strasse"));
+                    final String strasse = (String)adresse.getProperty("strasse");
+                    final String hausnummer = (String)adresse.getProperty("nummer");
+                    strassen.add(strasse);
+                    if (hausnummer != null) {
+                        if (!hausnummernMap.containsKey(strasse)) {
+                            hausnummernMap.put(strasse, new ArrayList<String>());
+                        }
+                        final Collection<String> hausnummern = hausnummernMap.get(strasse);
+                        hausnummern.add(hausnummer);
+                    }
                 }
                 final String strasse = strassen.iterator().next();
-                if (strassen.size() == 1) {
-                    this.lage = strasse;
-                } else {
-                    this.lage = strasse + " u.a.";
+                final StringBuffer sb = new StringBuffer(strasse);
+                boolean first = true;
+                final Collection<String> hausnummern = hausnummernMap.get(strasse);
+                if (hausnummern != null) {
+                    sb.append(" ");
+                    for (final String hausnummer : hausnummern) {
+                        if (!first) {
+                            sb.append(", ");
+                        }
+                        sb.append(hausnummer);
+                        first = false;
+                    }
                 }
+                if (strassen.size() > 1) {
+                    sb.append(" u.a.");
+                }
+                this.lage = sb.toString();
             }
         }
     }
