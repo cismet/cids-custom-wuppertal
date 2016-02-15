@@ -23,11 +23,11 @@ import java.text.SimpleDateFormat;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class SQLDateToStringConverter extends Converter<java.sql.Date, String> {
+public class SQLTimestampToStringConverter extends Converter<java.sql.Timestamp, String> {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm:sss");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -38,7 +38,7 @@ public class SQLDateToStringConverter extends Converter<java.sql.Date, String> {
     /**
      * Creates a new SQLDateToStringConverter object.
      */
-    public SQLDateToStringConverter() {
+    public SQLTimestampToStringConverter() {
         this(DATE_FORMAT);
     }
 
@@ -47,7 +47,7 @@ public class SQLDateToStringConverter extends Converter<java.sql.Date, String> {
      *
      * @param  simpleDateFormatString  DOCUMENT ME!
      */
-    public SQLDateToStringConverter(final String simpleDateFormatString) {
+    public SQLTimestampToStringConverter(final String simpleDateFormatString) {
         this(new SimpleDateFormat(simpleDateFormatString));
     }
 
@@ -56,29 +56,28 @@ public class SQLDateToStringConverter extends Converter<java.sql.Date, String> {
      *
      * @param  dateFormat  DOCUMENT ME!
      */
-    public SQLDateToStringConverter(final DateFormat dateFormat) {
+    public SQLTimestampToStringConverter(final DateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public String convertForward(final java.sql.Date date) {
+    public String convertForward(final java.sql.Timestamp date) {
         if (date == null) {
             return "";
         }
-        return DATE_FORMAT.format(date);
+        return dateFormat.format(date);
     }
 
     @Override
-    public java.sql.Date convertReverse(final String dateString) {
+    public java.sql.Timestamp convertReverse(final String dateString) {
         final java.util.Date uDate;
         try {
-            uDate = DATE_FORMAT.parse(dateString);
+            uDate = dateFormat.parse(dateString);
         } catch (ParseException ex) {
             return null;
         }
-        final java.sql.Date sDate = new java.sql.Date(uDate.getTime());
-        return sDate;
+        return new java.sql.Timestamp(uDate.getTime());
     }
 }
