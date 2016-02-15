@@ -14,7 +14,7 @@
     <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>cids Custom Wuppertal</name>
+    <name>${names.cids.custom-wuppertal}</name>
     <description>!!! description pending !!!</description>
     <licenses>
         <license>
@@ -56,6 +56,7 @@
             ToDo make constants for the single values to ease the configuration
             of the child POMs.
         -->
+        <names.cids.custom-wuppertal>cids Custom Wuppertal</names.cids.custom-wuppertal>
         <de.cismet.libDir>lib/localWuNDa</de.cismet.libDir>
     </properties>
 

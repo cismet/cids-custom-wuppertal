@@ -368,10 +368,8 @@
                   <SubComponents>
                     <Component class="org.jdesktop.swingx.JXHyperlink" name="hlProduktValue">
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_produkt.fk_typ.name}, ${cidsBean.fk_produkt.fk_format.format}, 1:${cidsBean.massstab}" target="hlProduktValue" targetPath="text" updateStrategy="0" immediately="false">
-                          <Property name="nullValue" type="java.lang.String" value="-"/>
-                          <Property name="incompletePathValue" type="java.lang.String" value="-"/>
-                        </BindingProperty>
+                        <BindingProperty name="enabled" source="Form" sourcePath="${cidsBean.produkt_dateipfad != null}" target="hlProduktValue" targetPath="enabled" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_produkt.fk_typ.name}, ${cidsBean.fk_produkt.fk_format.format}, 1:${cidsBean.massstab}" target="hlProduktValue" targetPath="text" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlProduktValueActionPerformed"/>
