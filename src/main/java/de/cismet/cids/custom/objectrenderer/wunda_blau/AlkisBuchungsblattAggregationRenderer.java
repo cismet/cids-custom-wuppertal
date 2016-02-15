@@ -161,10 +161,12 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 }
             });
 
+        final boolean billingAllowedNw = BillingPopup.isBillingAllowed("bestnw");
+        final boolean billingAllowedKom = BillingPopup.isBillingAllowed("bekom");
         jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW)
-                    && BillingPopup.isBillingAllowed());
+                    && billingAllowedNw);
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && billingAllowedKom);
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
     }
@@ -605,10 +607,12 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  enable  DOCUMENT ME!
      */
     private void changeButtonAvailability(final boolean enable) {
+        final boolean billingAllowedNw = BillingPopup.isBillingAllowed("bestnw");
+        final boolean billingAllowedKom = BillingPopup.isBillingAllowed("bekom");
         jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW)
-                    && BillingPopup.isBillingAllowed());
+                    && billingAllowedNw);
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && billingAllowedKom);
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
     }
