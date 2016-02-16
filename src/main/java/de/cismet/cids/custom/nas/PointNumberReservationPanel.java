@@ -417,7 +417,6 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
 
         pnlNbz.setLayout(new java.awt.GridBagLayout());
 
-        cbNbz.setEditable(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -499,11 +498,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         add(lblAnzWarn2, gridBagConstraints);
 
-        jspAnzahl.setModel(new javax.swing.SpinnerNumberModel(
-                Integer.valueOf(0),
-                Integer.valueOf(0),
-                null,
-                Integer.valueOf(1)));
+        jspAnzahl.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         jspAnzahl.setMinimumSize(new java.awt.Dimension(100, 28));
         jspAnzahl.setPreferredSize(new java.awt.Dimension(100, 28));
         jspAnzahl.addChangeListener(new javax.swing.event.ChangeListener() {
