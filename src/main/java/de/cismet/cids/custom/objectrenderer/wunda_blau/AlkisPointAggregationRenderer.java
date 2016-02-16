@@ -176,7 +176,10 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
 
-        btnCreate.setEnabled(BillingPopup.isBillingAllowed()
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("appdf")
+                    || BillingPopup.isBillingAllowed("pktlsttxt");
+
+        btnCreate.setEnabled(billingAllowed
                     && ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
