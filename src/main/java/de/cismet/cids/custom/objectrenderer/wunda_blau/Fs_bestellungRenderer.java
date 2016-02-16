@@ -13,7 +13,6 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -39,27 +38,24 @@ import java.io.IOException;
 import java.sql.Timestamp;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Formatter;
 import java.util.logging.Level;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.formsolutions.FSReloadBestellungenDialog;
+import de.cismet.cids.custom.objecteditors.utils.DoubleNumberConverter;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
-import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -164,6 +160,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JLabel lblEingegangenAm;
     private javax.swing.JLabel lblEingegangenAmValue;
     private javax.swing.JLabel lblFlurstueck;
+    private javax.swing.JLabel lblGebuehr;
+    private javax.swing.JLabel lblGebuehrValue;
     private javax.swing.JLabel lblLaFirma;
     private javax.swing.JLabel lblLaFirmaValue;
     private javax.swing.JLabel lblLaName;
@@ -320,6 +318,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         panProduktValue = new javax.swing.JPanel();
         hlProduktValue = new org.jdesktop.swingx.JXHyperlink();
         jButton1 = new javax.swing.JButton();
+        lblGebuehr = new javax.swing.JLabel();
+        lblGebuehrValue = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         panMap = new javax.swing.JPanel();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
@@ -442,7 +442,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -473,7 +472,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -504,7 +502,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -611,7 +608,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -690,6 +686,34 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(panProduktValue, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGebuehr,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblGebuehr.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblGebuehr, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebuehr}"),
+                lblGebuehrValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        binding.setConverter(new CurrencyConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblGebuehrValue, gridBagConstraints);
+
         jPanel5.setOpaque(false);
 
         final javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -701,7 +725,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
@@ -1347,5 +1370,31 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class CurrencyConverter extends Converter<Double, String> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public String convertForward(final Double value) {
+            return formatter.format(value);
+        }
+
+        @Override
+        public Double convertReverse(final String string) {
+            throw new UnsupportedOperationException("not needed");
+        }
     }
 }
