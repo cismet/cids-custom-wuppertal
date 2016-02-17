@@ -585,6 +585,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             (Geometry)null,
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(BaulastBescheinigungDialog.this)) {
+                    addMessage("\n===\n\nGebührenberechnung:\n");
+                    addMessage(BillingPopup.getInstance().getBerechnungsProtokoll());
                     final Download download = generateDownload(
                             projectdescription,
                             jobnumber,
