@@ -19,6 +19,8 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.apache.log4j.Logger;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -173,24 +175,14 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 }
             });
 
-        final JTextComponent textComp = (JTextComponent)cbNbz.getEditor().getEditorComponent();
-        textComp.getDocument().addDocumentListener(new DocumentListener() {
+        cbNbz.addActionListener(new ActionListener() {
 
                 @Override
-                public void insertUpdate(final DocumentEvent e) {
-                    checkButtonState();
-                }
-
-                @Override
-                public void removeUpdate(final DocumentEvent e) {
-                    checkButtonState();
-                }
-
-                @Override
-                public void changedUpdate(final DocumentEvent e) {
+                public void actionPerformed(final ActionEvent e) {
                     checkButtonState();
                 }
             });
+
         btnRefreshNbz.setVisible(false);
         lblAnzWarn1.setVisible(false);
         lblAnzWarn2.setVisible(false);
@@ -417,6 +409,13 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
 
         pnlNbz.setLayout(new java.awt.GridBagLayout());
 
+        cbNbz.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbNbzActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -581,7 +580,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             LOG.error("Could not clear Protokoll Pane", ex);
         }
 
-        final String nummerierungsbezirk = (String)cbNbz.getEditor().getItem();
+        final String nummerierungsbezirk = (String)cbNbz.getSelectedItem();
         if (!anr.matches("[a-zA-Z0-9_-]*") || !nummerierungsbezirk.matches("[0-9]*")) {
             JOptionPane.showMessageDialog(
                 StaticSwingTools.getParentFrame(this),
@@ -812,7 +811,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      * DOCUMENT ME!
      */
     public void checkButtonState() {
-        if ((cbNbz.getEditor().getItem() == null) || ((String)cbNbz.getEditor().getItem()).isEmpty()) {
+        if ((cbNbz.getSelectedItem() == null) || ((String)cbNbz.getSelectedItem()).isEmpty()) {
             btnErstellen.setEnabled(false);
             return;
         }
@@ -874,6 +873,15 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
     private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_jspAnzahlStateChanged
 //        handleAnzahlSpinnderChanged();
     } //GEN-LAST:event_jspAnzahlStateChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbNbzActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_cbNbzActionPerformed
 
     /**
      * DOCUMENT ME!

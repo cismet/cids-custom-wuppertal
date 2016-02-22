@@ -13,9 +13,14 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+
 import org.openide.util.NbBundle;
 
 import java.math.BigDecimal;
+
+import java.sql.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,7 +37,9 @@ import javax.swing.JPanel;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.Download;
 
 /**
@@ -317,11 +325,22 @@ public class PrintBillingReportForCustomer {
         if (isRechnungsanlage && markBillingsAsBilled) {
             for (final CidsBean billing : billingsBeans) {
                 try {
-                    billing.setProperty("abrechnungsdatum", new Date());
+                    billing.setProperty("abrechnungsdatum", new Timestamp(new Date().getTime()));
                     billing.setProperty("abgerechnet", Boolean.TRUE);
                     billing.persist();
-                } catch (Exception ex) {
+                } catch (final Exception ex) {
                     LOG.error("Error while setting value or persisting of billing.", ex);
+                    final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                            "Fehler beim Abrechnen",
+                            "Buchung konnte nicht auf abgerechnet gesetzt werden.",
+                            ex.getMessage(),
+                            null,
+                            ex,
+                            Level.ALL,
+                            null);
+                    JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(
+                            CismapBroker.getInstance().getMappingComponent()),
+                        ei);
                 }
             }
         }
