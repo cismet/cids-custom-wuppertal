@@ -849,6 +849,15 @@ public class BillingPopup extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public String getBerechnungsProtokoll() {
+        return txtBerechnung.getText();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   product          DOCUMENT ME!
      * @param   defaultRequest   DOCUMENT ME!
      * @param   requestPerUsage  DOCUMENT ME!
