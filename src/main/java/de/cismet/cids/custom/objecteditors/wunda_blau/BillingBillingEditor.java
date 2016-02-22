@@ -16,6 +16,8 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import org.apache.log4j.Logger;
 
+import java.sql.Timestamp;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -814,7 +816,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
             }
             if ((cidsBean != null) && ((Boolean)cidsBean.getProperty("abgerechnet"))
                         && (((Date)cidsBean.getProperty("abrechnungsdatum")) == null)) {
-                cidsBean.setProperty("abrechnungsdatum", new Date());
+                cidsBean.setProperty("abrechnungsdatum", new Timestamp(new Date().getTime()));
             } else if ((cidsBean != null) && !((Boolean)cidsBean.getProperty("abgerechnet"))) {
                 cidsBean.setProperty("abrechnungsdatum", null);
             }
