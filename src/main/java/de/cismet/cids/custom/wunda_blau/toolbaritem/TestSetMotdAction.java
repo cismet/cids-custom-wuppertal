@@ -85,7 +85,7 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                             null,
                             new ServerActionParameter<String>(
                                 PublishCidsServerMessageAction.ParameterType.MESSAGE.toString(),
-                                message.substring(0, 40)),
+                                message.substring(0, Math.min(40, message.length()))),
                             new ServerActionParameter<String>(
                                 PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
                                 MotdWundaStartupHook.MOTD_MESSAGE_TOTD));
