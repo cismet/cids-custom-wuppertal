@@ -33,16 +33,16 @@ import de.cismet.tools.StaticDebuggingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsClientToolbarItem.class)
-public class AddCidsServerMessageAction extends AbstractAction implements CidsClientToolbarItem {
+public class TestSetMotdAction extends AbstractAction implements CidsClientToolbarItem {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new NavigatorDownloadManagerAction object.
      */
-    public AddCidsServerMessageAction() {
+    public TestSetMotdAction() {
         putValue(Action.NAME, "MOTD");
-        putValue(Action.SHORT_DESCRIPTION, "AddCidsServerMessageAction");
+        putValue(Action.SHORT_DESCRIPTION, "set MOTD (test)");
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -59,16 +59,10 @@ public class AddCidsServerMessageAction extends AbstractAction implements CidsCl
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        final String message = JOptionPane.showInputDialog("Message ?");
+        final String message = JOptionPane.showInputDialog("MOTD ?");
 
         if (message != null) {
             try {
-                final ServerActionParameter<String> messageParam = new ServerActionParameter<String>(
-                        PublishCidsServerMessageAction.ParameterType.MESSAGE.toString(),
-                        message);
-                final ServerActionParameter<String> categoryParam = new ServerActionParameter<String>(
-                        PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
-                        MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
                 SessionManager.getSession()
                         .getConnection()
                         .executeTask(
@@ -76,8 +70,25 @@ public class AddCidsServerMessageAction extends AbstractAction implements CidsCl
                             PublishCidsServerMessageAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
                             null,
-                            messageParam,
-                            categoryParam);
+                            new ServerActionParameter<String>(
+                                PublishCidsServerMessageAction.ParameterType.MESSAGE.toString(),
+                                message),
+                            new ServerActionParameter<String>(
+                                PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
+                                MotdWundaStartupHook.MOTD_MESSAGE_MOTD));
+                SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(
+                            SessionManager.getSession().getUser(),
+                            PublishCidsServerMessageAction.TASK_NAME,
+                            SessionManager.getSession().getUser().getDomain(),
+                            null,
+                            new ServerActionParameter<String>(
+                                PublishCidsServerMessageAction.ParameterType.MESSAGE.toString(),
+                                message.substring(0, 40)),
+                            new ServerActionParameter<String>(
+                                PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
+                                MotdWundaStartupHook.MOTD_MESSAGE_TOTD));
             } catch (final ConnectionException ex) {
                 Exceptions.printStackTrace(ex);
             }
