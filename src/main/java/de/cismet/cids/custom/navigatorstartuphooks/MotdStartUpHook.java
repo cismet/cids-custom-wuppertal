@@ -43,24 +43,22 @@ public class MotdStartUpHook implements StartupHook {
 
     @Override
     public void applicationStarted() {
-        if (StaticDebuggingTools.checkHomeForFile("wundaMotdEnabled")) {
-            CidsServerMessageNotifier.getInstance()
-                    .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
-            CidsServerMessageNotifier.getInstance().subscribe(new CidsServerMessageNotifierListener() {
+        CidsServerMessageNotifier.getInstance()
+                .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
+        CidsServerMessageNotifier.getInstance().subscribe(new CidsServerMessageNotifierListener() {
 
-                    @Override
-                    public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
-                        if ((event != null) && (event.getMessage() != null)) {
-                            LOG.info(
-                                event.getMessage().getId()
-                                        + " ("
-                                        + event.getMessage().getCategory()
-                                        + "): "
-                                        + event.getMessage().getMessage());
-                        }
+                @Override
+                public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
+                    if ((event != null) && (event.getMessage() != null)) {
+                        LOG.info(
+                            event.getMessage().getId()
+                                    + " ("
+                                    + event.getMessage().getCategory()
+                                    + "): "
+                                    + event.getMessage().getMessage());
                     }
-                }, null);
-            CidsServerMessageNotifier.getInstance().start();
-        }
+                }
+            }, null);
+        CidsServerMessageNotifier.getInstance().start();
     }
 }
