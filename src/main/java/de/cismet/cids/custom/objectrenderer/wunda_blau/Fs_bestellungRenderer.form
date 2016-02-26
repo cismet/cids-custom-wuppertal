@@ -368,7 +368,7 @@
                   <SubComponents>
                     <Component class="org.jdesktop.swingx.JXHyperlink" name="hlProduktValue">
                       <BindingProperties>
-                        <BindingProperty name="enabled" source="Form" sourcePath="${cidsBean.produkt_dateipfad != null}" target="hlProduktValue" targetPath="enabled" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="enabled" source="Form" sourcePath="${ cidsBean.produkt_dateipfad != null &amp;&amp; !produktTooOld }" target="hlProduktValue" targetPath="enabled" updateStrategy="0" immediately="false"/>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_produkt.fk_typ.name}, ${cidsBean.fk_produkt.fk_format.format}, 1:${cidsBean.massstab}" target="hlProduktValue" targetPath="text" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <Events>

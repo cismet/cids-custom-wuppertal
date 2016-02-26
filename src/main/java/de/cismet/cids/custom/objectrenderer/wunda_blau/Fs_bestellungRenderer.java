@@ -41,6 +41,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.logging.Level;
 
@@ -629,7 +630,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.produkt_dateipfad != null}"),
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${ cidsBean.produkt_dateipfad != null && !produktTooOld }"),
                 hlProduktValue,
                 org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
@@ -1272,6 +1274,21 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean));
     }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isProduktTooOld() {
+        if ((cidsBean != null) && (cidsBean.getProperty("produkt_ts") != null)) {
+            final Timestamp produktTs = (Timestamp)cidsBean.getProperty("produkt_ts");
+            final Date now = new Date();
+            final long daysOld = (now.getTime() - produktTs.getTime()) / (1000 * 60 * 60 * 24);
+            return daysOld > 30;
+        }
+        return false;
+    }
 
     @Override
     public CidsBean getCidsBean() {
