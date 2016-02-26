@@ -19,10 +19,6 @@ import de.cismet.cids.custom.motd.MotdDialog;
 import de.cismet.cids.custom.wunda_blau.startuphooks.MotdWundaStartupHook;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
-import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
-import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
-
-import de.cismet.tools.StaticDebuggingTools;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -45,20 +41,5 @@ public class MotdStartUpHook implements StartupHook {
     public void applicationStarted() {
         CidsServerMessageNotifier.getInstance()
                 .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
-        CidsServerMessageNotifier.getInstance().subscribe(new CidsServerMessageNotifierListener() {
-
-                @Override
-                public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
-                    if ((event != null) && (event.getMessage() != null)) {
-                        LOG.info(
-                            event.getMessage().getId()
-                                    + " ("
-                                    + event.getMessage().getCategory()
-                                    + "): "
-                                    + event.getMessage().getMessage());
-                    }
-                }
-            }, null);
-        CidsServerMessageNotifier.getInstance().start();
     }
 }
