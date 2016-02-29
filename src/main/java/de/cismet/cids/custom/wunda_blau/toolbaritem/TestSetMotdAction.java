@@ -70,10 +70,7 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                             SessionManager.getSession().getUser(),
                             PublishCidsServerMessageAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
-                            null,
-                            new ServerActionParameter<String>(
-                                PublishCidsServerMessageAction.ParameterType.MESSAGE.toString(),
-                                message),
+                            message,
                             new ServerActionParameter<String>(
                                 PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
                                 MotdWundaStartupHook.MOTD_MESSAGE_MOTD));
@@ -83,10 +80,7 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                             SessionManager.getSession().getUser(),
                             PublishCidsServerMessageAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
-                            null,
-                            new ServerActionParameter<String>(
-                                PublishCidsServerMessageAction.ParameterType.MESSAGE.toString(),
-                                message.substring(0, Math.min(40, message.length()))),
+                            message.substring(0, Math.min(40, message.length())),
                             new ServerActionParameter<String>(
                                 PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
                                 MotdWundaStartupHook.MOTD_MESSAGE_TOTD));
