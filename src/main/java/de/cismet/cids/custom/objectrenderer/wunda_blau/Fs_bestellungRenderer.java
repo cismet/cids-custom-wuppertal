@@ -145,7 +145,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private org.jdesktop.swingx.JXHyperlink hlProduktValue;
     private org.jdesktop.swingx.JXHyperlink hlStatusErrorDetails;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -296,7 +296,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblTitle = new javax.swing.JLabel();
         lblTitleValue = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         panMain = new javax.swing.JPanel();
         panInfo = new javax.swing.JPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -386,9 +386,25 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         panFooter.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jLabel1.text")); // NOI18N
-        panFooter.add(jLabel1, new java.awt.GridBagConstraints());
+            jButton2,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jButton2.text")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.postweg}"),
+                jButton2,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        panFooter.add(jButton2, new java.awt.GridBagConstraints());
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -1274,6 +1290,20 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean));
     }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
+            final Download download = FsBestellungReportGenerator.createJasperDownload(
+                    cidsBean,
+                    DownloadManagerDialog.getInstance().getJobName());
+            DownloadManager.instance().add(download);
+        }
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
