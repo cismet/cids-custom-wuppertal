@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UebersichtBaulasten" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportScriptlet" whenResourceMissingType="Empty" uuid="1bac6412-4c0b-4e58-ad48-7da27f1409be">
+	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="blattnummer" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="laufende_nummer" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="arten" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<title>
+		<band/>
+	</title>
+	<columnHeader>
+		<band height="46">
+			<line>
+				<reportElement x="5" y="44" width="545" height="1" uuid="f531cd98-9b84-4d93-a288-ce85a0a5c291"/>
+			</line>
+			<staticText>
+				<reportElement x="5" y="0" width="129" height="40" uuid="9acdc777-38c5-48c9-b7cf-27ecd89cb42b"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Baulastblattnummer]]></text>
+			</staticText>
+			<line>
+				<reportElement x="134" y="15" width="1" height="30" uuid="52a6cdff-782e-410c-9b9d-08feca13b81e"/>
+			</line>
+			<staticText>
+				<reportElement x="135" y="0" width="64" height="40" uuid="2773f4ba-3669-4b41-a7f8-099b770224bb"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[lfd. Nr.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="199" y="15" width="1" height="30" uuid="a4d7bf52-7e90-4aab-9712-4cc22fabcbc8"/>
+			</line>
+			<staticText>
+				<reportElement x="200" y="0" width="355" height="40" uuid="d9a636a0-30fd-43d5-8f20-bb5143699695"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Art]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="355" height="20" uuid="7b72e068-9579-4fba-9e34-8e77c7a62606"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{arten}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="134" y="0" width="1" height="20" uuid="bdcac90b-edfd-4474-9daf-7d89c0274f39"/>
+			</line>
+			<textField>
+				<reportElement x="5" y="0" width="129" height="20" uuid="23cd96f4-138e-48d1-952c-4976b44412d2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{blattnummer}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="199" y="0" width="1" height="20" uuid="0a8289f9-4bb7-4b45-90c5-35e13ed74f73"/>
+			</line>
+			<textField>
+				<reportElement x="135" y="0" width="64" height="20" uuid="4dbd4ffd-a471-47ff-9fb4-0800bc37be8b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laufende_nummer}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
