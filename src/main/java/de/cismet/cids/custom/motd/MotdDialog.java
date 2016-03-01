@@ -130,8 +130,8 @@ public class MotdDialog extends javax.swing.JDialog implements CidsServerMessage
     public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
         if (event != null) {
             final CidsServerMessage message = event.getMessage();
-            if ((message != null) && (message.getMessage() instanceof String)) {
-                final String messageContent = (String)message.getMessage();
+            if ((message != null) && (message.getContent() instanceof String)) {
+                final String messageContent = (String)message.getContent();
                 fXWebViewPanel1.loadContent(messageContent);
                 pack();
                 StaticSwingTools.showDialog(this);
