@@ -11,6 +11,9 @@
  */
 package de.cismet.cids.custom.navigatorstartuphooks;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
 import org.apache.log4j.Logger;
 
 import org.openide.util.lookup.ServiceProvider;
@@ -39,7 +42,18 @@ public class MotdStartUpHook implements StartupHook {
 
     @Override
     public void applicationStarted() {
-        CidsServerMessageNotifier.getInstance()
-                .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
+        try {
+            if (SessionManager.getConnection().hasConfigAttr(
+                            SessionManager.getSession().getUser(),
+                            "csm://"
+                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD)) {
+                CidsServerMessageNotifier.getInstance()
+                        .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
+            }
+        } catch (ConnectionException ex) {
+            LOG.warn("Konnte Rechte an csm://" + MotdWundaStartupHook.MOTD_MESSAGE_MOTD
+                        + " nicht abfragen. Keine Meldung des Tages !",
+                ex);
+        }
     }
 }

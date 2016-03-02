@@ -55,7 +55,15 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
 
     @Override
     public boolean isVisible() {
-        return StaticDebuggingTools.checkHomeForFile("wundaMotdToolbar");
+        try {
+            return StaticDebuggingTools.checkHomeForFile("MotdTestToolbarEnabled")
+                        && SessionManager.getConnection()
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://"
+                                + PublishCidsServerMessageAction.TASK_NAME);
+        } catch (ConnectionException ex) {
+            return false;
+        }
     }
 
     @Override
