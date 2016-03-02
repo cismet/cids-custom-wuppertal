@@ -9,6 +9,8 @@ package de.cismet.cids.custom.motd;
 
 import java.awt.Frame;
 
+import javax.swing.SwingUtilities;
+
 import de.cismet.cids.server.messages.CidsServerMessage;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
@@ -132,9 +134,15 @@ public class MotdDialog extends javax.swing.JDialog implements CidsServerMessage
             final CidsServerMessage message = event.getMessage();
             if ((message != null) && (message.getContent() instanceof String)) {
                 final String messageContent = (String)message.getContent();
-                fXWebViewPanel1.loadContent(messageContent);
-                pack();
-                StaticSwingTools.showDialog(this);
+                SwingUtilities.invokeLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            fXWebViewPanel1.loadContent(messageContent);
+                            pack();
+                            StaticSwingTools.showDialog(MotdDialog.this);
+                        }
+                    });
             }
         }
     }
