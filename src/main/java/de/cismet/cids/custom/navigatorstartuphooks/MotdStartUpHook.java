@@ -55,5 +55,18 @@ public class MotdStartUpHook implements StartupHook {
                         + " nicht abfragen. Keine Meldung des Tages !",
                 ex);
         }
+        try {
+            if (SessionManager.getConnection().hasConfigAttr(
+                            SessionManager.getSession().getUser(),
+                            "csm://"
+                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN)) {
+                CidsServerMessageNotifier.getInstance()
+                        .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN);
+            }
+        } catch (ConnectionException ex) {
+            LOG.warn("Konnte Rechte an csm://" + MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN
+                        + " nicht abfragen. Keine Meldung des Tages !",
+                ex);
+        }
     }
 }
