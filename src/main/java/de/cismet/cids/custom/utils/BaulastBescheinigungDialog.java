@@ -66,6 +66,7 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
+import de.cismet.cids.custom.wunda_blau.search.actions.BaulastBescheinigungPruefungServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
@@ -73,6 +74,8 @@ import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
@@ -131,13 +134,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     //~ Instance fields --------------------------------------------------------
 
     private final Collection<ProductGroupAmount> prodAmounts = new ArrayList<ProductGroupAmount>();
-    private final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap =
-        new HashMap<CidsBean, Set<CidsBean>>();
-    private final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap =
-        new HashMap<CidsBean, Set<CidsBean>>();
+    private final Set<BescheinigungsGruppeBean> bescheinigungsgruppen = new HashSet<BescheinigungsGruppeBean>();
 
     private SwingWorker worker;
-    private Collection<CidsBean> flurstuecke;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.commons.gui.progress.BusyStatusPanel busyStatusPanel1;
@@ -408,12 +407,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     public void show(final Collection<CidsBean> flurstuecke, final Component parent) {
         final List<CidsBean> flurstueckeList = new ArrayList<CidsBean>(new HashSet<CidsBean>(flurstuecke));
         prodAmounts.clear();
-        flurstueckeToBaulastenBelastetMap.clear();
-        flurstueckeToBaulastenBeguenstigtMap.clear();
+        bescheinigungsgruppen.clear();
 
         jTextField2.setText(new SimpleDateFormat("yy").format(new Date()) + "-");
-
-        this.flurstuecke = flurstueckeList;
 
         prepareDownload(flurstueckeList);
 
@@ -425,10 +421,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         doDownload();
         setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -467,6 +463,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
                     @Override
                     protected Collection<ProductGroupAmount> doInBackground() throws Exception {
+                        final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap =
+                            new HashMap<CidsBean, Set<CidsBean>>();
+                        final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap =
+                            new HashMap<CidsBean, Set<CidsBean>>();
+
                         addMessage("Baulastbescheinigungs-Protokoll für "
                                     + ((flurstuecke.size() == 1) ? "folgendes Flurstück" : "folgende Flurstücke")
                                     + ":");
@@ -503,6 +504,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                 grundstueckeToFlurstueckeMap,
                                 flurstueckeToBaulastenBelastetMap,
                                 flurstueckeToBaulastenBeguenstigtMap);
+
+                        bescheinigungsgruppen.addAll(createBescheinigungsGruppen(
+                                flurstuecke,
+                                flurstueckeToBaulastenBeguenstigtMap,
+                                flurstueckeToBaulastenBelastetMap));
+
                         return prodAmounts;
                     }
 
@@ -593,9 +600,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                     final Download download = generateDownload(
                             projectdescription,
                             jobnumber,
-                            flurstuecke,
-                            flurstueckeToBaulastenBelastetMap,
-                            flurstueckeToBaulastenBeguenstigtMap);
+                            bescheinigungsgruppen);
                     DownloadManager.instance().add(download);
                 }
             }
@@ -609,12 +614,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
         if ((worker != null) && !worker.isDone()) {
             worker.cancel(true);
         }
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1177,22 +1182,27 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 final String baulastenString = sb.toString();
 
                 final int numOfBaulasten = baulasten.size();
-                if (numOfBaulasten == 0) {
-                    addMessage(" * Grundstück " + key + " => Negativ-Bescheinigung");
-                    anzahlNegativ++;
-                } else if (numOfBaulasten == 1) {
-                    addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für eine Baulast (" + baulastenString
+                switch (numOfBaulasten) {
+                    case 0:
+                        addMessage(" * Grundstück " + key + " => Negativ-Bescheinigung");
+                        anzahlNegativ++;
+                        break;
+                    case 1:
+                        addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für eine Baulast (" + baulastenString
                                 + ")");
-                    anzahlPositiv1++;
-                } else if (numOfBaulasten == 2) {
-                    addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für zwei Baulasten ("
+                        anzahlPositiv1++;
+                        break;
+                    case 2:
+                        addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für zwei Baulasten ("
                                 + baulastenString
                                 + ")");
-                    anzahlPositiv2++;
-                } else {
-                    addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für drei oder mehr Baulasten ("
+                        anzahlPositiv2++;
+                        break;
+                    default:
+                        addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für drei oder mehr Baulasten ("
                                 + baulastenString + ")");
-                    anzahlPositiv3++;
+                        anzahlPositiv3++;
+                        break;
                 }
             }
         }
@@ -1259,11 +1269,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param   projectdescription                    DOCUMENT ME!
-     * @param   jobnumber                             DOCUMENT ME!
-     * @param   flurstuecke                           DOCUMENT ME!
-     * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
-     * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
+     * @param   projectdescription     DOCUMENT ME!
+     * @param   jobnumber              DOCUMENT ME!
+     * @param   bescheinigungsgruppen  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
@@ -1271,9 +1279,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      */
     public Download generateDownload(final String projectdescription,
             final String jobnumber,
-            final Collection<CidsBean> flurstuecke,
-            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap,
-            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) throws Exception {
+            final Set<BescheinigungsGruppeBean> bescheinigungsgruppen) throws Exception {
         final String jobname = DownloadManagerDialog.getInstance().getJobName();
         final BackgroundTaskMultipleDownload.FetchDownloadsTask fetchDownloadsTask =
             new BackgroundTaskMultipleDownload.FetchDownloadsTask() {
@@ -1282,12 +1288,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 public Collection<? extends Download> fetchDownloads() throws Exception {
                     final Collection<Download> downloads = new ArrayList<Download>();
                     try {
-                        // Bescheinigungsgruppen ermitteln
-                        final Set<BescheinigungsGruppeBean> bescheinigungsgruppen = createBescheinigungsGruppen(
-                                flurstuecke,
-                                flurstueckeToBaulastenBeguenstigtMap,
-                                flurstueckeToBaulastenBelastetMap);
-
                         downloads.add(new TxtDownload(
                                 protokollPane.getText(),
                                 jobname,
@@ -1296,6 +1296,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                 ".txt"));
 
                         if (bescheinigungsgruppen != null) {
+                            final Set<CidsBean> allBaulasten = new HashSet<CidsBean>();
+
                             // Download: Berichte für alle Bescheinigungsgruppen
                             int number = 0;
                             final int max = bescheinigungsgruppen.size();
@@ -1307,24 +1309,23 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                         projectdescription,
                                         ++number,
                                         max));
+                                // alle Baulasten ermitteln
+                                for (final BaulastInfoBean baulast : bescheinigungsGruppe.getBaulastenBelastet()) {
+                                    allBaulasten.add(baulast.getBaulast());
+                                }
+                                for (final BaulastInfoBean baulast : bescheinigungsGruppe.getBaulastenBeguenstigt()) {
+                                    allBaulasten.add(baulast.getBaulast());
+                                }
                             }
-                        }
 
-                        // alle Baulasten ermitteln
-                        final Set<CidsBean> allBaulasten = new HashSet<CidsBean>();
-                        for (final Set<CidsBean> baulasten : flurstueckeToBaulastenBeguenstigtMap.values()) {
-                            allBaulasten.addAll(baulasten);
-                        }
-                        for (final Set<CidsBean> baulasten : flurstueckeToBaulastenBelastetMap.values()) {
-                            allBaulasten.addAll(baulasten);
-                        }
-                        if (!allBaulasten.isEmpty()) {
-                            // Download: Bericht für alle Baulasten
-                            downloads.addAll(BaulastenReportGenerator.generateRasterDownloads(
-                                    jobname,
-                                    allBaulasten,
-                                    jobnumber,
-                                    projectdescription));
+                            if (!allBaulasten.isEmpty()) {
+                                // Download: Bericht für alle Baulasten
+                                downloads.addAll(BaulastenReportGenerator.generateRasterDownloads(
+                                        jobname,
+                                        allBaulasten,
+                                        jobnumber,
+                                        projectdescription));
+                            }
                         }
                     } catch (final Exception ex) {
                         LOG.fatal(ex, ex);
@@ -1344,7 +1345,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      * @version  $Revision$, $Date$
      */
     @Getter
-    public static class BaulastBean {
+    public static class BaulastInfoBean {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -1361,7 +1362,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
          *
          * @param  baulast  DOCUMENT ME!
          */
-        BaulastBean(final CidsBean baulast) {
+        BaulastInfoBean(final CidsBean baulast) {
             this.baulast = baulast;
             this.blattnummer = (String)baulast.getProperty("blattnummer");
             this.laufende_nummer = (String)baulast.getProperty("laufende_nummer");
@@ -1397,8 +1398,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         //~ Instance fields ----------------------------------------------------
 
         private final List<FlurstueckBean> flurstuecke;
-        private final List<BaulastBean> baulastenBeguenstigt;
-        private final List<BaulastBean> baulastenBelastet;
+        private final List<BaulastInfoBean> baulastenBeguenstigt;
+        private final List<BaulastInfoBean> baulastenBelastet;
 
         //~ Constructors -------------------------------------------------------
 
@@ -1428,13 +1429,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 this.flurstuecke.add(new FlurstueckBean(flurstueck));
             }
 
-            this.baulastenBeguenstigt = new ArrayList<BaulastBean>();
+            this.baulastenBeguenstigt = new ArrayList<BaulastInfoBean>();
             for (final CidsBean baulastBeguenstigt : baulastenBeguenstigt) {
-                this.baulastenBeguenstigt.add(new BaulastBean(baulastBeguenstigt));
+                this.baulastenBeguenstigt.add(new BaulastInfoBean(baulastBeguenstigt));
             }
-            this.baulastenBelastet = new ArrayList<BaulastBean>();
+            this.baulastenBelastet = new ArrayList<BaulastInfoBean>();
             for (final CidsBean baulastBelastet : baulastenBelastet) {
-                this.baulastenBelastet.add(new BaulastBean(baulastBelastet));
+                this.baulastenBelastet.add(new BaulastInfoBean(baulastBelastet));
             }
 
             Collections.sort(this.flurstuecke, new Comparator<FlurstueckBean>() {
@@ -1460,10 +1461,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                     }
                 });
 
-            final Comparator<BaulastBean> baulastBeanComparator = new Comparator<BaulastBean>() {
+            final Comparator<BaulastInfoBean> baulastBeanComparator = new Comparator<BaulastInfoBean>() {
 
                     @Override
-                    public int compare(final BaulastBean o1, final BaulastBean o2) {
+                    public int compare(final BaulastInfoBean o1, final BaulastInfoBean o2) {
                         final int compareBlattnummer = compareString(o1.getBlattnummer(), o2.getBlattnummer());
                         if (compareBlattnummer != 0) {
                             return compareBlattnummer;
@@ -1489,11 +1490,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         public String toString() {
             final StringBuffer sb = new StringBuffer();
 
-            final List<BaulastBean> sortedBeguenstigt = new ArrayList<BaulastBean>(baulastenBeguenstigt);
+            final List<BaulastInfoBean> sortedBeguenstigt = new ArrayList<BaulastInfoBean>(baulastenBeguenstigt);
             Collections.sort(sortedBeguenstigt, new BaulastBeanComparator());
 
             boolean first = true;
-            for (final BaulastBean baulast : sortedBeguenstigt) {
+            for (final BaulastInfoBean baulast : sortedBeguenstigt) {
                 if (!first) {
                     sb.append(", ");
                     first = false;
@@ -1503,11 +1504,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
             sb.append("|");
 
-            final List<BaulastBean> sortedBelastet = new ArrayList<BaulastBean>(baulastenBelastet);
+            final List<BaulastInfoBean> sortedBelastet = new ArrayList<BaulastInfoBean>(baulastenBelastet);
             Collections.sort(sortedBelastet, new BaulastBeanComparator());
 
             first = true;
-            for (final BaulastBean baulast : sortedBelastet) {
+            for (final BaulastInfoBean baulast : sortedBelastet) {
                 if (!first) {
                     sb.append(";");
                     first = false;
@@ -1538,12 +1539,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @version  $Revision$, $Date$
      */
-    static class BaulastBeanComparator implements Comparator<BaulastBean> {
+    static class BaulastBeanComparator implements Comparator<BaulastInfoBean> {
 
         //~ Methods ------------------------------------------------------------
 
         @Override
-        public int compare(final BaulastBean o1, final BaulastBean o2) {
+        public int compare(final BaulastInfoBean o1, final BaulastInfoBean o2) {
             final String s1 = (o1 == null) ? "" : o1.toString(); // NOI18N
             final String s2 = (o2 == null) ? "" : o2.toString(); // NOI18N
 
