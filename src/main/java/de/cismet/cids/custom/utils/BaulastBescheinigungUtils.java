@@ -278,7 +278,7 @@ public class BaulastBescheinigungUtils {
      *
      * @return  DOCUMENT ME!
      */
-    private static CidsBean getBaulast(final BerechtigungspruefungBescheinigungBaulastInfo info) {
+    public static CidsBean loadBaulast(final BerechtigungspruefungBescheinigungBaulastInfo info) {
         if (!BAULAST_CACHE.containsKey(info)) {
             final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
@@ -452,11 +452,11 @@ public class BaulastBescheinigungUtils {
                                 // alle Baulasten ermitteln
                                 for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
                                             : bescheinigungsGruppe.getBaulastenBelastet()) {
-                                    allBaulasten.add(getBaulast(baulastInfo));
+                                    allBaulasten.add(loadBaulast(baulastInfo));
                                 }
                                 for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
                                             : bescheinigungsGruppe.getBaulastenBeguenstigt()) {
-                                    allBaulasten.add(getBaulast(baulastInfo));
+                                    allBaulasten.add(loadBaulast(baulastInfo));
                                 }
                             }
 
