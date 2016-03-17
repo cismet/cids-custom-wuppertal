@@ -33,8 +33,6 @@ import org.apache.log4j.Logger;
 
 import java.awt.Component;
 
-import java.io.IOException;
-
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -61,7 +59,7 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
-import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungInfo;
+import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungFreigabeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungInfo;
@@ -240,6 +238,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         diaFreigegeben.setTitle(org.openide.util.NbBundle.getMessage(
                 BaulastBescheinigungDialog.class,
                 "BaulastBescheinigungDialog.diaFreigegeben.title")); // NOI18N
+        diaFreigegeben.setMinimumSize(new java.awt.Dimension(300, 150));
         diaFreigegeben.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
@@ -267,6 +266,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             org.openide.util.NbBundle.getMessage(
                 BaulastBescheinigungDialog.class,
                 "BaulastBescheinigungDialog.jLabel6.text")); // NOI18N
+        jLabel6.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -286,6 +286,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         diaStorniert.setTitle(org.openide.util.NbBundle.getMessage(
                 BaulastBescheinigungDialog.class,
                 "BaulastBescheinigungDialog.diaStorniert.title")); // NOI18N
+        diaStorniert.setMinimumSize(new java.awt.Dimension(400, 300));
+        diaStorniert.setModal(true);
         diaStorniert.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel6.setLayout(new java.awt.GridBagLayout());
@@ -402,6 +404,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jPanel1, gridBagConstraints);
 
+        jPanel4.setMinimumSize(new java.awt.Dimension(500, 27));
+        jPanel4.setPreferredSize(new java.awt.Dimension(500, 27));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
@@ -520,7 +524,21 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      * @param  parent       DOCUMENT ME!
      */
     public void show(final Collection<CidsBean> flurstuecke, final Component parent) {
-        berechtigungspruefungAnfragePanel1.setProdukt("baulastbescheinigung");
+        boolean berechtigungspruefung = true;
+        try {
+            berechtigungspruefung = SessionManager.getConnection()
+                        .hasConfigAttr(
+                                SessionManager.getSession().getUser(),
+                                "berechtigungspruefung_baulastbescheinigung");
+        } catch (final ConnectionException ex) {
+            LOG.info("could not check config attr", ex);
+        }
+        if (berechtigungspruefung) {
+            berechtigungspruefungAnfragePanel1.setProdukt("baulastbescheinigung");
+            berechtigungspruefungAnfragePanel1.setVisible(true);
+        } else {
+            berechtigungspruefungAnfragePanel1.setVisible(false);
+        }
         final List<CidsBean> flurstueckeList = new ArrayList<CidsBean>(new HashSet<CidsBean>(flurstuecke));
         prodAmounts.clear();
         bescheinigungsgruppen.clear();
@@ -1331,47 +1349,46 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     @Override
     public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
         try {
-            final Map<String, BerechtigungspruefungInfo> pruefungInfoMap = (Map)
+            final Map<String, BerechtigungspruefungFreigabeInfo> freigabeInfoMap = (Map)
                 new ObjectMapper().readValue((String)event.getMessage().getContent(),
-                    new TypeReference<Map<String, BerechtigungspruefungInfo<BerechtigungspruefungBescheinigungDownloadInfo>>>() {
+                    new TypeReference<Map<String, BerechtigungspruefungFreigabeInfo<BerechtigungspruefungBescheinigungDownloadInfo>>>() {
                     });
 
-            for (final String schluessel : pruefungInfoMap.keySet()) {
-                final BerechtigungspruefungInfo pruefungInfo = pruefungInfoMap.get(schluessel);
+            for (final String schluessel : freigabeInfoMap.keySet()) {
+                final BerechtigungspruefungFreigabeInfo freigabeInfo = freigabeInfoMap.get(schluessel);
 
-                if (pruefungInfo.getFreigegeben()) {
-                    try {
-                        SessionManager.getProxy()
-                                .executeTask(
-                                    BerechtigungspruefungAnfrageServerAction.TASK_NAME,
-                                    "WUNDA_BLAU",
-                                    null,
-                                    new ServerActionParameter<String>(
-                                        BerechtigungspruefungAnfrageServerAction.ParameterType.ABGEHOLT.toString(),
-                                        schluessel));
-                    } catch (final Exception ex) {
-                        LOG.warn(ex, ex);
-                    }
-
+                if (freigabeInfo.getFreigegeben()) {
                     jLabel6.setText(String.format(
                             org.openide.util.NbBundle.getMessage(
                                 BaulastBescheinigungDialog.class,
                                 "BaulastBescheinigungDialog.jLabel6.text"),
                             schluessel,
-                            pruefungInfo.getBerechtigungspruefungDownloadInfo().getProduktTyp()));
+                            freigabeInfo.getBerechtigungspruefungDownloadInfo().getProduktTyp()));
                     StaticSwingTools.showDialog(diaFreigegeben);
 
                     BaulastBescheinigungUtils.doDownload((BerechtigungspruefungBescheinigungDownloadInfo)
-                        pruefungInfo.getBerechtigungspruefungDownloadInfo());
+                        freigabeInfo.getBerechtigungspruefungDownloadInfo());
                 } else {
                     jLabel8.setText(String.format(
                             org.openide.util.NbBundle.getMessage(
                                 BaulastBescheinigungDialog.class,
                                 "BaulastBescheinigungDialog.jLabel8.text"),
                             schluessel,
-                            pruefungInfo.getBerechtigungspruefungDownloadInfo().getProduktTyp()));
-                    jTextArea2.setText(pruefungInfo.getKommentar());
+                            freigabeInfo.getBerechtigungspruefungDownloadInfo().getProduktTyp()));
+                    jTextArea2.setText(freigabeInfo.getKommentar());
                     StaticSwingTools.showDialog(diaStorniert);
+                }
+                try {
+                    SessionManager.getProxy()
+                            .executeTask(
+                                BerechtigungspruefungAnfrageServerAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                null,
+                                new ServerActionParameter<String>(
+                                    BerechtigungspruefungAnfrageServerAction.ParameterType.ABGEHOLT.toString(),
+                                    schluessel));
+                } catch (final Exception ex) {
+                    LOG.warn(ex, ex);
                 }
             }
         } catch (final Exception ex) {

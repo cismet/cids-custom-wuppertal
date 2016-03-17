@@ -13,20 +13,30 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.ComponentRegistry;
+
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jdesktop.beansbinding.Converter;
 
+import java.awt.Component;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
@@ -83,6 +93,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
     private BerechtigungspruefungDownloadInfo downloadInfo = null;
     private BerechtigungspruefungBescheinigungDownloadInfo bescheinigungDownloadInfo = null;
+
+    private final Map<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean> baulastMap =
+        new HashMap<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog diaFreigabe;
@@ -330,7 +343,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         diaFreigabe.setTitle(org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.diaFreigabe.title")); // NOI18N
-        diaFreigabe.setPreferredSize(new java.awt.Dimension(300, 200));
+        diaFreigabe.setModal(true);
         diaFreigabe.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -408,6 +421,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         diaStorno.setTitle(org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.diaStorno.title")); // NOI18N
+        diaStorno.setModal(true);
         diaStorno.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
@@ -884,6 +898,14 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         jScrollPane1.setPreferredSize(new java.awt.Dimension(54, 150));
 
         jList1.setModel(new DefaultListModel<BerechtigungspruefungBescheinigungBaulastInfo>());
+        jList1.setCellRenderer(new BaulastInfoListCellRenderer());
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    jList1MouseClicked(evt);
+                }
+            });
         jScrollPane1.setViewportView(jList1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1108,29 +1130,30 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlEMailValueActionPerformed
+    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlEMailValueActionPerformed
         try {
             BrowserLauncher.openURL("mailto:" + "");
         } catch (Exception ex) {
             LOG.warn("could not open mailto link", ex);
         }
-    }//GEN-LAST:event_hlEMailValueActionPerformed
+    }                                                                                //GEN-LAST:event_hlEMailValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        jTextArea3.setText("");
         StaticSwingTools.showDialog(diaFreigabe);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlDateianhangValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlDateianhangValueActionPerformed
+    private void hlDateianhangValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlDateianhangValueActionPerformed
         final String dateiName = (String)cidsBean.getProperty("dateiname");
         final int extPos = dateiName.lastIndexOf(".");
         final String pureName = dateiName.substring(0, extPos);
@@ -1146,63 +1169,82 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 pureName,
                 ext);
         DownloadManager.instance().add(download);
-    }//GEN-LAST:event_hlDateianhangValueActionPerformed
+    } //GEN-LAST:event_hlDateianhangValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlVorschauValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlVorschauValueActionPerformed
+    private void hlVorschauValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlVorschauValueActionPerformed
         BaulastBescheinigungUtils.doDownload(bescheinigungDownloadInfo);
-    }//GEN-LAST:event_hlVorschauValueActionPerformed
+    }                                                                                   //GEN-LAST:event_hlVorschauValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
         diaStorno.setVisible(false);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         diaFreigabe.setVisible(false);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         executeFreigabe();
         diaFreigabe.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
         executeStorno();
         diaStorno.setVisible(false);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        jTextArea4.setText("");
         StaticSwingTools.showDialog(diaStorno);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList1MouseClicked
+        if (evt.getClickCount() > 1) {
+            final Object selObject = jList1.getSelectedValue();
+            if (selObject instanceof BerechtigungspruefungBescheinigungBaulastInfo) {
+                ComponentRegistry.getRegistry()
+                        .getDescriptionPane()
+                        .gotoMetaObjectNode(new MetaObjectNode(
+                                baulastMap.get((BerechtigungspruefungBescheinigungBaulastInfo)selObject)),
+                            false);
+            }
+        }
+    }                                                                      //GEN-LAST:event_jList1MouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1312,6 +1354,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        baulastMap.clear();
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         lblAnfrageVonValue.setText(((cidsBean != null) && (cidsBean.getProperty("benutzer") != null))
@@ -1372,6 +1415,28 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                                 baulastInfos.add(baulastInfo);
                             }
                         }
+
+                        for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo : baulastInfos) {
+                            new SwingWorker<CidsBean, Object>() {
+
+                                    @Override
+                                    protected CidsBean doInBackground() throws Exception {
+                                        final CidsBean selBean = BaulastBescheinigungUtils.loadBaulast(baulastInfo);
+                                        return selBean;
+                                    }
+
+                                    @Override
+                                    protected void done() {
+                                        try {
+                                            baulastMap.put(baulastInfo, (CidsBean)get());
+                                        } catch (final Exception ex) {
+                                            LOG.warn(ex, ex);
+                                        }
+                                        jList1.revalidate();
+                                    }
+                                }.execute();
+                        }
+
                         for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo : baulastInfos) {
                             ((DefaultListModel<BerechtigungspruefungBescheinigungBaulastInfo>)jList1.getModel())
                                     .addElement(baulastInfo);
@@ -1396,7 +1461,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         }
 
         lblAbholStatusValue.setText(((cidsBean != null) && Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")))
-                ? "Vom Kunden heruntergeladen" : "Vom Kunden noch nicht heruntergeladen");
+                ? (Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus")) ? "Vom Kunden heruntergeladen"
+                                                                            : "Stornomeldung erhalten")
+                : "Vom Kunden noch nicht heruntergeladen");
 
         bindingGroup.bind();
     }
@@ -1448,6 +1515,33 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         @Override
         public Double convertReverse(final String string) {
             throw new UnsupportedOperationException("not needed");
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class BaulastInfoListCellRenderer extends DefaultListCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList<?> list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final JLabel component = (JLabel)super.getListCellRendererComponent(
+                    list,
+                    value,
+                    index,
+                    isSelected,
+                    cellHasFocus); // To change body of generated methods, choose Tools | Templates.
+
+            component.setEnabled(baulastMap.containsKey((BerechtigungspruefungBescheinigungBaulastInfo)value));
+            return component;
         }
     }
 }
