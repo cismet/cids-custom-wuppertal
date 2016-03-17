@@ -1,0 +1,15 @@
+{
+    "produkte" : [
+        {
+            "produktbezeichnung" : "baulastbescheinigung",
+            "begruendungstext_erlaubt" : true,
+            "dateianhang_erlaubt" : true,
+            "berechtigungsgrund_erlaubt" : true,
+            "berechtigungsgruende" : [
+                "Wertgutachten",
+                "Immobilienfinanzierung"
+            ]
+        }
+    ]
+}
+
