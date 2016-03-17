@@ -80,14 +80,20 @@ public class BerechtigungspruefungAnfrageEingangDialog extends javax.swing.JDial
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(BerechtigungspruefungAnfrageEingangDialog.class, "BerechtigungspruefungAnfrageEingangDialog.title")); // NOI18N
+        setTitle(org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungAnfrageEingangDialog.class,
+                "BerechtigungspruefungAnfrageEingangDialog.title")); // NOI18N
         setPreferredSize(new java.awt.Dimension(350, 150));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(BerechtigungspruefungAnfrageEingangDialog.class, "BerechtigungspruefungAnfrageEingangDialog.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungAnfrageEingangDialog.class,
+                "BerechtigungspruefungAnfrageEingangDialog.jLabel1.text")); // NOI18N
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -98,12 +104,18 @@ public class BerechtigungspruefungAnfrageEingangDialog extends javax.swing.JDial
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(BerechtigungspruefungAnfrageEingangDialog.class, "BerechtigungspruefungAnfrageEingangDialog.jButton1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungAnfrageEingangDialog.class,
+                "BerechtigungspruefungAnfrageEingangDialog.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -120,16 +132,16 @@ public class BerechtigungspruefungAnfrageEingangDialog extends javax.swing.JDial
         getContentPane().add(jPanel1, gridBagConstraints);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
