@@ -343,7 +343,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         diaFreigabe.setTitle(org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.diaFreigabe.title")); // NOI18N
+        diaFreigabe.setMinimumSize(new java.awt.Dimension(300, 200));
         diaFreigabe.setModal(true);
+        diaFreigabe.setPreferredSize(new java.awt.Dimension(300, 200));
         diaFreigabe.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -421,6 +423,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         diaStorno.setTitle(org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.diaStorno.title")); // NOI18N
+        diaStorno.setMinimumSize(new java.awt.Dimension(300, 200));
         diaStorno.setModal(true);
         diaStorno.getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -1256,7 +1259,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 protected Boolean doInBackground() throws Exception {
                     try {
                         final String schluessel = (String)cidsBean.getProperty("schluessel");
-                        final String begruendung = jTextArea3.getText();
+                        final String kommentar = jTextArea3.getText();
                         return (Boolean)SessionManager.getSession().getConnection()
                                     .executeTask(SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
@@ -1265,7 +1268,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.KOMMENTAR
                                                     .toString(),
-                                                begruendung),
+                                                kommentar),
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.MODUS
                                                     .toString(),
@@ -1306,7 +1309,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 protected Boolean doInBackground() throws Exception {
                     try {
                         final String schluessel = (String)cidsBean.getProperty("schluessel");
-                        final String begruendung = jTextArea3.getText();
+                        final String kommentar = jTextArea4.getText();
                         return (Boolean)SessionManager.getSession().getConnection()
                                     .executeTask(SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
@@ -1315,7 +1318,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.KOMMENTAR
                                                     .toString(),
-                                                begruendung),
+                                                kommentar),
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.MODUS
                                                     .toString(),
