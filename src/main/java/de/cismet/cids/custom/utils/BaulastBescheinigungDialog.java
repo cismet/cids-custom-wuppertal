@@ -238,7 +238,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         diaFreigegeben.setTitle(org.openide.util.NbBundle.getMessage(
                 BaulastBescheinigungDialog.class,
                 "BaulastBescheinigungDialog.diaFreigegeben.title")); // NOI18N
-        diaFreigegeben.setMinimumSize(new java.awt.Dimension(300, 150));
         diaFreigegeben.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
@@ -256,7 +255,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         jPanel5.add(jButton4, gridBagConstraints);
@@ -270,10 +269,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel5.add(jLabel6, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -596,9 +595,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                     JOptionPane.showMessageDialog(
                                         StaticSwingTools.getParentFrame(
                                             BaulastBescheinigungDialog.this),
-                                        "<html>Ihre Anfrage wird bearbeitet. ("
+                                        "<html>Ihre Anfrage wird unter dem Schlüssel \""
                                                 + anfrageSchluessel
-                                                + ")");
+                                                + "\" bearbeitet."
+                                                + "<br/>Sie werden benachrichtigt, sobald sie bearbeitet wurde.",
+                                        "Ihre Anfrage wird bearbeitet",
+                                        JOptionPane.PLAIN_MESSAGE);
                                 }
                             });
                     } else {
@@ -1368,8 +1370,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             org.openide.util.NbBundle.getMessage(
                                 BaulastBescheinigungDialog.class,
                                 "BaulastBescheinigungDialog.jLabel6.text"),
-                            schluessel,
-                            freigabeInfo.getBerechtigungspruefungDownloadInfo().getProduktTyp()));
+                            schluessel));
+                    diaFreigegeben.pack();
                     StaticSwingTools.showDialog(diaFreigegeben);
 
                     BaulastBescheinigungUtils.doDownload((BerechtigungspruefungBescheinigungDownloadInfo)
@@ -1379,9 +1381,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             org.openide.util.NbBundle.getMessage(
                                 BaulastBescheinigungDialog.class,
                                 "BaulastBescheinigungDialog.jLabel8.text"),
-                            schluessel,
-                            freigabeInfo.getBerechtigungspruefungDownloadInfo().getProduktTyp()));
+                            schluessel));
                     jTextArea2.setText(freigabeInfo.getKommentar());
+                    diaStorniert.pack();
                     StaticSwingTools.showDialog(diaStorniert);
                 }
                 try {
