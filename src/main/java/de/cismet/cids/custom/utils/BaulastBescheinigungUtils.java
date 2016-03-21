@@ -94,27 +94,28 @@ public class BaulastBescheinigungUtils {
      * @return  DOCUMENT ME!
      */
     public static BerechtigungspruefungBescheinigungGruppeInfo createGruppeInfo(
-            final Set<CidsBean> baulastenBeguenstigt,
-            final Set<CidsBean> baulastenBelastet) {
-        return createGruppeInfo(new HashSet<CidsBean>(), baulastenBeguenstigt, baulastenBelastet);
+            final Collection<CidsBean> baulastenBeguenstigt,
+            final Collection<CidsBean> baulastenBelastet) {
+        return createGruppeInfo(new HashMap<CidsBean, Collection<String>>(), baulastenBeguenstigt, baulastenBelastet);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   flurstueckeBeans           DOCUMENT ME!
-     * @param   baulastenBeguenstigtBeans  DOCUMENT ME!
-     * @param   baulastenBelastetBeans     DOCUMENT ME!
+     * @param   flurstuecketoGrundstueckeMap  DOCUMENT ME!
+     * @param   baulastenBeguenstigtBeans     DOCUMENT ME!
+     * @param   baulastenBelastetBeans        DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static BerechtigungspruefungBescheinigungGruppeInfo createGruppeInfo(final Set<CidsBean> flurstueckeBeans,
-            final Set<CidsBean> baulastenBeguenstigtBeans,
-            final Set<CidsBean> baulastenBelastetBeans) {
+    public static BerechtigungspruefungBescheinigungGruppeInfo createGruppeInfo(
+            final Map<CidsBean, Collection<String>> flurstuecketoGrundstueckeMap,
+            final Collection<CidsBean> baulastenBeguenstigtBeans,
+            final Collection<CidsBean> baulastenBelastetBeans) {
         final List<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckeInfo =
             new ArrayList<BerechtigungspruefungBescheinigungFlurstueckInfo>();
-        for (final CidsBean flurstueck : flurstueckeBeans) {
-            flurstueckeInfo.add(createFlurstueckInfo(flurstueck));
+        for (final CidsBean flurstueck : flurstuecketoGrundstueckeMap.keySet()) {
+            flurstueckeInfo.add(createFlurstueckInfo(flurstueck, flurstuecketoGrundstueckeMap.get(flurstueck)));
         }
 
         final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBeguenstigtInfos =
@@ -192,11 +193,13 @@ public class BaulastBescheinigungUtils {
     /**
      * Creates a new FlurstueckBean object.
      *
-     * @param   flurstueck  DOCUMENT ME!
+     * @param   flurstueck    DOCUMENT ME!
+     * @param   grundstuecke  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static BerechtigungspruefungBescheinigungFlurstueckInfo createFlurstueckInfo(final CidsBean flurstueck) {
+    public static BerechtigungspruefungBescheinigungFlurstueckInfo createFlurstueckInfo(final CidsBean flurstueck,
+            final Collection<String> grundstuecke) {
         final String alkisId = (String)flurstueck.getProperty("alkis_id");
         final String gemarkung = (String)flurstueck.getProperty("gemarkung");
         final String flur = (String)flurstueck.getProperty("flur");
@@ -243,7 +246,14 @@ public class BaulastBescheinigungUtils {
             lage = sb.toString();
         }
 
-        return new BerechtigungspruefungBescheinigungFlurstueckInfo(alkisId, gemarkung, flur, zaehler, nenner, lage);
+        return new BerechtigungspruefungBescheinigungFlurstueckInfo(
+                alkisId,
+                gemarkung,
+                flur,
+                zaehler,
+                nenner,
+                lage,
+                grundstuecke);
     }
 
     /**

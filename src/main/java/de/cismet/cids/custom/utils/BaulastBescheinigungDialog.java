@@ -120,7 +120,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     //~ Instance fields --------------------------------------------------------
 
     private final Collection<ProductGroupAmount> prodAmounts = new ArrayList<ProductGroupAmount>();
-    private final Set<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen =
+    private final Collection<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen =
         new HashSet<BerechtigungspruefungBescheinigungGruppeInfo>();
 
     private SwingWorker worker;
@@ -665,10 +665,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
                     @Override
                     protected Collection<ProductGroupAmount> doInBackground() throws Exception {
-                        final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap =
-                            new HashMap<CidsBean, Set<CidsBean>>();
-                        final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap =
-                            new HashMap<CidsBean, Set<CidsBean>>();
+                        final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap =
+                            new HashMap<CidsBean, Collection<CidsBean>>();
+                        final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap =
+                            new HashMap<CidsBean, Collection<CidsBean>>();
 
                         addMessage("Baulastbescheinigungs-Protokoll für "
                                     + ((flurstuecke.size() == 1) ? "folgendes Flurstück" : "folgende Flurstücke")
@@ -690,7 +690,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
                         setStatusMessage("Buchungsblätter werden analysiert...");
 
-                        final Map<String, Set<CidsBean>> grundstueckeToFlurstueckeMap =
+                        final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap =
                             createGrundstueckeToFlurstueckeMap(flurstuecke);
 
                         setStatusMessage("Baulasten werden gesucht...");
@@ -708,7 +708,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                 flurstueckeToBaulastenBeguenstigtMap);
 
                         bescheinigungsgruppen.addAll(createBescheinigungsGruppen(
-                                flurstuecke,
+                                createFlurstueckeToGrundstueckeMap(flurstuecke, grundstueckeToFlurstueckeMap),
                                 flurstueckeToBaulastenBeguenstigtMap,
                                 flurstueckeToBaulastenBelastetMap));
 
@@ -769,8 +769,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      * @throws  Exception  DOCUMENT ME!
      */
     private static void fillFlurstueckeToBaulastenMaps(final Collection<CidsBean> flurstuecke,
-            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap,
-            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) throws Exception {
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) throws Exception {
         addMessage("\n===");
 
         // belastete Baulasten pro Flurstück
@@ -1029,21 +1029,22 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     /**
      * DOCUMENT ME!
      *
-     * @param   flurstuecke                           DOCUMENT ME!
+     * @param   flurstueckeToGrundstueckeMap          flurstuecke DOCUMENT ME!
      * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
      * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     private Set<BerechtigungspruefungBescheinigungGruppeInfo> createBescheinigungsGruppen(
-            final Collection<CidsBean> flurstuecke,
-            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap,
-            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap) {
+            final Map<CidsBean, Collection<String>> flurstueckeToGrundstueckeMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap) {
         final Map<String, BerechtigungspruefungBescheinigungGruppeInfo> gruppeMap =
             new HashMap<String, BerechtigungspruefungBescheinigungGruppeInfo>();
-        for (final CidsBean flurstueck : flurstuecke) {
-            final Set<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(flurstueck);
-            final Set<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
+
+        for (final CidsBean flurstueck : flurstueckeToGrundstueckeMap.keySet()) {
+            final Collection<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(flurstueck);
+            final Collection<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
             final BerechtigungspruefungBescheinigungGruppeInfo newGruppe = BaulastBescheinigungUtils.createGruppeInfo(
                     baulastenBeguenstigt,
                     baulastenBelastet);
@@ -1052,7 +1053,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                 gruppeMap.put(gruppeKey, newGruppe);
             }
             final BerechtigungspruefungBescheinigungGruppeInfo gruppe = gruppeMap.get(gruppeKey);
-            gruppe.getFlurstuecke().add(BaulastBescheinigungUtils.createFlurstueckInfo(flurstueck));
+            gruppe.getFlurstuecke()
+                    .add(BaulastBescheinigungUtils.createFlurstueckInfo(
+                            flurstueck,
+                            flurstueckeToGrundstueckeMap.get(flurstueck)));
         }
 
         final Set<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen =
@@ -1069,6 +1073,32 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     /**
      * DOCUMENT ME!
      *
+     * @param   flurstuecke                   DOCUMENT ME!
+     * @param   grundstueckeToFlurstueckeMap  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static Map<CidsBean, Collection<String>> createFlurstueckeToGrundstueckeMap(
+            final Collection<CidsBean> flurstuecke,
+            final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap) {
+        final HashMap<CidsBean, Collection<String>> flurstueckeToGrundstueckeMap =
+            new HashMap<CidsBean, Collection<String>>();
+
+        for (final String grundstueck : grundstueckeToFlurstueckeMap.keySet()) {
+            for (final CidsBean flurstueck : flurstuecke) {
+                if (!flurstueckeToGrundstueckeMap.containsKey(flurstueck)) {
+                    flurstueckeToGrundstueckeMap.put(flurstueck, new HashSet<String>());
+                }
+                final Collection<String> grundstuecke = flurstueckeToGrundstueckeMap.get(flurstueck);
+                grundstuecke.add(grundstueck);
+            }
+        }
+        return flurstueckeToGrundstueckeMap;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   flurstuecke  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -1076,11 +1106,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      * @throws  Exception             DOCUMENT ME!
      * @throws  InterruptedException  DOCUMENT ME!
      */
-    private static Map<String, Set<CidsBean>> createGrundstueckeToFlurstueckeMap(final Collection<CidsBean> flurstuecke)
-            throws Exception {
+    private static Map<String, Collection<CidsBean>> createGrundstueckeToFlurstueckeMap(
+            final Collection<CidsBean> flurstuecke) throws Exception {
         addMessage("\n===\n\nZuordnung der Flurstücke zu Grundstücken...");
 
-        final Map<String, Set<CidsBean>> grundstueckeToFlurstueckeMap = new HashMap<String, Set<CidsBean>>();
+        final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap =
+            new HashMap<String, Collection<CidsBean>>();
 
         for (final CidsBean flurstueckBean : flurstuecke) {
             final List<CidsBean> buchungsblaetter = new ArrayList<CidsBean>(
@@ -1158,16 +1189,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                 continue;
                             }
 
-//                            if ("Wohnungs-/Teileigentum".equals(buchungsart)) {
-//                                if (teileigentumAlreadyCounted) {
-//                                    addMessage("   -> ignoriere " + key + " aufgrund der Buchungsart ("
-//                                                + buchungsart
-//                                                + ")");
-//                                    continue;
-//                                } else {
-//                                    teileigentumAlreadyCounted = true;
-//                                }
-//                            }
                             if (!grundstueckeToFlurstueckeMap.containsKey(key)) {
                                 grundstueckeToFlurstueckeMap.put(key, new HashSet<CidsBean>());
                             }
@@ -1183,40 +1204,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                 }
             }
         }
-//
-//        boolean first = true;
-//
-//        final Set<String> keys = new HashSet<String>(grundstueckeToFlurstueckeMap.keySet());
-//        for (final String key : keys) {
-//            final Set<CidsBean> flurstueckeToCheck = new HashSet<CidsBean>(grundstueckeToFlurstueckeMap.get(key));
-//            for (final String innerKey : keys) {
-//                if (flurstueckeToCheck.isEmpty()) {
-//                    break;
-//                }
-//                if (!innerKey.equals(key)) {
-//                    if (grundstueckeToFlurstueckeMap.containsKey(innerKey)) {
-//                        for (final CidsBean flurstueck : grundstueckeToFlurstueckeMap.get(innerKey)) {
-//                            if (flurstueckeToCheck.contains(flurstueck)) {
-//                                flurstueckeToCheck.remove(flurstueck);
-//                                if (flurstueckeToCheck.isEmpty()) {
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            // all flurstueck found in another grundstueck(e);
-//            if (flurstueckeToCheck.isEmpty()) {
-//                if (first) {
-//                    addMessage("\n");
-//                    first = false;
-//                }
-//                addMessage("Entferne Grundstück " + key
-//                            + " da alle enthaltenen Flurstücke bereits anderen Grundstücken zugeordnet wurden.");
-//                grundstueckeToFlurstueckeMap.remove(key);
-//            }
-//        }
 
         return grundstueckeToFlurstueckeMap;
     }
@@ -1231,9 +1218,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      * @return  DOCUMENT ME!
      */
     private static Collection<ProductGroupAmount> createBilling(
-            final Map<String, Set<CidsBean>> grundstueckeToFlurstueckeMap,
-            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBelastetMap,
-            final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) {
+            final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) {
         final List<String> keys = new ArrayList<String>(grundstueckeToFlurstueckeMap.keySet());
         Collections.sort(keys);
 
@@ -1255,12 +1242,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             if (grundstueckeToFlurstueckeMap.containsKey(key)) {
                 boolean first = true;
 
-                final Set<CidsBean> flurstuecke = grundstueckeToFlurstueckeMap.get(key);
+                final Collection<CidsBean> flurstuecke = grundstueckeToFlurstueckeMap.get(key);
 
                 final Set<CidsBean> baulasten = new HashSet<CidsBean>();
                 for (final CidsBean flurstueck : flurstuecke) {
-                    final Set<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
-                    final Set<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(flurstueck);
+                    final Collection<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
+                    final Collection<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(
+                            flurstueck);
                     baulasten.addAll(baulastenBelastet);
                     baulasten.addAll(baulastenBeguenstigt);
                 }
