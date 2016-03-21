@@ -776,6 +776,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 }
                 final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(search);
                 for (final MetaObjectNode mon : mons) {
+                    final MetaObject mo = SessionManager.getProxy()
+                                .getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU");
+                    if ((mo.getBean() != null) && (mo.getBean() != null)
+                                && (mo.getBean().getProperty("loeschungsdatum") != null)) {
+                        continue;
+                    }
                     if (mon.getName().startsWith("indirekt: ")) {
                         throw new BaBeException(
                             "Zu den angegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
