@@ -84,23 +84,10 @@ public class BescheinigungspruefungMessageStartUpHook implements StartupHook {
                             ex);
                     }
 
-                    try {
-                        if (SessionManager.getConnection().hasConfigAttr(
-                                        SessionManager.getSession().getUser(),
-                                        "csm://"
-                                        + BerechtigungspruefungProperties.CSM_FREIGABE)) {
-                            CidsServerMessageNotifier.getInstance()
-                                    .subscribe(
-                                        BaulastBescheinigungDialog.getInstance(),
-                                        BerechtigungspruefungProperties.CSM_FREIGABE);
-                        }
-                    } catch (ConnectionException ex) {
-                        LOG.warn(
-                            "Konnte Rechte an csm://"
-                                    + BerechtigungspruefungProperties.CSM_FREIGABE
-                                    + " nicht abfragen. Keine Benachrichtung bei neuen Prüfungen!",
-                            ex);
-                    }
+                    CidsServerMessageNotifier.getInstance()
+                            .subscribe(
+                                BaulastBescheinigungDialog.getInstance(),
+                                BerechtigungspruefungProperties.CSM_FREIGABE);
                 }
             }).start();
     }

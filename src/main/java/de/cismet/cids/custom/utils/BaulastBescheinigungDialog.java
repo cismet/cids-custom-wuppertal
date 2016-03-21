@@ -146,6 +146,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea2;
@@ -225,6 +226,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -407,6 +409,17 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         jPanel4.setPreferredSize(new java.awt.Dimension(500, 27));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
+        jPanel9.setMinimumSize(new java.awt.Dimension(400, 27));
+        jPanel9.setOpaque(false);
+        jPanel9.setPreferredSize(new java.awt.Dimension(400, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(jPanel9, gridBagConstraints);
+
         jPanel2.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -456,7 +469,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
         jPanel4.add(busyStatusPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -629,7 +641,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                 "baulast.bescheinigung.protokollpane_enabled");
         } catch (ConnectionException ex) {
         }
-        jScrollPane1.setVisible(checkProtokollPane != null);
+        jPanel8.setVisible(checkProtokollPane != null);
 
         try {
             if ((worker != null) && !worker.isDone()) {
