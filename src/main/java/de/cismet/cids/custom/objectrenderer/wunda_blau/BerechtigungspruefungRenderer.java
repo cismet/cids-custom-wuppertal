@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.Component;
 
@@ -31,12 +33,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
@@ -1251,66 +1255,19 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  freigabe  DOCUMENT ME!
      */
-    private void executeFreigabe() {
-        new SwingWorker<Boolean, Void>() {
+    private void executeFreigabeOrStorno(final boolean freigabe) {
+        new SwingWorker<BerechtigungspruefungFreigabeServerAction.ReturnType, Void>() {
 
                 @Override
-                protected Boolean doInBackground() throws Exception {
-                    try {
-                        final String schluessel = (String)cidsBean.getProperty("schluessel");
-                        final String kommentar = jTextArea3.getText();
-                        return (Boolean)SessionManager.getSession().getConnection()
-                                    .executeTask(SessionManager.getSession().getUser(),
-                                            BerechtigungspruefungFreigabeServerAction.TASK_NAME,
-                                            SessionManager.getSession().getUser().getDomain(),
-                                            schluessel,
-                                            new ServerActionParameter<String>(
-                                                BerechtigungspruefungFreigabeServerAction.ParameterType.KOMMENTAR
-                                                    .toString(),
-                                                kommentar),
-                                            new ServerActionParameter<String>(
-                                                BerechtigungspruefungFreigabeServerAction.ParameterType.MODUS
-                                                    .toString(),
-                                                BerechtigungspruefungFreigabeServerAction.MODUS_FREIGABE));
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    final Boolean ret;
-
-                    try {
-                        ret = get();
-                        if (ret == null) {
-                            LOG.error("Fehler beim Freigeben");
-                        } else if (!ret) {
-                            LOG.error("Anfrage wurde bereits bearbeitet.");
-                        }
-                    } catch (final Exception ex) {
-                        LOG.error("Fehler beim Freigeben", ex);
-                    }
-                    jButton1.setEnabled(false);
-                    jButton2.setEnabled(false);
-                }
-            }.execute();
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void executeStorno() {
-        new SwingWorker<Boolean, Void>() {
-
-                @Override
-                protected Boolean doInBackground() throws Exception {
+                protected BerechtigungspruefungFreigabeServerAction.ReturnType doInBackground() throws Exception {
                     try {
                         final String schluessel = (String)cidsBean.getProperty("schluessel");
                         final String kommentar = jTextArea4.getText();
-                        return (Boolean)SessionManager.getSession().getConnection()
+                        return (BerechtigungspruefungFreigabeServerAction.ReturnType)SessionManager
+                                    .getSession().getConnection()
                                     .executeTask(SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
@@ -1331,23 +1288,84 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
                 @Override
                 protected void done() {
-                    final Boolean ret;
-
+                    final BerechtigungspruefungFreigabeServerAction.ReturnType ret;
                     try {
                         ret = get();
-                        if (ret == null) {
-                            LOG.error("Fehler beim Freigeben");
-                        } else if (!ret) {
-                            LOG.error("Anfrage wurde bereits bearbeitet.");
+                        if (ret.equals(BerechtigungspruefungFreigabeServerAction.ReturnType.OK)) {
+                            final String title = freigabe ? "Berechtigungs-Anfrage freigegeben."
+                                                          : "Berechtigungs-Anfrage storniert.";
+                            final String message = freigabe ? "<html>Die Berechtigungs-Anfrage wurde freigegeben."
+                                                            : "<html>Die Berechtigungs-Anfrage wurde storniert.";
+                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(
+                                    BerechtigungspruefungRenderer.this),
+                                message,
+                                title,
+                                JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            final String title = freigabe ? "Fehler beim Freigeben." : "Fehler beim Stornieren.";
+                            switch (ret) {
+                                case ALREADY: {
+                                    final String message = freigabe
+                                        ? "<html>Die Berechtigungs-Anfrage wurde bereits freigegeben."
+                                        : "<html>Die Berechtigungs-Anfrage wurde bereits storniert.";
+                                    JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(
+                                            BerechtigungspruefungRenderer.this),
+                                        message,
+                                        title,
+                                        JOptionPane.ERROR_MESSAGE);
+                                }
+                                break;
+                                case PENDING: {
+                                    final String message =
+                                        "<html>Die Berechtigungs-Anfrage wird bereits von einem anderen Prüfer bearbeitet.";
+                                    JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(
+                                            BerechtigungspruefungRenderer.this),
+                                        message,
+                                        title,
+                                        JOptionPane.ERROR_MESSAGE);
+                                }
+                                break;
+                                default: {
+                                    break;
+                                }
+                            }
                         }
                     } catch (final Exception ex) {
-                        LOG.error("Fehler beim Freigeben", ex);
-                    }
+                        final String title = freigabe ? "Fehler beim Freigeben." : "Fehler beim Stornieren.";
+                        final String message = freigabe
+                            ? "Beim Freigegen ist es zu unerwartetem einem Fehler gekommen."
+                            : "Beim Stornieren ist es zu unerwartetem einem Fehler gekommen.";
+                        final ErrorInfo info = new ErrorInfo(
+                                title,
+                                message,
+                                null,
+                                null,
+                                ex,
+                                Level.SEVERE,
+                                null);
+                        JXErrorPane.showDialog(BerechtigungspruefungRenderer.this, info);
 
-                    jButton1.setEnabled(false);
-                    jButton2.setEnabled(false);
+                        LOG.error("Fehler beim Freigeben", ex);
+                    } finally {
+                        jButton1.setEnabled(false);
+                        jButton2.setEnabled(false);
+                    }
                 }
             }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void executeFreigabe() {
+        executeFreigabeOrStorno(true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void executeStorno() {
+        executeFreigabeOrStorno(false);
     }
 
     @Override
@@ -1365,14 +1383,20 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         ((DefaultListModel<BerechtigungspruefungBescheinigungBaulastInfo>)jList1.getModel()).clear();
         if (cidsBean != null) {
-            if (cidsBean.getProperty("pruefstatus") == null) {
+            if (cidsBean.getProperty("pruefer") == null) {
                 lblPruefStatusValue.setText("offen");
+            } else if (cidsBean.getProperty("pruefstatus") == null) {
+                lblPruefStatusValue.setText("in Bearbeitung");
             } else {
                 lblPruefStatusValue.setText((Boolean)cidsBean.getProperty("pruefstatus") ? "freigegeben" : "storniert");
             }
 
-            jButton1.setEnabled(cidsBean.getProperty("pruefstatus") == null);
-            jButton2.setEnabled(cidsBean.getProperty("pruefstatus") == null);
+            final String pruefer = SessionManager.getSession().getUser().getName();
+
+            jButton1.setEnabled((cidsBean.getProperty("pruefer") == null)
+                        || pruefer.equals(cidsBean.getProperty("pruefer")));
+            jButton2.setEnabled((cidsBean.getProperty("pruefer") == null)
+                        || pruefer.equals(cidsBean.getProperty("pruefer")));
 
             new SwingWorker<CidsBean, Void>() {
 

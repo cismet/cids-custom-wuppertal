@@ -496,7 +496,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 300));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 250));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(520, 250));
 
         protokollPane.setEditable(false);
         jScrollPane1.setViewportView(protokollPane);
@@ -612,7 +612,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                                 + "\" bearbeitet."
                                                 + "<br/>Sie werden benachrichtigt, sobald sie bearbeitet wurde.",
                                         "Ihre Anfrage wird bearbeitet",
-                                        JOptionPane.PLAIN_MESSAGE);
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 }
                             });
                     } else {
