@@ -1042,7 +1042,18 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         final Map<String, BerechtigungspruefungBescheinigungGruppeInfo> gruppeMap =
             new HashMap<String, BerechtigungspruefungBescheinigungGruppeInfo>();
 
-        for (final CidsBean flurstueck : flurstueckeToGrundstueckeMap.keySet()) {
+        final List<CidsBean> flurstuecke = new ArrayList<CidsBean>(flurstueckeToGrundstueckeMap.keySet());
+        Collections.sort(flurstuecke, new Comparator<CidsBean>() {
+
+                @Override
+                public int compare(final CidsBean o1, final CidsBean o2) {
+                    final String s1 = (o1 == null) ? "" : (String)o1.getProperty("alkis_id");
+                    final String s2 = (o2 == null) ? "" : (String)o2.getProperty("alkis_id");
+                    return s1.compareTo(s2);
+                }
+            });
+
+        for (final CidsBean flurstueck : flurstuecke) {
             final Collection<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(flurstueck);
             final Collection<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
             final BerechtigungspruefungBescheinigungGruppeInfo newGruppe = BaulastBescheinigungUtils.createGruppeInfo(
@@ -1085,12 +1096,15 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             new HashMap<CidsBean, Collection<String>>();
 
         for (final String grundstueck : grundstueckeToFlurstueckeMap.keySet()) {
+            final Collection<CidsBean> gruFlu = grundstueckeToFlurstueckeMap.get(grundstueck);
             for (final CidsBean flurstueck : flurstuecke) {
-                if (!flurstueckeToGrundstueckeMap.containsKey(flurstueck)) {
-                    flurstueckeToGrundstueckeMap.put(flurstueck, new HashSet<String>());
+                if (gruFlu.contains(flurstueck)) {
+                    if (!flurstueckeToGrundstueckeMap.containsKey(flurstueck)) {
+                        flurstueckeToGrundstueckeMap.put(flurstueck, new HashSet<String>());
+                    }
+                    final Collection<String> grundstuecke = flurstueckeToGrundstueckeMap.get(flurstueck);
+                    grundstuecke.add(grundstueck);
                 }
-                final Collection<String> grundstuecke = flurstueckeToGrundstueckeMap.get(flurstueck);
-                grundstuecke.add(grundstueck);
             }
         }
         return flurstueckeToGrundstueckeMap;
