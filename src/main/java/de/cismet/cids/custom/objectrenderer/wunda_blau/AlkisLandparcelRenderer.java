@@ -46,6 +46,7 @@ import java.awt.image.BufferedImage;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -75,6 +76,7 @@ import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
@@ -136,6 +138,10 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN =
         "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED =
+        "baulast.report.bescheinigung_enabled@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED =
+        "baulast.report.bescheinigung_disabled@WUNDA_BLAU";
     //
     private static final String BUCHUNGSBLATT_TABLE = "alkis_buchungsblatt";
     private static final String DOMAIN = "WUNDA_BLAU";
@@ -254,6 +260,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private javax.swing.JButton btnForward;
     private javax.swing.JEditorPane epInhaltBuchungsblatt;
     private javax.swing.JEditorPane epLage;
+    private org.jdesktop.swingx.JXHyperlink hlBaulastbescheinigung;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisKomHtml;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisKomInternHtml;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisKomInternPdf;
@@ -417,13 +424,18 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         }
         panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
 
+        final boolean billingAllowedFsueKom = BillingPopup.isBillingAllowed("fsuekom");
+        final boolean billingAllowedFsueNw = BillingPopup.isBillingAllowed("fsuenw");
+        final boolean billingAllowedFsNw = BillingPopup.isBillingAllowed("fsnw");
+        final boolean billingAllowedBlabBe = BillingPopup.isBillingAllowed("blab_be");
+
         hlKarte.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
         hlFlurstuecksnachweisPdf.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
-                    && BillingPopup.isBillingAllowed());
+                    && billingAllowedFsNw);
         hlFlurstuecksnachweisHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS));
         hlFlurstuecksEigentumsnachweisKomPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && billingAllowedFsueKom);
         hlFlurstuecksEigentumsnachweisKomHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM));
         hlFlurstuecksEigentumsnachweisKomInternPdf.setEnabled(ObjectRendererUtils.checkActionTag(
@@ -431,9 +443,13 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         hlFlurstuecksEigentumsnachweisKomInternHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
         hlFlurstuecksEigentumsnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && billingAllowedFsueNw);
         hlFlurstuecksEigentumsnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW));
+        hlBaulastbescheinigung.setEnabled(
+            ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
+                    && !ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED)
+                    && billingAllowedBlabBe);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -818,6 +834,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         jLabel4 = new javax.swing.JLabel();
         hlFlurstuecksEigentumsnachweisKomPdf = new org.jdesktop.swingx.JXHyperlink();
         hlFlurstuecksEigentumsnachweisKomInternPdf = new org.jdesktop.swingx.JXHyperlink();
+        hlBaulastbescheinigung = new org.jdesktop.swingx.JXHyperlink();
         panHtmlProducts = new RoundedPanel();
         hlFlurstuecksEigentumsnachweisKomHtml = new org.jdesktop.swingx.JXHyperlink();
         hlFlurstuecksnachweisHtml = new org.jdesktop.swingx.JXHyperlink();
@@ -835,7 +852,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("TITLE");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -863,7 +880,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         panFooterLeft.setPreferredSize(new java.awt.Dimension(124, 40));
         panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 5));
 
-        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblBack.setForeground(new java.awt.Color(255, 255, 255));
         lblBack.setText("Info");
         lblBack.setEnabled(false);
@@ -925,7 +942,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             });
         panFooterRight.add(btnForward);
 
-        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Produkte");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1015,7 +1032,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         panBuchungEigentum.add(scpBuchungsblattFlurstuecke, gridBagConstraints);
 
-        lblBuchungsblaetter.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBuchungsblaetter.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBuchungsblaetter.setText("Buchungsblätter:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1024,7 +1041,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         panBuchungEigentum.add(lblBuchungsblaetter, gridBagConstraints);
 
-        lblInhalt.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblInhalt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblInhalt.setText("Inhalt:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1033,7 +1050,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         panBuchungEigentum.add(lblInhalt, gridBagConstraints);
 
-        lblEnthalteneFlurstuecke.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblEnthalteneFlurstuecke.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblEnthalteneFlurstuecke.setText("Enthaltene Flurstücke:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1052,7 +1069,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         scpInhaltBuchungsblatt.setPreferredSize(new java.awt.Dimension(250, 200));
 
         epInhaltBuchungsblatt.setBorder(null);
-        epInhaltBuchungsblatt.setContentType("text/html");
+        epInhaltBuchungsblatt.setContentType("text/html"); // NOI18N
         epInhaltBuchungsblatt.setEditable(false);
         epInhaltBuchungsblatt.setText("\n");
         epInhaltBuchungsblatt.setMaximumSize(new java.awt.Dimension(250, 200));
@@ -1117,7 +1134,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         panMainInfo.add(lblLandparcelCode, gridBagConstraints);
 
-        lblDescLandparcelCode.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescLandparcelCode.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescLandparcelCode.setText("Flurstückskennzeichen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1126,7 +1143,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         panMainInfo.add(lblDescLandparcelCode, gridBagConstraints);
 
-        lblDescGemeinde.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescGemeinde.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescGemeinde.setText("Gemeinde:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1143,7 +1160,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panMainInfo.add(lblGemeinde, gridBagConstraints);
 
-        lblDescGemarkung.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescGemarkung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescGemarkung.setText("Gemarkung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1169,7 +1186,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panMainInfo.add(lblGemarkung, gridBagConstraints);
 
-        lblDescLage.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescLage.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescLage.setText("Lage:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1211,7 +1228,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         scpLage.setPreferredSize(new java.awt.Dimension(250, 20));
 
         epLage.setBorder(null);
-        epLage.setContentType("text/html");
+        epLage.setContentType("text/html"); // NOI18N
         epLage.setEditable(false);
         epLage.setOpaque(false);
         scpLage.setViewportView(epLage);
@@ -1274,7 +1291,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 10, 7);
         panPdfProducts.add(hlKarte, gridBagConstraints);
@@ -1368,6 +1385,23 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPdfProducts.add(hlFlurstuecksEigentumsnachweisKomInternPdf, gridBagConstraints);
+
+        hlBaulastbescheinigung.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        hlBaulastbescheinigung.setText("Baulastbescheinigung");
+        hlBaulastbescheinigung.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlBaulastbescheinigungActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        panPdfProducts.add(hlBaulastbescheinigung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1768,6 +1802,17 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                         + "flurstuecksundeigentumsnachweis_kommunal_intern.html");
         }
     }                                                                                                               //GEN-LAST:event_hlFlurstuecksEigentumsnachweisKomInternHtmlActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlBaulastbescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBaulastbescheinigungActionPerformed
+        final Collection<CidsBean> flurstuecke = new ArrayList<CidsBean>();
+        flurstuecke.add(cidsBean);
+        BaulastBescheinigungDialog.getInstance().show(flurstuecke, this);
+    }                                                                                          //GEN-LAST:event_hlBaulastbescheinigungActionPerformed
 
     /**
      * DOCUMENT ME!

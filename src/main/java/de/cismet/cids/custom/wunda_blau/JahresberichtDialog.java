@@ -145,7 +145,6 @@ public class JahresberichtDialog extends javax.swing.JDialog {
                 "JahresberichtDialog.lblErrorBillingsTitle.text")); // NOI18N
 
         setTitle(org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.title")); // NOI18N
-        setPreferredSize(new java.awt.Dimension(400, 200));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 

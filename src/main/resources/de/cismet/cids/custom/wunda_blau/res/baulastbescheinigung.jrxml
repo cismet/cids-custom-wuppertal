@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Baulasten" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" scriptletClass="de.cismet.cids.custom.objectrenderer.wunda_blau.VermessungRissReportScriptlet" uuid="35bae2a7-1b15-4850-a139-ee769bb95ba6">
+	<property name="ireport.zoom" value="1.0000000000000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="HAS_BELASTET" class="java.lang.Boolean"/>
+	<parameter name="HAS_BEGUENSTIGT" class="java.lang.Boolean"/>
+	<parameter name="FABRICATIONNOTICE" class="java.lang.String"/>
+	<field name="flurstuecke" class="java.util.Collection"/>
+	<field name="baulastenBelastet" class="java.util.Collection"/>
+	<field name="baulastenBeguenstigt" class="java.util.Collection"/>
+	<variable name="DATE" class="java.util.Date" calculation="First">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<background>
+		<band height="802">
+			<line>
+				<reportElement x="0" y="0" width="1" height="802" uuid="448fe998-2b12-45a9-b777-46cd0fb1fe8d"/>
+			</line>
+			<line>
+				<reportElement x="555" y="0" width="1" height="802" uuid="0ff76381-fa00-450a-aafc-330f74cb4538"/>
+			</line>
+			<line>
+				<reportElement x="0" y="801" width="555" height="1" uuid="74d71c94-cc76-46cf-a1b9-d579f33ce5e8"/>
+			</line>
+			<line>
+				<reportElement x="1" y="0" width="555" height="1" uuid="0bb6fdca-9b24-460c-9985-fac0716ce974"/>
+			</line>
+		</band>
+	</background>
+	<title>
+		<band height="366">
+			<frame>
+				<reportElement mode="Opaque" x="1" y="1" width="554" height="110" backcolor="#EBEBEB" uuid="32562218-9ffa-4634-96b0-afeca0b5e6d3"/>
+				<staticText>
+					<reportElement x="110" y="24" width="197" height="35" uuid="424a9549-a440-477a-812d-90e90b4e062a"/>
+					<textElement>
+						<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Ressort Vermessung, Katasteramt und Geodaten (R102)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="110" y="3" width="158" height="21" uuid="ad17287a-b8b8-475b-88f5-a93c415b4db3"/>
+					<textElement>
+						<font fontName="SansSerif" size="16" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Stadt Wuppertal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="110" y="59" width="158" height="20" uuid="5a2dfbd4-b623-42ee-9c75-b7a8112485cc"/>
+					<textElement>
+						<font fontName="SansSerif" size="12" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Johannes-Rau-Platz 1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="110" y="79" width="158" height="20" uuid="233c99df-1435-4aaa-9557-d2d4dc835393"/>
+					<textElement>
+						<font fontName="SansSerif" size="12" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[42275 Wuppertal]]></text>
+				</staticText>
+				<image>
+					<reportElement x="11" y="3" width="92" height="82" uuid="c1668224-b68a-4a6d-9f35-5a709eaed95f"/>
+					<imageExpression><![CDATA["de/cismet/cids/custom/objectrenderer/wunda_blau/logo_stadt_wuppertal.png"]]></imageExpression>
+				</image>
+				<textField evaluationTime="Report" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="307" y="89" width="240" height="20" uuid="42d290f8-a48e-4ea3-b0f5-3ca3b7452cec"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA["Erstellt am" + DateFormat.getDateInstance(DateFormat.LONG).format($V{DATE})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="307" y="3" width="240" height="42" uuid="55a9cae5-9edb-4c96-a8d0-1f314882defc"/>
+					<textElement textAlignment="Right">
+						<font fontName="SansSerif" size="14" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Baulastbescheinigung]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="84" width="240" height="25" uuid="f447237f-da95-41f4-8c54-5f9062213466"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Calibri" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{FABRICATIONNOTICE}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement x="0" y="111" width="555" height="1" uuid="e7130a59-c8e0-4a8c-b8c8-9d9160a69e86"/>
+			</line>
+			<subreport>
+				<reportElement positionType="Float" x="1" y="345" width="555" height="20" uuid="da4a5dd4-78ce-441d-b47e-b805c60bb40c">
+					<printWhenExpression><![CDATA[true]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="HAS_BEGUENSTIGT">
+					<subreportParameterExpression><![CDATA[$P{HAS_BEGUENSTIGT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{baulastenBeguenstigt}, false)]]></dataSourceExpression>
+				<subreportExpression><![CDATA["de/cismet/cids/custom/wunda_blau/res/baulastbescheinigung_beguenstigt.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="246" width="555" height="20" uuid="3165109a-2ec8-4445-a5d3-39f0370842d6">
+					<printWhenExpression><![CDATA[true]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="HAS_BELASTET">
+					<subreportParameterExpression><![CDATA[$P{HAS_BELASTET}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{baulastenBelastet}, false)]]></dataSourceExpression>
+				<subreportExpression><![CDATA["de/cismet/cids/custom/wunda_blau/res/baulastbescheinigung_belastet.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="130" width="555" height="20" uuid="8fb35219-2a9c-4739-851c-f6c83a2c3789">
+					<printWhenExpression><![CDATA[true]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{flurstuecke}, false)]]></dataSourceExpression>
+				<subreportExpression><![CDATA["de/cismet/cids/custom/wunda_blau/res/baulastbescheinigung_flurstuecke.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement positionType="Float" x="30" y="295" width="525" height="25" uuid="ddfd09b3-e742-4fac-bb3f-18d579463a62"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[sind keine Baulasten eingetragen.]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="5" y="300" width="15" height="15" uuid="c4980c10-1fa6-4a83-b18f-728d98697ca1"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="5" y="300" width="15" height="15" uuid="e41b154c-22ad-4b16-b7a7-cf566c55efec">
+					<printWhenExpression><![CDATA[!$P{HAS_BEGUENSTIGT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="30" y="320" width="525" height="25" uuid="cad7dcf2-2ee2-4fb7-bd6e-c0843497e57d"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[sind folgende Baulasten eingetragen:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="270" width="555" height="25" uuid="212ba807-7c66-4708-9065-c29c4936e829"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zu Gunsten der o.g. Flurstücke]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="5" y="325" width="15" height="15" uuid="e7ad91f3-ef60-4363-b109-ee01903378c1"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="5" y="325" width="15" height="15" uuid="49bce0bb-3a7a-4737-802a-902f19d881df">
+					<printWhenExpression><![CDATA[$P{HAS_BEGUENSTIGT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="170" width="555" height="25" uuid="212ba807-7c66-4708-9065-c29c4936e829"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zu Lasten der o.g. Flurstücke]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="5" y="200" width="15" height="15" uuid="c4980c10-1fa6-4a83-b18f-728d98697ca1"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="30" y="195" width="525" height="25" uuid="ddfd09b3-e742-4fac-bb3f-18d579463a62"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[sind keine Baulasten eingetragen.]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="5" y="225" width="15" height="15" uuid="e7ad91f3-ef60-4363-b109-ee01903378c1"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="30" y="220" width="525" height="25" uuid="cad7dcf2-2ee2-4fb7-bd6e-c0843497e57d"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[sind folgende Baulasten eingetragen:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="5" y="200" width="15" height="15" uuid="49bce0bb-3a7a-4737-802a-902f19d881df">
+					<printWhenExpression><![CDATA[!$P{HAS_BELASTET}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="5" y="225" width="15" height="15" uuid="e41b154c-22ad-4b16-b7a7-cf566c55efec">
+					<printWhenExpression><![CDATA[$P{HAS_BELASTET}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[X]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="5" y="0" width="140" height="15" uuid="fd450a4b-6902-4d10-8e90-f06ff25cbdbe"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA["Seite " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="150" y="0" width="400" height="15" isRemoveLineWhenBlank="true" uuid="271dcef9-a4d8-4838-9e32-55f2ac16b1e9"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA["Dieser Bericht wurde am " + DateFormat.getDateInstance(DateFormat.LONG).format($V{DATE}) + " um " + DateFormat.getTimeInstance(DateFormat.SHORT).format($V{DATE}) + " Uhr erstellt."]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

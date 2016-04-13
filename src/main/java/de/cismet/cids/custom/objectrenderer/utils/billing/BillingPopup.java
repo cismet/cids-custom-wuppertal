@@ -27,7 +27,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -812,7 +812,7 @@ public class BillingPopup extends javax.swing.JDialog {
      * @throws  ConnectionException  DOCUMENT ME!
      */
     private static String[] getAllowedUsages(final User user, final String product) throws ConnectionException {
-        final Set<String> allowedUsages = new HashSet<String>();
+        final Set<String> allowedUsages = new LinkedHashSet<String>();
 
         final String rawAllowedUsageLines = SessionManager.getConnection()
                     .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR);
@@ -844,6 +844,15 @@ public class BillingPopup extends javax.swing.JDialog {
         }
 
         return allowedUsages.toArray(new String[0]);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getBerechnungsProtokoll() {
+        return txtBerechnung.getText();
     }
 
     /**

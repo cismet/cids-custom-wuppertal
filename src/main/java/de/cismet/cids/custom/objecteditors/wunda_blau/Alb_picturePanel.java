@@ -299,12 +299,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             });
 
         try {
-            jXHyperlink1.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT)
-                        && BillingPopup.isBillingAllowed());
-            jXHyperlink2.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN)
-                        && BillingPopup.isBillingAllowed());
-            jXHyperlink3.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER)
-                        && BillingPopup.isBillingAllowed());
+            final boolean billingAllowed = BillingPopup.isBillingAllowed("bla");
+
+            jXHyperlink1.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && billingAllowed);
+            jXHyperlink2.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && billingAllowed);
+            jXHyperlink3.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && billingAllowed);
             btnOpen.setEnabled(!ObjectRendererUtils.checkActionTag(OPEN_ACTION_TAG));
         } catch (final Exception ex) {
             // needed for netbeans gui editor

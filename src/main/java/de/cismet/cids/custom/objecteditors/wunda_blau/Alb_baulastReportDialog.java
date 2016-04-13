@@ -269,7 +269,7 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog {
                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                     String projectname = projektbezeichnung;
                     if ((projectname == null) || (projectname.trim().length() == 0)) {
-                        projectname = type.toString();
+                        projectname = "";
                     }
                     final Download download = BaulastenReportGenerator.generateDownload(
                             type,

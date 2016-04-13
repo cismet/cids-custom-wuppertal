@@ -406,7 +406,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                                 Alb_baulastAggregationRendererPanel.this)) {
                                     String projectname = txtProjectname.getText();
                                     if ((projectname == null) || (projectname.trim().length() == 0)) {
-                                        projectname = type.toString();
+                                        projectname = "";
                                     }
                                     final Download download = BaulastenReportGenerator.generateDownload(
                                             type,
@@ -498,16 +498,17 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         tableSorter.setSortKeys(sortKeys);
 
         final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && BillingPopup.isBillingAllowed()) {
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("bla");
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT);
         }
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && BillingPopup.isBillingAllowed()) {
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN);
         }
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && BillingPopup.isBillingAllowed()) {
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER);
         }
-        final boolean enabled = BillingPopup.isBillingAllowed() && !items.isEmpty();
+        final boolean enabled = billingAllowed && !items.isEmpty();
 
         cmbType.setModel(new DefaultComboBoxModel(items.toArray(new BaulastenReportGenerator.Type[0])));
         cmbType.setEnabled(enabled);
