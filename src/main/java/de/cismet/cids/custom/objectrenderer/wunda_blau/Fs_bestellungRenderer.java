@@ -42,13 +42,11 @@ import java.text.NumberFormat;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.logging.Level;
 
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.objecteditors.utils.DoubleNumberConverter;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
@@ -114,23 +112,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             }
         };
 
-    private static final Converter<Boolean, String> CONVERTER_STATUS = new Converter<Boolean, String>() {
-
-            @Override
-            public String convertForward(final Boolean s) {
-                if (Boolean.TRUE.equals(s)) {
-                    return "erledigt";
-                } else {
-                    return "in Bearbeitung";
-                }
-            }
-
-            @Override
-            public Boolean convertReverse(final String t) {
-                return null;
-            }
-        };
-
     //~ Instance fields --------------------------------------------------------
 
     private final ObjectMapper MAPPER = new ObjectMapper();
@@ -141,7 +122,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink hlEMailValue;
-    private org.jdesktop.swingx.JXHyperlink hlFlurstueckValue;
+    private org.jdesktop.swingx.JXHyperlink hlFlurstueckeValue;
     private org.jdesktop.swingx.JXHyperlink hlProduktValue;
     private org.jdesktop.swingx.JXHyperlink hlStatusErrorDetails;
     private javax.swing.JButton jButton1;
@@ -160,7 +141,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JLabel lblEMail;
     private javax.swing.JLabel lblEingegangenAm;
     private javax.swing.JLabel lblEingegangenAmValue;
-    private javax.swing.JLabel lblFlurstueck;
+    private javax.swing.JLabel lblFlurstuecke;
     private javax.swing.JLabel lblGebuehr;
     private javax.swing.JLabel lblGebuehrValue;
     private javax.swing.JLabel lblLaFirma;
@@ -313,8 +294,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblStatusValue = new javax.swing.JLabel();
         hlStatusErrorDetails = new org.jdesktop.swingx.JXHyperlink();
         jPanel6 = new javax.swing.JPanel();
-        lblFlurstueck = new javax.swing.JLabel();
-        hlFlurstueckValue = new org.jdesktop.swingx.JXHyperlink();
+        lblFlurstuecke = new javax.swing.JLabel();
+        hlFlurstueckeValue = new org.jdesktop.swingx.JXHyperlink();
         lblProdukt = new javax.swing.JLabel();
         panProduktValue = new javax.swing.JPanel();
         hlProduktValue = new org.jdesktop.swingx.JXHyperlink();
@@ -596,31 +577,21 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         jPanel1.add(panStatusValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            lblFlurstueck,
+            lblFlurstuecke,
             org.openide.util.NbBundle.getMessage(
                 Fs_bestellungRenderer.class,
-                "Fs_bestellungRenderer.lblFlurstueck.text")); // NOI18N
+                "Fs_bestellungRenderer.lblFlurstuecke.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblFlurstueck, gridBagConstraints);
+        jPanel1.add(lblFlurstuecke, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.landparcelcode}"),
-                hlFlurstueckValue,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
-        bindingGroup.addBinding(binding);
-
-        hlFlurstueckValue.addActionListener(new java.awt.event.ActionListener() {
+        hlFlurstueckeValue.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    hlFlurstueckValueActionPerformed(evt);
+                    hlFlurstueckeValueActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -629,7 +600,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(hlFlurstueckValue, gridBagConstraints);
+        jPanel1.add(hlFlurstueckeValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblProdukt,
@@ -1195,11 +1166,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlFlurstueckValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstueckValueActionPerformed
+    private void hlFlurstueckeValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstueckeValueActionPerformed
         if (flurstueckMon != null) {
             ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(flurstueckMon, false);
         }
-    }                                                                                     //GEN-LAST:event_hlFlurstueckValueActionPerformed
+    }                                                                                      //GEN-LAST:event_hlFlurstueckeValueActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1331,6 +1302,10 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         setFlurstueckMon(null);
         this.cidsBean = cidsBean;
 
+        lblStatusValue.setText("-");
+        hlFlurstueckeValue.setText("-");
+        hlStatusErrorDetails.setVisible(false);
+
         if (cidsBean != null) {
             final String statusText;
             final Boolean erledigt = (Boolean)cidsBean.getProperty("erledigt");
@@ -1347,41 +1322,51 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
             hlStatusErrorDetails.setVisible(fehler != null);
 
+            final String landparcelcodesString = (String)cidsBean.getProperty("landparcelcode");
+            final String landparcelcode;
+            if ((landparcelcodesString != null) && !landparcelcodesString.isEmpty()) {
+                final String[] landparcelcodes = landparcelcodesString.split(",");
+                landparcelcode = landparcelcodes[0];
+                hlFlurstueckeValue.setText(landparcelcode + ((landparcelcodes.length > 1) ? " u.a." : ""));
+            } else {
+                landparcelcode = null;
+            }
+
             final Geometry geom = (Geometry)cidsBean.getProperty("geometrie.geo_field");
             if (geom != null) {
                 initMap(geom);
             }
+
+            new SwingWorker<MetaObjectNode, Void>() {
+
+                    @Override
+                    protected MetaObjectNode doInBackground() throws Exception {
+                        final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
+                                CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
+                                CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
+                                landparcelcode,
+                                null);
+                        final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                        if (!mons.isEmpty()) {
+                            return mons.iterator().next();
+                        } else {
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            setFlurstueckMon(get());
+                        } catch (final Exception ex) {
+                            LOG.warn(ex, ex);
+                        }
+                    }
+                }.execute();
         }
 
         bindingGroup.bind();
-
-        new SwingWorker<MetaObjectNode, Void>() {
-
-                @Override
-                protected MetaObjectNode doInBackground() throws Exception {
-                    final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
-                            CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
-                            CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
-                            (String)cidsBean.getProperty("landparcelcode"),
-                            null);
-                    final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), search);
-                    if (!mons.isEmpty()) {
-                        return mons.iterator().next();
-                    } else {
-                        return null;
-                    }
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        setFlurstueckMon(get());
-                    } catch (final Exception ex) {
-                        LOG.warn(ex, ex);
-                    }
-                }
-            }.execute();
     }
 
     /**
@@ -1392,7 +1377,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private void setFlurstueckMon(final MetaObjectNode flurstueckMon) {
         this.flurstueckMon = flurstueckMon;
         jButton1.setEnabled(flurstueckMon != null);
-        hlFlurstueckValue.setEnabled(flurstueckMon != null);
+        hlFlurstueckeValue.setEnabled(flurstueckMon != null);
     }
 
     @Override
