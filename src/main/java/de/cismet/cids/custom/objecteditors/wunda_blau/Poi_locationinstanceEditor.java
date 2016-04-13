@@ -26,11 +26,22 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import java.awt.Cursor;
+import java.awt.EventQueue;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.logging.Level;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
@@ -47,6 +58,8 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.tools.BrowserLauncher;
+
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -62,6 +75,13 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String title = "";
+
+    private ImageIcon statusRed = new javax.swing.ImageIcon(
+            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
+    private ImageIcon statusGreen = new javax.swing.ImageIcon(
+            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
+    private ImageIcon statusGrey = new javax.swing.ImageIcon(
+            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-offline.png"));
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddThema;
     private javax.swing.JButton btnAddZusNamen;
@@ -81,8 +101,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JCheckBox chkVeroeffentlicht;
     private javax.swing.JDialog dlgAddLocationType;
     private javax.swing.JDialog dlgAddZusNamen;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblArt;
     private javax.swing.JLabel lblAuswaehlen;
+    private javax.swing.JLabel lblAuthor;
     private javax.swing.JLabel lblBezeichnung;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblFax;
@@ -90,6 +113,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JLabel lblGeomPoint1;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
+    private javax.swing.JLabel lblHeader3;
+    private javax.swing.JLabel lblImageUrl;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblLocationTypes;
     private javax.swing.JLabel lblLocationTypes1;
@@ -101,7 +126,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JLabel lblTelefon;
     private javax.swing.JLabel lblUrl;
+    private javax.swing.JLabel lblUrlCheckImage;
+    private javax.swing.JLabel lblUrlCheckWebsite;
     private javax.swing.JLabel lblVeroeffentlicht;
+    private javax.swing.JLabel lblWebsite;
     private javax.swing.JList lstLocationTypes;
     private javax.swing.JList lstZusNamen;
     private javax.swing.JPanel panAddLocationType;
@@ -118,6 +146,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JScrollPane scpLstLocationTypes;
     private javax.swing.JScrollPane scpTxtInfo;
     private javax.swing.JScrollPane scpZusNamen;
+    private javax.swing.JTextField txtAuthor;
     private javax.swing.JTextField txtBezeichnung;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFax;
@@ -127,7 +156,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JTextField txtTelefon;
     private javax.swing.JTextField txtUrl;
     private javax.swing.JTextField txtZusNamen;
+    private javax.swing.JTextArea txtaImageUrl;
     private javax.swing.JTextArea txtaInfo;
+    private javax.swing.JTextArea txtaWebsiteUrl;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -145,9 +176,110 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         ((DefaultCismapGeometryComboBoxEditor)cbGeomPoint).setLocalRenderFeatureString("pos");
         ((DefaultCismapGeometryComboBoxEditor)cbGeomArea).setLocalRenderFeatureString("geom_area");
+
+        txtaImageUrl.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    checkUrlAndIndicate(txtaImageUrl.getText(), lblUrlCheckImage);
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    checkUrlAndIndicate(txtaImageUrl.getText(), lblUrlCheckImage);
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    checkUrlAndIndicate(txtaImageUrl.getText(), lblUrlCheckImage);
+                }
+            });
+
+        txtaWebsiteUrl.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    checkUrlAndIndicate(txtaWebsiteUrl.getText(), lblUrlCheckWebsite);
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    checkUrlAndIndicate(txtaWebsiteUrl.getText(), lblUrlCheckWebsite);
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    checkUrlAndIndicate(txtaWebsiteUrl.getText(), lblUrlCheckWebsite);
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url        DOCUMENT ME!
+     * @param  indicator  DOCUMENT ME!
+     */
+    private void checkUrlAndIndicate(final String url, final JLabel indicator) {
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    EventQueue.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                indicator.setIcon(statusGrey);
+                                indicator.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                            }
+                        });
+                    return checkURL(new URL(url));
+                }
+
+                @Override
+                protected void done() {
+                    final Boolean check;
+                    try {
+                        check = get();
+                        if (check) {
+                            indicator.setIcon(statusGreen);
+                            indicator.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        } else {
+                            indicator.setIcon(statusRed);
+                            indicator.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+                    } catch (Exception e) {
+                        indicator.setIcon(statusRed);
+                        indicator.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
+                }
+            };
+        worker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean checkURL(final URL url) {
+        try {
+            final HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("HEAD");
+            final int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -272,6 +404,17 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             chkVeroeffentlicht = new javax.swing.JCheckBox();
             lblHeader2 = new javax.swing.JLabel();
             cbMainLocationType = new DefaultBindableReferenceCombo(true);
+            txtAuthor = new javax.swing.JTextField();
+            lblUrlCheckImage = new javax.swing.JLabel();
+            lblUrlCheckWebsite = new javax.swing.JLabel();
+            lblHeader3 = new javax.swing.JLabel();
+            lblWebsite = new javax.swing.JLabel();
+            lblAuthor = new javax.swing.JLabel();
+            lblImageUrl = new javax.swing.JLabel();
+            jScrollPane1 = new javax.swing.JScrollPane();
+            txtaImageUrl = new javax.swing.JTextArea();
+            jScrollPane2 = new javax.swing.JScrollPane();
+            txtaWebsiteUrl = new javax.swing.JTextArea();
 
             dlgAddLocationType.setModal(true);
 
@@ -711,8 +854,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_area}"),
                 cbGeomArea,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
-                "");
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomArea).getConverter());
         bindingGroup.addBinding(binding);
 
@@ -973,9 +1115,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panSpacing2.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panContent2.add(panSpacing2, gridBagConstraints);
@@ -1040,6 +1182,137 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
         panContent2.add(cbMainLocationType, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.urheber_foto}"),
+                txtAuthor,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(txtAuthor, gridBagConstraints);
+
+        lblUrlCheckImage.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheckImage.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblUrlCheckImageMouseClicked(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        panContent2.add(lblUrlCheckImage, gridBagConstraints);
+
+        lblUrlCheckWebsite.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheckWebsite.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblUrlCheckWebsiteMouseClicked(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        panContent2.add(lblUrlCheckWebsite, gridBagConstraints);
+
+        lblHeader3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblHeader3.setText("Bilder");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblHeader3, gridBagConstraints);
+
+        lblWebsite.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblWebsite.setText("Webseite des Bildes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblWebsite, gridBagConstraints);
+
+        lblAuthor.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblAuthor.setText("Urheber:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblAuthor, gridBagConstraints);
+
+        lblImageUrl.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblImageUrl.setText("Bild-URL:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblImageUrl, gridBagConstraints);
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        txtaImageUrl.setColumns(20);
+        txtaImageUrl.setRows(1);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.foto}"),
+                txtaImageUrl,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(txtaImageUrl);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 8, 5, 8);
+        panContent2.add(jScrollPane1, gridBagConstraints);
+
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        txtaWebsiteUrl.setColumns(20);
+        txtaWebsiteUrl.setRows(1);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fotostrecke}"),
+                txtaWebsiteUrl,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane2.setViewportView(txtaWebsiteUrl);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 7, 5, 7);
+        panContent2.add(jScrollPane2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1258,6 +1531,48 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             log.fatal("Problem during setting the area geom", e);
         }
     } //GEN-LAST:event_btnCreateAreaFromPointActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblUrlCheckImageMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblUrlCheckImageMouseClicked
+        final String foto = (String)cidsBean.getProperty("foto");
+        if (foto != null) {
+            try {
+                BrowserLauncher.openURL(foto);
+            } catch (Exception ex) {
+                final String message = "Fehler beim Öffnen des Fotos.";
+                log.error(message, ex);
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    message,
+                    "Fehler",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }                                                                                //GEN-LAST:event_lblUrlCheckImageMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblUrlCheckWebsiteMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblUrlCheckWebsiteMouseClicked
+        final String foto = (String)cidsBean.getProperty("fotostrecke");
+        if (foto != null) {
+            try {
+                BrowserLauncher.openURL(foto);
+            } catch (Exception ex) {
+                final String message = "Fehler beim Öffnen der Fotostrecke.";
+                log.error(message, ex);
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    message,
+                    "Fehler",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }                                                                                  //GEN-LAST:event_lblUrlCheckWebsiteMouseClicked
 
     /**
      * DOCUMENT ME!
