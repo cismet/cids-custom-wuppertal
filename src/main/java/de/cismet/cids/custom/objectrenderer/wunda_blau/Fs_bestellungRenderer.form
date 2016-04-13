@@ -320,10 +320,10 @@
                     </Container>
                   </SubComponents>
                 </Container>
-                <Component class="javax.swing.JLabel" name="lblFlurstueck">
+                <Component class="javax.swing.JLabel" name="lblFlurstuecke">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="Fs_bestellungRenderer.lblFlurstueck.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="Fs_bestellungRenderer.lblFlurstuecke.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Constraints>
@@ -332,15 +332,9 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="org.jdesktop.swingx.JXHyperlink" name="hlFlurstueckValue">
-                  <BindingProperties>
-                    <BindingProperty name="text" source="Form" sourcePath="${cidsBean.landparcelcode}" target="hlFlurstueckValue" targetPath="text" updateStrategy="0" immediately="false">
-                      <Property name="nullValue" type="java.lang.String" value="-"/>
-                      <Property name="incompletePathValue" type="java.lang.String" value="-"/>
-                    </BindingProperty>
-                  </BindingProperties>
+                <Component class="org.jdesktop.swingx.JXHyperlink" name="hlFlurstueckeValue">
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlFlurstueckValueActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlFlurstueckeValueActionPerformed"/>
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
