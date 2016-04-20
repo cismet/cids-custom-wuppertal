@@ -2047,12 +2047,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 this.cidsBean);
             initMap();
 
-            restrictedLevel = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(cidsBean);
-
             bindingGroup.bind();
             if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
                 setDefaultValuesForNewCidsBean();
             }
+            restrictedLevel = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(cidsBean);
+
             decorateComboBoxes();
             automaticallySortLists();
             final String vorschaubild = (String)cidsBean.getProperty("vorschaubild.bildnummer");
