@@ -318,6 +318,8 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
         jPanel2.add(filler1, gridBagConstraints);
+
+        pnlVerwendungszweck.initVerwendungszweckCheckBoxes(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;

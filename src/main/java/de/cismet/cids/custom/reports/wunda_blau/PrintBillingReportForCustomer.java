@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.reports.wunda_blau;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXErrorPane;
@@ -33,6 +35,8 @@ import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -62,7 +66,6 @@ public class PrintBillingReportForCustomer {
     private Date[] fromDate_tillDate;
     private Collection<CidsBean> billingsBeans;
     private boolean isRechnungsanlage;
-    private boolean markBillingsAsBilled;
     private int amountTotalDownloads = 0;
     private int amountWithCosts = 0;
     private int amountWithoutCosts = 0;
@@ -72,15 +75,16 @@ public class PrintBillingReportForCustomer {
     private int amountEigenerGebrauch = 0;
     private int amountWiederverkauf = 0;
     private int amountEigenerGebrauchGebührenbefreit = 0;
-    private HashSet amountVUamtlicherLageplanGB = new HashSet();
-    private HashSet amountVUhoheitlicheVermessungGB = new HashSet();
-    private HashSet amountVUsonstigeGB = new HashSet();
-    private HashSet amountEigenerGebrauchGB = new HashSet();
-    private HashSet amountWiederverkaufGB = new HashSet();
-    private HashSet amountEigenerGebrauchGebührenbefreitGB = new HashSet();
-    private JPanel panel;
-    private boolean showBillingWithoutCostInReport;
+    private final HashSet amountVUamtlicherLageplanGB = new HashSet();
+    private final HashSet amountVUhoheitlicheVermessungGB = new HashSet();
+    private final HashSet amountVUsonstigeGB = new HashSet();
+    private final HashSet amountEigenerGebrauchGB = new HashSet();
+    private final HashSet amountWiederverkaufGB = new HashSet();
+    private final HashSet amountEigenerGebrauchGebührenbefreitGB = new HashSet();
+    private final JPanel panel;
+    private final boolean showBillingWithoutCostInReport;
     private DownloadFinishedObserver downloadFinishedObserver = new DownloadFinishedObserver();
+    private final BillingDoneListener billingDoneListener;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -91,25 +95,25 @@ public class PrintBillingReportForCustomer {
      * @param  billingsBeans                   DOCUMENT ME!
      * @param  fromDate_tillDate               DOCUMENT ME!
      * @param  isRechnungsanlage               DOCUMENT ME!
-     * @param  markBillingsAsBilled            DOCUMENT ME!
      * @param  panel                           DOCUMENT ME!
      * @param  showBillingWithoutCostInReport  DOCUMENT ME!
+     * @param  billingDoneListener             DOCUMENT ME!
      */
     public PrintBillingReportForCustomer(final CidsBean kundeBean,
             final Collection<CidsBean> billingsBeans,
             final Date[] fromDate_tillDate,
             final boolean isRechnungsanlage,
-            final boolean markBillingsAsBilled,
             final JPanel panel,
-            final boolean showBillingWithoutCostInReport) {
+            final boolean showBillingWithoutCostInReport,
+            final BillingDoneListener billingDoneListener) {
         this.kundeBean = kundeBean;
         this.fromDate_tillDate = fromDate_tillDate;
         this.isRechnungsanlage = isRechnungsanlage;
-        this.markBillingsAsBilled = markBillingsAsBilled;
         this.billingsBeans = billingsBeans;
         this.panel = panel;
         this.showBillingWithoutCostInReport = showBillingWithoutCostInReport;
         totalSum = generateStatisticsForTheReport(billingsBeans);
+        this.billingDoneListener = billingDoneListener;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -322,26 +326,47 @@ public class PrintBillingReportForCustomer {
      * DOCUMENT ME!
      */
     private void markBillings() {
-        if (isRechnungsanlage && markBillingsAsBilled) {
-            for (final CidsBean billing : billingsBeans) {
-                try {
-                    billing.setProperty("abrechnungsdatum", new Timestamp(new Date().getTime()));
-                    billing.setProperty("abgerechnet", Boolean.TRUE);
-                    billing.persist();
-                } catch (final Exception ex) {
-                    LOG.error("Error while setting value or persisting of billing.", ex);
-                    final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
-                            "Fehler beim Abrechnen",
-                            "Buchung konnte nicht auf abgerechnet gesetzt werden.",
-                            ex.getMessage(),
-                            null,
-                            ex,
-                            Level.ALL,
-                            null);
-                    JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(
-                            CismapBroker.getInstance().getMappingComponent()),
-                        ei);
-                }
+        if (isRechnungsanlage) {
+            final BillingBillDialog diag = new BillingBillDialog(ComponentRegistry.getRegistry().getNavigator());
+            StaticSwingTools.showDialog(diag);
+            if (Boolean.TRUE.equals(diag.isBilling())) {
+                new SwingWorker<Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            for (final CidsBean billing : billingsBeans) {
+                                try {
+                                    billing.setProperty("abrechnungsdatum", new Timestamp(new Date().getTime()));
+                                    billing.setProperty("abgerechnet", Boolean.TRUE);
+                                    billing.persist();
+                                } catch (final Exception ex) {
+                                    LOG.error("Error while setting value or persisting of billing.", ex);
+                                    final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                                            "Fehler beim Abrechnen",
+                                            "Buchung konnte nicht auf abgerechnet gesetzt werden.",
+                                            ex.getMessage(),
+                                            null,
+                                            ex,
+                                            Level.ALL,
+                                            null);
+                                    SwingUtilities.invokeLater(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                JXErrorPane.showDialog(
+                                                    StaticSwingTools.getParentFrameIfNotNull(
+                                                        CismapBroker.getInstance().getMappingComponent()),
+                                                    ei);
+                                            }
+                                        });
+                                }
+                            }
+                            billingDoneListener.billingDone(true);
+                            return null;
+                        }
+                    }.execute();
+            } else {
+                billingDoneListener.billingDone(false);
             }
         }
     }
@@ -353,6 +378,25 @@ public class PrintBillingReportForCustomer {
      */
     public void setDownloadFinishedObserver(final DownloadFinishedObserver downloadFinishedObserver) {
         this.downloadFinishedObserver = downloadFinishedObserver;
+    }
+
+    //~ Inner Interfaces -------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public interface BillingDoneListener {
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  isDone  DOCUMENT ME!
+         */
+        void billingDone(final boolean isDone);
     }
 
     //~ Inner Classes ----------------------------------------------------------
