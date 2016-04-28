@@ -566,7 +566,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         try {
             if (BillingPopup.doBilling(
                             "blab_be",
@@ -626,7 +626,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         }
 
         setVisible(false);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    } //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -790,30 +790,30 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
         if ((worker != null) && !worker.isDone()) {
             worker.cancel(true);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         diaFreigegeben.setVisible(false);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
         diaStorniert.setVisible(false);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1210,7 +1210,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             final CidsBean gemarkung = mos[0].getBean();
 
                             final String key = gemarkung.getProperty("name") + " "
-                                        + Integer.parseInt(buchungsblattnummer) + " / "
+                                        + Integer.parseInt(buchungsblattnummer.substring(0, 5))
+                                        + buchungsblattnummer.substring(5) + " / "
                                         + Integer.parseInt(buchungsstelle.getSequentialNumber());
 
                             final String buchungsart = buchungsstelle.getBuchungsart();
