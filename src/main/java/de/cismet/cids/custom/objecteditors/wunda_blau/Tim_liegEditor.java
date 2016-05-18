@@ -267,6 +267,8 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
      */
     public Tim_liegEditor() {
         initComponents();
+        scpKartographie.getVerticalScrollBar().setUnitIncrement(26);
+        scpStadtgrundkarte.getVerticalScrollBar().setUnitIncrement(26);
     }
 
     //~ Methods ----------------------------------------------------------------
