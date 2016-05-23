@@ -1279,7 +1279,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.MODUS
                                                     .toString(),
-                                                BerechtigungspruefungFreigabeServerAction.MODUS_STORNO));
+                                                freigabe ? BerechtigungspruefungFreigabeServerAction.MODUS_FREIGABE
+                                                         : BerechtigungspruefungFreigabeServerAction.MODUS_STORNO));
                     } catch (final Exception ex) {
                         LOG.error(ex, ex);
                         return null;
