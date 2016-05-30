@@ -284,9 +284,6 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                         }
                         for (final String key : result.keySet()) {
                             final ArrayList<String> values = result.get(key);
-                            if (key.equals("total")) {
-                                setTotalLabel(values.get(0));
-                            }
                             if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
                                 if (key.equals("punkte")) {
                                     setPointLabels(values.get(0), values.get(1));
@@ -303,6 +300,13 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                                 } else if (key.equals("flurstuecke")) {
                                     setFlurstueckLabels(values.get(0), values.get(1));
                                 }
+                            }
+                        }
+                        for (final String key : result.keySet()) {
+                            final ArrayList<String> values = result.get(key);
+                            if (key.equals("total")) {
+                                setTotalLabel(values.get(0));
+                                break;
                             }
                         }
                         repaint();
