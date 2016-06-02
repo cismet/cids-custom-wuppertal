@@ -82,6 +82,17 @@ public class FsBestellungReportGenerator {
     /**
      * DOCUMENT ME!
      *
+     * @param   string  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String emptyIfNull(final String string) {
+        return (string != null) ? string : "";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   bestellungbean  DOCUMENT ME!
      * @param   jobname         DOCUMENT ME!
      *
@@ -91,7 +102,7 @@ public class FsBestellungReportGenerator {
         final DateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy");
 
         final String vorgangsnummer = (bestellungbean.getProperty("transid") != null)
-            ? ((String)bestellungbean.getProperty("transid")).substring("AS_KF600200-".length()) : null;
+            ? ((String)bestellungbean.getProperty("transid")).substring("KFAS_KF600200-".length()) : null;
         final String flurstuecksKennzeichen = (String)bestellungbean.getProperty("landparcelcode");
 
         final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
@@ -122,14 +133,14 @@ public class FsBestellungReportGenerator {
                     parameters.put(PARAMETER_TRANSAKTIONSID, dashIfNull(vorgangsnummer));
                     parameters.put(
                         PARAMETER_FLURSTUECKSKENNZEICHEN,
-                        dashIfNull(flurstuecksKennzeichen));
+                        dashIfNull(flurstuecksKennzeichen).replace(",", ", "));
                     parameters.put(
                         PARAMETER_PRODUKTBEZEICHNUNG,
                         dashIfNull((String)bestellungbean.getProperty("fk_produkt.fk_typ.name")));
 
                     parameters.put(
                         PARAMETER_LIEFER_FIRMA,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.firma")));
+                        emptyIfNull((String)bestellungbean.getProperty("fk_adresse_versand.firma")));
                     parameters.put(
                         PARAMETER_LIEFER_VORNAME,
                         dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.vorname")));
@@ -154,7 +165,7 @@ public class FsBestellungReportGenerator {
 
                     parameters.put(
                         PARAMETER_RECHNUNG_FIRMA,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.firma")));
+                        emptyIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.firma")));
                     parameters.put(
                         PARAMETER_RECHNUNG_VORNAME,
                         dashIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.vorname")));
