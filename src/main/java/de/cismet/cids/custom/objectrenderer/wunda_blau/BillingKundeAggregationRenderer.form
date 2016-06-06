@@ -211,48 +211,48 @@
                         <Property name="rows" type="int" value="2"/>
                       </Layout>
                       <SubComponents>
-                        <Component class="javax.swing.JCheckBox" name="cboAbgerechneteBuchungen">
+                        <Component class="javax.swing.JCheckBox" name="cboAbgerechnet">
                           <Properties>
                             <Property name="selected" type="boolean" value="true"/>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeAggregationRenderer.cboAbgerechneteBuchungen.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeAggregationRenderer.cboAbgerechnet.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboAbgerechneteBuchungenActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboAbgerechnetActionPerformed"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JCheckBox" name="cboNoAbgerechneteBuchungen">
+                        <Component class="javax.swing.JCheckBox" name="cboNichtAbgerechnet">
                           <Properties>
                             <Property name="selected" type="boolean" value="true"/>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeAggregationRenderer.cboNoAbgerechneteBuchungen.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeAggregationRenderer.cboNichtAbgerechnet.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboNoAbgerechneteBuchungenActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboNichtAbgerechnetActionPerformed"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JCheckBox" name="cboNoFreeDownloads">
+                        <Component class="javax.swing.JCheckBox" name="cboKostenpflichtig">
                           <Properties>
                             <Property name="selected" type="boolean" value="true"/>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeAggregationRenderer.cboNoFreeDownloads.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeAggregationRenderer.cboKostenpflichtig.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboNoFreeDownloadsActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboKostenpflichtigActionPerformed"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JCheckBox" name="cboFreeDownloads">
+                        <Component class="javax.swing.JCheckBox" name="cboKostenfrei">
                           <Properties>
                             <Property name="selected" type="boolean" value="true"/>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeAggregationRenderer.cboFreeDownloads.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeAggregationRenderer.cboKostenfrei.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboFreeDownloadsActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboKostenfreiActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>

@@ -138,21 +138,25 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private javax.swing.JButton btnBuchungsbeleg;
     private javax.swing.JButton btnRechnungsanlage;
     private javax.swing.JButton btnShowResults;
+    private javax.swing.JCheckBox cboAbgerechnet;
     private javax.swing.JComboBox cboBenutzer;
     private javax.swing.JCheckBox cboHideFreeDownloadsBuchungsbeleg;
     private javax.swing.JCheckBox cboHideFreeDownloadsRechnungsanlage;
     private javax.swing.JCheckBox cboKostenfrei;
     private javax.swing.JCheckBox cboKostenpflichtig;
+    private javax.swing.JCheckBox cboNichtAbgerechnet;
     private javax.swing.Box.Filler filler5;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFilterResult;
     private javax.swing.JLabel lblResultHeader;
@@ -161,7 +165,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private javax.swing.JPanel pnlBusyLable;
     private javax.swing.JPanel pnlFilterResults;
     private javax.swing.JPanel pnlFilters;
-    private javax.swing.JPanel pnlKostentyp;
     private javax.swing.JPanel pnlTable;
     private de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel pnlTimeFilters;
     private de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel pnlVerwendungszweck;
@@ -278,15 +281,18 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         txtProjekt = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         cboBenutzer = new javax.swing.JComboBox();
-        pnlKostentyp = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        cboKostenfrei = new javax.swing.JCheckBox();
-        cboKostenpflichtig = new javax.swing.JCheckBox();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         pnlVerwendungszweck = new de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel();
         btnShowResults = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        cboAbgerechnet = new javax.swing.JCheckBox();
+        cboNichtAbgerechnet = new javax.swing.JCheckBox();
+        cboKostenpflichtig = new javax.swing.JCheckBox();
+        cboKostenfrei = new javax.swing.JCheckBox();
+        jPanel8 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         cboHideFreeDownloadsRechnungsanlage = new javax.swing.JCheckBox();
@@ -418,56 +424,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         jPanel5.add(jPanel3, gridBagConstraints);
-
-        pnlKostentyp.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    BillingKundeRenderer.class,
-                    "BillingKundeRenderer.pnlKostentyp.border.title"))); // NOI18N
-        pnlKostentyp.setLayout(new java.awt.BorderLayout());
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 6, 3, 3));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
-
-        cboKostenfrei.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            cboKostenfrei,
-            org.openide.util.NbBundle.getMessage(
-                BillingKundeRenderer.class,
-                "BillingKundeRenderer.cboKostenfrei.text")); // NOI18N
-        cboKostenfrei.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboKostenfreiActionPerformed(evt);
-                }
-            });
-        jPanel1.add(cboKostenfrei);
-
-        cboKostenpflichtig.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            cboKostenpflichtig,
-            org.openide.util.NbBundle.getMessage(
-                BillingKundeRenderer.class,
-                "BillingKundeRenderer.cboKostenpflichtig.text")); // NOI18N
-        cboKostenpflichtig.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboKostenpflichtigActionPerformed(evt);
-                }
-            });
-        jPanel1.add(cboKostenpflichtig);
-
-        pnlKostentyp.add(jPanel1, java.awt.BorderLayout.CENTER);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
-        jPanel5.add(pnlKostentyp, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -503,6 +459,97 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 2);
         jPanel5.add(btnShowResults, gridBagConstraints);
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    BillingKundeRenderer.class,
+                    "BillingKundeRenderer.jPanel6.border.title"))); // NOI18N
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jPanel7.setLayout(new java.awt.GridLayout(2, 2));
+
+        cboAbgerechnet.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboAbgerechnet,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.cboAbgerechnet.text")); // NOI18N
+        cboAbgerechnet.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboAbgerechnetActionPerformed(evt);
+                }
+            });
+        jPanel7.add(cboAbgerechnet);
+
+        cboNichtAbgerechnet.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboNichtAbgerechnet,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.cboNichtAbgerechnet.text")); // NOI18N
+        cboNichtAbgerechnet.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboNichtAbgerechnetActionPerformed(evt);
+                }
+            });
+        jPanel7.add(cboNichtAbgerechnet);
+
+        cboKostenpflichtig.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboKostenpflichtig,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.cboKostenpflichtig.text")); // NOI18N
+        cboKostenpflichtig.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboKostenpflichtigActionPerformed(evt);
+                }
+            });
+        jPanel7.add(cboKostenpflichtig);
+
+        cboKostenfrei.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboKostenfrei,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.cboKostenfrei.text")); // NOI18N
+        cboKostenfrei.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboKostenfreiActionPerformed(evt);
+                }
+            });
+        jPanel7.add(cboKostenfrei);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel6.add(jPanel7, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel6.add(jPanel8, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 0, 2);
+        jPanel5.add(jPanel6, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -735,30 +782,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
-        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
-            cboKostenpflichtig.setSelected(true);
-        }
-        filterSettingsChanged();
-    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
-        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
-            cboKostenfrei.setSelected(true);
-        }
-        filterSettingsChanged();
-    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
         filterSettingsChanged();
     }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
@@ -880,6 +903,54 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             retrieveShowBillingInReport(evt),
             null).print();
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbgerechnetActionPerformed
+        if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
+            cboAbgerechnet.setSelected(true);
+        }
+        filterSettingsChanged();
+    }                                                                                  //GEN-LAST:event_cboAbgerechnetActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboNichtAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNichtAbgerechnetActionPerformed
+        if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
+            cboAbgerechnet.setSelected(true);
+        }
+        filterSettingsChanged();
+    }                                                                                       //GEN-LAST:event_cboNichtAbgerechnetActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
+        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
+            cboKostenpflichtig.setSelected(true);
+        }
+        filterSettingsChanged();
+    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
+        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
+            cboKostenpflichtig.setSelected(true);
+        }
+        filterSettingsChanged();
+    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1165,7 +1236,27 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
 
         cidsBillingSearchStatement.setVerwendungszweckKeys(
             pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
-        cidsBillingSearchStatement.setKostentyp(chooseKostentyp());
+
+        if (cboKostenfrei.isSelected() && cboKostenpflichtig.isSelected()) {
+            cidsBillingSearchStatement.setKostentyp(Kostentyp.IGNORIEREN);
+        } else if (cboKostenfrei.isSelected()) {
+            cidsBillingSearchStatement.setKostentyp(Kostentyp.KOSTENFREI);
+        } else if (cboKostenpflichtig.isSelected()) {
+            cidsBillingSearchStatement.setKostentyp(Kostentyp.KOSTENPFLICHTIG);
+        } else {
+            cidsBillingSearchStatement.setKostentyp(Kostentyp.IGNORIEREN);
+        }
+
+        if ((cboAbgerechnet.isSelected() && cboNichtAbgerechnet.isSelected())) {
+            cidsBillingSearchStatement.setShowAbgerechneteBillings(null);
+        } else if (cboAbgerechnet.isSelected()) {
+            cidsBillingSearchStatement.setShowAbgerechneteBillings(true);
+        } else if (cboNichtAbgerechnet.isSelected()) {
+            cidsBillingSearchStatement.setShowAbgerechneteBillings(false);
+        } else {
+            cidsBillingSearchStatement.setShowAbgerechneteBillings(null);
+        }
+
         fromDate_tillDate = pnlTimeFilters.chooseDates();
         cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
         cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
@@ -1229,21 +1320,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 }
             };
         swingWorker.execute();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Kostentyp chooseKostentyp() {
-        if (cboKostenfrei.isSelected() == cboKostenpflichtig.isSelected()) {
-            return Kostentyp.IGNORIEREN;
-        } else if (cboKostenfrei.isSelected()) {
-            return Kostentyp.KOSTENFREI;
-        } else {
-            return Kostentyp.KOSTENPFLICHTIG;
-        }
     }
 
     /**

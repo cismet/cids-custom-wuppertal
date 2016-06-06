@@ -105,12 +105,12 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JButton btnGeschaeftsstatistik;
     private javax.swing.JButton btnRechnungsanlage;
     private javax.swing.JButton btnShowResults;
-    private javax.swing.JCheckBox cboAbgerechneteBuchungen;
-    private javax.swing.JCheckBox cboFreeDownloads;
+    private javax.swing.JCheckBox cboAbgerechnet;
     private javax.swing.JCheckBox cboHideFreeDownloadsBuchungsbeleg;
     private javax.swing.JCheckBox cboHideFreeDownloadsRechnungsanlage;
-    private javax.swing.JCheckBox cboNoAbgerechneteBuchungen;
-    private javax.swing.JCheckBox cboNoFreeDownloads;
+    private javax.swing.JCheckBox cboKostenfrei;
+    private javax.swing.JCheckBox cboKostenpflichtig;
+    private javax.swing.JCheckBox cboNichtAbgerechnet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -156,7 +156,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
             btnGeschaeftsstatistik.setEnabled(false);
 
-            cboAbgerechneteBuchungen.setVisible(false);
+            cboAbgerechnet.setVisible(false);
         }
     }
 
@@ -186,10 +186,10 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         pnlTimeFilters = new de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        cboAbgerechneteBuchungen = new javax.swing.JCheckBox();
-        cboNoAbgerechneteBuchungen = new javax.swing.JCheckBox();
-        cboNoFreeDownloads = new javax.swing.JCheckBox();
-        cboFreeDownloads = new javax.swing.JCheckBox();
+        cboAbgerechnet = new javax.swing.JCheckBox();
+        cboNichtAbgerechnet = new javax.swing.JCheckBox();
+        cboKostenpflichtig = new javax.swing.JCheckBox();
+        cboKostenfrei = new javax.swing.JCheckBox();
         jPanel6 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -315,65 +315,65 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
         jPanel4.setLayout(new java.awt.GridLayout(2, 2));
 
-        cboAbgerechneteBuchungen.setSelected(true);
+        cboAbgerechnet.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
-            cboAbgerechneteBuchungen,
+            cboAbgerechnet,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.cboAbgerechneteBuchungen.text")); // NOI18N
-        cboAbgerechneteBuchungen.addActionListener(new java.awt.event.ActionListener() {
+                "BillingKundeAggregationRenderer.cboAbgerechnet.text")); // NOI18N
+        cboAbgerechnet.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboAbgerechneteBuchungenActionPerformed(evt);
+                    cboAbgerechnetActionPerformed(evt);
                 }
             });
-        jPanel4.add(cboAbgerechneteBuchungen);
+        jPanel4.add(cboAbgerechnet);
 
-        cboNoAbgerechneteBuchungen.setSelected(true);
+        cboNichtAbgerechnet.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
-            cboNoAbgerechneteBuchungen,
+            cboNichtAbgerechnet,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.cboNoAbgerechneteBuchungen.text")); // NOI18N
-        cboNoAbgerechneteBuchungen.addActionListener(new java.awt.event.ActionListener() {
+                "BillingKundeAggregationRenderer.cboNichtAbgerechnet.text")); // NOI18N
+        cboNichtAbgerechnet.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboNoAbgerechneteBuchungenActionPerformed(evt);
+                    cboNichtAbgerechnetActionPerformed(evt);
                 }
             });
-        jPanel4.add(cboNoAbgerechneteBuchungen);
+        jPanel4.add(cboNichtAbgerechnet);
 
-        cboNoFreeDownloads.setSelected(true);
+        cboKostenpflichtig.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
-            cboNoFreeDownloads,
+            cboKostenpflichtig,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.cboNoFreeDownloads.text")); // NOI18N
-        cboNoFreeDownloads.addActionListener(new java.awt.event.ActionListener() {
+                "BillingKundeAggregationRenderer.cboKostenpflichtig.text")); // NOI18N
+        cboKostenpflichtig.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboNoFreeDownloadsActionPerformed(evt);
+                    cboKostenpflichtigActionPerformed(evt);
                 }
             });
-        jPanel4.add(cboNoFreeDownloads);
+        jPanel4.add(cboKostenpflichtig);
 
-        cboFreeDownloads.setSelected(true);
+        cboKostenfrei.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
-            cboFreeDownloads,
+            cboKostenfrei,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.cboFreeDownloads.text")); // NOI18N
-        cboFreeDownloads.addActionListener(new java.awt.event.ActionListener() {
+                "BillingKundeAggregationRenderer.cboKostenfrei.text")); // NOI18N
+        cboKostenfrei.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboFreeDownloadsActionPerformed(evt);
+                    cboKostenfreiActionPerformed(evt);
                 }
             });
-        jPanel4.add(cboFreeDownloads);
+        jPanel4.add(cboKostenfrei);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -774,36 +774,48 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboFreeDownloadsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboFreeDownloadsActionPerformed
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
+        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
+            cboKostenpflichtig.setSelected(true);
+        }
         filterSettingsChanged();
-    }                                                                                    //GEN-LAST:event_cboFreeDownloadsActionPerformed
+    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboAbgerechneteBuchungenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbgerechneteBuchungenActionPerformed
+    private void cboAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbgerechnetActionPerformed
+        if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
+            cboAbgerechnet.setSelected(true);
+        }
         filterSettingsChanged();
-    }                                                                                            //GEN-LAST:event_cboAbgerechneteBuchungenActionPerformed
+    }                                                                                  //GEN-LAST:event_cboAbgerechnetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboNoAbgerechneteBuchungenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNoAbgerechneteBuchungenActionPerformed
+    private void cboNichtAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNichtAbgerechnetActionPerformed
+        if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
+            cboAbgerechnet.setSelected(true);
+        }
         filterSettingsChanged();
-    }                                                                                              //GEN-LAST:event_cboNoAbgerechneteBuchungenActionPerformed
+    }                                                                                       //GEN-LAST:event_cboNichtAbgerechnetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboNoFreeDownloadsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNoFreeDownloadsActionPerformed
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
+        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
+            cboKostenfrei.setSelected(true);
+        }
         filterSettingsChanged();
-    }                                                                                      //GEN-LAST:event_cboNoFreeDownloadsActionPerformed
+    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -867,21 +879,21 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
         cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
 
-        if (cboFreeDownloads.isSelected() && cboNoFreeDownloads.isSelected()) {
+        if (cboKostenfrei.isSelected() && cboKostenpflichtig.isSelected()) {
             cidsBillingSearchStatement.setKostentyp(Kostentyp.IGNORIEREN);
-        } else if (cboFreeDownloads.isSelected()) {
+        } else if (cboKostenfrei.isSelected()) {
             cidsBillingSearchStatement.setKostentyp(Kostentyp.KOSTENFREI);
-        } else if (cboNoFreeDownloads.isSelected()) {
+        } else if (cboKostenpflichtig.isSelected()) {
             cidsBillingSearchStatement.setKostentyp(Kostentyp.KOSTENPFLICHTIG);
         } else {
             cidsBillingSearchStatement.setKostentyp(Kostentyp.IGNORIEREN);
         }
 
-        if ((cboAbgerechneteBuchungen.isSelected() && cboNoAbgerechneteBuchungen.isSelected())) {
+        if ((cboAbgerechnet.isSelected() && cboNichtAbgerechnet.isSelected())) {
             cidsBillingSearchStatement.setShowAbgerechneteBillings(null);
-        } else if (cboAbgerechneteBuchungen.isSelected()) {
+        } else if (cboAbgerechnet.isSelected()) {
             cidsBillingSearchStatement.setShowAbgerechneteBillings(true);
-        } else if (cboNoAbgerechneteBuchungen.isSelected()) {
+        } else if (cboNichtAbgerechnet.isSelected()) {
             cidsBillingSearchStatement.setShowAbgerechneteBillings(false);
         } else {
             cidsBillingSearchStatement.setShowAbgerechneteBillings(null);
@@ -986,7 +998,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 text.append(".");
             }
         }
-        if (cboNoAbgerechneteBuchungen.isSelected()) {
+        if (cboNichtAbgerechnet.isSelected()) {
             text.append(NbBundle.getMessage(
                     BillingKundeAggregationRenderer.class,
                     "BillingKundeAggregationRenderer.generateFilterResultText().suffix.hideAbgerechnteAndStornierte"));
