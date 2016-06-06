@@ -146,12 +146,16 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JLabel lblGebuehrValue;
     private javax.swing.JLabel lblLaFirma;
     private javax.swing.JLabel lblLaFirmaValue;
+    private javax.swing.JLabel lblLaLand;
+    private javax.swing.JLabel lblLaLandValue;
     private javax.swing.JLabel lblLaName;
     private javax.swing.JLabel lblLaNameValue;
     private javax.swing.JLabel lblLaOrt;
     private javax.swing.JLabel lblLaOrtValue;
     private javax.swing.JLabel lblLaStrasse;
     private javax.swing.JLabel lblLaStrasseValue;
+    private javax.swing.JLabel lblLand;
+    private javax.swing.JLabel lblLandValue;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNameValue;
     private javax.swing.JLabel lblOrt;
@@ -318,6 +322,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblLaStrasseValue = new javax.swing.JLabel();
         lblLaOrt = new javax.swing.JLabel();
         lblLaOrtValue = new javax.swing.JLabel();
+        lblLaLand = new javax.swing.JLabel();
+        lblLaLandValue = new javax.swing.JLabel();
         lblEMail = new javax.swing.JLabel();
         hlEMailValue = new org.jdesktop.swingx.JXHyperlink();
         panRechnungsanschrift = new javax.swing.JPanel();
@@ -332,6 +338,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblStrasseValue = new javax.swing.JLabel();
         lblOrt = new javax.swing.JLabel();
         lblOrtValue = new javax.swing.JLabel();
+        lblLand = new javax.swing.JLabel();
+        lblLandValue = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         panFiller = new javax.swing.JPanel();
 
@@ -881,6 +889,32 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                     "${cidsBean.fk_adresse_versand.plz} ${cidsBean.fk_adresse_versand.ort}"),
                 lblLaOrtValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(lblLaOrtValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLaLand,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLaLand.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(lblLaLand, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_versand.staat}"),
+                lblLaLandValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -891,7 +925,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(lblLaOrtValue, gridBagConstraints);
+        jPanel2.add(lblLaLandValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblEMail,
@@ -1075,6 +1109,32 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                     "${cidsBean.fk_adresse_rechnung.plz} ${cidsBean.fk_adresse_rechnung.ort}"),
                 lblOrtValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(lblOrtValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLand,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLand.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(lblLand, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_rechnung.staat}"),
+                lblLandValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -1085,7 +1145,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(lblOrtValue, gridBagConstraints);
+        jPanel3.add(lblLandValue, gridBagConstraints);
 
         jPanel4.setOpaque(false);
 
