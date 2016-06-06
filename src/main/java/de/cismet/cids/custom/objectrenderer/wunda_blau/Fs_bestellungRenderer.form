@@ -663,7 +663,7 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="lblLaLandValue">
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse_versand.plz} ${cidsBean.fk_adresse_versand.staat}" target="lblLaLandValue" targetPath="text" updateStrategy="0" immediately="false">
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse_versand.staat}" target="lblLaLandValue" targetPath="text" updateStrategy="0" immediately="false">
                           <Property name="nullValue" type="java.lang.String" value="-"/>
                           <Property name="incompletePathValue" type="java.lang.String" value="-"/>
                         </BindingProperty>
@@ -868,7 +868,7 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="lblLandValue">
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse_rechnung.plz} ${cidsBean.fk_adresse_rechnung.staat}" target="lblLandValue" targetPath="text" updateStrategy="0" immediately="false">
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse_rechnung.staat}" target="lblLandValue" targetPath="text" updateStrategy="0" immediately="false">
                           <Property name="nullValue" type="java.lang.String" value="-"/>
                           <Property name="incompletePathValue" type="java.lang.String" value="-"/>
                         </BindingProperty>

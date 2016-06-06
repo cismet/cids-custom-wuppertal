@@ -912,8 +912,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create(
-                    "${cidsBean.fk_adresse_versand.plz} ${cidsBean.fk_adresse_versand.staat}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_versand.staat}"),
                 lblLaLandValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
@@ -1133,8 +1132,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create(
-                    "${cidsBean.fk_adresse_rechnung.plz} ${cidsBean.fk_adresse_rechnung.staat}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_rechnung.staat}"),
                 lblLandValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
