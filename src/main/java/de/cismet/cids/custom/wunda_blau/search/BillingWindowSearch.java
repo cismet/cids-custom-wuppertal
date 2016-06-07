@@ -160,7 +160,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         pnlAbgerechnetStorniert = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         lblAbgerechnetInformation = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30), new java.awt.Dimension(0, 30), new java.awt.Dimension(32767, 30));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(32767, 30));
         jPanel5 = new javax.swing.JPanel();
         cboAbgerechnet = new javax.swing.JCheckBox();
         cboNichtAbgerechnet = new javax.swing.JCheckBox();
@@ -170,7 +172,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel1 = new javax.swing.JPanel();
         cboKostenpflichtig = new javax.swing.JCheckBox();
         cboKostenfrei = new javax.swing.JCheckBox();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         pnlVerwendungszweck = new de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel();
         pnlTimeFilters = new de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -192,12 +196,19 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 14, 7, 14));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        pnlAbgerechnetStorniert.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.pnlAbgerechnetStorniert.border.title"))); // NOI18N
+        pnlAbgerechnetStorniert.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    BillingWindowSearch.class,
+                    "BillingWindowSearch.pnlAbgerechnetStorniert.border.title"))); // NOI18N
         pnlAbgerechnetStorniert.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblAbgerechnetInformation, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.lblAbgerechnetInformation.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAbgerechnetInformation,
+            org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.lblAbgerechnetInformation.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -214,39 +225,59 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel5.setLayout(new java.awt.GridLayout(2, 2));
 
         cboAbgerechnet.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(cboAbgerechnet, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboAbgerechnet.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboAbgerechnet,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboAbgerechnet.text")); // NOI18N
         cboAbgerechnet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboAbgerechnetActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboAbgerechnetActionPerformed(evt);
+                }
+            });
         jPanel5.add(cboAbgerechnet);
 
         cboNichtAbgerechnet.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(cboNichtAbgerechnet, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboNichtAbgerechnet.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboNichtAbgerechnet,
+            org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.cboNichtAbgerechnet.text")); // NOI18N
         cboNichtAbgerechnet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboNichtAbgerechnetActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboNichtAbgerechnetActionPerformed(evt);
+                }
+            });
         jPanel5.add(cboNichtAbgerechnet);
 
         cboStorniert.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(cboStorniert, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboStorniert.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboStorniert,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboStorniert.text")); // NOI18N
         cboStorniert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboStorniertActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboStorniertActionPerformed(evt);
+                }
+            });
         jPanel5.add(cboStorniert);
 
         cboNichtStorniert.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(cboNichtStorniert, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboNichtStorniert.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboNichtStorniert,
+            org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.cboNichtStorniert.text")); // NOI18N
         cboNichtStorniert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboNichtStorniertActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboNichtStorniertActionPerformed(evt);
+                }
+            });
         jPanel5.add(cboNichtStorniert);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -265,28 +296,41 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel2.add(pnlAbgerechnetStorniert, gridBagConstraints);
 
-        pnlKostentyp.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.pnlKostentyp.border.title"))); // NOI18N
+        pnlKostentyp.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    BillingWindowSearch.class,
+                    "BillingWindowSearch.pnlKostentyp.border.title"))); // NOI18N
         pnlKostentyp.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         cboKostenpflichtig.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(cboKostenpflichtig, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboKostenpflichtig.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboKostenpflichtig,
+            org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.cboKostenpflichtig.text")); // NOI18N
         cboKostenpflichtig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboKostenpflichtigActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboKostenpflichtigActionPerformed(evt);
+                }
+            });
         jPanel1.add(cboKostenpflichtig);
 
         cboKostenfrei.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(cboKostenfrei, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboKostenfrei.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboKostenfrei,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboKostenfrei.text")); // NOI18N
         cboKostenfrei.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboKostenfreiActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboKostenfreiActionPerformed(evt);
+                }
+            });
         jPanel1.add(cboKostenfrei);
 
         pnlKostentyp.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -322,10 +366,17 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         jPanel2.add(pnlTimeFilters, gridBagConstraints);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jPanel3.border.outsideBorder.title")), javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createTitledBorder(
+                    org.openide.util.NbBundle.getMessage(
+                        BillingWindowSearch.class,
+                        "BillingWindowSearch.jPanel3.border.outsideBorder.title")),
+                javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7))); // NOI18N
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -334,10 +385,12 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel3.add(jLabel1, gridBagConstraints);
 
         cboAbrechnungsturnus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboAbrechnungsturnusActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboAbrechnungsturnusActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -346,8 +399,12 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(4, 2, 0, 0);
         jPanel3.add(cboAbrechnungsturnus, gridBagConstraints);
 
-        txtCustomerName.setText(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.txtCustomerName.text")); // NOI18N
-        txtCustomerName.setToolTipText(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.txtCustomerName.toolTipText")); // NOI18N
+        txtCustomerName.setText(org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.txtCustomerName.text"));        // NOI18N
+        txtCustomerName.setToolTipText(org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.txtCustomerName.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -356,7 +413,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         jPanel3.add(txtCustomerName, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel7.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel7,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -364,7 +423,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 3);
         jPanel3.add(jLabel7, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel6.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel6,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -372,7 +433,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(13, 0, 0, 6);
         jPanel3.add(jLabel6, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel5.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel5,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -380,13 +443,19 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 6);
         jPanel3.add(jLabel5, gridBagConstraints);
 
-        txtGeschaeftsbuchnummer.setText(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.txtGeschaeftsbuchnummer.text")); // NOI18N
-        txtGeschaeftsbuchnummer.setToolTipText(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.txtGeschaeftsbuchnummer.toolTipText")); // NOI18N
+        txtGeschaeftsbuchnummer.setText(org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.txtGeschaeftsbuchnummer.text"));        // NOI18N
+        txtGeschaeftsbuchnummer.setToolTipText(org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.txtGeschaeftsbuchnummer.toolTipText")); // NOI18N
         txtGeschaeftsbuchnummer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtGeschaeftsbuchnummerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    txtGeschaeftsbuchnummerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -395,8 +464,12 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(13, 2, 0, 0);
         jPanel3.add(txtGeschaeftsbuchnummer, gridBagConstraints);
 
-        txtProjekt.setText(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.txtProjekt.text")); // NOI18N
-        txtProjekt.setToolTipText(org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.txtProjekt.toolTipText")); // NOI18N
+        txtProjekt.setText(org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.txtProjekt.text"));        // NOI18N
+        txtProjekt.setToolTipText(org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.txtProjekt.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -405,7 +478,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(4, 2, 0, 0);
         jPanel3.add(txtProjekt, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel4.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel4,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel4.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -414,10 +489,12 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel3.add(jLabel4, gridBagConstraints);
 
         cboBenutzer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboBenutzerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboBenutzerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -425,7 +502,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(4, 2, 0, 0);
         jPanel3.add(cboBenutzer, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -454,102 +533,102 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         jScrollPane1.setViewportView(jPanel2);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
+    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
+    } //GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBenutzerActionPerformed
-    }//GEN-LAST:event_cboBenutzerActionPerformed
+    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
+    }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenfreiActionPerformed
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenpflichtig.setSelected(true);
         }
-    }//GEN-LAST:event_cboKostenfreiActionPerformed
+    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenpflichtigActionPerformed
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenfrei.setSelected(true);
         }
-    }//GEN-LAST:event_cboKostenpflichtigActionPerformed
+    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboAbrechnungsturnusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAbrechnungsturnusActionPerformed
-    }//GEN-LAST:event_cboAbrechnungsturnusActionPerformed
+    private void cboAbrechnungsturnusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbrechnungsturnusActionPerformed
+    }                                                                                        //GEN-LAST:event_cboAbrechnungsturnusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAbgerechnetActionPerformed
+    private void cboAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbgerechnetActionPerformed
         if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
             cboAbgerechnet.setSelected(true);
         }
         showOrHideInformationLabel();
-    }//GEN-LAST:event_cboAbgerechnetActionPerformed
+    }                                                                                  //GEN-LAST:event_cboAbgerechnetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboStorniertActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboStorniertActionPerformed
+    private void cboStorniertActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboStorniertActionPerformed
         if (!cboStorniert.isSelected() && !cboNichtStorniert.isSelected()) {
             cboStorniert.setSelected(true);
         }
         showOrHideInformationLabel();
-    }//GEN-LAST:event_cboStorniertActionPerformed
+    }                                                                                //GEN-LAST:event_cboStorniertActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboNichtAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboNichtAbgerechnetActionPerformed
+    private void cboNichtAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNichtAbgerechnetActionPerformed
         if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
             cboAbgerechnet.setSelected(true);
         }
         showOrHideInformationLabel();
-    }//GEN-LAST:event_cboNichtAbgerechnetActionPerformed
+    }                                                                                       //GEN-LAST:event_cboNichtAbgerechnetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboNichtStorniertActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboNichtStorniertActionPerformed
+    private void cboNichtStorniertActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNichtStorniertActionPerformed
         if (!cboStorniert.isSelected() && !cboNichtStorniert.isSelected()) {
             cboStorniert.setSelected(true);
         }
         showOrHideInformationLabel();
-    }//GEN-LAST:event_cboNichtStorniertActionPerformed
+    }                                                                                     //GEN-LAST:event_cboNichtStorniertActionPerformed
 
     /**
      * DOCUMENT ME!
