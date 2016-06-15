@@ -124,21 +124,21 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
                 }
             }
         }
-        if (!allowedUsages.isEmpty()) {
-            final String rawRestrcitedUsageLines = SessionManager.getConnection()
-                        .getConfigAttr(user, RESTRICTED_USAGE_CONFIG_ATTR);
-            if (rawRestrcitedUsageLines != null) {
-                for (final String rawRestrcitedUsageLine : rawRestrcitedUsageLines.split("\n")) {
-                    final int indexOfRestricted = rawRestrcitedUsageLine.indexOf(":");
-                    final String restrictedProduct = (indexOfRestricted > -1)
-                        ? rawRestrcitedUsageLine.substring(0, indexOfRestricted) : null;
-                    if ((restrictedProduct == null) || (product == null) || restrictedProduct.equals(product)) {
-                        allowedUsages.removeAll(Arrays.asList(
-                                rawRestrcitedUsageLine.substring(indexOfRestricted + 1).split(",")));
-                    }
-                }
-            }
-        }
+//        if (!allowedUsages.isEmpty()) {
+//            final String rawRestrcitedUsageLines = SessionManager.getConnection()
+//                        .getConfigAttr(user, RESTRICTED_USAGE_CONFIG_ATTR);
+//            if (rawRestrcitedUsageLines != null) {
+//                for (final String rawRestrcitedUsageLine : rawRestrcitedUsageLines.split("\n")) {
+//                    final int indexOfRestricted = rawRestrcitedUsageLine.indexOf(":");
+//                    final String restrictedProduct = (indexOfRestricted > -1)
+//                        ? rawRestrcitedUsageLine.substring(0, indexOfRestricted) : null;
+//                    if ((restrictedProduct == null) || (product == null) || restrictedProduct.equals(product)) {
+//                        allowedUsages.removeAll(Arrays.asList(
+//                                rawRestrcitedUsageLine.substring(indexOfRestricted + 1).split(",")));
+//                    }
+//                }
+//            }
+//        }
 
         return allowedUsages.toArray(new String[0]);
     }
