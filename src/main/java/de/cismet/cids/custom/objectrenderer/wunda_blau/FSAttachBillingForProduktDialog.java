@@ -43,12 +43,12 @@ import de.cismet.cids.server.actions.ServerActionParameter;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FSReloadProduktDialog extends javax.swing.JDialog {
+public class FSAttachBillingForProduktDialog extends javax.swing.JDialog {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            FSReloadProduktDialog.class);
+            FSAttachBillingForProduktDialog.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -69,7 +69,7 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
      *
      * @param  cidsBean  DOCUMENT ME!
      */
-    public FSReloadProduktDialog(final CidsBean cidsBean) {
+    public FSAttachBillingForProduktDialog(final CidsBean cidsBean) {
         super((Frame)null, true);
         initComponents();
 
@@ -93,7 +93,9 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(FSReloadProduktDialog.class, "FSReloadProduktDialog.title")); // NOI18N
+        setTitle(org.openide.util.NbBundle.getMessage(
+                FSAttachBillingForProduktDialog.class,
+                "FSAttachBillingForProduktDialog.title")); // NOI18N
         setModal(true);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -101,7 +103,9 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel1,
-            org.openide.util.NbBundle.getMessage(FSReloadProduktDialog.class, "FSReloadProduktDialog.jLabel1.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(
+                FSAttachBillingForProduktDialog.class,
+                "FSAttachBillingForProduktDialog.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -117,7 +121,9 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton1,
-            org.openide.util.NbBundle.getMessage(FSReloadProduktDialog.class, "FSReloadProduktDialog.jButton1.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(
+                FSAttachBillingForProduktDialog.class,
+                "FSAttachBillingForProduktDialog.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -172,7 +178,10 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
                             Arrays.asList(mon));
                     final ServerActionParameter<Integer> paramStep = new ServerActionParameter<Integer>(
                             FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.STEP_TO_EXECUTE.toString(),
-                            FormSolutionServerNewStuffAvailableAction.STATUS_DOWNLOAD);
+                            FormSolutionServerNewStuffAvailableAction.STATUS_BILLING);
+                    final ServerActionParameter<Boolean> singleStep = new ServerActionParameter<Boolean>(
+                            FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.SINGLE_STEP.toString(),
+                            Boolean.TRUE);
 
                     try {
                         SessionManager.getConnection()
@@ -181,7 +190,8 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
                                     "WUNDA_BLAU",
                                     null,
                                     paramMon,
-                                    paramStep);
+                                    paramStep,
+                                    singleStep);
                     } catch (final ConnectionException ex3) {
                         LOG.error(ex3, ex3);
                     }
