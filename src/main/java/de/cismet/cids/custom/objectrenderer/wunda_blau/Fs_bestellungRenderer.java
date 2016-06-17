@@ -121,11 +121,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private MetaObjectNode flurstueckMon;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cmdAttachBilling;
+    private javax.swing.JButton cmdReload;
     private org.jdesktop.swingx.JXHyperlink hlEMailValue;
     private org.jdesktop.swingx.JXHyperlink hlFlurstueckeValue;
     private org.jdesktop.swingx.JXHyperlink hlProduktValue;
     private org.jdesktop.swingx.JXHyperlink hlStatusErrorDetails;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -303,7 +304,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblProdukt = new javax.swing.JLabel();
         panProduktValue = new javax.swing.JPanel();
         hlProduktValue = new org.jdesktop.swingx.JXHyperlink();
-        jButton1 = new javax.swing.JButton();
+        cmdReload = new javax.swing.JButton();
+        cmdAttachBilling = new javax.swing.JButton();
         lblGebuehr = new javax.swing.JLabel();
         lblGebuehrValue = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -655,26 +657,49 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panProduktValue.add(hlProduktValue, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/stock_refresh.png")));              // NOI18N
+        cmdReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/stock_refresh.png")));              // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
-            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.jButton1.text")); // NOI18N
-        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
+            cmdReload,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.cmdReload.text")); // NOI18N
+        cmdReload.setToolTipText(org.openide.util.NbBundle.getMessage(
                 Fs_bestellungRenderer.class,
-                "Fs_bestellungRenderer.jButton1.toolTipText"));                                                        // NOI18N
-        jButton1.setFocusPainted(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+                "Fs_bestellungRenderer.cmdReload.toolTipText"));                                                        // NOI18N
+        cmdReload.setFocusPainted(false);
+        cmdReload.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton1ActionPerformed(evt);
+                    cmdReloadActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        panProduktValue.add(jButton1, gridBagConstraints);
+        panProduktValue.add(cmdReload, gridBagConstraints);
+
+        cmdAttachBilling.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/money--pencil.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cmdAttachBilling,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.cmdAttachBilling.text"));                                                  // NOI18N
+        cmdAttachBilling.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.cmdAttachBilling.toolTipText"));                                           // NOI18N
+        cmdAttachBilling.setFocusPainted(false);
+        cmdAttachBilling.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cmdAttachBillingActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        panProduktValue.add(cmdAttachBilling, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1318,9 +1343,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void cmdReloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdReloadActionPerformed
         StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean));
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }                                                                             //GEN-LAST:event_cmdReloadActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1335,6 +1360,15 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             DownloadManager.instance().add(download);
         }
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cmdAttachBillingActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAttachBillingActionPerformed
+        StaticSwingTools.showDialog(new FSAttachBillingForProduktDialog(cidsBean));
+    }                                                                                    //GEN-LAST:event_cmdAttachBillingActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1427,6 +1461,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         }
 
         bindingGroup.bind();
+        if ((cidsBean != null) && (cidsBean.getProperty("fk_billing") != null)) {
+            cmdAttachBilling.setVisible(false);
+        } else {
+            cmdAttachBilling.setVisible(true);
+        }
     }
 
     /**
@@ -1436,7 +1475,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      */
     private void setFlurstueckMon(final MetaObjectNode flurstueckMon) {
         this.flurstueckMon = flurstueckMon;
-        jButton1.setEnabled(flurstueckMon != null);
+        cmdReload.setEnabled(flurstueckMon != null);
         hlFlurstueckeValue.setEnabled(flurstueckMon != null);
     }
 
