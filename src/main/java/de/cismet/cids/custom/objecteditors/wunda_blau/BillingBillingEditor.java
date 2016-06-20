@@ -869,8 +869,11 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
             text += "Neuer Wert: " + aenderung_neuer_wert;
         }
         txtaAenderung.setText(text);
-
-        txtaBerechnung.setText(cidsBean.getProperty("berechnung").toString());
+        if (cidsBean.getProperty("berechnung") != null) {
+            txtaBerechnung.setText(cidsBean.getProperty("berechnung").toString());
+        } else {
+            txtaBerechnung.setText("");
+        }
 
         txtAngelegt_am.setText(DATE_FORMAT.format(cidsBean.getProperty("ts")));
 
