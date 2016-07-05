@@ -1286,7 +1286,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             showAlert(true);
             showMeasurePanel();
         } else {
-            final String filename = BaulastenPictureFinder.getPlanPictureFilename(getCidsBean());
+            final String filename = BaulastenPictureFinder.getPlanPictureFilename(getCidsBean()).toString();
             pictureReaderWorker = new PictureReaderWorker(documentURLs[currentDocument]);
             CismetThreadPool.execute(pictureReaderWorker);
         }
@@ -1362,9 +1362,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      */
     private String getDocumentFilename() {
         if (currentDocument == LAGEPLAN_DOCUMENT) {
-            return BaulastenPictureFinder.getPlanPictureFilename(getCidsBean());
+            return BaulastenPictureFinder.getPlanPictureFilename(getCidsBean()).toString();
         } else {
-            return BaulastenPictureFinder.getTextblattPictureFilename(getCidsBean());
+            return BaulastenPictureFinder.getTextblattPictureFilename(getCidsBean()).toString();
         }
     }
 
