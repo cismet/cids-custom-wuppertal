@@ -29,6 +29,7 @@ import com.twelvemonkeys.imageio.metadata.Entry;
 import com.twelvemonkeys.imageio.metadata.exif.EXIFReader;
 import com.twelvemonkeys.imageio.metadata.exif.Rational;
 import com.twelvemonkeys.imageio.metadata.exif.TIFF;
+import com.twelvemonkeys.util.LinkedSet;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -253,7 +254,7 @@ public class BaulastenReportGenerator {
                 jobnumber,
                 projectname));
 
-        final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
+        final Collection<URL> additionalFilesToDownload = new LinkedSet<URL>();
         for (final CidsBean selectedBaulast : selectedBaulasten) {
             final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
                     selectedBaulast);
