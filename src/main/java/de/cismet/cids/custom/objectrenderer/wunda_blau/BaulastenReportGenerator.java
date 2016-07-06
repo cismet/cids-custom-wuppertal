@@ -29,6 +29,7 @@ import com.twelvemonkeys.imageio.metadata.Entry;
 import com.twelvemonkeys.imageio.metadata.exif.EXIFReader;
 import com.twelvemonkeys.imageio.metadata.exif.Rational;
 import com.twelvemonkeys.imageio.metadata.exif.TIFF;
+import com.twelvemonkeys.util.LinkedSet;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -253,7 +254,7 @@ public class BaulastenReportGenerator {
                 jobnumber,
                 projectname));
 
-        final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
+        final Collection<URL> additionalFilesToDownload = new LinkedSet<URL>();
         for (final CidsBean selectedBaulast : selectedBaulasten) {
             final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
                     selectedBaulast);
@@ -340,15 +341,19 @@ public class BaulastenReportGenerator {
 
                                 @Override
                                 public int compare(final CidsBean o1, final CidsBean o2) {
-                                    final String s1 = (o1 == null)
-                                        ? ""
-                                        : ((String)o1.getProperty("blattnummer") + "/"
-                                                    + (String)o1.getProperty("laufende_nummer"));
-                                    final String s2 = (o2 == null)
-                                        ? ""
-                                        : ((String)o2.getProperty("blattnummer") + "/"
-                                                    + (String)o2.getProperty("laufende_nummer"));
-                                    return (s1).compareToIgnoreCase(s2);
+                                    final String bnr1 = (o1 == null) ? "" : (String)o1.getProperty("blattnummer");
+                                    final String bnr2 = (o2 == null) ? "" : (String)o2.getProperty("blattnummer");
+
+                                    final Integer lfdN1 = (o1 == null)
+                                        ? -1 : Integer.parseInt((String)o1.getProperty("laufende_nummer"));
+                                    final int lfdN2 = (o2 == null)
+                                        ? -1 : Integer.parseInt((String)o2.getProperty("laufende_nummer"));
+
+                                    if (!bnr1.equalsIgnoreCase(bnr2)) {
+                                        return bnr1.compareToIgnoreCase(bnr2);
+                                    } else {
+                                        return lfdN1.compareTo(lfdN2);
+                                    }
                                 }
                             });
 

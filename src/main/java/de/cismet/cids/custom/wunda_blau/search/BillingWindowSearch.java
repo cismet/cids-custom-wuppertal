@@ -224,6 +224,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         jPanel5.setLayout(new java.awt.GridLayout(2, 2));
 
+        cboAbgerechnet.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             cboAbgerechnet,
             org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboAbgerechnet.text")); // NOI18N
@@ -236,6 +237,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             });
         jPanel5.add(cboAbgerechnet);
 
+        cboNichtAbgerechnet.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             cboNichtAbgerechnet,
             org.openide.util.NbBundle.getMessage(
@@ -250,6 +252,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             });
         jPanel5.add(cboNichtAbgerechnet);
 
+        cboStorniert.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             cboStorniert,
             org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboStorniert.text")); // NOI18N
@@ -262,6 +265,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             });
         jPanel5.add(cboStorniert);
 
+        cboNichtStorniert.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             cboNichtStorniert,
             org.openide.util.NbBundle.getMessage(
@@ -299,7 +303,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         pnlKostentyp.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         cboKostenpflichtig.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
