@@ -60,13 +60,13 @@ public class FileWithoutSuffix {
      */
     public String toString(final boolean reducedSize) {
         if (number == null) {
-            if (reducedSize) {
-                return BaulastenPictureFinder.PATH_RS + BaulastenPictureFinder.SEP + file;
+            if (reducedSize) { // file.toUpperCase bacuase of cismet/wupp#942
+                return BaulastenPictureFinder.PATH_RS + BaulastenPictureFinder.SEP + file.toUpperCase();
             } else {
-                return BaulastenPictureFinder.PATH + BaulastenPictureFinder.SEP + file;
+                return BaulastenPictureFinder.PATH + BaulastenPictureFinder.SEP + file.toUpperCase();
             }
         } else {
-            return getFolder(number, reducedSize) + BaulastenPictureFinder.SEP + file;
+            return getFolder(number, reducedSize) + BaulastenPictureFinder.SEP + file.toUpperCase();
         }
     }
 
