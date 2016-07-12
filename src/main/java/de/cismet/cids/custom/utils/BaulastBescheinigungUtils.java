@@ -170,8 +170,10 @@ public class BaulastBescheinigungUtils {
                     if (compareBlattnummer != 0) {
                         return compareBlattnummer;
                     } else {
-                        final int compareLaufendenummer = compareString(o1.getLaufende_nummer(),
-                                o2.getLaufende_nummer());
+                        final Integer lfdN1 = (o1 == null) ? -1 : Integer.parseInt((String)o1.getLaufende_nummer());
+                        final int lfdN2 = (o2 == null) ? -1 : Integer.parseInt((String)o2.getLaufende_nummer());
+                        final int compareLaufendenummer = lfdN1.compareTo(lfdN2);
+
                         if (compareLaufendenummer != 0) {
                             return compareLaufendenummer;
                         } else {

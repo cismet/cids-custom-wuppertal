@@ -22,6 +22,8 @@ import Sirius.server.middleware.types.MetaObjectNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.twelvemonkeys.util.LinkedSet;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
