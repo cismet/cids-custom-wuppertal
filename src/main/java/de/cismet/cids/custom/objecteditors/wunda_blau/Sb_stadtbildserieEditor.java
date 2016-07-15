@@ -1870,8 +1870,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
             new StadtbildserieReportParameterGenerator();
 
-        if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String vorschaubildnummer = (String)cidsBean.getProperty("vorschaubild.bildnummer");
             final String filename = "stadbildserie_"
                         + vorschaubildnummer;
@@ -2046,12 +2047,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 this.cidsBean);
             initMap();
 
-            restrictedLevel = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(cidsBean);
-
             bindingGroup.bind();
             if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
                 setDefaultValuesForNewCidsBean();
             }
+            restrictedLevel = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(cidsBean);
+
             decorateComboBoxes();
             automaticallySortLists();
             final String vorschaubild = (String)cidsBean.getProperty("vorschaubild.bildnummer");
@@ -2778,7 +2779,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
          * Selects the specified object from the list, taking into account sorting and filtering.
          *
          * @param  anObject      the object to select
-         * @param  shouldScroll {@code true} if the list should scroll to display the selected object, if one exists;
+         * @param  shouldScroll  {@code true} if the list should scroll to display the selected object, if one exists;
          *                       otherwise {@code false}
          */
         @Override

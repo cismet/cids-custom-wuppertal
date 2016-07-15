@@ -1403,7 +1403,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                 "WUNDA_BLAU",
                 "Administratoren",
                 "admin",
-                "kif");
+                "leo");
             final JScrollPane jsp = new JScrollPane(new MauernWindowSearch());
             DevelopmentTools.showTestFrame(jsp, 800, 1000);
         } catch (Exception ex) {

@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.cismet.cids</groupId>
         <artifactId>cids-parent</artifactId>
-        <version>2.0-SNAPSHOT</version>
+        <version>2.3.1</version>
     </parent>
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
@@ -14,7 +14,7 @@
     <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>cids Custom Wuppertal</name>
+    <name>${names.cids.custom-wuppertal}</name>
     <description>!!! description pending !!!</description>
     <licenses>
         <license>
@@ -56,6 +56,7 @@
             ToDo make constants for the single values to ease the configuration
             of the child POMs.
         -->
+        <names.cids.custom-wuppertal>cids Custom Wuppertal</names.cids.custom-wuppertal>
         <de.cismet.libDir>lib/localWuNDa</de.cismet.libDir>
     </properties>
 
@@ -126,6 +127,11 @@
             <artifactId>imageio-tiff</artifactId>
             <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
         </dependency>
+        <dependency>
+            <groupId>com.drewnoakes</groupId>
+            <artifactId>metadata-extractor</artifactId>
+            <version>2.8.1</version>
+        </dependency>                        
     </dependencies>
 
     <build>

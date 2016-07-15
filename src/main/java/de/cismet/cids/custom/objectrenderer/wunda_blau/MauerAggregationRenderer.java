@@ -911,9 +911,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
             if (districtComparison != 0) {
                 return districtComparison;
             } else {
-                return cidsBean1.getProperty("stuetzmauertyp.name")
-                            .toString()
-                            .compareTo(cidsBean2.getProperty("stuetzmauertyp.name").toString());
+                return cidsBean1.getProperty("id").toString().compareTo(cidsBean2.getProperty("id").toString());
             }
         }
     }

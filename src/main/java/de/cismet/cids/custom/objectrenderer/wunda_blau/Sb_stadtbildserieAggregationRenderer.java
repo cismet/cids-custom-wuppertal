@@ -841,8 +841,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String filename = "Stadtbilder_Serienauszug";
             final String downloadTitle = "Stadtbilder Serienauszug";
 
@@ -923,8 +924,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String filename = "Stadtbilder_Einzelbilderauszug";
             final String downloadTitle = "Stadtbilder Einzelbilderauszug";
 
@@ -994,7 +996,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      * DOCUMENT ME!
      */
     private void downladVorauswahl() {
-        final String jobname = DownloadManagerDialog.getJobname();
+        final String jobname = DownloadManagerDialog.getInstance().getJobName();
         // create an array with Sb_stadtbildserieGridObject of the current vorschau.
         final Sb_stadtbildserieGridObject[] gridObjectArr =
             new Sb_stadtbildserieGridObject[grdStadtbildserien.getModel().getSize()];
@@ -1045,7 +1047,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "not.yet",
                                         (Geometry)null,
                                         new ProductGroupAmount("ea", amountDownloads))
-                                    && DownloadManagerDialog.showAskingForUserTitle(
+                                    && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
                             if (amountDownloads == 1) {
                                 DownloadManager.instance().add(downloads.get(0));
@@ -1064,7 +1066,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      * DOCUMENT ME!
      */
     private void downladWarenkorb() {
-        final String jobname = DownloadManagerDialog.getJobname();
+        final String jobname = DownloadManagerDialog.getInstance().getJobName();
         // create an array with Sb_stadtbildserieGridObject of the current vorschau.
         final Sb_stadtbildserieGridObject[] gridObjectArr =
             new Sb_stadtbildserieGridObject[grdStadtbildserien.getModel().getSize()];
@@ -1115,7 +1117,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "not.yet",
                                         (Geometry)null,
                                         new ProductGroupAmount("ea", amountDownloads))
-                                    && DownloadManagerDialog.showAskingForUserTitle(
+                                    && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
                             if (amountDownloads == 1) {
                                 DownloadManager.instance().add(downloads.get(0));
@@ -1768,10 +1770,12 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                     int lastIndex = -1;
 
-                    @Override
                     /**
                      * Draw the marker.
+                     *
+                     * @param  e  DOCUMENT ME!
                      */
+                    @Override
                     public void mouseMoved(final MouseEvent e) {
                         if ((lastIndex >= 0) && (lastIndex < PictureSelectionJGrid.this.getModel().getSize())) {
                             final Object o = PictureSelectionJGrid.this.getModel().getElementAt(lastIndex);

@@ -72,6 +72,8 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     private javax.swing.JComboBox cboBenutzer;
     private javax.swing.JCheckBox cboKostenfrei;
     private javax.swing.JCheckBox cboKostenpflichtig;
+    private javax.swing.JCheckBox cboNichtAbgerechnet;
+    private javax.swing.JCheckBox cboNichtStorniert;
     private javax.swing.JCheckBox cboStorniert;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -85,6 +87,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAbgerechnetInformation;
     private javax.swing.JPanel panCommand;
@@ -157,15 +160,18 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         pnlAbgerechnetStorniert = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         lblAbgerechnetInformation = new javax.swing.JLabel();
-        cboAbgerechnet = new javax.swing.JCheckBox();
-        cboStorniert = new javax.swing.JCheckBox();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30),
                 new java.awt.Dimension(0, 30),
                 new java.awt.Dimension(32767, 30));
+        jPanel5 = new javax.swing.JPanel();
+        cboAbgerechnet = new javax.swing.JCheckBox();
+        cboNichtAbgerechnet = new javax.swing.JCheckBox();
+        cboStorniert = new javax.swing.JCheckBox();
+        cboNichtStorniert = new javax.swing.JCheckBox();
         pnlKostentyp = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        cboKostenfrei = new javax.swing.JCheckBox();
         cboKostenpflichtig = new javax.swing.JCheckBox();
+        cboKostenfrei = new javax.swing.JCheckBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -205,13 +211,20 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                 "BillingWindowSearch.lblAbgerechnetInformation.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         jPanel4.add(lblAbgerechnetInformation, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        jPanel4.add(filler2, gridBagConstraints);
 
+        jPanel5.setLayout(new java.awt.GridLayout(2, 2));
+
+        cboAbgerechnet.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             cboAbgerechnet,
             org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboAbgerechnet.text")); // NOI18N
@@ -222,15 +235,24 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                     cboAbgerechnetActionPerformed(evt);
                 }
             });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 3, 5, 5);
-        jPanel4.add(cboAbgerechnet, gridBagConstraints);
+        jPanel5.add(cboAbgerechnet);
 
+        cboNichtAbgerechnet.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboNichtAbgerechnet,
+            org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.cboNichtAbgerechnet.text")); // NOI18N
+        cboNichtAbgerechnet.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboNichtAbgerechnetActionPerformed(evt);
+                }
+            });
+        jPanel5.add(cboNichtAbgerechnet);
+
+        cboStorniert.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             cboStorniert,
             org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboStorniert.text")); // NOI18N
@@ -241,18 +263,27 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                     cboStorniertActionPerformed(evt);
                 }
             });
+        jPanel5.add(cboStorniert);
+
+        cboNichtStorniert.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboNichtStorniert,
+            org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.cboNichtStorniert.text")); // NOI18N
+        cboNichtStorniert.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboNichtStorniertActionPerformed(evt);
+                }
+            });
+        jPanel5.add(cboNichtStorniert);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 5);
-        jPanel4.add(cboStorniert, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        jPanel4.add(filler2, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(jPanel5, gridBagConstraints);
 
         pnlAbgerechnetStorniert.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -272,20 +303,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         pnlKostentyp.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
-
-        cboKostenfrei.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            cboKostenfrei,
-            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboKostenfrei.text")); // NOI18N
-        cboKostenfrei.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboKostenfreiActionPerformed(evt);
-                }
-            });
-        jPanel1.add(cboKostenfrei);
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         cboKostenpflichtig.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -301,6 +319,19 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                 }
             });
         jPanel1.add(cboKostenpflichtig);
+
+        cboKostenfrei.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboKostenfrei,
+            org.openide.util.NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.cboKostenfrei.text")); // NOI18N
+        cboKostenfrei.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboKostenfreiActionPerformed(evt);
+                }
+            });
+        jPanel1.add(cboKostenfrei);
 
         pnlKostentyp.add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -318,6 +349,8 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
         jPanel2.add(filler1, gridBagConstraints);
+
+        pnlVerwendungszweck.initVerwendungszweckCheckBoxes(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -555,8 +588,8 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * @param  evt  DOCUMENT ME!
      */
     private void cboAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbgerechnetActionPerformed
-        if (cboAbgerechnet.isSelected()) {
-            cboStorniert.setSelected(false);
+        if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
+            cboAbgerechnet.setSelected(true);
         }
         showOrHideInformationLabel();
     }                                                                                  //GEN-LAST:event_cboAbgerechnetActionPerformed
@@ -567,11 +600,35 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * @param  evt  DOCUMENT ME!
      */
     private void cboStorniertActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboStorniertActionPerformed
-        if (cboStorniert.isSelected()) {
-            cboAbgerechnet.setSelected(false);
+        if (!cboStorniert.isSelected() && !cboNichtStorniert.isSelected()) {
+            cboStorniert.setSelected(true);
         }
         showOrHideInformationLabel();
     }                                                                                //GEN-LAST:event_cboStorniertActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboNichtAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNichtAbgerechnetActionPerformed
+        if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
+            cboAbgerechnet.setSelected(true);
+        }
+        showOrHideInformationLabel();
+    }                                                                                       //GEN-LAST:event_cboNichtAbgerechnetActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboNichtStorniertActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNichtStorniertActionPerformed
+        if (!cboStorniert.isSelected() && !cboNichtStorniert.isSelected()) {
+            cboStorniert.setSelected(true);
+        }
+        showOrHideInformationLabel();
+    }                                                                                     //GEN-LAST:event_cboNichtStorniertActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -621,8 +678,25 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         metaObjectNodesBillingSearchStatement.setKostentyp(chooseKostentyp());
 
-        metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(cboAbgerechnet.isSelected());
-        metaObjectNodesBillingSearchStatement.setShowOnlyStornierteBillings(cboStorniert.isSelected());
+        if ((cboAbgerechnet.isSelected() && cboNichtAbgerechnet.isSelected())) {
+            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(null);
+        } else if (cboAbgerechnet.isSelected()) {
+            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(true);
+        } else if (cboNichtAbgerechnet.isSelected()) {
+            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(false);
+        } else {
+            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(null);
+        }
+
+        if ((cboStorniert.isSelected() && cboNichtStorniert.isSelected())) {
+            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(null);
+        } else if (cboStorniert.isSelected()) {
+            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(true);
+        } else if (cboNichtStorniert.isSelected()) {
+            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(false);
+        } else {
+            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(null);
+        }
 
         return metaObjectNodesBillingSearchStatement;
     }
@@ -681,7 +755,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " \n";
             query += "FROM " + MB_MC.getTableName();
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query.toString(), 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
             for (final MetaObject abrechnungsturnus : metaObjects) {
                 cboBenutzer.addItem(abrechnungsturnus.getBean());
             }

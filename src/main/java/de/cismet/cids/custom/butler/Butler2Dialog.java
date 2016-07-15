@@ -779,9 +779,9 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
                     // for each product tab we have to create one download
                     final StringBuilder jobnameBuilder = new StringBuilder();
-                    if (DownloadManagerDialog.showAskingForUserTitle(
+                    if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                     CismapBroker.getInstance().getMappingComponent())) {
-                        final String jobname = DownloadManagerDialog.getJobname();
+                        final String jobname = DownloadManagerDialog.getInstance().getJobName();
                         if (jobname == null) {
                             jobnameBuilder.append("");
                         } else {

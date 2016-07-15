@@ -952,14 +952,15 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
                     @Override
                     public void run() {
-                        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
+                        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                                        NivellementPunktEditor.this)) {
                             final String filename = urlOfDocument.substring(urlOfDocument.lastIndexOf("/") + 1);
                             DownloadManager.instance()
                                     .add(
                                         new HttpDownload(
                                             url,
                                             "",
-                                            DownloadManagerDialog.getJobname(),
+                                            DownloadManagerDialog.getInstance().getJobName(),
                                             "NivP-Beschreibung",
                                             filename.substring(0, filename.lastIndexOf(".")),
                                             filename.substring(filename.lastIndexOf("."))));
@@ -1048,8 +1049,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(NivellementPunktEditor.this)) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
@@ -1456,13 +1457,14 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
             measuringComponent.reset();
             if ((document != null) && !isCancelled()) {
+                final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
                 measuringComponent.setVisible(true);
                 lblMissingRasterdocument.setVisible(false);
                 measuringComponent.addImage(document);
                 measuringComponent.zoomToFeatureCollection();
                 btnHome.setEnabled(true);
-                btnOpen.setEnabled(BillingPopup.isBillingAllowed());
-                btnReport.setEnabled(BillingPopup.isBillingAllowed());
+                btnOpen.setEnabled(billingAllowed);
+                btnReport.setEnabled(billingAllowed);
                 togPan.setEnabled(true);
                 togZoom.setEnabled(true);
             } else {

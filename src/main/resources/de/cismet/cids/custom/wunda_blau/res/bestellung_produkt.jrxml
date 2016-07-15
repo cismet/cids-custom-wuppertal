@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Produkt-Bestellung" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" scriptletClass="de.cismet.cids.custom.objectrenderer.wunda_blau.VermessungRissReportScriptlet" uuid="35bae2a7-1b15-4850-a139-ee769bb95ba6">
+	<property name="ireport.zoom" value="1.0000000000000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATUM_HEUTE" class="java.lang.String"/>
+	<parameter name="DATUM_EINGANG" class="java.lang.String"/>
+	<parameter name="PRODUKTBEZEICHNUNG" class="java.lang.String"/>
+	<parameter name="FLURSTUECKSKENNZEICHEN" class="java.lang.String"/>
+	<parameter name="TRANSAKTIONSID" class="java.lang.String"/>
+	<parameter name="LIEFER_FIRMA" class="java.lang.String"/>
+	<parameter name="LIEFER_VORNAME" class="java.lang.String"/>
+	<parameter name="LIEFER_NAME" class="java.lang.String"/>
+	<parameter name="LIEFER_STRASSE" class="java.lang.String"/>
+	<parameter name="LIEFER_HAUSNUMMER" class="java.lang.String"/>
+	<parameter name="LIEFER_PLZ" class="java.lang.String"/>
+	<parameter name="LIEFER_ORT" class="java.lang.String"/>
+	<parameter name="RECHNUNG_FIRMA" class="java.lang.String"/>
+	<parameter name="RECHNUNG_VORNAME" class="java.lang.String"/>
+	<parameter name="RECHNUNG_NAME" class="java.lang.String"/>
+	<parameter name="RECHNUNG_STRASSE" class="java.lang.String"/>
+	<parameter name="RECHNUNG_HAUSNUMMER" class="java.lang.String"/>
+	<parameter name="RECHNUNG_PLZ" class="java.lang.String"/>
+	<parameter name="RECHNUNG_ORT" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band height="802"/>
+	</background>
+	<title>
+		<band height="366">
+			<textField>
+				<reportElement x="0" y="150" width="338" height="20" uuid="1dbb0437-1b80-4d68-aa82-00788dfde16c"/>
+				<textFieldExpression><![CDATA["Ihre Kartenbestellung vom " + $P{DATUM_EINGANG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="350" height="20" uuid="0e091fba-603b-4417-a980-f6b7436c7db0"/>
+				<textFieldExpression><![CDATA[$P{LIEFER_FIRMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="350" height="20" uuid="a2964c29-449b-46f7-a93c-9bbafd6abe6d"/>
+				<textFieldExpression><![CDATA[$P{LIEFER_VORNAME} + " " + $P{LIEFER_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="350" height="20" uuid="9ecfe0a8-fa1b-4260-85fd-4206ca4379b3"/>
+				<textFieldExpression><![CDATA[$P{LIEFER_STRASSE} + " " + $P{LIEFER_HAUSNUMMER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="60" width="350" height="20" uuid="8d4b89d3-faf5-4759-b7dd-474f734df132"/>
+				<textFieldExpression><![CDATA[$P{LIEFER_PLZ} + " " + $P{LIEFER_ORT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="110" width="195" height="20" uuid="7adb4410-b3e7-4574-b78d-ee2d7412dcff"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{DATUM_HEUTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="211" width="387" height="20" uuid="fea75c99-d9de-41e8-b0e5-77737b1a42b4"/>
+				<textFieldExpression><![CDATA["Sehr g... " + $P{LIEFER_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="266" width="371" height="20" uuid="544b4dea-2fb6-485c-90b1-7a85a4fe8228"/>
+				<textFieldExpression><![CDATA[$P{PRODUKTBEZEICHNUNG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="286" width="371" height="20" uuid="12369d22-f5cc-40fc-9874-d41edd328ce1"/>
+				<textFieldExpression><![CDATA[$P{FLURSTUECKSKENNZEICHEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="306" width="371" height="20" uuid="763ee697-f328-4672-9250-9d08d98e4947"/>
+				<textFieldExpression><![CDATA[$P{TRANSAKTIONSID}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageFooter>
+		<band height="20">
+			<staticText>
+				<reportElement x="0" y="0" width="162" height="20" uuid="731aae35-4c50-42fa-8d07-a55c119ca781"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[	STADT WUPPERTAL / ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="0" width="393" height="20" uuid="574efc22-3b36-456a-b9df-150a8bb809c4"/>
+				<text><![CDATA[VERMESSUNG, KATASTERAMT UND GEODATEN]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

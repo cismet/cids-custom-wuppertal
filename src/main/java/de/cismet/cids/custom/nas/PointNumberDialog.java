@@ -1178,10 +1178,10 @@ public class PointNumberDialog extends javax.swing.JDialog {
             return;
         }
         PointNumberDownload download;
-        if (DownloadManagerDialog.showAskingForUserTitle(
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         CismapBroker.getInstance().getMappingComponent())) {
-            final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
-                            .getJobname() : null;
+            final String jobname = (!DownloadManagerDialog.getInstance().getJobName().equals(""))
+                ? DownloadManagerDialog.getInstance().getJobName() : null;
             download = new PointNumberDownload(
                     result,
                     "Punktnummer Download",

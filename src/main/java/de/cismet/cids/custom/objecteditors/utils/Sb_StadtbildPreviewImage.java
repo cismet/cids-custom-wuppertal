@@ -362,9 +362,9 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                             "stb",
                             "not.yet",
                             (Geometry)null,
-                            new ProductGroupAmount("ea", 1)) && DownloadManagerDialog.showAskingForUserTitle(
-                            this)) {
-                final String jobname = DownloadManagerDialog.getJobname();
+                            new ProductGroupAmount("ea", 1))
+                        && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
+                final String jobname = DownloadManagerDialog.getInstance().getJobName();
                 DownloadManager.instance()
                         .add(
                             new TifferDownload(

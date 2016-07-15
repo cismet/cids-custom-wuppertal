@@ -1107,7 +1107,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     final boolean isNivPUebersicht = type.equals("NivP-Übersicht");
                     final boolean isApUebersicht = type.equals("AP-Übersicht");
                     final boolean isPunktnummerierungsuebersicht = type.equals("Punktnumerierungsübersicht");
-                    final boolean isDgkMitHoehenlinien = type.equals("DGK mit Höhenlinien");
+                    final boolean isDgkMitHoehenlinien = type.equals("ABK mit Höhenlinien");
                     final boolean isStadtgrundkarteMitHoehenlinien = type.equals("Stadtgrundkarte mit Höhenlinien");
                     final boolean isOrthofotoMitKatasterdarstellung = type.equals("Orthofoto mit Katasterdarstellung");
 
@@ -1262,19 +1262,19 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                         product = "pnükom0";
                         prGroup = "eakarte_a2-a0";
                     } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA4) {
-                        product = "dgkhkom4";
+                        product = "abkhkom4";
                         prGroup = "eakarte_a3";
                     } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA3) {
-                        product = "dgkhkom3";
+                        product = "abkhkom3";
                         prGroup = "eakarte_a3";
                     } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA2) {
-                        product = "dgkhkom2";
+                        product = "abkhkom2";
                         prGroup = "eakarte_a2-a0";
                     } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA1) {
-                        product = "dgkhkom1";
+                        product = "abkhkom1";
                         prGroup = "eakarte_a2-a0";
                     } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA0) {
-                        product = "dgkhkom0";
+                        product = "abkhkom0";
                         prGroup = "eakarte_a2-a0";
                     } else if (isWupKommunal && isStadtgrundkarteMitHoehenlinien && isDinA4) {
                         product = "skhkom4";
@@ -1351,7 +1351,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  landparcelCode  DOCUMENT ME!
      */
     private void doDownload(final URL url, final String product, final String landparcelCode) {
-        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
+        if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
             return;
         }
 
@@ -1364,7 +1364,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final HttpDownload download = new HttpDownload(
                 url,
                 "",
-                DownloadManagerDialog.getJobname(),
+                DownloadManagerDialog.getInstance().getJobName(),
                 "ALKIS-Druck",
                 filename,
                 ".pdf");

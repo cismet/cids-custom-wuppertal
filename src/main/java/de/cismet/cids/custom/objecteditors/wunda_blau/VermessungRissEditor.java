@@ -1419,7 +1419,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
                 @Override
                 public void run() {
-                    if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
+                    if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(VermessungRissEditor.this)) {
                         final String urlString = url.toExternalForm();
                         final String filename = urlString.substring(urlString.lastIndexOf("/") + 1);
 
@@ -1428,7 +1428,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                                     new HttpDownload(
                                         url,
                                         "",
-                                        DownloadManagerDialog.getJobname(),
+                                        DownloadManagerDialog.getInstance().getJobName(),
                                         (currentDocument == VERMESSUNGSRISS) ? "Vermessungsriss"
                                                                              : "Ergänzende Dokumente",
                                         filename.substring(0, filename.lastIndexOf(".")),
@@ -2645,6 +2645,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @version  $Revision$, $Date$
      */
+
     //J-
     //When Wupp decides to publish the correspoding files on a WebDAV server, use following three classes.
     /**

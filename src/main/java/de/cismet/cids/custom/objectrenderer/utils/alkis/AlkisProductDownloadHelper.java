@@ -81,7 +81,7 @@ public class AlkisProductDownloadHelper {
                     download = new CredentialsAwareHttpDownlaod(
                             url,
                             "",
-                            DownloadManagerDialog.getJobname(),
+                            DownloadManagerDialog.getInstance().getJobName(),
                             downloadTitle,
                             filename,
                             ".pdf",

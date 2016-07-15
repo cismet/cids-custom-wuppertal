@@ -25,8 +25,11 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -55,6 +58,7 @@ public class BillingPopup extends javax.swing.JDialog {
 
     public static final String MODE_CONFIG_ATTR = "billing.mode@WUNDA_BLAU";
     public static final String ALLOWED_USAGE_CONFIG_ATTR = "billing.allowed.usage@WUNDA_BLAU";
+    public static final String RESTRICTED_USAGE_CONFIG_ATTR = "billing.restricted.usage@WUNDA_BLAU";
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             BillingPopup.class);
@@ -629,6 +633,28 @@ public class BillingPopup extends javax.swing.JDialog {
      * @return  DOCUMENT ME!
      */
     public CidsBean getExternalUser() {
+        return getExternalUser(SessionManager.getSession().getUser());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   user  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getExternalUser(final User user) {
+        return getExternalUser(user.getName());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   loginName  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getExternalUser(final String loginName) {
         final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
         if (MB_MC == null) {
             if (LOG.isDebugEnabled()) {
@@ -639,7 +665,7 @@ public class BillingPopup extends javax.swing.JDialog {
         }
         String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
         query += "FROM " + MB_MC.getTableName();
-        query += " WHERE name = '" + SessionManager.getSession().getUser().getName() + "'";
+        query += " WHERE name = '" + loginName + "'";
 
         CidsBean externalUser = null;
         try {
@@ -750,8 +776,11 @@ public class BillingPopup extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return      DOCUMENT ME!
+     *
+     * @deprecated  use isBillingAllowed(String) instead
      */
+    @Deprecated
     public static boolean isBillingAllowed() {
         try {
             final User user = SessionManager.getSession().getUser();
@@ -762,6 +791,79 @@ public class BillingPopup extends javax.swing.JDialog {
             LOG.error("error while checking configAttr", ex);
             return false;
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean isBillingAllowed(final String product) {
+        try {
+            final User user = SessionManager.getSession().getUser();
+            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) == null)
+                        || ((SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) != null)
+                            && (getAllowedUsages(user, product).length > 0));
+        } catch (ConnectionException ex) {
+            LOG.error("error while checking configAttr", ex);
+            return false;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   user     DOCUMENT ME!
+     * @param   product  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    private static String[] getAllowedUsages(final User user, final String product) throws ConnectionException {
+        final Set<String> allowedUsages = new LinkedHashSet<String>();
+
+        final String rawAllowedUsageLines = SessionManager.getConnection()
+                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR);
+        if (rawAllowedUsageLines != null) {
+            for (final String rawAllowedUsageLine : rawAllowedUsageLines.split("\n")) {
+                final int indexOfAllowed = rawAllowedUsageLine.indexOf(":");
+                final String allowedProduct = (indexOfAllowed > -1) ? rawAllowedUsageLine.substring(0, indexOfAllowed)
+                                                                    : null;
+                if ((allowedProduct == null) || allowedProduct.equals(product)) {
+                    allowedUsages.addAll(Arrays.asList(rawAllowedUsageLine.substring(indexOfAllowed + 1).split(",")));
+                }
+            }
+        }
+
+        if (!allowedUsages.isEmpty()) {
+            final String rawRestrcitedUsageLines = SessionManager.getConnection()
+                        .getConfigAttr(user, RESTRICTED_USAGE_CONFIG_ATTR);
+            if (rawRestrcitedUsageLines != null) {
+                for (final String rawRestrcitedUsageLine : rawRestrcitedUsageLines.split("\n")) {
+                    final int indexOfRestricted = rawRestrcitedUsageLine.indexOf(":");
+                    final String restrictedProduct = (indexOfRestricted > -1)
+                        ? rawRestrcitedUsageLine.substring(0, indexOfRestricted) : null;
+                    if ((restrictedProduct == null) || restrictedProduct.equals(product)) {
+                        allowedUsages.removeAll(Arrays.asList(
+                                rawRestrcitedUsageLine.substring(indexOfRestricted + 1).split(",")));
+                    }
+                }
+            }
+        }
+
+        return allowedUsages.toArray(new String[0]);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getBerechnungsProtokoll() {
+        return txtBerechnung.getText();
     }
 
     /**
@@ -827,8 +929,7 @@ public class BillingPopup extends javax.swing.JDialog {
         berechnungPrefix += "\n";
 
         // Auslesen der gültigen Verwendungszwecke
-        final String rawAllowedUsage = SessionManager.getConnection().getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR);
-        final String[] validUsages = rawAllowedUsage.split(",");
+        final String[] validUsages = getAllowedUsages(user, currentProduct.id);
 
         final Usage[] comboUsages = new Usage[validUsages.length];
         int i = 0;

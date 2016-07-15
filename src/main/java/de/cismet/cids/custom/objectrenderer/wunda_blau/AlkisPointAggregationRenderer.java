@@ -176,7 +176,10 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
 
-        btnCreate.setEnabled(BillingPopup.isBillingAllowed()
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("appdf")
+                    || BillingPopup.isBillingAllowed("pktlsttxt");
+
+        btnCreate.setEnabled(billingAllowed
                     && ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
@@ -841,8 +844,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 }
             };
 
-        if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
-            final String jobname = DownloadManagerDialog.getJobname();
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(AlkisPointAggregationRenderer.this)) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
@@ -1038,7 +1041,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     try {
                         final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
                         if ((url != null) && (url.trim().length() > 0)) {
-                            if (!DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
+                            if (
+                                !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                                            AlkisPointAggregationRenderer.this)) {
                                 return;
                             }
 
@@ -1049,7 +1054,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 download = new HttpDownload(
                                         new URL(url),
                                         "",
-                                        DownloadManagerDialog.getJobname(),
+                                        DownloadManagerDialog.getInstance().getJobName(),
                                         "Punktnachweis",
                                         code,
                                         extension);
@@ -1059,7 +1064,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                         new URL(url.substring(0, parameterPosition)),
                                         parameters,
                                         POST_HEADER,
-                                        DownloadManagerDialog.getJobname(),
+                                        DownloadManagerDialog.getInstance().getJobName(),
                                         "Punktnachweis",
                                         code,
                                         extension);

@@ -226,10 +226,10 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     pointFeatures.add(dsf);
                 }
             }
-            final PFeature pf = new PFeature(f, map);
-            if (!pf.hasHole()) {
-                geomWrappers.add(new GeomWrapper(f.getGeometry().buffer(buffer), name, selected));
-            }
+//            final PFeature pf = new PFeature(f, map);
+//            if (!pf.hasHole()) {
+            geomWrappers.add(new GeomWrapper(f.getGeometry().buffer(buffer), name, selected));
+//            }
 //            }
         }
         tableModel = new NasTableModel();
@@ -725,10 +725,10 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      * @param  product    DOCUMENT ME!
      */
     private void doDownload(final String requestId, final NasProduct product) {
-        if (DownloadManagerDialog.showAskingForUserTitle(
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         CismapBroker.getInstance().getMappingComponent())) {
-            final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
-                            .getJobname() : null;
+            final String jobname = (!DownloadManagerDialog.getInstance().getJobName().equals(""))
+                ? DownloadManagerDialog.getInstance().getJobName() : null;
             final String title = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString())
                 ? BASE_TITLE_DXF : BASE_TITLE_NAS;
             DownloadManager.instance()

@@ -516,11 +516,15 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         }
         panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
 
-        hlPunktlisteHtml.setEnabled(BillingPopup.isBillingAllowed()
+        final boolean billingAllowedPdf = BillingPopup.isBillingAllowed("pktlstpdf");
+        final boolean billingAllowedTxt = BillingPopup.isBillingAllowed("pktlsttxt");
+        final boolean billingAllowedHtml = billingAllowedPdf || billingAllowedTxt;
+
+        hlPunktlisteHtml.setEnabled(billingAllowedHtml
                     && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
-        hlPunktlistePdf.setEnabled(BillingPopup.isBillingAllowed()
+        hlPunktlistePdf.setEnabled(billingAllowedPdf
                     && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
-        hlPunktlisteTxt.setEnabled(BillingPopup.isBillingAllowed()
+        hlPunktlisteTxt.setEnabled(billingAllowedTxt
                     && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
@@ -2048,7 +2052,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
                 final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(pointData, productType);
                 if ((url != null) && (url.trim().length() > 0)) {
-                    if (!DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
+                    if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(AlkisPointRenderer.this)) {
                         return;
                     }
 
@@ -2059,7 +2063,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                         download = new HttpDownload(
                                 new URL(url),
                                 "",
-                                DownloadManagerDialog.getJobname(),
+                                DownloadManagerDialog.getInstance().getJobName(),
                                 "Punktnachweis",
                                 productType,
                                 extension);
@@ -2069,7 +2073,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                                 new URL(url.substring(0, parameterPosition)),
                                 parameters,
                                 AlkisPointAggregationRenderer.POST_HEADER,
-                                DownloadManagerDialog.getJobname(),
+                                DownloadManagerDialog.getInstance().getJobName(),
                                 "Punktnachweis",
                                 productType,
                                 extension);
@@ -2204,14 +2208,15 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
                             @Override
                             public void run() {
-                                if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
+                                if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                                                AlkisPointRenderer.this)) {
                                     final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
                                     DownloadManager.instance()
                                             .add(
                                                 new HttpDownload(
                                                     url,
                                                     "",
-                                                    DownloadManagerDialog.getJobname(),
+                                                    DownloadManagerDialog.getInstance().getJobName(),
                                                     "AP-Karte",
                                                     filename.substring(0, filename.lastIndexOf(".")),
                                                     filename.substring(filename.lastIndexOf("."))));

@@ -11,25 +11,44 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
-import Sirius.navigator.ui.ComponentRegistry;
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
+import Sirius.server.newuser.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.io.IOException;
 
+import java.text.Collator;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
+
+import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.ALLOWED_USAGE_CONFIG_ATTR;
+import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.RESTRICTED_USAGE_CONFIG_ATTR;
 
 /**
  * DOCUMENT ME!
@@ -42,19 +61,18 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(VerwendungszweckPanel.class);
-    private static BillingInfo billingInfo;
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private static final HashMap<String, Usage> usages = new HashMap<String, Usage>();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final HashMap<String, Usage> USAGES = new HashMap<String, Usage>();
 
     static {
         try {
-            billingInfo = mapper.readValue(BillingInfo.class.getResourceAsStream(
+            final BillingInfo billingInfo = MAPPER.readValue(BillingInfo.class.getResourceAsStream(
                         "/de/cismet/cids/custom/billing/billing.json"),
                     BillingInfo.class);
 
             final ArrayList<Usage> lu = billingInfo.getUsages();
             for (final Usage u : lu) {
-                usages.put(u.getKey(), u);
+                USAGES.put(u.getKey(), u);
             }
         } catch (IOException ioException) {
             LOG.error("Error when trying to read the billingInfo.json", ioException);
@@ -63,8 +81,9 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
 
     //~ Instance fields --------------------------------------------------------
 
-    private HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
+    private final HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
     private Action filterAction;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel pnlVerwendungszweckCheckBoxes;
     // End of variables declaration//GEN-END:variables
@@ -76,52 +95,134 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
      */
     public VerwendungszweckPanel() {
         initComponents();
-        initVerwendungszweckCheckBoxes();
     }
 
     //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
+     *
+     * @param   user     DOCUMENT ME!
+     * @param   product  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
      */
-    private void initVerwendungszweckCheckBoxes() {
-        for (final Usage usage : usages.values()) {
-            final JCheckBox checkBox = new JCheckBox();
-            checkBox.setSelected(true);
-            checkBox.setText(usage.getName());
-            checkBox.setToolTipText(usage.getKey());
-            checkBox.addActionListener(new ActionListener() {
+    private static String[] getAllowedUsages(final User user, final String product) throws ConnectionException {
+        final Set<String> allowedUsages = new LinkedHashSet<String>();
 
-                    @Override
-                    public void actionPerformed(final ActionEvent e) {
-                        boolean noneSelected = true;
-                        for (final JCheckBox cb : mappingJCheckboxToUsages.keySet()) {
-                            if (cb.isSelected()) {
-                                noneSelected = false;
-                                break;
+        final String rawAllowedUsageLines = SessionManager.getConnection()
+                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR);
+        if (rawAllowedUsageLines != null) {
+            for (final String rawAllowedUsageLine : rawAllowedUsageLines.split("\n")) {
+                final int indexOfAllowed = rawAllowedUsageLine.indexOf(":");
+                final String allowedProduct = (indexOfAllowed > -1) ? rawAllowedUsageLine.substring(0, indexOfAllowed)
+                                                                    : null;
+                if ((allowedProduct == null) || (product == null) || allowedProduct.equals(product)) {
+                    allowedUsages.addAll(Arrays.asList(rawAllowedUsageLine.substring(indexOfAllowed + 1).split(",")));
+                }
+            }
+        }
+//        if (!allowedUsages.isEmpty()) {
+//            final String rawRestrcitedUsageLines = SessionManager.getConnection()
+//                        .getConfigAttr(user, RESTRICTED_USAGE_CONFIG_ATTR);
+//            if (rawRestrcitedUsageLines != null) {
+//                for (final String rawRestrcitedUsageLine : rawRestrcitedUsageLines.split("\n")) {
+//                    final int indexOfRestricted = rawRestrcitedUsageLine.indexOf(":");
+//                    final String restrictedProduct = (indexOfRestricted > -1)
+//                        ? rawRestrcitedUsageLine.substring(0, indexOfRestricted) : null;
+//                    if ((restrictedProduct == null) || (product == null) || restrictedProduct.equals(product)) {
+//                        allowedUsages.removeAll(Arrays.asList(
+//                                rawRestrcitedUsageLine.substring(indexOfRestricted + 1).split(",")));
+//                    }
+//                }
+//            }
+//        }
+
+        return allowedUsages.toArray(new String[0]);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  filterUsages  DOCUMENT ME!
+     */
+    public void initVerwendungszweckCheckBoxes(final boolean filterUsages) {
+        mappingJCheckboxToUsages.clear();
+        pnlVerwendungszweckCheckBoxes.removeAll();
+
+        Set<String> allowedUsages = null;
+        if (filterUsages) {
+            try {
+                allowedUsages = new HashSet<String>(Arrays.asList(
+                            getAllowedUsages(SessionManager.getSession().getUser(), null)));
+            } catch (final Exception ex) {
+                allowedUsages = new HashSet<String>();
+            }
+        }
+
+        final List<JCheckBox> checkboxes = new ArrayList<JCheckBox>(USAGES.values().size());
+        for (final Usage usage : USAGES.values()) {
+            if ((allowedUsages == null) || allowedUsages.contains(usage.getKey())) {
+                final JCheckBox checkBox = new JCheckBox();
+                checkBox.setSelected(true);
+                checkBox.setText(usage.getName());
+                checkBox.setToolTipText(usage.getKey());
+                checkBox.addActionListener(new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            boolean noneSelected = true;
+                            for (final JCheckBox cb : mappingJCheckboxToUsages.keySet()) {
+                                if (cb.isSelected()) {
+                                    noneSelected = false;
+                                    break;
+                                }
+                            }
+                            if (noneSelected) {
+                                ((JCheckBox)e.getSource()).setSelected(true);
+                                final String title = NbBundle.getMessage(
+                                        VerwendungszweckPanel.class,
+                                        "VerwendungszweckPanel.initVerwendungszweckCheckBoxes().actionPerformed().dialog.title");
+                                final String message = NbBundle.getMessage(
+                                        VerwendungszweckPanel.class,
+                                        "VerwendungszweckPanel.initVerwendungszweckCheckBoxes().actionPerformed().dialog.message");
+                                JOptionPane.showMessageDialog(
+                                    VerwendungszweckPanel.this.getTopLevelAncestor(),
+                                    message,
+                                    title,
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            } else if (filterAction != null) {
+                                filterAction.actionPerformed(null);
                             }
                         }
-                        if (noneSelected) {
-                            ((JCheckBox)e.getSource()).setSelected(true);
-                            final String title = NbBundle.getMessage(
-                                    VerwendungszweckPanel.class,
-                                    "VerwendungszweckPanel.initVerwendungszweckCheckBoxes().actionPerformed().dialog.title");
-                            final String message = NbBundle.getMessage(
-                                    VerwendungszweckPanel.class,
-                                    "VerwendungszweckPanel.initVerwendungszweckCheckBoxes().actionPerformed().dialog.message");
-                            JOptionPane.showMessageDialog(
-                                VerwendungszweckPanel.this.getTopLevelAncestor(),
-                                message,
-                                title,
-                                JOptionPane.INFORMATION_MESSAGE);
-                        } else if (filterAction != null) {
-                            filterAction.actionPerformed(null);
-                        }
-                    }
-                });
+                    });
 
-            mappingJCheckboxToUsages.put(checkBox, usage);
-            pnlVerwendungszweckCheckBoxes.add(checkBox);
+                mappingJCheckboxToUsages.put(checkBox, usage);
+                checkboxes.add(checkBox);
+            }
+        }
+
+        final Collator deCollator = Collator.getInstance(Locale.GERMANY);
+        Collections.sort(checkboxes, new Comparator<JCheckBox>() {
+
+                @Override
+                public int compare(final JCheckBox o1, final JCheckBox o2) {
+                    return deCollator.compare(o1.getText(), o2.getText());
+                }
+            });
+
+        final List<JCheckBox> leftCol = checkboxes.subList(0, (int)Math.ceil(checkboxes.size() / 2f));
+        final List<JCheckBox> rightCol = checkboxes.subList((int)Math.ceil(checkboxes.size() / 2f), checkboxes.size());
+
+        final Iterator<JCheckBox> itLeft = leftCol.iterator();
+        final Iterator<JCheckBox> itRight = rightCol.iterator();
+        while (itLeft.hasNext()) {
+            pnlVerwendungszweckCheckBoxes.add(itLeft.next());
+            if (itRight.hasNext()) {
+                pnlVerwendungszweckCheckBoxes.add(itRight.next());
+            }
         }
     }
 
@@ -143,9 +244,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
         setLayout(new java.awt.GridBagLayout());
 
         pnlVerwendungszweckCheckBoxes.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 6, 3, 3));
-        pnlVerwendungszweckCheckBoxes.setLayout(new javax.swing.BoxLayout(
-                pnlVerwendungszweckCheckBoxes,
-                javax.swing.BoxLayout.PAGE_AXIS));
+        pnlVerwendungszweckCheckBoxes.setLayout(new java.awt.GridLayout(0, 2));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -185,6 +284,6 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
      * @return  DOCUMENT ME!
      */
     public static HashMap<String, Usage> getUsages() {
-        return usages;
+        return USAGES;
     }
 }

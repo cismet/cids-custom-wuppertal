@@ -100,6 +100,24 @@
     },{
         "key":"eaqkm",
         "description":"Quadratkilometer"
+	},{
+        "key":"ea_bla",
+        "description":"Baulast"
+	},{
+        "key":"ea_blab_pos_1",
+        "description":"Baulastbescheinigung positiv (je Grundstück)"
+	},{
+        "key":"ea_blab_pos_2",
+        "description":"Baulastbescheinigung positiv (je Grundstück)"
+	},{
+        "key":"ea_blab_pos_3",
+        "description":"Baulastbescheinigung positiv (je Grundstück)"
+	},{
+        "key":"ea_blab_neg",
+        "description":"Baulastbescheinigung negativ (je Grundstück)"
+	},{
+        "key":"ea_blab_neg_ab_10",
+        "description":"Baulastbescheinigung negativ (Maximalgebühr)"
     }],
      "usages":[{
         "name":"Vermessungsunterlagen (amtlicher Lageplan TS 3)",
@@ -125,7 +143,43 @@
         "name":"eigener Gebrauch (gebührenbefreit)",
         "key":"eigG frei",
         "description":"-"
-    }],
+    },{
+        "name":"eigener Gebrauch (bis 5 Arbeitsplätze)",
+        "key":"eigG_5",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (bis 20 Arbeitsplätze)",
+        "key":"eigG_20",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (bis 100 Arbeitsplätze)",
+        "key":"eigG_100",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (über 100 Arbeitsplätze)",
+        "key":"eigG_101",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (einmalig)",
+        "key":"GDZ",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (bis 5 Arbeitsplätze)",
+        "key":"GDZ_5",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (bis 20 Arbeitsplätze)",
+        "key":"GDZ_20",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (bis 100 Arbeitsplätze)",
+        "key":"GDZ_100",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (über 100 Arbeitsplätze)",
+        "key":"GDZ_101",
+        "description":"-"		
+		}],
     "products":[{
         "name":"Flurstücksnachweis",
         "id":"fsnw",
@@ -136,7 +190,16 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0			
         },
         "prices":{
             "ea":10.0
@@ -152,8 +215,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":10.0
         },
@@ -168,8 +240,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":11.0
         },
@@ -184,8 +265,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":20.0
         },
@@ -200,8 +290,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":20.0
         },
@@ -216,8 +315,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":22.0
         },
@@ -232,8 +340,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":10.0
         },
@@ -248,8 +365,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":20.0
         },
@@ -264,8 +390,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":20.0
         },
@@ -280,8 +415,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":40.0
         },
@@ -296,8 +440,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":40.0
         },
@@ -312,8 +465,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":40.0
         },
@@ -328,8 +490,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":22.0
         },
@@ -344,8 +515,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":22.0
         },
@@ -360,8 +540,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":44.0
         },
@@ -376,8 +565,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":44.0
         },
@@ -392,8 +590,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":44.0
         },
@@ -408,8 +615,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":20.0
         },
@@ -424,8 +640,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":20.0
         },
@@ -440,8 +665,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":40.0
         },
@@ -456,8 +690,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":40.0
         },
@@ -472,8 +715,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":40.0
         },
@@ -488,8 +740,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":15.0
         },
@@ -504,8 +765,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":15.0
         },
@@ -520,8 +790,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":30.0
         },
@@ -536,8 +815,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":30.0
         },
@@ -552,8 +840,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":30.0
         },
@@ -568,8 +865,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":22.0
         },
@@ -584,8 +890,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":22.0
         },
@@ -600,8 +915,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":44.0
         },
@@ -616,8 +940,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":44.0
         },
@@ -632,8 +965,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":44.0
         },
@@ -648,8 +990,17 @@
             "VU s":0.5,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
         "prices":{
             "eapkt_1000":0.2,
             "eapkt_1001-10000":0.1,
@@ -668,8 +1019,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eafifty":20.0
         },
@@ -684,8 +1044,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":15.0
         },
@@ -700,8 +1069,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":15.0
         },
@@ -716,8 +1094,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":30.0
         },
@@ -732,8 +1119,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":30.0
         },
@@ -748,8 +1144,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":30.0
         },
@@ -764,8 +1169,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":12.60
         },
@@ -780,8 +1194,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":12.60
         },
@@ -796,8 +1219,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -812,8 +1244,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -828,8 +1269,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -844,8 +1294,17 @@
             "VU s":0.0,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":10.0
         },
@@ -860,8 +1319,17 @@
             "VU s":0.0,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":10.0
         },
@@ -876,8 +1344,17 @@
             "VU s":0.0,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
@@ -892,8 +1369,17 @@
             "VU s":0.0,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
@@ -908,8 +1394,17 @@
             "VU s":0.0,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
@@ -924,8 +1419,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":10.0
         },
@@ -940,8 +1444,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":10.0
         },
@@ -956,8 +1469,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
@@ -972,8 +1494,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
@@ -988,8 +1519,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
@@ -1004,8 +1544,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":10.0
         },
@@ -1020,8 +1569,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":10.0
         },
@@ -1036,8 +1594,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
@@ -1052,8 +1619,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
@@ -1068,88 +1644,142 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":20.0
         },
         "mwst":0.0
     },{
-        "name":"Digitale Grundkarte mit Höhenlinien DIN A4",
-        "id":"dgkhkom4",
-        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A4",
+        "id":"abkhkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA4 Hochformat oder DINA4 Querformat",
         "discounts":{
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":12.60
         },
         "mwst":19.0
     },{
-        "name":"Digitale Grundkarte mit Höhenlinien DIN A3",
-        "id":"dgkhkom3",
-        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A3",
+        "id":"abkhkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA3 Hochformat oder DINA3 Querformat",
         "discounts":{
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":12.60
         },
         "mwst":19.0
     },{
-        "name":"Digitale Grundkarte mit Höhenlinien DIN A2",
-        "id":"dgkhkom2",
-        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A2",
+        "id":"abkhkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA2 Hochformat oder DINA2 Querformat",
         "discounts":{
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
         "mwst":19.0
     },{
-        "name":"Digitale Grundkarte mit Höhenlinien DIN A1",
-        "id":"dgkhkom1",
-        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A1",
+        "id":"abkhkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA1 Hochformat oder DINA1 Querformat",
         "discounts":{
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
         "mwst":19.0
     },{
-        "name":"Digitale Grundkarte mit Höhenlinien DIN A0",
-        "id":"dgkhkom0",
-        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A0",
+        "id":"abkhkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA0 Hochformat oder DINA0 Querformat",
         "discounts":{
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -1164,8 +1794,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":12.60
         },
@@ -1180,8 +1819,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":12.60
         },
@@ -1196,8 +1844,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -1212,8 +1869,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -1228,8 +1894,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -1244,8 +1919,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":12.60
         },
@@ -1260,8 +1944,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a3":12.60
         },
@@ -1276,8 +1969,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -1292,8 +1994,17 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
@@ -1308,12 +2019,146 @@
             "VU s":0.75,
             "VU hV":0.75,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "eakarte_a2-a0":25.21
         },
         "mwst":19.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A4",
+        "id":"fnp4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":14.99
+        },
+        "mwst":0.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A3",
+        "id":"fnp3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":14.99
+        },
+        "mwst":0.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A2",
+        "id":"fnp2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A1",
+        "id":"fnp1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A0",
+        "id":"fnp0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0		
     },{
         "name":"AP-Karte",
         "id":"appdf",
@@ -1324,8 +2169,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":10.0
         },
@@ -1340,8 +2194,17 @@
             "VU s":0.0,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":10.0
         },
@@ -1356,8 +2219,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":10.0,
             "eadoc_a3":10.0,
@@ -1374,8 +2246,17 @@
             "VU s":0.75,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
         "prices":{
             "ea":10.0,
             "eadoc_a3":10.0,
@@ -1385,15 +2266,24 @@
     },{
         "name":"NAS-Daten (mit Eigentümern)",
         "id":"naskom",
-        "description":"# vollständiger NAS-Datensatz: GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "description":"[x] ALKIS-Datenausgabe NAS/DXF: NAS (komplett)",
         "discounts":{
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
         "prices":{
             "eaflst_1000":1.98,
             "eaflst_1001-10000":0.99,
@@ -1422,8 +2312,17 @@
             "VU s":0.5,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+			},
         "prices":{
             "eaflst_1000":1.98,
             "eaflst_1001-10000":0.99,
@@ -1440,15 +2339,24 @@
     },{
        "name":"NAS-Daten (nur Punkte)",
         "id":"naspkt",
-        "description":"[x] NAS Datensatz nur Punkte",
+        "description":"[x] ALKIS-Datenausgabe NAS/DXF: NAS (nur Punkte)",
         "discounts":{
             "eigG":0.5,
             "VU aL":0.0,
             "VU s":0.5,
             "VU hV":0.0,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
         "prices":{
             "eapkt_1000":0.2,
             "eapkt_1001-10000":0.1,
@@ -1467,28 +2375,46 @@
             "VU s":0.5,
             "VU hV":0.5,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
         "prices":{
             "eaflst_1000":0.45,
             "eaflst_1001-10000":0.225,
             "eaflst_10001-100000":0.1125,
             "eaflst_100001-1000000":0.05625,
-            "eaflst_1000001":0.028125            
+            "eaflst_1000001":0.028125
         },
         "mwst":0.0
-    },{	
+    },{
         "name":"DXF-Daten (Stadtgrundkarte kommunal)",
         "id":"skmekomdxf",
-        "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "description":"[x] ALKIS-Datenausgabe NAS/DXF: DXF (Farbe) und DXF (Strichdarstellung)",
         "discounts":{
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.5,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
         "prices":{
             "eaflst_1000":0.99,
             "eaflst_1001-10000":0.495,
@@ -1503,17 +2429,26 @@
         },
         "mwst":0.0
     },{
-        "name":"GEOTIFF-Daten (Stadtgrundkarte kommunal)",
+        "name":"Rasterdaten (Stadtgrundkarte kommunal)",
         "id":"skmekomtiff",
-        "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "description":"[x] ALKIS-Datenausgabe Raster/Vektor: Stadtgrundkarte mit kommunalen Ergänzungen farbig und grau, Karte für Feldvergleich Farbe und Grauwert (alle Ausgabeformate)",
         "discounts":{
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.5,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
         "prices":{
             "eaflst_1000":0.495,
             "eaflst_1001-10000":0.2475,
@@ -1528,21 +2463,338 @@
         },
         "mwst":0.0
     },{
-        "name":"GEOTIFF-Daten (DGK, ABK)",
+        "name":"Rasterdaten (DGK, ABK)",
         "id":"abktiff",
-        "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe DGK und ABK (alle Produkte, alle Ausgabeformate, alle Auflösungen)",
         "discounts":{
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.5,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
         "prices":{
             "eaqkm":7.5
         },
         "mwst":0.0
+    },{
+        "name":"Rasterdaten Stadtkarte",
+        "id":"sptiff",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Stadtkarte (alle Produkte, alle Ausgabeformate, alle Auflösungen)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":0.0
+        },
+        "mwst":19.0
+    },{
+        "name":"Rasterdaten Orthofoto (bis 10 cm Bodenauflösung)",
+        "id":"ortho5",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Orthofoto (alle Produkte, alle Ausgabeformate, Auflösungen 5 und 10 cm/Pixel)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":20.0
+        },
+        "mwst":19.0
+    },{
+        "name":"Rasterdaten Orthofoto (größer 10 cm Bodenauflösung)",
+        "id":"ortho15",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Orthofoto (alle Produkte, alle Ausgabeformate, Auflösungen 15 und 31 cm/Pixel)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":9.0
+        },
+        "mwst":19.0
+    },{
+        "name":"Vektordaten Höhenlinien (bis 1 m Äquidistanz)",
+        "id":"hoeli1",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkt 1m-Höhenlinie (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":5.0
+        },
+        "mwst":19.0
+    },{
+        "name":"Vektordaten Höhenlinien (größer 1 m Äquidistanz)",
+        "id":"hoeli5",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkte 5m- und 10m-Höhenlinie (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":2.5
+        },
+        "mwst":19.0
+    },{
+        "name":"DGM1",
+        "id":"dgm1",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkt 1m-Punktraster (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":80.0
+        },
+        "mwst":0.0
+    },{
+        "name":"DGM5",
+        "id":"dgm5",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkt 5m-Punktraster (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"DGM10",
+        "id":"dgm10",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkt 10m-Punktraster (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Vektordaten Höhenpunkte (terrestrisch)",
+        "id":"hoept",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkte Regengeld-Dach- und Bodenpunkte (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "ea":0.015
+        },
+        "mwst":19.0
+    },{
+        "name":"Vektordaten Gebäudeumringe",
+        "id":"gebu",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Kataster, Produkt Wuppertaler Gebäude (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eageb_1000":0.07,
+            "eageb_1001-10000":0.035,
+            "eageb_10001-100000":0.0175,
+            "eageb_100001-1000000":0.00875,
+            "eageb_1000001":0.004375
+		},
+        "mwst":0.0
+    },{
+        "name":"Vektordaten Flurstücksumringe",
+        "id":"flu",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Kataster, Produkt Wuppertaler Flurstücke (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+			"eaflst_1000":0.25,
+            "eaflst_1001-10000":0.125,
+            "eaflst_10001-100000":0.0625,
+            "eaflst_100001-1000000":0.03125,
+            "eaflst_1000001":0.01625
+		},
+        "mwst":0.0
+    },{
+        "name":"Vektordaten Adressen",
+        "id":"adr",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Kataster, Produkt Wuppertaler Adressen (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "ea":0.05
+        },
+        "mwst":19.0
 	},{
         "name":"Stadtbild",
         "id":"stb",
@@ -1553,11 +2805,74 @@
             "VU s":0.5,
             "VU hV":0.5,
             "WV ein":1.0,
-            "eigG frei":0.0
-        },
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
         "prices":{
             "ea":10.0
         },
-        "mwst":19.0	
+        "mwst":19.0
+	},{
+        "name":"Baulast",
+        "id":"bla",
+        "description":"[x] Einzelobjektrenderer Baulast / Download Baulast und Aggregierender Renderer Download Baulastbericht",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.0,
+            "eigG_100":1.0,
+            "eigG_101":1.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea_bla":50.0
+        },
+        "mwst":0.0
+	},{
+        "name":"Baulastbescheinigung",
+        "id":"blab_be",
+        "description":"[x] Einzelobjektrenderer Flurstück / Download Baulastbescheinigung und Aggregierender Renderer Flurstücke / Download Baulastbescheinigung",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.0,
+            "eigG_100":1.0,
+            "eigG_101":1.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea_blab_pos_1":50.0,
+            "ea_blab_pos_2":100.0,
+            "ea_blab_pos_3":150.0,
+            "ea_blab_neg":10.0,
+            "ea_blab_neg_ab_10":100.0
+        },
+        "mwst":0.0
     }]
 }

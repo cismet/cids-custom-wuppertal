@@ -142,7 +142,9 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         tblPunkte.getSelectionModel().addListSelectionListener(new TableSelectionListener());
         tableComparator = new TableModelIndexConvertingToViewIndexComparator((tblPunkte));
 
-        btnGenerateReport.setEnabled(BillingPopup.isBillingAllowed());
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+
+        btnGenerateReport.setEnabled(billingAllowed);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -386,12 +388,13 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         parameters.put(PARAMETER_JOBNUMBER, txtJobnumber.getText());
         parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
 
-        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktAggregationRenderer.this)) {
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        NivellementPunktAggregationRenderer.this)) {
             String projectname = txtProjectname.getText();
             if ((projectname == null) || (projectname.trim().length() == 0)) {
                 projectname = "Nivellement-Punkte";
             }
-            final String jobname = DownloadManagerDialog.getJobname();
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(

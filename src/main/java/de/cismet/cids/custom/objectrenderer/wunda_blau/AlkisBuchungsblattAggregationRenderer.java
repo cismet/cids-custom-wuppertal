@@ -161,10 +161,12 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 }
             });
 
+        final boolean billingAllowedNw = BillingPopup.isBillingAllowed("bestnw");
+        final boolean billingAllowedKom = BillingPopup.isBillingAllowed("bekom");
         jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW)
-                    && BillingPopup.isBillingAllowed());
+                    && billingAllowedNw);
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && billingAllowedKom);
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
     }
@@ -478,7 +480,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                     }
 
                     String jobname = hlBestandsnachweisStichtagNRW.getText();
-                    if (DownloadManagerDialog.showAskingForUserTitle(this)) {
+                    if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
 //                        jobname = DownloadManagerDialog.getJobname();
                     }
                     if (downloads.size() > 1) {
@@ -605,10 +607,12 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  enable  DOCUMENT ME!
      */
     private void changeButtonAvailability(final boolean enable) {
+        final boolean billingAllowedNw = BillingPopup.isBillingAllowed("bestnw");
+        final boolean billingAllowedKom = BillingPopup.isBillingAllowed("bekom");
         jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW)
-                    && BillingPopup.isBillingAllowed());
+                    && billingAllowedNw);
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && billingAllowedKom);
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
     }
@@ -628,10 +632,10 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             // return;
         }
 
-        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
+        if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
             return;
         }
-        final String jobname = DownloadManagerDialog.getJobname();
+        final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
         final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
 
