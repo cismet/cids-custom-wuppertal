@@ -48,7 +48,7 @@ public class StrasseToStringConverter extends ToStringConverter implements java.
 
         String stringRepresentation = "";
 
-        final Collection<Attribute> attrs = mo.getAttributeByName("NAME", 1);
+        final Collection<ObjectAttribute> attrs = mo.getAttributeByName("NAME", 1);
 
         if (!attrs.isEmpty()) {
             final Attribute attr = attrs.iterator().next();
