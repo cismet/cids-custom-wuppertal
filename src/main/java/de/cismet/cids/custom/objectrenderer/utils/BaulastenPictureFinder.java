@@ -483,8 +483,8 @@ public final class BaulastenPictureFinder {
                 try {
                     String linkurl = null;
                     if (checkReducedSize) {
-                        linkurl = fileWithoutSuffix.toString(false) + LINKEXTENSION;    // search the link within the
-                                                                                        // original size directory
+                        linkurl = fileWithoutSuffix.toString(false) + LINKEXTENSION; // search the link within the
+                                                                                     // original size directory
                     } else {
                         linkurl = fileWithoutSuffixString + LINKEXTENSION;
                     }
