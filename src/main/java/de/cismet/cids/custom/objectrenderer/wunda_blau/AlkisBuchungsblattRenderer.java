@@ -16,11 +16,14 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObjectNode;
+import Sirius.server.middleware.types.Node;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
@@ -58,12 +61,15 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -90,9 +96,11 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -162,6 +170,10 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         "custom.alkis.product.bestandsnachweis_kom_intern@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW =
         "custom.alkis.product.grundstuecksnachweis_nrw@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED =
+        "baulast.report.bescheinigung_enabled@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED =
+        "baulast.report.bescheinigung_disabled@WUNDA_BLAU";
     private static int nextColor = 0;
 
     //~ Instance fields --------------------------------------------------------
@@ -188,6 +200,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private final Map<Object, ImageIcon> productPreviewImages;
     private boolean continueInBackground = false;
     private final boolean demoMode = StaticDebuggingTools.checkHomeForFile("demoMode");
+    private Collection<CidsBean> selectedFlurstuecke;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private org.jdesktop.swingx.JXBusyLabel blWaitingLandparcel;
@@ -214,6 +227,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private org.jdesktop.swingx.JXHyperlink jxlBaulastBescheinigung;
     private javax.swing.JLabel lblAmtgericht;
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblBlattart;
@@ -319,6 +333,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         final boolean billingAllowedBeNw = BillingPopup.isBillingAllowed("benw");
         final boolean billingAllowedBeKom = BillingPopup.isBillingAllowed("bekom");
         final boolean billingAllowedGrNw = BillingPopup.isBillingAllowed("grnw");
+
         hlBestandsnachweisKomPdf.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && billingAllowedBeKom);
         hlBestandsnachweisKomHtml.setEnabled(ObjectRendererUtils.checkActionTag(
@@ -335,6 +350,15 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW) && billingAllowedGrNw);
         hlGrundstuecksnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW));
+
+        final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be");
+        if (!billingAllowedBlab_be) {
+            jxlBaulastBescheinigung.setText("Baulastbescheinigung");
+        }
+        jxlBaulastBescheinigung.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
+                    && !ObjectRendererUtils.checkActionTag(
+                        PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && billingAllowedBlab_be);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -536,6 +560,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         hlGrundstuecksnachweisNrwPdf = new org.jdesktop.swingx.JXHyperlink();
         hlBestandsnachweisKomInternPdf = new org.jdesktop.swingx.JXHyperlink();
         hlBestandsnachweisNrwStichtagPdf = new org.jdesktop.swingx.JXHyperlink();
+        jxlBaulastBescheinigung = new org.jdesktop.swingx.JXHyperlink();
         jPanel9 = new javax.swing.JPanel();
         panProductPreview = new RoundedPanel();
         lblProductPreview = new javax.swing.JLabel();
@@ -1032,6 +1057,27 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         panProduktePDF.add(hlBestandsnachweisNrwStichtagPdf, gridBagConstraints);
+
+        jxlBaulastBescheinigung.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png")));    // NOI18N
+        jxlBaulastBescheinigung.setText(org.openide.util.NbBundle.getMessage(
+                AlkisBuchungsblattRenderer.class,
+                "AlkisLandparcelAggregationRenderer.jxlBaulastBescheinigung.text")); // NOI18N
+        jxlBaulastBescheinigung.setEnabled(false);
+        jxlBaulastBescheinigung.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jxlBaulastBescheinigungActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
+        panProduktePDF.add(jxlBaulastBescheinigung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1550,6 +1596,15 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
+        BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, AlkisBuchungsblattRenderer.this);
+    }                                                                                           //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   buchungsblattCode  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -1684,6 +1739,54 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         }
         if (cb != null) {
             cidsBean = cb;
+
+            final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be");
+            if (billingAllowedBlab_be) {
+                new SwingWorker<Collection<CidsBean>, Void>() {
+
+                        @Override
+                        protected Collection<CidsBean> doInBackground() throws Exception {
+                            final Collection<CidsBean> selectedFlurstuecke = new ArrayList<CidsBean>();
+                            final Set<String> landparcelCodes = new HashSet<String>();
+                            for (final CidsBean landparcelBean : cidsBean.getBeanCollectionProperty("landparcels")) {
+                                final String landparcelcode = (String)landparcelBean.getProperty("landparcelcode");
+                                if (!landparcelCodes.contains(landparcelcode)) {
+                                    landparcelCodes.add(landparcelcode);
+                                    final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
+                                            CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
+                                            CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
+                                            landparcelcode,
+                                            null);
+
+                                    final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                                .customServerSearch(SessionManager.getSession().getUser(), search);
+                                    if (!mons.isEmpty()) {
+                                        final MetaObjectNode mon = mons.iterator().next();
+                                        final CidsBean flurstueck = SessionManager.getProxy()
+                                                    .getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU")
+                                                    .getBean();
+                                        selectedFlurstuecke.add(flurstueck);
+                                    }
+                                }
+                            }
+                            return selectedFlurstuecke;
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                selectedFlurstuecke = get();
+                                jxlBaulastBescheinigung.setText("Baulastbescheinigung");
+                                if ((selectedFlurstuecke != null) && !selectedFlurstuecke.isEmpty()) {
+                                    jxlBaulastBescheinigung.setEnabled(true);
+                                }
+                            } catch (final Exception ex) {
+                                LOG.warn(ex, ex);
+                            }
+                        }
+                    }.execute();
+            }
+
             retrieveWorker = new RetrieveWorker(cidsBean);
             final Runnable edtRunner = new Runnable() {
 
