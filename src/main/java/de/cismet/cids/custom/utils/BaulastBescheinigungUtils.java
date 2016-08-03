@@ -24,6 +24,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.log4j.Logger;
 
+import org.springframework.util.comparator.ComparableComparator;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
@@ -386,10 +388,11 @@ public class BaulastBescheinigungUtils {
             };
 
         final Collection<BerechtigungspruefungBescheinigungFlurstueckInfo> fls = bescheinigungsGruppe.getFlurstuecke();
-        final String title = "Bescheinigung " + fls.iterator().next().getAlkisId() + ((fls.size() > 1) ? " (ua)" : "")
+        final boolean ua = (fls.size() > 1);
+        final String title = "Bescheinigung " + fls.iterator().next().getAlkisId() + (ua ? " (ua)" : "")
                     + " " + number + "/" + max;
         final String fileName = "bescheinigung_" + fls.iterator().next().getAlkisId().replace("/", "--")
-                    + ((fls.size() > 1) ? ".ua" : "")
+                    + (ua ? ".ua" : "")
                     + "_" + number;
 
         final JasperReportDownload download = new JasperReportDownload(
@@ -410,7 +413,7 @@ public class BaulastBescheinigungUtils {
      */
     public static void doDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo) {
         try {
-            final Download download = BaulastBescheinigungUtils.generateDownload(downloadInfo);
+            final Download download = generateDownload(downloadInfo);
             DownloadManager.instance().add(download);
         } catch (final Exception ex) {
             LOG.fatal(ex, ex);
@@ -451,8 +454,24 @@ public class BaulastBescheinigungUtils {
                             // Download: Berichte für alle Bescheinigungsgruppen
                             int number = 0;
                             final int max = downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen().size();
+
+                            final List<BerechtigungspruefungBescheinigungGruppeInfo> sortedBescheinigungsGruppen =
+                                new ArrayList<BerechtigungspruefungBescheinigungGruppeInfo>(
+                                    downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen());
+                            Collections.sort(
+                                sortedBescheinigungsGruppen,
+                                new Comparator<BerechtigungspruefungBescheinigungGruppeInfo>() {
+
+                                    @Override
+                                    public int compare(final BerechtigungspruefungBescheinigungGruppeInfo o1,
+                                            final BerechtigungspruefungBescheinigungGruppeInfo o2) {
+                                        final String alkisId1 = o1.getFlurstuecke().iterator().next().getAlkisId();
+                                        final String alkisId2 = o2.getFlurstuecke().iterator().next().getAlkisId();
+                                        return alkisId1.compareTo(alkisId2);
+                                    }
+                                });
                             for (final BerechtigungspruefungBescheinigungGruppeInfo bescheinigungsGruppe
-                                        : downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen()) {
+                                        : sortedBescheinigungsGruppen) {
                                 downloads.add(createBescheinigungPdf(
                                         bescheinigungsGruppe,
                                         jobname,
