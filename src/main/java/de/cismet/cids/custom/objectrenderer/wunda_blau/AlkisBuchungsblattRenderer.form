@@ -850,7 +850,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="org.jdesktop.swingx.JXHyperlink" name="jxlBaulastBescheinigung">
+            <Component class="org.jdesktop.swingx.JXHyperlink" name="hlBaulastBescheinigung">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
@@ -861,7 +861,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jxlBaulastBescheinigungActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlBaulastBescheinigungActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

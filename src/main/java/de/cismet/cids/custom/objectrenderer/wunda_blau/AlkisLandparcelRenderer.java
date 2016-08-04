@@ -16,7 +16,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
@@ -232,6 +231,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private ImageIcon BUCH_EIG_NRW_PDF;
     private ImageIcon BUCH_EIG_NRW_HTML;
     private ImageIcon BUCH_EIG_KOM_PDF;
+    private ImageIcon BLA_BESCH_PDF;
     private ImageIcon BUCH_EIG_KOM_HTML;
     private ImageIcon KARTE_PDF;
 //    private static final ImageIcon FORWARD_PRESSED;
@@ -471,22 +471,53 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         BufferedImage i5 = null;
         BufferedImage i6 = null;
         BufferedImage i7 = null;
+        BufferedImage i8 = null;
         try {
             // TODO: Richtige Screenshots machen und zuordnen!
             i1 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "buchnachweispdf.png")));
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        try {
             i2 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "buchnachweishtml.png")));
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        try {
             i3 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bucheignachweispdf.png")));
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        try {
             i4 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bucheignachweishtml.png")));
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        try {
             i5 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "karte.png")));
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        try {
             i6 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "buchnachweispdf.png")));
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        try {
             i7 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "buchnachweishtml.png")));
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        try {
+            i8 = reflectionRenderer.appendReflection(ImageIO.read(
+                        getClass().getResource(ALKIS_RES_PACKAGE + "baulastbescheinigungpdf.png")));
         } catch (Exception ex) {
             log.error(ex, ex);
         }
@@ -497,6 +528,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         KARTE_PDF = new ImageIcon(i5);
         BUCH_EIG_KOM_PDF = new ImageIcon(i6);
         BUCH_EIG_KOM_HTML = new ImageIcon(i7);
+        BLA_BESCH_PDF = new ImageIcon(i8);
     }
 
     /**
@@ -555,6 +587,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         productPreviewImages.put(hlFlurstuecksnachweisHtml, BUCH_HTML);
         productPreviewImages.put(hlFlurstuecksnachweisPdf, BUCH_PDF);
         productPreviewImages.put(hlKarte, KARTE_PDF);
+        productPreviewImages.put(hlBaulastbescheinigung, BLA_BESCH_PDF);
         final ProductLabelMouseAdaper productListener = new ProductLabelMouseAdaper();
         hlFlurstuecksEigentumsnachweisNrwPdf.addMouseListener(productListener);
         hlFlurstuecksEigentumsnachweisKomPdf.addMouseListener(productListener);
@@ -565,6 +598,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         hlFlurstuecksnachweisHtml.addMouseListener(productListener);
         hlFlurstuecksnachweisPdf.addMouseListener(productListener);
         hlKarte.addMouseListener(productListener);
+        hlBaulastbescheinigung.addMouseListener(productListener);
     }
 
     /**
@@ -1068,9 +1102,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         scpInhaltBuchungsblatt.setOpaque(false);
         scpInhaltBuchungsblatt.setPreferredSize(new java.awt.Dimension(250, 200));
 
+        epInhaltBuchungsblatt.setEditable(false);
         epInhaltBuchungsblatt.setBorder(null);
         epInhaltBuchungsblatt.setContentType("text/html"); // NOI18N
-        epInhaltBuchungsblatt.setEditable(false);
         epInhaltBuchungsblatt.setText("\n");
         epInhaltBuchungsblatt.setMaximumSize(new java.awt.Dimension(250, 200));
         epInhaltBuchungsblatt.setMinimumSize(new java.awt.Dimension(250, 200));
