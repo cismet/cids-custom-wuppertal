@@ -393,11 +393,11 @@
                   <SubComponents>
                     <Component class="javax.swing.JEditorPane" name="epInhaltBuchungsblatt">
                       <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="null"/>
                         </Property>
                         <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
-                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="text" type="java.lang.String" value="&#xa;"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[250, 200]"/>

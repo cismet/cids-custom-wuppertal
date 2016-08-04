@@ -23,7 +23,6 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
-import Sirius.server.middleware.types.Node;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
@@ -185,6 +184,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private ImageIcon BESTAND_KOM_HTML;
     private ImageIcon GRUND_NRW_PDF;
     private ImageIcon GRUND_NRW_HTML;
+    private ImageIcon BLA_BESCH_PDF;
     //
     private final List<LightweightLandParcel3A> landParcel3AList;
     private final MappingComponent map;
@@ -207,6 +207,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnForward;
     private javax.swing.JEditorPane epOwner;
+    private org.jdesktop.swingx.JXHyperlink hlBaulastBescheinigung;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisKomHtml;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisKomInternHtml;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisKomInternPdf;
@@ -227,7 +228,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private org.jdesktop.swingx.JXHyperlink jxlBaulastBescheinigung;
     private javax.swing.JLabel lblAmtgericht;
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblBlattart;
@@ -353,9 +353,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be");
         if (!billingAllowedBlab_be) {
-            jxlBaulastBescheinigung.setText("Baulastbescheinigung");
+            hlBaulastBescheinigung.setText("Baulastbescheinigung");
         }
-        jxlBaulastBescheinigung.setEnabled(ObjectRendererUtils.checkActionTag(
+        hlBaulastBescheinigung.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
                     && !ObjectRendererUtils.checkActionTag(
                         PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && billingAllowedBlab_be);
@@ -376,32 +376,64 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         BufferedImage i5 = null;
         BufferedImage i6 = null;
         BufferedImage i7 = null;
+        BufferedImage i8 = null;
         try {
             // TODO: Richtige Screenshots machen und zuordnen!
             i1 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsnachweispdf.png")));
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        try {
             i2 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsachweishtml.png")));
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        try {
             i3 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsnachweispdf.png")));
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        try {
             i4 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsachweishtml.png")));
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        try {
             i5 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsnachweispdf.png")));
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        try {
             i6 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsachweishtml.png")));
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        try {
             i7 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsachweisStichtagPdf.png")));
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
+        try {
+            i8 = reflectionRenderer.appendReflection(ImageIO.read(
+                        getClass().getResource(ALKIS_RES_PACKAGE + "baulastbescheinigungpdf.png")));
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
         BESTAND_NRW_PDF = new ImageIcon(i1);
-        BESTAND_NRW_STICHTAG_PDF = new ImageIcon(i7);
         BESTAND_NRW_HTML = new ImageIcon(i2);
         BESTAND_KOM_PDF = new ImageIcon(i3);
         BESTAND_KOM_HTML = new ImageIcon(i4);
         GRUND_NRW_PDF = new ImageIcon(i5);
         GRUND_NRW_HTML = new ImageIcon(i6);
+        BESTAND_NRW_STICHTAG_PDF = new ImageIcon(i7);
+        BLA_BESCH_PDF = new ImageIcon(i8);
     }
 
     /**
@@ -460,6 +492,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         productPreviewImages.put(hlBestandsnachweisKomInternHtml, BESTAND_KOM_HTML);
         productPreviewImages.put(hlGrundstuecksnachweisNrwPdf, GRUND_NRW_PDF);
         productPreviewImages.put(hlGrundstuecksnachweisNrwHtml, GRUND_NRW_HTML);
+        productPreviewImages.put(hlBaulastBescheinigung, BLA_BESCH_PDF);
         final ProductLabelMouseAdaper productListener = new ProductLabelMouseAdaper();
         hlBestandsnachweisNrwHtml.addMouseListener(productListener);
         hlBestandsnachweisNrwPdf.addMouseListener(productListener);
@@ -470,6 +503,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         hlBestandsnachweisKomInternPdf.addMouseListener(productListener);
         hlGrundstuecksnachweisNrwHtml.addMouseListener(productListener);
         hlGrundstuecksnachweisNrwPdf.addMouseListener(productListener);
+        hlBaulastBescheinigung.addMouseListener(productListener);
     }
 
     /**
@@ -560,7 +594,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         hlGrundstuecksnachweisNrwPdf = new org.jdesktop.swingx.JXHyperlink();
         hlBestandsnachweisKomInternPdf = new org.jdesktop.swingx.JXHyperlink();
         hlBestandsnachweisNrwStichtagPdf = new org.jdesktop.swingx.JXHyperlink();
-        jxlBaulastBescheinigung = new org.jdesktop.swingx.JXHyperlink();
+        hlBaulastBescheinigung = new org.jdesktop.swingx.JXHyperlink();
         jPanel9 = new javax.swing.JPanel();
         panProductPreview = new RoundedPanel();
         lblProductPreview = new javax.swing.JLabel();
@@ -1058,17 +1092,17 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         panProduktePDF.add(hlBestandsnachweisNrwStichtagPdf, gridBagConstraints);
 
-        jxlBaulastBescheinigung.setIcon(new javax.swing.ImageIcon(
+        hlBaulastBescheinigung.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/pdf.png")));    // NOI18N
-        jxlBaulastBescheinigung.setText(org.openide.util.NbBundle.getMessage(
+        hlBaulastBescheinigung.setText(org.openide.util.NbBundle.getMessage(
                 AlkisBuchungsblattRenderer.class,
                 "AlkisLandparcelAggregationRenderer.jxlBaulastBescheinigung.text")); // NOI18N
-        jxlBaulastBescheinigung.setEnabled(false);
-        jxlBaulastBescheinigung.addActionListener(new java.awt.event.ActionListener() {
+        hlBaulastBescheinigung.setEnabled(false);
+        hlBaulastBescheinigung.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jxlBaulastBescheinigungActionPerformed(evt);
+                    hlBaulastBescheinigungActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1077,7 +1111,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
-        panProduktePDF.add(jxlBaulastBescheinigung, gridBagConstraints);
+        panProduktePDF.add(hlBaulastBescheinigung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1598,9 +1632,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
+    private void hlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBaulastBescheinigungActionPerformed
         BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, AlkisBuchungsblattRenderer.this);
-    }                                                                                           //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
+    }                                                                                          //GEN-LAST:event_hlBaulastBescheinigungActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1776,9 +1810,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         protected void done() {
                             try {
                                 selectedFlurstuecke = get();
-                                jxlBaulastBescheinigung.setText("Baulastbescheinigung");
+                                hlBaulastBescheinigung.setText("Baulastbescheinigung");
                                 if ((selectedFlurstuecke != null) && !selectedFlurstuecke.isEmpty()) {
-                                    jxlBaulastBescheinigung.setEnabled(true);
+                                    hlBaulastBescheinigung.setEnabled(true);
                                 }
                             } catch (final Exception ex) {
                                 LOG.warn(ex, ex);
