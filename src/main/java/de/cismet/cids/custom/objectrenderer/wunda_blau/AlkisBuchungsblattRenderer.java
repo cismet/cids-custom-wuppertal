@@ -1093,10 +1093,10 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         panProduktePDF.add(hlBestandsnachweisNrwStichtagPdf, gridBagConstraints);
 
         hlBaulastBescheinigung.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png")));    // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlBaulastBescheinigung.setText(org.openide.util.NbBundle.getMessage(
                 AlkisBuchungsblattRenderer.class,
-                "AlkisLandparcelAggregationRenderer.jxlBaulastBescheinigung.text")); // NOI18N
+                "AlkisBuchungsblattRenderer.jxlBaulastBescheinigung.text"));      // NOI18N
         hlBaulastBescheinigung.setEnabled(false);
         hlBaulastBescheinigung.addActionListener(new java.awt.event.ActionListener() {
 
