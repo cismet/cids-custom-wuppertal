@@ -2033,10 +2033,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
         try {
-            geomFromAdresse = MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_ADRESSE_QUERY)[0].getBean();
-            geomFromStrasse = MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_STRASSE_QUERY)[0].getBean();
+            geomFromAdresse =
+                MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_ADRESSE_QUERY, "WUNDA_BLAU")[0].getBean();
+            geomFromStrasse =
+                MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_STRASSE_QUERY, "WUNDA_BLAU")[0].getBean();
             geomFromDigitizedAction =
-                MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_DIGI_QUERY)[0].getBean();
+                MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_DIGI_QUERY, "WUNDA_BLAU")[0].getBean();
         } catch (CacheException ex) {
             throw new RuntimeException("Geometry origin state could not be loaded. That should not happen.", ex);
         }
