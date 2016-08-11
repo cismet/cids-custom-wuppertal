@@ -28,6 +28,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
@@ -35,12 +37,13 @@ import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.server.AdresseGebaeudeLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -59,7 +62,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             AlkisGebaeudeRendererPanel.class);
 
     //~ Instance fields --------------------------------------------------------
@@ -368,22 +371,29 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
         if (cidsBean != null) {
             final Object idObj = cidsBean.getProperty("id");
             if (idObj instanceof Integer) {
-                final Integer searchID = (Integer)idObj;
-                return ObjectRendererUtils.getLightweightMetaObjectsForQuery(
-                        "alkis_adresse",
-                        "select id,strasse,nummer from alkis_adresse where gebaeude = "
-                                + searchID
-                                + " order by strasse,nummer",
-                        new String[] { "id", "strasse", "nummer" },
-                        new AbstractAttributeRepresentationFormater() {
+                final Integer gebaeudeId = (Integer)idObj;
+                try {
+                    final AdresseGebaeudeLightweightSearch search = new AdresseGebaeudeLightweightSearch();
+                    search.setRepresentationFields(new String[] { "id", "strasse", "nummer" });
+                    search.setGebaudeId(gebaeudeId);
+                    final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                                .customServerSearch(search);
+                    for (final LightweightMetaObject lwmo : lwmos) {
+                        lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
-                            @Override
-                            public String getRepresentation() {
-                                final StringBuilder result = new StringBuilder();
-                                result.append(getAttribute("strasse")).append(" ").append(getAttribute("nummer"));
-                                return result.toString();
-                            }
-                        });
+                                @Override
+                                public String getRepresentation() {
+                                    final StringBuilder result = new StringBuilder();
+                                    result.append(getAttribute("strasse")).append(" ").append(getAttribute("nummer"));
+                                    return result.toString();
+                                }
+                            });
+                    }
+                    return lwmos.toArray(new MetaObject[0]);
+                } catch (final ConnectionException ex) {
+                    LOG.error(ex, ex);
+                    return null;
+                }
             }
         }
         return new MetaObject[0];
@@ -406,7 +416,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
                     if (mc != null) {
                         ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer)jumpID, "");
                     } else {
-                        log.error("Could not find MetaClass for " + tabname);
+                        LOG.error("Could not find MetaClass for " + tabname);
                     }
                 }
             }

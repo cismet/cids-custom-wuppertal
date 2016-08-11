@@ -17,6 +17,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
@@ -72,6 +73,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.server.BaulastArtLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -960,17 +962,24 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      * @return  DOCUMENT ME!
      */
     private MetaObject[] getLWBaulastarten() {
-        return ObjectRendererUtils.getLightweightMetaObjectsForQuery(
-                "alb_baulast_art",
-                "select id,baulast_art from alb_baulast_art order by baulast_art",
-                new String[] { "baulast_art" },
-                new AbstractAttributeRepresentationFormater() {
+        try {
+            final BaulastArtLightweightSearch search = new BaulastArtLightweightSearch();
+            search.setRepresentationFields(new String[] { "baulast_art" });
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            for (final LightweightMetaObject lwmo : lwmos) {
+                lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
-                    @Override
-                    public String getRepresentation() {
-                        return String.valueOf(getAttribute("baulast_art"));
-                    }
-                });
+                        @Override
+                        public String getRepresentation() {
+                            return String.valueOf(getAttribute("baulast_art"));
+                        }
+                    });
+            }
+            return lwmos.toArray(new MetaObject[0]);
+        } catch (final ConnectionException ex) {
+            LOG.error(ex, ex);
+            return null;
+        }
     }
 
     /**
