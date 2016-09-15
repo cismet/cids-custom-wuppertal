@@ -24,6 +24,7 @@ import de.cismet.cismap.cidslayer.CidsLayerFeature;
 import de.cismet.cismap.commons.features.FeatureServiceFeature;
 import de.cismet.cismap.commons.featureservice.LayerProperties;
 import de.cismet.cismap.commons.gui.attributetable.DefaultAttributeTableRuleSet;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.SelectableServiceFeature;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -53,7 +54,7 @@ public class WohnlageRuleSet extends DefaultAttributeTableRuleSet {
      *
      * @version  $Revision$, $Date$
      */
-    public static class WohnlageLayerFeature extends CidsLayerFeature {
+    public static class WohnlageLayerFeature extends CidsLayerFeature implements SelectableServiceFeature {
 
         //~ Constructors -------------------------------------------------------
 
