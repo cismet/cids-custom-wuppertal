@@ -48,6 +48,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.wunda_blau.search.actions.WohnlagenKategorisierungServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -95,7 +96,8 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
         try {
             isActive = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
-                                "custom.wohnlage.kategorisierung_featureaction")
+                                "csa://"
+                                + WohnlagenKategorisierungServerAction.TASK_NAME)
                         != null;
         } catch (final Exception ex) {
             LOG.error("Could not validate action tag (custom.wohnlage.kategorisierung_featureaction)!", ex);
