@@ -56,6 +56,8 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.actions.ServerActionParameter;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -134,10 +136,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
     private javax.swing.JLabel labInfoTitle;
     private javax.swing.JLabel labInfoTitle1;
     private javax.swing.JLabel labInfoTitle2;
@@ -313,7 +317,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         cmdReload = new javax.swing.JButton();
         cmdAttachBilling = new javax.swing.JButton();
         lblGebuehr = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
         lblGebuehrValue = new javax.swing.JLabel();
+        jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         jPanel5 = new javax.swing.JPanel();
         panMap = new javax.swing.JPanel();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
@@ -651,6 +657,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                     "${cidsBean.fk_produkt.fk_typ.name}, ${cidsBean.fk_produkt.fk_format.format}, 1:${cidsBean.massstab}"),
                 hlProduktValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         hlProduktValue.addActionListener(new java.awt.event.ActionListener() {
@@ -730,23 +738,62 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblGebuehr, gridBagConstraints);
 
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebuehr}"),
                 lblGebuehrValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
         binding.setConverter(new CurrencyConverter());
         bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel7.add(lblGebuehrValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jXHyperlink1,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.jXHyperlink1.text")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${ cidsBean.rechnung_dateipfad != null && !produktTooOld }"),
+                jXHyperlink1,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        jPanel7.add(jXHyperlink1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblGebuehrValue, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(jPanel7, gridBagConstraints);
 
         jPanel5.setOpaque(false);
 
@@ -1447,6 +1494,46 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
+        final String filePath = (String)cidsBean.getProperty("rechnung_dateipfad");
+        final String fileName = (String)cidsBean.getProperty("rechnung_dateiname_orig");
+        if (filePath != null) {
+            try {
+                final MetaObject mo = getCidsBean().getMetaObject();
+                final MetaObjectNode mon = new MetaObjectNode(mo.getDomain(), mo.getId(), mo.getClassID());
+
+                final int extPos = fileName.lastIndexOf(".");
+                final String pureName = fileName.substring(0, extPos);
+                final String ext = fileName.substring(extPos);
+
+                if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(Fs_bestellungRenderer.this)) {
+                    final String path = DownloadManagerDialog.getInstance().getJobName();
+                    final Download download = new ByteArrayActionDownload(
+                            FormSolutionDownloadBestellungAction.TASK_NAME,
+                            mon,
+                            new ServerActionParameter[] {
+                                new ServerActionParameter<FormSolutionDownloadBestellungAction.Type>(
+                                    FormSolutionDownloadBestellungAction.Parameter.TYPE.toString(),
+                                    FormSolutionDownloadBestellungAction.Type.RECHNUNG)
+                            },
+                            "Rechnung: "
+                                    + title,
+                            path,
+                            pureName,
+                            ext);
+                    DownloadManager.instance().add(download);
+                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            }
+        }
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     public boolean isProduktTooOld() {
@@ -1532,7 +1619,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                         }
                     }
                 }.execute();
-            
+
             final boolean lieferAlternativ = cidsBean.getProperty("fk_adresse_versand.alternativ") != null;
             lblLaAdresse.setVisible(lieferAlternativ);
             jScrollPane1.setVisible(lieferAlternativ);
@@ -1547,7 +1634,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             lblLand.setVisible(rechnungAlternativ);
             lblLandValue.setVisible(rechnungAlternativ);
             lblStrasse.setVisible(!rechnungAlternativ);
-            lblStrasseValue.setVisible(!rechnungAlternativ);            
+            lblStrasseValue.setVisible(!rechnungAlternativ);
         }
 
         bindingGroup.bind();
