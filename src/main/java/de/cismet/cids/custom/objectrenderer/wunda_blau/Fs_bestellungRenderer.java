@@ -134,9 +134,14 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JLabel labInfoTitle;
     private javax.swing.JLabel labInfoTitle1;
     private javax.swing.JLabel labInfoTitle2;
+    private javax.swing.JLabel lblAdresse;
     private javax.swing.JLabel lblBezugsweg;
     private javax.swing.JLabel lblBezugswegValue;
     private javax.swing.JLabel lblEMail;
@@ -145,6 +150,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JLabel lblFlurstuecke;
     private javax.swing.JLabel lblGebuehr;
     private javax.swing.JLabel lblGebuehrValue;
+    private javax.swing.JLabel lblLaAdresse;
     private javax.swing.JLabel lblLaFirma;
     private javax.swing.JLabel lblLaFirmaValue;
     private javax.swing.JLabel lblLaLand;
@@ -324,6 +330,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblLaStrasseValue = new javax.swing.JLabel();
         lblLaOrt = new javax.swing.JLabel();
         lblLaOrtValue = new javax.swing.JLabel();
+        lblLaAdresse = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         lblLaLand = new javax.swing.JLabel();
         lblLaLandValue = new javax.swing.JLabel();
         lblEMail = new javax.swing.JLabel();
@@ -340,6 +349,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblStrasseValue = new javax.swing.JLabel();
         lblOrt = new javax.swing.JLabel();
         lblOrtValue = new javax.swing.JLabel();
+        lblAdresse = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
         lblLand = new javax.swing.JLabel();
         lblLandValue = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -854,8 +866,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                     "${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_versand.name}"),
                 lblLaNameValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -923,6 +933,41 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaOrtValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLaAdresse,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblLaAdresse.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(lblLaAdresse, gridBagConstraints);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_versand.alternativ}"),
+                jTextArea1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(jTextArea1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jScrollPane1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblLaLand,
@@ -1145,6 +1190,39 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         jPanel3.add(lblOrtValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
+            lblAdresse,
+            org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblAdresse.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(lblAdresse, gridBagConstraints);
+
+        jTextArea2.setEditable(false);
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_rechnung.alternativ}"),
+                jTextArea2,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane2.setViewportView(jTextArea2);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jScrollPane2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
             lblLand,
             org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblLand.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1177,16 +1255,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         final javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                403,
-                Short.MAX_VALUE));
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -1251,31 +1325,31 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlFlurstueckeValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstueckeValueActionPerformed
+    private void hlFlurstueckeValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstueckeValueActionPerformed
         if (flurstueckMon != null) {
             ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(flurstueckMon, false);
         }
-    }                                                                                      //GEN-LAST:event_hlFlurstueckeValueActionPerformed
+    }//GEN-LAST:event_hlFlurstueckeValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlEMailValueActionPerformed
+    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlEMailValueActionPerformed
         try {
             BrowserLauncher.openURL("mailto:" + (String)cidsBean.getProperty("email"));
         } catch (Exception ex) {
             LOG.warn("could not open mailto link", ex);
         }
-    }                                                                                //GEN-LAST:event_hlEMailValueActionPerformed
+    }//GEN-LAST:event_hlEMailValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlProduktValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlProduktValueActionPerformed
+    private void hlProduktValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlProduktValueActionPerformed
         final String filePath = (String)cidsBean.getProperty("produkt_dateipfad");
         final String fileName = (String)cidsBean.getProperty("produkt_dateiname_orig");
         if (filePath != null) {
@@ -1304,14 +1378,14 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 LOG.error(ex, ex);
             }
         }
-    } //GEN-LAST:event_hlProduktValueActionPerformed
+    }//GEN-LAST:event_hlProduktValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlStatusErrorDetailsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlStatusErrorDetailsActionPerformed
+    private void hlStatusErrorDetailsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlStatusErrorDetailsActionPerformed
         final String exceptionJson = (String)cidsBean.getProperty("exception");
         final String fehler = (String)cidsBean.getProperty("fehler");
         final Timestamp fehler_ts = (Timestamp)cidsBean.getProperty("fehler_ts");
@@ -1336,39 +1410,39 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 Level.SEVERE,
                 null);
         JXErrorPane.showDialog(this, info);
-    } //GEN-LAST:event_hlStatusErrorDetailsActionPerformed
+    }//GEN-LAST:event_hlStatusErrorDetailsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdReloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdReloadActionPerformed
+    private void cmdReloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdReloadActionPerformed
         StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean));
-    }                                                                             //GEN-LAST:event_cmdReloadActionPerformed
+    }//GEN-LAST:event_cmdReloadActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
             final Download download = FsBestellungReportGenerator.createJasperDownload(
                     cidsBean,
                     DownloadManagerDialog.getInstance().getJobName());
             DownloadManager.instance().add(download);
         }
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdAttachBillingActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAttachBillingActionPerformed
+    private void cmdAttachBillingActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAttachBillingActionPerformed
         StaticSwingTools.showDialog(new FSAttachBillingForProduktDialog(cidsBean));
-    }                                                                                    //GEN-LAST:event_cmdAttachBillingActionPerformed
+    }//GEN-LAST:event_cmdAttachBillingActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1458,6 +1532,22 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                         }
                     }
                 }.execute();
+            
+            final boolean lieferAlternativ = cidsBean.getProperty("fk_adresse_versand.alternativ") != null;
+            lblLaAdresse.setVisible(lieferAlternativ);
+            jScrollPane1.setVisible(lieferAlternativ);
+            lblLaLand.setVisible(lieferAlternativ);
+            lblLaLandValue.setVisible(lieferAlternativ);
+            lblLaStrasse.setVisible(!lieferAlternativ);
+            lblLaStrasseValue.setVisible(!lieferAlternativ);
+
+            final boolean rechnungAlternativ = cidsBean.getProperty("fk_adresse_rechnung.alternativ") != null;
+            lblAdresse.setVisible(rechnungAlternativ);
+            jScrollPane2.setVisible(rechnungAlternativ);
+            lblLand.setVisible(rechnungAlternativ);
+            lblLandValue.setVisible(rechnungAlternativ);
+            lblStrasse.setVisible(!rechnungAlternativ);
+            lblStrasseValue.setVisible(!rechnungAlternativ);            
         }
 
         bindingGroup.bind();

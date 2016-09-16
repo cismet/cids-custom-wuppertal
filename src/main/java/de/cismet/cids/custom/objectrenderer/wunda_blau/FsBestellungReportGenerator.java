@@ -54,6 +54,8 @@ public class FsBestellungReportGenerator {
     private static final String PARAMETER_LIEFER_HAUSNUMMER = "LIEFER_HAUSNUMMER";
     private static final String PARAMETER_LIEFER_PLZ = "LIEFER_PLZ";
     private static final String PARAMETER_LIEFER_ORT = "LIEFER_ORT";
+    private static final String PARAMETER_LIEFER_ALTERNATIV = "LIEFER_ALTERNATIV";
+    private static final String PARAMETER_LIEFER_ADRESSE = "LIEFER_ADRESSE";
 
     private static final String PARAMETER_RECHNUNG_FIRMA = "RECHNUNG_FIRMA";
     private static final String PARAMETER_RECHNUNG_VORNAME = "RECHNUNG_VORNAME";
@@ -62,6 +64,8 @@ public class FsBestellungReportGenerator {
     private static final String PARAMETER_RECHNUNG_HAUSNUMMER = "RECHNUNG_HAUSNUMMER";
     private static final String PARAMETER_RECHNUNG_PLZ = "RECHNUNG_PLZ";
     private static final String PARAMETER_RECHNUNG_ORT = "RECHNUNG_ORT";
+    private static final String PARAMETER_RECHNUNG_ALTERNATIV = "RECHNUNG_ALTERNATIV";
+    private static final String PARAMETER_RECHNUNG_ADRESSE = "RECHNUNG_ADRESSE";
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             FsBestellungReportGenerator.class);
@@ -103,7 +107,7 @@ public class FsBestellungReportGenerator {
 
         final String vorgangsnummer = (bestellungbean.getProperty("transid") != null)
             ? ((String)bestellungbean.getProperty("transid")).substring("KFAS_KF600200-".length()) : null;
-        final String flurstuecksKennzeichen = (String)bestellungbean.getProperty("landparcelcode");
+        final String landparcelcode = (String)bestellungbean.getProperty("landparcelcode");
 
         final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
             new JasperReportDownload.JasperReportDataSourceGenerator() {
@@ -124,69 +128,81 @@ public class FsBestellungReportGenerator {
 
                 @Override
                 public Map generateParamters() {
-                    final HashMap parameters = new HashMap();
-                    parameters.put(PARAMETER_DATUM_HEUTE,
-                        dashIfNull(dateformat.format(new Date())));
-                    parameters.put(
-                        PARAMETER_DATUM_EINGANG,
-                        dashIfNull(dateformat.format((Timestamp)bestellungbean.getProperty("eingang_ts"))));
-                    parameters.put(PARAMETER_TRANSAKTIONSID, dashIfNull(vorgangsnummer));
-                    parameters.put(
-                        PARAMETER_FLURSTUECKSKENNZEICHEN,
-                        dashIfNull(flurstuecksKennzeichen).replace(",", ", "));
-                    parameters.put(
-                        PARAMETER_PRODUKTBEZEICHNUNG,
-                        dashIfNull((String)bestellungbean.getProperty("fk_produkt.fk_typ.name")));
-
-                    parameters.put(
-                        PARAMETER_LIEFER_FIRMA,
-                        emptyIfNull((String)bestellungbean.getProperty("fk_adresse_versand.firma")));
-                    parameters.put(
-                        PARAMETER_LIEFER_VORNAME,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.vorname")));
-                    parameters.put(
-                        PARAMETER_LIEFER_NAME,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.name")));
-                    parameters.put(
-                        PARAMETER_LIEFER_STRASSE,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.strasse")));
-                    parameters.put(
-                        PARAMETER_LIEFER_HAUSNUMMER,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.hausnummer")));
-                    parameters.put(
-                        PARAMETER_LIEFER_PLZ,
-                        dashIfNull(
-                            (bestellungbean.getProperty("fk_adresse_versand.plz") != null)
+                    final String datumHeute = dashIfNull(dateformat.format(new Date()));
+                    final String datumEingang = dashIfNull(dateformat.format(
+                                (Timestamp)bestellungbean.getProperty("eingang_ts")));
+                    final String transaktionsid = dashIfNull(vorgangsnummer);
+                    final String flurstueckskennzeichen = dashIfNull(landparcelcode).replace(",", ", ");
+                    final String produktbezeichnung = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_produkt.fk_typ.name"));
+                    final String lieferFirma = emptyIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_versand.firma"));
+                    final String lieferVorname = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_versand.vorname"));
+                    final String lieferName = dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.name"));
+                    final String lieferStrasse = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_versand.strasse"));
+                    final String lieferHausnummer = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_versand.hausnummer"));
+                    final String lieferPlz = dashIfNull((bestellungbean.getProperty("fk_adresse_versand.plz") != null)
                                 ? Integer.toString((Integer)bestellungbean.getProperty("fk_adresse_versand.plz"))
-                                : null));
-                    parameters.put(
-                        PARAMETER_LIEFER_ORT,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.ort")));
-
-                    parameters.put(
-                        PARAMETER_RECHNUNG_FIRMA,
-                        emptyIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.firma")));
-                    parameters.put(
-                        PARAMETER_RECHNUNG_VORNAME,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.vorname")));
-                    parameters.put(
-                        PARAMETER_RECHNUNG_NAME,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.name")));
-                    parameters.put(
-                        PARAMETER_RECHNUNG_STRASSE,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.strasse")));
-                    parameters.put(
-                        PARAMETER_RECHNUNG_HAUSNUMMER,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.hausnummer")));
-                    parameters.put(
-                        PARAMETER_RECHNUNG_PLZ,
-                        dashIfNull(
+                                : null);
+                    final String lieferOrt = dashIfNull((String)bestellungbean.getProperty("fk_adresse_versand.ort"));
+                    final String lieferStaat = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_versand.staat"));
+                    final String lieferAlternativ = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_versand.alternativ"));
+                    final String lieferAdresse = (lieferAlternativ.equals("-"))
+                        ? (lieferStrasse + " " + lieferHausnummer + "\n" + lieferPlz + " " + lieferOrt)
+                        : (lieferAlternativ + "\n" + lieferStaat);
+                    final String rechnungFirma = emptyIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_rechnung.firma"));
+                    final String rechnungVorname = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_rechnung.vorname"));
+                    final String rechnungName = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_rechnung.name"));
+                    final String rechnungStrasse = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_rechnung.strasse"));
+                    final String rechnungHausnummer = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_rechnung.hausnummer"));
+                    final String rechnungPlz = dashIfNull(
                             (bestellungbean.getProperty("fk_adresse_rechnung.plz") != null)
                                 ? Integer.toString((Integer)bestellungbean.getProperty("fk_adresse_rechnung.plz"))
-                                : null));
-                    parameters.put(
-                        PARAMETER_RECHNUNG_ORT,
-                        dashIfNull((String)bestellungbean.getProperty("fk_adresse_rechnung.ort")));
+                                : null);
+                    final String rechnungOrt = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_rechnung.ort"));
+                    final String rechnungStaat = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_rechnung.staat"));
+                    final String rechnungAlternativ = dashIfNull((String)bestellungbean.getProperty(
+                                "fk_adresse_rechnung.alternativ"));
+                    final String rechnungAdresse = (rechnungAlternativ.equals("-"))
+                        ? (rechnungStrasse + " " + rechnungHausnummer + "\n" + rechnungPlz + " " + rechnungOrt)
+                        : (rechnungAlternativ + "\n" + rechnungStaat);
+
+                    final HashMap parameters = new HashMap();
+                    parameters.put(PARAMETER_DATUM_HEUTE, datumHeute);
+                    parameters.put(PARAMETER_DATUM_EINGANG, datumEingang);
+                    parameters.put(PARAMETER_TRANSAKTIONSID, transaktionsid);
+                    parameters.put(PARAMETER_FLURSTUECKSKENNZEICHEN, flurstueckskennzeichen);
+                    parameters.put(PARAMETER_PRODUKTBEZEICHNUNG, produktbezeichnung);
+                    parameters.put(PARAMETER_LIEFER_FIRMA, lieferFirma);
+                    parameters.put(PARAMETER_LIEFER_VORNAME, lieferVorname);
+                    parameters.put(PARAMETER_LIEFER_NAME, lieferName);
+                    parameters.put(PARAMETER_LIEFER_STRASSE, lieferStrasse);
+                    parameters.put(PARAMETER_LIEFER_HAUSNUMMER, lieferHausnummer);
+                    parameters.put(PARAMETER_LIEFER_PLZ, lieferPlz);
+                    parameters.put(PARAMETER_LIEFER_ORT, lieferOrt);
+                    parameters.put(PARAMETER_LIEFER_ALTERNATIV, lieferAlternativ);
+                    parameters.put(PARAMETER_LIEFER_ADRESSE, lieferAdresse);
+                    parameters.put(PARAMETER_RECHNUNG_FIRMA, rechnungFirma);
+                    parameters.put(PARAMETER_RECHNUNG_VORNAME, rechnungVorname);
+                    parameters.put(PARAMETER_RECHNUNG_NAME, rechnungName);
+                    parameters.put(PARAMETER_RECHNUNG_STRASSE, rechnungStrasse);
+                    parameters.put(PARAMETER_RECHNUNG_HAUSNUMMER, rechnungHausnummer);
+                    parameters.put(PARAMETER_RECHNUNG_PLZ, rechnungPlz);
+                    parameters.put(PARAMETER_RECHNUNG_ORT, rechnungOrt);
+                    parameters.put(PARAMETER_RECHNUNG_ALTERNATIV, rechnungAlternativ);
+                    parameters.put(PARAMETER_RECHNUNG_ADRESSE, rechnungAdresse);
                     return parameters;
                 }
             };
