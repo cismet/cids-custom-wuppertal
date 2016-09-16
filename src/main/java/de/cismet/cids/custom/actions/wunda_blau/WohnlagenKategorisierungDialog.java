@@ -41,6 +41,8 @@ import javax.swing.ButtonModel;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingWorker;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.actions.WohnlagenKategorisierungServerAction;
@@ -104,6 +106,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -112,11 +115,12 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -161,7 +165,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
 
                     @Override
                     public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                        kategorieSelected();
+                        inputChanged();
                     }
                 });
             lblKategorieColor.setText(" ");
@@ -213,6 +217,24 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
             jLabel1.setText("<html>Es wurden #ANZAHL# Wohnlagen markiert.<br/>Wählen Sie eine der Kategorien:"
                         .replaceAll("#ANZAHL#", Integer.toString(size)));
         }
+
+        jTextArea1.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    inputChanged();
+                }
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    inputChanged();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent arg0) {
+                    inputChanged();
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -247,7 +269,9 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
         btnOk = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel6,
@@ -259,6 +283,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
         setTitle(org.openide.util.NbBundle.getMessage(
                 WohnlagenKategorisierungDialog.class,
                 "WohnlagenKategorisierungDialog.title")); // NOI18N
+        setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -489,7 +514,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel2.add(jPanel1, gridBagConstraints);
@@ -508,31 +533,36 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, " ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         jPanel2.add(jLabel2, gridBagConstraints);
 
-        final javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                283,
-                Short.MAX_VALUE));
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                10,
-                Short.MAX_VALUE));
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel2.add(jPanel4, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel2.add(jScrollPane1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel3,
+            org.openide.util.NbBundle.getMessage(
+                WohnlagenKategorisierungDialog.class,
+                "WohnlagenKategorisierungDialog.jLabel3.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel2.add(jLabel3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -592,13 +622,18 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
                                     MC_WOHNLAGE.getDomain(),
                                     wohnlageId,
                                     MC_WOHNLAGE.getId()));
-                            cidsLayerFeature.setProperty("farbcode", kategorie.getProperty("farbcode"));
-                            cidsLayerFeature.setProperty("kategorie_id", kategorie.getProperty("id"));
+                            if (kategorie != null) {
+                                cidsLayerFeature.setProperty("farbcode", kategorie.getProperty("farbcode"));
+                                cidsLayerFeature.setProperty("kategorie_id", kategorie.getProperty("id"));
+                            }
                         }
                         if (service != null) {
                             service.refreshFeatures();
                         }
-                        final MetaObjectNode kategorieNode = new MetaObjectNode(kategorie);
+                        final String trimmedTextAreaText = jTextArea1.getText().trim();
+                        final String bemerkung = trimmedTextAreaText.isEmpty() ? null : trimmedTextAreaText;
+
+                        final MetaObjectNode kategorieNode = (kategorie == null) ? null : new MetaObjectNode(kategorie);
                         SessionManager.getProxy()
                                 .executeTask(
                                     WohnlagenKategorisierungServerAction.TASK_NAME,
@@ -609,7 +644,10 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
                                         kategorieNode),
                                     new ServerActionParameter<Collection<MetaObjectNode>>(
                                         WohnlagenKategorisierungServerAction.ParameterType.WOHNLAGEN.toString(),
-                                        wohnlageNodes));
+                                        wohnlageNodes),
+                                    new ServerActionParameter<String>(
+                                        WohnlagenKategorisierungServerAction.ParameterType.BEMERKUNG.toString(),
+                                        bemerkung));
                     } catch (final Exception ex) {
                         LOG.warn(ex, ex);
                     }
@@ -644,7 +682,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void jRadioButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton1ActionPerformed
-        kategorieSelected();
+        inputChanged();
     }                                                                                 //GEN-LAST:event_jRadioButton1ActionPerformed
 
     /**
@@ -653,7 +691,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton2ActionPerformed
-        kategorieSelected();
+        inputChanged();
     }                                                                                 //GEN-LAST:event_jRadioButton2ActionPerformed
 
     /**
@@ -662,7 +700,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void jRadioButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton3ActionPerformed
-        kategorieSelected();
+        inputChanged();
     }                                                                                 //GEN-LAST:event_jRadioButton3ActionPerformed
 
     /**
@@ -671,13 +709,13 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void jRadioButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton4ActionPerformed
-        kategorieSelected();
+        inputChanged();
     }                                                                                 //GEN-LAST:event_jRadioButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      */
-    private void kategorieSelected() {
-        btnOk.setEnabled(true);
+    private void inputChanged() {
+        btnOk.setEnabled((buttonGroup1.getSelection() != null) || !jTextArea1.getText().trim().isEmpty());
     }
 }
