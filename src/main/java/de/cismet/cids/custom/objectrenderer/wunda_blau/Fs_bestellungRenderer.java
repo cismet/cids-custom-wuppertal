@@ -1284,10 +1284,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 final MetaObject mo = getCidsBean().getMetaObject();
                 final MetaObjectNode mon = new MetaObjectNode(mo.getDomain(), mo.getId(), mo.getClassID());
 
-                final int extPos = fileName.lastIndexOf(".");
-                final String pureName = fileName.substring(0, extPos);
-                final String ext = fileName.substring(extPos);
-
                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(Fs_bestellungRenderer.this)) {
                     final String path = DownloadManagerDialog.getInstance().getJobName();
                     final Download download = new ByteArrayActionDownload(
@@ -1301,8 +1297,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                             "Rechnung: "
                                     + title,
                             path,
-                            pureName,
-                            ext);
+                            fileName,
+                            ".pdf");
                     DownloadManager.instance().add(download);
                 }
             } catch (final Exception ex) {
@@ -1403,18 +1399,18 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             final boolean lieferAlternativ = cidsBean.getProperty("fk_adresse_versand.alternativ") != null;
             lblLaAdresse.setVisible(lieferAlternativ);
             jScrollPane1.setVisible(lieferAlternativ);
-            lblLaLand.setVisible(lieferAlternativ);
-            lblLaLandValue.setVisible(lieferAlternativ);
             lblLaStrasse.setVisible(!lieferAlternativ);
             lblLaStrasseValue.setVisible(!lieferAlternativ);
+            lblLaOrt.setVisible(lieferAlternativ);
+            lblLaOrtValue.setVisible(lieferAlternativ);
 
             final boolean rechnungAlternativ = cidsBean.getProperty("fk_adresse_rechnung.alternativ") != null;
             lblAdresse.setVisible(rechnungAlternativ);
             jScrollPane2.setVisible(rechnungAlternativ);
-            lblLand.setVisible(rechnungAlternativ);
-            lblLandValue.setVisible(rechnungAlternativ);
             lblStrasse.setVisible(!rechnungAlternativ);
             lblStrasseValue.setVisible(!rechnungAlternativ);
+            lblOrt.setVisible(rechnungAlternativ);
+            lblOrtValue.setVisible(rechnungAlternativ);
         }
 
         bindingGroup.bind();
