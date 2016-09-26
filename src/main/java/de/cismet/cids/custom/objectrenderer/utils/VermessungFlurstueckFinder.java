@@ -310,9 +310,10 @@ public class VermessungFlurstueckFinder {
         try {
             final VermessungFlurstueckKickerLightweightSearch search =
                 new VermessungFlurstueckKickerLightweightSearch();
-            search.setSearchFor(VermessungFlurstueckKickerLightweightSearch.SearchFor.ZAEHLER_NENNER);
+            search.setSearchFor(VermessungFlurstueckKickerLightweightSearch.SearchFor.FLURSTUECKE);
             search.setGemarkungsnummer(gemarkungsnummer);
             search.setFlur(flur);
+            search.setZaehler(zaehler);
             search.setNenner(nenner);
             search.setRepresentationFields(
                 new String[] { "id", FLURSTUECK_GEMARKUNG, FLURSTUECK_FLUR, FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
