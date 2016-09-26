@@ -203,28 +203,33 @@ public class BaulastenReportGenerator {
      * @return  DOCUMENT ME!
      */
     public static MetadataInfo createMetadataInfoFromJpeg(final Metadata metadata) {
-        final JpegDirectory jpegDirectory = metadata.getFirstDirectoryOfType(JpegDirectory.class);
-        final JfifDirectory jfifDirectory = metadata.getFirstDirectoryOfType(JfifDirectory.class);
+        try {
+            final JpegDirectory jpegDirectory = metadata.getFirstDirectoryOfType(JpegDirectory.class);
+            final JfifDirectory jfifDirectory = metadata.getFirstDirectoryOfType(JfifDirectory.class);
 
-        final JpegDescriptor descJPeg = new JpegDescriptor(jpegDirectory);
+            final JpegDescriptor descJPeg = new JpegDescriptor(jpegDirectory);
 
-        final String widthDesc = descJPeg.getImageWidthDescription();
-        final String heightDesc = descJPeg.getImageHeightDescription();
+            final String widthDesc = descJPeg.getImageWidthDescription();
+            final String heightDesc = descJPeg.getImageHeightDescription();
 
-        final JfifDescriptor descJFif = new JfifDescriptor(jfifDirectory);
+            final JfifDescriptor descJFif = new JfifDescriptor(jfifDirectory);
 
 //                                            final String unitDesc = descJFif.getImageResUnitsDescription();
-        final String xResDesc = descJFif.getImageResXDescription();
-        final String yResDesc = descJFif.getImageResYDescription();
+            final String xResDesc = descJFif.getImageResXDescription();
+            final String yResDesc = descJFif.getImageResYDescription();
 
-        if ((widthDesc != null) && (heightDesc != null) && (xResDesc != null) && (yResDesc != null)) {
-            final long width = Long.parseLong(widthDesc.replaceAll(" pixels", ""));
-            final long height = Long.parseLong(heightDesc.replaceAll(" pixels", ""));
-            final int dpiX = Integer.parseInt(xResDesc.replaceAll(" dots", ""));
-            final int dpiY = Integer.parseInt(yResDesc.replaceAll(" dots", ""));
+            if ((widthDesc != null) && (heightDesc != null) && (xResDesc != null) && (yResDesc != null)) {
+                final long width = Long.parseLong(widthDesc.replaceAll(" pixels", ""));
+                final long height = Long.parseLong(heightDesc.replaceAll(" pixels", ""));
+                final int dpiX = Integer.parseInt(xResDesc.replaceAll(" dots", ""));
+                final int dpiY = Integer.parseInt(yResDesc.replaceAll(" dots", ""));
 
-            return new MetadataInfo(1, width, height, dpiX, dpiY);
-        } else {
+                return new MetadataInfo(1, width, height, dpiX, dpiY);
+            } else {
+                return null;
+            }
+        } catch (final Exception ex) {
+            LOG.warn("couldn't read the metadata", ex);
             return null;
         }
     }
