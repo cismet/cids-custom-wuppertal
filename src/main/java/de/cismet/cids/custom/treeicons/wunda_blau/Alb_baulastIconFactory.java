@@ -19,7 +19,6 @@ import Sirius.navigator.ui.tree.CidsTreeObjectIconFactory;
 
 import Sirius.server.middleware.types.MetaObject;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
@@ -31,7 +30,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.tools.gui.Static2DTools;
+import de.cismet.tools.Static2DTools;
 
 /**
  * DOCUMENT ME!
