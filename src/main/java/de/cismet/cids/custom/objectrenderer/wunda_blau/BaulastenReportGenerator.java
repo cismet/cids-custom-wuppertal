@@ -56,7 +56,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
-import de.cismet.tools.gui.MultiPagePictureReader;
+import de.cismet.tools.gui.WebAccessMultiPagePictureReader;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -380,22 +380,25 @@ public class BaulastenReportGenerator {
 
                                 for (final URL url : urlListRasterdaten) {
 //
-//                                final MultiPagePictureReader reader = new MultiPagePictureReader(new File(
+//                                final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(new File(
 //                                            "/home/jruiz/Downloads/000509-02p.tif"));
-                                    final MultiPagePictureReader reader = new MultiPagePictureReader(url, false, false);
+                                    final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(
+                                            url,
+                                            false,
+                                            false);
 
                                     final EXIFReader exif = new EXIFReader();
 
                                     final Map<Integer, MetadataInfo> metadatainfoPerPage = new HashMap();
 
                                     final InputStream is = reader.getInputStream();
-                                    if (MultiPagePictureReader.CODEC_JPEG.equals(reader.getCodec())) {
+                                    if (WebAccessMultiPagePictureReader.CODEC_JPEG.equals(reader.getCodec())) {
                                         final Metadata metadata = ImageMetadataReader.readMetadata(is);
                                         final MetadataInfo metadataInfo = createMetadataInfoFromJpeg(metadata);
                                         if (metadataInfo != null) {
                                             metadatainfoPerPage.put(metadataInfo.getPageNumber(), metadataInfo);
                                         }
-                                    } else if (MultiPagePictureReader.CODEC_TIFF.equals(reader.getCodec())) {
+                                    } else if (WebAccessMultiPagePictureReader.CODEC_TIFF.equals(reader.getCodec())) {
                                         final com.twelvemonkeys.imageio.metadata.Directory dir = exif.read(ImageIO
                                                         .createImageInputStream(is));
                                         final Map<Integer, MetadataInfo> metadataInfoPerPageFallBack = new HashMap();
@@ -486,9 +489,12 @@ public class BaulastenReportGenerator {
                             urlList.addAll(urlListLageplan);
                             for (final URL url : urlList) {
                                 try {
-//                                final MultiPagePictureReader reader = new MultiPagePictureReader(new File(
+//                                final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(new File(
 //                                            "/home/jruiz/Downloads/000509-02p.tif"));
-                                    final MultiPagePictureReader reader = new MultiPagePictureReader(url, false, false);
+                                    final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(
+                                            url,
+                                            false,
+                                            false);
                                     for (int i = 0; i < reader.getNumberOfPages(); i++) {
                                         imageBeans.add(new BaulastImageReportBean(
                                                 i,
@@ -625,7 +631,7 @@ public class BaulastenReportGenerator {
         //~ Instance fields ----------------------------------------------------
 
         private final Integer page;
-        private final MultiPagePictureReader reader;
+        private final WebAccessMultiPagePictureReader reader;
     }
 
     /**

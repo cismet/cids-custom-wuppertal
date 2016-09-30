@@ -79,8 +79,8 @@ import de.cismet.cismap.commons.gui.piccolo.eventlistener.MessenGeometryListener
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.StaticDecimalTools;
 
-import de.cismet.tools.gui.MultiPagePictureReader;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.WebAccessMultiPagePictureReader;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
@@ -148,7 +148,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private Crs crs = new Crs("EPSG:31466", "EPSG:31466", "EPSG:31466", true, true);
     MeasuringComponent measureComponent = new MeasuringComponent(initialBoundingBox, crs);
     private PictureSelectWorker currentPictureSelectWorker = null;
-    private MultiPagePictureReader pictureReader;
+    private WebAccessMultiPagePictureReader pictureReader;
     private CidsBean cidsBean;
     private URL[] documentURLs;
     private JToggleButton[] documentButtons;
@@ -945,43 +945,43 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
         measureComponent.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
+    }//GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togMessenPolyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togMessenPolyActionPerformed
+    private void togMessenPolyActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togMessenPolyActionPerformed
         measureComponent.actionMeasurePolygon();
-    }                                                                                 //GEN-LAST:event_togMessenPolyActionPerformed
+    }//GEN-LAST:event_togMessenPolyActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
         measureComponent.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
+    }//GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togMessenLineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togMessenLineActionPerformed
+    private void togMessenLineActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togMessenLineActionPerformed
         measureComponent.actionMeasureLine();
-    }                                                                                 //GEN-LAST:event_togMessenLineActionPerformed
+    }//GEN-LAST:event_togMessenLineActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togCalibrateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togCalibrateActionPerformed
+    private void togCalibrateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togCalibrateActionPerformed
         if (currentPage != NO_SELECTION) {
             final Double distance = askForDistanceValue();
             if (distance != null) {
@@ -1012,23 +1012,23 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             }
             togPan.setSelected(true);
         }
-    }                                                                                //GEN-LAST:event_togCalibrateActionPerformed
+    }//GEN-LAST:event_togCalibrateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         measureComponent.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         if ((currentDocument == NO_SELECTION) || (documentURLs == null) || (currentDocument >= documentURLs.length)
                     || (currentDocument < 0)) {
             return;
@@ -1063,38 +1063,38 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     }
                 }
             });
-    } //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPlanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPlanActionPerformed
+    private void btnPlanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlanActionPerformed
         umleitungsPanel = new Alb_baulastUmleitungPanel(Alb_baulastUmleitungPanel.MODE.LAGEPLAN, this);
         showUmleitung = true;
         loadPlan();
         checkLinkInTitle();
-    }                                                                           //GEN-LAST:event_btnPlanActionPerformed
+    }//GEN-LAST:event_btnPlanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnTextblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnTextblattActionPerformed
+    private void btnTextblattActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTextblattActionPerformed
         umleitungsPanel = new Alb_baulastUmleitungPanel(Alb_baulastUmleitungPanel.MODE.TEXTBLATT, this);
         showUmleitung = true;
         loadTextBlatt();
         checkLinkInTitle();
-    }                                                                                //GEN-LAST:event_btnTextblattActionPerformed
+    }//GEN-LAST:event_btnTextblattActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlUmleitungActionPerformed
+    private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlUmleitungActionPerformed
         umleitungsPanel.reset();
         alert.setType(AlertPanel.TYPE.SUCCESS);
         umleitungsPanel.setTextColor(AlertPanel.successMessageColor);
@@ -1113,53 +1113,53 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         this.invalidate();
         this.validate();
         this.repaint();
-    } //GEN-LAST:event_jxlUmleitungActionPerformed
+    }//GEN-LAST:event_jxlUmleitungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink3ActionPerformed
+    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink3ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(
                     BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER,
                     Arrays.asList(new CidsBean[] { cidsBean }),
                     this);
-    }                                                                                //GEN-LAST:event_jXHyperlink3ActionPerformed
+    }//GEN-LAST:event_jXHyperlink3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(
                     BaulastenReportGenerator.Type.TEXTBLATT,
                     Arrays.asList(new CidsBean[] { cidsBean }),
                     this);
-    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
+    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink2ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(
                     BaulastenReportGenerator.Type.TEXTBLATT_PLAN,
                     Arrays.asList(new CidsBean[] { cidsBean }),
                     this);
-    }                                                                                //GEN-LAST:event_jXHyperlink2ActionPerformed
+    }//GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstPicturesValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstPicturesValueChanged
+    private void lstPicturesValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPicturesValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object selObj = lstPictures.getSelectedValue();
             if (selObj instanceof Integer) {
@@ -1173,7 +1173,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 CismetThreadPool.execute(currentPictureSelectWorker);
             }
         }
-    } //GEN-LAST:event_lstPicturesValueChanged
+    }//GEN-LAST:event_lstPicturesValueChanged
 
     /**
      * DOCUMENT ME!
@@ -1879,7 +1879,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             readPageGeometriesIntoMap(getPages());
 
             closeReader();
-            pictureReader = new MultiPagePictureReader(pictureURL);
+            pictureReader = new WebAccessMultiPagePictureReader(pictureURL);
 //            pictureReader.setCaching(false);
             final int numberOfPages = pictureReader.getNumberOfPages();
             for (int i = 0; i < numberOfPages; ++i) {
