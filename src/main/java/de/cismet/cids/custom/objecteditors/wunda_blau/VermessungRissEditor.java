@@ -79,7 +79,7 @@ import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -1342,41 +1342,42 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }//GEN-LAST:event_togPanActionPerformed
+    }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }//GEN-LAST:event_togZoomActionPerformed
+    }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }//GEN-LAST:event_btnHomeActionPerformed
+    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if ((currentDocument != NO_SELECTION) && (documentURLs[currentDocument] != null)) {
             try {
                 final URL downloadURL;
                 if (documentURLs[currentDocument].toExternalForm().contains(
-                                VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE)) {
+                                VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE)) {
                     final String url = documentURLs[currentDocument].toExternalForm()
-                                .replaceAll(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                                .replaceAll(
+                                    VermessungsrissWebAccessPictureFinder.getInstance().SUFFIX_REDUCED_SIZE,
                                     "");
                     downloadURL = new URL(url);
                 } else {
@@ -1435,14 +1436,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     }
                 }
             });
-    }//GEN-LAST:event_btnOpenActionPerformed
+    } //GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseClicked
+    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMouseClicked
         if (evt.getClickCount() <= 1) {
             return;
         }
@@ -1457,14 +1458,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selMO, "");
             }
         }
-    }//GEN-LAST:event_lstLandparcelsMouseClicked
+    } //GEN-LAST:event_lstLandparcelsMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstPagesValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPagesValueChanged
+    private void lstPagesValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstPagesValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object page = lstPages.getSelectedValue();
 
@@ -1472,14 +1473,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 loadPage(((Integer)page) - 1);
             }
         }
-    }//GEN-LAST:event_lstPagesValueChanged
+    } //GEN-LAST:event_lstPagesValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togBildActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togBildActionPerformed
+    private void togBildActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togBildActionPerformed
         umleitungsPanel = new VermessungUmleitungPanel(VermessungUmleitungPanel.MODE.VERMESSUNGSRISS, this);
         showUmleitung = true;
         currentSelectedButton = togBild;
@@ -1487,14 +1488,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         alertPanel.repaint();
         loadVermessungsriss();
         checkLinkInTitle();
-    }//GEN-LAST:event_togBildActionPerformed
+    }                                                                           //GEN-LAST:event_togBildActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togGrenzniederschriftActionPerformed
+    private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togGrenzniederschriftActionPerformed
         umleitungsPanel = new VermessungUmleitungPanel(VermessungUmleitungPanel.MODE.GRENZNIEDERSCHRIFT, this);
         showUmleitung = true;
         currentSelectedButton = togGrenzniederschrift;
@@ -1502,27 +1503,27 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         alertPanel.repaint();
         loadGrenzniederschrift();
 //        checkLinkInTitle();
-    }//GEN-LAST:event_togGrenzniederschriftActionPerformed
+    }                                                                                         //GEN-LAST:event_togGrenzniederschriftActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddLandparcelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLandparcelActionPerformed
+    private void btnAddLandparcelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLandparcelActionPerformed
         flurstueckDialog.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
                 "flurstuecksvermessung"));
 
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), flurstueckDialog, true);
-    }//GEN-LAST:event_btnAddLandparcelActionPerformed
+    } //GEN-LAST:event_btnAddLandparcelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLandparcelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLandparcelActionPerformed
+    private void btnRemoveLandparcelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveLandparcelActionPerformed
         final Object[] selection = lstLandparcels.getSelectedValues();
 
         if ((selection != null) && (selection.length > 0)) {
@@ -1550,25 +1551,25 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveLandparcelActionPerformed
+    } //GEN-LAST:event_btnRemoveLandparcelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLandparcelsValueChanged
+    private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstLandparcelsValueChanged
         if (!evt.getValueIsAdjusting()) {
             btnRemoveLandparcel.setEnabled(!readOnly && (lstLandparcels.getSelectedIndex() > -1));
         }
-    }//GEN-LAST:event_lstLandparcelsValueChanged
+    }                                                                                         //GEN-LAST:event_lstLandparcelsValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCombineGeometriesActionPerformed
+    private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCombineGeometriesActionPerformed
         if (cidsBean == null) {
             return;
         }
@@ -1614,14 +1615,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             // TODO: Tell user about error.
             LOG.error("Could set new geometry: '" + unionGeometry.toText() + "'.", ex);
         }
-    }//GEN-LAST:event_btnCombineGeometriesActionPerformed
+    } //GEN-LAST:event_btnCombineGeometriesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGeometrieStatusActionPerformed
+    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmbGeometrieStatusActionPerformed
         if (cmbGeometrieStatus.getSelectedItem() instanceof CidsBean) {
             final CidsBean geometrieStatus = (CidsBean)cmbGeometrieStatus.getSelectedItem();
 
@@ -1630,14 +1631,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                         (Integer)geometrieStatus.getProperty("id")));
             }
         }
-    }//GEN-LAST:event_cmbGeometrieStatusActionPerformed
+    } //GEN-LAST:event_cmbGeometrieStatusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsMousePressed(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMousePressed
+    private void lstLandparcelsMousePressed(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMousePressed
         if (!readOnly && popChangeVeraenderungsart.isPopupTrigger(evt)) {
             final int indexUnderMouse = lstLandparcels.locationToIndex(evt.getPoint());
 
@@ -1661,24 +1662,24 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 popChangeVeraenderungsart.show(evt.getComponent(), evt.getX(), evt.getY());
             }
         }
-    }//GEN-LAST:event_lstLandparcelsMousePressed
+    } //GEN-LAST:event_lstLandparcelsMousePressed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsMouseReleased(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseReleased
+    private void lstLandparcelsMouseReleased(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMouseReleased
         // Hock for popup menu. The return value of JPopupMenu.isPopupTrigger() depends on the OS.
         lstLandparcelsMousePressed(evt);
-    }//GEN-LAST:event_lstLandparcelsMouseReleased
+    } //GEN-LAST:event_lstLandparcelsMouseReleased
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlUmleitungActionPerformed
+    private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlUmleitungActionPerformed
         umleitungsPanel.reset();
         final String s = jxlUmleitung.getText();
 //        umleitungsPanel.checkState();
@@ -1702,7 +1703,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlMeasureComponentWrapper.invalidate();
         pnlMeasureComponentWrapper.validate();
         pnlMeasureComponentWrapper.repaint();
-    }//GEN-LAST:event_jxlUmleitungActionPerformed
+    }                                                                                //GEN-LAST:event_jxlUmleitungActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1895,9 +1896,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
         final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
         if (currentSelectedButton == togBild) {
-            return VermessungsrissPictureFinder.getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
+            return VermessungsrissWebAccessPictureFinder.getInstance()
+                        .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
         } else {
-            return VermessungsrissPictureFinder.getGrenzniederschriftFilename(schluessel, gemarkung, flur, blatt);
+            return VermessungsrissWebAccessPictureFinder.getInstance()
+                        .getGrenzniederschriftFilename(schluessel, gemarkung, flur, blatt);
         }
     }
 
@@ -2534,7 +2537,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lstPages.setModel(new DefaultListModel());
         final URL url = documentURLs[currentDocument];
         if (url == null) {
-            final String link = VermessungsrissPictureFinder.getLinkFromLinkDocument(readOnly, getDocumentFilename());
+            final String link = VermessungsrissWebAccessPictureFinder.getInstance()
+                        .getLinkFromLinkDocument(readOnly, getDocumentFilename());
             if ((link != null) && !link.isEmpty()) {
                 jxlUmleitung.setText(link);
                 showLinkInTitle(true);
@@ -2825,8 +2829,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
             final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
 
-            result[VERMESSUNGSRISS] = VermessungsrissPictureFinder.findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
-            result[GRENZNIEDERSCHRIFT] = VermessungsrissPictureFinder.findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
+            result[VERMESSUNGSRISS] = VermessungsrissWebAccessPictureFinder.getInstance().findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
+            result[GRENZNIEDERSCHRIFT] = VermessungsrissWebAccessPictureFinder.getInstance().findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
 
             LOG.debug("Textblätter:" + result[VERMESSUNGSRISS]);
             LOG.debug("Lagepläne:" + result[GRENZNIEDERSCHRIFT]);
