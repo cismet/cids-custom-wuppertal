@@ -53,7 +53,7 @@ import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel.MODE;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -331,7 +331,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                             editor.reloadPictureFromUrl(file);
                         } else {
                             // no file exists we need to show a warning...
-                            lastCheckedURL = new URL(VermessungsrissPictureFinder.getObjectPath(
+                            lastCheckedURL = new URL(VermessungsrissWebAccessPictureFinder.getInstance().getObjectPath(
                                         true,
                                         getLinkDocument()));
                             editor.warnAlert();
@@ -356,7 +356,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         return null;
                     }
                     if (isPlatzhalter) {
-                        return new URL(VermessungsrissPictureFinder.getObjectPath(
+                        return new URL(VermessungsrissWebAccessPictureFinder.getInstance().getObjectPath(
                                     mode
                                             == MODE.GRENZNIEDERSCHRIFT,
                                     input) + ".jpg");
@@ -366,17 +366,19 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
                         // check if we need to format the flur and the blatt
                         if (mode == MODE.VERMESSUNGSRISS) {
-                            res = VermessungsrissPictureFinder.findVermessungsrissPicture(
-                                    props[0],
-                                    Integer.parseInt(props[1]),
-                                    props[2],
-                                    props[3]);
+                            res = VermessungsrissWebAccessPictureFinder.getInstance()
+                                        .findVermessungsrissPicture(
+                                                props[0],
+                                                Integer.parseInt(props[1]),
+                                                props[2],
+                                                props[3]);
                         } else {
-                            res = VermessungsrissPictureFinder.findGrenzniederschriftPicture(
-                                    props[0],
-                                    Integer.parseInt(props[1]),
-                                    props[2],
-                                    props[3]);
+                            res = VermessungsrissWebAccessPictureFinder.getInstance()
+                                        .findGrenzniederschriftPicture(
+                                                props[0],
+                                                Integer.parseInt(props[1]),
+                                                props[2],
+                                                props[3]);
                         }
                         if ((res == null) || res.isEmpty()) {
                             return null;
@@ -608,14 +610,15 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         final String flur = vermessungBean.getProperty("flur").toString();
         final String blatt = vermessungBean.getProperty("blatt").toString();
 
-        return VermessungsrissPictureFinder.getObjectFilename(
-                false,
-                mode
+        return VermessungsrissWebAccessPictureFinder.getInstance()
+                    .getObjectFilename(
+                        false,
+                        mode
                         == MODE.GRENZNIEDERSCHRIFT,
-                schluessel,
-                gemarkung,
-                flur,
-                blatt);
+                        schluessel,
+                        gemarkung,
+                        flur,
+                        blatt);
     }
 
     /**
