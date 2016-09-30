@@ -1947,7 +1947,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRetrieveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrieveActionPerformed
+    private void btnRetrieveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRetrieveActionPerformed
         final CidsBean bean = cidsBean;
         if (bean != null) {
             final String pointCode = String.valueOf(bean.getProperty("pointcode"));
@@ -1955,53 +1955,53 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 AlkisSOAPWorkerService.execute(new RetrieveWorker(pointCode));
             }
         }
-    }//GEN-LAST:event_btnRetrieveActionPerformed
+    }                                                                               //GEN-LAST:event_btnRetrieveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-    }//GEN-LAST:event_lblBackMouseClicked
+    }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, CARD_1);
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
         lblTitle.setText(title);
-    }//GEN-LAST:event_btnBackActionPerformed
+    }                                                                           //GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, CARD_2);
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
         lblTitle.setText("Produkte");
-    }//GEN-LAST:event_btnForwardActionPerformed
+    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-    }//GEN-LAST:event_lblForwMouseClicked
+    }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
@@ -2099,7 +2099,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlistePdfActionPerformed
+    private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlistePdfActionPerformed
         try {
             if (BillingPopup.doBilling("pktlstpdf", "no.yet", (Geometry)null, new ProductGroupAmount("eafifty", 1))) {
                 downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
@@ -2108,23 +2108,23 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    }//GEN-LAST:event_hlPunktlistePdfActionPerformed
+    }                                                                                   //GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlPunktlisteHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
+    private void hlPunktlisteHtmlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
         downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_HTML);
-    }//GEN-LAST:event_hlPunktlisteHtmlActionPerformed
+    }                                                                                    //GEN-LAST:event_hlPunktlisteHtmlActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbPunktorteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPunktorteActionPerformed
+    private void cbPunktorteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbPunktorteActionPerformed
         final Object selection = cbPunktorte.getSelectedItem();
         if (selection instanceof PointLocation) {
             final PointLocation pointLoc = (PointLocation)selection;
@@ -2134,14 +2134,14 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 cbPunktorte.setBackground(Color.WHITE);
             }
         }
-    }//GEN-LAST:event_cbPunktorteActionPerformed
+    }                                                                               //GEN-LAST:event_cbPunktorteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteTxtActionPerformed
+    private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlisteTxtActionPerformed
         try {
             if (BillingPopup.doBilling(
                             "pktlsttxt",
@@ -2154,41 +2154,41 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    }//GEN-LAST:event_hlPunktlisteTxtActionPerformed
+    }                                                                                   //GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }//GEN-LAST:event_togPanActionPerformed
+    }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }//GEN-LAST:event_togZoomActionPerformed
+    }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }//GEN-LAST:event_btnHomeActionPerformed
+    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if (urlOfAPMap != null) {
             final URL url;
             try {
@@ -2229,7 +2229,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 // Hier noch ein Fehlerdialog
             }
         }
-    }//GEN-LAST:event_btnOpenActionPerformed
+    } //GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -2659,7 +2659,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 return result;
             }
 
-            final Collection<URL> validURLs = AlkisPunktReportScriptlet.getInstance().getCorrespondingURLs(pointcode);
+            final Collection<URL> validURLs = AlkisPunktReportScriptlet.getCorrespondingURLs(pointcode);
             InputStream streamToReadFrom = null;
             for (final URL url : validURLs) {
                 try {
