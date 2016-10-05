@@ -35,7 +35,6 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.BrowserLauncher;
 
-
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -546,7 +545,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblMailMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMailMouseClicked
+    private void lblMailMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblMailMouseClicked
         final String email = lblMail.getText();
         if (email.length() > 3) {
             try {
@@ -555,14 +554,14 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
                 log.error("Fehler beim \u00D6ffnen der URL: \"mailto:" + email + "\"", ex);
             }
         }
-    }//GEN-LAST:event_lblMailMouseClicked
+    }                                                                       //GEN-LAST:event_lblMailMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblUrlMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblUrlMouseClicked
+    private void lblUrlMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblUrlMouseClicked
         final String url = lblUrl.getText();
         if (url.length() > 3) {
             try {
@@ -571,14 +570,14 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
                 log.error("Fehler beim \u00D6ffnen der URL: " + url + "", ex);
             }
         }
-    }//GEN-LAST:event_lblUrlMouseClicked
+    }                                                                      //GEN-LAST:event_lblUrlMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlinkWebsiteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlinkWebsiteActionPerformed
+    private void jXHyperlinkWebsiteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlinkWebsiteActionPerformed
         final String site = (String)cidsBean.getProperty("fotostrecke");
         if (site != null) {
             try {
@@ -592,14 +591,14 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
                     JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jXHyperlinkWebsiteActionPerformed
+    }                                                                                      //GEN-LAST:event_jXHyperlinkWebsiteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlinkImageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlinkImageActionPerformed
+    private void jXHyperlinkImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlinkImageActionPerformed
         final String foto = (String)cidsBean.getProperty("foto");
         if (foto != null) {
             try {
@@ -613,7 +612,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
                     JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jXHyperlinkImageActionPerformed
+    }                                                                                    //GEN-LAST:event_jXHyperlinkImageActionPerformed
 
     /**
      * DOCUMENT ME!
