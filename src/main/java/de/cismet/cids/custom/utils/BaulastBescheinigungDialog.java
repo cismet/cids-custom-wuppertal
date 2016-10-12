@@ -1209,12 +1209,20 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                         + Integer.parseInt(gemarkungsnummer) + " "
                                         + "LIMIT 1;";
                             final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(pruefungQuery, 0);
-                            final CidsBean gemarkung = mos[0].getBean();
 
-                            final String key = gemarkung.getProperty("name") + " "
-                                        + Integer.parseInt(buchungsblattnummer.substring(0, 5))
-                                        + buchungsblattnummer.substring(5) + " / "
-                                        + Integer.parseInt(buchungsstelle.getSequentialNumber());
+                            final String key;
+                            if ((mos != null) && (mos.length > 0)) {
+                                final CidsBean gemarkung = mos[0].getBean();
+                                key = gemarkung.getProperty("name") + " "
+                                            + Integer.parseInt(buchungsblattnummer.substring(0, 5))
+                                            + buchungsblattnummer.substring(5) + " / "
+                                            + Integer.parseInt(buchungsstelle.getSequentialNumber());
+                            } else {
+                                key = "[" + gemarkungsnummer + "] "
+                                            + Integer.parseInt(buchungsblattnummer.substring(0, 5))
+                                            + buchungsblattnummer.substring(5) + " / "
+                                            + Integer.parseInt(buchungsstelle.getSequentialNumber());
+                            }
 
                             final String buchungsart = buchungsstelle.getBuchungsart();
                             if ("Erbbaurecht".equals(buchungsart)) {
