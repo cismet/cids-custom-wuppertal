@@ -26,6 +26,8 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.Component;
 
+import java.sql.Timestamp;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
@@ -51,7 +53,7 @@ import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungDo
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungBaulastInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
-import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAhnhangDownloadAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnhangDownloadAction;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungFreigabeServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -102,13 +104,13 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         new HashMap<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFreigeben;
+    private javax.swing.JButton btnStorno;
     private javax.swing.JDialog diaFreigabe;
     private javax.swing.JDialog diaStorno;
     private org.jdesktop.swingx.JXHyperlink hlDateianhangValue;
     private org.jdesktop.swingx.JXHyperlink hlEMailValue;
     private org.jdesktop.swingx.JXHyperlink hlVorschauValue;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -154,6 +156,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JLabel lblPruefKommentar;
     private javax.swing.JLabel lblPruefStatus;
     private javax.swing.JLabel lblPruefStatusValue;
+    private javax.swing.JLabel lblPruefTsValue;
     private javax.swing.JLabel lblPruefer;
     private javax.swing.JLabel lblPrueferValue;
     private javax.swing.JLabel lblSchluessel;
@@ -202,8 +205,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         lblTitle = new javax.swing.JLabel();
         lblTitleValue = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnFreigeben = new javax.swing.JButton();
+        btnStorno = new javax.swing.JButton();
         diaFreigabe = new javax.swing.JDialog();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -236,6 +239,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         hlEMailValue = new org.jdesktop.swingx.JXHyperlink();
         lblPruefStatus = new javax.swing.JLabel();
         lblPruefStatusValue = new javax.swing.JLabel();
+        lblPruefTsValue = new javax.swing.JLabel();
         lblPruefer = new javax.swing.JLabel();
         lblPrueferValue = new javax.swing.JLabel();
         lblGeprueftAmValue = new javax.swing.JLabel();
@@ -303,45 +307,45 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         panFooter.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jButton2,
+            btnFreigeben,
             org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
-                "BerechtigungspruefungRenderer.jButton2.text")); // NOI18N
+                "BerechtigungspruefungRenderer.btnFreigeben.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.postweg}"),
-                jButton2,
+                btnFreigeben,
                 org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnFreigeben.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton2ActionPerformed(evt);
+                    btnFreigebenActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        panFooter.add(jButton2, gridBagConstraints);
+        panFooter.add(btnFreigeben, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
+            btnStorno,
             org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
-                "BerechtigungspruefungRenderer.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+                "BerechtigungspruefungRenderer.btnStorno.text")); // NOI18N
+        btnStorno.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton1ActionPerformed(evt);
+                    btnStornoActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        panFooter.add(jButton1, gridBagConstraints);
+        panFooter.add(btnStorno, gridBagConstraints);
 
         diaFreigabe.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         diaFreigabe.setTitle(org.openide.util.NbBundle.getMessage(
@@ -349,7 +353,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 "BerechtigungspruefungRenderer.diaFreigabe.title")); // NOI18N
         diaFreigabe.setMinimumSize(new java.awt.Dimension(300, 200));
         diaFreigabe.setModal(true);
-        diaFreigabe.setPreferredSize(new java.awt.Dimension(300, 200));
         diaFreigabe.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -687,12 +690,30 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 "BerechtigungspruefungRenderer.lblPruefStatusValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblPruefStatusValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.freigabe_timestamp}"),
+                lblPruefTsValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
+        binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblPruefTsValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblPruefer,
@@ -1150,10 +1171,10 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
         jTextArea3.setText("");
         StaticSwingTools.showDialog(diaFreigabe);
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }                                                                                //GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1167,7 +1188,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         final String ext = dateiName.substring(extPos);
 
         final Download download = new ByteArrayActionDownload(
-                BerechtigungspruefungAhnhangDownloadAction.TASK_NAME,
+                BerechtigungspruefungAnhangDownloadAction.TASK_NAME,
                 (String)cidsBean.getProperty("schluessel"),
                 null,
                 "Berechtigungs-Prüfung - Dateianhang: "
@@ -1230,10 +1251,10 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void btnStornoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnStornoActionPerformed
         jTextArea4.setText("");
         StaticSwingTools.showDialog(diaStorno);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }                                                                             //GEN-LAST:event_btnStornoActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1294,21 +1315,21 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         ret = get();
                         if (ret.equals(BerechtigungspruefungFreigabeServerAction.ReturnType.OK)) {
                             final String title = freigabe ? "Berechtigungs-Anfrage freigegeben."
-                                                          : "Berechtigungs-Anfrage storniert.";
+                                                          : "Berechtigungs-Anfrage abgelehnt.";
                             final String message = freigabe ? "<html>Die Berechtigungs-Anfrage wurde freigegeben."
-                                                            : "<html>Die Berechtigungs-Anfrage wurde storniert.";
+                                                            : "<html>Die Berechtigungs-Anfrage wurde abgelehnt.";
                             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(
                                     BerechtigungspruefungRenderer.this),
                                 message,
                                 title,
                                 JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            final String title = freigabe ? "Fehler beim Freigeben." : "Fehler beim Stornieren.";
+                            final String title = freigabe ? "Fehler beim Freigeben." : "Fehler beim Ablehnen.";
                             switch (ret) {
                                 case ALREADY: {
                                     final String message = freigabe
                                         ? "<html>Die Berechtigungs-Anfrage wurde bereits freigegeben."
-                                        : "<html>Die Berechtigungs-Anfrage wurde bereits storniert.";
+                                        : "<html>Die Berechtigungs-Anfrage wurde bereits abgelehnt.";
                                     JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(
                                             BerechtigungspruefungRenderer.this),
                                         message,
@@ -1332,10 +1353,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                             }
                         }
                     } catch (final Exception ex) {
-                        final String title = freigabe ? "Fehler beim Freigeben." : "Fehler beim Stornieren.";
-                        final String message = freigabe
-                            ? "Beim Freigegen ist es zu unerwartetem einem Fehler gekommen."
-                            : "Beim Stornieren ist es zu unerwartetem einem Fehler gekommen.";
+                        final String title = freigabe ? "Fehler beim Freigeben." : "Fehler beim Ablehnen.";
+                        final String message = freigabe ? "Beim Freigegen ist es zu unerwartetem einem Fehler gekommen."
+                                                        : "Beim Ablehnen ist es zu unerwartetem einem Fehler gekommen.";
                         final ErrorInfo info = new ErrorInfo(
                                 title,
                                 message,
@@ -1348,8 +1368,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
                         LOG.error("Fehler beim Freigeben", ex);
                     } finally {
-                        jButton1.setEnabled(false);
-                        jButton2.setEnabled(false);
+                        btnStorno.setEnabled(false);
+                        btnFreigeben.setEnabled(false);
                     }
                 }
             }.execute();
@@ -1389,15 +1409,16 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             } else if (cidsBean.getProperty("pruefstatus") == null) {
                 lblPruefStatusValue.setText("in Bearbeitung");
             } else {
-                lblPruefStatusValue.setText((Boolean)cidsBean.getProperty("pruefstatus") ? "freigegeben" : "storniert");
+                lblPruefStatusValue.setText((Boolean)cidsBean.getProperty("pruefstatus") ? "freigegeben" : "abgelehnt");
             }
 
             final String pruefer = SessionManager.getSession().getUser().getName();
-
-            jButton1.setEnabled((cidsBean.getProperty("pruefer") == null)
-                        || pruefer.equals(cidsBean.getProperty("pruefer")));
-            jButton2.setEnabled((cidsBean.getProperty("pruefer") == null)
-                        || pruefer.equals(cidsBean.getProperty("pruefer")));
+            btnFreigeben.setEnabled((cidsBean.getProperty("pruefer") == null)
+                        || (pruefer.equals(cidsBean.getProperty("pruefer"))
+                            && (cidsBean.getProperty("pruefstatus") == null)));
+            btnStorno.setEnabled((cidsBean.getProperty("pruefer") == null)
+                        || (pruefer.equals(cidsBean.getProperty("pruefer"))
+                            && (cidsBean.getProperty("pruefstatus") == null)));
 
             new SwingWorker<CidsBean, Void>() {
 
@@ -1478,8 +1499,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 downloadInfo = null;
             }
         } else {
-            jButton1.setEnabled(false);
-            jButton2.setEnabled(false);
+            btnStorno.setEnabled(false);
+            btnFreigeben.setEnabled(false);
             lblPruefStatusValue.setText("-");
 
             lblAnfrageVonValue.setText("-");
@@ -1490,7 +1511,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         lblAbholStatusValue.setText(((cidsBean != null) && Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")))
                 ? (Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus")) ? "Vom Kunden heruntergeladen"
-                                                                            : "Stornomeldung erhalten")
+                                                                            : "Ablehnungsmeldung erhalten")
                 : "Vom Kunden noch nicht heruntergeladen");
 
         bindingGroup.bind();
