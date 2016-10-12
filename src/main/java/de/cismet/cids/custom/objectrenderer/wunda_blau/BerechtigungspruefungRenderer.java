@@ -1205,7 +1205,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      * @param  evt  DOCUMENT ME!
      */
     private void hlVorschauValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlVorschauValueActionPerformed
-        BaulastBescheinigungUtils.doDownload(bescheinigungDownloadInfo);
+        BaulastBescheinigungUtils.doDownload(bescheinigungDownloadInfo, (String)cidsBean.getProperty("schluessel"));
     }                                                                                   //GEN-LAST:event_hlVorschauValueActionPerformed
 
     /**

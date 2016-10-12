@@ -24,8 +24,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.log4j.Logger;
 
-import org.springframework.util.comparator.ComparableComparator;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
@@ -80,6 +78,7 @@ public class BaulastBescheinigungUtils {
 
     private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
+    private static final String PARAMETER_PRUEFKEY = "PRUEFKEY";
     private static final String PARAMETER_HAS_BELASTET = "HAS_BELASTET";
     private static final String PARAMETER_HAS_BEGUENSTIGT = "HAS_BEGUENSTIGT";
     private static final String PARAMETER_FABRICATIONNOTICE = "FABRICATIONNOTICE";
@@ -326,6 +325,7 @@ public class BaulastBescheinigungUtils {
      * @param   jobname               DOCUMENT ME!
      * @param   jobnumber             DOCUMENT ME!
      * @param   projectName           DOCUMENT ME!
+     * @param   anfrageSchluessel     DOCUMENT ME!
      * @param   fabricationdate       DOCUMENT ME!
      * @param   number                projectname DOCUMENT ME!
      * @param   max                   DOCUMENT ME!
@@ -339,6 +339,7 @@ public class BaulastBescheinigungUtils {
             final String jobname,
             final String jobnumber,
             final String projectName,
+            final String anfrageSchluessel,
             final Date fabricationdate,
             final int number,
             final int max) throws Exception {
@@ -368,6 +369,7 @@ public class BaulastBescheinigungUtils {
                         final HashMap parameters = new HashMap();
                         parameters.put(PARAMETER_JOBNUMBER, jobnumber);
                         parameters.put(PARAMETER_PROJECTNAME, projectName);
+                        parameters.put(PARAMETER_PRUEFKEY, anfrageSchluessel);
 
                         parameters.put(PARAMETER_HAS_BELASTET, !bescheinigungsGruppe.getBaulastenBelastet().isEmpty());
                         parameters.put(
@@ -409,11 +411,13 @@ public class BaulastBescheinigungUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param  downloadInfo  DOCUMENT ME!
+     * @param  downloadInfo       DOCUMENT ME!
+     * @param  anfrageSchluessel  DOCUMENT ME!
      */
-    public static void doDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo) {
+    public static void doDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
+            final String anfrageSchluessel) {
         try {
-            final Download download = generateDownload(downloadInfo);
+            final Download download = generateDownload(downloadInfo, anfrageSchluessel);
             DownloadManager.instance().add(download);
         } catch (final Exception ex) {
             LOG.fatal(ex, ex);
@@ -423,14 +427,15 @@ public class BaulastBescheinigungUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   downloadInfo  DOCUMENT ME!
+     * @param   downloadInfo       DOCUMENT ME!
+     * @param   anfrageSchluessel  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static Download generateDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo)
-            throws Exception {
+    public static Download generateDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
+            final String anfrageSchluessel) throws Exception {
         final String jobname = (downloadInfo.getJobname() != null) ? downloadInfo.getJobname()
                                                                    : DownloadManagerDialog.getInstance().getJobName();
 
@@ -477,6 +482,7 @@ public class BaulastBescheinigungUtils {
                                         jobname,
                                         downloadInfo.getAuftragsnummer(),
                                         downloadInfo.getProduktbezeichnung(),
+                                        anfrageSchluessel,
                                         downloadInfo.getBescheinigungsInfo().getDatum(),
                                         ++number,
                                         max));
