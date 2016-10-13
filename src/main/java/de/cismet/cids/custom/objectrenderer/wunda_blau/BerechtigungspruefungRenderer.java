@@ -55,6 +55,7 @@ import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.Be
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnhangDownloadAction;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungFreigabeServerAction;
+import de.cismet.cids.custom.wunda_blau.toolbaritem.BerechtigungspruefungMessageNotifier;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -1280,13 +1281,13 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      * @param  freigabe  DOCUMENT ME!
      */
     private void executeFreigabeOrStorno(final boolean freigabe) {
+        final String schluessel = (String)cidsBean.getProperty("schluessel");
         new SwingWorker<BerechtigungspruefungFreigabeServerAction.ReturnType, Void>() {
 
                 @Override
                 protected BerechtigungspruefungFreigabeServerAction.ReturnType doInBackground() throws Exception {
                     try {
-                        final String schluessel = (String)cidsBean.getProperty("schluessel");
-                        final String kommentar = jTextArea4.getText();
+                        final String kommentar = freigabe ? jTextArea3.getText() : jTextArea4.getText();
                         return (BerechtigungspruefungFreigabeServerAction.ReturnType)SessionManager
                                     .getSession().getConnection()
                                     .executeTask(SessionManager.getSession().getUser(),
@@ -1313,6 +1314,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                     final BerechtigungspruefungFreigabeServerAction.ReturnType ret;
                     try {
                         ret = get();
+                        BerechtigungspruefungMessageNotifier.getInstance().fireAnfrageRemoved(schluessel);
                         if (ret.equals(BerechtigungspruefungFreigabeServerAction.ReturnType.OK)) {
                             final String title = freigabe ? "Berechtigungs-Anfrage freigegeben."
                                                           : "Berechtigungs-Anfrage abgelehnt.";
