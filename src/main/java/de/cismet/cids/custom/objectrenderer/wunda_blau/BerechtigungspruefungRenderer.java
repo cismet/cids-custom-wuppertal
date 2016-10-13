@@ -45,6 +45,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifier;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
@@ -55,7 +56,6 @@ import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.Be
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnhangDownloadAction;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungFreigabeServerAction;
-import de.cismet.cids.custom.wunda_blau.toolbaritem.BerechtigungspruefungMessageNotifier;
 
 import de.cismet.cids.dynamics.CidsBean;
 
