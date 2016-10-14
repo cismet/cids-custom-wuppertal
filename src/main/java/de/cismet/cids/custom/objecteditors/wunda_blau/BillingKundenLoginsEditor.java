@@ -88,6 +88,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
             RendererTools.makeReadOnly(txtKontakt);
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(cboCustomer);
+            RendererTools.makeReadOnly(txtTelNummer);
         }
     }
 
