@@ -148,9 +148,10 @@ public class BerechtigungspruefungToolbarWidget extends AbstractAction implement
     @Override
     public final boolean isVisible() {
         try {
-        return (SessionManager.getConnection().getConfigAttr(
+            return (SessionManager.getConnection().getConfigAttr(
                         SessionManager.getSession().getUser(),
-                        "csa://" + BerechtigungspruefungFreigabeServerAction.TASK_NAME)
+                        "csa://"
+                                + BerechtigungspruefungFreigabeServerAction.TASK_NAME)
                             != null);
         } catch (final Exception ex) {
             LOG.warn("could not check for csa://" + BerechtigungspruefungFreigabeServerAction.TASK_NAME, ex);
