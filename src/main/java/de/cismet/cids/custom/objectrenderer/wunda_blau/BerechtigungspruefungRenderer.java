@@ -26,8 +26,6 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.Component;
 
-import java.sql.Timestamp;
-
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
@@ -110,7 +108,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JDialog diaFreigabe;
     private javax.swing.JDialog diaStorno;
     private org.jdesktop.swingx.JXHyperlink hlDateianhangValue;
-    private org.jdesktop.swingx.JXHyperlink hlEMailValue;
     private org.jdesktop.swingx.JXHyperlink hlVorschauValue;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -149,7 +146,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JLabel lblBerechtigungsgrund;
     private javax.swing.JLabel lblBerechtigungsgrundValue;
     private javax.swing.JLabel lblDateianhang;
-    private javax.swing.JLabel lblEingegangenAm;
+    private javax.swing.JLabel lblEMail;
     private javax.swing.JLabel lblEingegangenAmValue;
     private javax.swing.JLabel lblGeprueftAmValue;
     private javax.swing.JLabel lblProdukt;
@@ -162,6 +159,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JLabel lblPrueferValue;
     private javax.swing.JLabel lblSchluessel;
     private javax.swing.JLabel lblSchluesselValue;
+    private javax.swing.JLabel lblTelNummer;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTitleValue;
     private javax.swing.JLabel lblVorschau;
@@ -176,6 +174,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
     private javax.swing.JScrollPane txaBegruendungstextValue;
     private javax.swing.JScrollPane txaBegruendungstextValue1;
+    private javax.swing.JTextField txtEMailValue;
+    private javax.swing.JTextField txtTelNummerValue;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -231,13 +231,15 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         jPanel1 = new javax.swing.JPanel();
         lblSchluessel = new javax.swing.JLabel();
         lblSchluesselValue = new javax.swing.JLabel();
+        lblEingegangenAmValue = new javax.swing.JLabel();
         lblProdukt = new javax.swing.JLabel();
         lblProduktValue = new javax.swing.JLabel();
-        lblEingegangenAm = new javax.swing.JLabel();
-        lblEingegangenAmValue = new javax.swing.JLabel();
         lblAnfrageVon = new javax.swing.JLabel();
         lblAnfrageVonValue = new javax.swing.JLabel();
-        hlEMailValue = new org.jdesktop.swingx.JXHyperlink();
+        lblEMail = new javax.swing.JLabel();
+        txtEMailValue = new javax.swing.JTextField();
+        lblTelNummer = new javax.swing.JLabel();
+        txtTelNummerValue = new javax.swing.JTextField();
         lblPruefStatus = new javax.swing.JLabel();
         lblPruefStatusValue = new javax.swing.JLabel();
         lblPruefTsValue = new javax.swing.JLabel();
@@ -561,12 +563,27 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblSchluesselValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anfrage_timestamp}"),
+                lblEingegangenAmValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblEingegangenAmValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblProdukt,
@@ -594,35 +611,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         jPanel1.add(lblProduktValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            lblEingegangenAm,
-            org.openide.util.NbBundle.getMessage(
-                BerechtigungspruefungRenderer.class,
-                "BerechtigungspruefungRenderer.lblEingegangenAm.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblEingegangenAm, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anfrage_timestamp}"),
-                lblEingegangenAmValue,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblEingegangenAmValue, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
             lblAnfrageVon,
             org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
@@ -632,46 +620,67 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblAnfrageVon, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${kundenName}"),
-                lblAnfrageVonValue,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblAnfrageVonValue, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${kundenMail}"),
-                hlEMailValue,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        hlEMailValue.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    hlEMailValueActionPerformed(evt);
-                }
-            });
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblEMail,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.lblEMail.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(hlEMailValue, gridBagConstraints);
+        jPanel1.add(lblEMail, gridBagConstraints);
+
+        txtEMailValue.setEditable(false);
+        txtEMailValue.setBackground(null);
+        txtEMailValue.setText(org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.txtEMailValue.text")); // NOI18N
+        txtEMailValue.setBorder(null);
+        txtEMailValue.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtEMailValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTelNummer,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.lblTelNummer.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblTelNummer, gridBagConstraints);
+
+        txtTelNummerValue.setEditable(false);
+        txtTelNummerValue.setBackground(null);
+        txtTelNummerValue.setText(org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.txtTelNummerValue.text")); // NOI18N
+        txtTelNummerValue.setBorder(null);
+        txtTelNummerValue.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtTelNummerValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblPruefStatus,
@@ -691,7 +700,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 "BerechtigungspruefungRenderer.lblPruefStatusValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -1159,19 +1167,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlEMailValueActionPerformed
-        try {
-            BrowserLauncher.openURL("mailto:" + "");
-        } catch (Exception ex) {
-            LOG.warn("could not open mailto link", ex);
-        }
-    }                                                                                //GEN-LAST:event_hlEMailValueActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
         jTextArea3.setText("");
         StaticSwingTools.showDialog(diaFreigabe);
@@ -1422,6 +1417,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         || (pruefer.equals(cidsBean.getProperty("pruefer"))
                             && (cidsBean.getProperty("pruefstatus") == null)));
 
+            lblAnfrageVonValue.setText((String)cidsBean.getProperty("benutzer"));
+            txtEMailValue.setText("");
+            txtEMailValue.setText("");
             new SwingWorker<CidsBean, Void>() {
 
                     @Override
@@ -1433,8 +1431,12 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                     protected void done() {
                         try {
                             final CidsBean externalUser = get();
-                            lblAnfrageVonValue.setText((String)externalUser.getProperty("name"));
-                            hlEMailValue.setText((String)externalUser.getProperty("kontakt"));
+                            if (externalUser != null) {
+                                lblAnfrageVonValue.setText((String)externalUser.getProperty("kunde.name") + " ("
+                                            + (String)cidsBean.getProperty("benutzer") + ")");
+                                txtEMailValue.setText((String)externalUser.getProperty("kontakt"));
+                                txtTelNummerValue.setText((String)externalUser.getProperty("tel_nummer"));
+                            }
                         } catch (final Exception ex) {
                             LOG.warn(ex, ex);
                         }
@@ -1506,7 +1508,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             lblPruefStatusValue.setText("-");
 
             lblAnfrageVonValue.setText("-");
-            hlEMailValue.setText("-");
+            txtEMailValue.setText("");
+            txtTelNummerValue.setText("");
 
             downloadInfo = null;
         }
