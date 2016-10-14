@@ -52,8 +52,6 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
 
     private File file = null;
 
-    private final Konfiguration conf;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -73,17 +71,6 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
      */
     public BerechtigungspruefungAnfragePanel() {
         initComponents();
-
-        Konfiguration conf = null;
-        try {
-            conf = (Konfiguration)
-                new ObjectMapper().readValue(BerechtigungspruefungAnfragePanel.class.getResourceAsStream(
-                        "/de/cismet/cids/custom/berechtigungspruefung/berechtigungspruefung_conf.json"),
-                    Konfiguration.class);
-        } catch (final Exception ex) {
-            LOG.warn(ex, ex);
-        }
-        this.conf = conf;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -95,11 +82,12 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
      */
     public void setProdukt(final String produktbezeichnung) {
         ((DefaultComboBoxModel<String>)jComboBox1.getModel()).removeAllElements();
-        for (final ProduktTyp produkt : conf.getProdukte()) {
+        for (final BerechtigungspruefungKonfiguration.ProduktTyp produkt
+                    : BerechtigungspruefungKonfiguration.INSTANCE.getProdukte()) {
             if (produktbezeichnung.equals(produkt.getProduktbezeichnung())) {
                 ((DefaultComboBoxModel<String>)jComboBox1.getModel()).addElement(
                     "<html><i>kein Berechtigungsgrund ausgewählt");
-                for (final String berechtigungsgrund : produkt.berechtigungsgruende) {
+                for (final String berechtigungsgrund : produkt.getBerechtigungsgruende()) {
                     ((DefaultComboBoxModel<String>)jComboBox1.getModel()).addElement(berechtigungsgrund);
                 }
                 break;
@@ -341,83 +329,5 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
          * @param  anfrageSchluessel  DOCUMENT ME!
          */
         void callback(final String anfrageSchluessel);
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    @Getter
-    @JsonAutoDetect(
-        fieldVisibility = JsonAutoDetect.Visibility.NONE,
-        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-        getterVisibility = JsonAutoDetect.Visibility.NONE,
-        setterVisibility = JsonAutoDetect.Visibility.NONE
-    )
-    static class ProduktTyp {
-
-        //~ Instance fields ----------------------------------------------------
-
-        @JsonProperty private final String produktbezeichnung;
-        @JsonProperty private final boolean begruendungstextErlaubt;
-        @JsonProperty private final boolean berechtigungsgrundErlaubt;
-        @JsonProperty private final boolean dateianhangErlaubt;
-        @JsonProperty private final Collection<String> berechtigungsgruende;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new ProduktTyp object.
-         *
-         * @param  produktbezeichnung         DOCUMENT ME!
-         * @param  begruendungstextErlaubt    DOCUMENT ME!
-         * @param  berechtigungsgrundErlaubt  DOCUMENT ME!
-         * @param  dateianhangErlaubt         DOCUMENT ME!
-         * @param  berechtigungsgruende       DOCUMENT ME!
-         */
-        public ProduktTyp(@JsonProperty("produktbezeichnung") final String produktbezeichnung,
-                @JsonProperty("begruendungstext_erlaubt") final boolean begruendungstextErlaubt,
-                @JsonProperty("berechtigungsgrund_erlaubt") final boolean berechtigungsgrundErlaubt,
-                @JsonProperty("dateianhang_erlaubt") final boolean dateianhangErlaubt,
-                @JsonProperty("berechtigungsgruende") final Collection<String> berechtigungsgruende) {
-            this.produktbezeichnung = produktbezeichnung;
-            this.begruendungstextErlaubt = begruendungstextErlaubt;
-            this.berechtigungsgrundErlaubt = berechtigungsgrundErlaubt;
-            this.dateianhangErlaubt = dateianhangErlaubt;
-            this.berechtigungsgruende = berechtigungsgruende;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    @Getter
-    @JsonAutoDetect(
-        fieldVisibility = JsonAutoDetect.Visibility.NONE,
-        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-        getterVisibility = JsonAutoDetect.Visibility.NONE,
-        setterVisibility = JsonAutoDetect.Visibility.NONE
-    )
-    static class Konfiguration {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private final Collection<ProduktTyp> produkte;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new Konfiguration object.
-         *
-         * @param  produkte  DOCUMENT ME!
-         */
-        public Konfiguration(@JsonProperty("produkte") final Collection<ProduktTyp> produkte) {
-            this.produkte = produkte;
-        }
     }
 }

@@ -80,11 +80,12 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
      * Creates new form BerechtigungspruefungToolbarWidget.
      */
     public BerechtigungspruefungToolbarWidget() {
-        initComponents();
+        if (isVisible()) {
+            initComponents();
+            updateAnfragen();
 
-        updateAnfragen();
-
-        BerechtigungspruefungMessageNotifier.getInstance().addListener(notifierListener);
+            BerechtigungspruefungMessageNotifier.getInstance().addListener(notifierListener);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -213,16 +214,7 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
 
     @Override
     public final boolean isVisible() {
-        try {
-            return (SessionManager.getConnection().getConfigAttr(
-                        SessionManager.getSession().getUser(),
-                        "csa://"
-                                + BerechtigungspruefungFreigabeServerAction.TASK_NAME)
-                            != null);
-        } catch (final Exception ex) {
-            LOG.warn("could not check for csa://" + BerechtigungspruefungFreigabeServerAction.TASK_NAME, ex);
-            return false;
-        }
+        return (!BerechtigungspruefungMessageNotifier.getInstance().getProdukttypeList().isEmpty());
     }
 
     /**
