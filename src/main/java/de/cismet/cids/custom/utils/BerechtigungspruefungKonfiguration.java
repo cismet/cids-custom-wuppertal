@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
 import java.util.Collection;
+import java.util.List;
 
 import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
 
@@ -56,17 +57,25 @@ public class BerechtigungspruefungKonfiguration {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Collection<ProduktTyp> produkte;
+    @JsonProperty private final List<ProduktTyp> produkte;
+    @JsonProperty private final List<Freigabegrund> freigabegruende;
+    @JsonProperty private final List<Ablehnungsgrund> ablehnungsgruende;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new Konfiguration object.
      *
-     * @param  produkte  DOCUMENT ME!
+     * @param  produkte           DOCUMENT ME!
+     * @param  freigabegruende    DOCUMENT ME!
+     * @param  ablehnungsgruende  DOCUMENT ME!
      */
-    public BerechtigungspruefungKonfiguration(@JsonProperty("produkte") final Collection<ProduktTyp> produkte) {
+    public BerechtigungspruefungKonfiguration(@JsonProperty("produkte") final List<ProduktTyp> produkte,
+            @JsonProperty("freigabegruende") final List<Freigabegrund> freigabegruende,
+            @JsonProperty("ablehnungsgruende") final List<Ablehnungsgrund> ablehnungsgruende) {
         this.produkte = produkte;
+        this.freigabegruende = freigabegruende;
+        this.ablehnungsgruende = ablehnungsgruende;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -114,6 +123,74 @@ public class BerechtigungspruefungKonfiguration {
             this.berechtigungsgrundErlaubt = berechtigungsgrundErlaubt;
             this.dateianhangErlaubt = dateianhangErlaubt;
             this.berechtigungsgruende = berechtigungsgruende;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @Getter
+    @JsonAutoDetect(
+        fieldVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE
+    )
+    public static class Ablehnungsgrund {
+
+        //~ Instance fields ----------------------------------------------------
+
+        @JsonProperty private final String vorlage;
+        @JsonProperty private final String langtext;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ProduktTyp object.
+         *
+         * @param  vorlage   DOCUMENT ME!
+         * @param  langtext  DOCUMENT ME!
+         */
+        public Ablehnungsgrund(@JsonProperty("vorlage") final String vorlage,
+                @JsonProperty("langtext") final String langtext) {
+            this.vorlage = vorlage;
+            this.langtext = langtext;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @Getter
+    @JsonAutoDetect(
+        fieldVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE
+    )
+    public static class Freigabegrund {
+
+        //~ Instance fields ----------------------------------------------------
+
+        @JsonProperty private final String vorlage;
+        @JsonProperty private final String langtext;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ProduktTyp object.
+         *
+         * @param  vorlage   DOCUMENT ME!
+         * @param  langtext  DOCUMENT ME!
+         */
+        public Freigabegrund(@JsonProperty("vorlage") final String vorlage,
+                @JsonProperty("langtext") final String langtext) {
+            this.vorlage = vorlage;
+            this.langtext = langtext;
         }
     }
 }

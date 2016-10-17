@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
@@ -47,6 +48,7 @@ import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageN
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
+import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungBaulastInfo;
@@ -60,8 +62,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-
-import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -102,6 +102,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private final Map<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean> baulastMap =
         new HashMap<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean>();
 
+    private final Map<String, String> freigabegruendeMap = new HashMap<String, String>();
+    private final Map<String, String> ablehnungsgruendeMap = new HashMap<String, String>();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFreigeben;
     private javax.swing.JButton btnStorno;
@@ -113,8 +116,12 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JList<BerechtigungspruefungBescheinigungBaulastInfo> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -129,10 +136,14 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea4;
+    private javax.swing.JTextArea jTextArea5;
+    private javax.swing.JTextArea jTextArea6;
     private javax.swing.JLabel labInfoTitle;
     private javax.swing.JLabel labInfoTitle1;
     private javax.swing.JLabel labInfoTitle2;
@@ -186,8 +197,25 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      */
     public BerechtigungspruefungRenderer() {
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
         initComponents();
+
+        final DefaultComboBoxModel<String> freigabegruendeModel = new DefaultComboBoxModel<String>();
+        freigabegruendeModel.addElement("<html><i>Vorlage auswählen</i>");
+        for (final BerechtigungspruefungKonfiguration.Freigabegrund freigabegrund
+                    : BerechtigungspruefungKonfiguration.INSTANCE.getFreigabegruende()) {
+            freigabegruendeMap.put(freigabegrund.getVorlage(), freigabegrund.getLangtext());
+            freigabegruendeModel.addElement(freigabegrund.getVorlage());
+        }
+        jComboBox1.setModel(freigabegruendeModel);
+
+        final DefaultComboBoxModel<String> ablehnungsgruendeModel = new DefaultComboBoxModel<String>();
+        ablehnungsgruendeModel.addElement("<html><i>Vorlage auswählen.</i>");
+        for (final BerechtigungspruefungKonfiguration.Ablehnungsgrund ablehnungsgrund
+                    : BerechtigungspruefungKonfiguration.INSTANCE.getAblehnungsgruende()) {
+            ablehnungsgruendeMap.put(ablehnungsgrund.getVorlage(), ablehnungsgrund.getLangtext());
+            ablehnungsgruendeModel.addElement(ablehnungsgrund.getVorlage());
+        }
+        jComboBox2.setModel(ablehnungsgruendeModel);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -216,6 +244,10 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         jPanel5 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea5 = new javax.swing.JTextArea();
+        jComboBox1 = new javax.swing.JComboBox<String>();
+        jLabel3 = new javax.swing.JLabel();
         diaStorno = new javax.swing.JDialog();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -224,6 +256,10 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         jPanel9 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<String>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextArea6 = new javax.swing.JTextArea();
         panMain = new javax.swing.JPanel();
         panInfo = new javax.swing.JPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -354,23 +390,26 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         diaFreigabe.setTitle(org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.diaFreigabe.title")); // NOI18N
-        diaFreigabe.setMinimumSize(new java.awt.Dimension(300, 200));
+        diaFreigabe.setMinimumSize(new java.awt.Dimension(350, 250));
         diaFreigabe.setModal(true);
         diaFreigabe.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jTextArea3.setColumns(20);
+        jTextArea3.setLineWrap(true);
         jTextArea3.setRows(5);
+        jTextArea3.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextArea3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel4.add(jScrollPane2, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -379,6 +418,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(jLabel1, gridBagConstraints);
 
@@ -389,6 +431,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.jButton3.text")); // NOI18N
+        jButton3.setEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -418,9 +461,53 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel4.add(jPanel5, gridBagConstraints);
+
+        jTextArea5.setEditable(false);
+        jTextArea5.setColumns(20);
+        jTextArea5.setLineWrap(true);
+        jTextArea5.setRows(5);
+        jTextArea5.setWrapStyleWord(true);
+        jScrollPane4.setViewportView(jTextArea5);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel4.add(jScrollPane4, gridBagConstraints);
+
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jComboBox1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel4.add(jComboBox1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel3,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.jLabel3.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel4.add(jLabel3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -433,23 +520,26 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         diaStorno.setTitle(org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.diaStorno.title")); // NOI18N
-        diaStorno.setMinimumSize(new java.awt.Dimension(300, 200));
+        diaStorno.setMinimumSize(new java.awt.Dimension(350, 250));
         diaStorno.setModal(true);
         diaStorno.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
         jTextArea4.setColumns(20);
+        jTextArea4.setLineWrap(true);
         jTextArea4.setRows(5);
+        jTextArea4.setWrapStyleWord(true);
         jScrollPane3.setViewportView(jTextArea4);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel8.add(jScrollPane3, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -458,6 +548,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel8.add(jLabel2, gridBagConstraints);
 
@@ -468,6 +561,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
                 "BerechtigungspruefungRenderer.jButton5.text")); // NOI18N
+        jButton5.setEnabled(false);
         jButton5.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -497,9 +591,53 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel8.add(jPanel9, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel4,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.jLabel4.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel8.add(jLabel4, gridBagConstraints);
+
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jComboBox2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel8.add(jComboBox2, gridBagConstraints);
+
+        jTextArea6.setEditable(false);
+        jTextArea6.setColumns(20);
+        jTextArea6.setLineWrap(true);
+        jTextArea6.setRows(5);
+        jTextArea6.setWrapStyleWord(true);
+        jScrollPane5.setViewportView(jTextArea6);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel8.add(jScrollPane5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -784,7 +922,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
+        jTextArea2.setLineWrap(true);
         jTextArea2.setRows(5);
+        jTextArea2.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1057,7 +1197,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
+        jTextArea1.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1169,6 +1311,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      */
     private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
         jTextArea3.setText("");
+        diaFreigabe.pack();
         StaticSwingTools.showDialog(diaFreigabe);
     }                                                                                //GEN-LAST:event_btnFreigebenActionPerformed
 
@@ -1249,6 +1392,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      */
     private void btnStornoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnStornoActionPerformed
         jTextArea4.setText("");
+        diaStorno.pack();
         StaticSwingTools.showDialog(diaStorno);
     }                                                                             //GEN-LAST:event_btnStornoActionPerformed
 
@@ -1273,6 +1417,32 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jComboBox1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jComboBox1ActionPerformed
+        final String vorlage = (String)jComboBox1.getSelectedItem();
+        final String langtext = freigabegruendeMap.get(vorlage);
+        jTextArea5.setText(langtext);
+        jButton3.setEnabled(langtext != null);
+        diaFreigabe.pack();
+    }                                                                              //GEN-LAST:event_jComboBox1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jComboBox2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jComboBox2ActionPerformed
+        final String vorlage = (String)jComboBox2.getSelectedItem();
+        final String langtext = ablehnungsgruendeMap.get(vorlage);
+        jTextArea6.setText(langtext);
+        jButton5.setEnabled(langtext != null);
+        diaStorno.pack();
+    }                                                                              //GEN-LAST:event_jComboBox2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  freigabe  DOCUMENT ME!
      */
     private void executeFreigabeOrStorno(final boolean freigabe) {
@@ -1282,7 +1452,16 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 @Override
                 protected BerechtigungspruefungFreigabeServerAction.ReturnType doInBackground() throws Exception {
                     try {
-                        final String kommentar = freigabe ? jTextArea3.getText() : jTextArea4.getText();
+                        final String kommentar;
+                        if (freigabe) {
+                            kommentar = jTextArea5.getText()
+                                        + (((jTextArea3.getText() != null) && !jTextArea3.getText().trim().isEmpty())
+                                            ? ("\n\n" + jTextArea3.getText()) : "");
+                        } else {
+                            kommentar = jTextArea6.getText()
+                                        + (((jTextArea4.getText() != null) && !jTextArea4.getText().trim().isEmpty())
+                                            ? ("\n\n" + jTextArea4.getText()) : "");
+                        }
                         return (BerechtigungspruefungFreigabeServerAction.ReturnType)SessionManager
                                     .getSession().getConnection()
                                     .executeTask(SessionManager.getSession().getUser(),
