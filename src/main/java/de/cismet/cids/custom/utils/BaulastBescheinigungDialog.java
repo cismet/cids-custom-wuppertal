@@ -570,9 +570,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         try {
+            final String produktbezeichnung = jTextField1.getText();
+            final String auftragsnummer = jTextField2.getText();
             if (BillingPopup.doBilling(
                             "blab_be",
                             "no.yet",
+                            auftragsnummer,
+                            produktbezeichnung,
                             (Geometry)null,
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
@@ -582,9 +586,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                         addMessage("\n===\n\nGebührenberechnung:\n");
                         addMessage(berechnung);
                     }
-
-                    final String produktbezeichnung = jTextField1.getText();
-                    final String auftragsnummer = jTextField2.getText();
 
                     final BerechtigungspruefungBescheinigungInfo bescheinigungsInfo =
                         new BerechtigungspruefungBescheinigungInfo(new Date(),
@@ -618,7 +619,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                 }
                             });
                     } else {
-                        BaulastBescheinigungUtils.doDownload(downloadInfo);
+                        BaulastBescheinigungUtils.doDownload(downloadInfo, "");
                     }
                 }
             }
@@ -1209,12 +1210,20 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                         + Integer.parseInt(gemarkungsnummer) + " "
                                         + "LIMIT 1;";
                             final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(pruefungQuery, 0);
-                            final CidsBean gemarkung = mos[0].getBean();
 
-                            final String key = gemarkung.getProperty("name") + " "
-                                        + Integer.parseInt(buchungsblattnummer.substring(0, 5))
-                                        + buchungsblattnummer.substring(5) + " / "
-                                        + Integer.parseInt(buchungsstelle.getSequentialNumber());
+                            final String key;
+                            if ((mos != null) && (mos.length > 0)) {
+                                final CidsBean gemarkung = mos[0].getBean();
+                                key = gemarkung.getProperty("name") + " "
+                                            + Integer.parseInt(buchungsblattnummer.substring(0, 5))
+                                            + buchungsblattnummer.substring(5) + " / "
+                                            + Integer.parseInt(buchungsstelle.getSequentialNumber());
+                            } else {
+                                key = "[" + gemarkungsnummer + "] "
+                                            + Integer.parseInt(buchungsblattnummer.substring(0, 5))
+                                            + buchungsblattnummer.substring(5) + " / "
+                                            + Integer.parseInt(buchungsstelle.getSequentialNumber());
+                            }
 
                             final String buchungsart = buchungsstelle.getBuchungsart();
                             if ("Erbbaurecht".equals(buchungsart)) {
@@ -1409,7 +1418,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                     StaticSwingTools.showDialog(diaFreigegeben);
 
                     BaulastBescheinigungUtils.doDownload((BerechtigungspruefungBescheinigungDownloadInfo)
-                        freigabeInfo.getBerechtigungspruefungDownloadInfo());
+                        freigabeInfo.getBerechtigungspruefungDownloadInfo(),
+                        schluessel);
                 } else {
                     jLabel8.setText(String.format(
                             org.openide.util.NbBundle.getMessage(

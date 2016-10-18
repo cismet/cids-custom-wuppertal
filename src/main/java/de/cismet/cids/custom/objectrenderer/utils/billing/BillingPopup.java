@@ -241,7 +241,31 @@ public class BillingPopup extends javax.swing.JDialog {
             final String gBuchNr,
             final Geometry geom,
             final ProductGroupAmount... amounts) throws Exception {
-        return doBilling(product, request, null, gBuchNr, geom, amounts);
+        return doBilling(product, request, gBuchNr, null, geom, amounts);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product     DOCUMENT ME!
+     * @param   request     DOCUMENT ME!
+     * @param   gBuchNr     DOCUMENT ME!
+     * @param   projektbez  DOCUMENT ME!
+     * @param   geom        DOCUMENT ME!
+     * @param   amounts     DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static boolean doBilling(
+            final String product,
+            final String request,
+            final String gBuchNr,
+            final String projektbez,
+            final Geometry geom,
+            final ProductGroupAmount... amounts) throws Exception {
+        return doBilling(product, request, null, gBuchNr, projektbez, geom, amounts);
     }
 
     /**
@@ -265,8 +289,35 @@ public class BillingPopup extends javax.swing.JDialog {
             final String gBuchNr,
             final Geometry geom,
             final ProductGroupAmount... amounts) throws Exception {
+        return doBilling(product, defaultRequest, requestPerUsage, gBuchNr, null, geom, amounts);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product          DOCUMENT ME!
+     * @param   defaultRequest   DOCUMENT ME!
+     * @param   requestPerUsage  DOCUMENT ME!
+     * @param   gBuchNr          DOCUMENT ME!
+     * @param   projektbez       DOCUMENT ME!
+     * @param   geom             DOCUMENT ME!
+     * @param   amounts          DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static boolean doBilling(
+            final String product,
+            final String defaultRequest,
+            final Map<String, String> requestPerUsage,
+            final String gBuchNr,
+            final String projektbez,
+            final Geometry geom,
+            final ProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         instance.txtGBuchNr.setText(gBuchNr);
+        instance.txtProjektbez.setText(projektbez);
         final User user = SessionManager.getSession().getUser();
         final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
         if (modus != null) {

@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.berechtigungspruefung;
+package de.cismet.cids.custom.wunda_blau.toolbaritem;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
@@ -24,24 +24,21 @@ import org.apache.log4j.Logger;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungBearbeitungInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungProperties;
+import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifier;
+import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifierListener;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungFreigabeServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
 
-import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
-import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -51,99 +48,47 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class BerechtigungspruefungBerebeitungDialog extends javax.swing.JDialog {
+@org.openide.util.lookup.ServiceProvider(service = CidsClientToolbarItem.class)
+public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel implements CidsClientToolbarItem {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Map<String, BerechtigungspruefungBerebeitungDialog> DIALOG_MAP =
-        new HashMap<String, BerechtigungspruefungBerebeitungDialog>();
-    private static final Logger LOG = Logger.getLogger(BerechtigungspruefungBerebeitungDialog.class);
+    private static final Logger LOG = Logger.getLogger(BerechtigungspruefungToolbarWidget.class);
 
-    private static final CidsServerMessageNotifierListener NOTIFIER_LISTENER = new CidsServerMessageNotifierListener() {
+    private static final String TEXT_TEMPLATE = "%s offene Berechtigungsprüfungs-Anfragen";
+    private static final String TEXT_TEMPLATE_NONE = "keine offene Berechtigungsprüfungs-Anfragen";
+    private static final String TEXT_TEMPLATE_ONE = "Eine offene Berechtigungsprüfungs-Anfrage";
 
-            @Override
-            public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
-                final String category = event.getMessage().getCategory();
-                if (BerechtigungspruefungProperties.CSM_ANFRAGE.equals(category)) {
-                    final String schluessel = (String)event.getMessage().getContent();
-                    SwingUtilities.invokeLater(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                showDialog(schluessel);
-                            }
-                        });
-                } else if (BerechtigungspruefungProperties.CSM_BEARBEITUNG.equals(category)) {
-                    final BerechtigungspruefungBearbeitungInfo info = (BerechtigungspruefungBearbeitungInfo)
-                        event.getMessage().getContent();
-                    final BerechtigungspruefungBerebeitungDialog dialog = DIALOG_MAP.get(info.getSchluessel());
-                    if (dialog != null) {
-                        SwingUtilities.invokeLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    dialog.close();
-                                }
-                            });
-                    }
-                }
-            }
-        };
+    private static final ImageIcon ICON_PENDING = new javax.swing.ImageIcon(BerechtigungspruefungToolbarWidget.class
+                    .getResource("/de/cismet/cids/custom/wunda_blau/toolbaritem/exclamation-red-icon.png"));
+    private static final ImageIcon ICON_DONE = new javax.swing.ImageIcon(BerechtigungspruefungToolbarWidget.class
+                    .getResource("/de/cismet/cids/custom/wunda_blau/toolbaritem/tick-circle-icon.png"));
 
     //~ Instance fields --------------------------------------------------------
 
-    private final String schluessel;
+    private final BerechtigungspruefungMessageNotifierListener notifierListener =
+        new BerechtigungspruefungToolbarWidget.MessageListener();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form BerechtigungspruefungBerebeitungDialog.
-     *
-     * @param  parent      DOCUMENT ME!
-     * @param  modal       DOCUMENT ME!
-     * @param  schluessel  DOCUMENT ME!
+     * Creates new form BerechtigungspruefungToolbarWidget.
      */
-    private BerechtigungspruefungBerebeitungDialog(final java.awt.Frame parent,
-            final boolean modal,
-            final String schluessel) {
-        super(parent, modal);
-        initComponents();
-        this.schluessel = schluessel;
+    public BerechtigungspruefungToolbarWidget() {
+        if (isVisible()) {
+            initComponents();
+            updateAnfragen();
+
+            BerechtigungspruefungMessageNotifier.getInstance().addListener(notifierListener);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static CidsServerMessageNotifierListener getCidsServerMessageNotifierListener() {
-        return NOTIFIER_LISTENER;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  schluessel  DOCUMENT ME!
-     */
-    public static void showDialog(final String schluessel) {
-        final BerechtigungspruefungBerebeitungDialog dialog = new BerechtigungspruefungBerebeitungDialog(
-                ComponentRegistry.getRegistry().getMainWindow(),
-                true,
-                schluessel);
-        dialog.pack();
-        DIALOG_MAP.put(schluessel, dialog);
-        StaticSwingTools.showDialog(dialog);
-    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -154,47 +99,18 @@ public class BerechtigungspruefungBerebeitungDialog extends javax.swing.JDialog 
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(
-                BerechtigungspruefungBerebeitungDialog.class,
-                "BerechtigungspruefungBerebeitungDialog.jLabel1.text")); // NOI18N
+        setMaximumSize(new java.awt.Dimension(333, 31));
+        setOpaque(false);
+        setPreferredSize(new java.awt.Dimension(333, 31));
+        setLayout(new java.awt.GridBagLayout());
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(
-                BerechtigungspruefungBerebeitungDialog.class,
-                "BerechtigungspruefungBerebeitungDialog.title")); // NOI18N
-        getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
-            org.openide.util.NbBundle.getMessage(
-                BerechtigungspruefungBerebeitungDialog.class,
-                "BerechtigungspruefungBerebeitungDialog.jLabel2.text")); // NOI18N
-        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel1.add(jLabel2, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
-            org.openide.util.NbBundle.getMessage(
-                BerechtigungspruefungBerebeitungDialog.class,
-                "BerechtigungspruefungBerebeitungDialog.jButton1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, TEXT_TEMPLATE_NONE);
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -203,57 +119,24 @@ public class BerechtigungspruefungBerebeitungDialog extends javax.swing.JDialog 
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel1.add(jButton1, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton2,
-            org.openide.util.NbBundle.getMessage(
-                BerechtigungspruefungBerebeitungDialog.class,
-                "BerechtigungspruefungBerebeitungDialog.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton2ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(jButton2, gridBagConstraints);
+        add(jButton1, gridBagConstraints);
 
+        jLabel1.setIcon(ICON_DONE);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungToolbarWidget.class,
+                "BerechtigungspruefungToolbarWidget.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jPanel1, gridBagConstraints);
-
-        pack();
-    } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void close() {
-        dispose();
-        DIALOG_MAP.remove(schluessel);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
-        close();
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        add(jLabel1, gridBagConstraints);
+    }                                                                // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -261,8 +144,6 @@ public class BerechtigungspruefungBerebeitungDialog extends javax.swing.JDialog 
      * @param  evt  DOCUMENT ME!
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        close();
-
         new SwingWorker<BerechtigungspruefungFreigabeServerAction.ReturnType, Void>() {
 
                 @Override
@@ -274,7 +155,8 @@ public class BerechtigungspruefungBerebeitungDialog extends javax.swing.JDialog 
                                             SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
-                                            schluessel,
+                                            BerechtigungspruefungMessageNotifier.getInstance()
+                                                .getAeltesteOffeneAnfrage(),
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.MODUS
                                                     .toString(),
@@ -292,7 +174,7 @@ public class BerechtigungspruefungBerebeitungDialog extends javax.swing.JDialog 
                         ret = get();
                         if (ret.equals(
                                         BerechtigungspruefungFreigabeServerAction.ReturnType.OK)) {
-                            gotoPruefung(schluessel);
+                            gotoPruefung(BerechtigungspruefungMessageNotifier.getInstance().getAeltesteOffeneAnfrage());
                         } else {
                             final String title = "Fehler beim Sperren.";
                             final String message =
@@ -325,12 +207,24 @@ public class BerechtigungspruefungBerebeitungDialog extends javax.swing.JDialog 
             }.execute();
     } //GEN-LAST:event_jButton1ActionPerformed
 
+    @Override
+    public String getSorterString() {
+        return "XXX";
+    }
+
+    @Override
+    public final boolean isVisible() {
+        return (!BerechtigungspruefungMessageNotifier.getInstance().getProdukttypeList().isEmpty());
+    }
+
     /**
      * DOCUMENT ME!
      *
      * @param  schluessel  DOCUMENT ME!
      */
     private void gotoPruefung(final String schluessel) {
+        ComponentRegistry.getRegistry().showComponent(ComponentRegistry.DESCRIPTION_PANE);
+        ComponentRegistry.getRegistry().getDescriptionPane().showWaitScreen();
         new SwingWorker<MetaObjectNode, Object>() {
 
                 @Override
@@ -362,5 +256,69 @@ public class BerechtigungspruefungBerebeitungDialog extends javax.swing.JDialog 
                     }
                 }
             }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateAnfragen() {
+        int anzahlAnfragen;
+
+        try {
+            anzahlAnfragen = BerechtigungspruefungMessageNotifier.getInstance().getOffeneAnfragen().size();
+        } catch (final Exception ex) {
+            LOG.error("Fehler bei der Abfrage der offenen Anfragen", ex);
+            anzahlAnfragen = -1;
+        }
+
+        final String name;
+        final ImageIcon icon;
+        final boolean pending;
+        switch (anzahlAnfragen) {
+            case 0: {
+                name = TEXT_TEMPLATE_NONE;
+                icon = ICON_DONE;
+                pending = false;
+            }
+            break;
+            case 1: {
+                name = TEXT_TEMPLATE_ONE;
+                icon = ICON_PENDING;
+                pending = true;
+            }
+            break;
+            default: {
+                name = String.format(TEXT_TEMPLATE, String.valueOf(anzahlAnfragen));
+                icon = ICON_PENDING;
+                pending = true;
+            }
+        }
+
+        jButton1.setEnabled(pending);
+        jButton1.setText(name);
+        jLabel1.setToolTipText(name);
+        jLabel1.setIcon(icon);
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class MessageListener implements BerechtigungspruefungMessageNotifierListener {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void anfrageAdded(final String key) {
+            updateAnfragen();
+        }
+
+        @Override
+        public void anfrageRemoved(final String key) {
+            updateAnfragen();
+        }
     }
 }

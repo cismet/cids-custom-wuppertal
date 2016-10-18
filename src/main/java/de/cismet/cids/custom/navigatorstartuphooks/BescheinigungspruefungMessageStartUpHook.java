@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.lookup.ServiceProvider;
 
-import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungBerebeitungDialog;
+import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifier;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungProperties;
 
@@ -54,7 +54,7 @@ public class BescheinigungspruefungMessageStartUpHook implements StartupHook {
                                         + BerechtigungspruefungProperties.CSM_ANFRAGE)) {
                             CidsServerMessageNotifier.getInstance()
                                     .subscribe(
-                                        BerechtigungspruefungBerebeitungDialog.getCidsServerMessageNotifierListener(),
+                                        BerechtigungspruefungMessageNotifier.getInstance(),
                                         BerechtigungspruefungProperties.CSM_ANFRAGE);
                         }
                     } catch (ConnectionException ex) {
@@ -71,7 +71,7 @@ public class BescheinigungspruefungMessageStartUpHook implements StartupHook {
                                         + BerechtigungspruefungProperties.CSM_BEARBEITUNG)) {
                             CidsServerMessageNotifier.getInstance()
                                     .subscribe(
-                                        BerechtigungspruefungBerebeitungDialog.getCidsServerMessageNotifierListener(),
+                                        BerechtigungspruefungMessageNotifier.getInstance(),
                                         BerechtigungspruefungProperties.CSM_BEARBEITUNG);
                         }
                     } catch (ConnectionException ex) {
