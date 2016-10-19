@@ -79,7 +79,7 @@ import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -1374,9 +1374,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             try {
                 final URL downloadURL;
                 if (documentURLs[currentDocument].toExternalForm().contains(
-                                VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE)) {
+                                VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE)) {
                     final String url = documentURLs[currentDocument].toExternalForm()
-                                .replaceAll(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                                .replaceAll(
+                                    VermessungsrissWebAccessPictureFinder.getInstance().SUFFIX_REDUCED_SIZE,
                                     "");
                     downloadURL = new URL(url);
                 } else {
@@ -1895,9 +1896,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
         final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
         if (currentSelectedButton == togBild) {
-            return VermessungsrissPictureFinder.getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
+            return VermessungsrissWebAccessPictureFinder.getInstance()
+                        .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
         } else {
-            return VermessungsrissPictureFinder.getGrenzniederschriftFilename(schluessel, gemarkung, flur, blatt);
+            return VermessungsrissWebAccessPictureFinder.getInstance()
+                        .getGrenzniederschriftFilename(schluessel, gemarkung, flur, blatt);
         }
     }
 
@@ -2534,7 +2537,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lstPages.setModel(new DefaultListModel());
         final URL url = documentURLs[currentDocument];
         if (url == null) {
-            final String link = VermessungsrissPictureFinder.getLinkFromLinkDocument(readOnly, getDocumentFilename());
+            final String link = VermessungsrissWebAccessPictureFinder.getInstance()
+                        .getLinkFromLinkDocument(readOnly, getDocumentFilename());
             if ((link != null) && !link.isEmpty()) {
                 jxlUmleitung.setText(link);
                 showLinkInTitle(true);
@@ -2825,8 +2829,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
             final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
 
-            result[VERMESSUNGSRISS] = VermessungsrissPictureFinder.findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
-            result[GRENZNIEDERSCHRIFT] = VermessungsrissPictureFinder.findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
+            result[VERMESSUNGSRISS] = VermessungsrissWebAccessPictureFinder.getInstance().findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
+            result[GRENZNIEDERSCHRIFT] = VermessungsrissWebAccessPictureFinder.getInstance().findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
 
             LOG.debug("Textblätter:" + result[VERMESSUNGSRISS]);
             LOG.debug("Lagepläne:" + result[GRENZNIEDERSCHRIFT]);
