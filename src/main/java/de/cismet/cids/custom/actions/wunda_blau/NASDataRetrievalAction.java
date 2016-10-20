@@ -12,23 +12,17 @@
 package de.cismet.cids.custom.actions.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 
-import com.vividsolutions.jts.geom.Geometry;
-
-import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.awt.event.ActionEvent;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.swing.AbstractAction;
 import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.nas.NasDialog;
-import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteSearch;
 
 import de.cismet.cismap.commons.features.CommonFeatureAction;
 import de.cismet.cismap.commons.features.Feature;

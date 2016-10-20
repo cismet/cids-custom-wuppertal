@@ -23,9 +23,11 @@ import java.util.HashMap;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Product;
-import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteSearch;
+import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearchStatement.Pointtype;
 import de.cismet.cids.custom.wunda_blau.search.server.NasPointSearch;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 /**
  * DOCUMENT ME!
@@ -142,12 +144,29 @@ public abstract class NasFeeCalculator {
      * @throws  ConnectionException  DOCUMENT ME!
      */
     public static int getFlurstueckAmount(final Geometry g) throws ConnectionException {
-        final NasZaehlObjekteSearch flurstueckSearch = new NasZaehlObjekteSearch(
-                g,
-                NasZaehlObjekteSearch.NasSearchType.FLURSTUECKE);
+        return getAmount(NasZaehlObjekteServerAction.NasSearchType.FLURSTUECKE, g);
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   searchType  DOCUMENT ME!
+     * @param   geom        DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    public static int getAmount(final NasZaehlObjekteServerAction.NasSearchType searchType, final Geometry geom)
+            throws ConnectionException {
+        final ServerActionParameter sapType = new ServerActionParameter<NasZaehlObjekteServerAction.NasSearchType>(
+                NasZaehlObjekteServerAction.Parameter.SEARCH_TYPE.toString(),
+                searchType);
+        final ServerActionParameter sapGeom = new ServerActionParameter<Geometry>(
+                NasZaehlObjekteServerAction.Parameter.GEOMETRY.toString(),
+                geom);
         final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), flurstueckSearch);
+                    .executeTask(NasZaehlObjekteServerAction.TASK_NAME, "WUNDA_BLAU", null, sapType, sapGeom);
         return c.get(0);
     }
 
@@ -161,13 +180,7 @@ public abstract class NasFeeCalculator {
      * @throws  ConnectionException  DOCUMENT ME!
      */
     public static int getGebaeudeAmount(final Geometry g) throws ConnectionException {
-        final NasZaehlObjekteSearch gebaeudeSearch = new NasZaehlObjekteSearch(
-                g,
-                NasZaehlObjekteSearch.NasSearchType.GEBAEUDE);
-
-        final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), gebaeudeSearch);
-        return c.get(0);
+        return getAmount(NasZaehlObjekteServerAction.NasSearchType.GEBAEUDE, g);
     }
 
     /**
@@ -180,13 +193,7 @@ public abstract class NasFeeCalculator {
      * @throws  ConnectionException  DOCUMENT ME!
      */
     public static int getDachPunkteAmount(final Geometry g) throws ConnectionException {
-        final NasZaehlObjekteSearch dachpuntkeSearch = new NasZaehlObjekteSearch(
-                g,
-                NasZaehlObjekteSearch.NasSearchType.DACHPUNKTE);
-
-        final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), dachpuntkeSearch);
-        return c.get(0);
+        return getAmount(NasZaehlObjekteServerAction.NasSearchType.DACHPUNKTE, g);
     }
 
     /**
@@ -199,13 +206,7 @@ public abstract class NasFeeCalculator {
      * @throws  ConnectionException  DOCUMENT ME!
      */
     public static int getBodenPunkteAmount(final Geometry g) throws ConnectionException {
-        final NasZaehlObjekteSearch bodenPunkte = new NasZaehlObjekteSearch(
-                g,
-                NasZaehlObjekteSearch.NasSearchType.BODENPUNKTE);
-
-        final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), bodenPunkte);
-        return c.get(0);
+        return getAmount(NasZaehlObjekteServerAction.NasSearchType.BODENPUNKTE, g);
     }
 
     /**

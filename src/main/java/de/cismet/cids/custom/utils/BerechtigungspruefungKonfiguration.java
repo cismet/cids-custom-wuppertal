@@ -12,14 +12,20 @@
  */
 package de.cismet.cids.custom.utils;
 
+import Sirius.navigator.connection.SessionManager;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 
+import java.io.StringReader;
+
 import java.util.Collection;
 import java.util.List;
+
+import de.cismet.cids.custom.wunda_blau.search.actions.GetServerResourceServerAction;
 
 import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
 
@@ -45,9 +51,17 @@ public class BerechtigungspruefungKonfiguration {
     static {
         BerechtigungspruefungKonfiguration conf = null;
         try {
+            final Object ret = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON);
+            if (ret instanceof Exception) {
+                throw (Exception)ret;
+            }
             conf = (BerechtigungspruefungKonfiguration)
-                new ObjectMapper().readValue(BerechtigungspruefungAnfragePanel.class.getResourceAsStream(
-                        "/de/cismet/cids/custom/berechtigungspruefung/berechtigungspruefung_conf.json"),
+                new ObjectMapper().readValue(new StringReader((String)ret),
                     BerechtigungspruefungKonfiguration.class);
         } catch (final Exception ex) {
             LOG.warn("error while creating BerechtigungspruefungKonfiguration instance", ex);

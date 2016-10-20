@@ -38,7 +38,9 @@ import de.cismet.cids.custom.nas.NasFeeCalculator;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
-import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteSearch;
+import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerAction;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.tools.StaticDecimalTools;
 
@@ -667,14 +669,21 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      */
     private String getAdressCount() {
         if (geom != null) {
-            final NasZaehlObjekteSearch flurstueckSearch = new NasZaehlObjekteSearch(
-                    geom,
-                    NasZaehlObjekteSearch.NasSearchType.ADRESSE);
-
             final ArrayList<Integer> c;
             try {
+                final ServerActionParameter sapType =
+                    new ServerActionParameter<NasZaehlObjekteServerAction.NasSearchType>(
+                        NasZaehlObjekteServerAction.Parameter.SEARCH_TYPE.toString(),
+                        NasZaehlObjekteServerAction.NasSearchType.ADRESSE);
+                final ServerActionParameter sapGeom = new ServerActionParameter<Geometry>(
+                        NasZaehlObjekteServerAction.Parameter.GEOMETRY.toString(),
+                        geom);
                 c = (ArrayList<Integer>)SessionManager.getProxy()
-                            .customServerSearch(SessionManager.getSession().getUser(), flurstueckSearch);
+                            .executeTask(
+                                    NasZaehlObjekteServerAction.TASK_NAME,
+                                    null,
+                                    sapType,
+                                    sapGeom);
                 return "" + c.get(0);
             } catch (ConnectionException ex) {
                 Exceptions.printStackTrace(ex);

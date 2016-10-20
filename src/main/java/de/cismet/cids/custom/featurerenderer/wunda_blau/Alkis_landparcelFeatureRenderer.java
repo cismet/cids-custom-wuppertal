@@ -10,7 +10,7 @@ package de.cismet.cids.custom.featurerenderer.wunda_blau;
 import java.awt.Color;
 import java.awt.Paint;
 
-import java.util.Properties;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
@@ -31,10 +31,7 @@ public class Alkis_landparcelFeatureRenderer extends CustomCidsFeatureRenderer {
 
     static {
         try {
-            final Properties prop = new Properties();
-            prop.load(Alkis_landparcelFeatureRenderer.class.getResourceAsStream(
-                    "/de/cismet/cids/custom/wunda_blau/res/alkis/alkis_conf.properties"));
-            final String rgbValueStr = prop.getProperty("LANDPARCEL_FEATURE_RENDERER_COLOR");
+            final String rgbValueStr = AlkisConstants.COMMONS.LANDPARCEL_FEATURE_RENDERER_COLOR;
             int rgbValue;
             if (rgbValueStr != null) {
                 rgbValue = Integer.parseInt(rgbValueStr, 16);
@@ -42,8 +39,8 @@ public class Alkis_landparcelFeatureRenderer extends CustomCidsFeatureRenderer {
                 rgbValue = AQUA_SKY;
             }
             FILLING_STYLE_COLOR = new Color(rgbValue);
-        } catch (Exception ex) {
-            LOG.warn("Bundle could not be loaded", ex);
+        } catch (final Exception ex) {
+            LOG.warn("AlkisConf could not be loaded", ex);
             FILLING_STYLE_COLOR = new Color(AQUA_SKY);
         }
     }

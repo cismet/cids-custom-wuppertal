@@ -19,8 +19,8 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifier;
+import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungProperties;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungProperties;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 
@@ -51,16 +51,16 @@ public class BescheinigungspruefungMessageStartUpHook implements StartupHook {
                         if (SessionManager.getConnection().hasConfigAttr(
                                         SessionManager.getSession().getUser(),
                                         "csm://"
-                                        + BerechtigungspruefungProperties.CSM_ANFRAGE)) {
+                                        + BerechtigungspruefungProperties.getInstance().getCsmAnfrage())) {
                             CidsServerMessageNotifier.getInstance()
                                     .subscribe(
                                         BerechtigungspruefungMessageNotifier.getInstance(),
-                                        BerechtigungspruefungProperties.CSM_ANFRAGE);
+                                        BerechtigungspruefungProperties.getInstance().getCsmAnfrage());
                         }
                     } catch (ConnectionException ex) {
                         LOG.warn(
                             "Konnte Rechte an csm://"
-                                    + BerechtigungspruefungProperties.CSM_ANFRAGE
+                                    + BerechtigungspruefungProperties.getInstance().getCsmAnfrage()
                                     + " nicht abfragen. Keine Benachrichtung bei neuen Prüfungsanfragen!",
                             ex);
                     }
@@ -68,16 +68,16 @@ public class BescheinigungspruefungMessageStartUpHook implements StartupHook {
                         if (SessionManager.getConnection().hasConfigAttr(
                                         SessionManager.getSession().getUser(),
                                         "csm://"
-                                        + BerechtigungspruefungProperties.CSM_BEARBEITUNG)) {
+                                        + BerechtigungspruefungProperties.getInstance().getCsmBearbeitung())) {
                             CidsServerMessageNotifier.getInstance()
                                     .subscribe(
                                         BerechtigungspruefungMessageNotifier.getInstance(),
-                                        BerechtigungspruefungProperties.CSM_BEARBEITUNG);
+                                        BerechtigungspruefungProperties.getInstance().getCsmBearbeitung());
                         }
                     } catch (ConnectionException ex) {
                         LOG.warn(
                             "Konnte Rechte an csm://"
-                                    + BerechtigungspruefungProperties.CSM_BEARBEITUNG
+                                    + BerechtigungspruefungProperties.getInstance().getCsmBearbeitung()
                                     + " nicht abfragen. Keine Benachrichtung bei neuen Prüfungsanfragen!",
                             ex);
                     }
@@ -85,7 +85,7 @@ public class BescheinigungspruefungMessageStartUpHook implements StartupHook {
                     CidsServerMessageNotifier.getInstance()
                             .subscribe(
                                 BaulastBescheinigungDialog.getInstance(),
-                                BerechtigungspruefungProperties.CSM_FREIGABE);
+                                BerechtigungspruefungProperties.getInstance().getCsmFreigabe());
                 }
             }).start();
     }

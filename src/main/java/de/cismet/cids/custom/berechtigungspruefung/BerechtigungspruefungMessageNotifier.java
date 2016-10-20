@@ -30,7 +30,6 @@ import java.util.Map;
 
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungBearbeitungInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungProperties;
 import de.cismet.cids.custom.wunda_blau.search.server.BerechtigungspruefungOffeneAnfragenStatement;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
@@ -98,11 +97,11 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
     @Override
     public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
         final String category = event.getMessage().getCategory();
-        if (BerechtigungspruefungProperties.CSM_ANFRAGE.equals(category)) {
+        if (BerechtigungspruefungProperties.getInstance().getCsmAnfrage().equals(category)) {
             final List<String> schluesselList = (List)event.getMessage().getContent();
             final String schluessel = schluesselList.iterator().next();
             fireAnfrageAdded(schluessel);
-        } else if (BerechtigungspruefungProperties.CSM_BEARBEITUNG.equals(category)) {
+        } else if (BerechtigungspruefungProperties.getInstance().getCsmBearbeitung().equals(category)) {
             try {
                 final Map<String, BerechtigungspruefungBearbeitungInfo> infoMap = (Map)
                     new ObjectMapper().readValue((String)event.getMessage().getContent(),

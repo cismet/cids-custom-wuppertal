@@ -37,7 +37,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import java.io.IOException;
+import java.io.StringReader;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,8 +60,10 @@ import javax.swing.table.AbstractTableModel;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.nas.NasProduct;
+import de.cismet.cids.custom.wunda_blau.search.actions.GetServerResourceServerAction;
 //import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -93,7 +95,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger log = Logger.getLogger(NasDialog.class);
+    private static final Logger LOG = Logger.getLogger(NasDialog.class);
     private static double MAP_BUFFER = 50d;
 //    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
     private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.7f);
@@ -280,8 +282,19 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     private void loadNasProducts() {
         try {
             final ObjectMapper mapper = new ObjectMapper();
-            nasProducts = mapper.readValue(NasDialog.class.getResourceAsStream(
-                        "/de/cismet/cids/custom/nas/nasProductDescription.json"),
+
+            final Object ret = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.NAS_PRODUCT_DESCRIPTION_JSON);
+            if (ret instanceof Exception) {
+                throw (Exception)ret;
+            }
+            final String conf = (String)ret;
+
+            nasProducts = mapper.readValue(new StringReader(conf),
                     mapper.getTypeFactory().constructCollectionType(List.class, NasProduct.class));
             final ArrayList<NasProduct> skips = new ArrayList<NasProduct>();
             for (final NasProduct np : nasProducts) {
@@ -292,8 +305,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 }
             }
             nasProducts.removeAll(skips);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
+        } catch (final Exception ex) {
+            LOG.error(ex.getMessage(), ex);
         }
     }
 
@@ -310,7 +323,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                         .getConfigAttr(SessionManager.getSession().getUser(), actionAttributeString)
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
+            LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
         }
         return false;
     }
@@ -708,11 +721,11 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                                         goupAmounts)) {
                             doDownload(requestId, product);
                         } else {
-                            log.error("do billing returns false. can not start download");
+                            LOG.error("do billing returns false. can not start download");
                         }
                         dispose();
                     } catch (Exception ex) {
-                        log.error(ex, ex);
+                        LOG.error(ex, ex);
                     }
                 }
             });

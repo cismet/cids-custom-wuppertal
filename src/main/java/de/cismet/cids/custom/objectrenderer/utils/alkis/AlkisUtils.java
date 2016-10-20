@@ -39,6 +39,8 @@ import de.aedsicad.aaaweb.service.util.Point;
 
 import org.apache.commons.lang.ArrayUtils;
 
+import java.io.StringReader;
+
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,8 +48,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.wunda_blau.search.actions.GetServerResourceServerAction;
 import de.cismet.cids.custom.wunda_blau.search.actions.ServerAlkisSoapAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -64,22 +68,83 @@ public class AlkisUtils {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final AlkisProducts PRODUCTS = AlkisProducts.getInstance();
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
+    public static final AlkisProducts PRODUCTS;
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     public static final String ALKIS_SOAP_OVER_CSA = "alkisSoapTunnelAction";
-    static final ObjectMapper mapper = new ObjectMapper();
-    static Buchungsblattbezirke buchungsblattbezirke;
+    static final Buchungsblattbezirke BUCHUNGSBLATTBEZIRKE;
 
     static {
+        Buchungsblattbezirke buchungsblattbezirke = null;
         try {
-            buchungsblattbezirke = mapper.readValue(Buchungsblattbezirke.class.getResourceAsStream(
-                        "/de/cismet/cids/custom/wunda_blau/res/alkis/buchungsblattbezirke.json"),
-                    Buchungsblattbezirke.class);
-        } catch (Exception ex) {
-            log.error("Problem while reading the Buchungsblattbezirke.", ex);
+            final Object ret = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.ALKIS_BUCHUNTSBLATTBEZIRKE_JSON);
+            if (ret instanceof Exception) {
+                throw (Exception)ret;
+            }
+            final ObjectMapper mapper = new ObjectMapper();
+            buchungsblattbezirke = mapper.readValue((String)ret, Buchungsblattbezirke.class);
+        } catch (final Exception ex) {
+            LOG.error("Problem while reading the Buchungsblattbezirke.", ex);
             buchungsblattbezirke = new Buchungsblattbezirke();
         }
+        BUCHUNGSBLATTBEZIRKE = buchungsblattbezirke;
+
+        AlkisProducts alkisProducts = null;
+        try {
+            final Properties productsProperties = new Properties();
+            final Object productsRet = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.ALKIS_PRODUCTS_PROPERTIES);
+            if (productsRet instanceof Exception) {
+                throw new Exception("error while loading server resource "
+                            + WundaBlauServerResources.ALKIS_PRODUCTS_PROPERTIES,
+                    (Exception)productsRet);
+            }
+            productsProperties.load(new StringReader((String)productsRet));
+
+            final Properties formatsProperties = new Properties();
+            final Object formatsRet = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.ALKIS_FORMATS_PROPERTIES);
+            if (formatsRet instanceof Exception) {
+                throw new Exception("error while loading server resource "
+                            + WundaBlauServerResources.ALKIS_FORMATS_PROPERTIES,
+                    (Exception)formatsRet);
+            }
+            formatsProperties.load(new StringReader((String)formatsRet));
+
+            final Object beschreibungRet = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.ALKIS_PRODUKTBESCHREIBUNG_XML);
+            if (beschreibungRet instanceof Exception) {
+                throw new Exception("error while loading server resource "
+                            + WundaBlauServerResources.ALKIS_PRODUKTBESCHREIBUNG_XML,
+                    (Exception)beschreibungRet);
+            }
+
+            alkisProducts = new AlkisProducts(
+                    AlkisConstants.COMMONS,
+                    productsProperties,
+                    formatsProperties,
+                    (String)beschreibungRet);
+        } catch (final Exception ex) {
+            LOG.error("Problem while creating the AlkisProducts.", ex);
+        }
+        PRODUCTS = alkisProducts;
     }
 
     public static final String ADRESS_HERKUNFT_KATASTERAMT = "Katasteramt";
@@ -123,11 +188,11 @@ public class AlkisUtils {
     public static String getBuchungsblattbezirkFromBuchungsblattnummer(final String buchungsblattnummer) {
         try {
             final String bezirksNr = buchungsblattnummer.substring(0, buchungsblattnummer.indexOf("-"));
-            final String bezirksname = buchungsblattbezirke.getDistrictNamesMap().get(bezirksNr);
+            final String bezirksname = BUCHUNGSBLATTBEZIRKE.getDistrictNamesMap().get(bezirksNr);
             final StringBuffer b = new StringBuffer(bezirksname).append(" (").append(bezirksNr).append(')');
             return b.toString();
         } catch (Exception e) {
-            log.error("Error in getBuchungsblattbezirkFromBuchungsblattnummer(" + buchungsblattnummer + ")", e);
+            LOG.error("Error in getBuchungsblattbezirkFromBuchungsblattnummer(" + buchungsblattnummer + ")", e);
             return null;
         }
     }
@@ -332,7 +397,7 @@ public class AlkisUtils {
      */
     public static LandParcel[] getLandparcelFromBuchungsstelle(final Buchungsstelle buchungsstelle) {
         if ((buchungsstelle.getBuchungsstellen() == null) && (buchungsstelle.getLandParcel() == null)) {
-            log.warn("getLandparcelFromBuchungsstelle returns null. Problem on landparcel with number:"
+            LOG.warn("getLandparcelFromBuchungsstelle returns null. Problem on landparcel with number:"
                         + buchungsstelle.getSequentialNumber());
             return new LandParcel[0];
         } else if (buchungsstelle.getBuchungsstellen() == null) {
@@ -720,7 +785,7 @@ public class AlkisUtils {
                         .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print@WUNDA_BLAU")
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Alkis Print Dialog!", ex);
+            LOG.error("Could not validate action tag for Alkis Print Dialog!", ex);
         }
         return false;
     }
@@ -736,7 +801,7 @@ public class AlkisUtils {
                         .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products@WUNDA_BLAU")
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Alkis Products!", ex);
+            LOG.error("Could not validate action tag for Alkis Products!", ex);
         }
         return false;
     }
@@ -752,7 +817,7 @@ public class AlkisUtils {
                         .getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt@WUNDA_BLAU")
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
+            LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
         }
         return false;
     }
@@ -768,7 +833,7 @@ public class AlkisUtils {
                         .getConfigAttr(SessionManager.getSession().getUser(), ALKIS_HTML_PRODUCTS_ENABLED)
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Alkis HTML Products!", ex);
+            LOG.error("Could not validate action tag for Alkis HTML Products!", ex);
         }
         return false;
     }
@@ -786,7 +851,7 @@ public class AlkisUtils {
                                 + ALKIS_SOAP_OVER_CSA)
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Alkis SOAP CSA Calls!", ex);
+            LOG.error("Could not validate action tag for Alkis SOAP CSA Calls!", ex);
         }
         return false;
     }
