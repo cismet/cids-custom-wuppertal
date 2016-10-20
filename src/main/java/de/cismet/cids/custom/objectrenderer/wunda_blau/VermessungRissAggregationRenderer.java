@@ -52,12 +52,12 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungsRissWebAccessReportHelper;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
-import de.cismet.cids.custom.utils.alkis.VermessungsRissReportHelper;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsrissReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -399,10 +399,10 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         try {
                             for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
                                 final boolean isDocumentAvailable;
-                                if (type.equalsIgnoreCase(VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE)) {
+                                if (type.equalsIgnoreCase(VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE)) {
                                     isDocumentAvailable = hasVermessungsriss(selectedVermessungsriss);
                                 } else if (type.equalsIgnoreCase(
-                                                VermessungsRissReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                                VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
                                     isDocumentAvailable = hasErgaenzendeDokumente(selectedVermessungsriss);
                                 } else {
                                     isDocumentAvailable = false;
@@ -427,7 +427,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 i++;
                             }
 
-                            if (type.equalsIgnoreCase(VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE)) {
+                            if (type.equalsIgnoreCase(VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE)) {
                                 if (BillingPopup.doBilling(
                                                 "vrpdf",
                                                 "no.yet",
@@ -438,7 +438,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         type,
                                         AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
                                 }
-                            } else if (type.equalsIgnoreCase(VermessungsRissReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
+                            } else if (type.equalsIgnoreCase(
+                                            VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
                                 if (BillingPopup.doBilling(
                                                 "doklapdf",
                                                 "no.yet",
@@ -592,8 +593,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 saps,
                                 finalProjectname,
                                 jobname,
-                                (VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) ? "vermriss"
-                                                                                                           : "ergdok",
+                                (VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type))
+                                    ? "vermriss" : "ergdok",
                                 ".pdf");
 
                         final Collection<Download> downloads = new ArrayList<Download>();
@@ -741,15 +742,15 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             if (allowErgaenzendeDokumenteReport && allowVermessungsrisseReport) {
                 cmbType.setModel(new DefaultComboBoxModel(
                         new String[] {
-                            VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE,
-                            VermessungsRissReportHelper.TYPE_COMPLEMENTARYDOCUMENTS
+                            VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE,
+                            VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS
                         }));
             } else if (allowErgaenzendeDokumenteReport) {
                 cmbType.setModel(new DefaultComboBoxModel(
-                        new String[] { VermessungsRissReportHelper.TYPE_COMPLEMENTARYDOCUMENTS }));
+                        new String[] { VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS }));
             } else if (allowVermessungsrisseReport) {
                 cmbType.setModel(new DefaultComboBoxModel(
-                        new String[] { VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE }));
+                        new String[] { VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE }));
             }
             cmbType.setEnabled(enabled);
             btnGenerateReport.setEnabled(enabled);
