@@ -60,6 +60,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungFreigabeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
@@ -109,7 +110,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         ALKISInfoServices infoService = null;
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
             try {
-                soapProvider = new SOAPAccessProvider();
+                soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
                 infoService = soapProvider.getAlkisInfoService();
             } catch (final Exception ex) {
                 LOG.warn("error while creating ALKISInfoServices", ex);

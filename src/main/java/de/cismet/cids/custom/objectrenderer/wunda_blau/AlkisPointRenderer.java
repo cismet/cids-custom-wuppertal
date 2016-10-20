@@ -469,7 +469,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
             try {
-                soapProvider = new SOAPAccessProvider();
+                soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
                 infoService = soapProvider.getAlkisInfoService();
             } catch (Exception ex) {
                 LOG.fatal(ex, ex);

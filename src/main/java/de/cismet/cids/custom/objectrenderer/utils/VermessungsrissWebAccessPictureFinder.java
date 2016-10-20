@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils;
 
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 
 import de.cismet.security.WebAccessManager;
@@ -30,7 +31,7 @@ public class VermessungsrissWebAccessPictureFinder extends VermessungsrissPictur
      * Creates a new VermessungsrissWebAccessPictureFinder object.
      */
     public VermessungsrissWebAccessPictureFinder() {
-        super(WebAccessManager.getInstance());
+        super(WebAccessManager.getInstance(), AlkisConstants.COMMONS);
     }
 
     //~ Methods ----------------------------------------------------------------

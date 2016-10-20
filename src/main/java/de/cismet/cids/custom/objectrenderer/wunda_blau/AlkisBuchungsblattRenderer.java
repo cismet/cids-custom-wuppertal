@@ -287,7 +287,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
             try {
-                soapProvider = new SOAPAccessProvider();
+                soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
                 infoService = soapProvider.getAlkisInfoService();
             } catch (Exception ex) {
                 LOG.fatal(ex, ex);

@@ -76,6 +76,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
+import de.cismet.cids.custom.utils.alkis.AlkisConf;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
@@ -698,7 +699,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void initSoapServiceAccess() {
         try {
-            soapProvider = new SOAPAccessProvider();
+            soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
             infoService = soapProvider.getAlkisInfoService();
         } catch (Exception ex) {
             log.fatal(ex, ex);
