@@ -2659,7 +2659,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 return result;
             }
 
-            final Collection<URL> validURLs = AlkisPunktReportScriptlet.getCorrespondingURLs(pointcode);
+            final Collection<URL> validURLs = AlkisUtils.PRODUCTS.getCorrespondingPointURLs(pointcode);
             InputStream streamToReadFrom = null;
             for (final URL url : validURLs) {
                 try {
