@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
@@ -30,7 +29,6 @@ import java.awt.EventQueue;
 import java.net.URL;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
