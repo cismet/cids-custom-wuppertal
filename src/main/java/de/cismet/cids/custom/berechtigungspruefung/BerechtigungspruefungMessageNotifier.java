@@ -15,21 +15,14 @@ package de.cismet.cids.custom.berechtigungspruefung;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
-import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungBearbeitungInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.BerechtigungspruefungOffeneAnfragenStatement;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
@@ -102,17 +95,9 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
             final String schluessel = schluesselList.iterator().next();
             fireAnfrageAdded(schluessel);
         } else if (BerechtigungspruefungProperties.getInstance().getCsmBearbeitung().equals(category)) {
-            try {
-                final Map<String, BerechtigungspruefungBearbeitungInfo> infoMap = (Map)
-                    new ObjectMapper().readValue((String)event.getMessage().getContent(),
-                        new TypeReference<Map<String, BerechtigungspruefungBearbeitungInfo>>() {
-                        });
-
-                final String schluessel = infoMap.keySet().isEmpty() ? null : infoMap.keySet().iterator().next();
-                fireAnfrageRemoved(schluessel);
-            } catch (final IOException ex) {
-                LOG.error("error while processing CSM_BEARBEITUNG", ex);
-            }
+            final List<String> schluesselList = (List)event.getMessage().getContent();
+            final String schluessel = schluesselList.isEmpty() ? null : schluesselList.iterator().next();
+            fireAnfrageRemoved(schluessel);
         }
     }
 

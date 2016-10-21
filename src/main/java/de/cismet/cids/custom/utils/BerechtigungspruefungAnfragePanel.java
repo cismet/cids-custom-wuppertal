@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 
@@ -38,8 +39,6 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
-
 /**
  * DOCUMENT ME!
  *
@@ -47,6 +46,10 @@ import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
  * @version  $Revision$, $Date$
  */
 public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(BerechtigungspruefungAnfragePanel.class.getName());
 
     //~ Instance fields --------------------------------------------------------
 

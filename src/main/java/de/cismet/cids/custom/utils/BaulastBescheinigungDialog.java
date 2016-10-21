@@ -19,11 +19,6 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.twelvemonkeys.util.LinkedSet;
-
 import com.vividsolutions.jts.geom.Geometry;
 
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
@@ -62,11 +57,9 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
-import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungFreigabeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungInfo;
-import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnfrageServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
@@ -74,11 +67,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-
-import de.cismet.cids.server.actions.ServerActionParameter;
-
-import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
-import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
@@ -92,7 +80,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class BaulastBescheinigungDialog extends javax.swing.JDialog implements CidsServerMessageNotifierListener {
+public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -131,28 +119,18 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.utils.BerechtigungspruefungAnfragePanel berechtigungspruefungAnfragePanel1;
     private de.cismet.commons.gui.progress.BusyStatusPanel busyStatusPanel1;
-    private javax.swing.JDialog diaFreigegeben;
-    private javax.swing.JDialog diaStorniert;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private de.cismet.commons.gui.progress.BusyLoggingTextPane protokollPane;
@@ -212,16 +190,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        diaFreigegeben = new javax.swing.JDialog();
-        jPanel5 = new javax.swing.JPanel();
-        jButton4 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        diaStorniert = new javax.swing.JDialog();
-        jPanel6 = new javax.swing.JPanel();
-        jButton5 = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -239,115 +207,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         protokollPane = new de.cismet.commons.gui.progress.BusyLoggingTextPane();
-
-        diaFreigegeben.setTitle(org.openide.util.NbBundle.getMessage(
-                BaulastBescheinigungDialog.class,
-                "BaulastBescheinigungDialog.diaFreigegeben.title")); // NOI18N
-        diaFreigegeben.getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        jPanel5.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton4,
-            org.openide.util.NbBundle.getMessage(
-                BaulastBescheinigungDialog.class,
-                "BaulastBescheinigungDialog.jButton4.text")); // NOI18N
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton4ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        jPanel5.add(jButton4, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel6,
-            org.openide.util.NbBundle.getMessage(
-                BaulastBescheinigungDialog.class,
-                "BaulastBescheinigungDialog.jLabel6.text")); // NOI18N
-        jLabel6.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel5.add(jLabel6, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        diaFreigegeben.getContentPane().add(jPanel5, gridBagConstraints);
-
-        diaStorniert.setTitle(org.openide.util.NbBundle.getMessage(
-                BaulastBescheinigungDialog.class,
-                "BaulastBescheinigungDialog.diaStorniert.title")); // NOI18N
-        diaStorniert.setMinimumSize(new java.awt.Dimension(400, 300));
-        diaStorniert.setModal(true);
-        diaStorniert.getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        jPanel6.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton5,
-            org.openide.util.NbBundle.getMessage(
-                BaulastBescheinigungDialog.class,
-                "BaulastBescheinigungDialog.jButton5.text")); // NOI18N
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton5ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        jPanel6.add(jButton5, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel8,
-            org.openide.util.NbBundle.getMessage(
-                BaulastBescheinigungDialog.class,
-                "BaulastBescheinigungDialog.jLabel8.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel6.add(jLabel8, gridBagConstraints);
-
-        jTextArea2.setEditable(false);
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane3.setViewportView(jTextArea2);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
-        jPanel6.add(jScrollPane3, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        diaStorniert.getContentPane().add(jPanel6, gridBagConstraints);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(
@@ -548,7 +407,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             LOG.info("could not check config attr", ex);
         }
         if (berechtigungspruefung) {
-            berechtigungspruefungAnfragePanel1.setProdukt("baulastbescheinigung");
+            berechtigungspruefungAnfragePanel1.setProdukt(BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP);
             berechtigungspruefungAnfragePanel1.setVisible(true);
         } else {
             berechtigungspruefungAnfragePanel1.setVisible(false);
@@ -800,24 +659,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             worker.cancel(true);
         }
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
-        diaFreigegeben.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
-        diaStorniert.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1396,57 +1237,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         }
 
         return buchungsblatt;
-    }
-
-    @Override
-    public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
-        try {
-            final Map<String, BerechtigungspruefungFreigabeInfo> freigabeInfoMap = (Map)
-                new ObjectMapper().readValue((String)event.getMessage().getContent(),
-                    new TypeReference<Map<String, BerechtigungspruefungFreigabeInfo<BerechtigungspruefungBescheinigungDownloadInfo>>>() {
-                    });
-
-            for (final String schluessel : freigabeInfoMap.keySet()) {
-                final BerechtigungspruefungFreigabeInfo freigabeInfo = freigabeInfoMap.get(schluessel);
-
-                if (freigabeInfo.getFreigegeben()) {
-                    jLabel6.setText(String.format(
-                            org.openide.util.NbBundle.getMessage(
-                                BaulastBescheinigungDialog.class,
-                                "BaulastBescheinigungDialog.jLabel6.text"),
-                            schluessel));
-                    diaFreigegeben.pack();
-                    StaticSwingTools.showDialog(diaFreigegeben);
-
-                    BaulastBescheinigungUtils.doDownload((BerechtigungspruefungBescheinigungDownloadInfo)
-                        freigabeInfo.getBerechtigungspruefungDownloadInfo(),
-                        schluessel);
-                } else {
-                    jLabel8.setText(String.format(
-                            org.openide.util.NbBundle.getMessage(
-                                BaulastBescheinigungDialog.class,
-                                "BaulastBescheinigungDialog.jLabel8.text"),
-                            schluessel));
-                    jTextArea2.setText(freigabeInfo.getKommentar());
-                    diaStorniert.pack();
-                    StaticSwingTools.showDialog(diaStorniert);
-                }
-                try {
-                    SessionManager.getProxy()
-                            .executeTask(
-                                BerechtigungspruefungAnfrageServerAction.TASK_NAME,
-                                "WUNDA_BLAU",
-                                null,
-                                new ServerActionParameter<String>(
-                                    BerechtigungspruefungAnfrageServerAction.ParameterType.ABGEHOLT.toString(),
-                                    schluessel));
-                } catch (final Exception ex) {
-                    LOG.warn(ex, ex);
-                }
-            }
-        } catch (final Exception ex) {
-            LOG.warn(ex, ex);
-        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
