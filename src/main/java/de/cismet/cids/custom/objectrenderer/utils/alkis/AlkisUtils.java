@@ -68,8 +68,23 @@ public class AlkisUtils {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final AlkisProducts PRODUCTS;
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
+
+    public static final String PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS =
+        "custom.alkis.product.flurstuecksnachweis@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW =
+        "custom.alkis.product.flurstuecks_eigentumsnachweis_nrw@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM =
+        "custom.alkis.product.flurstuecks_eigentumsnachweis_kom@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN =
+        "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED =
+        "baulast.report.bescheinigung_enabled@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED =
+        "baulast.report.bescheinigung_disabled@WUNDA_BLAU";
+
+    public static final AlkisProducts PRODUCTS;
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     public static final String ALKIS_SOAP_OVER_CSA = "alkisSoapTunnelAction";
     static final Buchungsblattbezirke BUCHUNGSBLATTBEZIRKE;
@@ -903,5 +918,59 @@ public class AlkisUtils {
                             body,
                             buchungsblattCodeSAP);
         return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getActionTag(final String product) {
+        final String actionTag;
+        if (AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF.equals(product)
+                    || AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS;
+        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF.equals(product)
+                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW;
+        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF.equals(product)
+                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN;
+        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF.equals(product)
+                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM;
+        } else {
+            actionTag = "3wbgW§$%Q&/"; // unknown product, prevent NPE while checking action tag with null
+        }
+        return actionTag;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getProductName(final String product) {
+        final String downloadTitle;
+        if (PRODUCTS.FLURSTUECKSNACHWEIS_PDF.equals(product)
+                    || PRODUCTS.FLURSTUECKSNACHWEIS_HTML.equals(product)) {
+            downloadTitle = "Flurstücksnachweis";
+        } else if (PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF.equals(product)
+                    || PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML.equals(product)) {
+            downloadTitle = "Flurstücks- und Eigentumsnachweis NRW";
+        } else if (PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF.equals(product)
+                    || PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML.equals(product)) {
+            downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal)";
+        } else if (PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF.equals(product)
+                    || PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)) {
+            downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal, intern)";
+        } else {
+            downloadTitle = null;
+        }
+        return downloadTitle;
     }
 }

@@ -419,28 +419,28 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         hlKarte.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
         hlFlurstuecksnachweisPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(
+                AlkisUtils.getActionTag(
                     AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF)) && billingAllowedFsNw);
         hlFlurstuecksnachweisHtml.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(
+                AlkisUtils.getActionTag(
                     AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML)));
         hlFlurstuecksEigentumsnachweisKomPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(
+                AlkisUtils.getActionTag(
                     AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF)) && billingAllowedFsueKom);
         hlFlurstuecksEigentumsnachweisKomHtml.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(
+                AlkisUtils.getActionTag(
                     AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML)));
         hlFlurstuecksEigentumsnachweisKomInternPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(
+                AlkisUtils.getActionTag(
                     AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF)));
         hlFlurstuecksEigentumsnachweisKomInternHtml.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(
+                AlkisUtils.getActionTag(
                     AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML)));
         hlFlurstuecksEigentumsnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(
+                AlkisUtils.getActionTag(
                     AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF)) && billingAllowedFsueNw);
         hlFlurstuecksEigentumsnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(
+                AlkisUtils.getActionTag(
                     AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML)));
         hlBaulastbescheinigung.setEnabled(
             ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
@@ -709,7 +709,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void downloadEinzelnachweisProduct(final String product, final boolean berechtigungspruefung) {
         if (!ObjectRendererUtils.checkActionTag(
-                        AlkisLandparcelAggregationRenderer.getEinzelnachweisActionTag(product))) {
+                        AlkisUtils.getActionTag(product))) {
             showNoProductPermissionWarning();
             return;
         }

@@ -88,20 +88,6 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
     private static final Logger LOG = Logger.getLogger(AlkisLandparcelAggregationRenderer.class);
 
-    private static final String PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS =
-        "custom.alkis.product.flurstuecksnachweis@WUNDA_BLAU";
-    private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW =
-        "custom.alkis.product.flurstuecks_eigentumsnachweis_nrw@WUNDA_BLAU";
-    private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM =
-        "custom.alkis.product.flurstuecks_eigentumsnachweis_kom@WUNDA_BLAU";
-    private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN =
-        "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern@WUNDA_BLAU";
-    private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte@WUNDA_BLAU";
-    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED =
-        "baulast.report.bescheinigung_enabled@WUNDA_BLAU";
-    private static final String PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED =
-        "baulast.report.bescheinigung_disabled@WUNDA_BLAU";
-
     private static final Color[] COLORS = new Color[] {
             new Color(247, 150, 70, 192),
             new Color(155, 187, 89, 192),
@@ -639,24 +625,24 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         final boolean billingAllowedFsNw = BillingPopup.isBillingAllowed("fsnw");
         final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be");
 
-        jxlKarte.setEnabled(enable && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
+        jxlKarte.setEnabled(enable && ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE));
         jxlFlurstuecksnachweis.setEnabled(enable
-                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
+                    && ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
                     && billingAllowedFsNw);
         jxlNachweisKommunal.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && billingAllowedFsueKom);
+                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && billingAllowedFsueKom);
         jxlNachweisKommunalIntern.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
+                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
         jxlNachweisNRW.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && billingAllowedFsueNw);
+                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && billingAllowedFsueNw);
         jxlBaulastBescheinigung.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
+                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
                     && !ObjectRendererUtils.checkActionTag(
-                        PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && billingAllowedBlab_be);
+                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && billingAllowedBlab_be);
     }
 
     /**
@@ -698,42 +684,15 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     /**
      * DOCUMENT ME!
      *
-     * @param   product  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String getEinzelnachweisActionTag(final String product) {
-        final String actionTag;
-        if (AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML.equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS;
-        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML.equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW;
-        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN;
-        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML.equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM;
-        } else {
-            actionTag = "3wbgW§$%Q&/"; // unknown product, prevent NPE while checking action tag with null
-        }
-        return actionTag;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  downloadInfo  DOCUMENT ME!
      */
     public static void downloadEinzelnachweisProduct(
             final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
-        final String actionTag = getEinzelnachweisActionTag(product);
+        final String actionTag = AlkisUtils.getActionTag(product);
 
-        if (!ObjectRendererUtils.checkActionTag(getEinzelnachweisActionTag(product))) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product))) {
             showNoProductPermissionWarning();
             return;
         }
@@ -808,7 +767,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  berechtigungspruefung  DOCUMENT ME!
      */
     private void downloadEinzelnachweisProduct(final String product, final boolean berechtigungspruefung) {
-        if (!ObjectRendererUtils.checkActionTag(getEinzelnachweisActionTag(product))) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product))) {
             showNoProductPermissionWarning();
             return;
         }
@@ -856,7 +815,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String downloadTitle = "Karte";
 
-        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE)) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE)) {
             showNoProductPermissionWarning();
             return;
         }
@@ -899,7 +858,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * DOCUMENT ME!
      */
     private void downloadKarteProduct() {
-        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE)) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE)) {
             showNoProductPermissionWarning();
             return;
         }
