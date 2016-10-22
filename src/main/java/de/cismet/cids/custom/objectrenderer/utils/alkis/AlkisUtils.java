@@ -70,6 +70,16 @@ public class AlkisUtils {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
 
+    public static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW =
+        "custom.alkis.product.bestandsnachweis_nrw@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM =
+        "custom.alkis.product.bestandsnachweis_kom@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN =
+        "custom.alkis.product.bestandsnachweis_kom_intern@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW =
+        "custom.alkis.product.bestandsnachweis_stichtagsbezogen_nrw@WUNDA_BLAU";
+    public static final String PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW =
+        "custom.alkis.product.grundstuecksnachweis_nrw@WUNDA_BLAU";
     public static final String PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS =
         "custom.alkis.product.flurstuecksnachweis@WUNDA_BLAU";
     public static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW =
@@ -923,6 +933,26 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   buchungsblattCode  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String fixBuchungslattCode(final String buchungsblattCode) {
+        if (buchungsblattCode != null) {
+            final StringBuffer buchungsblattCodeSB = new StringBuffer(buchungsblattCode);
+            // Fix SICAD-API-strangeness...
+            while (buchungsblattCodeSB.length() < 14) {
+                buchungsblattCodeSB.append(" ");
+            }
+            return buchungsblattCodeSB.toString();
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   product  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -941,6 +971,15 @@ public class AlkisUtils {
         } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF.equals(product)
                     || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML.equals(product)) {
             actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM;
+        } else if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF.equals(product)
+                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM;
+        } else if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF.equals(product)
+                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN;
+        } else if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF.equals(product)
+                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW;
         } else {
             actionTag = "3wbgW§$%Q&/"; // unknown product, prevent NPE while checking action tag with null
         }
@@ -968,6 +1007,20 @@ public class AlkisUtils {
         } else if (PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF.equals(product)
                     || PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)) {
             downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal, intern)";
+        } else if (PRODUCTS.BESTANDSNACHWEIS_NRW_PDF.equals(product)
+                    || PRODUCTS.BESTANDSNACHWEIS_NRW_HTML.equals(product)) {
+            downloadTitle = "Bestandsnachweis (NRW)";
+        } else if (PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(product)) {
+            downloadTitle = "Bestandsnachweis stichtagsbezogen (NRW)";
+        } else if (PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF.equals(product)
+                    || PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML.equals(product)) {
+            downloadTitle = "Bestandsnachweis (kommunal)";
+        } else if (PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF.equals(product)
+                    || PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)) {
+            downloadTitle = "Bestandsnachweis (kommunal, intern)";
+        } else if (PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product)
+                    || PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
+            downloadTitle = "Grundstücksnachweis (NRW)";
         } else {
             downloadTitle = null;
         }

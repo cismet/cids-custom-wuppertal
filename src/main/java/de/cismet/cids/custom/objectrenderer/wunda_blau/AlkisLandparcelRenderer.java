@@ -619,14 +619,14 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                             final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(
                                     soapProvider.getIdentityCard(),
                                     soapProvider.getService(),
-                                    AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                                    AlkisUtils.fixBuchungslattCode(buchungsblattcode));
                             buchungsblatt = infoService.getBuchungsblattWithUUID(soapProvider.getIdentityCard(),
                                     soapProvider.getService(),
                                     uuids[0],
                                     true);
                         } else {
                             buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                                    AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                                    AlkisUtils.fixBuchungslattCode(buchungsblattcode));
                         }
                     } else {
                         final Owner o = new Owner();

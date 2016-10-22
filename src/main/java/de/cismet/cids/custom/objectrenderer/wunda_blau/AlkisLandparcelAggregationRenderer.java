@@ -691,6 +691,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
         final String actionTag = AlkisUtils.getActionTag(product);
+        final String downloadTitle = AlkisUtils.getProductName(product);
 
         if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product))) {
             showNoProductPermissionWarning();
@@ -703,23 +704,6 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)
                     || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML.equals(product)) {
             extension = ".html";
-        }
-
-        final String downloadTitle;
-        if (AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML.equals(product)) {
-            downloadTitle = "Flurstücksnachweis";
-        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML.equals(product)) {
-            downloadTitle = "Flurstücks- und Eigentumsnachweis NRW";
-        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML.equals(product)) {
-            downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal)";
-        } else if (AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)) {
-            downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal, intern)";
-        } else {
-            downloadTitle = null;
         }
 
         if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {

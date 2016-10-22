@@ -1221,14 +1221,14 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                         final String[] uuids = INFO_SERVICE.translateBuchungsblattCodeIntoUUIds(
                                 SOAP_PROVIDER.getIdentityCard(),
                                 SOAP_PROVIDER.getService(),
-                                AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                                AlkisUtils.fixBuchungslattCode(buchungsblattcode));
                         buchungsblatt = INFO_SERVICE.getBuchungsblattWithUUID(SOAP_PROVIDER.getIdentityCard(),
                                 SOAP_PROVIDER.getService(),
                                 uuids[0],
                                 true);
                     } else {
                         buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                                AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                                AlkisUtils.fixBuchungslattCode(buchungsblattcode));
                     }
 
                     BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);
