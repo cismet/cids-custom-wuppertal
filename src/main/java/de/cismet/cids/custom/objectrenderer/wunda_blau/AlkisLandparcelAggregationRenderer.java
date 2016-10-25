@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -26,8 +25,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 
-import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,7 +32,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -45,13 +41,13 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.BerechtigungspruefungAnfrageDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
-import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
@@ -69,11 +65,6 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
-import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.HttpDownload;
-import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 
 /**
  * DOCUMENT ME!
@@ -648,111 +639,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     /**
      * DOCUMENT ME!
      *
-     * @param   product     DOCUMENT ME!
-     * @param   alkisCodes  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static BerechtigungspruefungAlkisKarteDownloadInfo createBerechtigungspruefungAlkisKarteDownloadInfo(
-            final String product,
-            final List<String> alkisCodes) {
-        final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo =
-            new BerechtigungspruefungAlkisKarteDownloadInfo(
-                BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE,
-                alkisCodes);
-        return downloadInfo;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   product     DOCUMENT ME!
-     * @param   alkisCodes  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static BerechtigungspruefungAlkisEinzelnachweisDownloadInfo
-    createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(final String product, final List<String> alkisCodes) {
-        final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo =
-            new BerechtigungspruefungAlkisEinzelnachweisDownloadInfo(
-                BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE,
-                product,
-                alkisCodes);
-        return downloadInfo;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  downloadInfo  DOCUMENT ME!
-     */
-    public static void downloadEinzelnachweisProduct(
-            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo) {
-        final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
-        final String product = downloadInfo.getAlkisProdukt();
-        final String actionTag = AlkisUtils.getActionTag(product);
-        final String downloadTitle = AlkisUtils.getProductName(product);
-
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product))) {
-            showNoProductPermissionWarning();
-            return;
-        }
-
-        String extension = ".pdf";
-        if (AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML.equals(product)) {
-            extension = ".html";
-        }
-
-        if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
-            return;
-        }
-        final String jobname = DownloadManagerDialog.getInstance().getJobName();
-
-        final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
-
-        for (final String parcelCode : downloadInfo.getAlkisCodes()) {
-            final URL url;
-            if ((parcelCode != null) && (parcelCode.length() > 0)) {
-                try {
-                    url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
-                            parcelCode,
-                            product,
-                            AlkisUtils.getFertigungsVermerk("WV ein"));
-
-                    if (url != null) {
-                        final String filename = product + "." + parcelCode.replace("/", "--");
-                        downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, extension));
-                    }
-                } catch (final Exception ex) {
-                    ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts: " + product,
-                        ex,
-                        parent);
-                    LOG.error("The URL to download product '" + product + "' (actionTag: " + actionTag
-                                + ") could not be constructed.",
-                        ex);
-                }
-            }
-        }
-
-        if (downloads.size() > 1) {
-            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
-        } else if (downloads.size() == 1) {
-            DownloadManager.instance().add(downloads.get(0));
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  product                DOCUMENT ME!
      * @param  berechtigungspruefung  DOCUMENT ME!
      */
     private void downloadEinzelnachweisProduct(final String product, final boolean berechtigungspruefung) {
         if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product))) {
-            showNoProductPermissionWarning();
+            AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
 
@@ -764,77 +656,13 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             parcelCodes.add(AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
         }
 
-        final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo =
-            createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(product, parcelCodes);
+        final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                    .createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(product, parcelCodes);
         if (berechtigungspruefung
                     && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(downloadInfo.getProduktTyp())) {
             BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
         } else {
-            downloadEinzelnachweisProduct(downloadInfo);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   alkisCodes  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static BerechtigungspruefungAlkisKarteDownloadInfo createBerechtigungspruefungAlkisKarteDownloadInfo(
-            final List<String> alkisCodes) {
-        final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo =
-            new BerechtigungspruefungAlkisKarteDownloadInfo(
-                BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE,
-                alkisCodes);
-        return downloadInfo;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  downloadInfo  downloadTitle DOCUMENT ME!
-     */
-    public static void downloadKarteProduct(final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo) {
-        final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
-        final String downloadTitle = "Karte";
-
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE)) {
-            showNoProductPermissionWarning();
-            return;
-        }
-
-        if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
-            return;
-        }
-        final String jobname = DownloadManagerDialog.getInstance().getJobName();
-
-        final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
-        for (final String parcelCode : downloadInfo.getAlkisCodes()) {
-            URL url = null;
-
-            if (parcelCode.length() > 0) {
-                try {
-                    url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode, AlkisUtils.getFertigungsVermerk("WV ein"));
-                } catch (final Exception ex) {
-                    ObjectRendererUtils.showExceptionWindowToUser(
-                        "Fehler beim Aufruf des Produkts: Kartenprodukt",
-                        ex,
-                        parent);
-                    LOG.error(ex);
-                }
-            }
-
-            if (url != null) {
-                final String filename = "LK.GDBNRW.A.F." + parcelCode.replace("/", "--");
-                downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
-            }
-        }
-
-        if (downloads.size() > 1) {
-            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
-        } else if (downloads.size() == 1) {
-            DownloadManager.instance().add(downloads.get(0));
+            AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo);
         }
     }
 
@@ -843,7 +671,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      */
     private void downloadKarteProduct() {
         if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE)) {
-            showNoProductPermissionWarning();
+            AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
 
@@ -855,22 +683,13 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             parcelCodes.add(AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
         }
 
-        final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo =
-            createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
+        final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                    .createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
         if (BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(downloadInfo.getProduktTyp())) {
             BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
         } else {
-            downloadKarteProduct(downloadInfo);
+            AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo);
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private static void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(
-                ComponentRegistry.getRegistry().getDescriptionPane()),
-            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     //~ Inner Classes ----------------------------------------------------------

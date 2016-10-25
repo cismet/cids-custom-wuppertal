@@ -56,7 +56,6 @@ import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -71,6 +70,7 @@ import javax.swing.text.html.StyleSheet;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
@@ -103,7 +103,6 @@ import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -710,19 +709,19 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private void downloadEinzelnachweisProduct(final String product, final boolean berechtigungspruefung) {
         if (!ObjectRendererUtils.checkActionTag(
                         AlkisUtils.getActionTag(product))) {
-            showNoProductPermissionWarning();
+            AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
 
         final List<String> parcelCodes = Arrays.asList(AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBean));
 
-        final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisLandparcelAggregationRenderer
+        final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
                     .createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(product, parcelCodes);
         if (berechtigungspruefung
                     && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(downloadInfo.getProduktTyp())) {
             BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
         } else {
-            AlkisLandparcelAggregationRenderer.downloadEinzelnachweisProduct(downloadInfo);
+            AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo);
         }
     }
 
@@ -731,27 +730,19 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void downloadKarteProduct() {
         if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE)) {
-            showNoProductPermissionWarning();
+            AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
 
         final List<String> parcelCodes = Arrays.asList(AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBean));
 
-        final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisLandparcelAggregationRenderer
+        final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisProductDownloadHelper
                     .createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
         if (BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(downloadInfo.getProduktTyp())) {
             BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
         } else {
-            AlkisLandparcelAggregationRenderer.downloadKarteProduct(downloadInfo);
+            AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo);
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -1538,7 +1529,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             if (ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE)) {
                 downloadKarteProduct();
             } else {
-                showNoProductPermissionWarning();
+                AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             }
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "flurstueckskarte.pdf");

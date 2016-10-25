@@ -54,7 +54,6 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;

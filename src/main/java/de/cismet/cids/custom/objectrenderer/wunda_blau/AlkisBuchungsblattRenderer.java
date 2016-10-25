@@ -127,7 +127,6 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
-import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
@@ -424,14 +423,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         GRUND_NRW_HTML = new ImageIcon(i6);
         BESTAND_NRW_STICHTAG_PDF = new ImageIcon(i7);
         BLA_BESCH_PDF = new ImageIcon(i8);
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -1265,22 +1256,22 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         final String actionTag = AlkisUtils.getActionTag(product);
 
         if (!ObjectRendererUtils.checkActionTag(actionTag)) {
-            showNoProductPermissionWarning();
+            AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
 
-        final List<String> parcelCodes = Arrays.asList(getCompleteBuchungsblattCode());
+        final List<String> bucungsblattCodes = Arrays.asList(getCompleteBuchungsblattCode());
 
-        final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisBuchungsblattAggregationRenderer
-                    .createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(
+        final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                    .createAlkisBuchungsblattachweisDownloadInfo(
                         product,
-                        parcelCodes);
+                        bucungsblattCodes);
         if (berechtigungspruefung
                     && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(
                         downloadInfo.getProduktTyp())) {
             BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
         } else {
-            AlkisBuchungsblattAggregationRenderer.downloadEinzelnachweisProduct(downloadInfo);
+            AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(downloadInfo);
         }
     }
 
@@ -1293,7 +1284,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         final String downloadTitle = AlkisUtils.getProductName(product);
 
         if (!ObjectRendererUtils.checkActionTag(actionTag)) {
-            showNoProductPermissionWarning();
+            AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
 
@@ -1593,23 +1584,21 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private void hlBestandsnachweisNrwStichtagPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisNrwStichtagPdfActionPerformed
         if (!demoMode) {
             try {
+                final String product = AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF;
+                final String actionTag = AlkisUtils.getActionTag(product);
+
+                if (!ObjectRendererUtils.checkActionTag(actionTag)) {
+                    AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
+                    return;
+                }
+
                 final StichtagChooserDialog stichtagDialog = new StichtagChooserDialog(ComponentRegistry.getRegistry()
                                 .getMainWindow());
                 StaticSwingTools.showDialog(stichtagDialog);
                 final Date stichtag = stichtagDialog.getDate();
                 if (stichtag != null) {
                     if (BillingPopup.doBilling("bestnw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
-                        final String jobname = hlBestandsnachweisNrwStichtagPdf.getText();
-                        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
-                        }
-                        final Download d = AlkisProductDownloadHelper.createStichtagProductDownload(
-                                stichtag,
-                                jobname,
-                                AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF,
-                                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW,
-                                getCompleteBuchungsblattCode(),
-                                this);
-                        DownloadManager.instance().add(d);
+                        downloadEinzelnachweisStichtagProduct(product, stichtag, true);
                     }
                 }
             } catch (Exception e) {
@@ -1619,7 +1608,35 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_nrw.pdf");
         }
-    }                                                                                                    //GEN-LAST:event_hlBestandsnachweisNrwStichtagPdfActionPerformed
+    } //GEN-LAST:event_hlBestandsnachweisNrwStichtagPdfActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  product                DOCUMENT ME!
+     * @param  stichtag               DOCUMENT ME!
+     * @param  berechtigungspruefung  DOCUMENT ME!
+     */
+    private void downloadEinzelnachweisStichtagProduct(final String product,
+            final Date stichtag,
+            final boolean berechtigungspruefung) {
+        final List<String> buchungsblattCodes = Arrays.asList(getCompleteBuchungsblattCode());
+        final String actionTag = AlkisUtils.getActionTag(product);
+
+        if (!ObjectRendererUtils.checkActionTag(actionTag)) {
+            AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
+            return;
+        }
+
+        final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                    .createAlkisBuchungsblattnachweisDownloadInfo(product, stichtag, buchungsblattCodes);
+        if (berechtigungspruefung
+                    && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(downloadInfo.getProduktTyp())) {
+            BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
+        } else {
+            AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(downloadInfo);
+        }
+    }
 
     /**
      * DOCUMENT ME!

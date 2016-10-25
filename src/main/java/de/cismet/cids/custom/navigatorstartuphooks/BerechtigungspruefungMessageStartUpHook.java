@@ -27,7 +27,8 @@ import java.util.List;
 
 import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifier;
 import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungProperties;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisLandparcelAggregationRenderer;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
 import de.cismet.cids.custom.utils.BerechtigungspruefungFreigabeDialog;
 import de.cismet.cids.custom.utils.BerechtigungspruefungStornoDialog;
@@ -154,12 +155,19 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook, Cid
                                             BerechtigungspruefungAlkisEinzelnachweisDownloadInfo.class);
                                     switch (einzelnachweisDownloadInfo.getAlkisObjectTyp()) {
                                         case FLURSTUECKE: {
-                                            AlkisLandparcelAggregationRenderer.downloadEinzelnachweisProduct(
+                                            AlkisProductDownloadHelper.downloadEinzelnachweisProduct(
                                                 einzelnachweisDownloadInfo);
                                         }
                                         break;
                                         case BUCHUNGSBLAETTER: {
-//TODO
+                                            if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(
+                                                            einzelnachweisDownloadInfo.getAlkisProdukt())) {
+                                                AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(
+                                                    einzelnachweisDownloadInfo);
+                                            } else {
+                                                AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(
+                                                    einzelnachweisDownloadInfo);
+                                            }
                                         }
                                         break;
                                     }
@@ -172,7 +180,7 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook, Cid
                                             BerechtigungspruefungAlkisKarteDownloadInfo.class);
                                     switch (karteDownloadInfo.getAlkisObjectTyp()) {
                                         case FLURSTUECKE: {
-                                            AlkisLandparcelAggregationRenderer.downloadKarteProduct(karteDownloadInfo);
+                                            AlkisProductDownloadHelper.downloadKarteProduct(karteDownloadInfo);
                                         }
                                         break;
                                         case BUCHUNGSBLAETTER: {

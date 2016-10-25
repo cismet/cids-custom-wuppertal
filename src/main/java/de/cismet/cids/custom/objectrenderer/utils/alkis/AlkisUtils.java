@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -980,6 +981,11 @@ public class AlkisUtils {
         } else if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF.equals(product)
                     || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML.equals(product)) {
             actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW;
+        } else if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW;
+        } else if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product)
+                    || AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
+            actionTag = PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW;
         } else {
             actionTag = "3wbgW§$%Q&/"; // unknown product, prevent NPE while checking action tag with null
         }
