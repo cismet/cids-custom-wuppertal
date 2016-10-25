@@ -320,7 +320,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
                     != null;
         if (!hasFreigabeAccess) {
-            tbpModus.remove(pnlVerlaengern);
+            tbpModus.remove(pnlFreigeben);
         }
     }
 
@@ -1874,7 +1874,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
                 if (selectedValues == punktnummern.size()) {
                     cbAntragsNummer.removeItemAt(cbAntragsNummer.getSelectedIndex());
-                    cbAntragsNummer.setSelectedIndex(0);
+                    cbAntragsNummer.setSelectedItem(null);
                 }
                 loadPointNumbers();
             } catch (InterruptedException ex) {
@@ -2092,12 +2092,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     cbAntragsNummer.getModel();
                 cbAntragsNummerModel.removeAllElements();
                 if (antragsNummern.isEmpty()) {
-                    cbAntragsNummerModel.addElement("keine Aufträge gefunden");
+                    cbAntragsNummerModel.addElement("<html><i>keine Aufträge gefunden");
                 } else {
                     final String insertedText = (String)
                         ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).getText();
 
                     cbAntragsNummerModel.removeAllElements();
+                    cbAntragsNummerModel.addElement("<htm><i>kein Auftrag ausgewählt");
                     for (final String antragsNummer : antragsNummern) {
                         cbAntragsNummerModel.addElement(antragsNummer);
                     }
@@ -2112,7 +2113,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
 
                 jProgressBar1.setIndeterminate(false);
-                cbAntragsNummer.setEnabled(true);
+                cbAntragsNummer.setEnabled(!antragsNummern.isEmpty());
 
                 if (cbAntragsNummer.getModel().getSize() > 0) {
                     cbAntragsNummer.setSelectedIndex(0);
