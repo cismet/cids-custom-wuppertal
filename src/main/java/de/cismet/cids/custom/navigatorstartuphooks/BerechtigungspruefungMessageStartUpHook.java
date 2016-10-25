@@ -17,8 +17,6 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.log4j.Logger;
 
 import org.openide.util.lookup.ServiceProvider;
@@ -28,14 +26,8 @@ import java.util.List;
 import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifier;
 import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungProperties;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
-import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
 import de.cismet.cids.custom.utils.BerechtigungspruefungFreigabeDialog;
 import de.cismet.cids.custom.utils.BerechtigungspruefungStornoDialog;
-import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisDownloadInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnfrageServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -136,62 +128,8 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook, Cid
                     if (Boolean.TRUE.equals(berechtigungspruefungBean.getProperty("pruefstatus"))) {
                         BerechtigungspruefungFreigabeDialog.getInstance().showFreigabe(berechtigungspruefungBean);
                         final String produkttyp = (String)berechtigungspruefungBean.getProperty("produkttyp");
-                        if (BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
-                            final BerechtigungspruefungBescheinigungDownloadInfo bescheinigungDownloadInfo =
-                                new ObjectMapper().readValue((String)berechtigungspruefungBean.getProperty(
-                                        "downloadinfo_json"),
-                                    BerechtigungspruefungBescheinigungDownloadInfo.class);
-                            BaulastBescheinigungUtils.doDownload(bescheinigungDownloadInfo, schluessel);
-                        } else if (BerechtigungspruefungAlkisDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
-                            final BerechtigungspruefungAlkisDownloadInfo alkisDownloadInfo =
-                                new ObjectMapper().readValue((String)berechtigungspruefungBean.getProperty(
-                                        "downloadinfo_json"),
-                                    BerechtigungspruefungAlkisDownloadInfo.class);
-                            switch (alkisDownloadInfo.getAlkisDownloadTyp()) {
-                                case EINZELNACHWEIS: {
-                                    final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo einzelnachweisDownloadInfo =
-                                        new ObjectMapper().readValue((String)berechtigungspruefungBean.getProperty(
-                                                "downloadinfo_json"),
-                                            BerechtigungspruefungAlkisEinzelnachweisDownloadInfo.class);
-                                    switch (einzelnachweisDownloadInfo.getAlkisObjectTyp()) {
-                                        case FLURSTUECKE: {
-                                            AlkisProductDownloadHelper.downloadEinzelnachweisProduct(
-                                                einzelnachweisDownloadInfo);
-                                        }
-                                        break;
-                                        case BUCHUNGSBLAETTER: {
-                                            if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(
-                                                            einzelnachweisDownloadInfo.getAlkisProdukt())) {
-                                                AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(
-                                                    einzelnachweisDownloadInfo);
-                                            } else {
-                                                AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(
-                                                    einzelnachweisDownloadInfo);
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-                                break;
-                                case KARTE: {
-                                    final BerechtigungspruefungAlkisKarteDownloadInfo karteDownloadInfo =
-                                        new ObjectMapper().readValue((String)berechtigungspruefungBean.getProperty(
-                                                "downloadinfo_json"),
-                                            BerechtigungspruefungAlkisKarteDownloadInfo.class);
-                                    switch (karteDownloadInfo.getAlkisObjectTyp()) {
-                                        case FLURSTUECKE: {
-                                            AlkisProductDownloadHelper.downloadKarteProduct(karteDownloadInfo);
-                                        }
-                                        break;
-                                        case BUCHUNGSBLAETTER: {
-//TODO
-                                        }
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
+                        final String downloadInfo = (String)berechtigungspruefungBean.getProperty("downloadinfo_json");
+                        AlkisProductDownloadHelper.download(schluessel, produkttyp, downloadInfo);
                     } else {
                         BerechtigungspruefungStornoDialog.getInstance().showStorno(berechtigungspruefungBean);
                     }

@@ -14,6 +14,8 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
 import Sirius.navigator.ui.ComponentRegistry;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jxl.common.Logger;
 
 import java.awt.Component;
@@ -29,6 +31,8 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
+import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
@@ -80,7 +84,7 @@ public class AlkisProductDownloadHelper {
             downloads.add(d);
         }
 
-        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
+        if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
             return;
         }
 
@@ -426,6 +430,64 @@ public class AlkisProductDownloadHelper {
             DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
         } else if (downloads.size() == 1) {
             DownloadManager.instance().add(downloads.get(0));
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   schluessel    DOCUMENT ME!
+     * @param   produkttyp    DOCUMENT ME!
+     * @param   downloadInfo  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void download(final String schluessel, final String produkttyp, final String downloadInfo)
+            throws Exception {
+        if (BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
+            final BerechtigungspruefungBescheinigungDownloadInfo bescheinigungDownloadInfo =
+                new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungBescheinigungDownloadInfo.class);
+            BaulastBescheinigungUtils.doDownload(bescheinigungDownloadInfo, schluessel);
+        } else if (BerechtigungspruefungAlkisDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
+            final BerechtigungspruefungAlkisDownloadInfo alkisDownloadInfo =
+                new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungAlkisDownloadInfo.class);
+            switch (alkisDownloadInfo.getAlkisDownloadTyp()) {
+                case EINZELNACHWEIS: {
+                    final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo einzelnachweisDownloadInfo =
+                        new ObjectMapper().readValue(
+                            downloadInfo,
+                            BerechtigungspruefungAlkisEinzelnachweisDownloadInfo.class);
+                    switch (einzelnachweisDownloadInfo.getAlkisObjectTyp()) {
+                        case FLURSTUECKE: {
+                            AlkisProductDownloadHelper.downloadEinzelnachweisProduct(einzelnachweisDownloadInfo);
+                        }
+                        break;
+                        case BUCHUNGSBLAETTER: {
+                            if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(
+                                            einzelnachweisDownloadInfo.getAlkisProdukt())) {
+                                AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(
+                                    einzelnachweisDownloadInfo);
+                            } else {
+                                AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(
+                                    einzelnachweisDownloadInfo);
+                            }
+                        }
+                        break;
+                    }
+                }
+                break;
+                case KARTE: {
+                    final BerechtigungspruefungAlkisKarteDownloadInfo karteDownloadInfo =
+                        new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungAlkisKarteDownloadInfo.class);
+                    switch (karteDownloadInfo.getAlkisObjectTyp()) {
+                        case FLURSTUECKE: {
+                            AlkisProductDownloadHelper.downloadKarteProduct(karteDownloadInfo);
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
         }
     }
 
