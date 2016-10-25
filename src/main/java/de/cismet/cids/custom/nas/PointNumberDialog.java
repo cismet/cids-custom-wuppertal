@@ -2098,7 +2098,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                         ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).getText();
 
                     cbAntragsNummerModel.removeAllElements();
-                    cbAntragsNummerModel.addElement("<htm><i>kein Auftrag ausgewählt");
+                    cbAntragsNummerModel.addElement("<html><i>kein Auftrag ausgewählt");
                     for (final String antragsNummer : antragsNummern) {
                         cbAntragsNummerModel.addElement(antragsNummer);
                     }
