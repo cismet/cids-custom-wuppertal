@@ -235,7 +235,9 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
     private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
-            final String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+            final String extension = jFileChooser1.getSelectedFile()
+                        .getName()
+                        .substring(jFileChooser1.getSelectedFile().getName().lastIndexOf(".") + 1);
             if (ALLOWED_EXTENSIONS.contains(extension)) {
                 file = jFileChooser1.getSelectedFile();
             } else {
