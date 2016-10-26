@@ -232,7 +232,7 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
             final String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
@@ -252,7 +252,7 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
         }
 
         jLabel4.setText((file == null) ? "<html><i>keine Datei ausgewählt" : file.getName());
-    }//GEN-LAST:event_jButton3ActionPerformed
+    } //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
