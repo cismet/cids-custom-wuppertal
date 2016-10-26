@@ -142,6 +142,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink2;
     private javax.swing.JLabel labInfoTitle;
     private javax.swing.JLabel labInfoTitle1;
     private javax.swing.JLabel labInfoTitle2;
@@ -181,7 +182,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTitleValue;
     private javax.swing.JLabel lblTransId;
-    private javax.swing.JLabel lblTransIdValue;
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
     private javax.swing.JPanel panAdressen;
     private javax.swing.JPanel panFiller;
@@ -299,7 +299,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         labInfoTitle = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblTransId = new javax.swing.JLabel();
-        lblTransIdValue = new javax.swing.JLabel();
+        jXHyperlink2 = new org.jdesktop.swingx.JXHyperlink();
         lblEingegangenAm = new javax.swing.JLabel();
         lblEingegangenAmValue = new javax.swing.JLabel();
         lblBezugsweg = new javax.swing.JLabel();
@@ -460,19 +460,24 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.transid}"),
-                lblTransIdValue,
+                jXHyperlink2,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
+        jXHyperlink2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink2ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblTransIdValue, gridBagConstraints);
+        jPanel1.add(jXHyperlink2, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblEingegangenAm,
@@ -1372,31 +1377,31 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlFlurstueckeValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstueckeValueActionPerformed
+    private void hlFlurstueckeValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstueckeValueActionPerformed
         if (flurstueckMon != null) {
             ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(flurstueckMon, false);
         }
-    }                                                                                      //GEN-LAST:event_hlFlurstueckeValueActionPerformed
+    }//GEN-LAST:event_hlFlurstueckeValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlEMailValueActionPerformed
+    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlEMailValueActionPerformed
         try {
             BrowserLauncher.openURL("mailto:" + (String)cidsBean.getProperty("email"));
         } catch (Exception ex) {
             LOG.warn("could not open mailto link", ex);
         }
-    }                                                                                //GEN-LAST:event_hlEMailValueActionPerformed
+    }//GEN-LAST:event_hlEMailValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlProduktValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlProduktValueActionPerformed
+    private void hlProduktValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlProduktValueActionPerformed
         final String filePath = (String)cidsBean.getProperty("produkt_dateipfad");
         final String fileName = (String)cidsBean.getProperty("produkt_dateiname_orig");
         if (filePath != null) {
@@ -1425,14 +1430,14 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 LOG.error(ex, ex);
             }
         }
-    } //GEN-LAST:event_hlProduktValueActionPerformed
+    }//GEN-LAST:event_hlProduktValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlStatusErrorDetailsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlStatusErrorDetailsActionPerformed
+    private void hlStatusErrorDetailsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlStatusErrorDetailsActionPerformed
         final String exceptionJson = (String)cidsBean.getProperty("exception");
         final String fehler = (String)cidsBean.getProperty("fehler");
         final Timestamp fehler_ts = (Timestamp)cidsBean.getProperty("fehler_ts");
@@ -1457,46 +1462,46 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 Level.SEVERE,
                 null);
         JXErrorPane.showDialog(this, info);
-    } //GEN-LAST:event_hlStatusErrorDetailsActionPerformed
+    }//GEN-LAST:event_hlStatusErrorDetailsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdReloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdReloadActionPerformed
+    private void cmdReloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdReloadActionPerformed
         StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean));
-    }                                                                             //GEN-LAST:event_cmdReloadActionPerformed
+    }//GEN-LAST:event_cmdReloadActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
             final Download download = FsBestellungReportGenerator.createJasperDownload(
                     cidsBean,
                     DownloadManagerDialog.getInstance().getJobName());
             DownloadManager.instance().add(download);
         }
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdAttachBillingActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAttachBillingActionPerformed
+    private void cmdAttachBillingActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAttachBillingActionPerformed
         StaticSwingTools.showDialog(new FSAttachBillingForProduktDialog(cidsBean));
-    }                                                                                    //GEN-LAST:event_cmdAttachBillingActionPerformed
+    }//GEN-LAST:event_cmdAttachBillingActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         final String filePath = (String)cidsBean.getProperty("rechnung_dateipfad");
         final String fileName = (String)cidsBean.getProperty("rechnung_dateiname_orig");
         if (filePath != null) {
@@ -1525,7 +1530,31 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 LOG.error(ex, ex);
             }
         }
-    } //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink2ActionPerformed
+
+        final String url = "https://www.wuppertal.de/kartendownload/index.php?tid="
+                    + (String)cidsBean.getProperty("transid");
+        try {
+            BrowserLauncher.openURL(url);
+        } catch (final Exception ex) {
+            final ErrorInfo info = new ErrorInfo(
+                    "Fehler beim Öffnen der URL",
+                    ex.getMessage(),
+                    null,
+                    null,
+                    ex,
+                    Level.SEVERE,
+                    null);
+            JXErrorPane.showDialog(this, info);
+        }
+    }//GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
      * DOCUMENT ME!
