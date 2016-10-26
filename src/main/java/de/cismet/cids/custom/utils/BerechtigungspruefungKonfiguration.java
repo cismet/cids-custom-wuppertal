@@ -25,7 +25,7 @@ import java.io.StringReader;
 import java.util.Collection;
 import java.util.List;
 
-import de.cismet.cids.custom.wunda_blau.search.actions.GetServerResourceServerAction;
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
 import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
 
@@ -56,7 +56,7 @@ public class BerechtigungspruefungKonfiguration {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON);
+                            WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }

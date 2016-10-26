@@ -18,7 +18,8 @@ import java.io.StringReader;
 import java.util.Properties;
 
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
-import de.cismet.cids.custom.wunda_blau.search.actions.GetServerResourceServerAction;
+
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
 /**
  * DOCUMENT ME!
@@ -44,7 +45,7 @@ public final class AlkisConstants {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.ALKIS_CONF);
+                            WundaBlauServerResources.ALKIS_CONF.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }

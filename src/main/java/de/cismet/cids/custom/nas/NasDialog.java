@@ -63,7 +63,8 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.nas.NasProduct;
-import de.cismet.cids.custom.wunda_blau.search.actions.GetServerResourceServerAction;
+
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 //import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -288,7 +289,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.NAS_PRODUCT_DESCRIPTION_JSON);
+                            WundaBlauServerResources.NAS_PRODUCT_DESCRIPTION_JSON.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }

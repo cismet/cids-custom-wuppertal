@@ -14,6 +14,7 @@ package de.cismet.cids.custom.navigatorstartuphooks;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
+import Sirius.server.middleware.impls.domainserver.DomainServerImpl;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
@@ -59,51 +60,53 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook, Cid
 
     @Override
     public void applicationStarted() {
-        new Thread(new Runnable() {
+        if ("WUNDA_BLAU".equals(SessionManager.getSession().getConnectionInfo().getUserDomain())) {
+            new Thread(new Runnable() {
 
-                @Override
-                public void run() {
-                    try {
-                        if (SessionManager.getConnection().hasConfigAttr(
-                                        SessionManager.getSession().getUser(),
-                                        "csm://"
-                                        + BerechtigungspruefungProperties.getInstance().getCsmAnfrage())) {
-                            CidsServerMessageNotifier.getInstance()
-                                    .subscribe(
-                                        BerechtigungspruefungMessageNotifier.getInstance(),
-                                        BerechtigungspruefungProperties.getInstance().getCsmAnfrage());
+                    @Override
+                    public void run() {
+                        try {
+                            if (SessionManager.getConnection().hasConfigAttr(
+                                            SessionManager.getSession().getUser(),
+                                            "csm://"
+                                            + BerechtigungspruefungProperties.getInstance().getCsmAnfrage())) {
+                                CidsServerMessageNotifier.getInstance()
+                                        .subscribe(
+                                            BerechtigungspruefungMessageNotifier.getInstance(),
+                                            BerechtigungspruefungProperties.getInstance().getCsmAnfrage());
+                            }
+                        } catch (ConnectionException ex) {
+                            LOG.warn(
+                                "Konnte Rechte an csm://"
+                                        + BerechtigungspruefungProperties.getInstance().getCsmAnfrage()
+                                        + " nicht abfragen. Keine Benachrichtung bei neuen Prüfungsanfragen!",
+                                ex);
                         }
-                    } catch (ConnectionException ex) {
-                        LOG.warn(
-                            "Konnte Rechte an csm://"
-                                    + BerechtigungspruefungProperties.getInstance().getCsmAnfrage()
-                                    + " nicht abfragen. Keine Benachrichtung bei neuen Prüfungsanfragen!",
-                            ex);
-                    }
-                    try {
-                        if (SessionManager.getConnection().hasConfigAttr(
-                                        SessionManager.getSession().getUser(),
-                                        "csm://"
-                                        + BerechtigungspruefungProperties.getInstance().getCsmBearbeitung())) {
-                            CidsServerMessageNotifier.getInstance()
-                                    .subscribe(
-                                        BerechtigungspruefungMessageNotifier.getInstance(),
-                                        BerechtigungspruefungProperties.getInstance().getCsmBearbeitung());
+                        try {
+                            if (SessionManager.getConnection().hasConfigAttr(
+                                            SessionManager.getSession().getUser(),
+                                            "csm://"
+                                            + BerechtigungspruefungProperties.getInstance().getCsmBearbeitung())) {
+                                CidsServerMessageNotifier.getInstance()
+                                        .subscribe(
+                                            BerechtigungspruefungMessageNotifier.getInstance(),
+                                            BerechtigungspruefungProperties.getInstance().getCsmBearbeitung());
+                            }
+                        } catch (ConnectionException ex) {
+                            LOG.warn(
+                                "Konnte Rechte an csm://"
+                                        + BerechtigungspruefungProperties.getInstance().getCsmBearbeitung()
+                                        + " nicht abfragen. Keine Benachrichtung bei neuen Prüfungsanfragen!",
+                                ex);
                         }
-                    } catch (ConnectionException ex) {
-                        LOG.warn(
-                            "Konnte Rechte an csm://"
-                                    + BerechtigungspruefungProperties.getInstance().getCsmBearbeitung()
-                                    + " nicht abfragen. Keine Benachrichtung bei neuen Prüfungsanfragen!",
-                            ex);
-                    }
 
-                    CidsServerMessageNotifier.getInstance()
-                            .subscribe(
-                                BerechtigungspruefungMessageStartUpHook.this,
-                                BerechtigungspruefungProperties.getInstance().getCsmFreigabe());
-                }
-            }).start();
+                        CidsServerMessageNotifier.getInstance()
+                                .subscribe(
+                                    BerechtigungspruefungMessageStartUpHook.this,
+                                    BerechtigungspruefungProperties.getInstance().getCsmFreigabe());
+                    }
+                }).start();
+        }
     }
 
     @Override
