@@ -243,7 +243,7 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(
                     this,
                     "Diese Datei-Endung ist nicht erlaubt.\n\nFolgende Datei-Endungen werden akzeptiert:\n"
-                            + String.join(",", ALLOWED_EXTENSIONS),
+                            + implode(",", ALLOWED_EXTENSIONS.toArray(new String[0])),
                     "Unerlaubte Datei-Endung",
                     JOptionPane.ERROR_MESSAGE);
             }
@@ -253,6 +253,28 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
 
         jLabel4.setText((file == null) ? "<html><i>keine Datei ausgewählt" : file.getName());
     } //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   delimiter  DOCUMENT ME!
+     * @param   strings    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String implode(final String delimiter, final String... strings) {
+        if (strings.length == 0) {
+            return "";
+        } else {
+            final StringBuilder sb = new StringBuilder();
+            sb.append(strings[0]);
+            for (int index = 1; index < strings.length; index++) {
+                sb.append(delimiter);
+                sb.append(strings[index]);
+            }
+            return sb.toString();
+        }
+    }
 
     /**
      * DOCUMENT ME!
