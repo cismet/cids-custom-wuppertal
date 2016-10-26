@@ -14,11 +14,7 @@ package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.Getter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -26,11 +22,14 @@ import org.apache.log4j.Logger;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnfrageServerAction;
@@ -50,6 +49,17 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BerechtigungspruefungAnfragePanel.class.getName());
+
+    private static final Collection<String> ALLOWED_EXTENSIONS = Arrays.asList(
+            "pdf",
+            "bmp",
+            "tiff",
+            "tif",
+            "png",
+            "jpg",
+            "jpeg",
+            "jpg",
+            "gif");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -118,6 +128,11 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<String>();
+
+        jFileChooser1.setAcceptAllFileFilterUsed(false);
+        jFileChooser1.setFileFilter(new FileNameExtensionFilter(
+                "PDF und Bild-Dateien",
+                ALLOWED_EXTENSIONS.toArray(new String[0])));
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -217,16 +232,27 @@ public class BerechtigungspruefungAnfragePanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
-            file = jFileChooser1.getSelectedFile();
+            final String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+            if (ALLOWED_EXTENSIONS.contains(extension)) {
+                file = jFileChooser1.getSelectedFile();
+            } else {
+                file = null;
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Diese Datei-Endung ist nicht erlaubt.\n\nFolgende Datei-Endungen werden akzeptiert:\n"
+                            + String.join(",", ALLOWED_EXTENSIONS),
+                    "Unerlaubte Datei-Endung",
+                    JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             file = null;
         }
 
         jLabel4.setText((file == null) ? "<html><i>keine Datei ausgewählt" : file.getName());
-    } //GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
