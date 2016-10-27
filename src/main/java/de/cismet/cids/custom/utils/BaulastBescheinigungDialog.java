@@ -396,7 +396,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      * @param  parent       DOCUMENT ME!
      */
     public void show(final Collection<CidsBean> flurstuecke, final Component parent) {
-        boolean berechtigungspruefung = true;
+        boolean berechtigungspruefung = false;
         try {
             berechtigungspruefung = SessionManager.getConnection()
                         .hasConfigAttr(
@@ -429,8 +429,17 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         try {
-            final String produktbezeichnung = jTextField1.getText();
-            final String auftragsnummer = jTextField2.getText();
+            boolean berechtigungspruefung = false;
+            try {
+                berechtigungspruefung = SessionManager.getConnection()
+                            .hasConfigAttr(
+                                    SessionManager.getSession().getUser(),
+                                    "berechtigungspruefung_baulastbescheinigung");
+            } catch (final ConnectionException ex) {
+                LOG.info("could not check config attr", ex);
+            }
+            final String produktbezeichnung = (berechtigungspruefung) ? jTextField2.getText() : jTextField1.getText();
+            final String auftragsnummer = (berechtigungspruefung) ? "BlaB-?" : jTextField2.getText();
             if (BillingPopup.doBilling(
                             "blab_be",
                             "no.yet",
