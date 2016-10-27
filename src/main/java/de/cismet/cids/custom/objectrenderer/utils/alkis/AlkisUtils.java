@@ -1032,4 +1032,33 @@ public class AlkisUtils {
         }
         return downloadTitle;
     }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getBillingKey(final String product) {
+        final String billingKey;
+        if (PRODUCTS.FLURSTUECKSNACHWEIS_PDF.equals(product)) {
+            billingKey = "fsnw";
+        } else if (PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF.equals(product)) {
+            billingKey = "fsuenw";
+        } else if (PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF.equals(product)) {
+            billingKey = "fsuekom";
+        } else if (PRODUCTS.BESTANDSNACHWEIS_NRW_PDF.equals(product)) {
+            billingKey = "benw";
+        } else if (PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(product)) {
+            billingKey = "bestnw";
+        } else if (PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF.equals(product)) {
+            billingKey = "bekom";
+        } else if (PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product)) {
+            billingKey = "grnw";
+        } else {
+            billingKey = null;
+        }
+        return billingKey;
+    }
 }

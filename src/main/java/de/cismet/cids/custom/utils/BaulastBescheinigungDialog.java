@@ -438,6 +438,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                             produktbezeichnung,
                             (Geometry)null,
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
+                final CidsBean billingBean = BillingPopup.getInstance().getBillingBean();
                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                 BaulastBescheinigungDialog.this)) {
                     final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
@@ -450,13 +451,15 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                         new BerechtigungspruefungBescheinigungInfo(new Date(),
                             new HashSet<BerechtigungspruefungBescheinigungGruppeInfo>(bescheinigungsgruppen));
 
+                    final Integer billinId = (billingBean != null) ? billingBean.getPrimaryKeyValue() : null;
                     final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
                         new BerechtigungspruefungBescheinigungDownloadInfo(
                             DownloadManagerDialog.getInstance().getJobName(),
                             produktbezeichnung,
                             auftragsnummer,
                             protokollPane.getText(),
-                            bescheinigungsInfo);
+                            bescheinigungsInfo,
+                            billinId);
                     if (SessionManager.getConnection().hasConfigAttr(
                                     SessionManager.getSession().getUser(),
                                     "berechtigungspruefung_baulastbescheinigung")) {

@@ -121,6 +121,7 @@ public class BillingPopup extends javax.swing.JDialog {
     private double nettoPrice = 0;
     private double bruttoPrice = 0;
     private boolean shouldGoOn = false;
+    private CidsBean billingBean = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboUsage;
     private javax.swing.JButton cmdCancel;
@@ -634,16 +635,27 @@ public class BillingPopup extends javax.swing.JDialog {
             cb.setProperty("request", getCurrentRequest());
             cb.setProperty("verwendungskey", currentUsage.getKey());
             cb.setProperty("abgerechnet", Boolean.FALSE);
-            cb.persist();
+            final CidsBean persistedCb = cb.persist();
 
             // Nebenläufigkeit my arse
             shouldGoOn = true;
+            billingBean = persistedCb;
         } catch (Exception e) {
             LOG.error("Error during the persitence of the billing log.", e);
             shouldGoOn = false;
+            billingBean = null;
         }
         // the end
         setVisible(false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getBillingBean() {
+        return billingBean;
     }
 
     /**
@@ -737,6 +749,7 @@ public class BillingPopup extends javax.swing.JDialog {
      */
     private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {
         shouldGoOn = false;
+        billingBean = null;
         setVisible(false);
     }
 
