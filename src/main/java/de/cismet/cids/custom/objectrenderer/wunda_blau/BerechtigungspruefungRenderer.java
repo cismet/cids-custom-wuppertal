@@ -24,6 +24,8 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import org.openide.util.Exceptions;
+
 import java.awt.CardLayout;
 import java.awt.Component;
 
@@ -69,6 +71,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -117,6 +121,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JDialog diaFreigabe;
     private javax.swing.JDialog diaStorno;
     private org.jdesktop.swingx.JXHyperlink hlDateianhangValue;
+    private org.jdesktop.swingx.JXHyperlink hlEMailValue;
     private org.jdesktop.swingx.JXHyperlink hlVorschauValue;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -202,7 +207,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
     private javax.swing.JScrollPane txaBegruendungstextValue;
     private javax.swing.JScrollPane txaBegruendungstextValue1;
-    private javax.swing.JTextField txtEMailValue;
     private javax.swing.JTextField txtTelNummerValue;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -290,7 +294,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         lblAnfrageVon = new javax.swing.JLabel();
         lblAnfrageVonValue = new javax.swing.JLabel();
         lblEMail = new javax.swing.JLabel();
-        txtEMailValue = new javax.swing.JTextField();
+        hlEMailValue = new org.jdesktop.swingx.JXHyperlink();
         lblTelNummer = new javax.swing.JLabel();
         txtTelNummerValue = new javax.swing.JTextField();
         lblPruefStatus = new javax.swing.JLabel();
@@ -806,20 +810,26 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblEMail, gridBagConstraints);
 
-        txtEMailValue.setEditable(false);
-        txtEMailValue.setBackground(null);
-        txtEMailValue.setText(org.openide.util.NbBundle.getMessage(
+        org.openide.awt.Mnemonics.setLocalizedText(
+            hlEMailValue,
+            org.openide.util.NbBundle.getMessage(
                 BerechtigungspruefungRenderer.class,
-                "BerechtigungspruefungRenderer.txtEMailValue.text")); // NOI18N
-        txtEMailValue.setBorder(null);
-        txtEMailValue.setOpaque(false);
+                "BerechtigungspruefungRenderer.hlEMailValue.text")); // NOI18N
+        hlEMailValue.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlEMailValueActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(txtEMailValue, gridBagConstraints);
+        jPanel1.add(hlEMailValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblTelNummer,
@@ -1579,6 +1589,22 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlEMailValueActionPerformed
+        final String email = hlEMailValue.getText();
+        if ((email != null) && !email.isEmpty()) {
+            try {
+                BrowserLauncher.openURL("mailto:" + email);
+            } catch (final Exception ex) {
+                LOG.warn(ex, ex);
+            }
+        }
+    }                                                                                //GEN-LAST:event_hlEMailValueActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  freigabe  DOCUMENT ME!
      */
     private void executeFreigabeOrStorno(final boolean freigabe) {
@@ -1733,8 +1759,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                             && (cidsBean.getProperty("pruefstatus") == null)));
 
             lblAnfrageVonValue.setText((String)cidsBean.getProperty("benutzer"));
-            txtEMailValue.setText("");
-            txtEMailValue.setText("");
+            hlEMailValue.setText("");
+            hlEMailValue.setText("");
             new SwingWorker<CidsBean, Void>() {
 
                     @Override
@@ -1749,7 +1775,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                             if (externalUser != null) {
                                 lblAnfrageVonValue.setText((String)externalUser.getProperty("kunde.name") + " ("
                                             + (String)cidsBean.getProperty("benutzer") + ")");
-                                txtEMailValue.setText((String)externalUser.getProperty("kontakt"));
+                                hlEMailValue.setText((String)externalUser.getProperty("kontakt"));
                                 txtTelNummerValue.setText((String)externalUser.getProperty("tel_nummer"));
                             }
                         } catch (final Exception ex) {
@@ -1851,7 +1877,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             lblPruefStatusValue.setText("-");
 
             lblAnfrageVonValue.setText("-");
-            txtEMailValue.setText("");
+            hlEMailValue.setText("");
             txtTelNummerValue.setText("");
 
             downloadInfo = null;
