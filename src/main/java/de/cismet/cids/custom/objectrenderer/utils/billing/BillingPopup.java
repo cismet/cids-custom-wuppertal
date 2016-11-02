@@ -848,10 +848,15 @@ public class BillingPopup extends javax.swing.JDialog {
         } else {
             file = null;
         }
+        updateFileLabel();
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateFileLabel() {
         jLabel4.setText((file == null) ? "<html><i>keine Datei ausgewählt" : file.getName());
-    } //GEN-LAST:event_jButton3ActionPerformed
-
+    }
     /**
      * DOCUMENT ME!
      *
@@ -1373,6 +1378,7 @@ public class BillingPopup extends javax.swing.JDialog {
         }
         jTextArea1.setText("");
         file = null;
+        updateFileLabel();
     }
 
     /**
