@@ -96,7 +96,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.BerechtigungspruefungAnfrageDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
@@ -1261,30 +1260,23 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         }
 
         try {
+            final List<String> bucungsblattCodes = Arrays.asList(getCompleteBuchungsblattCode());
+
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                        .createAlkisBuchungsblattachweisDownloadInfo(
+                            product,
+                            bucungsblattCodes);
             final String billingKey = AlkisUtils.getBillingKey(product);
             if ((billingKey == null)
                         || BillingPopup.doBilling(
                             billingKey,
                             "no.yet",
                             (Geometry)null,
+                            (berechtigungspruefung
+                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
+                                ? downloadInfo : null,
                             new ProductGroupAmount("ea", 1))) {
-                final CidsBean billingBean = BillingPopup.getInstance().getBillingBean();
-                final Integer billingId = (billingBean != null) ? billingBean.getPrimaryKeyValue() : null;
-
-                final List<String> bucungsblattCodes = Arrays.asList(getCompleteBuchungsblattCode());
-
-                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
-                            .createAlkisBuchungsblattachweisDownloadInfo(
-                                product,
-                                bucungsblattCodes,
-                                billingId);
-                if (berechtigungspruefung
-                            && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(
-                                downloadInfo.getProduktTyp())) {
-                    BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
-                } else {
-                    AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(downloadInfo);
-                }
+                AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(downloadInfo);
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -1603,32 +1595,25 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         final Date stichtag = stichtagDialog.getDate();
 
         try {
-            final String billingKey = AlkisUtils.getBillingKey(product);
-            if ((billingKey == null)
-                        || BillingPopup.doBilling(
-                            billingKey,
-                            "no.yet",
-                            (Geometry)null,
-                            new ProductGroupAmount("ea", 1))) {
-                final CidsBean billingBean = BillingPopup.getInstance().getBillingBean();
-                final Integer billingId = (billingBean != null) ? billingBean.getPrimaryKeyValue() : null;
+            if (stichtag != null) {
+                final List<String> buchungsblattCodes = Arrays.asList(getCompleteBuchungsblattCode());
 
-                if (stichtag != null) {
-                    final List<String> buchungsblattCodes = Arrays.asList(getCompleteBuchungsblattCode());
-
-                    final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
-                                .createAlkisBuchungsblattnachweisDownloadInfo(
-                                    product,
-                                    stichtag,
-                                    buchungsblattCodes,
-                                    billingId);
-                    if (berechtigungspruefung
-                                && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(
-                                    downloadInfo.getProduktTyp())) {
-                        BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
-                    } else {
-                        AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(downloadInfo);
-                    }
+                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                            .createAlkisBuchungsblattnachweisDownloadInfo(
+                                product,
+                                stichtag,
+                                buchungsblattCodes);
+                final String billingKey = AlkisUtils.getBillingKey(product);
+                if ((billingKey == null)
+                            || BillingPopup.doBilling(
+                                billingKey,
+                                "no.yet",
+                                (Geometry)null,
+                                (berechtigungspruefung
+                                    && AlkisProductDownloadHelper.checkBerechtigungspruefung(
+                                        downloadInfo.getProduktTyp())) ? downloadInfo : null,
+                                new ProductGroupAmount("ea", 1))) {
+                    AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(downloadInfo);
                 }
             }
         } catch (Exception e) {

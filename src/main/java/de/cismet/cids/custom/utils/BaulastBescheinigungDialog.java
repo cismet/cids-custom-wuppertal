@@ -51,6 +51,7 @@ import javax.swing.text.BadLocationException;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
@@ -116,7 +117,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     private SwingWorker worker;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.custom.utils.BerechtigungspruefungAnfragePanel berechtigungspruefungAnfragePanel1;
     private de.cismet.commons.gui.progress.BusyStatusPanel busyStatusPanel1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -196,16 +196,15 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
-        busyStatusPanel1 = new de.cismet.commons.gui.progress.BusyStatusPanel();
-        berechtigungspruefungAnfragePanel1 = new de.cismet.cids.custom.utils.BerechtigungspruefungAnfragePanel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         protokollPane = new de.cismet.commons.gui.progress.BusyLoggingTextPane();
+        jPanel9 = new javax.swing.JPanel();
+        busyStatusPanel1 = new de.cismet.commons.gui.progress.BusyStatusPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(
@@ -270,17 +269,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         jPanel4.setPreferredSize(new java.awt.Dimension(500, 27));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jPanel9.setMinimumSize(new java.awt.Dimension(400, 27));
-        jPanel9.setOpaque(false);
-        jPanel9.setPreferredSize(new java.awt.Dimension(400, 27));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel4.add(jPanel9, gridBagConstraints);
-
         jPanel2.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -312,25 +300,16 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         jPanel2.add(jButton1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel4.add(jPanel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         jPanel4.add(jPanel7, gridBagConstraints);
-
-        busyStatusPanel1.setStatusMessage(org.openide.util.NbBundle.getMessage(
-                BaulastBescheinigungDialog.class,
-                "BaulastBescheinigungDialog.busyStatusPanel1.statusMessage")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel4.add(busyStatusPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -339,16 +318,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jPanel4, gridBagConstraints);
-
-        berechtigungspruefungAnfragePanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    BaulastBescheinigungDialog.class,
-                    "BaulastBescheinigungDialog.berechtigungspruefungAnfragePanel1.border.title"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel3.add(berechtigungspruefungAnfragePanel1, gridBagConstraints);
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
@@ -373,11 +342,32 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel3.add(jPanel8, gridBagConstraints);
+
+        jPanel9.setMinimumSize(new java.awt.Dimension(400, 27));
+        jPanel9.setOpaque(false);
+        jPanel9.setPreferredSize(new java.awt.Dimension(400, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel3.add(jPanel9, gridBagConstraints);
+
+        busyStatusPanel1.setStatusMessage(org.openide.util.NbBundle.getMessage(
+                BaulastBescheinigungDialog.class,
+                "BaulastBescheinigungDialog.busyStatusPanel1.statusMessage")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(busyStatusPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -396,30 +386,22 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      * @param  parent       DOCUMENT ME!
      */
     public void show(final Collection<CidsBean> flurstuecke, final Component parent) {
-        boolean berechtigungspruefung = false;
         try {
-            berechtigungspruefung = SessionManager.getConnection()
-                        .hasConfigAttr(
-                                SessionManager.getSession().getUser(),
-                                "berechtigungspruefung_baulastbescheinigung");
-        } catch (final ConnectionException ex) {
-            LOG.info("could not check config attr", ex);
+            final List<CidsBean> flurstueckeList = new ArrayList<CidsBean>(new HashSet<CidsBean>(flurstuecke));
+            prodAmounts.clear();
+            bescheinigungsgruppen.clear();
+
+            jTextField2.setText(new SimpleDateFormat("yy").format(new Date()) + "-");
+
+            jPanel1.setVisible(!BillingPopup.hasUserBillingMode());
+
+            prepareDownload(flurstueckeList);
+
+            StaticSwingTools.showDialog(this);
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+            // TODO SHOW ERROR
         }
-        if (berechtigungspruefung) {
-            berechtigungspruefungAnfragePanel1.setProdukt(BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP);
-            berechtigungspruefungAnfragePanel1.setVisible(true);
-        } else {
-            berechtigungspruefungAnfragePanel1.setVisible(false);
-        }
-        final List<CidsBean> flurstueckeList = new ArrayList<CidsBean>(new HashSet<CidsBean>(flurstuecke));
-        prodAmounts.clear();
-        bescheinigungsgruppen.clear();
-
-        jTextField2.setText(new SimpleDateFormat("yy").format(new Date()) + "-");
-
-        prepareDownload(flurstueckeList);
-
-        StaticSwingTools.showDialog(this);
     }
 
     /**
@@ -438,16 +420,24 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
             } catch (final ConnectionException ex) {
                 LOG.info("could not check config attr", ex);
             }
-            final String produktbezeichnung = (berechtigungspruefung) ? jTextField2.getText() : jTextField1.getText();
-            final String auftragsnummer = (berechtigungspruefung) ? "BlaB-?" : jTextField2.getText();
+
+            final boolean hasBilling = BillingPopup.hasUserBillingMode();
+            final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
+                new BerechtigungspruefungBescheinigungDownloadInfo(
+                    hasBilling ? null : jTextField2.getText(),
+                    hasBilling ? null : jTextField1.getText(),
+                    protokollPane.getText(),
+                    new BerechtigungspruefungBescheinigungInfo(
+                        new Date(),
+                        new HashSet<BerechtigungspruefungBescheinigungGruppeInfo>(bescheinigungsgruppen)));
             if (BillingPopup.doBilling(
                             "blab_be",
                             "no.yet",
-                            auftragsnummer,
-                            produktbezeichnung,
                             (Geometry)null,
+                            (berechtigungspruefung
+                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
+                                ? downloadInfo : null,
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
-                final CidsBean billingBean = BillingPopup.getInstance().getBillingBean();
                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                 BaulastBescheinigungDialog.this)) {
                     final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
@@ -456,42 +446,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                         addMessage(berechnung);
                     }
 
-                    final BerechtigungspruefungBescheinigungInfo bescheinigungsInfo =
-                        new BerechtigungspruefungBescheinigungInfo(new Date(),
-                            new HashSet<BerechtigungspruefungBescheinigungGruppeInfo>(bescheinigungsgruppen));
-
-                    final Integer billinId = (billingBean != null) ? billingBean.getPrimaryKeyValue() : null;
-                    final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
-                        new BerechtigungspruefungBescheinigungDownloadInfo(
-                            DownloadManagerDialog.getInstance().getJobName(),
-                            produktbezeichnung,
-                            auftragsnummer,
-                            protokollPane.getText(),
-                            bescheinigungsInfo,
-                            billinId);
-                    if (SessionManager.getConnection().hasConfigAttr(
-                                    SessionManager.getSession().getUser(),
-                                    "berechtigungspruefung_baulastbescheinigung")) {
-                        berechtigungspruefungAnfragePanel1.doAnfrage(
-                            downloadInfo,
-                            new BerechtigungspruefungAnfragePanel.Callback() {
-
-                                @Override
-                                public void callback(final String anfrageSchluessel) {
-                                    JOptionPane.showMessageDialog(
-                                        StaticSwingTools.getParentFrame(
-                                            BaulastBescheinigungDialog.this),
-                                        "<html>Ihre Anfrage wird unter dem Schlüssel \""
-                                                + anfrageSchluessel
-                                                + "\" bearbeitet."
-                                                + "<br/>Sie werden benachrichtigt, sobald sie bearbeitet wurde.",
-                                        "Ihre Anfrage wird bearbeitet",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                                }
-                            });
-                    } else {
-                        BaulastBescheinigungUtils.doDownload(downloadInfo, "");
-                    }
+                    BaulastBescheinigungUtils.doDownload(downloadInfo, "");
                 }
             }
         } catch (final Exception ex) {
@@ -725,7 +680,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                 System.exit(0);
                             }
                         });
-                    dialog.show(BaulastBescheinigungDialog.createTestFlurstuecke(), new javax.swing.JFrame());
+//                    dialog.show(BaulastBescheinigungDialog.createTestFlurstuecke(), new javax.swing.JFrame());
                 }
             });
     }

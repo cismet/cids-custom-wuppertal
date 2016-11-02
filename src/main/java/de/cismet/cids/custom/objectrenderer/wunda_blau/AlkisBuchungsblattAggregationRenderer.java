@@ -59,7 +59,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.BerechtigungspruefungAnfrageDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
@@ -474,30 +473,23 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         StaticSwingTools.showDialog(stichtagDialog);
         final Date stichtag = stichtagDialog.getDate();
         try {
-            final String billingKey = AlkisUtils.getBillingKey(product);
-            if ((billingKey == null)
-                        || BillingPopup.doBilling(
-                            billingKey,
-                            "no.yet",
-                            (Geometry)null,
-                            new ProductGroupAmount("ea", stueck))) {
-                final CidsBean billingBean = BillingPopup.getInstance().getBillingBean();
-                final Integer billingId = (billingBean != null) ? billingBean.getPrimaryKeyValue() : null;
-
-                if (stichtag != null) {
-                    final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
-                                .createAlkisBuchungsblattnachweisDownloadInfo(
-                                    product,
-                                    stichtag,
-                                    buchungsblattCodes,
-                                    billingId);
-                    if (berechtigungspruefung
-                                && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(
-                                    downloadInfo.getProduktTyp())) {
-                        BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
-                    } else {
-                        AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(downloadInfo);
-                    }
+            if (stichtag != null) {
+                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                            .createAlkisBuchungsblattnachweisDownloadInfo(
+                                product,
+                                stichtag,
+                                buchungsblattCodes);
+                AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(downloadInfo);
+                final String billingKey = AlkisUtils.getBillingKey(product);
+                if ((billingKey == null)
+                            || BillingPopup.doBilling(
+                                billingKey,
+                                "no.yet",
+                                (Geometry)null,
+                                (berechtigungspruefung
+                                    && AlkisProductDownloadHelper.checkBerechtigungspruefung(
+                                        downloadInfo.getProduktTyp())) ? downloadInfo : null,
+                                new ProductGroupAmount("ea", stueck))) {
                 }
             }
         } catch (Exception e) {
@@ -725,33 +717,28 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         }
 
         try {
+            final List<String> buchungsblattCodes = new ArrayList<String>(cidsBeanWrappers.size());
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (!cidsBeanWrapper.isSelected()) {
+                    continue;
+                }
+                buchungsblattCodes.add(getCompleteBuchungsblattCode(cidsBeanWrapper.getCidsBean()));
+            }
+
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                        .createAlkisBuchungsblattachweisDownloadInfo(product, buchungsblattCodes);
+
             final String billingKey = AlkisUtils.getBillingKey(product);
             if ((billingKey == null)
                         || BillingPopup.doBilling(
                             billingKey,
                             "no.yet",
                             (Geometry)null,
+                            (berechtigungspruefung
+                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
+                                ? downloadInfo : null,
                             new ProductGroupAmount("ea", stueck))) {
-                final CidsBean billingBean = BillingPopup.getInstance().getBillingBean();
-                final Integer billingId = (billingBean != null) ? billingBean.getPrimaryKeyValue() : null;
-
-                final List<String> buchungsblattCodes = new ArrayList<String>(cidsBeanWrappers.size());
-                for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
-                    if (!cidsBeanWrapper.isSelected()) {
-                        continue;
-                    }
-                    buchungsblattCodes.add(getCompleteBuchungsblattCode(cidsBeanWrapper.getCidsBean()));
-                }
-
-                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
-                            .createAlkisBuchungsblattachweisDownloadInfo(product, buchungsblattCodes, billingId);
-                if (berechtigungspruefung
-                            && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(
-                                downloadInfo.getProduktTyp())) {
-                    BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
-                } else {
-                    AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(downloadInfo);
-                }
+                AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(downloadInfo);
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);

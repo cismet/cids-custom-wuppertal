@@ -436,8 +436,8 @@ public class BaulastBescheinigungUtils {
      */
     public static Download generateDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
             final String anfrageSchluessel) throws Exception {
-        final String jobname = (downloadInfo.getJobname() != null) ? downloadInfo.getJobname()
-                                                                   : DownloadManagerDialog.getInstance().getJobName();
+        final String jobname = (downloadInfo.getAuftragsnummer() != null)
+            ? downloadInfo.getAuftragsnummer() : DownloadManagerDialog.getInstance().getJobName();
 
         final BackgroundTaskMultipleDownload.FetchDownloadsTask fetchDownloadsTask =
             new BackgroundTaskMultipleDownload.FetchDownloadsTask() {

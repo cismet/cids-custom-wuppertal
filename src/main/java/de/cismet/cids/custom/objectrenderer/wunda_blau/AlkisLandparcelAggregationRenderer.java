@@ -46,7 +46,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.BerechtigungspruefungAnfrageDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
@@ -614,36 +613,27 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         }
 
         try {
+            final List<String> parcelCodes = new ArrayList<String>(cidsBeanWrappers.size());
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (!cidsBeanWrapper.isSelected()) {
+                    continue;
+                }
+                parcelCodes.add(AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
+            }
+
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                        .createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(product, parcelCodes);
             final String billingKey = AlkisUtils.getBillingKey(product);
             if ((billingKey == null)
                         || BillingPopup.doBilling(
                             billingKey,
                             "no.yet",
                             (Geometry)null,
+                            (berechtigungspruefung
+                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
+                                ? downloadInfo : null,
                             new ProductGroupAmount("ea", stueck))) {
-                final CidsBean billingBean = BillingPopup.getInstance().getBillingBean();
-                final Integer billingId = (billingBean != null) ? billingBean.getPrimaryKeyValue() : null;
-
-                final List<String> parcelCodes = new ArrayList<String>(cidsBeanWrappers.size());
-                for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
-                    if (!cidsBeanWrapper.isSelected()) {
-                        continue;
-                    }
-                    parcelCodes.add(AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
-                }
-
-                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
-                            .createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(
-                                product,
-                                parcelCodes,
-                                billingId);
-                if (berechtigungspruefung
-                            && BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(
-                                downloadInfo.getProduktTyp())) {
-                    BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
-                } else {
-                    AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo);
-                }
+                AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo);
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -670,11 +660,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
         final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisProductDownloadHelper
                     .createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
-        if (BerechtigungspruefungAnfrageDialog.checkBerechtigungspruefung(downloadInfo.getProduktTyp())) {
-            BerechtigungspruefungAnfrageDialog.showPruefungsanfrage(downloadInfo);
-        } else {
-            AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo);
-        }
+        AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo);
     }
 
     //~ Inner Classes ----------------------------------------------------------

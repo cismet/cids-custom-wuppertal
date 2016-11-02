@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -177,22 +178,19 @@ public class AlkisProductDownloadHelper {
      * @param   product             DOCUMENT ME!
      * @param   stichtag            DOCUMENT ME!
      * @param   buchungsblattCodes  DOCUMENT ME!
-     * @param   billingId           DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static BerechtigungspruefungAlkisEinzelnachweisDownloadInfo createAlkisBuchungsblattnachweisDownloadInfo(
             final String product,
             final Date stichtag,
-            final List<String> buchungsblattCodes,
-            final Integer billingId) {
+            final List<String> buchungsblattCodes) {
         final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo =
             new BerechtigungspruefungAlkisEinzelnachweisDownloadInfo(
                 BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.BUCHUNGSBLAETTER,
                 product,
                 stichtag,
-                buchungsblattCodes,
-                billingId);
+                buchungsblattCodes);
         return downloadInfo;
     }
 
@@ -201,20 +199,17 @@ public class AlkisProductDownloadHelper {
      *
      * @param   product             DOCUMENT ME!
      * @param   buchungsblattCodes  DOCUMENT ME!
-     * @param   billingId           DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static BerechtigungspruefungAlkisEinzelnachweisDownloadInfo createAlkisBuchungsblattachweisDownloadInfo(
             final String product,
-            final List<String> buchungsblattCodes,
-            final Integer billingId) {
+            final List<String> buchungsblattCodes) {
         final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo =
             new BerechtigungspruefungAlkisEinzelnachweisDownloadInfo(
                 BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.BUCHUNGSBLAETTER,
                 product,
-                buchungsblattCodes,
-                billingId);
+                buchungsblattCodes);
         return downloadInfo;
     }
 
@@ -290,8 +285,7 @@ public class AlkisProductDownloadHelper {
         final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo =
             new BerechtigungspruefungAlkisKarteDownloadInfo(
                 BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE,
-                alkisCodes,
-                null);
+                alkisCodes);
         return downloadInfo;
     }
 
@@ -300,20 +294,16 @@ public class AlkisProductDownloadHelper {
      *
      * @param   product     DOCUMENT ME!
      * @param   alkisCodes  DOCUMENT ME!
-     * @param   billingId   DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static BerechtigungspruefungAlkisEinzelnachweisDownloadInfo
-    createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(final String product,
-            final List<String> alkisCodes,
-            final Integer billingId) {
+    createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(final String product, final List<String> alkisCodes) {
         final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo =
             new BerechtigungspruefungAlkisEinzelnachweisDownloadInfo(
                 BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE,
                 product,
-                alkisCodes,
-                billingId);
+                alkisCodes);
         return downloadInfo;
     }
 
@@ -392,8 +382,7 @@ public class AlkisProductDownloadHelper {
         final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo =
             new BerechtigungspruefungAlkisKarteDownloadInfo(
                 BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE,
-                alkisCodes,
-                null);
+                alkisCodes);
         return downloadInfo;
     }
 
@@ -511,5 +500,24 @@ public class AlkisProductDownloadHelper {
     public static void showNoProductPermissionWarning(final Component parent) {
         JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(parent),
             "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   downloadType  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean checkBerechtigungspruefung(final String downloadType) {
+        try {
+            return (SessionManager.getConnection().hasConfigAttr(
+                        SessionManager.getSession().getUser(),
+                        "berechtigungspruefung_"
+                                + downloadType));
+        } catch (final Exception ex) {
+            LOG.info("could now check Berechtigungspruefung confattr", ex);
+            return false;
+        }
     }
 }
