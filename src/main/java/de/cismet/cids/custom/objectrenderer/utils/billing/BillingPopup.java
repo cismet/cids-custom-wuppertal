@@ -525,8 +525,8 @@ public class BillingPopup extends javax.swing.JDialog {
                 ALLOWED_EXTENSIONS.toArray(new String[0])));
 
         setTitle(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.title")); // NOI18N
+        setMaximumSize(new java.awt.Dimension(2147483647, 600));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(450, 650));
         getContentPane().setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -813,16 +813,16 @@ public class BillingPopup extends javax.swing.JDialog {
         getContentPane().add(jButton3, gridBagConstraints);
 
         jLabel9.setText(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.jLabel9.text")); // NOI18N
+        jLabel9.setPreferredSize(new java.awt.Dimension(450, 150));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel9, gridBagConstraints);
 
-        setSize(new java.awt.Dimension(460, 530));
+        setSize(new java.awt.Dimension(468, 678));
         setLocationRelativeTo(null);
     } // </editor-fold>//GEN-END:initComponents
 
