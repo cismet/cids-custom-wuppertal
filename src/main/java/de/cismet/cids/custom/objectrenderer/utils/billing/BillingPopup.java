@@ -606,6 +606,8 @@ public class BillingPopup extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
 
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(222, 77));
+
         txtProjektbez.setColumns(20);
         txtProjektbez.setRows(5);
         txtProjektbez.setMinimumSize(new java.awt.Dimension(0, 40));
@@ -760,7 +762,7 @@ public class BillingPopup extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 5, 5);
         getContentPane().add(jLabel6, gridBagConstraints);
 
-        jScrollPane5.setMinimumSize(new java.awt.Dimension(19, 100));
+        jScrollPane5.setMinimumSize(new java.awt.Dimension(222, 77));
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -816,10 +818,10 @@ public class BillingPopup extends javax.swing.JDialog {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel9, gridBagConstraints);
 
-        setSize(new java.awt.Dimension(463, 565));
+        setSize(new java.awt.Dimension(464, 735));
         setLocationRelativeTo(null);
     } // </editor-fold>//GEN-END:initComponents
 
@@ -828,7 +830,7 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
             final String extension = jFileChooser1.getSelectedFile()
@@ -849,7 +851,7 @@ public class BillingPopup extends javax.swing.JDialog {
             file = null;
         }
         updateFileLabel();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
