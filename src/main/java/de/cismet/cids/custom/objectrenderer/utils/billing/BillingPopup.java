@@ -526,6 +526,7 @@ public class BillingPopup extends javax.swing.JDialog {
 
         setTitle(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.title")); // NOI18N
         setModal(true);
+        setPreferredSize(new java.awt.Dimension(450, 650));
         getContentPane().setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -821,7 +822,7 @@ public class BillingPopup extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel9, gridBagConstraints);
 
-        setSize(new java.awt.Dimension(464, 735));
+        setSize(new java.awt.Dimension(460, 530));
         setLocationRelativeTo(null);
     } // </editor-fold>//GEN-END:initComponents
 
