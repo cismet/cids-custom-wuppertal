@@ -525,7 +525,7 @@ public class BillingPopup extends javax.swing.JDialog {
                 ALLOWED_EXTENSIONS.toArray(new String[0])));
 
         setTitle(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.title")); // NOI18N
-        setAlwaysOnTop(true);
+        setModal(true);
         getContentPane().setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
