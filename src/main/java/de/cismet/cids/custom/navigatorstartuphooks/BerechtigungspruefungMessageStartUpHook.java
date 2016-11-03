@@ -112,21 +112,23 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook, Cid
     @Override
     public void messageRetrieved(final CidsServerMessageNotifierListenerEvent event) {
         try {
-            final List<String> schluesselList = (List)event.getMessage().getContent();
+//            final List<String> schluesselList = (List)event.getMessage().getContent();
+            final String benutzer = SessionManager.getSession().getUser().getName();
 
-            for (final String schluessel : schluesselList) {
-                final MetaClass mcBerechtigungspruefung = ClassCacheMultiple.getMetaClass(
-                        "WUNDA_BLAU",
-                        "BERECHTIGUNGSPRUEFUNG");
+            final MetaClass mcBerechtigungspruefung = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "BERECHTIGUNGSPRUEFUNG");
 
-                final String query = "SELECT " + mcBerechtigungspruefung.getID() + ", "
-                            + mcBerechtigungspruefung.getPrimaryKey() + " FROM "
-                            + mcBerechtigungspruefung.getTableName() + " WHERE schluessel LIKE '" + schluessel
-                            + "' LIMIT 1";
+            final String query = "SELECT " + mcBerechtigungspruefung.getID() + ", "
+                        + mcBerechtigungspruefung.getPrimaryKey() + " FROM "
+                        + mcBerechtigungspruefung.getTableName() + " WHERE benutzer LIKE '" + benutzer
+                        + "' AND pruefstatus IS NOT NULL AND abgeholt IS NOT TRUE";
 
-                final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
-                if ((mos != null) && (mos.length > 0)) {
-                    final CidsBean berechtigungspruefungBean = mos[0].getBean();
+            final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            if ((mos != null) && (mos.length > 0)) {
+                for (final MetaObject mo : mos) {
+                    final CidsBean berechtigungspruefungBean = mo.getBean();
+                    final String schluessel = (String)berechtigungspruefungBean.getProperty("schluessel");
 
                     if (Boolean.TRUE.equals(berechtigungspruefungBean.getProperty("pruefstatus"))) {
                         BerechtigungspruefungFreigabeDialog.getInstance().showFreigabe(berechtigungspruefungBean);

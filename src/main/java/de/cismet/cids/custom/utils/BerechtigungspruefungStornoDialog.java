@@ -14,6 +14,8 @@ package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.ui.ComponentRegistry;
 
+import javax.swing.SwingUtilities;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -52,14 +54,24 @@ public class BerechtigungspruefungStornoDialog extends javax.swing.JDialog {
      * @param  berechtigungspruefungBean  schluessel DOCUMENT ME!
      */
     public final void showStorno(final CidsBean berechtigungspruefungBean) {
-        jLabel8.setText(String.format(
-                org.openide.util.NbBundle.getMessage(
-                    BerechtigungspruefungStornoDialog.class,
-                    "BerechtigungspruefungStornoDialog.jLabel8.text"),
-                (String)berechtigungspruefungBean.getProperty("schluessel")));
-        jTextArea2.setText((String)berechtigungspruefungBean.getProperty("pruefkommentar"));
-        pack();
-        StaticSwingTools.showDialog(this);
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        showStorno(berechtigungspruefungBean);
+                    }
+                });
+        } else {
+            jLabel8.setText(String.format(
+                    org.openide.util.NbBundle.getMessage(
+                        BerechtigungspruefungStornoDialog.class,
+                        "BerechtigungspruefungStornoDialog.jLabel8.text"),
+                    (String)berechtigungspruefungBean.getProperty("schluessel")));
+            jTextArea2.setText((String)berechtigungspruefungBean.getProperty("pruefkommentar"));
+            pack();
+            StaticSwingTools.showDialog(this);
+        }
     }
 
     /**
