@@ -438,16 +438,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                 && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
                                 ? downloadInfo : null,
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
-                if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
-                                BaulastBescheinigungDialog.this)) {
-                    final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
-                    if ((berechnung != null) && !berechnung.trim().isEmpty()) {
-                        addMessage("\n===\n\nGebührenberechnung:\n");
-                        addMessage(berechnung);
-                    }
-
-                    BaulastBescheinigungUtils.doDownload(downloadInfo, "");
+                final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
+                if ((berechnung != null) && !berechnung.trim().isEmpty()) {
+                    addMessage("\n===\n\nGebührenberechnung:\n");
+                    addMessage(berechnung);
                 }
+
+                BaulastBescheinigungUtils.doDownload(downloadInfo, "");
             }
         } catch (final Exception ex) {
             LOG.error(ex, ex);

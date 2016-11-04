@@ -14,6 +14,7 @@ package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -53,6 +54,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -418,9 +420,11 @@ public class BaulastBescheinigungUtils {
             final String anfrageSchluessel) {
         try {
             final Download download = generateDownload(downloadInfo, anfrageSchluessel);
-            DownloadManager.instance().add(download);
+            if (download != null) {
+                DownloadManager.instance().add(download);
+            }
         } catch (final Exception ex) {
-            LOG.fatal(ex, ex);
+            LOG.error("error while generating download", ex);
         }
     }
 
@@ -436,6 +440,11 @@ public class BaulastBescheinigungUtils {
      */
     public static Download generateDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
             final String anfrageSchluessel) throws Exception {
+        if (
+            !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            return null;
+        }
         final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
         final BackgroundTaskMultipleDownload.FetchDownloadsTask fetchDownloadsTask =
