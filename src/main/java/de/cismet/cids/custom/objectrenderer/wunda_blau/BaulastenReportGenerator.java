@@ -253,11 +253,13 @@ public class BaulastenReportGenerator {
             final String projectname) throws Exception {
         final Collection<Download> downloads = new ArrayList<Download>();
         downloads.add(createJasperDownload(
+
                 Type.TEXTBLATT_PLAN_RASTER,
                 selectedBaulasten,
                 jobname,
                 jobnumber,
-                projectname));
+                projectname,
+                "Bericht aus dem Baulastenverzeichnis"));
 
         final Collection<URL> additionalFilesToDownload = new LinkedSet<URL>();
         for (final CidsBean selectedBaulast : selectedBaulasten) {
@@ -311,7 +313,7 @@ public class BaulastenReportGenerator {
                 };
             return new BackgroundTaskMultipleDownload(null, jobname, fetchDownloadsTask);
         } else {
-            return createJasperDownload(type, selectedBaulasten, jobname, jobnumber, projectname);
+            return createJasperDownload(type, selectedBaulasten, jobname, jobnumber, projectname, projectname);
         }
     }
 
@@ -323,6 +325,7 @@ public class BaulastenReportGenerator {
      * @param   jobname            DOCUMENT ME!
      * @param   jobnumber          DOCUMENT ME!
      * @param   projectname        DOCUMENT ME!
+     * @param   title              DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
@@ -332,7 +335,8 @@ public class BaulastenReportGenerator {
             final Collection<CidsBean> selectedBaulasten,
             final String jobname,
             final String jobnumber,
-            final String projectname) throws Exception {
+            final String projectname,
+            final String title) throws Exception {
         final HashMap parameters = new HashMap();
 
         final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
@@ -555,7 +559,7 @@ public class BaulastenReportGenerator {
                 parametersGenerator,
                 dataSourceGenerator,
                 jobname,
-                projectname,
+                title,
                 "baulasten");
 
         return download;
