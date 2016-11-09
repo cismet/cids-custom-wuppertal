@@ -187,6 +187,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private boolean continueInBackground = false;
     private final boolean demoMode = StaticDebuggingTools.checkHomeForFile("demoMode");
     private Collection<CidsBean> selectedFlurstuecke;
+    private boolean eigentuemerPermission;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private org.jdesktop.swingx.JXBusyLabel blWaitingLandparcel;
@@ -266,6 +267,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * Creates new form Alkis_pointRenderer.
      */
     public AlkisBuchungsblattRenderer() {
+        eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess() && !demoMode;
         map = new MappingComponent();
         map.setOpaque(false);
         landParcel3AList = new ArrayList<LightweightLandParcel3A>();
@@ -347,6 +349,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     && !ObjectRendererUtils.checkActionTag(
                         AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED)
                     && billingAllowedBlab_be);
+
+        panEigentuemer.setVisible(eigentuemerPermission);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1801,12 +1805,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
                     @Override
                     public void run() {
-                        if (AlkisUtils.validateUserHasAlkisBuchungsblattAccess() && !demoMode) {
-                            AlkisSOAPWorkerService.execute(retrieveWorker);
-                        } else {
-                            panEigentuemer.setVisible(false);
-                            setWaiting(false);
-                        }
+                        AlkisSOAPWorkerService.execute(retrieveWorker);
                     }
                 };
             if (EventQueue.isDispatchThread()) {

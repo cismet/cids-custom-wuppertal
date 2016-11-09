@@ -206,7 +206,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
     //~ Instance fields --------------------------------------------------------
 
-    private final boolean buchungsblattPermission;
+    private final boolean eigentuemerPermission;
     private final boolean demoMode = StaticDebuggingTools.checkHomeForFile("demoMode");
 // private ImageIcon FORWARD_PRESSED;
 // private ImageIcon FORWARD_SELECTED;
@@ -335,7 +335,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * Creates new form Alkis_pointRenderer.
      */
     public AlkisLandparcelRenderer() {
-        buchungsblattPermission = AlkisUtils.validateUserHasAlkisBuchungsblattAccess();
+        eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess();
         buchungsblaetter = TypeSafeCollections.newConcurrentHashMap();
         productPreviewImages = TypeSafeCollections.newHashMap();
         gotoBeanMap = TypeSafeCollections.newHashMap();
@@ -405,7 +405,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
-        if (!buchungsblattPermission) {
+        if (!eigentuemerPermission) {
             panBuchungEigentum.setVisible(false);
         }
         panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
@@ -1634,7 +1634,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * @param  evt  DOCUMENT ME!
      */
     private void lstBuchungsblaetterValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBuchungsblaetterValueChanged
-        if (buchungsblattPermission && !evt.getValueIsAdjusting()) {
+        if (eigentuemerPermission && !evt.getValueIsAdjusting()) {
             final Object[] selectedObjs = lstBuchungsblaetter.getSelectedValues();
             if ((selectedObjs != null) && (selectedObjs.length > 0)) {
                 final Collection<CidsBean> selectedBeans = TypeSafeCollections.newArrayList(selectedObjs.length);

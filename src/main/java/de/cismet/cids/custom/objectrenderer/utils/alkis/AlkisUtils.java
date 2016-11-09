@@ -47,7 +47,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -98,6 +97,7 @@ public class AlkisUtils {
     public static final AlkisProducts PRODUCTS;
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     public static final String ALKIS_SOAP_OVER_CSA = "alkisSoapTunnelAction";
+    public static final String ALKIS_EIGENTUEMER = "custom.alkis.buchungsblatt@WUNDA_BLAU";
     static final Buchungsblattbezirke BUCHUNGSBLATTBEZIRKE;
 
     static {
@@ -837,10 +837,10 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasAlkisBuchungsblattAccess() {
+    public static boolean validateUserHasEigentuemerAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt@WUNDA_BLAU")
+                        .getConfigAttr(SessionManager.getSession().getUser(), ALKIS_EIGENTUEMER)
                         != null;
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
