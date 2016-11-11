@@ -1273,7 +1273,6 @@
                 </Component>
                 <Component class="org.jdesktop.swingx.JXHyperlink" name="hlDateianhangValue">
                   <BindingProperties>
-                    <BindingProperty name="enabled" source="Form" sourcePath="${cidsBean.dateiname != null}" target="hlDateianhangValue" targetPath="enabled" updateStrategy="0" immediately="false"/>
                     <BindingProperty name="text" source="Form" sourcePath="${cidsBean.dateiname}" target="hlDateianhangValue" targetPath="text" updateStrategy="0" immediately="false">
                       <Property name="nullValue" type="java.lang.String" value="-"/>
                       <Property name="incompletePathValue" type="java.lang.String" value="-"/>

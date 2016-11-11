@@ -27,6 +27,8 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import java.awt.CardLayout;
 import java.awt.Component;
 
+import java.sql.Timestamp;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
@@ -1385,13 +1387,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dateiname != null}"),
-                hlDateianhangValue,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dateiname}"),
                 hlDateianhangValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -1785,6 +1780,11 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         ((DefaultListModel<String>)jList1.getModel()).clear();
         if (cidsBean != null) {
+            hlDateianhangValue.setEnabled((cidsBean.getProperty("dateiname") != null)
+                        && ((Timestamp)cidsBean.getProperty("anfrage_timestamp") != null)
+                        && !((Timestamp)cidsBean.getProperty("anfrage_timestamp")).before(
+                            BerechtigungspruefungHandler.getThresholdAnhangDate()));
+
             if (cidsBean.getProperty("pruefer") == null) {
                 lblPruefStatusValue.setText("offen");
             } else if (cidsBean.getProperty("pruefstatus") == null) {
@@ -1959,6 +1959,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 downloadInfo = null;
             }
         } else {
+            hlDateianhangValue.setEnabled(false);
+
             btnStorno.setEnabled(false);
             btnFreigeben.setEnabled(false);
             lblPruefStatusValue.setText("-");
