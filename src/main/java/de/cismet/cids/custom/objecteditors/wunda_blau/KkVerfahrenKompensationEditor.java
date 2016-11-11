@@ -54,6 +54,7 @@ import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -63,6 +64,7 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -145,6 +147,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private javax.swing.JButton btnRemBioEin;
     private javax.swing.JButton btnRemKontr;
     private javax.swing.JButton btnRemMass;
+    private javax.swing.JComboBox cbGeom;
     private javax.swing.JComboBox<String> cboFlaecheKategorie;
     private javax.swing.JComboBox<String> cboFlaecheLandschaftsplan;
     private javax.swing.JComboBox<String> cboFlaecheSchutzstatus;
@@ -173,6 +176,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private javax.swing.JLabel labQm;
     private javax.swing.JLabel lblAus;
     private javax.swing.JLabel lblEin;
+    private javax.swing.JLabel lblGeometrie;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panBio;
     private javax.swing.JPanel panBiotope;
@@ -253,6 +257,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         pnlMap.add(previewMap, BorderLayout.CENTER);
 
         if (!editable) {
+            lblGeometrie.setVisible(false);
             RendererTools.makeReadOnly(txtFlaecheAusfuehrender);
             RendererTools.makeReadOnly(txtFlaecheId);
             RendererTools.makeReadOnly(txtFlaecheJahrDerUmsetzung);
@@ -263,7 +268,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(taNebenbest);
             RendererTools.makeReadOnly(chkFlaecheMassnahmeUmgesetzt);
-            RendererTools.makeReadOnly(dcAufnahme);
+//            RendererTools.makeReadOnly(dcAufnahme);
+            dcAufnahme.setEditable(false);
             RendererTools.makeReadOnly(btnAddBioAus);
             RendererTools.makeReadOnly(btnAddBioEin);
             RendererTools.makeReadOnly(btnAddKontr);
@@ -272,6 +278,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             RendererTools.makeReadOnly(btnRemBioEin);
             RendererTools.makeReadOnly(btnRemKontr);
             RendererTools.makeReadOnly(btnRemMass);
+            RendererTools.makeReadOnly(chkFlaecheMassnahmeUmgesetzt);
         }
     }
 
@@ -306,6 +313,10 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         txtFlaecheJahrDerUmsetzung = new javax.swing.JTextField();
         txtFlaecheAusfuehrender = new javax.swing.JTextField();
         dcAufnahme = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        if (editable) {
+            cbGeom = new DefaultCismapGeometryComboBoxEditor();
+        }
+        lblGeometrie = new javax.swing.JLabel();
         panFlaechenMainSub2 = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -367,9 +378,9 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         setMinimumSize(new java.awt.Dimension(862, 348));
         setLayout(new java.awt.GridBagLayout());
 
-        panFlaechenMainSub1.setMinimumSize(new java.awt.Dimension(610, 134));
+        panFlaechenMainSub1.setMinimumSize(new java.awt.Dimension(610, 164));
         panFlaechenMainSub1.setOpaque(false);
-        panFlaechenMainSub1.setPreferredSize(new java.awt.Dimension(610, 134));
+        panFlaechenMainSub1.setPreferredSize(new java.awt.Dimension(610, 164));
         panFlaechenMainSub1.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(KkVerfahrenKompensationEditor.class, "KkVerfahrenKompensationEditor.jLabel17.text")); // NOI18N
@@ -532,7 +543,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         panFlaechenMainSub1.add(txtFlaecheAusfuehrender, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${datum_der_aufnahme}"), dcAufnahme, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.datum_der_aufnahme}"), dcAufnahme, org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcAufnahme.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -545,12 +556,39 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         panFlaechenMainSub1.add(dcAufnahme, gridBagConstraints);
 
+        if (editable) {
+
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"), cbGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
+            bindingGroup.addBinding(binding);
+
+        }
+        if (editable) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.gridwidth = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+            panFlaechenMainSub1.add(cbGeom, gridBagConstraints);
+        }
+
+        org.openide.awt.Mnemonics.setLocalizedText(lblGeometrie, org.openide.util.NbBundle.getMessage(KkVerfahrenKompensationEditor.class, "KkVerfahrenKompensationEditor.lblGeometrie.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        panFlaechenMainSub1.add(lblGeometrie, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
         add(panFlaechenMainSub1, gridBagConstraints);
 
         panFlaechenMainSub2.setOpaque(false);
@@ -814,6 +852,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.7;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panBiotope.add(jScrollPane6, gridBagConstraints);
 
         jScrollPane1.setViewportView(xtBiotopeEin);
@@ -824,6 +863,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 2);
         panBiotope.add(jScrollPane1, gridBagConstraints);
 
         jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(KkVerfahrenKompensationEditor.class, "KkVerfahrenKompensationEditor.panBiotope.TabConstraints.tabTitle", new Object[] {}), panBiotope); // NOI18N
@@ -839,6 +879,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panMassnahmen.add(jScrollPane5, gridBagConstraints);
 
         jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(KkVerfahrenKompensationEditor.class, "KkVerfahrenKompensationEditor.panMassnahmen.TabConstraints.tabTitle", new Object[] {}), panMassnahmen); // NOI18N
@@ -854,6 +895,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panKontrollen.add(jScrollPane4, gridBagConstraints);
 
         jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(KkVerfahrenKompensationEditor.class, "KkVerfahrenKompensationEditor.panKontrollen.TabConstraints.tabTitle", new Object[] {}), panKontrollen); // NOI18N
@@ -1264,13 +1306,16 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                             }
                         });
                     previewMap.setInteractionMode("MUTE");
-                    if (previewGeometry != null) {
-                        previewGeometry.setGeometry(pureFeatureGeom);
-                        previewGeometry.setFillingPaint(new Color(1, 0, 0, 0.5f));
-                        previewGeometry.setLineWidth(3);
-                        previewGeometry.setLinePaint(new Color(1, 0, 0, 1f));
-                        previewMap.getFeatureCollection().addFeature(previewGeometry);
+                    if (bufferedBox != null) {
+                        previewMap.getFeatureCollection().addFeature(new CidsFeature(cidsBean.getMetaObject()));
                     }
+//                    if (previewGeometry != null) {
+//                        previewGeometry.setGeometry(pureFeatureGeom);
+//                        previewGeometry.setFillingPaint(new Color(1, 0, 0, 0.5f));
+//                        previewGeometry.setLineWidth(3);
+//                        previewGeometry.setLinePaint(new Color(1, 0, 0, 1f));
+//                        previewMap.getFeatureCollection().addFeature(previewGeometry);
+//                    }
                     previewMap.setAnimationDuration(duration);
                 }
             };

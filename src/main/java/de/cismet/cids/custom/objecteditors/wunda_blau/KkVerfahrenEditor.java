@@ -38,6 +38,9 @@ import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
+import de.cismet.cismap.commons.gui.layerwidget.ZoomToFeaturesWorker;
+import de.cismet.cismap.commons.interaction.CismapBroker;
+import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -125,6 +128,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private javax.swing.JLabel lblFlaeche;
     private javax.swing.JLabel lblForw;
     private javax.swing.JLabel lblLastInMap;
+    private javax.swing.JLabel lblLastInMap1;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstFlaechen;
     private javax.swing.JList lstLaufendeNummern;
@@ -195,14 +199,19 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             RendererTools.makeReadOnly(txtBezeichnung);
             RendererTools.makeReadOnly(txtTraeger);
             RendererTools.makeReadOnly(txtVerfahrensstand);
-            RendererTools.makeReadOnly(dcAufnahme);
-            RendererTools.makeReadOnly(dcRechtskraft);
+            dcAufnahme.setEditable(false);
+            dcRechtskraft.setEditable(false);
+//            RendererTools.makeReadOnly(dcAufnahme);
+//            RendererTools.makeReadOnly(dcRechtskraft);
             RendererTools.makeReadOnly(cbGrundlage);
             RendererTools.makeReadOnly(cbStatus);
             RendererTools.makeReadOnly(btnAddLaufendeNummer2);
             RendererTools.makeReadOnly(btnRemoveLaufendeNummer2);
             RendererTools.makeReadOnly(btnAddLaufendeNummer1);
             RendererTools.makeReadOnly(btnRemoveLaufendeNummer1);
+            RendererTools.makeReadOnly(chkAusgleich);
+            RendererTools.makeReadOnly(chkErsatzzahlung);
+            RendererTools.makeReadOnly(chkErstattung);
         }
     }
 
@@ -220,6 +229,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
 
         panTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        lblLastInMap1 = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
         panButtons = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -310,6 +320,22 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
+
+        lblLastInMap1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
+        lblLastInMap1.setToolTipText(org.openide.util.NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.lblLastInMap1.toolTipText")); // NOI18N
+        lblLastInMap1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblLastInMap1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLastInMap1MouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panTitle.add(lblLastInMap1, gridBagConstraints);
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.BorderLayout());
@@ -660,6 +686,11 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         chkAusgleich.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkAusgleichActionPerformed(evt);
+            }
+        });
+        chkAusgleich.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
+            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
+                chkAusgleichVetoableChange(evt);
             }
         });
         jPanel4.add(chkAusgleich);
@@ -1188,6 +1219,16 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      * @param  evt  DOCUMENT ME!
      */
     private void lblLastInMapMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLastInMapMouseClicked
+        Object selectedBeans = lstFlaechen.getSelectedValue();
+        List<CidsFeature> features = new ArrayList<CidsFeature>();
+        
+        if (selectedBeans instanceof CidsBean) {
+            features.add(new CidsFeature(((CidsBean)selectedBeans).getMetaObject()));
+
+            CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeatures(features);
+            ZoomToFeaturesWorker worker = new ZoomToFeaturesWorker(features.toArray(new CidsFeature[features.size()]));
+            worker.execute();
+        }
     }//GEN-LAST:event_lblLastInMapMouseClicked
 
     /**
@@ -1225,6 +1266,24 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             ((KompensationskatasterBeanTable)xtKosten.getModel()).removeRow(row);
         }
     }//GEN-LAST:event_btnRemoveLaufendeNummer2ActionPerformed
+
+    private void chkAusgleichVetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_chkAusgleichVetoableChange
+    }//GEN-LAST:event_chkAusgleichVetoableChange
+
+    private void lblLastInMap1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLastInMap1MouseClicked
+        List<CidsBean> beans = cidsBean.getBeanCollectionProperty("kompensationen");
+        List<CidsFeature> features = new ArrayList<CidsFeature>();
+        
+        if (beans != null && beans.size() > 0) {
+            for (CidsBean tmpBean : beans) {
+                features.add(new CidsFeature(tmpBean.getMetaObject()));
+            }
+
+            CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeatures(features);
+            ZoomToFeaturesWorker worker = new ZoomToFeaturesWorker(features.toArray(new CidsFeature[features.size()]));
+            worker.execute();
+        }
+    }//GEN-LAST:event_lblLastInMap1MouseClicked
 
     @Override
     public CidsBean getCidsBean() {
