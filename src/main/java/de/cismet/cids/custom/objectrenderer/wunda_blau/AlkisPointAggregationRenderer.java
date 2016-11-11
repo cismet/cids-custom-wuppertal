@@ -75,6 +75,7 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisPointReportBean;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisPointReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -116,11 +117,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             AlkisPointAggregationRenderer.class);
     private static final double BUFFER = 0.005;
-    public static final HashMap<String, String> POST_HEADER = new HashMap<String, String>();
-
-    static {
-        POST_HEADER.put(WebAccessManager.HEADER_CONTENTTYPE_KEY, WebAccessManager.HEADER_CONTENTTYPE_VALUE_POST);
-    }
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -1030,7 +1026,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 download = new HttpDownload(
                                         new URL(url.substring(0, parameterPosition)),
                                         parameters,
-                                        POST_HEADER,
+                                        AlkisProducts.POST_HEADER,
                                         DownloadManagerDialog.getInstance().getJobName(),
                                         "Punktnachweis",
                                         code,

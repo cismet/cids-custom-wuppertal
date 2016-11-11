@@ -90,6 +90,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkis.AlkisPunktReportScriptlet;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
@@ -2072,7 +2073,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                         download = new HttpDownload(
                                 new URL(url.substring(0, parameterPosition)),
                                 parameters,
-                                AlkisPointAggregationRenderer.POST_HEADER,
+                                AlkisProducts.POST_HEADER,
                                 DownloadManagerDialog.getInstance().getJobName(),
                                 "Punktnachweis",
                                 productType,
