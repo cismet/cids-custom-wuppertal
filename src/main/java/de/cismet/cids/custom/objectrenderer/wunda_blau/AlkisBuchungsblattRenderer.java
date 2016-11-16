@@ -1264,7 +1264,17 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         }
 
         try {
-            final List<String> bucungsblattCodes = Arrays.asList(getCompleteBuchungsblattCode());
+            String buchungsblattCode = getCompleteBuchungsblattCode();
+            if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product)
+                        || AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
+                final String anhang = getCompleteLaufendeNrCode();
+                if (anhang != null) {
+                    buchungsblattCode += anhang;
+                } else {
+                    return;
+                }
+            }
+            final List<String> bucungsblattCodes = Arrays.asList(buchungsblattCode);
 
             final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
                         .createAlkisBuchungsblattachweisDownloadInfo(
