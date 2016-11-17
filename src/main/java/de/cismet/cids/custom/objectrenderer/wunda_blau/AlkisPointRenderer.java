@@ -1964,7 +1964,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
-        btnBackActionPerformed(null);
+        if (lblBack.isEnabled()) {
+            btnBackActionPerformed(null);
+        }
     }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
     /**
@@ -2001,7 +2003,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
-        btnForwardActionPerformed(null);
+        if (lblForw.isEnabled()) {
+            btnForwardActionPerformed(null);
+        }
     }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
     /**
