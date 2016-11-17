@@ -1590,6 +1590,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             xtKosten.getColumn(1).setCellEditor(new DateCellEditor());
             xtKosten.getColumn(2).setCellEditor(new DateCellEditor());
             lstFlaechen.setModel(new CustomJListModel("kompensationen"));
+            if (lstFlaechen.getModel().getSize() > 0) {
+                lstFlaechen.setSelectedIndex(0);
+            }
         }
     }
 
