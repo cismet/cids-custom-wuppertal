@@ -700,6 +700,10 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkAusgleichActionPerformed"/>
                         <EventHandler event="vetoableChange" listener="java.beans.VetoableChangeListener" parameters="java.beans.PropertyChangeEvent" handler="chkAusgleichVetoableChange"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {     &#xa;    org.openide.awt.Mnemonics.setLocalizedText(chkAusgleich, org.openide.util.NbBundle.getMessage(KkVerfahrenEditor.class, &quot;KkVerfahrenEditor.chkAusgleich.text&quot;)); // NOI18N      &#xa;    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create(&quot;${cidsBean.ausgleich}&quot;), chkAusgleich, org.jdesktop.beansbinding.BeanProperty.create(&quot;selected&quot;));&#xa;    binding.setSourceNullValue(false);&#xa;    binding.setSourceUnreadableValue(false);&#xa;    bindingGroup.addBinding(binding);&#xa;}"/>
+                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editable) {"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="chkErstattung">
                       <Properties>
@@ -713,6 +717,10 @@
                           <Property name="incompletePathValue" type="boolean" value="false"/>
                         </BindingProperty>
                       </BindingProperties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;    org.openide.awt.Mnemonics.setLocalizedText(chkErstattung, org.openide.util.NbBundle.getMessage(KkVerfahrenEditor.class, &quot;KkVerfahrenEditor.chkErstattung.text&quot;)); // NOI18N&#xa;&#xa;    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create(&quot;${cidsBean.erstattung}&quot;), chkErstattung, org.jdesktop.beansbinding.BeanProperty.create(&quot;selected&quot;));&#xa;    binding.setSourceNullValue(false);&#xa;    binding.setSourceUnreadableValue(false);&#xa;    bindingGroup.addBinding(binding);&#xa;}"/>
+                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editable) {"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="chkErsatzzahlung">
                       <Properties>
@@ -726,6 +734,10 @@
                           <Property name="incompletePathValue" type="boolean" value="false"/>
                         </BindingProperty>
                       </BindingProperties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="} else {&#xa;    org.openide.awt.Mnemonics.setLocalizedText(chkErsatzzahlung, org.openide.util.NbBundle.getMessage(KkVerfahrenEditor.class, &quot;KkVerfahrenEditor.chkErsatzzahlung.text&quot;)); // NOI18N&#xa;    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create(&quot;${cidsBean.ersatzzahlung}&quot;), chkErsatzzahlung, org.jdesktop.beansbinding.BeanProperty.create(&quot;selected&quot;));&#xa;    binding.setSourceNullValue(false);&#xa;    binding.setSourceUnreadableValue(false);&#xa;    bindingGroup.addBinding(binding);&#xa;}"/>
+                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editable) {"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -859,13 +871,13 @@
                           <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -878,13 +890,13 @@
                           <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -909,7 +921,7 @@
             <Container class="de.cismet.tools.gui.RoundedPanel" name="rpFlaechenliste">
               <Properties>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[250, 202]"/>
+                  <Dimension value="[120, 202]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[250, 202]"/>
@@ -943,9 +955,6 @@
                         <Property name="selectionMode" type="int" value="0"/>
                         <Property name="fixedCellWidth" type="int" value="75"/>
                       </Properties>
-                      <BindingProperties>
-                        <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.kompensationen}" target="lstFlaechen" targetPath="elements" updateStrategy="0" immediately="false"/>
-                      </BindingProperties>
                       <Events>
                         <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstFlaechenValueChanged"/>
                       </Events>
@@ -997,7 +1006,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="185" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="55" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -1027,13 +1036,13 @@
                           <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 25]"/>
+                          <Dimension value="[39, 25]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -1051,13 +1060,13 @@
                           <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 20]"/>
+                          <Dimension value="[39, 20]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[43, 25]"/>
+                          <Dimension value="[39, 25]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -1127,7 +1136,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="1260" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="1390" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -1152,6 +1161,21 @@
                       <Events>
                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblLastInMapMouseClicked"/>
                       </Events>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                          <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="10" anchor="13" weightX="0.0" weightY="0.0"/>
+                        </Constraint>
+                      </Constraints>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="labBPlan">
+                      <Properties>
+                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="KkVerfahrenEditor.labBPlan.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                        </Property>
+                      </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="10" anchor="13" weightX="0.0" weightY="0.0"/>

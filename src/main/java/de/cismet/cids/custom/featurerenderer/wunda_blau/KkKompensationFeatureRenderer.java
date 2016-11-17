@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,18 +12,28 @@
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
-import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
-import de.cismet.cismap.navigatorplugin.CidsFeature;
-import java.awt.Color;
-import java.awt.Paint;
 import org.apache.log4j.Logger;
 
+import java.awt.Color;
+import java.awt.Paint;
+
+import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
+
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
 /**
+ * DOCUMENT ME!
  *
- * @author therter
+ * @author   therter
+ * @version  $Revision$, $Date$
  */
 public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
+
+    //~ Static fields/initializers ---------------------------------------------
+
     private static final Logger LOG = Logger.getLogger(KkKompensationFeatureRenderer.class);
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public float getTransparency() {
@@ -25,8 +42,8 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public synchronized Paint getFillingStyle(final CidsFeature subFeature) {
-        String katKlasse = getKatKlasse(subFeature);
-        
+        final String katKlasse = getKatKlasse(subFeature);
+
         if (katKlasse != null) {
             if (katKlasse.equals("1")) {
                 return Color.decode("#FF0000");
@@ -50,10 +67,17 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
                 return Color.decode("#C000C0");
             }
         }
-        
+
         return Color.decode("#80C0FF");
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   subFeature  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     private String getKatKlasse(final CidsFeature subFeature) {
         String katKlasse = null;
 
@@ -84,5 +108,4 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
     @Override
     public void assign() {
     }
-    
 }

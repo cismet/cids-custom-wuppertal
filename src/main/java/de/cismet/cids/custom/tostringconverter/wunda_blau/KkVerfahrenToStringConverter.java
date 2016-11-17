@@ -20,16 +20,16 @@ import de.cismet.cids.tools.CustomToStringConverter;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class KkKompensationToStringConverter extends CustomToStringConverter {
+public class KkVerfahrenToStringConverter extends CustomToStringConverter {
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public String createString() {
-        final String schluessel = (String)cidsBean.getProperty("schluessel");
+        final String name = (String)cidsBean.getProperty("bezeichnung");
 
-        if (schluessel != null) {
-            return schluessel;
+        if (name != null) {
+            return name;
         } else {
             return "unbenannt";
         }

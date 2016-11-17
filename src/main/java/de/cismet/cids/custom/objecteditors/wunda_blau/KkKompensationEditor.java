@@ -18,19 +18,20 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import java.util.Collection;
 import java.util.List;
 
 import de.cismet.cids.custom.wunda_blau.search.server.KkVerfahrenSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
+
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 
 /**
  * DOCUMENT ME!
@@ -94,7 +95,7 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
     }
 
     @Override
-    public void editorClosed(EditorClosedEvent event) {
+    public void editorClosed(final EditorClosedEvent event) {
         if (event.getStatus() == EditorSaveStatus.SAVE_SUCCESS) {
             try {
                 verfahrenBean.persist();
@@ -110,7 +111,7 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(final PropertyChangeEvent evt) {
         if (editable) {
             kompensationBean.setArtificialChangeFlag(true);
         }

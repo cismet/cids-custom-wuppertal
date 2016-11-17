@@ -27,8 +27,6 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * DOCUMENT ME!
@@ -42,18 +40,6 @@ public class RendererTools {
 
     public static final Color ERROR_BACKGROUND = new Color(250, 215, 216);
     public static final Color ERROR_FORGROUND = new Color(145, 32, 32);
-    public static final ActionListener CHECKBOX_ACTION_LISTENER = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Object source = e.getSource();
-            
-            if (source instanceof JCheckBox) {
-                JCheckBox box = (JCheckBox)source;
-                
-                box.setSelected(!box.isSelected());
-            }
-        }
-    };
 
     //~ Methods ----------------------------------------------------------------
 
@@ -80,7 +66,7 @@ public class RendererTools {
             final DefaultBindableDateChooser dc = (DefaultBindableDateChooser)comp;
             dc.setEnabled(false);
         } else if (comp instanceof JCheckBox) {
-            ((JCheckBox)comp).addActionListener(CHECKBOX_ACTION_LISTENER);
+            ((JCheckBox)comp).setEnabled(false);
         } else if (comp != null) {
             comp.setEnabled(false);
         }
