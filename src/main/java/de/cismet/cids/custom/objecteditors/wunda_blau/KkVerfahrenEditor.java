@@ -41,12 +41,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.KompensationskatasterBeanTable;
 import de.cismet.cids.custom.wunda_blau.search.server.BPlanByGeometrySearch;
-import de.cismet.cids.custom.wunda_blau.search.server.GemeindeByGeometrySearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -158,7 +158,6 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblFlaeche;
     private javax.swing.JLabel lblForw;
-    private javax.swing.JLabel lblLastInMap;
     private javax.swing.JLabel lblLastInMap1;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstFlaechen;
@@ -211,7 +210,6 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     public KkVerfahrenEditor(final boolean editable) {
         this.editable = editable;
         initComponents();
-        lblLastInMap.setVisible(false);
         edFlaeche.addNameChangedListener(new KeyAdapter() {
 
                 @Override
@@ -229,9 +227,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         RendererTools.makeReadOnly(txtId);
 
         if (!editable) {
-            RendererTools.makeReadOnly(txtBezeichnung);
-            RendererTools.makeReadOnly(txtTraeger);
-            RendererTools.makeReadOnly(txtVerfahrensstand);
+            makeReadOnly(txtBezeichnung);
+            makeReadOnly(txtTraeger);
+            makeReadOnly(txtVerfahrensstand);
             dcAufnahme.setEditable(false);
             dcRechtskraft.setEditable(false);
             RendererTools.makeReadOnly(cbGrundlage);
@@ -247,6 +245,16 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tComp  DOCUMENT ME!
+     */
+    private void makeReadOnly(final JTextComponent tComp) {
+        tComp.setEditable(false);
+        tComp.setOpaque(false);
+    }
 
     /**
      * DOCUMENT ME!
@@ -347,7 +355,6 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblFlaeche = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
-        lblLastInMap = new javax.swing.JLabel();
         labBPlan = new javax.swing.JLabel();
         panFlaechenMain = new javax.swing.JPanel();
         edFlaeche = new de.cismet.cids.custom.objecteditors.wunda_blau.KkVerfahrenKompensationEditor(editable);
@@ -1215,26 +1222,6 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         gridBagConstraints.weightx = 1.0;
         semiRoundedPanel5.add(jPanel9, gridBagConstraints);
 
-        lblLastInMap.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
-        lblLastInMap.setToolTipText(org.openide.util.NbBundle.getMessage(
-                KkVerfahrenEditor.class,
-                "KkVerfahrenEditor.lblLastInMap.toolTipText"));                                      // NOI18N
-        lblLastInMap.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        lblLastInMap.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblLastInMapMouseClicked(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        semiRoundedPanel5.add(lblLastInMap, gridBagConstraints);
-
         labBPlan.setForeground(new java.awt.Color(255, 255, 255));
         org.openide.awt.Mnemonics.setLocalizedText(
             labBPlan,
@@ -1472,25 +1459,6 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             }
         }
     } //GEN-LAST:event_btnRemoveLaufendeNummer1ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void lblLastInMapMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblLastInMapMouseClicked
-        final Object selectedBeans = lstFlaechen.getSelectedValue();
-        final List<CidsFeature> features = new ArrayList<CidsFeature>();
-
-        if (selectedBeans instanceof CidsBean) {
-            features.add(new CidsFeature(((CidsBean)selectedBeans).getMetaObject()));
-
-            CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeatures(features);
-            final ZoomToFeaturesWorker worker = new ZoomToFeaturesWorker(features.toArray(
-                        new CidsFeature[features.size()]));
-            worker.execute();
-        }
-    } //GEN-LAST:event_lblLastInMapMouseClicked
 
     /**
      * DOCUMENT ME!

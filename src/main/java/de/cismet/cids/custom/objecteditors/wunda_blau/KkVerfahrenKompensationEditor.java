@@ -28,7 +28,6 @@ import org.jdesktop.swingx.JXTable;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -38,7 +37,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -47,13 +45,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.KompensationskatasterBeanTable;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
-import de.cismet.cids.custom.wunda_blau.search.server.BPlanByGeometrySearch;
 import de.cismet.cids.custom.wunda_blau.search.server.GemeindeByGeometrySearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -284,10 +282,10 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
         if (!editable) {
             lblGeometrie.setVisible(false);
-            RendererTools.makeReadOnly(txtFlaecheAusfuehrender);
-            RendererTools.makeReadOnly(txtFlaecheId);
-            RendererTools.makeReadOnly(txtFlaecheJahrDerUmsetzung);
-            RendererTools.makeReadOnly(txtFlaecheName);
+            makeReadOnly(txtFlaecheAusfuehrender);
+            makeReadOnly(txtFlaecheId);
+            makeReadOnly(txtFlaecheJahrDerUmsetzung);
+            makeReadOnly(txtFlaecheName);
             RendererTools.makeReadOnly(cboFlaecheKategorie);
             RendererTools.makeReadOnly(cboFlaecheLandschaftsplan);
             RendererTools.makeReadOnly(cboFlaecheSchutzstatus);
@@ -309,6 +307,16 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tComp  DOCUMENT ME!
+     */
+    private void makeReadOnly(final JTextComponent tComp) {
+        tComp.setEditable(false);
+        tComp.setOpaque(false);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1501,18 +1509,17 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                     previewMap.setInteractionMode(MappingComponent.ZOOM);
                     // finally when all configurations are done ...
                     previewMap.unlock();
-                    previewMap.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
+                    previewMap.addCustomInputListener("ADD_TO_MAP_KOMP", new PBasicInputEventHandler() {
 
                             @Override
                             public void mouseClicked(final PInputEvent evt) {
                                 if (evt.getClickCount() > 1) {
                                     final CidsBean bean = cidsBean;
-                                    ObjectRendererUtils.switchToCismapMap();
                                     ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
                                 }
                             }
                         });
-                    previewMap.setInteractionMode("MUTE");
+                    previewMap.setInteractionMode("ADD_TO_MAP_KOMP");
                     if (bufferedBox != null) {
                         previewMap.getFeatureCollection().addFeature(new CidsFeature(cidsBean.getMetaObject()));
                     }
