@@ -15,11 +15,15 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.localserver.attribute.ObjectAttribute;
+import Sirius.server.middleware.types.MetaObject;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
 
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,10 +39,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
@@ -53,6 +60,8 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.server.search.CidsServerSearch;
 
@@ -79,7 +88,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    EditorSaveListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -225,6 +235,28 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             });
         cardLayout = (CardLayout)getLayout();
         RendererTools.makeReadOnly(txtId);
+        lstFlaechen.setCellRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    Object newValue = value;
+
+                    if (value instanceof CidsBean) {
+                        final CidsBean bean = (CidsBean)value;
+                        newValue = bean.getProperty("schluessel");
+
+                        if (newValue == null) {
+                            newValue = "unbenannt";
+                        }
+                    }
+
+                    return super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
+                }
+            });
 
         if (!editable) {
             makeReadOnly(txtBezeichnung);
@@ -247,7 +279,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * Does not remove the border in difference to the RendererTools.
      *
      * @param  tComp  DOCUMENT ME!
      */
@@ -257,7 +289,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     }
 
     /**
-     * DOCUMENT ME!
+     * Does only work properly with binding adjustments.
      *
      * @param  box  DOCUMENT ME!
      */
@@ -1638,6 +1670,58 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     public void propertyChange(final PropertyChangeEvent evt) {
     }
 
+    @Override
+    public void editorClosed(final EditorClosedEvent event) {
+    }
+
+    @Override
+    public boolean prepareForSave() {
+        List<CidsBean> kompBeans = null;
+        final ObjectAttribute bezAttribute = cidsBean.getMetaObject().getAttribute("bezeichnung");
+
+        if ((bezAttribute != null) && bezAttribute.isChanged()) {
+            // the cs_cache table must be updated for the kompensation objects
+            if ((cidsBean != null)) {
+                final Object colObj = cidsBean.getProperty("kompensationen");
+                if (colObj instanceof Collection) {
+                    kompBeans = (List<CidsBean>)colObj;
+                }
+            }
+
+            if ((kompBeans != null) && (kompBeans.size() > 0)) {
+                final Executor exec = CismetExecutors.newSingleThreadExecutor();
+                for (final CidsBean tmp : kompBeans) {
+                    // use invoke later to ensure that the verfahren object will be saved first
+                    EventQueue.invokeLater(new Thread() {
+
+                            @Override
+                            public void run() {
+                                // do not persist the beans in edt. This can happen in the background.
+                                exec.execute(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                // this ensures that the kompensation object will be saved (updated).
+                                                // Without update, the cs_cache table will not be updated, but this is
+                                                // required, if the attribute bezeichnung of the verfahren has changed
+                                                tmp.getMetaObject().setStatus(MetaObject.MODIFIED);
+                                                tmp.getMetaObject().getAttribute("name").setChanged(true);
+                                                tmp.persist();
+                                            } catch (Exception e) {
+                                                LOG.error("Error while saving kompensation object", e);
+                                            }
+                                        }
+                                    });
+                            }
+                        });
+                }
+            }
+        }
+
+        return true;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1654,8 +1738,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
 
                 @Override
                 public int compare(final CidsBean o1, final CidsBean o2) {
-                    final String o1String = String.valueOf(o1);
-                    final String o2String = String.valueOf(o2);
+                    final String o1String = String.valueOf(o1.getProperty("schluessel"));
+                    final String o2String = String.valueOf(o2.getProperty("schluessel"));
 
                     try {
                         final Integer o1Int = Integer.parseInt(o1String);

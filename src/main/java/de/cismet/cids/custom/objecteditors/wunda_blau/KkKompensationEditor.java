@@ -19,7 +19,6 @@ import Sirius.server.middleware.types.MetaObject;
 import org.apache.log4j.Logger;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import java.util.Collection;
 import java.util.List;
@@ -96,17 +95,38 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
 
     @Override
     public void editorClosed(final EditorClosedEvent event) {
-        if (event.getStatus() == EditorSaveStatus.SAVE_SUCCESS) {
-            try {
-                verfahrenBean.persist();
-            } catch (Exception ex) {
-                LOG.error("Cannot log object", ex);
-            }
-        }
     }
 
     @Override
     public boolean prepareForSave() {
+        try {
+            if (verfahrenBean != null) {
+                verfahrenBean.persist();
+
+                // ensures that the kompensation object will be updated (this updates the table cs_cache).
+                List<CidsBean> kompBeans = null;
+                if ((verfahrenBean != null)) {
+                    final Object colObj = verfahrenBean.getProperty("kompensationen");
+                    if (colObj instanceof Collection) {
+                        kompBeans = (List<CidsBean>)colObj;
+                    }
+                }
+
+                if (kompBeans != null) {
+                    final int index = kompBeans.indexOf(kompensationBean);
+
+                    if (index != -1) {
+                        final CidsBean kompBean = kompBeans.get(index);
+                        kompBean.getMetaObject().setStatus(MetaObject.MODIFIED);
+                        kompBean.getMetaObject().getAttribute("name").setChanged(true);
+                        kompBean.persist();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            LOG.error("Cannot persist object", ex);
+        }
+
         return true;
     }
 

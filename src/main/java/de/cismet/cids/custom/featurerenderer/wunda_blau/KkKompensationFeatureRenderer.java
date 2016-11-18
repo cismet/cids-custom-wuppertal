@@ -17,7 +17,11 @@ import org.apache.log4j.Logger;
 import java.awt.Color;
 import java.awt.Paint;
 
+import javax.swing.JComponent;
+
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
+
+import de.cismet.cismap.commons.Refreshable;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
@@ -107,5 +111,10 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public void assign() {
+    }
+
+    @Override
+    public JComponent getInfoComponent(final Refreshable refresh) {
+        return null;
     }
 }
