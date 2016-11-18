@@ -309,7 +309,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * Does not remove the border in difference to the RendererTools.
      *
      * @param  tComp  DOCUMENT ME!
      */
