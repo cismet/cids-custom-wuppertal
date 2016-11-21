@@ -1300,63 +1300,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
     /**
      * DOCUMENT ME!
-     */
-    private void downloadGrundstecksNachweis() {
-        final String product = AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML;
-        final String actionTag = AlkisUtils.getActionTag(product);
-        final String downloadTitle = AlkisUtils.getProductName(product);
-
-        if (!ObjectRendererUtils.checkActionTag(actionTag)) {
-            AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
-            return;
-        }
-
-        try {
-            String buchungsblattCode_Anhang = getCompleteBuchungsblattCode();
-            if (buchungsblattCode_Anhang.length() > 0) {
-                final String anhang = getCompleteLaufendeNrCode();
-                if (anhang != null) {
-                    buchungsblattCode_Anhang += anhang;
-                } else {
-                    return;
-                }
-
-                final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode_Anhang);
-                final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
-                        queryID,
-                        product,
-                        AlkisUtils.getFertigungsVermerk("WV ein"));
-
-                if (url != null) {
-                    if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
-                        return;
-                    }
-                    final String jobname = DownloadManagerDialog.getInstance().getJobName();
-
-                    String filename = product + "." + buchungsblattCode_Anhang.replace("/", "--").trim();
-                    filename = filename.replaceAll(" +", "_"); // replace all whitespaces
-                    final HttpDownload download = new HttpDownload(
-                            url,
-                            "",
-                            jobname,
-                            downloadTitle,
-                            filename,
-                            ".html");
-                    DownloadManager.instance().add(download);
-                }
-            }
-        } catch (Exception ex) {
-            ObjectRendererUtils.showExceptionWindowToUser(
-                "Fehler beim Aufruf des Produkts: "
-                        + product,
-                ex,
-                this);
-            LOG.error(ex);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
@@ -1470,7 +1413,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void hlGrundstuecksnachweisNrwHtmlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
-        downloadGrundstecksNachweis();
+        downloadProduct(AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML, false);
     }                                                                                                 //GEN-LAST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
 
     /**
