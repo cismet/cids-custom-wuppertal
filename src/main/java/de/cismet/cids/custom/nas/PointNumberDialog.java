@@ -111,6 +111,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private boolean hasBeenDownloadedOrIgnoredYet = true;
 
     private String dontReloadPnrsForThisAnr = null;
+    private final List<String> antragsNummern = new ArrayList<String>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeSelectAll;
@@ -230,6 +231,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     }
 
                     cbAntragsNummer.setEditable(tbpModus.getSelectedComponent().equals(pnlReservieren));
+                    cbAntragsNummer.setEnabled(
+                        tbpModus.getSelectedComponent().equals(pnlReservieren)
+                                || !antragsNummern.isEmpty());
                 }
             });
 
@@ -2078,7 +2082,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         protected void done() {
             try {
                 final List<String> result = (List<String>)get();
-                final List<String> antragsNummern = new ArrayList<String>();
+                antragsNummern.clear();
 
                 if ((result != null) && !result.isEmpty()) {
                     // remove prefix and sort
@@ -2113,7 +2117,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
 
                 jProgressBar1.setIndeterminate(false);
-                cbAntragsNummer.setEnabled(!antragsNummern.isEmpty());
+                cbAntragsNummer.setEnabled(tbpModus.getSelectedComponent().equals(pnlReservieren)
+                            || !antragsNummern.isEmpty());
 
                 if (cbAntragsNummer.getModel().getSize() > 0) {
                     cbAntragsNummer.setSelectedIndex(0);
