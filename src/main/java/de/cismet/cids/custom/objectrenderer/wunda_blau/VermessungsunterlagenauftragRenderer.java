@@ -8,6 +8,9 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.ComponentRegistry;
+
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,23 +19,32 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import org.openide.util.Exceptions;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import java.io.IOException;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungFlurstueckInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsUnterlagenPortalDownloadAction;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -47,12 +59,10 @@ import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.gui.printing.PrintingWidget;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.tools.gui.TitleComponentProvider;
-import de.cismet.tools.gui.downloadmanager.ByteArrayDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -81,6 +91,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private StyledFeature geometrieSaumFeature;
     private StyledFeature flurstueckeFeature;
 
+    private final Map<String, CidsBean> alkisMap = new HashMap<String, CidsBean>();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.Box.Filler filler1;
@@ -98,8 +110,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -211,14 +221,12 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
         panContent1 = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<String>();
         roundedPanel4 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
         panContent2 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList3 = new javax.swing.JList<String>();
         jPanel2 = new javax.swing.JPanel();
@@ -619,6 +627,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         roundedPanel3.setLayout(new java.awt.GridBagLayout());
 
         semiRoundedPanel4.setBackground(new java.awt.Color(51, 51, 51));
+        semiRoundedPanel4.setMaximumSize(new java.awt.Dimension(258, 25));
+        semiRoundedPanel4.setMinimumSize(new java.awt.Dimension(258, 25));
+        semiRoundedPanel4.setPreferredSize(new java.awt.Dimension(258, 25));
         semiRoundedPanel4.setLayout(new java.awt.FlowLayout());
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -635,25 +646,18 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         panContent1.setOpaque(false);
         panContent1.setLayout(new java.awt.GridBagLayout());
 
-        jPanel8.setMaximumSize(new java.awt.Dimension(258, 130));
-        jPanel8.setMinimumSize(new java.awt.Dimension(258, 130));
-        jPanel8.setOpaque(false);
-        jPanel8.setPreferredSize(new java.awt.Dimension(258, 130));
-        panContent1.add(jPanel8, new java.awt.GridBagConstraints());
-
         jScrollPane2.setMaximumSize(new java.awt.Dimension(258, 130));
         jScrollPane2.setMinimumSize(new java.awt.Dimension(258, 130));
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flurstuecke}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                eLProperty,
-                jList2);
-        jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create(
-                "${gemarkung}-${flur}-${flurstueck}"));
-        bindingGroup.addBinding(jListBinding);
+        jList2.setModel(new DefaultListModel<String>());
+        jList2.setCellRenderer(new AlkisFlurstueckInfoListCellRenderer());
+        jList2.addMouseListener(new java.awt.event.MouseAdapter() {
 
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    jList2MouseClicked(evt);
+                }
+            });
         jScrollPane2.setViewportView(jList2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -684,6 +688,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         roundedPanel4.setLayout(new java.awt.GridBagLayout());
 
         semiRoundedPanel5.setBackground(new java.awt.Color(51, 51, 51));
+        semiRoundedPanel5.setMaximumSize(new java.awt.Dimension(258, 25));
+        semiRoundedPanel5.setMinimumSize(new java.awt.Dimension(258, 25));
+        semiRoundedPanel5.setPreferredSize(new java.awt.Dimension(258, 25));
         semiRoundedPanel5.setLayout(new java.awt.FlowLayout());
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -700,14 +707,10 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         panContent2.setOpaque(false);
         panContent2.setLayout(new java.awt.GridBagLayout());
 
-        jPanel9.setMaximumSize(new java.awt.Dimension(258, 130));
-        jPanel9.setMinimumSize(new java.awt.Dimension(258, 130));
-        jPanel9.setOpaque(false);
-        jPanel9.setPreferredSize(new java.awt.Dimension(258, 130));
-        panContent2.add(jPanel9, new java.awt.GridBagConstraints());
-
         jScrollPane3.setMaximumSize(new java.awt.Dimension(258, 130));
         jScrollPane3.setMinimumSize(new java.awt.Dimension(258, 130));
+
+        jList3.setCellRenderer(new AlkisFlurstueckInfoListCellRenderer());
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.punktnummern}");
         jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
@@ -920,7 +923,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 final String schluessel = (String)cidsBean.getProperty("schluessel");
                 final Download download = new ByteArrayActionDownload(
                         VermessungsUnterlagenPortalDownloadAction.TASK_NAME,
-                        schluessel,
+                        schluessel.getBytes(),
                         null,
                         "Vermessungsunterlagen",
                         jobname,
@@ -954,6 +957,22 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList2MouseClicked
+        if (evt.getClickCount() > 1) {
+            final Object selObject = jList2.getSelectedValue();
+            if (selObject instanceof String) {
+                ComponentRegistry.getRegistry()
+                        .getDescriptionPane()
+                        .gotoMetaObjectNode(new MetaObjectNode(alkisMap.get((String)selObject)), false);
+            }
+        }
+    }                                                                      //GEN-LAST:event_jList2MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     @Override
@@ -968,6 +987,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        alkisMap.clear();
         bindingGroup.unbind();
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
@@ -979,8 +999,83 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
             bindingGroup.bind();
             setTitle((String)cidsBean.getProperty("schluessel"));
-            buttonGroup1.setSelected(jToggleButton1.getModel(), true);
-            jToggleButton1ActionPerformed(null);
+            if (jToggleButton1.isEnabled()) {
+                buttonGroup1.setSelected(jToggleButton1.getModel(), true);
+                jToggleButton1ActionPerformed(null);
+            } else {
+                buttonGroup1.setSelected(jToggleButton2.getModel(), true);
+                jToggleButton2ActionPerformed(null);
+            }
+
+            for (final CidsBean flurstueck : cidsBean.getBeanCollectionProperty("flurstuecke")) {
+                final String gemarkung = (String)flurstueck.getProperty("gemarkung");
+                final String flur = (String)flurstueck.getProperty("flur");
+                final String zaehlernenner = (String)flurstueck.getProperty("flurstueck");
+
+                final String formattedZN;
+                if (zaehlernenner.contains("/")) {
+                    final String[] split = zaehlernenner.split("/");
+                    if (split.length != 2) {
+                        continue;
+                    }
+                    final String zaehler = String.format("%05d", Integer.parseInt(split[0]));
+                    final String nenner = String.format("%04d", Integer.parseInt(split[1]));
+                    formattedZN = zaehler + "/" + nenner;
+                } else {
+                    formattedZN = String.format("%05d", Integer.parseInt(zaehlernenner));
+                }
+                final String alkisId = gemarkung + "-" + flur + "-" + formattedZN;
+
+                new SwingWorker<CidsBean, Object>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            final CidsBean selBean = loadAlkisObject(alkisId);
+                            return selBean;
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                final CidsBean cidsBean = (CidsBean)get();
+                                if (cidsBean != null) {
+                                    alkisMap.put(alkisId, cidsBean);
+                                }
+                            } catch (final Exception ex) {
+                                LOG.warn(ex, ex);
+                            }
+                            jList2.revalidate();
+                            jList2.repaint();
+                        }
+                    }.execute();
+                ((DefaultListModel<String>)jList2.getModel()).addElement(alkisId);
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   alkisId  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private CidsBean loadAlkisObject(final String alkisId) throws Exception {
+        final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
+                CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
+                CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
+                alkisId,
+                null);
+
+        final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                    .customServerSearch(SessionManager.getSession().getUser(), search);
+        if (!mons.isEmpty()) {
+            final MetaObjectNode mon = mons.iterator().next();
+            return SessionManager.getProxy().getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU").getBean();
+        } else {
+            return null;
         }
     }
 
@@ -1075,37 +1170,44 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     private void initMap() {
         if (cidsBean != null) {
-            final Geometry combinedGeom = geometrieSaumFeature.getGeometry().union(flurstueckeFeature.getGeometry());
+            final Geometry combinedGeom;
+            if ((flurstueckeFeature != null) && (flurstueckeFeature.getGeometry() != null)) {
+                combinedGeom = geometrieSaumFeature.getGeometry().union(flurstueckeFeature.getGeometry());
+                jToggleButton1.setEnabled(true);
+            } else {
+                combinedGeom = geometrieSaumFeature.getGeometry();
+                jToggleButton1.setEnabled(false);
+            }
+            try {
+                final XBoundingBox box = new XBoundingBox(combinedGeom.getEnvelope().buffer(
+                            AlkisConstants.COMMONS.GEO_BUFFER));
+                final Runnable mapRunnable = new Runnable() {
 
-            final XBoundingBox box = new XBoundingBox(combinedGeom.getEnvelope().buffer(
-                        AlkisConstants.COMMONS.GEO_BUFFER));
-            final Runnable mapRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            mappingModel.addHome(new XBoundingBox(
+                                    box.getX1(),
+                                    box.getY1(),
+                                    box.getX2(),
+                                    box.getY2(),
+                                    AlkisConstants.COMMONS.SRS_SERVICE,
+                                    true));
+                            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                                        AlkisConstants.COMMONS.MAP_CALL_STRING));
+                            swms.setName("Vermessungsunterlagen-Auftrag");
 
-                    @Override
-                    public void run() {
-                        final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                        mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
-                        mappingModel.addHome(new XBoundingBox(
-                                box.getX1(),
-                                box.getY1(),
-                                box.getX2(),
-                                box.getY2(),
-                                AlkisConstants.COMMONS.SRS_SERVICE,
-                                true));
-                        final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                    AlkisConstants.COMMONS.MAP_CALL_STRING));
-                        swms.setName("Vermessungsunterlagen-Auftrag");
-
-                        // add the raster layer to the model
-                        mappingModel.addLayer(swms);
-                        // set the model
-                        mappingComponent.setMappingModel(mappingModel);
-                        // initial positioning of the map
-                        mappingComponent.gotoInitialBoundingBox();
-                        // interaction mode
-                        mappingComponent.setInteractionMode(MappingComponent.ZOOM);
-                        // finally when all configurations are done ...
-                        mappingComponent.unlock();
+                            // add the raster layer to the model
+                            mappingModel.addLayer(swms);
+                            // set the model
+                            mappingComponent.setMappingModel(mappingModel);
+                            // initial positioning of the map
+                            mappingComponent.gotoInitialBoundingBox();
+                            // interaction mode
+                            mappingComponent.setInteractionMode(MappingComponent.ZOOM);
+                            // finally when all configurations are done ...
+                            mappingComponent.unlock();
 //                        previewMap.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
 //
 //                                @Override
@@ -1118,13 +1220,45 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 //                                }
 //                            });
 //                        previewMap.setInteractionMode("MUTE");
-                    }
-                };
-            if (EventQueue.isDispatchThread()) {
-                mapRunnable.run();
-            } else {
-                EventQueue.invokeLater(mapRunnable);
+                        }
+                    };
+                if (EventQueue.isDispatchThread()) {
+                    mapRunnable.run();
+                } else {
+                    EventQueue.invokeLater(mapRunnable);
+                }
+            } catch (final Exception ex) {
+                LOG.warn("could not init Map !", ex);
             }
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class AlkisFlurstueckInfoListCellRenderer extends DefaultListCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList<?> list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final JLabel component = (JLabel)super.getListCellRendererComponent(
+                    list,
+                    value,
+                    index,
+                    isSelected,
+                    cellHasFocus); // To change body of generated methods, choose Tools | Templates.
+
+            component.setEnabled(alkisMap.containsKey((String)value));
+            return component;
         }
     }
 }
