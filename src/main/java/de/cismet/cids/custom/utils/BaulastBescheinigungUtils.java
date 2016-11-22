@@ -487,8 +487,7 @@ public class BaulastBescheinigungUtils {
                                         : sortedBescheinigungsGruppen) {
                                 downloads.add(createBescheinigungPdf(
                                         bescheinigungsGruppe,
-                                        (downloadInfo.getAuftragsnummer() != null) ? downloadInfo.getAuftragsnummer()
-                                                                                   : jobname,
+                                        (jobname != null) ? jobname : downloadInfo.getAuftragsnummer(),
                                         downloadInfo.getAuftragsnummer(),
                                         downloadInfo.getProduktbezeichnung(),
                                         anfrageSchluessel,
