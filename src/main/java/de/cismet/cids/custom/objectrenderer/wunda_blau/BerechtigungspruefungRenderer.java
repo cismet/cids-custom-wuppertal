@@ -119,6 +119,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFreigeben;
+    private javax.swing.JButton btnFreigeben1;
     private javax.swing.JButton btnStorno;
     private javax.swing.JDialog diaFreigabe;
     private javax.swing.JDialog diaStorno;
@@ -260,6 +261,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         panFooter = new javax.swing.JPanel();
         btnFreigeben = new javax.swing.JButton();
         btnStorno = new javax.swing.JButton();
+        btnFreigeben1 = new javax.swing.JButton();
         diaFreigabe = new javax.swing.JDialog();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -419,8 +421,28 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panFooter.add(btnStorno, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnFreigeben1,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.btnFreigeben1.text")); // NOI18N
+        btnFreigeben1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnFreigeben1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        panFooter.add(btnFreigeben1, gridBagConstraints);
 
         diaFreigabe.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         diaFreigabe.setTitle(org.openide.util.NbBundle.getMessage(
@@ -1642,25 +1664,26 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     /**
      * DOCUMENT ME!
      *
-     * @param  freigabe  DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void executeFreigabeOrStorno(final boolean freigabe) {
+    private void btnFreigeben1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigeben1ActionPerformed
+        final String kommentar = (String)cidsBean.getProperty("pruefkommentar");
+        executeFreigabeOrStorno(true, kommentar);
+    }                                                                                 //GEN-LAST:event_btnFreigeben1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  freigabe   DOCUMENT ME!
+     * @param  kommentar  DOCUMENT ME!
+     */
+    private void executeFreigabeOrStorno(final boolean freigabe, final String kommentar) {
         final String schluessel = (String)cidsBean.getProperty("schluessel");
         new SwingWorker<BerechtigungspruefungFreigabeServerAction.ReturnType, Void>() {
 
                 @Override
                 protected BerechtigungspruefungFreigabeServerAction.ReturnType doInBackground() throws Exception {
                     try {
-                        final String kommentar;
-                        if (freigabe) {
-                            kommentar = jTextArea5.getText()
-                                        + (((jTextArea3.getText() != null) && !jTextArea3.getText().trim().isEmpty())
-                                            ? ("\n\n" + jTextArea3.getText()) : "");
-                        } else {
-                            kommentar = jTextArea6.getText()
-                                        + (((jTextArea4.getText() != null) && !jTextArea4.getText().trim().isEmpty())
-                                            ? ("\n\n" + jTextArea4.getText()) : "");
-                        }
                         return (BerechtigungspruefungFreigabeServerAction.ReturnType)SessionManager
                                     .getSession().getConnection()
                                     .executeTask(SessionManager.getSession().getUser(),
@@ -1754,14 +1777,20 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      * DOCUMENT ME!
      */
     private void executeFreigabe() {
-        executeFreigabeOrStorno(true);
+        final String kommentar = jTextArea5.getText()
+                    + (((jTextArea3.getText() != null) && !jTextArea3.getText().trim().isEmpty())
+                        ? ("\n\n" + jTextArea3.getText()) : "");
+        executeFreigabeOrStorno(true, kommentar);
     }
 
     /**
      * DOCUMENT ME!
      */
     private void executeStorno() {
-        executeFreigabeOrStorno(false);
+        final String kommentar = jTextArea6.getText()
+                    + (((jTextArea4.getText() != null) && !jTextArea4.getText().trim().isEmpty())
+                        ? ("\n\n" + jTextArea4.getText()) : "");
+        executeFreigabeOrStorno(false, kommentar);
     }
 
     @Override
@@ -1797,6 +1826,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             btnFreigeben.setEnabled((cidsBean.getProperty("pruefer") == null)
                         || (pruefer.equals(cidsBean.getProperty("pruefer"))
                             && (cidsBean.getProperty("pruefstatus") == null)));
+            btnFreigeben1.setVisible(Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus"))
+                        && Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")));
             btnStorno.setEnabled((cidsBean.getProperty("pruefer") == null)
                         || (pruefer.equals(cidsBean.getProperty("pruefer"))
                             && (cidsBean.getProperty("pruefstatus") == null)));

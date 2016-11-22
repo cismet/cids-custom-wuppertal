@@ -13,19 +13,9 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Converter;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -37,11 +27,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
@@ -53,10 +41,12 @@ import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.NivellementPunktAggregationRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -72,8 +62,6 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
-import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
-import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
 
 import de.cismet.security.WebAccessManager;
 
@@ -1022,45 +1010,13 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                             "no.yet",
                             (Geometry)null,
                             new ProductGroupAmount("ea", 1))) {
-                downloadReport();
+                NivellementPunktAggregationRenderer.downloadReport(Arrays.asList(cidsBean), "", "");
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
     }                                                                             //GEN-LAST:event_btnReportActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void downloadReport() {
-        final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
-
-                @Override
-                public JRDataSource generateDataSource() {
-                    final Collection<CidsBean> nivellementPunkte = new LinkedList<CidsBean>();
-                    nivellementPunkte.add(cidsBean);
-                    final Collection<NivellementPunktAggregationRenderer.NivellementPunktReportBean> reportBeans =
-                        new LinkedList<NivellementPunktAggregationRenderer.NivellementPunktReportBean>();
-                    reportBeans.add(new NivellementPunktAggregationRenderer.NivellementPunktReportBean(
-                            nivellementPunkte));
-                    final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-                    return dataSource;
-                }
-            };
-
-        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(NivellementPunktEditor.this)) {
-            final String jobname = DownloadManagerDialog.getInstance().getJobName();
-
-            DownloadManager.instance()
-                    .add(new JasperReportDownload(
-                            "/de/cismet/cids/custom/wunda_blau/res/nivp.jasper", // NOI18N
-                            dataSourceGenerator,
-                            jobname,
-                            "Nivellement-Punkt",
-                            "nivp"));
-        }
-    }
 
     /**
      * DOCUMENT ME!
@@ -1090,69 +1046,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
         currentRefreshDocumentWorker = new RefreshDocumentWorker();
         CismetThreadPool.execute(currentRefreshDocumentWorker);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   dgkBlattnummer  the value of dgkBlattnummer
-     * @param   laufendeNummer  the value of laufendeNummer
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static Collection<URL> getCorrespondingURLs(final java.lang.String dgkBlattnummer,
-            final String laufendeNummer) {
-        final Collection<URL> validURLs = new LinkedList<URL>();
-        final StringBuilder urlBuilder = new StringBuilder(AlkisConstants.COMMONS.NIVP_HOST);
-        urlBuilder.append('/');
-        urlBuilder.append(dgkBlattnummer);
-        urlBuilder.append('/');
-        urlBuilder.append(AlkisConstants.COMMONS.NIVP_PREFIX);
-        urlBuilder.append(dgkBlattnummer);
-        urlBuilder.append(getFormattedLaufendeNummer(laufendeNummer));
-        urlBuilder.append('.');
-        for (final String suffix : SUFFIXES) {
-            URL urlToTry = null;
-            try {
-                urlToTry = new URL(urlBuilder.toString() + suffix);
-            } catch (MalformedURLException ex) {
-                LOG.warn("The URL '" + urlBuilder.toString() + suffix
-                            + "' is malformed. Can't load the corresponding picture.",
-                    ex);
-            }
-
-            if (urlToTry != null) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Valid URL: " + urlToTry.toExternalForm());
-                }
-
-                validURLs.add(urlToTry);
-            }
-        }
-        return validURLs;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   laufendeNummer  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    protected static String getFormattedLaufendeNummer(final String laufendeNummer) {
-        final StringBuilder result;
-
-        if (laufendeNummer == null) {
-            result = new StringBuilder("000");
-        } else {
-            result = new StringBuilder(laufendeNummer);
-        }
-
-        while (result.length() < 3) {
-            result.insert(0, "0");
-        }
-
-        return result.toString();
     }
 
     /**
@@ -1196,7 +1089,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             final String dgkBlattnummer = (String)cidsBean.getProperty("dgk_blattnummer");
             final String laufendeNummer = (String)cidsBean.getProperty("laufende_nummer");
             lblTitle.setText(NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblTitle.text")
-                        + " " + dgkBlattnummer + getFormattedLaufendeNummer(laufendeNummer));
+                        + " " + dgkBlattnummer + AlkisProducts.getFormattedLaufendeNummerNivP(laufendeNummer));
             refreshImage();
         }
     }
@@ -1382,7 +1275,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
-            final Collection<URL> validURLs = getCorrespondingURLs(txtDGKBlattnummer.getText(),
+            final Collection<URL> validURLs = AlkisUtils.PRODUCTS.getCorrespondingNivPURLs(txtDGKBlattnummer.getText(),
                     txtLaufendeNummer.getText());
 
             InputStream streamToReadFrom = null;
