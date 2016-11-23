@@ -27,6 +27,9 @@ import java.awt.EventQueue;
 
 import java.io.IOException;
 
+import java.text.DateFormat;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,13 +47,18 @@ import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenUtils;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsUnterlagenPortalDownloadAction;
+import de.cismet.cids.custom.wunda_blau.search.server.KundeByVermessungsStellenNummerSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.BooleanToStringConverter;
+
+import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -80,6 +88,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             VermessungsunterlagenauftragRenderer.class);
+    private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(
+            DateFormat.MEDIUM,
+            DateFormat.SHORT);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -91,6 +102,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private StyledFeature geometrieFeature;
     private StyledFeature geometrieSaumFeature;
     private StyledFeature flurstueckeFeature;
+    private String vermStelle;
 
     private final Map<String, CidsBean> alkisMap = new HashMap<String, CidsBean>();
 
@@ -100,6 +112,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
@@ -114,6 +127,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton3;
@@ -195,6 +209,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel1 = new javax.swing.JLabel();
         panContent = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
         lblGeschBuchNummer = new javax.swing.JLabel();
         lblVermStelle = new javax.swing.JLabel();
@@ -205,6 +220,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         lblMitPunktnummernreservierung = new javax.swing.JLabel();
         lblSaumAP = new javax.swing.JLabel();
         lblVermessungsarten = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
         jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         lblGeschBuchNummer1 = new javax.swing.JLabel();
         lblVermStelle1 = new javax.swing.JLabel();
@@ -303,6 +319,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         panContent.setOpaque(false);
         panContent.setLayout(new java.awt.GridBagLayout());
 
+        jLabel4.setText("Vorgangsnummer:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(jLabel4, gridBagConstraints);
+
         lblStatus.setText("Status des Auftrags:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -383,7 +406,28 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblVermessungsarten, gridBagConstraints);
 
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(null);
+        jTextField1.setBorder(null);
+        jTextField1.setOpaque(false);
+
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
+                jTextField1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(jTextField1, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status != null}"),
@@ -410,6 +454,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(jXHyperlink1, gridBagConstraints);
@@ -427,7 +472,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -446,7 +490,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -465,7 +508,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -480,12 +522,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 "timestamp");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
-        binding.setConverter(new SQLTimestampToStringConverter());
+        binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -500,7 +541,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 "zip_timestamp");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
-        binding.setConverter(new SQLTimestampToStringConverter());
+        binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -524,7 +565,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -544,7 +584,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -563,7 +602,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -587,7 +625,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1002,7 +1039,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             initMap();
 
             bindingGroup.bind();
-            setTitle((String)cidsBean.getProperty("schluessel"));
+            setTitle(null);
+            updateVermessungsstelle();
             if (jToggleButton1.isEnabled()) {
                 buttonGroup1.setSelected(jToggleButton1.getModel(), true);
                 jToggleButton1ActionPerformed(null);
@@ -1122,10 +1160,12 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     @Override
     public void setTitle(final String title) {
-        if (title == null) {
+        if (cidsBean == null) {
             this.title = "<Error>";
         } else {
-            this.title = "Bestellung Vermessungsunterlagen: " + title;
+            // DATE_FORMAT.format((Timestamp)cidsBean.getProperty("timestamp"))
+            this.title = "Bestellung Vermessungsunterlagen: "
+                        + (String)cidsBean.getProperty("schluessel") + " - " + vermStelle;
         }
         lblTitle.setText(this.title);
     }
@@ -1245,6 +1285,45 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 LOG.warn("could not init Map !", ex);
             }
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateVermessungsstelle() {
+        this.vermStelle = null;
+        final String vermessungsstelle = (String)cidsBean.getProperty("vermessungsstelle");
+        new SwingWorker<String, Void>() {
+
+                @Override
+                protected String doInBackground() throws Exception {
+                    if ("053290".equals(vermessungsstelle)) {
+                        return "Stadt Wuppertal";
+                    } else {
+                        final CidsServerSearch search = new KundeByVermessungsStellenNummerSearch(vermessungsstelle);
+                        final Collection res = SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                        if ((res == null) || res.isEmpty()) {
+                            return null;
+                        } else {
+                            return ((VermessungsStellenSearchResult)res.iterator().next()).getName();
+                        }
+                    }
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final String ret = get();
+                        VermessungsunterlagenauftragRenderer.this.vermStelle = ret;
+                        setTitle(null);
+                        if (ret != null) {
+                            lblVermStelle1.setText(vermessungsstelle + " (" + ret + ")");
+                        }
+                    } catch (final Exception ex) {
+                    }
+                }
+            }.execute();
     }
 
     //~ Inner Classes ----------------------------------------------------------
