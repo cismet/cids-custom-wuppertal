@@ -36,6 +36,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -72,6 +75,7 @@ import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
@@ -91,7 +95,8 @@ import de.cismet.tools.gui.SemiRoundedPanel;
  */
 public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements DisposableCidsBeanStore,
     BorderProvider,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -472,6 +477,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
                 txtFlaecheId,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1373,55 +1380,82 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        if (cidsBean == getCidsBean()) {
+            return;
+        }
+        dispose();
         bindingGroup.unbind();
+        if (cidsBean != null) {
+            cidsBean.addPropertyChangeListener(this);
+        }
         this.cidsBean = cidsBean;
 
         if (cidsBean != null) {
+            if (editable) {
+                ((DefaultCismapGeometryComboBoxEditor)cbGeom).setCidsMetaObject(cidsBean.getMetaObject());
+                ((DefaultCismapGeometryComboBoxEditor)cbGeom).initForNewBinding();
+            }
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 cidsBean);
             bindingGroup.bind();
-//            KompensationskatasterBeanTable biotopModel = new KompensationskatasterBeanTable(cidsBean, "zielbiotope", COL_NAMES, PROP_NAMES , PROP_TYPES);
-//            xtBiotope.setModel(biotopModel);
-            final KompensationskatasterBeanTable massnahmenModel = new KompensationskatasterBeanTable(
-                    editable,
-                    cidsBean,
-                    "massnahmen",
-                    MASSNAHMEN_COL_NAMES,
-                    MASSNAHMEN_PROP_NAMES,
-                    MASSNAHMEN_PROP_TYPES);
-            xtMassnahmen.setModel(massnahmenModel);
-            xtMassnahmen.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(MASSNAHMEN_MC));
-            final KompensationskatasterBeanTable kontrollenModel = new KompensationskatasterBeanTable(
-                    editable,
-                    cidsBean,
-                    "massnahmenkontrolle",
-                    KONTROLLE_COL_NAMES,
-                    KONTROLLE_PROP_NAMES,
-                    KONTROLLE_PROP_TYPES);
-            xtKontrollen.setModel(kontrollenModel);
-            final KompensationskatasterBeanTable biotopZielModel = new KompensationskatasterBeanTable(
-                    editable,
-                    cidsBean,
-                    "zielbiotope",
-                    BIO_ZIEL_COL_NAMES,
-                    BIO_ZIEL_PROP_NAMES,
-                    BIO_ZIEL_PROP_TYPES);
-            xtBiotopeEin.setModel(biotopZielModel);
-            xtBiotopeEin.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(BIOTOP_MC));
-            final KompensationskatasterBeanTable biotopAusModel = new KompensationskatasterBeanTable(
-                    editable,
-                    cidsBean,
-                    "ausgangsbiotope",
-                    BIO_AUS_COL_NAMES,
-                    BIO_AUS_PROP_NAMES,
-                    BIO_AUS_PROP_TYPES);
-            xtBiotopeAus.setModel(biotopAusModel);
-            xtBiotopeAus.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(AUSGANGS_BIOTOP_MC));
-            initMap();
+        } else {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).initForNewBinding();
+            txtFlaecheAusfuehrender.setText("");
+            txtFlaecheId.setText("");
+            txtFlaecheJahrDerUmsetzung.setText("");
+            txtFlaecheName.setText("");
+            taNebenbest.setText("");
+            taBemerkung.setText("");
+            dcAufnahme.setDate(null);
+            chkFlaecheMassnahmeUmgesetzt.setSelected(false);
+            cboFlaecheKategorie.setSelectedIndex(-1);
+            cboFlaecheLandschaftsplan.setSelectedIndex(-1);
+            cboFlaecheSchutzstatus.setSelectedIndex(-1);
+            cbGeom.setSelectedIndex(-1);
+        }
 
+        final KompensationskatasterBeanTable massnahmenModel = new KompensationskatasterBeanTable(
+                editable,
+                cidsBean,
+                "massnahmen",
+                MASSNAHMEN_COL_NAMES,
+                MASSNAHMEN_PROP_NAMES,
+                MASSNAHMEN_PROP_TYPES);
+        xtMassnahmen.setModel(massnahmenModel);
+        xtMassnahmen.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(MASSNAHMEN_MC));
+        final KompensationskatasterBeanTable kontrollenModel = new KompensationskatasterBeanTable(
+                editable,
+                cidsBean,
+                "massnahmenkontrolle",
+                KONTROLLE_COL_NAMES,
+                KONTROLLE_PROP_NAMES,
+                KONTROLLE_PROP_TYPES);
+        xtKontrollen.setModel(kontrollenModel);
+        xtKontrollen.getColumn(1).setCellEditor(new DateCellEditor());
+        xtKontrollen.getColumn(2).setCellEditor(new DateCellEditor());
+        final KompensationskatasterBeanTable biotopZielModel = new KompensationskatasterBeanTable(
+                editable,
+                cidsBean,
+                "zielbiotope",
+                BIO_ZIEL_COL_NAMES,
+                BIO_ZIEL_PROP_NAMES,
+                BIO_ZIEL_PROP_TYPES);
+        xtBiotopeEin.setModel(biotopZielModel);
+        xtBiotopeEin.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(BIOTOP_MC));
+        final KompensationskatasterBeanTable biotopAusModel = new KompensationskatasterBeanTable(
+                editable,
+                cidsBean,
+                "ausgangsbiotope",
+                BIO_AUS_COL_NAMES,
+                BIO_AUS_PROP_NAMES,
+                BIO_AUS_PROP_TYPES);
+        xtBiotopeAus.setModel(biotopAusModel);
+        xtBiotopeAus.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(AUSGANGS_BIOTOP_MC));
+        initMap();
+
+        if (cidsBean != null) {
             double qm = -1.0;
-
             final Geometry g = (Geometry)cidsBean.getProperty("geometrie.geo_field");
 
             if (g != null) {
@@ -1520,6 +1554,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                             }
                         });
                     previewMap.setInteractionMode("ADD_TO_MAP_KOMP");
+                    previewMap.getFeatureCollection().removeAllFeatures();
                     if (bufferedBox != null) {
                         previewMap.getFeatureCollection().addFeature(new CidsFeature(cidsBean.getMetaObject()));
                     }
@@ -1539,31 +1574,35 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             EventQueue.invokeLater(mapRunnable);
         }
 
-        final Geometry geom = (Geometry)cidsBean.getProperty("geometrie.geo_field");
+        if (cidsBean != null) {
+            final Geometry geom = (Geometry)cidsBean.getProperty("geometrie.geo_field");
 
-        if (geom != null) {
-            final Runnable initMapLabels = new Runnable() {
+            if (geom != null) {
+                final Runnable initMapLabels = new Runnable() {
 
-                    @Override
-                    public void run() {
-                        try {
-                            final CidsServerSearch gemeindeSearch = new GemeindeByGeometrySearch(geom.toText());
+                        @Override
+                        public void run() {
+                            try {
+                                final CidsServerSearch gemeindeSearch = new GemeindeByGeometrySearch(geom.toText());
 
-                            final List gemeinde = (List)SessionManager.getProxy()
-                                        .customServerSearch(SessionManager.getSession().getUser(), gemeindeSearch);
+                                final List gemeinde = (List)SessionManager.getProxy()
+                                            .customServerSearch(SessionManager.getSession().getUser(), gemeindeSearch);
 
-                            if ((gemeinde != null) && (gemeinde.size() > 0)) {
-                                labGem.setText(String.valueOf(gemeinde.get(0)));
-                            } else {
-                                labGem.setText("");
+                                if ((gemeinde != null) && (gemeinde.size() > 0)) {
+                                    labGem.setText(String.valueOf(gemeinde.get(0)));
+                                } else {
+                                    labGem.setText("");
+                                }
+                            } catch (Exception e) {
+                                LOG.error("Error while retrieving Gemeinde", e);
                             }
-                        } catch (Exception e) {
-                            LOG.error("Error while retrieving Gemeinde", e);
                         }
-                    }
-                };
+                    };
 
-            CismetExecutors.newSingleThreadExecutor().execute(initMapLabels);
+                CismetExecutors.newSingleThreadExecutor().execute(initMapLabels);
+            }
+        } else {
+            labGem.setText("");
         }
     }
 
@@ -1587,6 +1626,12 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
     @Override
     public void dispose() {
+        if (editable) {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
+        }
+        if (cidsBean != null) {
+            cidsBean.removePropertyChangeListener(this);
+        }
     }
 
     @Override
@@ -1602,6 +1647,13 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("geometrie")) {
+            initMap();
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -22,6 +22,7 @@ import java.beans.PropertyChangeEvent;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import de.cismet.cids.custom.wunda_blau.search.server.KkVerfahrenSearch;
 
@@ -31,6 +32,8 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
+
+import de.cismet.commons.concurrency.CismetExecutors;
 
 /**
  * DOCUMENT ME!
@@ -81,7 +84,9 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
 
                 if ((res != null) && (res.size() == 1)) {
                     verfahrenBean = ((MetaObject)res.get(0)).getBean();
-                    verfahrenBean.addPropertyChangeListener(this);
+                    if (editable) {
+                        verfahrenBean.addPropertyChangeListener(this);
+                    }
                     super.setCidsBean(verfahrenBean);
                     selectKompensation(cidsBean);
                 } else {
@@ -95,6 +100,9 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
 
     @Override
     public void editorClosed(final EditorClosedEvent event) {
+        if (verfahrenBean != null) {
+            verfahrenBean.removePropertyChangeListener(this);
+        }
     }
 
     @Override
@@ -113,13 +121,21 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
                 }
 
                 if (kompBeans != null) {
-                    final int index = kompBeans.indexOf(kompensationBean);
+                    final Executor exec = CismetExecutors.newSingleThreadExecutor();
+                    for (final CidsBean kompBean : kompBeans) {
+                        exec.execute(new Runnable() {
 
-                    if (index != -1) {
-                        final CidsBean kompBean = kompBeans.get(index);
-                        kompBean.getMetaObject().setStatus(MetaObject.MODIFIED);
-                        kompBean.getMetaObject().getAttribute("name").setChanged(true);
-                        kompBean.persist();
+                                @Override
+                                public void run() {
+                                    try {
+                                        kompBean.getMetaObject().setStatus(MetaObject.MODIFIED);
+                                        kompBean.getMetaObject().getAttribute("name").setChanged(true);
+                                        kompBean.persist();
+                                    } catch (Exception e) {
+                                        LOG.error("Error while saving kompensation object", e);
+                                    }
+                                }
+                            });
                     }
                 }
             }

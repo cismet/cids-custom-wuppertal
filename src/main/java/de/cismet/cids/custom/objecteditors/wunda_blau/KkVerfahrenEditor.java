@@ -1424,6 +1424,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             bean.addPropertyChangeListener(this);
             edFlaeche.setCidsBean(bean);
             initBPlan(bean);
+        } else {
+            edFlaeche.setCidsBean(null);
+            labBPlan.setText("BPlan: ");
         }
 
         refreshLabels();
@@ -1441,8 +1444,11 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         } else {
             lblFlaeche.setText("Fläche");
         }
-
         lstFlaechen.repaint();
+
+        if (edFlaeche.getCidsBean() != null) {
+            lstFlaechen.setSelectedValue(edFlaeche.getCidsBean(), true);
+        }
     }
 
     /**
@@ -1470,6 +1476,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_kompensation");
 
             cidsBean.addCollectionElement("kompensationen", bean);
+            ((CustomJListModel)lstFlaechen.getModel()).refresh();
+            lstFlaechen.setSelectedValue(bean, true);
+            lstFlaechenValueChanged(null);
         } catch (Exception e) {
             LOG.error("Cannot add new kk_kompensation object", e);
         }
@@ -1487,7 +1496,10 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             final List<CidsBean> kompensationBeans = cidsBean.getBeanCollectionProperty("kompensationen");
 
             if (kompensationBeans != null) {
-                kompensationBeans.remove(selectedObject);
+                kompensationBeans.remove((CidsBean)selectedObject);
+                ((CustomJListModel)lstFlaechen.getModel()).refresh();
+                lstFlaechen.getSelectionModel().clearSelection();
+                lstFlaechenValueChanged(null);
             }
         }
     } //GEN-LAST:event_btnRemoveLaufendeNummer1ActionPerformed
@@ -1780,6 +1792,13 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                 }
             }
             return null;
+        }
+
+        /**
+         * DOCUMENT ME!
+         */
+        public void refresh() {
+            fireContentsChanged(this, 0, getBeanList().size() - 1);
         }
 
         @Override
