@@ -10,6 +10,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,6 @@ import java.awt.EventQueue;
 
 import java.io.IOException;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -40,11 +40,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
+import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
-import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungFlurstueckInfo;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenUtils;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsUnterlagenPortalDownloadAction;
-import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -883,40 +884,40 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
         mappingComponent.getFeatureCollection().removeFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().removeFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().addFeature(flurstueckeFeature);
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+    private void jToggleButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton2ActionPerformed
         mappingComponent.getFeatureCollection().addFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().removeFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().removeFeature(flurstueckeFeature);
-    }//GEN-LAST:event_jToggleButton2ActionPerformed
+    }                                                                                  //GEN-LAST:event_jToggleButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
+    private void jToggleButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton3ActionPerformed
         mappingComponent.getFeatureCollection().removeFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().addFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().removeFeature(flurstueckeFeature);
-    }//GEN-LAST:event_jToggleButton3ActionPerformed
+    }                                                                                  //GEN-LAST:event_jToggleButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
         if (Boolean.TRUE.equals(cidsBean.getProperty("status"))) {
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -952,23 +953,26 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     null);
             JXErrorPane.showDialog(this, errorInfo);
         }
-    }//GEN-LAST:event_jXHyperlink1ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList2MouseClicked
+    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList2MouseClicked
         if (evt.getClickCount() > 1) {
             final Object selObject = jList2.getSelectedValue();
             if (selObject instanceof String) {
+                final CidsBean cidsBean = alkisMap.get((String)selObject);
                 ComponentRegistry.getRegistry()
                         .getDescriptionPane()
-                        .gotoMetaObjectNode(new MetaObjectNode(alkisMap.get((String)selObject)), false);
+                        .gotoMetaObjectNode(new MetaObjectNode(cidsBean), false);
+                ObjectRendererUtils.switchToCismapMap();
+                ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, true);
             }
         }
-    }//GEN-LAST:event_jList2MouseClicked
+    }                                                                      //GEN-LAST:event_jList2MouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1011,26 +1015,44 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 final String gemarkung = (String)flurstueck.getProperty("gemarkung");
                 final String flur = (String)flurstueck.getProperty("flur");
                 final String zaehlernenner = (String)flurstueck.getProperty("flurstueck");
-
-                final String formattedZN;
+                final String zaehler;
+                final String nenner;
                 if (zaehlernenner.contains("/")) {
                     final String[] split = zaehlernenner.split("/");
                     if (split.length != 2) {
                         continue;
                     }
-                    final String zaehler = String.format("%05d", Integer.parseInt(split[0]));
-                    final String nenner = String.format("%04d", Integer.parseInt(split[1]));
-                    formattedZN = zaehler + "/" + nenner;
+                    zaehler = split[0];
+                    nenner = split[1];
                 } else {
-                    formattedZN = String.format("%05d", Integer.parseInt(zaehlernenner));
+                    zaehler = zaehlernenner;
+                    nenner = null;
                 }
-                final String alkisId = gemarkung + "-" + flur + "-" + formattedZN;
+
+                final String[] parts = VermessungsunterlagenUtils.createFlurstueckParts(
+                        gemarkung,
+                        flur,
+                        zaehler,
+                        nenner);
+                if ((parts == null) || (parts.length != 4)) {
+                    continue;
+                }
+                final String gemarkungPart = parts[0];
+                final String flurPart = parts[1];
+                final String zaehlerPart = parts[2];
+                final String nennerPart = parts[3];
+
+                final String name = gemarkungPart + "-" + flurPart + "-" + zaehlerPart + "/" + nennerPart;
 
                 new SwingWorker<CidsBean, Object>() {
 
                         @Override
                         protected CidsBean doInBackground() throws Exception {
-                            final CidsBean selBean = loadAlkisObject(alkisId);
+                            final CidsBean selBean = loadAlkisObject(
+                                    gemarkungPart,
+                                    flurPart,
+                                    zaehlerPart,
+                                    nennerPart);
                             return selBean;
                         }
 
@@ -1039,7 +1061,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                             try {
                                 final CidsBean cidsBean = (CidsBean)get();
                                 if (cidsBean != null) {
-                                    alkisMap.put(alkisId, cidsBean);
+                                    alkisMap.put(name, cidsBean);
                                 }
                             } catch (final Exception ex) {
                                 LOG.warn(ex, ex);
@@ -1048,7 +1070,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                             jList2.repaint();
                         }
                     }.execute();
-                ((DefaultListModel<String>)jList2.getModel()).addElement(alkisId);
+                ((DefaultListModel<String>)jList2.getModel()).addElement(name);
             }
         }
     }
@@ -1056,24 +1078,28 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     /**
      * DOCUMENT ME!
      *
-     * @param   alkisId  DOCUMENT ME!
+     * @param   gemarkung  alkisId DOCUMENT ME!
+     * @param   flur       DOCUMENT ME!
+     * @param   zaehler    DOCUMENT ME!
+     * @param   nenner     DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private CidsBean loadAlkisObject(final String alkisId) throws Exception {
-        final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
-                CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
-                CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
-                alkisId,
-                null);
+    private CidsBean loadAlkisObject(final String gemarkung,
+            final String flur,
+            final String zaehler,
+            final String nenner) throws Exception {
+        final MetaObject[] mos = FlurstueckFinder.getLWLandparcel(gemarkung, flur, zaehler, nenner);
 
-        final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), search);
-        if (!mons.isEmpty()) {
-            final MetaObjectNode mon = mons.iterator().next();
-            return SessionManager.getProxy().getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU").getBean();
+        if ((mos != null) && (mos.length > 0)) {
+            final MetaObject mo = mos[0];
+            final CidsBean kickerBean = SessionManager.getProxy()
+                        .getMetaObject(mo.getId(), mo.getClassID(), "WUNDA_BLAU")
+                        .getBean();
+
+            return (CidsBean)kickerBean.getProperty("fs_referenz");
         } else {
             return null;
         }
@@ -1208,18 +1234,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                             mappingComponent.setInteractionMode(MappingComponent.ZOOM);
                             // finally when all configurations are done ...
                             mappingComponent.unlock();
-//                        previewMap.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
-//
-//                                @Override
-//                                public void mouseClicked(final PInputEvent evt) {
-//                                    if (evt.getClickCount() > 1) {
-//                                        final CidsBean bean = cidsBean;
-//                                        ObjectRendererUtils.switchToCismapMap();
-//                                        ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
-//                                    }
-//                                }
-//                            });
-//                        previewMap.setInteractionMode("MUTE");
                         }
                     };
                 if (EventQueue.isDispatchThread()) {
@@ -1257,7 +1271,12 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     isSelected,
                     cellHasFocus); // To change body of generated methods, choose Tools | Templates.
 
-            component.setEnabled(alkisMap.containsKey((String)value));
+            if (alkisMap.containsKey((String)value)) {
+                component.setEnabled(true);
+                component.setText(alkisMap.get((String)value).toString());
+            } else {
+                component.setEnabled(false);
+            }
             return component;
         }
     }
