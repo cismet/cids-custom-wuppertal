@@ -28,12 +28,16 @@ import java.awt.Component;
 import java.awt.EventQueue;
 
 import java.io.IOException;
+import java.io.StringReader;
+
+import java.net.URL;
 
 import java.text.DateFormat;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
@@ -48,11 +52,12 @@ import javax.swing.SwingWorker;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenHelper;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenProperties;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenUtils;
-import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsUnterlagenPortalDownloadAction;
 import de.cismet.cids.custom.wunda_blau.search.server.KundeByVermessungsStellenNummerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -60,6 +65,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.BooleanToStringConverter;
 
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -77,6 +83,7 @@ import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.HttpOrFtpDownload;
 
 /**
  * DOCUMENT ME!
@@ -1013,15 +1020,44 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 final String jobname = DownloadManagerDialog.getInstance().getJobName();
                 final String schluessel = (String)cidsBean.getProperty("schluessel");
-                final Download download = new ByteArrayActionDownload(
-                        VermessungsUnterlagenPortalDownloadAction.TASK_NAME,
-                        schluessel,
-                        null,
-                        "Vermessungsunterlagen",
-                        jobname,
-                        schluessel,
-                        ".zip");
-                DownloadManager.instance().add(download);
+
+                try {
+                    final Object ret = SessionManager.getSession()
+                                .getConnection()
+                                .executeTask(SessionManager.getSession().getUser(),
+                                    GetServerResourceServerAction.TASK_NAME,
+                                    "WUNDA_BLAU",
+                                    WundaBlauServerResources.VERMESSUNGSUNTERLAGENPORTAL_PROPERTIES.getValue());
+                    if (ret instanceof Exception) {
+                        throw (Exception)ret;
+                    }
+                    final Properties properties = new Properties();
+                    properties.load(new StringReader((String)ret));
+
+                    final VermessungsunterlagenProperties props = new VermessungsunterlagenProperties(properties);
+                    final String filename = VermessungsunterlagenHelper.DIR_PREFIX + "_" + schluessel + ".zip";
+                    final URL url = new URL("ftp://" + props.getFtpLogin() + ":" + props.getFtpPass() + "@"
+                                    + props.getFtpHost()
+                                    + props.getFtpPath() + "/" + filename);
+                    final Download download = new HttpOrFtpDownload(
+                            url,
+                            "",
+                            jobname,
+                            "Vermessungsunterlagen",
+                            filename,
+                            ".zip");
+                    DownloadManager.instance().add(download);
+                } catch (final Exception ex) {
+                    final ErrorInfo errorInfo = new ErrorInfo(
+                            "Fehler",
+                            "Der Download konnte nicht gestartet werden.",
+                            null,
+                            null,
+                            ex,
+                            Level.ALL,
+                            null);
+                    JXErrorPane.showDialog(this, errorInfo);
+                }
             }
         } else if (Boolean.FALSE.equals(cidsBean.getProperty("status"))) {
             final String exception_json = (String)cidsBean.getProperty("exception_json");
@@ -1044,7 +1080,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     null);
             JXErrorPane.showDialog(this, errorInfo);
         }
-    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+    } //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
