@@ -1013,6 +1013,16 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+
+    public String getVermStelle() {
+        return vermStelle;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
@@ -1414,7 +1424,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     private void updateVermessungsstelle() {
         this.vermStelle = null;
-        bindingGroup.getBinding("vermStelle").refresh();
+        bindingGroup.getBinding("vermStelle").unbind();
 
         final String vermessungsstelle = (String)cidsBean.getProperty("vermessungsstelle");
         new SwingWorker<String, Void>() {
@@ -1443,7 +1453,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         setTitle(null);
                     } catch (final Exception ex) {
                     } finally {
-                        bindingGroup.getBinding("vermStelle").refresh();
+                        bindingGroup.getBinding("vermStelle").bind();
                     }
                 }
             }.execute();
