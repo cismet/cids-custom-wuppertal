@@ -29,10 +29,8 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.method.MethodManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.middleware.types.Node;
 
@@ -50,7 +48,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -61,8 +58,6 @@ import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -95,12 +90,15 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     TitleComponentProvider,
     FooterComponentProvider {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(FlurstueckRenderer.class);
+
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
     private String title;
     private final MappingComponent map;
-    private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel6;
     private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
@@ -165,7 +163,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                     final String f = fnr.substring(0, 6) + "-" + fnr.substring(6, fnr.length());
                     jxhFortfuehrungsnummer.setText(f);
                 } catch (Exception e) {
-                    log.warn("fnr problem: " + fnr, e);
+                    LOG.warn("fnr problem: " + fnr, e);
                     jxhFortfuehrungsnummer.setText(fnr);
                 }
             }
@@ -456,7 +454,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 //                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Fortfuehrungsnachweis: " + documentName, "fortfuehrungsnachweis_" + documentName, "pdf");
 //                DownloadManager.instance().add(download);
             } catch (Exception e) {
-                log.error("Hier muss noch ne Messagebox hin", e);
+                LOG.error("Hier muss noch ne Messagebox hin", e);
             }
         }
     }                                                                                          //GEN-LAST:event_jxhFortfuehrungsnummerActionPerformed
@@ -467,56 +465,24 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
-        final String z = String.valueOf(cidsBean.getProperty("fstnr_z"));
-        final String n = String.valueOf(cidsBean.getProperty("fstnr_n"));
-
-        final String zf = String.format("%05d", new Integer(z));
-        final String nf = String.format("%04d", new Integer(n));
-        String f = zf;
-        if (!nf.equals("0000")) {
-            f = f + "/" + nf;
-        }
-
-        final String fString = "05" + cidsBean.getProperty("gemarkungs_nr.gemarkungsnummer") + "-" + lblFlur.getText()
-                    + "-" + f;
-        log.fatal(fString);
-        final CidsAlkisSearchStatement stmnt = new CidsAlkisSearchStatement(
-                CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
-                CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
-                fString,
-                null);
-
-        final SwingWorker<Collection<Node>, Void> searchWorker;
-        searchWorker = new SwingWorker<Collection<Node>, Void>() {
+        final SwingWorker<MetaObjectNode, Void> searchWorker = new SwingWorker<MetaObjectNode, Void>() {
 
                 @Override
-                protected Collection<Node> doInBackground() throws Exception {
-                    return SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), stmnt);
+                protected MetaObjectNode doInBackground() throws Exception {
+                    return searchAlkisLandparcel(cidsBean);
                 }
 
                 @Override
                 protected void done() {
                     try {
                         if (!isCancelled()) {
-                            final Collection<Node> nodes = get();
-                            for (final Node n : nodes) {
-                                final MetaObjectNode mon = (MetaObjectNode)n;
-
-                                final String tabname = "alkis_landparcel";
-                                final MetaClass mc = ClassCacheMultiple.getMetaClass(mon.getDomain(), mon.getClassId());
-                                if (mc != null) {
-                                    ComponentRegistry.getRegistry()
-                                            .getDescriptionPane()
-                                            .gotoMetaObject(mc, mon.getObjectId(), fString);
-                                } else {
-                                    log.error("Could not find MetaClass for " + tabname);
-                                }
-                            }
+                            final MetaObjectNode mon = get();
+                            ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(mon);
                         }
                     } catch (InterruptedException ex) {
-                        log.warn(ex, ex);
+                        LOG.warn(ex, ex);
                     } catch (Exception ex) {
-                        log.error(ex, ex);
+                        LOG.error(ex, ex);
                     } finally {
 //                    lblBusy.setBusy(false);
 //                    btnAbort.setEnabled(false);
@@ -526,6 +492,39 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
             };
         CismetThreadPool.execute(searchWorker);
     } //GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static MetaObjectNode searchAlkisLandparcel(final CidsBean fsBean) throws Exception {
+        final String z = String.valueOf(fsBean.getProperty("fstnr_z"));
+        final String n = String.valueOf(fsBean.getProperty("fstnr_n"));
+
+        final String zf = String.format("%05d", new Integer(z));
+        final String nf = String.format("%04d", new Integer(n));
+        String f = zf;
+        if (!nf.equals("0000")) {
+            f = f + "/" + nf;
+        }
+
+        final String fString = "05" + fsBean.getProperty("gemarkungs_nr.gemarkungsnummer") + "-"
+                    + fsBean.getProperty("flur") + "-" + f;
+        final CidsAlkisSearchStatement stmnt = new CidsAlkisSearchStatement(
+                CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
+                CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
+                fString,
+                null);
+
+        final Collection<Node> nodes = SessionManager.getProxy()
+                    .customServerSearch(SessionManager.getSession().getUser(), stmnt);
+        return ((nodes != null) && !nodes.isEmpty()) ? (MetaObjectNode)nodes.iterator().next() : null;
+    }
 
     /**
      * DOCUMENT ME!

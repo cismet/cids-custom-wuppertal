@@ -20,6 +20,8 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import org.openide.util.Exceptions;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -32,6 +34,7 @@ import java.text.DateFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import javax.swing.DefaultListCellRenderer;
@@ -51,7 +54,6 @@ import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSear
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenUtils;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsUnterlagenPortalDownloadAction;
 import de.cismet.cids.custom.wunda_blau.search.server.KundeByVermessungsStellenNummerSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -104,7 +106,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private StyledFeature flurstueckeFeature;
     private String vermStelle;
 
-    private final Map<String, CidsBean> alkisMap = new HashMap<String, CidsBean>();
+    private final Map<String, CidsBean> fsMap = new HashMap<String, CidsBean>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -113,6 +115,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
@@ -224,6 +227,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         lblGeschBuchNummer1 = new javax.swing.JLabel();
         lblVermStelle1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         lblKatasterId1 = new javax.swing.JLabel();
         lblEingangsdatum1 = new javax.swing.JLabel();
         lblErstellungsdatumZip1 = new javax.swing.JLabel();
@@ -423,7 +427,10 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(jTextField1, gridBagConstraints);
 
@@ -455,7 +462,10 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(jXHyperlink1, gridBagConstraints);
 
@@ -472,8 +482,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeschBuchNummer1, gridBagConstraints);
 
@@ -490,10 +503,30 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblVermStelle1, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("(${vermStelle})"),
+                jLabel5,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "vermStelle");
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(jLabel5, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -508,8 +541,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblKatasterId1, gridBagConstraints);
 
@@ -527,8 +563,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblEingangsdatum1, gridBagConstraints);
 
@@ -546,8 +585,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblErstellungsdatumZip1, gridBagConstraints);
 
@@ -565,8 +607,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblMitGrenzniederschriften1, gridBagConstraints);
 
@@ -584,8 +629,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblMitPunktnummernreservierung1, gridBagConstraints);
 
@@ -602,8 +650,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblSaumAP1, gridBagConstraints);
 
@@ -625,8 +676,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(jScrollPane1, gridBagConstraints);
 
@@ -634,7 +688,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -1001,15 +1055,47 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         if (evt.getClickCount() > 1) {
             final Object selObject = jList2.getSelectedValue();
             if (selObject instanceof String) {
-                final CidsBean cidsBean = alkisMap.get((String)selObject);
-                ComponentRegistry.getRegistry()
-                        .getDescriptionPane()
-                        .gotoMetaObjectNode(new MetaObjectNode(cidsBean), false);
-                ObjectRendererUtils.switchToCismapMap();
-                ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, true);
+                final CidsBean cidsBean = fsMap.get((String)selObject);
+
+                if (cidsBean != null) {
+                    new SwingWorker<CidsBean, Object>() {
+
+                            @Override
+                            protected CidsBean doInBackground() throws Exception {
+                                if (cidsBean.getProperty("historisch") != null) {
+                                    return cidsBean;
+                                } else {
+                                    final MetaObjectNode mon = FlurstueckRenderer.searchAlkisLandparcel(cidsBean);
+                                    final MetaObject mo = SessionManager.getProxy()
+                                                .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                    return mo.getBean();
+                                }
+                            }
+
+                            @Override
+                            protected void done() {
+                                CidsBean cidsBean = null;
+                                try {
+                                    cidsBean = get();
+                                } catch (InterruptedException ex) {
+                                    Exceptions.printStackTrace(ex);
+                                } catch (ExecutionException ex) {
+                                    Exceptions.printStackTrace(ex);
+                                }
+
+                                if (cidsBean != null) {
+                                    ComponentRegistry.getRegistry()
+                                            .getDescriptionPane()
+                                            .gotoMetaObjectNode(new MetaObjectNode(cidsBean), false);
+                                    ObjectRendererUtils.switchToCismapMap();
+                                    ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, true);
+                                }
+                            }
+                        }.execute();
+                }
             }
         }
-    }                                                                      //GEN-LAST:event_jList2MouseClicked
+    } //GEN-LAST:event_jList2MouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1028,7 +1114,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        alkisMap.clear();
+        fsMap.clear();
         bindingGroup.unbind();
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
@@ -1086,7 +1172,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
                         @Override
                         protected CidsBean doInBackground() throws Exception {
-                            final CidsBean selBean = loadAlkisObject(
+                            final CidsBean selBean = loadFsObject(
                                     gemarkungPart,
                                     flurPart,
                                     zaehlerPart,
@@ -1099,7 +1185,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                             try {
                                 final CidsBean cidsBean = (CidsBean)get();
                                 if (cidsBean != null) {
-                                    alkisMap.put(name, cidsBean);
+                                    fsMap.put(name, cidsBean);
                                 }
                             } catch (final Exception ex) {
                                 LOG.warn(ex, ex);
@@ -1125,7 +1211,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private CidsBean loadAlkisObject(final String gemarkung,
+    private CidsBean loadFsObject(final String gemarkung,
             final String flur,
             final String zaehler,
             final String nenner) throws Exception {
@@ -1292,6 +1378,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     private void updateVermessungsstelle() {
         this.vermStelle = null;
+        bindingGroup.getBinding("vermStelle").refresh();
+
         final String vermessungsstelle = (String)cidsBean.getProperty("vermessungsstelle");
         new SwingWorker<String, Void>() {
 
@@ -1317,10 +1405,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         final String ret = get();
                         VermessungsunterlagenauftragRenderer.this.vermStelle = ret;
                         setTitle(null);
-                        if (ret != null) {
-                            lblVermStelle1.setText(vermessungsstelle + " (" + ret + ")");
-                        }
                     } catch (final Exception ex) {
+                    } finally {
+                        bindingGroup.getBinding("vermStelle").refresh();
                     }
                 }
             }.execute();
@@ -1350,9 +1437,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     isSelected,
                     cellHasFocus); // To change body of generated methods, choose Tools | Templates.
 
-            if (alkisMap.containsKey((String)value)) {
+            if (fsMap.containsKey((String)value)) {
                 component.setEnabled(true);
-                component.setText(alkisMap.get((String)value).toString());
+                component.setText(fsMap.get((String)value).toString());
             } else {
                 component.setEnabled(false);
             }
