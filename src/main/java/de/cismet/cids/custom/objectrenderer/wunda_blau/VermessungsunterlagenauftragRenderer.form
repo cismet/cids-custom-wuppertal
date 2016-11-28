@@ -242,7 +242,7 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="lblMitPunktnummernreservierung">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Mit Punktnummernreservierung:"/>
+                        <Property name="text" type="java.lang.String" value="Nur Punktnummernreservierung:"/>
                       </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -298,7 +298,7 @@
                       <BindingProperties>
                         <BindingProperty name="enabled" source="Form" sourcePath="${cidsBean.status != null}" target="jXHyperlink1" targetPath="enabled" updateStrategy="0" immediately="false"/>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.status}" target="jXHyperlink1" targetPath="text" updateStrategy="0" immediately="false">
-                          <Property name="nullValue" type="java.lang.String" value="-"/>
+                          <Property name="nullValue" type="java.lang.String" value="in Bearbeitung"/>
                           <Property name="incompletePathValue" type="java.lang.String" value="-"/>
                           <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                             <Connection code="new BooleanToStringConverter(&quot;OK - Download&quot;, &quot;Fehler&quot;, &quot;in Bearbeitung&quot;)" type="code"/>
