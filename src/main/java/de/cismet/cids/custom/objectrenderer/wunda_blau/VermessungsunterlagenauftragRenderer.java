@@ -982,33 +982,33 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         mappingComponent.getFeatureCollection().removeFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().removeFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().addFeature(flurstueckeFeature);
-    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton2ActionPerformed
+    private void jToggleButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         mappingComponent.getFeatureCollection().addFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().removeFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().removeFeature(flurstueckeFeature);
-    }                                                                                  //GEN-LAST:event_jToggleButton2ActionPerformed
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton3ActionPerformed
+    private void jToggleButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
         mappingComponent.getFeatureCollection().removeFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().addFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().removeFeature(flurstueckeFeature);
-    }                                                                                  //GEN-LAST:event_jToggleButton3ActionPerformed
+    }//GEN-LAST:event_jToggleButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1025,7 +1025,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         if (Boolean.TRUE.equals(cidsBean.getProperty("status"))) {
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -1090,14 +1090,14 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     null);
             JXErrorPane.showDialog(this, errorInfo);
         }
-    } //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList2MouseClicked
+    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList2MouseClicked
         if (evt.getClickCount() > 1) {
             final Object selObject = jList2.getSelectedValue();
             if (selObject instanceof String) {
@@ -1141,7 +1141,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 }
             }
         }
-    } //GEN-LAST:event_jList2MouseClicked
+    }//GEN-LAST:event_jList2MouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1370,7 +1370,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         if (cidsBean != null) {
             final Geometry combinedGeom;
             if ((flurstueckeFeature != null) && (flurstueckeFeature.getGeometry() != null)) {
-                combinedGeom = geometrieSaumFeature.getGeometry().union(flurstueckeFeature.getGeometry());
+                combinedGeom = geometrieSaumFeature.getGeometry().getEnvelope().union(flurstueckeFeature.getGeometry().getEnvelope());
                 jToggleButton1.setEnabled(true);
             } else {
                 combinedGeom = geometrieSaumFeature.getGeometry();
