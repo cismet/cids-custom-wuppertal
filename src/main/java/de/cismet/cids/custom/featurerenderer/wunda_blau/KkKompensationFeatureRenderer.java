@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
+import com.vividsolutions.jts.geom.Geometry;
 import org.apache.log4j.Logger;
 
 import java.awt.Color;
@@ -22,8 +23,20 @@ import javax.swing.JComponent;
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
 import de.cismet.cismap.commons.Refreshable;
+import de.cismet.cismap.commons.gui.piccolo.PFixedTexturePaint;
+import de.cismet.cismap.commons.gui.piccolo.SelectionAwareTexturePaint;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
+import edu.umd.cs.piccolo.PNode;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import javax.imageio.ImageIO;
+import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
@@ -36,9 +49,98 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(KkKompensationFeatureRenderer.class);
+    private static final Map<String, BufferedImage> IMAGE_MAP = new HashMap<String, BufferedImage>();
 
+    
+    private static enum KatType {ART, DACH, FORST, KOMP, PLANUNG}
+    private static enum SelectionType {SELECTED, UNSELECTED, HIGHLIGHTED}
     //~ Methods ----------------------------------------------------------------
 
+    static {
+        final URL urlArt = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffArtenschutz.png");
+        final URL urlArtSelected = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffArtenschutzSelected.png");
+        final URL urlArtHighlighted = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffArtenschutzHighlighted.png");
+        final URL urlDach = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffDachbegruenung.png");
+        final URL urlDachSelected = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffDachbegruenungSelected.png");
+        final URL urlDachHighlighted = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffDachbegruenungHighlighted.png");
+        final URL urlForst = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffForst.png");
+        final URL urlForstSelected = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffForstSelected.png");
+        final URL urlForstHighlighted = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffForstHighlighted.png");
+        final URL urlKomp = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffKompensation.png");
+        final URL urlKompSelected = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffKompensationSelected.png");
+        final URL urlKompHighlighted = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffKompensationHighlighted.png");
+        final URL urlPlanung = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffPlanung.png");
+        final URL urlPlanungSelected = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffPlanungSelected.png");
+        final URL urlPlanungHighlighted = KkKompensationFeatureRenderer.class.getResource("/de/cismet/cids/custom/featurerenderer/wunda_blau/SchraffPlanungHighlighted.png");
+
+        IMAGE_MAP.put(generateMapKey(KatType.ART, SelectionType.UNSELECTED), readImage(urlArt));
+        IMAGE_MAP.put(generateMapKey(KatType.ART, SelectionType.SELECTED), readImage(urlArtSelected));
+        IMAGE_MAP.put(generateMapKey(KatType.ART, SelectionType.HIGHLIGHTED), readImage(urlArtHighlighted));
+        
+        IMAGE_MAP.put(generateMapKey(KatType.DACH, SelectionType.UNSELECTED), readImage(urlDach));
+        IMAGE_MAP.put(generateMapKey(KatType.DACH, SelectionType.SELECTED), readImage(urlDachSelected));
+        IMAGE_MAP.put(generateMapKey(KatType.DACH, SelectionType.HIGHLIGHTED), readImage(urlDachHighlighted));
+        
+        IMAGE_MAP.put(generateMapKey(KatType.FORST, SelectionType.UNSELECTED), readImage(urlForst));
+        IMAGE_MAP.put(generateMapKey(KatType.FORST, SelectionType.SELECTED), readImage(urlForstSelected));
+        IMAGE_MAP.put(generateMapKey(KatType.FORST, SelectionType.HIGHLIGHTED), readImage(urlForstHighlighted));
+        
+        IMAGE_MAP.put(generateMapKey(KatType.KOMP, SelectionType.UNSELECTED), readImage(urlKomp));
+        IMAGE_MAP.put(generateMapKey(KatType.KOMP, SelectionType.SELECTED), readImage(urlKompSelected));
+        IMAGE_MAP.put(generateMapKey(KatType.KOMP, SelectionType.HIGHLIGHTED), readImage(urlKompHighlighted));
+        
+        IMAGE_MAP.put(generateMapKey(KatType.PLANUNG, SelectionType.UNSELECTED), readImage(urlPlanung));
+        IMAGE_MAP.put(generateMapKey(KatType.PLANUNG, SelectionType.SELECTED), readImage(urlPlanungSelected));
+        IMAGE_MAP.put(generateMapKey(KatType.PLANUNG, SelectionType.HIGHLIGHTED), readImage(urlPlanungHighlighted));
+    }
+    
+    /**
+     * create a BufferedImage from the given url
+     * 
+     * @param url the image url
+     * @return the generated image
+     */
+    private static BufferedImage readImage(URL url) {
+        try {
+            return  ImageIO.read(url);
+        } catch (IOException ex) {
+            LOG.error("Cannot load image: " + url, ex);
+            return null;
+        }
+    }
+    
+    /**
+     * Generates the key for the IMAGE_MAP
+     * 
+     * @param kat
+     * @param selection
+     * @return 
+     */
+    private static String generateMapKey(KatType kat, SelectionType selection) {
+        return kat.toString() + "-" + selection.toString();
+    }
+    
+    /**
+     * creates the texture paint for the given category type
+     * 
+     * @param type
+     * @return a texture paint or null, if the images for the texture paint do not exist
+     */
+    private Paint createTexturePaint(KatType type) {
+        Rectangle2D r = new Rectangle2D.Double(0.0, 0.0, 0.07, 0.07);
+
+        BufferedImage selected = IMAGE_MAP.get(generateMapKey(type, SelectionType.SELECTED));
+        BufferedImage highlighted = IMAGE_MAP.get(generateMapKey(type, SelectionType.HIGHLIGHTED));
+        BufferedImage unselected = IMAGE_MAP.get(generateMapKey(type, SelectionType.UNSELECTED));
+
+        if (selected != null && highlighted != null && unselected != null) {
+            return new SelectionAwareTexturePaint(unselected, highlighted, selected, r);
+        } else {
+            return null;
+        }
+    }
+    
+    
     @Override
     public float getTransparency() {
         return 0.7f;
@@ -46,29 +148,59 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public synchronized Paint getFillingStyle(final CidsFeature subFeature) {
-        final String katKlasse = getKatKlasse(subFeature);
+        final String katKlasse = getKatKlasse();
 
         if (katKlasse != null) {
             if (katKlasse.equals("1")) {
                 return Color.decode("#FF0000");
             } else if (katKlasse.equals("11")) {
-                return Color.decode("#FF0000");
+                Paint texturePaint = createTexturePaint(KatType.KOMP);
+                
+                if (texturePaint != null) {
+                    return texturePaint;
+                } else {
+                    return Color.decode("#FF0000");
+                }
             } else if (katKlasse.equals("2")) {
                 return Color.decode("#007300");
             } else if (katKlasse.equals("22")) {
-                return Color.decode("#007300");
+                Paint texturePaint = createTexturePaint(KatType.FORST);
+                
+                if (texturePaint != null) {
+                    return texturePaint;
+                } else {
+                    return Color.decode("#007300");
+                }
             } else if (katKlasse.equals("3")) {
                 return Color.decode("#FFFF80");
             } else if (katKlasse.equals("33")) {
-                return Color.decode("#FFFF80");
+                Paint texturePaint = createTexturePaint(KatType.DACH);
+                
+                if (texturePaint != null) {
+                    return texturePaint;
+                } else {
+                    return Color.decode("#FFFF80");
+                }
             } else if (katKlasse.equals("4")) {
                 return Color.decode("#FAC864");
             } else if (katKlasse.equals("44")) {
-                return Color.decode("#FAC864");
+                Paint texturePaint = createTexturePaint(KatType.PLANUNG);
+                
+                if (texturePaint != null) {
+                    return texturePaint;
+                } else {
+                    return Color.decode("#FAC864");
+                }
             } else if (katKlasse.equals("5")) {
                 return Color.decode("#C000C0");
             } else if (katKlasse.equals("55")) {
-                return Color.decode("#C000C0");
+                Paint texturePaint = createTexturePaint(KatType.ART);
+                
+                if (texturePaint != null) {
+                    return texturePaint;
+                } else {
+                    return Color.decode("#C000C0");
+                }
             }
         }
 
@@ -78,11 +210,9 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
     /**
      * DOCUMENT ME!
      *
-     * @param   subFeature  DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
-    private String getKatKlasse(final CidsFeature subFeature) {
+    private String getKatKlasse() {
         String katKlasse = null;
 
         try {
