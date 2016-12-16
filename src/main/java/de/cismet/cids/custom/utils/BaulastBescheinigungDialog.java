@@ -988,10 +988,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                         if (Thread.currentThread().isInterrupted()) {
                             throw new InterruptedException();
                         }
-                        boolean flurstueckPartOfStelle = true;
-                        final LandParcel[] landparcels = buchungsstelle.getLandParcel();
+                        boolean flurstueckPartOfStelle = false;
+                        final LandParcel[] landparcels = AlkisUtils.getLandparcelFromBuchungsstelle(buchungsstelle);
                         if (landparcels != null) {
-                            flurstueckPartOfStelle = false;
                             for (final LandParcel lp : landparcels) {
                                 if (((String)flurstueckBean.getProperty("alkis_id")).equals(
                                                 lp.getLandParcelCode())) {
