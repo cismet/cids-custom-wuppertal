@@ -309,7 +309,10 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
         panTitle.add(panTitleString, java.awt.BorderLayout.CENTER);
 
+        panFooter.setOpaque(false);
+
         jCheckBox1.setText("Dieser Auftrag ist ein Testfall");
+        jCheckBox1.setEnabled(false);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
