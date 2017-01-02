@@ -79,6 +79,7 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -91,7 +92,9 @@ import de.cismet.tools.gui.downloadmanager.HttpOrFtpDownload;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer, TitleComponentProvider {
+public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer,
+    TitleComponentProvider,
+    FooterComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -118,6 +121,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -165,6 +169,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JPanel panContent1;
     private javax.swing.JPanel panContent2;
     private javax.swing.JPanel panDetails4;
+    private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel panTitleString;
     private javax.swing.JPanel pnlMap;
@@ -213,6 +218,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         buttonGroup1 = new javax.swing.ButtonGroup();
+        panFooter = new javax.swing.JPanel();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         roundedPanel2 = new de.cismet.tools.gui.RoundedPanel();
@@ -301,6 +308,18 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         panTitleString.add(filler1, gridBagConstraints);
 
         panTitle.add(panTitleString, java.awt.BorderLayout.CENTER);
+
+        jCheckBox1.setText("Dieser Auftrag ist ein Testfall");
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.test}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
+        panFooter.add(jCheckBox1);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -422,7 +441,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jTextField1.setBorder(null);
         jTextField1.setOpaque(false);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
@@ -1461,6 +1480,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     }
                 }
             }.execute();
+    }
+
+    @Override
+    public JComponent getFooterComponent() {
+        return panFooter;
     }
 
     //~ Inner Classes ----------------------------------------------------------
