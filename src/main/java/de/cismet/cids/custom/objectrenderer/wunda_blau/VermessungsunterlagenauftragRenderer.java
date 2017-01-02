@@ -92,9 +92,7 @@ import de.cismet.tools.gui.downloadmanager.HttpOrFtpDownload;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer,
-    TitleComponentProvider,
-    FooterComponentProvider {
+public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer, TitleComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -169,7 +167,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JPanel panContent1;
     private javax.swing.JPanel panContent2;
     private javax.swing.JPanel panDetails4;
-    private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel panTitleString;
     private javax.swing.JPanel pnlMap;
@@ -218,8 +215,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         buttonGroup1 = new javax.swing.ButtonGroup();
-        panFooter = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         roundedPanel2 = new de.cismet.tools.gui.RoundedPanel();
@@ -274,6 +269,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jToggleButton1 = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
         jToggleButton3 = new javax.swing.JToggleButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.BorderLayout());
@@ -308,21 +304,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         panTitleString.add(filler1, gridBagConstraints);
 
         panTitle.add(panTitleString, java.awt.BorderLayout.CENTER);
-
-        panFooter.setOpaque(false);
-
-        jCheckBox1.setText("Dieser Auftrag ist ein Testfall");
-        jCheckBox1.setEnabled(false);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.test}"),
-                jCheckBox1,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
-        panFooter.add(jCheckBox1);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -444,7 +425,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jTextField1.setBorder(null);
         jTextField1.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
@@ -996,6 +977,23 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.weighty = 1.0;
         add(jPanel3, gridBagConstraints);
 
+        jCheckBox1.setText("Dieser Auftrag ist ein Testfall");
+        jCheckBox1.setEnabled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.test}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        add(jCheckBox1, gridBagConstraints);
+
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
@@ -1483,11 +1481,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     }
                 }
             }.execute();
-    }
-
-    @Override
-    public JComponent getFooterComponent() {
-        return panFooter;
     }
 
     //~ Inner Classes ----------------------------------------------------------
