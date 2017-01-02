@@ -211,9 +211,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         panTitleString = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -421,16 +419,12 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         panContent.add(lblVermessungsarten, gridBagConstraints);
 
         jTextField1.setEditable(false);
-        jTextField1.setBackground(null);
+        jTextField1.setBackground(null
+        );
         jTextField1.setBorder(null);
         jTextField1.setOpaque(false);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
-                jTextField1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"), jTextField1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -444,32 +438,19 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(jTextField1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status != null}"),
-                jXHyperlink1,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status != null}"), jXHyperlink1, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status}"),
-                jXHyperlink1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "status");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status}"), jXHyperlink1, org.jdesktop.beansbinding.BeanProperty.create("text"), "status");
         binding.setSourceNullValue("in Bearbeitung");
         binding.setSourceUnreadableValue("-");
         binding.setConverter(new BooleanToStringConverter("OK - Download", "Fehler", "in Bearbeitung"));
         bindingGroup.addBinding(binding);
 
         jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jXHyperlink1ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXHyperlink1ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -479,13 +460,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(jXHyperlink1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geschaeftsbuchnummer}"),
-                lblGeschBuchNummer1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "geschaeftsbuchnummer");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geschaeftsbuchnummer}"), lblGeschBuchNummer1, org.jdesktop.beansbinding.BeanProperty.create("text"), "geschaeftsbuchnummer");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -500,13 +475,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeschBuchNummer1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vermessungsstelle}"),
-                lblVermStelle1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "vermessungsstelle");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vermessungsstelle}"), lblVermStelle1, org.jdesktop.beansbinding.BeanProperty.create("text"), "vermessungsstelle");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -519,13 +488,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblVermStelle1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("(${vermStelle})"),
-                jLabel5,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "vermStelle");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("(${vermStelle})"), jLabel5, org.jdesktop.beansbinding.BeanProperty.create("text"), "vermStelle");
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
@@ -538,13 +501,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(jLabel5, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.katasteramtsid}"),
-                lblKatasterId1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "katasteramtsid");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.katasteramtsid}"), lblKatasterId1, org.jdesktop.beansbinding.BeanProperty.create("text"), "katasteramtsid");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -559,13 +516,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblKatasterId1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.timestamp}"),
-                lblEingangsdatum1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "timestamp");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.timestamp}"), lblEingangsdatum1, org.jdesktop.beansbinding.BeanProperty.create("text"), "timestamp");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
@@ -581,13 +532,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblEingangsdatum1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zip_timestamp}"),
-                lblErstellungsdatumZip1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "zip_timestamp");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zip_timestamp}"), lblErstellungsdatumZip1, org.jdesktop.beansbinding.BeanProperty.create("text"), "zip_timestamp");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
@@ -603,13 +548,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblErstellungsdatumZip1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mit_grenzniederschriften}"),
-                lblMitGrenzniederschriften1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "mit_grenzniederschriften");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mit_grenzniederschriften}"), lblMitGrenzniederschriften1, org.jdesktop.beansbinding.BeanProperty.create("text"), "mit_grenzniederschriften");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         binding.setConverter(new BooleanToStringConverter("ja", "nein", "-"));
@@ -625,13 +564,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblMitGrenzniederschriften1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nur_punktnummernreservierung}"),
-                lblMitPunktnummernreservierung1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "nur_punktnummernreservierung");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nur_punktnummernreservierung}"), lblMitPunktnummernreservierung1, org.jdesktop.beansbinding.BeanProperty.create("text"), "nur_punktnummernreservierung");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         binding.setConverter(new BooleanToStringConverter("ja", "nein", "-"));
@@ -647,13 +580,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblMitPunktnummernreservierung1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.saumap} m"),
-                lblSaumAP1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "saumap");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.saumap} m"), lblSaumAP1, org.jdesktop.beansbinding.BeanProperty.create("text"), "saumap");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -671,15 +598,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jScrollPane1.setMinimumSize(new java.awt.Dimension(200, 80));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(200, 80));
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.vermessungsarten}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJListBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                        this,
-                        eLProperty,
-                        jList1,
-                        "vermessungsarten");
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vermessungsarten}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, jList1, "vermessungsarten");
         bindingGroup.addBinding(jListBinding);
 
         jScrollPane1.setViewportView(jList1);
@@ -751,15 +671,14 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jScrollPane2.setMaximumSize(new java.awt.Dimension(258, 130));
         jScrollPane2.setMinimumSize(new java.awt.Dimension(258, 130));
 
-        jList2.setModel(new DefaultListModel<String>());
+        jList2.setModel(new DefaultListModel<String>()
+        );
         jList2.setCellRenderer(new AlkisFlurstueckInfoListCellRenderer());
         jList2.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    jList2MouseClicked(evt);
-                }
-            });
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList2MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jList2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -815,13 +734,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jList3.setCellRenderer(new AlkisFlurstueckInfoListCellRenderer());
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.punktnummern}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                eLProperty,
-                jList3);
-        jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create(
-                "${kilometerquadrat} - ${katasteramt} : ${anzahl}"));
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, jList3);
+        jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create("${kilometerquadrat} - ${katasteramt} : ${anzahl}"));
         bindingGroup.addBinding(jListBinding);
 
         jScrollPane3.setViewportView(jList3);
@@ -899,43 +813,32 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         buttonGroup1.add(jToggleButton1);
         jToggleButton1.setText("Antragsflurstücke");
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jToggleButton1ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
         jPanel5.add(jToggleButton1);
 
         buttonGroup1.add(jToggleButton2);
         jToggleButton2.setText("Verm.-Gebiet ohne Saum");
         jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jToggleButton2ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
         jPanel5.add(jToggleButton2);
 
         buttonGroup1.add(jToggleButton3);
         jToggleButton3.setText("Verm.-Gebiet mit Saum");
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.saum > 0}"),
-                jToggleButton3,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.saum > 0}"), jToggleButton3, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jToggleButton3ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton3ActionPerformed(evt);
+            }
+        });
         jPanel5.add(jToggleButton3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -980,12 +883,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jCheckBox1.setText("Dieser Auftrag ist ein Testfall");
         jCheckBox1.setEnabled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.test}"),
-                jCheckBox1,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.test}"), jCheckBox1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -995,40 +895,40 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         add(jCheckBox1, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         mappingComponent.getFeatureCollection().removeFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().removeFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().addFeature(flurstueckeFeature);
-    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton2ActionPerformed
+    private void jToggleButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         mappingComponent.getFeatureCollection().addFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().removeFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().removeFeature(flurstueckeFeature);
-    }                                                                                  //GEN-LAST:event_jToggleButton2ActionPerformed
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton3ActionPerformed
+    private void jToggleButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
         mappingComponent.getFeatureCollection().removeFeature(geometrieFeature);
         mappingComponent.getFeatureCollection().addFeature(geometrieSaumFeature);
         mappingComponent.getFeatureCollection().removeFeature(flurstueckeFeature);
-    }                                                                                  //GEN-LAST:event_jToggleButton3ActionPerformed
+    }//GEN-LAST:event_jToggleButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1045,7 +945,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         if (Boolean.TRUE.equals(cidsBean.getProperty("status"))) {
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -1110,14 +1010,14 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     null);
             JXErrorPane.showDialog(this, errorInfo);
         }
-    } //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList2MouseClicked
+    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList2MouseClicked
         if (evt.getClickCount() > 1) {
             final Object selObject = jList2.getSelectedValue();
             if (selObject instanceof String) {
@@ -1161,7 +1061,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 }
             }
         }
-    } //GEN-LAST:event_jList2MouseClicked
+    }//GEN-LAST:event_jList2MouseClicked
 
     /**
      * DOCUMENT ME!
