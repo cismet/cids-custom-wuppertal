@@ -848,7 +848,6 @@
     <Component class="javax.swing.JCheckBox" name="jCheckBox1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Dieser Auftrag ist ein Testfall"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <BindingProperties>
         <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.test}" target="jCheckBox1" targetPath="selected" updateStrategy="0" immediately="false">
@@ -856,6 +855,9 @@
           <Property name="incompletePathValue" type="boolean" value="false"/>
         </BindingProperty>
       </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox1ActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="0" insetsBottom="10" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
