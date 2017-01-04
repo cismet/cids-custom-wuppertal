@@ -37,14 +37,16 @@ import de.cismet.tools.Static2DTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Fs_bestellungIconFactory implements CidsTreeObjectIconFactory {
+public class VermessungsunterlagenauftragIconFactory implements CidsTreeObjectIconFactory {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            Fs_bestellungIconFactory.class);
-    private static final ImageIcon FALLBACK = new ImageIcon(Fs_bestellungIconFactory.class.getResource(
-                "/res/16/FsBestellungGrau.png"));
+            VermessungsunterlagenauftragIconFactory.class);
+    private static final ImageIcon ICON = new ImageIcon(VermessungsunterlagenauftragIconFactory.class.getResource(
+                "/res/16/vermessungsunterlagenauftrag.png"));
+    private static final ImageIcon FALLBACK = new ImageIcon(VermessungsunterlagenauftragIconFactory.class.getResource(
+                "/res/16/vermessungsunterlagenauftrag_grau.png"));
 
     //~ Enums ------------------------------------------------------------------
 
@@ -57,7 +59,7 @@ public class Fs_bestellungIconFactory implements CidsTreeObjectIconFactory {
 
         //~ Enum constants -----------------------------------------------------
 
-        OPEN, ERROR
+        ERROR
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -67,7 +69,6 @@ public class Fs_bestellungIconFactory implements CidsTreeObjectIconFactory {
         new WeakHashMap<ObjectTreeNode, ExecutorService>();
     private final ExecutorService objectRetrievalExecutor = Executors.newFixedThreadPool(15);
 
-    private final ImageIcon OPEN_ICON;
     private final ImageIcon ERROR_ICON;
 
     //~ Constructors -----------------------------------------------------------
@@ -75,11 +76,9 @@ public class Fs_bestellungIconFactory implements CidsTreeObjectIconFactory {
     /**
      * Creates a new Alb_baulastIconFactory object.
      */
-    public Fs_bestellungIconFactory() {
-        OPEN_ICON = new ImageIcon(getClass().getResource(
-                    "/res/16/FsBestellung_overlay_error.png"));
+    public VermessungsunterlagenauftragIconFactory() {
         ERROR_ICON = new ImageIcon(getClass().getResource(
-                    "/res/16/FsBestellung_overlay_open.png"));
+                    "/res/16/vermessungsunterlagenauftrag_error.png"));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -130,20 +129,13 @@ public class Fs_bestellungIconFactory implements CidsTreeObjectIconFactory {
         if (node != null) {
             final MetaObject mo = node.getMetaObject(false);
             if (mo != null) {
-                final CidsBean bestellungBean = mo.getBean();
-                Icon result = node.getLeafIcon();
+                final CidsBean auftragBean = mo.getBean();
+                // Icon result = node.getLeafIcon();
+                Icon result = ICON;
 
-                final Overlay ol = getOverlayForBestellung(bestellungBean);
+                final Overlay ol = getOverlayForAuftrag(auftragBean);
                 if (ol != null) {
                     switch (ol) {
-                        case OPEN: {
-                            final Icon overlay = Static2DTools.createOverlayIcon(
-                                    OPEN_ICON,
-                                    result.getIconWidth(),
-                                    result.getIconHeight());
-                            result = Static2DTools.mergeIcons(result, overlay);
-                            break;
-                        }
                         case ERROR: {
                             final Icon overlay = Static2DTools.createOverlayIcon(
                                     ERROR_ICON,
@@ -220,46 +212,12 @@ public class Fs_bestellungIconFactory implements CidsTreeObjectIconFactory {
     /**
      * DOCUMENT ME!
      *
-     * @param   bestellung  DOCUMENT ME!
+     * @param   auftrag  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private static boolean isPostweg(final CidsBean bestellung) {
-        final Boolean postweg = (Boolean)bestellung.getProperty("postweg");
-        if (postweg == null) {
-            return false;
-        } else {
-            return postweg;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   bestellung  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static boolean isErledigt(final CidsBean bestellung) {
-        final Boolean erledigt = (Boolean)bestellung.getProperty("erledigt");
-        if (erledigt == null) {
-            return false;
-        } else {
-            return erledigt;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   bestellungBean  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static Overlay getOverlayForBestellung(final CidsBean bestellungBean) {
-        if (bestellungBean.getProperty("fehler") != null) {
-            return Overlay.OPEN;
-        } else if (isPostweg(bestellungBean) && !isErledigt(bestellungBean)) {
+    public static Overlay getOverlayForAuftrag(final CidsBean auftrag) {
+        if (Boolean.FALSE.equals(auftrag.getProperty("status"))) {
             return Overlay.ERROR;
         } else {
             return null;
