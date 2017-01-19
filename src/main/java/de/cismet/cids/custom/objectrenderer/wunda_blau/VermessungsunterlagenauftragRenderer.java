@@ -13,6 +13,7 @@ import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -103,6 +104,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
     //~ Instance fields --------------------------------------------------------
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     /** DOCUMENT ME! */
     private CidsBean cidsBean;
     private String title;
@@ -192,6 +195,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         mappingComponent = new MappingComponent();
         pnlMap.setLayout(new BorderLayout());
         pnlMap.add(mappingComponent, BorderLayout.CENTER);
+
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1101,7 +1106,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             Exception exception = null;
             boolean parseError = false;
             try {
-                exception = new ObjectMapper().readValue(exception_json, Exception.class);
+                exception = objectMapper.readValue(exception_json, Exception.class);
             } catch (final IOException ex) {
                 exception = ex;
                 parseError = true;
