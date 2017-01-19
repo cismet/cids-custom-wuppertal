@@ -79,7 +79,6 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -1507,7 +1506,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         final Collection res = SessionManager.getProxy()
                                     .customServerSearch(SessionManager.getSession().getUser(), search);
                         if ((res == null) || res.isEmpty()) {
-                            return null;
+                            return "nicht registrierte Vermessungsstelle";
                         } else {
                             return ((VermessungsStellenSearchResult)res.iterator().next()).getName();
                         }
