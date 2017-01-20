@@ -64,7 +64,7 @@
         <dependency>
             <groupId>de.cismet.cismap</groupId>
             <artifactId>cismap-plugin</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>4.0</version>
         </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>
@@ -89,18 +89,18 @@
         <dependency>
             <groupId>de.cismet.cids.custom.wupp.server</groupId>
             <artifactId>cids-custom-server-wuppertal</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>4.0</version>
         </dependency>
         <dependency>
             <groupId>de.cismet.cids.navigator.plugin</groupId>
             <artifactId>wf-akuk</artifactId>
-            <version>2.0-SNAPSHOT</version>        
+            <version>4.0</version>        
         </dependency>
         <dependency>
             <groupId>de.cismet.commons</groupId>
             <artifactId>cismap-scale-generator</artifactId>
             <scope>runtime</scope>
-            <version>2.0-SNAPSHOT</version>
+            <version>4.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>de.cismet</groupId>
             <artifactId>jgrid</artifactId>
-            <version>0.4-SNAPSHOT</version>
+            <version>4.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -157,7 +157,6 @@
         </plugins>
     </build>
 
-
     <profiles>
         <profile>
             <id>default-tools.jar</id>
@@ -195,8 +194,7 @@
                 </dependency>
             </dependencies>
         </profile>
-    </profiles>
-    
+    </profiles>  
 </project>
 
 
