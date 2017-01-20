@@ -33,6 +33,6 @@ public class Alb_baulastToStringConverter extends CustomToStringConverter {
         if (laufendeNummerObj == null) {
             laufendeNummerObj = "keine laufende Nummer";
         }
-        return blattObj + " / " + laufendeNummerObj;
+        return blattObj + "/" + laufendeNummerObj;
     }
 }

@@ -24,21 +24,28 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblLocationDescription" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lblData" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblENr" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lblSignature" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lblHighlight" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblENr" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblLocationDescription" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lblDataSources" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="txtHighlight" max="32767" attributes="0"/>
-                  <Component id="txtSignature" max="32767" attributes="0"/>
-                  <Component id="txtENr" max="32767" attributes="0"/>
-                  <Component id="txtLocationDescription" max="32767" attributes="0"/>
-                  <Component id="cboData" alignment="0" pref="164" max="32767" attributes="0"/>
-                  <Component id="jScrollPane2" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="txtLocationDescription" max="32767" attributes="0"/>
+                          <Component id="txtSignature" max="32767" attributes="0"/>
+                          <Component id="txtENr" max="32767" attributes="0"/>
+                          <Component id="cboData" alignment="0" pref="198" max="32767" attributes="0"/>
+                          <Component id="txtHighlight" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -47,16 +54,6 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblHighlight" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtHighlight" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblSignature" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtSignature" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblENr" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -68,15 +65,25 @@
                   <Component id="txtLocationDescription" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="cboData" max="32767" attributes="0"/>
-                  <Component id="lblData" min="-2" pref="27" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblSignature" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtSignature" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblHighlight" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtHighlight" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="cboData" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblData" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="lblDataSources" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="106" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane2" max="32767" attributes="0"/>
               </Group>

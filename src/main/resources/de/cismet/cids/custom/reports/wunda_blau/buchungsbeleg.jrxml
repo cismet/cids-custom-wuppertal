@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="kundeBean" class="de.cismet.cids.dynamics.CidsBean"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/gbaatz/git/210-cids-custom-wuppertal/src/main/resources/de/cismet/cids/custom/reports/wunda_blau/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="billingBeans_mwst0" class="java.util.Collection"/>
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="till" class="java.util.Date"/>
+	<parameter name="billingBeans_mwst19" class="java.util.Collection"/>
+	<parameter name="mwst_0" class="java.lang.Double"/>
+	<parameter name="netto_summe_0" class="java.math.BigDecimal"/>
+	<parameter name="brutto_summe_0" class="java.math.BigDecimal"/>
+	<parameter name="mwst_19" class="java.lang.Double"/>
+	<parameter name="netto_summe_19" class="java.math.BigDecimal"/>
+	<parameter name="brutto_summe_19" class="java.math.BigDecimal"/>
+	<parameter name="end_summe" class="java.math.BigDecimal"/>
+	<parameter name="isRechnungsanlage" class="java.lang.Boolean"/>
+	<parameter name="amountTotalDownloads" class="java.lang.Integer"/>
+	<parameter name="amountWithCosts" class="java.lang.Integer"/>
+	<parameter name="amountWithoutCosts" class="java.lang.Integer"/>
+	<parameter name="amountVUamtlicherLageplan" class="java.lang.Integer"/>
+	<parameter name="amountVUhoheitlicheVermessung" class="java.lang.Integer"/>
+	<parameter name="amountVUsonstige" class="java.lang.Integer"/>
+	<parameter name="amountVUamtlicherLageplanGB" class="java.lang.Integer"/>
+	<parameter name="amountVUhoheitlicheVermessungGB" class="java.lang.Integer"/>
+	<parameter name="amountVUsonstigeGB" class="java.lang.Integer"/>
+	<parameter name="mwstValue" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="360" splitType="Stretch">
+			<textField>
+				<reportElement x="142" y="67" width="413" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{kundeBean}.getProperty("name")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="142" y="87" width="413" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{kundeBean}.getProperty("vertragskennzeichen")]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="142" y="107" width="63" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField pattern="- dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="205" y="107" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{till}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement x="0" y="135" width="555" height="198">
+					<printWhenExpression><![CDATA[$P{isRechnungsanlage}]]></printWhenExpression>
+				</reportElement>
+				<textField>
+					<reportElement x="176" y="21" width="139" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountTotalDownloads}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="176" y="41" width="139" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWithCosts}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="176" y="61" width="139" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWithoutCosts}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="228" y="119" width="87" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUamtlicherLageplan}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="228" y="139" width="87" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUhoheitlicheVermessung}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="228" y="159" width="87" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUsonstige}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="21" width="174" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["gesamt (ohne Wiederverkauf):"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="61" width="174" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["kostenfrei:"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="41" width="174" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["kostenpflichtig:"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="119" width="174" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["VU amtlicher Lageplan (VU aL):"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="159" width="174" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["VU sonstige"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="139" width="174" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["VU hoheitliche Vermessung (VU hV):"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="317" y="119" width="85" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUamtlicherLageplanGB}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="317" y="139" width="85" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUhoheitlicheVermessungGB}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="317" y="159" width="85" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUsonstigeGB}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="526" y="61" width="29" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["GB"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="1" width="555" height="20" backcolor="#CCCCCC"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anzahl Downloads]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="92" width="228" height="27" backcolor="#CCCCCC"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Verwendungszwecke]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="228" y="92" width="87" height="27" backcolor="#CCCCCC"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anzahl
+Downloads]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="315" y="92" width="87" height="27" backcolor="#CCCCCC"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anzahl
+GB-Nr.]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="40" width="315" height="1"/>
+				</line>
+				<line>
+					<reportElement x="0" y="60" width="315" height="1"/>
+				</line>
+				<line>
+					<reportElement x="0" y="80" width="315" height="1"/>
+				</line>
+				<rectangle>
+					<reportElement x="402" y="92" width="153" height="27" forecolor="#FFFFFF" backcolor="#CCCCCC"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</rectangle>
+				<line>
+					<reportElement x="0" y="139" width="402" height="1"/>
+				</line>
+				<line>
+					<reportElement x="0" y="159" width="402" height="1"/>
+				</line>
+				<line>
+					<reportElement x="0" y="179" width="402" height="1"/>
+				</line>
+				<textField>
+					<reportElement x="443" y="155" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{mwstValue}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement x="0" y="67" width="131" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kunde:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="87" width="131" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vertragsnummer:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="107" width="131" height="20" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abrechnungszeitraum:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="180" height="20"/>
+				<textElement/>
+				<text><![CDATA[Stadt Wuppertal, Geodatenzentrum]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="32" width="555" height="27"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Online-Zugriff auf WuNDa-ALWIS: Abrechnung Downloads]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="4" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="92" splitType="Stretch">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="44" width="555" height="44"/>
+				<subreportParameter name="mwst">
+					<subreportParameterExpression><![CDATA[$P{mwst_19}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="brutto_summe">
+					<subreportParameterExpression><![CDATA[$P{brutto_summe_19}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="total_netto_summe">
+					<subreportParameterExpression><![CDATA[$P{netto_summe_19}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((Collection)$P{billingBeans_mwst19})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/reports/wunda_blau/buchungsbeleg_mwst.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="44"/>
+				<subreportParameter name="mwst">
+					<subreportParameterExpression><![CDATA[$P{mwst_0}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="brutto_summe">
+					<subreportParameterExpression><![CDATA[$P{brutto_summe_0}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="total_netto_summe">
+					<subreportParameterExpression><![CDATA[$P{netto_summe_0}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((Collection)$P{billingBeans_mwst0})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/reports/wunda_blau/buchungsbeleg_mwst.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{end_summe}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

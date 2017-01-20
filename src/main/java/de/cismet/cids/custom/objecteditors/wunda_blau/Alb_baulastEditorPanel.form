@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
@@ -135,7 +135,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,91,0,0,2,95"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,107,0,0,2,95"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -232,8 +232,12 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Beg&#xfc;nstigte Flurst&#xfc;cke"/>
                   </Properties>
+                  <BindingProperties>
+                    <BindingProperty name="text" source="lstFlurstueckeBeguenstigt" sourcePath="Beg&#xfc;nstigte Flurst&#xfc;cke (${model.size})" target="lblHeadBegFlurstuecke" targetPath="text" updateStrategy="0" immediately="false">
+                      <Property name="name" type="java.lang.String" value="begFstckBinding"/>
+                    </BindingProperty>
+                  </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                       <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -386,8 +390,12 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Belastete Flurst&#xfc;cke"/>
                   </Properties>
+                  <BindingProperties>
+                    <BindingProperty name="text" source="lstFlurstueckeBelastet" sourcePath="Belastete Flurst&#xfc;cke (${model.size})" target="lblHeadBelFlurstuecke" targetPath="text" updateStrategy="0" immediately="false">
+                      <Property name="name" type="java.lang.String" value="belFstckBinding"/>
+                    </BindingProperty>
+                  </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                       <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -493,6 +501,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Befristungsdatum:"/>
               </Properties>
+              <BindingProperties>
+                <BindingProperty name="opaque" source="Form" sourcePath="${cidsBean.befristungsdatum}!=null" target="lblDescBefristungsdatum" targetPath="opaque" updateStrategy="0" immediately="false"/>
+              </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                   <GridBagConstraints gridX="0" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
@@ -519,30 +530,6 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblDescTextblatt">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Textblatt:"/>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="0" gridY="6" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtTextblatt">
-              <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.textblatt}" target="txtTextblatt" targetPath="text" updateStrategy="0" immediately="false">
-                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                  <Property name="nullValue" type="java.lang.String" value="nicht verf&#xfc;gbar"/>
-                  <Property name="incompletePathValue" type="java.lang.String" value=""/>
-                </BindingProperty>
-              </BindingProperties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="6" gridWidth="6" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="6" insetsLeft="6" insetsBottom="6" insetsRight="6" anchor="17" weightX="1.0" weightY="0.0"/>
-                </Constraint>
-              </Constraints>
-            </Component>
             <Component class="javax.swing.JTextField" name="txtLaufendeNr">
               <Properties>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -556,11 +543,7 @@
                 </Property>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.laufende_nummer}" target="txtLaufendeNr" targetPath="text" updateStrategy="0" immediately="false">
-                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                  <Property name="nullValue" type="java.lang.String" value="nicht verf&#xfc;gbar"/>
-                  <Property name="incompletePathValue" type="java.lang.String" value=""/>
-                </BindingProperty>
+                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.laufende_nummer}" target="txtLaufendeNr" targetPath="text" updateStrategy="0" immediately="false"/>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -568,35 +551,9 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblDescLageplan">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Lageplan:"/>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="0" gridY="7" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtLageplan">
+            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="bdcLoeschungsdatum">
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.lageplan}" target="txtLageplan" targetPath="text" updateStrategy="0" immediately="false">
-                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                  <Property name="nullValue" type="java.lang.String" value="nicht verf&#xfc;gbar"/>
-                  <Property name="incompletePathValue" type="java.lang.String" value=""/>
-                </BindingProperty>
-              </BindingProperties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="7" gridWidth="6" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="1.0" weightY="0.0"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="defaultBindableDateChooser4">
-              <BindingProperties>
-                <BindingProperty name="date" source="Form" sourcePath="${cidsBean.loeschungsdatum}" target="defaultBindableDateChooser4" targetPath="date" updateStrategy="0" immediately="false">
-                  <Property name="nullValue" type="java.util.Date" value="null"/>
-                  <Property name="incompletePathValue" type="java.util.Date" value="null"/>
+                <BindingProperty name="date" source="Form" sourcePath="${cidsBean.loeschungsdatum}" target="bdcLoeschungsdatum" targetPath="date" updateStrategy="0" immediately="false">
                   <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.ComponentChooserEditor">
                     <ComponentRef name="sqlDateToUtilDateConverter"/>
                   </Property>
@@ -608,9 +565,9 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="defaultBindableDateChooser1">
+            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="bdcEintragungsdatum">
               <BindingProperties>
-                <BindingProperty name="date" source="Form" sourcePath="${cidsBean.eintragungsdatum}" target="defaultBindableDateChooser1" targetPath="date" updateStrategy="0" immediately="false">
+                <BindingProperty name="date" source="Form" sourcePath="${cidsBean.eintragungsdatum}" target="bdcEintragungsdatum" targetPath="date" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="java.util.Date" value="null"/>
                   <Property name="incompletePathValue" type="java.util.Date" value="null"/>
                   <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.ComponentChooserEditor">
@@ -624,27 +581,26 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="defaultBindableDateChooser2">
+            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="bdcBefristungsdatum">
               <BindingProperties>
-                <BindingProperty name="date" source="Form" sourcePath="${cidsBean.befristungsdatum}" target="defaultBindableDateChooser2" targetPath="date" updateStrategy="0" immediately="false">
-                  <Property name="nullValue" type="java.util.Date" value="null"/>
-                  <Property name="incompletePathValue" type="java.util.Date" value="null"/>
+                <BindingProperty name="date" source="Form" sourcePath="${cidsBean.befristungsdatum}" target="bdcBefristungsdatum" targetPath="date" updateStrategy="0" immediately="false">
                   <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.ComponentChooserEditor">
                     <ComponentRef name="sqlDateToUtilDateConverter"/>
                   </Property>
                 </BindingProperty>
               </BindingProperties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bdcBefristungsdatumActionPerformed"/>
+              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                   <GridBagConstraints gridX="1" gridY="3" gridWidth="6" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="defaultBindableDateChooser3">
+            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="bdcGeschlossenAm">
               <BindingProperties>
-                <BindingProperty name="date" source="Form" sourcePath="${cidsBean.geschlossen_am}" target="defaultBindableDateChooser3" targetPath="date" updateStrategy="0" immediately="false">
-                  <Property name="nullValue" type="java.util.Date" value="null"/>
-                  <Property name="incompletePathValue" type="java.util.Date" value="null"/>
+                <BindingProperty name="date" source="Form" sourcePath="${cidsBean.geschlossen_am}" target="bdcGeschlossenAm" targetPath="date" updateStrategy="0" immediately="false">
                   <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.ComponentChooserEditor">
                     <ComponentRef name="sqlDateToUtilDateConverter"/>
                   </Property>
@@ -713,7 +669,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="0" gridY="8" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="18" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="0" gridY="6" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="18" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -734,7 +690,7 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="8" gridWidth="5" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.1" weightY="1.0"/>
+                  <GridBagConstraints gridX="1" gridY="6" gridWidth="5" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.1" weightY="1.0"/>
                 </Constraint>
               </Constraints>
 
@@ -758,7 +714,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="6" gridY="8" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="6" gridY="6" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
 
@@ -842,17 +798,14 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblLetzteAenderung">
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.pruefdatum}" target="lblLetzteAenderung" targetPath="text" updateStrategy="0" immediately="false">
+                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.pruefkommentar}" target="lblLetzteAenderung" targetPath="text" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="java.lang.String" value=""/>
                   <Property name="incompletePathValue" type="java.lang.String" value=""/>
-                  <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="DATE_TO_STRING" type="code"/>
-                  </Property>
                 </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="5" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="11" insetsLeft="6" insetsBottom="6" insetsRight="6" anchor="17" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="5" gridY="1" gridWidth="2" gridHeight="1" fill="3" ipadX="0" ipadY="0" insetsTop="11" insetsLeft="6" insetsBottom="6" insetsRight="6" anchor="17" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>

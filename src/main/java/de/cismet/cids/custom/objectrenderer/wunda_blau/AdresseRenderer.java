@@ -7,45 +7,22 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import com.vividsolutions.jts.geom.Geometry;
+import javax.swing.JPanel;
 
-import de.cismet.cids.annotations.CidsAttribute;
+import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.custom.deprecated.JLoadDots;
-
-import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 /**
- * de.cismet.cids.objectrenderer.CoolAdressenRenderer.
+ * DOCUMENT ME!
  *
- * @author   cschmidt
- * @author   nh
  * @version  $Revision$, $Date$
  */
-public class AdresseRenderer extends BlurredMapObjectRenderer {
+public class AdresseRenderer extends JPanel implements CidsBeanRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("Strasse.Name")
-    public String strasse = new String("");
-
-    @CidsAttribute("Hausnummer")
-    public String hausnummer = new String("");
-
-    @CidsAttribute("Segment")
-    public Integer segment;
-
-    @CidsAttribute("Baublock")
-    public Integer baublock;
-
-    @CidsAttribute("Postleitzahl")
-    public Integer plz;
-
-    @CidsAttribute("Kehrbezirk")
-    public String kehrbezirk;
-
-    @CidsAttribute("Georeferenz.GEO_STRING")
-    public Geometry geom = null;
+    private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -54,18 +31,16 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblBaublock;
     private javax.swing.JLabel lblHausnummer;
     private javax.swing.JLabel lblKehrbezirk;
     private javax.swing.JLabel lblPostleitzahl;
     private javax.swing.JLabel lblSegment;
     private javax.swing.JLabel lblStrasse;
-    private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -75,60 +50,9 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
      */
     public AdresseRenderer() {
         initComponents();
-        setPanContent(panInhalt);
-        setPanInter(null);
-        setPanMap(panMap);
-        setPanTitle(panTitle);
-        setSpinner(panSpinner);
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public void assignSingle() {
-        if (geom != null) {
-            super.setGeometry(geom);
-        }
-
-        if (!strasse.equals("")) {
-            lblStrasse.setText(strasse);
-            lblTitle.setText(strasse);
-        } else {
-            jLabel1.setVisible(false);
-            lblStrasse.setVisible(false);
-        }
-        if (hausnummer != null) {
-            lblHausnummer.setText(hausnummer);
-            lblTitle.setText(lblTitle.getText() + " " + hausnummer);
-        } else {
-            jLabel2.setVisible(false);
-            lblHausnummer.setVisible(false);
-        }
-        if (plz != null) {
-            lblPostleitzahl.setText(plz.toString());
-        } else {
-            jLabel3.setVisible(false);
-            lblPostleitzahl.setVisible(false);
-        }
-        if (segment != null) {
-            lblSegment.setText(segment.toString());
-        } else {
-            jLabel4.setVisible(false);
-            lblSegment.setVisible(false);
-        }
-        if (baublock != null) {
-            lblBaublock.setText(baublock.toString());
-        } else {
-            jLabel5.setVisible(false);
-            lblBaublock.setVisible(false);
-        }
-        if (kehrbezirk != null) {
-            lblKehrbezirk.setText(kehrbezirk);
-        } else {
-            jLabel6.setVisible(false);
-            lblKehrbezirk.setVisible(false);
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -137,12 +61,9 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panTitle = new javax.swing.JPanel();
-        lblTitle = new javax.swing.JLabel();
-        panInter = new javax.swing.JPanel();
-        panMap = new javax.swing.JPanel();
-        panSpinner = new JLoadDots();
+        jPanel1 = new javax.swing.JPanel();
         panInhalt = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -156,87 +77,28 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         lblSegment = new javax.swing.JLabel();
         lblBaublock = new javax.swing.JLabel();
         lblKehrbezirk = new javax.swing.JLabel();
+        panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
 
         setMinimumSize(new java.awt.Dimension(313, 206));
         setOpaque(false);
         setPreferredSize(new java.awt.Dimension(313, 206));
         setLayout(new java.awt.BorderLayout());
 
-        panTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        panTitle.setOpaque(false);
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("Canvasstr.");
-
-        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
-        panTitle.setLayout(panTitleLayout);
-        panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    359,
-                    Short.MAX_VALUE)));
-        panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
-
-        add(panTitle, java.awt.BorderLayout.NORTH);
-
-        panInter.setOpaque(false);
-
-        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
-        panInter.setLayout(panInterLayout);
-        panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                469,
-                Short.MAX_VALUE));
-        panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                14,
-                Short.MAX_VALUE));
-
-        add(panInter, java.awt.BorderLayout.SOUTH);
-
-        panMap.setOpaque(false);
-        panMap.setLayout(new java.awt.GridBagLayout());
-
-        panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setOpaque(false);
-
-        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
-        panSpinner.setLayout(panSpinnerLayout);
-        panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-        panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-
-        panMap.add(panSpinner, new java.awt.GridBagConstraints());
-
-        add(panMap, java.awt.BorderLayout.CENTER);
-
-        panInhalt.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 15, 10, 20));
         panInhalt.setMinimumSize(new java.awt.Dimension(250, 150));
         panInhalt.setOpaque(false);
         panInhalt.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Strasse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Hausnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -245,7 +107,7 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel2, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Postleitzahl:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -254,7 +116,7 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Segment:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -263,7 +125,7 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel4, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Baublock:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -272,7 +134,7 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel5, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("Kehrbezirk:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -281,13 +143,27 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel6, gridBagConstraints);
 
-        lblStrasse.setText("Bergstrasse");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse.name}"),
+                lblStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblStrasse, gridBagConstraints);
 
-        lblHausnummer.setText("18");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
+                lblHausnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -295,7 +171,14 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblHausnummer, gridBagConstraints);
 
-        lblPostleitzahl.setText("66123");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.plz}"),
+                lblPostleitzahl,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -303,7 +186,14 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblPostleitzahl, gridBagConstraints);
 
-        lblSegment.setText("123/67");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.segment}"),
+                lblSegment,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -311,7 +201,14 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblSegment, gridBagConstraints);
 
-        lblBaublock.setText("5");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.baublock}"),
+                lblBaublock,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -319,7 +216,14 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblBaublock, gridBagConstraints);
 
-        lblKehrbezirk.setText("23");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kehrbezirk}"),
+                lblKehrbezirk,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -327,6 +231,64 @@ public class AdresseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblKehrbezirk, gridBagConstraints);
 
-        add(panInhalt, java.awt.BorderLayout.WEST);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
+        jPanel1.add(panInhalt, gridBagConstraints);
+
+        panPreviewMap.setMinimumSize(new java.awt.Dimension(100, 100));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        jPanel1.add(panPreviewMap, gridBagConstraints);
+
+        add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public CidsBean getCidsBean() {
+        return cidsBean;
+    }
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
+        if (cidsBean != null) {
+            this.cidsBean = cidsBean;
+            panPreviewMap.initMap(cidsBean, "umschreibendes_rechteck.geo_field");
+            bindingGroup.bind();
+        }
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
+
+    @Override
+    public String getTitle() {
+        String title = "";
+        final String strasse = (String)cidsBean.getProperty("strasse.name");
+        if (strasse != null) {
+            title += strasse;
+        }
+        final String hausnummer = (String)cidsBean.getProperty("hausnummer");
+        if (hausnummer != null) {
+            title += " " + hausnummer;
+        }
+        return title;
+    }
+
+    @Override
+    public void setTitle(final String title) {
+    }
 }

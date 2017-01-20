@@ -1,0 +1,2878 @@
+{
+    "modi":[{
+        "key":"selbst_oebvi",
+        "name":"Selbstentnahme (ÖbVI)",
+        "discounts":"true"
+    },
+    {
+        "key":"selbst_extern",
+        "name":"Selbstentnahme (extern)",
+        "discounts":"true"
+    },
+    {
+        "key":"geodatenzentrum",
+        "name":"Kundenauftrag Geodatenzentrum",
+        "discounts":"false"
+    },
+    {
+        "key":"r102",
+        "name":"Datenentnahme durch einen Mitarbeiter der Vermessungsabteilung (102.1) im Zuge eines eigenen Projektes von R102",
+        "discounts":"false"
+    }],
+    "productGroups":[{
+        "key":"ea",
+        "description":"Stück"
+    },{
+        "key":"eafifty",
+        "description":"Paket(e) mit max. 50 Punkten"
+    },{
+        "key":"eapkt_1000",
+        "description":"Punkte unrabattiert"
+    },{
+        "key":"eapkt_1001-10000",
+        "description":"Punkte 50% Rabatt"
+    },{
+        "key":"eapkt_10001-100000",
+        "description":"Punkte 75% Rabatt"
+    },{
+        "key":"eapkt_100001-1000000",
+        "description":"Punkte 87.5% Rabatt"
+    },{
+        "key":"eapkt_1000001",
+        "description":"Punkte 93.75% Rabatt"
+     },{
+        "key":"eakarte_a3",
+        "description":"Karte max. DIN A3"
+    },{
+        "key":"eakarte_a2-a0",
+        "description":"Karte DIN A2 - DIN A0"
+    },{
+        "key":"eadoc_a3",
+        "description":"Dokument(e) max. DIN A3"
+    },{
+        "key":"eadoc_a2-a0",
+        "description":"Dokument(e) DIN A2 - DIN A0"
+    },{
+        "key":"eaflst_1000",
+        "description":"Datensätze Flurstück unrabattiert"
+    },{
+        "key":"eaflst_1001-10000",
+        "description":"Datensätze Flurstück 50% Rabatt"
+    },{
+        "key":"eaflst_10001-100000",
+        "description":"Datensätze Flurstück 75% Rabatt"
+    },{
+        "key":"eaflst_100001-1000000",
+        "description":"Datensätze Flurstück 87.5% Rabatt"
+    },{
+        "key":"eaflst_1000001",
+        "description":"Datensätze Flurstück 93.75% Rabatt"
+    },{
+        "key":"eageb_1000",
+        "description":"Datensätze Gebäude unrabattiert"
+    },{
+        "key":"eageb_1001-10000",
+        "description":"Datensätze Gebäude 50% Rabatt"
+    },{
+        "key":"eageb_10001-100000",
+        "description":"Datensätze Gebäude 75% Rabatt"
+    },{
+        "key":"eageb_100001-1000000",
+        "description":"Datensätze Gebäude 87.5% Rabatt"
+    },{
+        "key":"eageb_1000001",
+        "description":"Datensätze Gebäude 93.75% Rabatt"
+    },{
+        "key":"eaeig_1000",
+        "description":"Datensätze Eigentümer unrabattiert"
+    },{
+        "key":"eaeig_1001-10000",
+        "description":"Datensätze Eigentümer 50% Rabatt"
+    },{
+        "key":"eaeig_10001-100000",
+        "description":"Datensätze Eigentümer 75% Rabatt"
+    },{
+        "key":"eaeig_100001-1000000",
+        "description":"Datensätze Eigentümer 87.5% Rabatt"
+    },{
+        "key":"eaeig_1000001",
+        "description":"Datensätze Eigentümer 93.75% Rabatt"
+    },{
+        "key":"eaqkm",
+        "description":"Quadratkilometer"
+	},{
+        "key":"ea_bla",
+        "description":"Baulast"
+	},{
+        "key":"ea_blab_pos_1",
+        "description":"Baulastbescheinigung positiv (je Grundstück)"
+	},{
+        "key":"ea_blab_pos_2",
+        "description":"Baulastbescheinigung positiv (je Grundstück)"
+	},{
+        "key":"ea_blab_pos_3",
+        "description":"Baulastbescheinigung positiv (je Grundstück)"
+	},{
+        "key":"ea_blab_neg",
+        "description":"Baulastbescheinigung negativ (je Grundstück)"
+	},{
+        "key":"ea_blab_neg_ab_10",
+        "description":"Baulastbescheinigung negativ (Maximalgebühr)"
+    }],
+     "usages":[{
+        "name":"Vermessungsunterlagen (amtlicher Lageplan TS 3)",
+        "key":"VU aL",
+        "description":"-"
+    },{
+        "name":"Vermessungsunterlagen (hoheitliche Vermessung TS 4)",
+        "key":"VU hV",
+        "description":"-"
+    },{
+        "name":"Vermessungsunterlagen (sonstige)",
+        "key":"VU s",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (einmalig)",
+        "key":"eigG",
+        "description":"-"
+    },{
+        "name":"Wiederverkauf (einmalig)",
+        "key":"WV ein",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (gebührenbefreit)",
+        "key":"eigG frei",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (bis 5 Arbeitsplätze)",
+        "key":"eigG_5",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (bis 20 Arbeitsplätze)",
+        "key":"eigG_20",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (bis 100 Arbeitsplätze)",
+        "key":"eigG_100",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (über 100 Arbeitsplätze)",
+        "key":"eigG_101",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (einmalig)",
+        "key":"GDZ",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (bis 5 Arbeitsplätze)",
+        "key":"GDZ_5",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (bis 20 Arbeitsplätze)",
+        "key":"GDZ_20",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (bis 100 Arbeitsplätze)",
+        "key":"GDZ_100",
+        "description":"-"
+    },{
+        "name":"Verkauf Geodatenzentrum (über 100 Arbeitsplätze)",
+        "key":"GDZ_101",
+        "description":"-"		
+		}],
+    "products":[{
+        "name":"Flurstücksnachweis",
+        "id":"fsnw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Flurstücke / Produkte / PDF-Produkte / Flurstücksnachweis und Aggregierender Renderer ALKIS-Flurstücke / PDF-Produkte / Flurstücksnachweis",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0			
+        },
+        "prices":{
+            "ea":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flurstücks- und Eigentumsnachweis (NRW)",
+        "id":"fsuenw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Flurstücke / Produkte / PDF-Produkte / Flurstücks- und Eigentumsnachweis (NRW) und Aggregierender Renderer ALKIS-Flurstücke / PDF-Produkte / Flurstücks- und Eigentumsnachweis NRW",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flurstücks- und Eigentumsnachweis (kommunal)",
+        "id":"fsuekom",
+        "description":"[x] Einzelobjektrenderer ALKIS-Flurstücke / Produkte / PDF-Produkte / Flurstücks- und Eigentumsnachweis (kommunal) und Aggregierender Renderer ALKIS-Flurstücke / PDF-Produkte / Flurstücks- und Eigentumsnachweis (kommunal)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":11.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Bestandsnachweis (NRW)",
+        "id":"benw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Buchungsblätter / Produkte / PDF-Produkte / Bestandsnachweis (NRW) und Aggregierender Renderer ALKIS-Buchungsblätter / PDF-Produkte / Bestandsnachweis (NRW)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":20.0
+        },
+        "mwst":0.0
+	},{
+        "name":"Bestandsnachweis stichtagsbezogen (NRW)",
+        "id":"bestnw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Buchungsblätter / Produkte / PDF-Produkte / Bestandsnachweis stichtagsbezogen (NRW) und Aggregierender Renderer ALKIS-Buchungsblätter / PDF-Produkte / Bestandsnachweis stichtagsbezogen (NRW)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Bestandsnachweis (kommunal)",
+        "id":"bekom",
+        "description":"[x] Einzelobjektrenderer ALKIS-Buchungsblätter / Produkte / PDF-Produkte / Bestandsnachweis (kommunal) und Aggregierender Renderer ALKIS-Buchungsblätter / PDF-Produkte / Bestandsnachweis (kommunal)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":22.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Grundstücksnachweis (NRW)",
+        "id":"grnw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Buchungsblätter / Produkte / PDF-Produkte / Grundstücksnachweis (NRW)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flurkarte (NRW) DIN A4",
+        "id":"fknw4",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flurkarte (NRW) DIN A3",
+        "id":"fknw3",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flurkarte (NRW) DIN A2",
+        "id":"fknw2",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":40.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flurkarte (NRW) DIN A1",
+        "id":"fknw1",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":40.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flurkarte (NRW) DIN A0",
+        "id":"fknw0",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":40.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A4",
+        "id":"skmekom4",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":22.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A3",
+        "id":"skmekom3",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":22.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A2",
+        "id":"skmekom2",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":44.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A1",
+        "id":"skmekom1",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":44.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A0",
+        "id":"skmekom0",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":44.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Schätzungskarte (NRW) DIN A4",
+        "id":"schknw4",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Schätzungskarte (NRW) DIN A3",
+        "id":"schknw3",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Schätzungskarte (NRW) DIN A2",
+        "id":"schknw2",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":40.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Schätzungskarte (NRW) DIN A1",
+        "id":"schknw1",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":40.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Schätzungskarte (NRW) DIN A0",
+        "id":"schknw0",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":40.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A4",
+        "id":"abknw4",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":15.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A3",
+        "id":"abknw3",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DIN3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":15.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A2",
+        "id":"abknw2",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A1",
+        "id":"abknw1",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A0",
+        "id":"abknw0",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte DIN A4",
+        "id":"skkom4",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":22.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte DIN A3",
+        "id":"skkom3",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":22.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte DIN A2",
+        "id":"skkom2",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":44.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte DIN A1",
+        "id":"skkom1",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":44.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Stadtgrundkarte DIN A0",
+        "id":"skkom0",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":44.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Punktliste (TEXT)",
+        "id":"pktlsttxt",
+        "description":"[x] ALKIS-Lagefestpunkte als Textdokument: Einzelobjektrenderer ALKIS-Punkte / Produkte / Textformat-Produkte / Punktliste und Aggregierender Renderer ALKIS-Punkte / Verfügbare Berichte / Punktliste (TEXT)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.0,
+            "VU s":0.5,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eapkt_1000":0.2,
+            "eapkt_1001-10000":0.1,
+            "eapkt_10001-100000":0.05,
+            "eapkt_100001-1000000":0.025,
+            "eapkt_1000001":0.0125
+        },
+        "mwst":0.0
+    },{
+        "name":"Punktnachweis (PDF)",
+        "id":"pktlstpdf",
+        "description":"[x] ALKIS-Lagefestpunkte als PDF-Dokument: Einzelobjektrenderer ALKIS-Punkte / Produkte / PDF-Produkte / Punktliste und Aggregierender Renderer ALKIS-Punkte / Verfügbare Berichte / Punktliste (PDF)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eafifty":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A4",
+        "id":"dgkkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":15.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A3",
+        "id":"dgkkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":15.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A2",
+        "id":"dgkkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A1",
+        "id":"dgkkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A0",
+        "id":"dgkkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Orthofoto DIN A4",
+        "id":"ofkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto DIN A3",
+        "id":"ofkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto DIN A2",
+        "id":"ofkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto DIN A1",
+        "id":"ofkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto DIN A0",
+        "id":"ofkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"NivP-Übersicht DIN A4",
+        "id":"nivpükom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"NivP-Übersicht DIN A3",
+        "id":"nivpükom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"NivP-Übersicht DIN A2",
+        "id":"nivpükom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"NivP-Übersicht DIN A1",
+        "id":"nivpükom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"NivP-Übersicht DIN A0",
+        "id":"nivpükom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"AP-Übersicht DIN A4",
+        "id":"apükom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"AP-Übersicht DIN A3",
+        "id":"apükom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"AP-Übersicht DIN A2",
+        "id":"apükom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"AP-Übersicht DIN A1",
+        "id":"apükom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"AP-Übersicht DIN A0",
+        "id":"apükom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A4",
+        "id":"pnükom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A3",
+        "id":"pnükom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A2",
+        "id":"pnükom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A1",
+        "id":"pnükom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A0",
+        "id":"pnükom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A4",
+        "id":"abkhkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
+    },{
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A3",
+        "id":"abkhkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
+    },{
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A2",
+        "id":"abkhkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A1",
+        "id":"abkhkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Amtliche Basiskarte mit Höhenlinien DIN A0",
+        "id":"abkhkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte ABK mit Höhenlinien; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A4",
+        "id":"skhkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A3",
+        "id":"skhkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A2",
+        "id":"skhkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A1",
+        "id":"skhkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A0",
+        "id":"skhkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A4",
+        "id":"ofkkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A3",
+        "id":"ofkkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A2",
+        "id":"ofkkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A1",
+        "id":"ofkkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A0",
+        "id":"ofkkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A4",
+        "id":"fnp4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":14.99
+        },
+        "mwst":0.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A3",
+        "id":"fnp3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a3":14.99
+        },
+        "mwst":0.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A2",
+        "id":"fnp2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A1",
+        "id":"fnp1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Flächennutzungsplan (FNP) DIN A0",
+        "id":"fnp0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkt FNP; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "eakarte_a2-a0":30.0
+        },
+        "mwst":0.0		
+    },{
+        "name":"AP-Karte",
+        "id":"appdf",
+        "description":"[x] Einzelobjektrenderer ALKIS-Punkte (für Aufnahmepunkte und Sonstige Vermessungspunkte) / Produkte / Öffnen [erst nach Umsetzung von bug tracker ID 2647] und Aggregierender Renderer ALKIS-Punkte / Verfügbare Berichte / AP-Karten (PDF) ",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Nivellement-Punkt",
+        "id":"nivppdf",
+        "description":"[x] Einzelobjektrenderer Nivellement-Punkte / Bericht erzeugen, Einzelobjektrenderer Nivellement-Punkte / Öffnen [erst nach Umsetzung von bug tracker ID 2650]  und Aggregierender Renderer Nivellement-Punkte / Bericht erzeugen",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.0,
+            "eigG_20":0.0,
+            "eigG_100":0.0,
+            "eigG_101":0.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Vermessungsriss",
+        "id":"vrpdf",
+        "description":"[x] Einzelobjektrenderer Vermessungsrisse / Dokumentauswahl: Vermessungsriss / Öffnen und Aggregierender Renderer Vermessungsrisse / Verfügbare Berichte / Vermessungsrisse [erst nach Umsetzung von bug tracker ID 2651]",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":10.0,
+            "eadoc_a3":10.0,
+            "eadoc_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Dokument Liegenschaftskatasterakte",
+        "id":"doklapdf",
+        "description":"[x] Einzelobjektrenderer Vermessungsrisse / Dokumentauswahl: Ergänzende Dokumente / Öffnen und Aggregierender Renderer Vermessungsrisse / Verfügbare Berichte / Ergänzende Dokumente [erst nach Umsetzung von bug tracker ID 2651]",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":0.75,
+            "eigG_20":0.75,
+            "eigG_100":0.75,
+            "eigG_101":0.75,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea":10.0,
+            "eadoc_a3":10.0,
+            "eadoc_a2-a0":20.0
+        },
+        "mwst":0.0
+    },{
+        "name":"NAS-Daten (mit Eigentümern)",
+        "id":"naskom",
+        "description":"[x] ALKIS-Datenausgabe NAS/DXF: NAS (komplett)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaflst_1000":1.98,
+            "eaflst_1001-10000":0.99,
+            "eaflst_10001-100000":0.495,
+            "eaflst_100001-1000000":0.2475,
+            "eaflst_1000001":0.12375,
+            "eageb_1000":1.8,
+            "eageb_1001-10000":0.9,
+            "eageb_10001-100000":0.45,
+            "eageb_100001-1000000":0.225,
+            "eageb_1000001":0.1125,
+            "eaeig_1000":0.9,
+            "eaeig_1001-10000":0.45,
+            "eaeig_10001-100000":0.225,
+            "eaeig_100001-1000000":0.1125,
+            "eaeig_1000001":0.05625
+        },
+        "mwst":0.0
+    },{
+        "name":"NAS-Daten (ohne Eigentümer)",
+        "id":"nasoeig",
+        "description":"# NAS-Datensatz ohne Eigentümer:  GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+			},
+        "prices":{
+            "eaflst_1000":1.98,
+            "eaflst_1001-10000":0.99,
+            "eaflst_10001-100000":0.495,
+            "eaflst_100001-1000000":0.2475,
+            "eaflst_1000001":0.12375,
+            "eageb_1000":1.8,
+            "eageb_1001-10000":0.9,
+            "eageb_10001-100000":0.45,
+            "eageb_100001-1000000":0.225,
+            "eageb_1000001":0.1125
+        },
+        "mwst":0.0
+    },{
+       "name":"NAS-Daten (nur Punkte)",
+        "id":"naspkt",
+        "description":"[x] ALKIS-Datenausgabe NAS/DXF: NAS (nur Punkte)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.0,
+            "VU s":0.5,
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eapkt_1000":0.2,
+            "eapkt_1001-10000":0.1,
+            "eapkt_10001-100000":0.05,
+            "eapkt_100001-1000000":0.025,
+            "eapkt_1000001":0.0125
+        },
+        "mwst":0.0
+    },{
+        "name":"Eigentümerliste (kommunal)",
+        "id":"eiglkom",
+        "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaflst_1000":0.45,
+            "eaflst_1001-10000":0.225,
+            "eaflst_10001-100000":0.1125,
+            "eaflst_100001-1000000":0.05625,
+            "eaflst_1000001":0.028125
+        },
+        "mwst":0.0
+    },{
+        "name":"DXF-Daten (Stadtgrundkarte kommunal)",
+        "id":"skmekomdxf",
+        "description":"[x] ALKIS-Datenausgabe NAS/DXF: DXF (Farbe) und DXF (Strichdarstellung)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaflst_1000":0.99,
+            "eaflst_1001-10000":0.495,
+            "eaflst_10001-100000":0.2475,
+            "eaflst_100001-1000000":0.12375,
+            "eaflst_1000001":0.061875,
+            "eageb_1000":0.9,
+            "eageb_1001-10000":0.45,
+            "eageb_10001-100000":0.225,
+            "eageb_100001-1000000":0.1125,
+            "eageb_1000001":0.05625
+        },
+        "mwst":0.0
+    },{
+        "name":"Rasterdaten (Stadtgrundkarte kommunal)",
+        "id":"skmekomtiff",
+        "description":"[x] ALKIS-Datenausgabe Raster/Vektor: Stadtgrundkarte mit kommunalen Ergänzungen farbig und grau, Karte für Feldvergleich Farbe und Grauwert (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaflst_1000":0.495,
+            "eaflst_1001-10000":0.2475,
+            "eaflst_10001-100000":0.12375,
+            "eaflst_100001-1000000":0.061875,
+            "eaflst_1000001":0.0309375,
+            "eageb_1000":0.45,
+            "eageb_1001-10000":0.225,
+            "eageb_10001-100000":0.1125,
+            "eageb_100001-1000000":0.05625,
+            "eageb_1000001":0.028125
+        },
+        "mwst":0.0
+    },{
+        "name":"Rasterdaten (DGK, ABK)",
+        "id":"abktiff",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe DGK und ABK (alle Produkte, alle Ausgabeformate, alle Auflösungen)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":7.5
+        },
+        "mwst":0.0
+    },{
+        "name":"Rasterdaten Stadtkarte",
+        "id":"sptiff",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Stadtkarte (alle Produkte, alle Ausgabeformate, alle Auflösungen)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":0.0
+        },
+        "mwst":19.0
+    },{
+        "name":"Rasterdaten Orthofoto (bis 10 cm Bodenauflösung)",
+        "id":"ortho5",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Orthofoto (alle Produkte, alle Ausgabeformate, Auflösungen 5 und 10 cm/Pixel)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":20.0
+        },
+        "mwst":19.0
+    },{
+        "name":"Rasterdaten Orthofoto (größer 10 cm Bodenauflösung)",
+        "id":"ortho15",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Orthofoto (alle Produkte, alle Ausgabeformate, Auflösungen 15 und 31 cm/Pixel)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":9.0
+        },
+        "mwst":19.0
+    },{
+        "name":"Vektordaten Höhenlinien (bis 1 m Äquidistanz)",
+        "id":"hoeli1",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkt 1m-Höhenlinie (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":5.0
+        },
+        "mwst":19.0
+    },{
+        "name":"Vektordaten Höhenlinien (größer 1 m Äquidistanz)",
+        "id":"hoeli5",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkte 5m- und 10m-Höhenlinie (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":2.5
+        },
+        "mwst":19.0
+    },{
+        "name":"DGM1",
+        "id":"dgm1",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkt 1m-Punktraster (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":80.0
+        },
+        "mwst":0.0
+    },{
+        "name":"DGM5",
+        "id":"dgm5",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkt 5m-Punktraster (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":30.0
+        },
+        "mwst":0.0
+    },{
+        "name":"DGM10",
+        "id":"dgm10",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkt 10m-Punktraster (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eaqkm":10.0
+        },
+        "mwst":0.0
+    },{
+        "name":"Vektordaten Höhenpunkte (terrestrisch)",
+        "id":"hoept",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Höhendaten, Produkte Regengeld-Dach- und Bodenpunkte (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "ea":0.015
+        },
+        "mwst":19.0
+    },{
+        "name":"Vektordaten Gebäudeumringe",
+        "id":"gebu",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Kataster, Produkt Wuppertaler Gebäude (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "eageb_1000":0.07,
+            "eageb_1001-10000":0.035,
+            "eageb_10001-100000":0.0175,
+            "eageb_100001-1000000":0.00875,
+            "eageb_1000001":0.004375
+		},
+        "mwst":0.0
+    },{
+        "name":"Vektordaten Flurstücksumringe",
+        "id":"flu",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Kataster, Produkt Wuppertaler Flurstücke (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+			"eaflst_1000":0.25,
+            "eaflst_1001-10000":0.125,
+            "eaflst_10001-100000":0.0625,
+            "eaflst_100001-1000000":0.03125,
+            "eaflst_1000001":0.01625
+		},
+        "mwst":0.0
+    },{
+        "name":"Vektordaten Adressen",
+        "id":"adr",
+        "description":"[x] kommunale Datenausgabe Raster/Vektor: Produktgruppe Kataster, Produkt Wuppertaler Adressen (alle Ausgabeformate)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "ea":0.05
+        },
+        "mwst":19.0
+	},{
+        "name":"Stadtbild",
+        "id":"stb",
+        "description":"[x] Einzelobjektrenderer Stadtbildserie / Download Stadtbild und Aggregierender Renderer Stadtbildserie / Donwload Stadtbild",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.5,
+            "eigG_100":2.0,
+            "eigG_101":2.5,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.5,
+            "GDZ_100":2.0,
+            "GDZ_101":2.5
+		},
+        "prices":{
+            "ea":10.0
+        },
+        "mwst":19.0
+	},{
+        "name":"Baulast",
+        "id":"bla",
+        "description":"[x] Einzelobjektrenderer Baulast / Download Baulast und Aggregierender Renderer Download Baulastbericht",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.0,
+            "eigG_100":1.0,
+            "eigG_101":1.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea_bla":50.0
+        },
+        "mwst":0.0
+	},{
+        "name":"Baulastbescheinigung",
+        "id":"blab_be",
+        "description":"[x] Einzelobjektrenderer Flurstück / Download Baulastbescheinigung und Aggregierender Renderer Flurstücke / Download Baulastbescheinigung",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0,
+            "eigG frei":0.0,
+            "eigG_5":1.0,
+            "eigG_20":1.0,
+            "eigG_100":1.0,
+            "eigG_101":1.0,
+            "GDZ":1.0,
+            "GDZ_5":1.0,
+            "GDZ_20":1.0,
+            "GDZ_100":1.0,
+            "GDZ_101":1.0
+		},
+        "prices":{
+            "ea_blab_pos_1":50.0,
+            "ea_blab_pos_2":100.0,
+            "ea_blab_pos_3":150.0,
+            "ea_blab_neg":10.0,
+            "ea_blab_neg_ab_10":100.0
+        },
+        "mwst":0.0
+    }]
+}

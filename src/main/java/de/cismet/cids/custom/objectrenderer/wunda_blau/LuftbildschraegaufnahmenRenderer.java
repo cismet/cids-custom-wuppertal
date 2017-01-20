@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.tools.BrowserLauncher;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -63,16 +63,19 @@ import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
 
 import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
+import de.cismet.tools.BrowserLauncher;
+
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
- * de.cismet.cids.objectrenderer.CoolLuftBildRenderer.
+ * The Luftbildschraegaufnahmen are deprecated. Take a look for example at {@link Sb_stadtbildserieRenderer}
  *
  * <p>Renderer speziell fuer Luftbildschraegaufnahmen.</p>
  *
- * @author   nhaffke
- * @version  $Revision$, $Date$
+ * @author      nhaffke
+ * @version     $Revision$, $Date$
+ * @deprecated  DOCUMENT ME!
  */
 @AggregationRenderer
 public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
@@ -147,7 +150,8 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
     @CidsAttributeVector("Georeferenz.GEO_STRING")
     public Vector<Geometry> geoAgr = new Vector();
-    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
+    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(ComponentRegistry.getRegistry().getMainWindow(),
+            true);
     Properties properties = new Properties();
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
@@ -271,7 +275,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                         @Override
                         public void run() {
                             try {
-                                String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
+                                final String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
                                 ImageIcon ii;
                                 if (url == null) {
                                     log.fatal("Aggregation Wupp " + EventQueue.isDispatchThread());
@@ -492,7 +496,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                     @Override
                     public void run() {
                         try {
-                            String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
+                            final String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
                             ImageIcon i;
                             if (url == null) {
                                 log.fatal("Single Wupp " + EventQueue.isDispatchThread());
@@ -1024,9 +1028,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
                                     @Override
                                     public void run() {
-                                        printingWaitDialog.setLocationRelativeTo(
-                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
-                                        printingWaitDialog.setVisible(true);
+                                        StaticSwingTools.showDialog(printingWaitDialog);
                                     }
                                 });
 
@@ -1185,9 +1187,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
                                     @Override
                                     public void run() {
-                                        printingWaitDialog.setLocationRelativeTo(
-                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
-                                        printingWaitDialog.setVisible(true);
+                                        StaticSwingTools.showDialog(printingWaitDialog);
                                     }
                                 });
 

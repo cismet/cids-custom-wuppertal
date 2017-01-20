@@ -23,6 +23,10 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
+import java.awt.Dimension;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -35,6 +39,8 @@ import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.tools.collections.TypeSafeCollections;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * ToolbarComponentsProvider that delivers a Button for Alkis Print to integrate into the Navigator Toolbar.
@@ -109,26 +115,37 @@ final class AlkisPrintJButton extends JButton {
     public AlkisPrintJButton() {
         try {
             this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());
-            printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
+//            printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
+            // printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
+            printWidget.setLocationRelativeTo(ComponentRegistry.getRegistry().getCatalogueTree());
         } catch (Exception ex) {
             log.fatal(ex, ex);
             throw new RuntimeException(ex);
         }
 //        setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameprint.png"))); // NOI18N
         setText(null);
-        setToolTipText("Alkis Drucken");
+        setToolTipText("ALKIS Drucken");
         setName("alkis_print");
         setBorderPainted(false);
         setFocusable(false);
         setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/alkisframeprint.png")));
         setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
         addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    printWidget.setVisible(true);
+                    final Dimension pos = AlkisPrintingSettingsWidget.getPreferredPositionOnScreen();
                     printWidget.pack();
+                    final int x = pos.width;
+                    final int y = pos.height;
+                    if ((x == -1) || (y == -1)) {
+                        StaticSwingTools.showDialog(printWidget);
+                    } else {
+                        printWidget.setLocation(x, y);
+                        printWidget.setVisible(true);
+                    }
                 }
             });
     }

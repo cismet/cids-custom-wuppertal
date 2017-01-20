@@ -7,8 +7,9 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.search.CidsServerSearch;
 
 import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.explodingpixels.macwidgets.HudWindow;
@@ -28,7 +29,11 @@ import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatem
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
+
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -41,7 +46,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             CustomStrassenToolbarSearch.class);
 
     //~ Instance fields --------------------------------------------------------
@@ -49,7 +54,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     private String searchString;
     private final MetaClass mc;
     private final ImageIcon icon;
-    private Collection<MetaClass> classCol;
+    private final Collection<MetaClass> classCol;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -58,30 +63,55 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
      */
     public CustomStrassenToolbarSearch() {
         mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "STRASSE");
-        icon = new ImageIcon(mc.getIconData());
         classCol = new ArrayList<MetaClass>(1);
-        classCol.add(mc);
+        if (mc != null) {
+            icon = new ImageIcon(mc.getIconData());
+            classCol.add(mc);
+        } else {
+            icon = null;
+            LOG.info("MetaClass Strasse is null, the permissions are probably missing.");
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return mc.getName();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  toolbarSearchString  DOCUMENT ME!
+     */
     @Override
     public void setSearchParameter(final String toolbarSearchString) {
         this.searchString = toolbarSearchString;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
-    public CidsServerSearch getServerSearch() {
+    public MetaObjectNodeServerSearch getServerSearch() {
         if (searchString.startsWith("str ")) {
             searchString = searchString.substring(4);
             final HudWindow hud = new HudWindow("Straßensuche");
@@ -95,9 +125,12 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
             hud.getContentPane().add(t);
             final JButton s = HudWidgetFactory.createHudButton("Suche");
             hud.getContentPane().add(s);
-            hud.getJDialog().setLocationRelativeTo(null);
             hud.getJDialog().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            hud.getJDialog().setVisible(true);
+
+            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(
+                    ComponentRegistry.getRegistry().getMainWindow()),
+                hud.getJDialog(),
+                true);
         }
 
         return new CustomStrassenSearchStatement(searchString);

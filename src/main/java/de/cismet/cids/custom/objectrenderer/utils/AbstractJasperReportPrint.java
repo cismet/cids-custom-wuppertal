@@ -11,6 +11,9 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -19,6 +22,7 @@ import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.swing.JRViewer;
+import net.sf.jasperreports.swing.JRViewerToolbar;
 
 import java.awt.EventQueue;
 
@@ -158,6 +162,37 @@ public abstract class AbstractJasperReportPrint {
         this.beansCollection = beansCollection;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public JasperPrint getJasperPrint() throws Exception {
+        final JasperReport jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
+                    reportURL));
+        JasperPrint jasperPrint = null;
+        if (isBeansCollection()) {
+            final Map params = generateReportParam(beans);
+            final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
+//                final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(beans.toArray());
+            jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
+        } else {
+            for (final CidsBean current : beans) {
+                final Map params = generateReportParam(current);
+                final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(new CidsBean[] { current });
+                if (jasperPrint == null) {
+                    jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
+                } else {
+                    jasperPrint.addPage((JRPrintPage)JasperFillManager.fillReport(jasperReport, params, beanArray)
+                                .getPages().get(0));
+                }
+            }
+        }
+        return jasperPrint;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -179,34 +214,25 @@ public abstract class AbstractJasperReportPrint {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected JasperPrint doInBackground() throws Exception {
-            final JasperReport jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
-                        reportURL));
-            JasperPrint jasperPrint = null;
-            if (isBeansCollection()) {
-                final Map params = generateReportParam(beans);
-                final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
-//                final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(beans.toArray());
-                jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
+            if (isCancelled()) {
+                return null;
             } else {
-                for (final CidsBean current : beans) {
-                    if (isCancelled()) {
-                        return null;
-                    }
-                    final Map params = generateReportParam(current);
-                    final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(new CidsBean[] { current });
-                    if (jasperPrint == null) {
-                        jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
-                    } else {
-                        jasperPrint.addPage((JRPrintPage)JasperFillManager.fillReport(jasperReport, params, beanArray)
-                                    .getPages().get(0));
-                    }
-                }
+                return getJasperPrint();
             }
-            return jasperPrint;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -241,9 +267,9 @@ public abstract class AbstractJasperReportPrint {
                         + insets.top
                         + insets.bottom
                         + 20);
-            aFrame.setLocation((screenSize.width - aFrame.getWidth()) / 2,
-                (screenSize.height - aFrame.getHeight())
-                        / 2);
+
+            final JFrame main = ComponentRegistry.getRegistry().getMainWindow();
+            aFrame.setLocationRelativeTo(main);
             aFrame.setVisible(true);
         }
     }

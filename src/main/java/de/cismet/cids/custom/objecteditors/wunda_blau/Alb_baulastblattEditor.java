@@ -12,18 +12,28 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
 
+import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.beansbinding.Validator;
+import org.jdesktop.beansbinding.Validator.Result;
+
 import org.openide.util.WeakListeners;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import java.sql.Date;
+
+import java.text.DateFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,9 +51,13 @@ import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.annotations.AggregationRenderer;
 
+import de.cismet.cids.client.tools.DevelopmentTools;
+
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -57,6 +71,7 @@ import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -78,6 +93,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     //~ Static fields/initializers ---------------------------------------------
 
     private static final int BLATT_NUMMER_ANZAHL_ZIFFERN = 6;
+    private static final Color WRONG_BLATTNUMMER_COLOR = new Color(242, 222, 222);
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
     private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
 
@@ -93,26 +109,56 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     private static final String FLURSTUECKE_BEGUENSTIGT = "flurstuecke_beguenstigt";
     private static final String ACTION_TAG = "custom.baulast.document@WUNDA_BLAU";
 
+    private static final String REPORT_ACTION_TAG_BLATT = "baulast.report.blatt_disabled@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_PLAN = "baulast.report.plan_disabled@WUNDA_BLAU";
+    private static final String REPORT_ACTION_TAG_RASTER = "baulast.report.raster_disabled@WUNDA_BLAU";
+
+    private static final Converter<java.sql.Date, String> DATE_TO_STRING = new Converter<Date, String>() {
+
+            @Override
+            public String convertForward(final Date value) {
+                if (value != null) {
+                    return DateFormat.getDateInstance().format(value);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public Date convertReverse(final String value) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+
     //~ Instance fields --------------------------------------------------------
 
-// private static final Validator<String> NUMBER_VALIDATOR = new Validator<String>() {
-//
-// @Override
-// public Result validate(String t) {
-// if (t.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
-// return new Result(Result.ERROR, "Blattnummer ist nicht " + BLATT_NUMMER_ANZAHL_ZIFFERN + "-stellig!");
-// } else if (!t.matches("^\\d$")) {
-// return new Result(Result.ERROR, "Blattnummer darf nur aus Ziffern [0-9] bestehen!");
-// }
-// return null;
-// }
-// };
+    private final Validator<String> NUMBER_VALIDATOR = new Validator<String>() {
+
+            @Override
+            public Result validate(final String t) {
+                final String regex6 = "\\d{6}";
+                final String regex7 = "\\d{6}[a-zA-Z]";
+                if (!(t.matches(regex6) || t.matches(regex7))) {
+                    final String corBlattnummer = correctBlattnummer(t);
+                    if (!(corBlattnummer.matches(regex6) || corBlattnummer.matches(regex7))) {
+                        wrongBlattnummer = true;
+                        Alb_baulastblattEditor.this.txtBlattnummer.setBackground(WRONG_BLATTNUMMER_COLOR);
+                        return new Result(Result.ERROR, "Keine korrekte Blattnummer");
+                    }
+                }
+                wrongBlattnummer = false;
+                Alb_baulastblattEditor.this.txtBlattnummer.setBackground(Color.white);
+                return null;
+            }
+        };
+
     private final boolean editable;
     private CidsBean cidsBean;
     private final CardLayout cardLayout;
     private Collection<CidsBean> baulastenBeans = null;
 //    private Collection<CidsBean> baulastenBeansToDelete = new ArrayList<CidsBean>();
     private PropertyChangeListener strongReferenceToWeakListener = null;
+    private boolean wrongBlattnummer = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
     private javax.swing.JButton btnAddLaufendeNummer;
@@ -121,16 +167,32 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     private javax.swing.JButton btnForward;
     private javax.swing.JButton btnPasteBaulast;
     private javax.swing.JButton btnRemoveLaufendeNummer;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink2;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink3;
     private javax.swing.JLabel lblBack;
+    private javax.swing.JLabel lblBearbeiter;
+    private javax.swing.JLabel lblBearbeitetAm;
     private javax.swing.JLabel lblBlattInMap;
     private javax.swing.JLabel lblBlattnummer;
+    private javax.swing.JLabel lblDurch;
     private javax.swing.JLabel lblForw;
+    private javax.swing.JLabel lblLetzteBearbeitung;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstLaufendeNummern;
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel panBaulastEditor;
     private de.cismet.tools.gui.RoundedPanel panBlattNummer;
+    private de.cismet.tools.gui.RoundedPanel panBlattberichte;
     private javax.swing.JPanel panButtons;
     private javax.swing.JPanel panControlsLaufendeNummern;
     private javax.swing.JPanel panFooter;
@@ -142,6 +204,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     private javax.swing.JScrollPane scpLaufendeNummern;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
     private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private javax.swing.JTextField txtBlattnummer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -163,6 +226,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      */
     public Alb_baulastblattEditor(final boolean editable) {
         this.editable = editable;
+        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable, false);
+        alb_picturePanel.getDocTypePanel().setVisible(false);
         initComponents();
         initFooterElements();
         cardLayout = (CardLayout)getLayout();
@@ -171,6 +236,21 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             txtBlattnummer.setEditable(false);
             txtBlattnummer.setOpaque(false);
             txtBlattnummer.setBorder(null);
+            lblLetzteBearbeitung.setVisible(false);
+            lblBearbeiter.setVisible(false);
+            lblDurch.setVisible(false);
+            lblBearbeitetAm.setVisible(false);
+        }
+
+        try {
+            final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+
+            jXHyperlink1.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && billingAllowed);
+            jXHyperlink2.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && billingAllowed);
+            jXHyperlink3.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && billingAllowed);
+        } catch (final Exception ex) {
+            // needed for netbeans gui editor
+            log.info("exception while checking action tags", ex);
         }
     }
 
@@ -184,14 +264,16 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      * @return  DOCUMENT ME!
      */
     private static String correctBlattnummer(String blattnummer) {
-        if (blattnummer.matches("^\\d*$")) {
-            while (blattnummer.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
-                blattnummer = "0" + blattnummer;
-            }
-            return blattnummer;
+        final int size;
+        if (blattnummer.matches("^\\d*[a-zA-Z]$")) {
+            size = BLATT_NUMMER_ANZAHL_ZIFFERN + 1;
         } else {
-            return null;
+            size = BLATT_NUMMER_ANZAHL_ZIFFERN;
         }
+        while (blattnummer.length() < size) {
+            blattnummer = "0" + blattnummer;
+        }
+        return blattnummer;
     }
 
     /**
@@ -219,6 +301,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             ObjectRendererUtils.BACKWARD_PRESSED);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -242,12 +329,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         try {
-            bindingGroup.unbind();
             if (cidsBean != null) {
                 final int nrIdx = lstLaufendeNummern.getSelectedIndex();
+                bindingGroup.unbind();
                 this.cidsBean = cidsBean;
                 this.baulastenBeans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
                 if (baulastenBeans != null) {
@@ -264,8 +356,10 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         log.error(x, x);
                     }
                 }
+                final Object laufendeNr = ((CidsBean)lstLaufendeNummern.getSelectedValue()).getProperty(
+                        "laufende_nummer");
                 final Object blattnummer = cidsBean.getProperty("blattnummer");
-                lblTitle.setText(TITLE_PREFIX + " " + blattnummer);
+                lblTitle.setText("Baulastblatt " + blattnummer + ": lfd. Nummer " + laufendeNr);
                 checkLaufendeNummern();
                 strongReferenceToWeakListener = new PropertyChangeListener() {
 
@@ -348,12 +442,25 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         lblTitle = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
         panButtons = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0),
+                new java.awt.Dimension(20, 0),
+                new java.awt.Dimension(20, 32767));
+        lblLetzteBearbeitung = new javax.swing.JLabel();
+        lblBearbeiter = new javax.swing.JLabel();
+        lblDurch = new javax.swing.JLabel();
+        lblBearbeitetAm = new javax.swing.JLabel();
         panFooterLeft = new javax.swing.JPanel();
         lblBack = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         panFooterRight = new javax.swing.JPanel();
         btnForward = new javax.swing.JButton();
         lblForw = new javax.swing.JLabel();
+        jPanel4 = alb_picturePanel.getDocTypePanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
         panMain = new javax.swing.JPanel();
         panBaulastEditor = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable);
         rpLaufendeNummern = new de.cismet.tools.gui.RoundedPanel();
@@ -366,18 +473,24 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         btnRemoveLaufendeNummer = new javax.swing.JButton();
         btnCopyBaulast = new javax.swing.JButton();
         btnPasteBaulast = new javax.swing.JButton();
+        panBlattberichte = new de.cismet.tools.gui.RoundedPanel();
+        semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
+        jXHyperlink2 = new org.jdesktop.swingx.JXHyperlink();
+        jXHyperlink3 = new org.jdesktop.swingx.JXHyperlink();
         panBlattNummer = new de.cismet.tools.gui.RoundedPanel();
         lblBlattnummer = new javax.swing.JLabel();
         txtBlattnummer = new javax.swing.JTextField();
         semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
         lblBlattInMap = new javax.swing.JLabel();
-        alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable);
+        alb_picturePanel = alb_picturePanel;
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Baulastblatt");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -391,7 +504,57 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 
         panButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 6, 0));
         panButtons.setOpaque(false);
-        panButtons.setLayout(new java.awt.GridBagLayout());
+        panButtons.setLayout(new java.awt.GridLayout(1, 0));
+
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jPanel1.setOpaque(false);
+        jPanel1.add(filler1);
+
+        lblLetzteBearbeitung.setForeground(new java.awt.Color(204, 204, 204));
+        lblLetzteBearbeitung.setText("Letzte Bearbeitung am");
+        jPanel1.add(lblLetzteBearbeitung);
+
+        lblBearbeiter.setForeground(new java.awt.Color(204, 204, 204));
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                panBaulastEditor,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitungsdatum}"),
+                lblBearbeiter,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bearbeitungsdatum");
+        binding.setSourceNullValue("(unbekannt)");
+        binding.setSourceUnreadableValue("(unbekannt)");
+        binding.setConverter(Alb_baulastblattEditor.DATE_TO_STRING);
+        bindingGroup.addBinding(binding);
+
+        jPanel1.add(lblBearbeiter);
+
+        lblDurch.setForeground(new java.awt.Color(204, 204, 204));
+        lblDurch.setText("durch");
+        jPanel1.add(lblDurch);
+
+        lblBearbeitetAm.setForeground(new java.awt.Color(204, 204, 204));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                panBaulastEditor,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitet_von}"),
+                lblBearbeitetAm,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bearbeitet_von");
+        binding.setSourceNullValue("(unbekannt)");
+        binding.setSourceUnreadableValue("(unbekannt)");
+        bindingGroup.addBinding(binding);
+
+        jPanel1.add(lblBearbeitetAm);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 0.01;
+        jPanel2.add(jPanel1, gridBagConstraints);
 
         panFooterLeft.setMaximumSize(new java.awt.Dimension(124, 40));
         panFooterLeft.setMinimumSize(new java.awt.Dimension(124, 40));
@@ -399,7 +562,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         panFooterLeft.setPreferredSize(new java.awt.Dimension(124, 40));
         panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 5));
 
-        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblBack.setForeground(new java.awt.Color(255, 255, 255));
         lblBack.setText("Info");
         lblBack.setEnabled(false);
@@ -433,7 +596,12 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panButtons.add(panFooterLeft, gridBagConstraints);
+        jPanel2.add(panFooterLeft, gridBagConstraints);
+
+        panButtons.add(jPanel2);
+
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
         panFooterRight.setMaximumSize(new java.awt.Dimension(124, 40));
         panFooterRight.setOpaque(false);
@@ -457,7 +625,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             });
         panFooterRight.add(btnForward);
 
-        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Dokumente");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -471,7 +639,34 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panButtons.add(panFooterRight, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        jPanel3.add(panFooterRight, gridBagConstraints);
+
+        jPanel4.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel3.add(jPanel4, gridBagConstraints);
+
+        jPanel6.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel3.add(jPanel6, gridBagConstraints);
+
+        jPanel7.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel3.add(jPanel7, gridBagConstraints);
+
+        panButtons.add(jPanel3);
 
         panFooter.add(panButtons, java.awt.BorderLayout.CENTER);
 
@@ -483,7 +678,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.9;
         gridBagConstraints.weighty = 1.0;
@@ -616,11 +811,88 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panMain.add(rpLaufendeNummern, gridBagConstraints);
+
+        panBlattberichte.setLayout(new java.awt.GridBagLayout());
+
+        semiRoundedPanel3.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Baulastblattberichte");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        semiRoundedPanel3.add(jLabel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panBlattberichte.add(semiRoundedPanel3, gridBagConstraints);
+
+        jXHyperlink1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        jXHyperlink1.setText("mit Textblättern");
+        jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        panBlattberichte.add(jXHyperlink1, gridBagConstraints);
+
+        jXHyperlink2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        jXHyperlink2.setText("mit Textblättern und Plänen");
+        jXHyperlink2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        panBlattberichte.add(jXHyperlink2, gridBagConstraints);
+
+        jXHyperlink3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf_blr.png"))); // NOI18N
+        jXHyperlink3.setText("<html>mit Textblättern, Plänen<br/>und Rasterdateien");
+        jXHyperlink3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        panBlattberichte.add(jXHyperlink3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panMain.add(panBlattberichte, gridBagConstraints);
 
         panBlattNummer.setLayout(new java.awt.GridBagLayout());
 
@@ -632,7 +904,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panBlattNummer.add(lblBlattnummer, gridBagConstraints);
 
-        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.blattnummer}"),
@@ -640,6 +912,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("");
+        binding.setValidator(NUMBER_VALIDATOR);
         bindingGroup.addBinding(binding);
 
         txtBlattnummer.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -716,10 +989,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     private void lstLaufendeNummernValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstLaufendeNummernValueChanged
         final Object selectionObj = lstLaufendeNummern.getSelectedValue();
         if (selectionObj instanceof CidsBean) {
+            bindingGroup.getBinding("bearbeitet_von").unbind();
+            bindingGroup.getBinding("bearbeitungsdatum").unbind();
             final CidsBean selectedBean = (CidsBean)selectionObj;
             panBaulastEditor.setCidsBean(selectedBean);
             alb_picturePanel.setCidsBean(selectedBean);
             btnPasteBaulast.setEnabled(isPastePossible());
+            bindingGroup.getBinding("bearbeitet_von").bind();
+            bindingGroup.getBinding("bearbeitungsdatum").bind();
+            final Object laufendeNr = selectedBean.getProperty("laufende_nummer");
+            final Object blattNummer = selectedBean.getProperty("blattnummer");
+            lblTitle.setText("Baulastblatt " + blattNummer + ": lfd. Nummer " + laufendeNr);
         }
         final Object[] selectedValues = lstLaufendeNummern.getSelectedValues();
         final Collection<MetaObject> selectedObjects = TypeSafeCollections.newArrayList();
@@ -741,7 +1021,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             final Collection<CidsBean> baulasten = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
             if (baulasten != null) {
                 final String userInput = (String)JOptionPane.showInputDialog(
-                        this,
+                        StaticSwingTools.getParentFrame(this),
                         "Bitte die neue Laufende Nummer eingeben:",
                         "Neue Laufende Nummer anlegen",
                         JOptionPane.PLAIN_MESSAGE,
@@ -752,20 +1032,19 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 if (userInput != null) {
                     if (isNewLaufendeNummer(userInput)) {
                         final int laufendeNr = Integer.parseInt(userInput);
-                        final String blattNummer = txtBlattnummer.getText();
-                        final String folder = generateFolderNameFromBlattnummer(blattNummer);
+
                         final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
+                        newBean.setProperty("geprueft", false);
                         newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
-                        newBean.setProperty("textblatt", folder);
-                        newBean.setProperty("lageplan", "");
                         newBean.setProperty("blattnummer", txtBlattnummer.getText());
-//                    newBean.setProperty("lageplan", folder);
+                        newBean.setProperty("bearbeitet_von", SessionManager.getSession().getUser().getName());
+                        newBean.setProperty("bearbeitungsdatum", new Date(System.currentTimeMillis()));
                         baulasten.add(newBean);
                         final int newIndex = lstLaufendeNummern.getModel().getSize();
                         lstLaufendeNummern.setSelectedIndex(newIndex - 1);
                     } else {
                         JOptionPane.showMessageDialog(
-                            this,
+                            StaticSwingTools.getParentFrame(this),
                             "Die Nummer "
                                     + userInput
                                     + " kann nicht angelegt werden, weil diese Nummer bereits existiert!");
@@ -780,7 +1059,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 ex,
                 this);
         }
-    }                                                                                        //GEN-LAST:event_btnAddLaufendeNummerActionPerformed
+    } //GEN-LAST:event_btnAddLaufendeNummerActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -799,64 +1078,6 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         }
         return true;
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   blattNummer  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private String generateFolderNameFromBlattnummer(String blattNummer) {
-        if (blattNummer != null) {
-            try {
-                blattNummer = blattNummer.replaceAll("\\D", "");
-                if (blattNummer.length() > 0) {
-                    int nummer = Integer.parseInt(blattNummer) - 1;
-                    nummer /= 1000;
-                    String nummStringStart = String.valueOf(nummer) + "001";
-                    String nummStringEnd = String.valueOf(nummer + 1) + "000";
-                    while (nummStringStart.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
-                        nummStringStart = "0" + nummStringStart;
-                    }
-                    while (nummStringEnd.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
-                        nummStringEnd = "0" + nummStringEnd;
-                    }
-                    // patch fuer fehler in wuppertaler ordnernummerierung (erster startet bei 000000 statt 000001)
-                    if ("000001".equals(nummStringStart)) {
-                        nummStringStart = "000000";
-                    }
-                    return nummStringStart + "-" + nummStringEnd + "/";
-                }
-            } catch (Exception ex) {
-                log.warn(ex, ex);
-            }
-        }
-        return "XXXW01-XXXX00/";
-    }
-//    private String generateFolderNameFromBlattnummer(String blattNummer) {
-//        if (blattNummer != null) {
-//            try {
-//                blattNummer = blattNummer.replaceAll("\\D", "");
-//                if (blattNummer.length() > 0) {
-//                    int nummer = Integer.parseInt(blattNummer);
-//                    nummer /= 1000;
-//                    String nummStringStart = String.valueOf(nummer) + "000";
-//                    String nummStringEnd = String.valueOf(nummer + 1) + "000";
-//                    while (nummStringStart.length() < 6) {
-//                        nummStringStart = "0" + nummStringStart;
-//                    }
-//                    while (nummStringEnd.length() < 6) {
-//                        nummStringEnd = "0" + nummStringEnd;
-//                    }
-//                    return nummStringStart + "-" + nummStringEnd + "/";
-//                }
-//            } catch (Exception ex) {
-//                log.warn(ex, ex);
-//            }
-//        }
-//        return "XXXX00-XXXY00/";
-//    }
 
     /**
      * DOCUMENT ME!
@@ -931,13 +1152,13 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                     final int answer;
                     if (checkOK) {
                         answer = JOptionPane.showConfirmDialog(
-                                this,
+                                StaticSwingTools.getParentFrame(this),
                                 "Soll die Nummer wirklich gelöscht werden?",
                                 "Nummer entfernen",
                                 JOptionPane.YES_NO_OPTION);
                     } else {
                         answer = JOptionPane.showConfirmDialog(
-                                this,
+                                StaticSwingTools.getParentFrame(this),
                                 "Plausibilitätsprüfung fehlgeschlagen. Nicht alle Flurstücke des Platzhalters wurden realen Baulasten zugeordnet. Soll dennoch gelöscht werden?",
                                 "Platzhalter entfernen",
                                 JOptionPane.YES_NO_OPTION,
@@ -974,6 +1195,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      */
     private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, "card1");
+        alb_picturePanel.getDocTypePanel().setVisible(false);
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
@@ -987,6 +1209,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      */
     private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, "card2");
+        alb_picturePanel.getDocTypePanel().setVisible(true);
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
@@ -995,7 +1218,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
         if (fileCollisionWarning.length() > 0) {
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 fileCollisionWarning,
                 "Unterschiedliche Dateiformate",
                 JOptionPane.WARNING_MESSAGE);
@@ -1044,7 +1267,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                                 final Object simpleValueToProcess) throws Exception {
                             if ("geprueft".equalsIgnoreCase(propertyName)
                                 || "pruefdatum".equalsIgnoreCase(propertyName)
-                                || "geprueft_von".equalsIgnoreCase(propertyName)) {
+                                || "geprueft_von".equalsIgnoreCase(propertyName)
+                                || "pruefkommentar".equalsIgnoreCase(propertyName)) {
                                 return;
                             }
 
@@ -1101,6 +1325,36 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+        Alb_baulastReportDialog.getInstance()
+                .showAndDoDownload(BaulastenReportGenerator.Type.TEXTBLATT, baulastenBeans, this);
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
+        Alb_baulastReportDialog.getInstance()
+                .showAndDoDownload(BaulastenReportGenerator.Type.TEXTBLATT_PLAN, baulastenBeans, this);
+    }                                                                                //GEN-LAST:event_jXHyperlink2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink3ActionPerformed
+        Alb_baulastReportDialog.getInstance()
+                .showAndDoDownload(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER, baulastenBeans, this);
+    }                                                                                //GEN-LAST:event_jXHyperlink3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     private boolean isPastePossible() {
@@ -1111,31 +1365,59 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         != null);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -1144,6 +1426,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         strongReferenceToWeakListener = null;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
     @Override
     public void editorClosed(final EditorClosedEvent event) {
 //            log.fatal(status);
@@ -1160,12 +1447,25 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 //        }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  RuntimeException  DOCUMENT ME!
+     */
     @Override
     public boolean prepareForSave() {
         correctBlattnummer();
         try {
             final ArrayList<String> errors = new ArrayList<String>();
             final String blattnummer = txtBlattnummer.getText();
+            if (wrongBlattnummer) {
+                errors.add(
+                    "Die Blattnummer "
+                            + blattnummer
+                            + " ist nicht korrekt! Bitte geben Sie eine gültige Blattnummer ein.");
+            }
             final boolean unique = Alb_Constraints.checkUniqueBlattNummer(
                     blattnummer,
                     getCidsBean().getMetaObject().getID());
@@ -1182,6 +1482,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                     "Folgende Baulasten haben kein belastetes Flurstück:\n"
                             + alleLastenOhneBelastetesFS
                             + "\nBitte ordnen Sie diesen laufenden Nummern belastete Flurstücke zu, erst dann kann der Datensatz gespeichert werden.");
+            }
+            for (final CidsBean last : baulastenBeans) {
+                if (!Alb_Constraints.checkEintragungsdatum(last)) {
+                    errors.add("Die Baulast" + last.toString() + " muss ein Eintragungsdatum haben.");
+                }
             }
             final List<String> incorrectBaulasteDates = Alb_Constraints.getIncorrectBaulastDates(cidsBean);
             if (incorrectBaulasteDates.size() > 0) {
@@ -1201,6 +1506,15 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 }
             }
 
+            // check i at least one Baulastart was assigned
+            for (final CidsBean last : baulastenBeans) {
+                final List baulastArt = (List)last.getProperty("art");
+
+                if ((baulastArt == null) || baulastArt.isEmpty()) {
+                    errors.add("Die Baulast" + last.toString() + " muss mindestens eine Baulastart haben.");
+                }
+            }
+
             if (errors.size() > 0) {
                 String errorOutput = "";
                 for (final String s : errors) {
@@ -1208,7 +1522,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 }
                 errorOutput = errorOutput.substring(0, errorOutput.length() - 1);
                 JOptionPane.showMessageDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     errorOutput,
                     "Fehler aufgetreten",
                     JOptionPane.WARNING_MESSAGE);
@@ -1221,5 +1535,29 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
+
+            // DevelopmentTools.createRendererInFrameFromRMIConnectionOnLocalhost(
+            "WUNDA_BLAU",
+            "Administratoren",
+            "admin",
+            "kif",
+            "alb_baulastblatt",
+            15626,
+            // 15625,
+            // 15624,
+            // "Title",
+            1024,
+            800);
     }
 }

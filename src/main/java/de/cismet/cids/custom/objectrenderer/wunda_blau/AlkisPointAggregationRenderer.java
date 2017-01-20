@@ -30,20 +30,12 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.middleware.types.MetaObjectNode;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -65,7 +57,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -79,17 +70,23 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkis.AlkisPointReportBean;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.wunda_blau.search.actions.AlkisPointReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
-import de.cismet.cismap.commons.gui.printing.PrintingWidget;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
@@ -119,14 +116,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             AlkisPointAggregationRenderer.class);
-
     private static final double BUFFER = 0.005;
-
-    public static final HashMap<String, String> POST_HEADER = new HashMap<String, String>();
-
-    static {
-        POST_HEADER.put(WebAccessManager.HEADER_CONTENTTYPE_KEY, WebAccessManager.HEADER_CONTENTTYPE_VALUE_POST);
-    }
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -183,6 +173,12 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         btnRelease.setEnabled(gehaltenePunkte.size() > 0);
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
+
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("appdf")
+                    || BillingPopup.isBillingAllowed("pktlsttxt");
+
+        btnCreate.setEnabled(billingAllowed
+                    && ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -325,7 +321,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
         if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
-            JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
             return;
         }
 
@@ -333,6 +330,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         if (APMAP.equalsIgnoreCase(format)) {
             final Collection<CidsBean> selectedAlkisPoints = getSelectedAlkisPointsContainingAPMap();
+
+            final int numOfPoints = selectedAlkisPoints.size();
 
             if (selectedAlkisPoints.isEmpty()) {
                 JOptionPane.showMessageDialog(
@@ -347,7 +346,18 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 return;
             }
 
-            CismetThreadPool.execute(new GenerateAPMapReport(selectedAlkisPoints));
+            try {
+                if (BillingPopup.doBilling(
+                                "appdf",
+                                "no.yet",
+                                (Geometry)null,
+                                new ProductGroupAmount("ea", numOfPoints))) {
+                    generateAPMapReport(selectedAlkisPoints);
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             final Collection<CidsBean> selectedAlkisPoints = getSelectedAlkisPoints();
 
@@ -364,9 +374,92 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 return;
             }
 
-            CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+            final int numOfPoints = selectedAlkisPoints.size();
+
+            if (format.equalsIgnoreCase(PDF)) {
+                try {
+                    if (BillingPopup.doBilling(
+                                    "pktlstpdf",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount("eafifty", 1 + (int)Math.floor(numOfPoints / 50f)))) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+            } else if (format.equalsIgnoreCase(TEXT)) {
+                try {
+                    final ArrayList<ProductGroupAmount> productGroupAmounts = getProductGroupAmountForObject(
+                            "eapkt",
+                            numOfPoints);
+                    final ProductGroupAmount[] groupAmounts = productGroupAmounts.toArray(
+                            new ProductGroupAmount[productGroupAmounts.size()]);
+
+                    if (BillingPopup.doBilling(
+                                    "pktlsttxt",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    groupAmounts)) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+            } else if (format.equalsIgnoreCase(APMAP)) {
+                try {
+                    if (BillingPopup.doBilling(
+                                    "appdf",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount("ea", numOfPoints))) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+            } else {
+                CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+            }
         }
     } //GEN-LAST:event_btnCreateActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   objectBaseKey  DOCUMENT ME!
+     * @param   amount         DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private ArrayList<ProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey, int amount) {
+        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
+        if (amount > 1000000) {
+            final int tmpPoints = amount - 1000000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
+            amount = 1000000;
+        }
+        if (amount > 100000) {
+            final int tmpPoints = amount - 100000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
+            amount = 100000;
+        }
+        if (amount > 10000) {
+            final int tmpPoints = amount - 10000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
+            amount = 10000;
+        }
+        if (amount > 1000) {
+            final int tmpPoints = amount - 1000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
+            amount = 1000;
+        }
+        result.add(new ProductGroupAmount(objectBaseKey + "_1000", amount));
+        return result;
+    }
 
     /**
      * DOCUMENT ME!
@@ -492,16 +585,31 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         return punktListeString.toString();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         String desc = "Punktliste";
@@ -512,6 +620,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         this.title = desc;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         if (beans instanceof List) {
@@ -545,11 +658,16 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             }
             ObjectRendererUtils.decorateTableWithSorter(tblAggregation);
 
-            if (allowAPMapReport) {
-                cbProducts.setModel(new DefaultComboBoxModel(new String[] { PDF, HTML, TEXT, APMAP }));
-            } else {
-                cbProducts.setModel(new DefaultComboBoxModel(new String[] { PDF, HTML, TEXT }));
+            final ArrayList<String> comboBoxContent = new ArrayList<String>();
+            comboBoxContent.add(PDF);
+            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess()) {
+                comboBoxContent.add(HTML);
             }
+            comboBoxContent.add(TEXT);
+            if (allowAPMapReport) {
+                comboBoxContent.add(APMAP);
+            }
+            cbProducts.setModel(new DefaultComboBoxModel(comboBoxContent.toArray(new String[0])));
         }
         setTitle(null);
     }
@@ -651,6 +769,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         mappingComponent.getCamera()
                 .animateViewToCenterBounds(viewBounds, true, mappingComponent.getAnimationDuration());
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -675,6 +794,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         return new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         mappingComponent.dispose();
@@ -703,6 +825,36 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             768);
     }
 
+    /**
+     * Generates the AP-Map report (Anschlusspunkt-Karten).
+     *
+     * @param  alkisPoints  the points used to generate the report and appearing in the report
+     */
+    private void generateAPMapReport(final Collection<CidsBean> alkisPoints) {
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(AlkisPointAggregationRenderer.this)) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
+
+            final Collection<MetaObjectNode> alkisMons = new ArrayList<MetaObjectNode>();
+            for (final CidsBean alkisPoint : alkisPoints) {
+                alkisMons.add(new MetaObjectNode(alkisPoint));
+            }
+
+            final ServerActionParameter<Collection> sapMons = new ServerActionParameter<Collection>(
+                    AlkisPointReportServerAction.Parameter.POINT_MONS.toString(),
+                    alkisMons);
+
+            DownloadManager.instance()
+                    .add(new ByteArrayActionDownload(
+                            AlkisPointReportServerAction.TASK_NAME,
+                            null,
+                            new ServerActionParameter[] { sapMons },
+                            "AP-Karten",
+                            jobname,
+                            "apkarten",
+                            ".pdf"));
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -714,6 +866,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void valueChanged(final ListSelectionEvent e) {
             if (!e.getValueIsAdjusting() && (cidsBeans != null)) {
@@ -765,11 +922,26 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   row     DOCUMENT ME!
+         * @param   column  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public boolean isCellEditable(final int row, final int column) {
             return column == 0;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   columnIndex  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             if (columnIndex == 0) {
@@ -777,40 +949,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             } else {
                 return super.getColumnClass(columnIndex);
             }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public static class AlkisPointReportBean {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private Collection<CidsBean> alkisPunkte;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new AlkisPointReportBean object.
-         *
-         * @param  alkisPunkte  DOCUMENT ME!
-         */
-        public AlkisPointReportBean(final Collection<CidsBean> alkisPunkte) {
-            this.alkisPunkte = alkisPunkte;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Collection<CidsBean> getAlkisPunkte() {
-            return alkisPunkte;
         }
     }
 
@@ -841,6 +979,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         public void run() {
             final String punktListenString = getPunktlistenStringForChosenPoints(alkisPoints);
@@ -863,7 +1004,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     try {
                         final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
                         if ((url != null) && (url.trim().length() > 0)) {
-                            if (!DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
+                            if (
+                                !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                                            AlkisPointAggregationRenderer.this)) {
                                 return;
                             }
 
@@ -874,7 +1017,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 download = new HttpDownload(
                                         new URL(url),
                                         "",
-                                        DownloadManagerDialog.getJobname(),
+                                        DownloadManagerDialog.getInstance().getJobName(),
                                         "Punktnachweis",
                                         code,
                                         extension);
@@ -883,8 +1026,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 download = new HttpDownload(
                                         new URL(url.substring(0, parameterPosition)),
                                         parameters,
-                                        POST_HEADER,
-                                        DownloadManagerDialog.getJobname(),
+                                        AlkisProducts.POST_HEADER,
+                                        DownloadManagerDialog.getInstance().getJobName(),
                                         "Punktnachweis",
                                         code,
                                         extension);
@@ -903,70 +1046,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                             ex);
                     }
                 }
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    protected class GenerateAPMapReport implements Runnable {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private Collection<CidsBean> alkisPoints;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new GenerateAPMapReport object.
-         *
-         * @param  alkisPoints  DOCUMENT ME!
-         */
-        public GenerateAPMapReport(final Collection<CidsBean> alkisPoints) {
-            this.alkisPoints = alkisPoints;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public void run() {
-            final Collection<AlkisPointReportBean> reportBeans = new LinkedList<AlkisPointReportBean>();
-            reportBeans.add(new AlkisPointReportBean(alkisPoints));
-            final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-
-            final JasperReport jasperReport;
-            final JasperPrint jasperPrint;
-            try {
-                jasperReport = (JasperReport)JRLoader.loadObject(AlkisPointAggregationRenderer.class
-                                .getResourceAsStream(
-                                    "/de/cismet/cids/custom/wunda_blau/res/apmaps.jasper"));
-                jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), dataSource);
-            } catch (JRException ex) {
-                log.error("Could not generate report for ap maps.", ex);
-
-                final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                            AlkisPointAggregationRenderer.class,
-                            "AlkisPointAggregationRenderer.GenerateAPMapReport.run().ErrorInfo.title"),   // NOI18N
-                        NbBundle.getMessage(
-                            PrintingWidget.class,
-                            "AlkisPointAggregationRenderer.GenerateAPMapReport.run().ErrorInfo.message"), // NOI18N
-                        null,
-                        null,
-                        ex,
-                        Level.ALL,
-                        null);
-                JXErrorPane.showDialog(AlkisPointAggregationRenderer.this, ei);
-
-                return;
-            }
-
-            if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
-                final String jobname = DownloadManagerDialog.getJobname();
-
-                DownloadManager.instance().add(new JasperDownload(jasperPrint, jobname, "AP-Karten", "apkarten"));
             }
         }
     }

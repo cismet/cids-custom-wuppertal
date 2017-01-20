@@ -7,32 +7,32 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import com.vividsolutions.jts.geom.Geometry;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import org.apache.log4j.Logger;
 
 import java.util.Date;
 
+import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.cismet.cids.annotations.CidsAttribute;
-import de.cismet.cids.annotations.CidsRendererTitle;
-
 import de.cismet.cids.custom.deprecated.CoolTabPanel;
 import de.cismet.cids.custom.deprecated.JBreakLabel;
-import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 
-import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 /**
- * de.cismet.cids.objectrenderer.CoolBplanVerfahrenRenderrer.java.
+ * DOCUMENT ME!
  *
- * @author   verkennis
  * @version  $Revision$, $Date$
  */
-public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements ChangeListener {
+public class Bplan_verfahrenRenderer extends JPanel implements CidsBeanRenderer,
+    ChangeListener,
+    RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -41,28 +41,15 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
     private static int lastSelected = 0;
     private static Date timer = new Date();
 
+    private static final Logger LOG = Logger.getLogger(Bplan_verfahrenRenderer.class);
+
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("Nummer")
-    public String nummer = "";
-
-    @CidsAttribute("Bezeichnung")
-    public String bezeichnung = "";
-
-    @CidsAttribute("Status")
-    public String status;
+    private CidsBean cidsBean;
 
 // Historie
 
-    public Object historie = null;
-
-    @CidsAttribute("Georeferenz.GEO_STRING")
-    public Geometry geometry = null;
-
-    @CidsRendererTitle
-    public String title = "";
-
-    private final Logger log = Logger.getLogger(this.getClass());
+    private Object historie = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -70,20 +57,17 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblAlkRelevant;
-    private javax.swing.JLabel lblBezeichnung;
     private javax.swing.JLabel lblNummer;
     private javax.swing.JLabel lblStatus;
-    private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panAlkis;
     private javax.swing.JPanel panAllgemein;
     private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
     private javax.swing.JPanel panTabAlkis;
     private javax.swing.JPanel panTabAllgemein;
-    private javax.swing.JPanel panTitle;
     private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JTextArea txtBezeichnung;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -93,56 +77,19 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
      */
     public Bplan_verfahrenRenderer() {
         initComponents();
-        setPanContent(panContent);
-        setPanInter(null);
-        setPanMap(panMap);
-        setPanTitle(panTitle);
-        setSpinner(panSpinner);
         tabbedPane.addChangeListener(this);
         if ((new Date().getTime() - timer.getTime()) < (60 * 1000L)) {
             tabbedPane.setSelectedIndex(lastSelected);
         }
+        assignSingle();
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
+    /**
+     * DOCUMENT ME!
+     */
     public void assignSingle() {
-        if (geometry != null) {
-            setGeometry(geometry);
-        }
-
-        if (title != null) {
-            if (title.length() > 50) {
-                title = title.substring(0, 50);
-                title = title + "...";
-            }
-            lblTitle.setText(TITLE + " - " + title);
-        } else {
-            lblTitle.setText(TITLE);
-        }
-
-        if (nummer != null) {
-            lblNummer.setText(nummer);
-        } else {
-            lblNummer.setVisible(false);
-            jLabel1.setVisible(false);
-        }
-
-        if (bezeichnung != null) {
-            lblBezeichnung.setText(bezeichnung);
-        } else {
-            jLabel2.setVisible(false);
-            lblBezeichnung.setVisible(false);
-        }
-
-        if (status != null) {
-            lblStatus.setText(status);
-        } else {
-            jLabel3.setVisible(false);
-            lblStatus.setVisible(false);
-        }
-
         // ALKIS-Assign
         if (historie != null) {
         } else {
@@ -157,11 +104,10 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panTitle = new javax.swing.JPanel();
-        lblTitle = new javax.swing.JLabel();
-        panInter = new javax.swing.JPanel();
         panContent = new javax.swing.JPanel();
+        panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
         tabbedPane = new javax.swing.JTabbedPane();
         tabbedPane.setUI(new TabbedPaneUITransparent());
         panTabAllgemein = new CoolTabPanel();
@@ -170,49 +116,28 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblNummer = new JBreakLabel();
-        lblBezeichnung = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
+        txtBezeichnung = new javax.swing.JTextArea();
         panTabAlkis = new CoolTabPanel();
         panAlkis = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         lblAlkRelevant = new javax.swing.JLabel();
-        panMap = new javax.swing.JPanel();
-        panSpinner = new JLoadDots();
 
         setMinimumSize(new java.awt.Dimension(400, 300));
         setLayout(new java.awt.BorderLayout());
 
-        panTitle.setOpaque(false);
-
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("Bebauungsplan");
-
-        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
-        panTitle.setLayout(panTitleLayout);
-        panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    304,
-                    Short.MAX_VALUE)));
-        panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
-
-        add(panTitle, java.awt.BorderLayout.NORTH);
-
-        panInter.setOpaque(false);
-        panInter.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
-        add(panInter, java.awt.BorderLayout.SOUTH);
-
         panContent.setOpaque(false);
-        panContent.setLayout(new java.awt.BorderLayout());
+        panContent.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        panContent.add(panPreviewMap, gridBagConstraints);
 
-        tabbedPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 15, 5, 10));
         tabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-        tabbedPane.setFont(new java.awt.Font("Tahoma", 1, 11));
+        tabbedPane.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         panTabAllgemein.setOpaque(false);
         panTabAllgemein.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
@@ -221,14 +146,14 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
         panAllgemein.setOpaque(false);
         panAllgemein.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Nummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 30);
         panAllgemein.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Bezeichnung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -238,7 +163,7 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
         panAllgemein.add(jLabel2, gridBagConstraints);
         jLabel2.getAccessibleContext().setAccessibleName("Bezeichnung");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Status:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -248,27 +173,58 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
         panAllgemein.add(jLabel3, gridBagConstraints);
         jLabel3.getAccessibleContext().setAccessibleName("Status");
 
-        lblNummer.setText("B130A");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
+                lblNummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panAllgemein.add(lblNummer, gridBagConstraints);
 
-        lblBezeichnung.setText("am blbbla");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        panAllgemein.add(lblBezeichnung, gridBagConstraints);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status}"),
+                lblStatus,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
-        lblStatus.setText("rechtsverbindlich");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panAllgemein.add(lblStatus, gridBagConstraints);
+
+        txtBezeichnung.setEditable(false);
+        txtBezeichnung.setColumns(30);
+        txtBezeichnung.setLineWrap(true);
+        txtBezeichnung.setRows(1);
+        txtBezeichnung.setToolTipText("");
+        txtBezeichnung.setWrapStyleWord(true);
+        txtBezeichnung.setBorder(null);
+        txtBezeichnung.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                txtBezeichnung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panAllgemein.add(txtBezeichnung, gridBagConstraints);
 
         panTabAllgemein.add(panAllgemein);
 
@@ -281,7 +237,7 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
         panAlkis.setOpaque(false);
         panAlkis.setLayout(new java.awt.GridBagLayout());
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel9.setText("ALKIS relevant");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -298,38 +254,63 @@ public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements
 
         tabbedPane.addTab("Historie", panTabAlkis);
 
-        panContent.add(tabbedPane, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
+        panContent.add(tabbedPane, gridBagConstraints);
 
-        add(panContent, java.awt.BorderLayout.WEST);
+        add(panContent, java.awt.BorderLayout.CENTER);
 
-        panMap.setOpaque(false);
-        panMap.setLayout(new java.awt.GridBagLayout());
-
-        panSpinner.setMaximumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setOpaque(false);
-
-        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
-        panSpinner.setLayout(panSpinnerLayout);
-        panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                69,
-                Short.MAX_VALUE));
-        panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-
-        panMap.add(panSpinner, new java.awt.GridBagConstraints());
-
-        add(panMap, java.awt.BorderLayout.CENTER);
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public void stateChanged(final ChangeEvent e) {
         lastSelected = tabbedPane.getSelectedIndex();
         timer = new Date();
+    }
+
+    @Override
+    public CidsBean getCidsBean() {
+        return cidsBean;
+    }
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
+        if (cidsBean != null) {
+            this.cidsBean = cidsBean;
+            panPreviewMap.initMap(cidsBean, "geometrie.geo_field");
+            bindingGroup.bind();
+        }
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
+
+    @Override
+    public String getTitle() {
+        String title = cidsBean.toString();
+        if (title != null) {
+            if (title.length() > 50) {
+                title = title.substring(0, 50);
+                title = title + "...";
+            }
+            title = TITLE + " - " + title;
+        } else {
+            title = TITLE;
+        }
+
+        return title;
+    }
+
+    @Override
+    public void setTitle(final String title) {
     }
 }

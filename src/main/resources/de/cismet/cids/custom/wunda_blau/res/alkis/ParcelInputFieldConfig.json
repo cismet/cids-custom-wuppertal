@@ -1,0 +1,48 @@
+{
+  "maxLenDistrictNumberField" : 4,
+  "maxLenParcelNumberField" : 3,
+  "maxLenParcelNumeratorField" : 5,
+  "maxLenParcelDenominatorField" : 4,
+  "delimiter1" : "-",
+  "delimiter2" : "/",
+  "conversionMap" : {
+    "ro" : 3267,
+    "d" : 3278,
+    "e" : 3135,
+    "b" : 3001,
+    "ba" : 3001,
+    "c" : 3279,
+    "n" : 3487,
+    "nä" : 3487,
+    "sc" : 3276,
+    "l" : 3486,
+    "vo" : 3277,
+    "cr" : 3279,
+    "v" : 3277,
+    "na" : 3487,
+    "el" : 3135,
+    "s" : 3276,
+    "r" : 3267,
+    "la" : 3486,
+    "dö" : 3278,
+    "do" : 3278,
+    "be" : 3485
+  },
+  "districtNamesMap" : {
+    "3135" : "Elberfeld",
+    "3001" : "Barmen",
+    "3267" : "Ronsdorf",
+    "3277" : "Vohwinkel",
+    "3276" : "Schöller",
+    "3279" : "Cronenberg",
+    "3278" : "Dönberg",
+    "3486" : "Langerfeld",
+    "3487" : "Nächstebreck",
+    "3485" : "Beyenburg"
+  },
+  "delimiter1AsString" : "-",
+  "delimiter2AsString" : "/",
+  "defaultAbbreviationLength" : 2,
+  "alternativeAbbreviationLength": {
+  }
+}

@@ -7,32 +7,23 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-
 import org.apache.log4j.Logger;
 
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.EventQueue;
 import java.awt.geom.Rectangle2D;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,7 +31,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -49,20 +39,22 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import de.cismet.cids.client.tools.DevelopmentTools;
-
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.wunda_blau.search.actions.NivPReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
-import de.cismet.cismap.commons.gui.printing.PrintingWidget;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
@@ -90,9 +82,6 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     private static final Logger LOG = Logger.getLogger(NivellementPunktAggregationRenderer.class);
 
     private static final double BUFFER = 0.005;
-
-    private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
-    private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -147,6 +136,10 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         scpPunkte.getViewport().setOpaque(false);
         tblPunkte.getSelectionModel().addListSelectionListener(new TableSelectionListener());
         tableComparator = new TableModelIndexConvertingToViewIndexComparator((tblPunkte));
+
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+
+        btnGenerateReport.setEnabled(billingAllowed);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -354,58 +347,61 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
             return;
         }
 
-        final Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    final Collection<NivellementPunktReportBean> reportBeans =
-                        new LinkedList<NivellementPunktReportBean>();
-                    reportBeans.add(new NivellementPunktReportBean(selectedNivellementPunkte));
-                    final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-
-                    final HashMap parameters = new HashMap();
-                    parameters.put(PARAMETER_JOBNUMBER, txtJobnumber.getText());
-                    parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
-
-                    final JasperReport jasperReport;
-                    final JasperPrint jasperPrint;
-                    try {
-                        jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
-                                    "/de/cismet/cids/custom/wunda_blau/res/nivp.jasper"));
-                        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-                    } catch (JRException ex) {
-                        LOG.error("Could not generate report for nivellement points.", ex);
-
-                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                                    NivellementPunktAggregationRenderer.class,
-                                    "NivellementPunktAggregationRenderer.btnGenerateReportActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
-                                NbBundle.getMessage(
-                                    NivellementPunktAggregationRenderer.class,
-                                    "NivellementPunktAggregationRenderer.btnGenerateReportActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
-                                null,
-                                null,
-                                ex,
-                                Level.ALL,
-                                null);
-                        JXErrorPane.showDialog(NivellementPunktAggregationRenderer.this, ei);
-
-                        return;
-                    }
-
-                    if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktAggregationRenderer.this)) {
-                        String projectname = txtProjectname.getText();
-                        if ((projectname == null) || (projectname.trim().length() == 0)) {
-                            projectname = "Nivellement-Punkte";
-                        }
-                        final String jobname = DownloadManagerDialog.getJobname();
-
-                        DownloadManager.instance().add(new JasperDownload(jasperPrint, jobname, projectname, "nivp"));
-                    }
-                }
-            };
-
-        CismetThreadPool.execute(runnable);
+        try {
+            if (BillingPopup.doBilling(
+                            "nivppdf",
+                            "no.yet",
+                            (Geometry)null,
+                            new ProductGroupAmount("ea", selectedNivellementPunkte.size()))) {
+                downloadReport(selectedNivellementPunkte, txtJobnumber.getText(), txtProjectname.getText());
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
     } //GEN-LAST:event_btnGenerateReportActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  nivPoints    DOCUMENT ME!
+     * @param  jobnumber    DOCUMENT ME!
+     * @param  projectname  DOCUMENT ME!
+     */
+    public static void downloadReport(final Collection<CidsBean> nivPoints,
+            final String jobnumber,
+            final String projectname) {
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getDescriptionPane())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
+
+            final Collection<MetaObjectNode> nivPMons = new ArrayList<MetaObjectNode>();
+            for (final CidsBean nivPoint : nivPoints) {
+                nivPMons.add(new MetaObjectNode(nivPoint));
+            }
+
+            final ServerActionParameter<Collection> sapMons = new ServerActionParameter<Collection>(
+                    NivPReportServerAction.Parameter.POINT_MONS.toString(),
+                    nivPMons);
+            final ServerActionParameter<String> sapJobnumber = new ServerActionParameter<String>(
+                    NivPReportServerAction.Parameter.JOBNUMBER.toString(),
+                    jobnumber);
+            final ServerActionParameter<String> sapProjectName = new ServerActionParameter<String>(
+                    NivPReportServerAction.Parameter.PROJECTNAME.toString(),
+                    projectname);
+
+            DownloadManager.instance()
+                    .add(new ByteArrayActionDownload(
+                            NivPReportServerAction.TASK_NAME,
+                            null,
+                            new ServerActionParameter[] { sapMons, sapJobnumber, sapProjectName },
+                            ((projectname == null) || (projectname.trim().length() == 0))
+                                ? ((nivPoints.size() == 1) ? "Nivellement-Punkt" : "Nivellement-Punkte") : projectname,
+                            jobname,
+                            "nivp",
+                            ".pdf"));
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -459,11 +455,21 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         if (beans instanceof List) {
@@ -487,16 +493,29 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         setTitle(null);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         mappingComponent.dispose();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         String desc = "Punktliste";
@@ -594,50 +613,6 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         return new Object[0];
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  args  DOCUMENT ME!
-     */
-    public static void main(final String[] args) {
-        try {
-//            final CidsBean[] nivellementPunkte = DevelopmentTools.createCidsBeansFromRMIConnectionOnLocalhost(
-//                    "WUNDA_BLAU",
-//                    "Administratoren",
-//                    "admin",
-//                    "sb",
-//                    "nivellement_punkt",
-//                    5);
-            final CidsBean[] nivellementPunkte = new CidsBean[] {
-                    DevelopmentTools.createCidsBeanFromRMIConnectionOnLocalhost(
-                        "WUNDA_BLAU",
-                        "Administratoren",
-                        "admin",
-                        "sb",
-                        "nivellement_punkt",
-                        // 6818)
-                        6833)
-                };
-
-//            DevelopmentTools.createAggregationRendererInFrameFromRMIConnectionOnLocalhost(
-//                Arrays.asList(nivellementPunkte),
-//                "Aggregationsrenderer",
-//                1024,
-//                768);
-
-            final Collection<NivellementPunktReportBean> reportBeans = new LinkedList<NivellementPunktReportBean>();
-            reportBeans.add(new NivellementPunktReportBean((Arrays.asList(nivellementPunkte))));
-            DevelopmentTools.showReportForBeans(
-                "/de/cismet/cids/custom/wunda_blau/res/nivp.jasper",
-                reportBeans);
-//            DevelopmentTools.showReportForCidsBeans(
-//                "/de/cismet/cids/custom/wunda_blau/res/nivp.jasper",
-//                nivellementPunkte);
-        } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
-        }
-    }
-
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -649,6 +624,11 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void valueChanged(final ListSelectionEvent e) {
             if (!e.getValueIsAdjusting() && (cidsBeans != null)) {
@@ -699,11 +679,26 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   row     DOCUMENT ME!
+         * @param   column  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public boolean isCellEditable(final int row, final int column) {
             return column == 0;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   columnIndex  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             if (columnIndex == 0) {
@@ -711,40 +706,6 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
             } else {
                 return super.getColumnClass(columnIndex);
             }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public static class NivellementPunktReportBean {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private Collection<CidsBean> nivellementPunkte;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new NivellementPunktReportBean object.
-         *
-         * @param  nivellementPunkte  DOCUMENT ME!
-         */
-        public NivellementPunktReportBean(final Collection<CidsBean> nivellementPunkte) {
-            this.nivellementPunkte = nivellementPunkte;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Collection<CidsBean> getNivellementPunkte() {
-            return nivellementPunkte;
         }
     }
 }

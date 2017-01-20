@@ -36,10 +36,8 @@ public class IndentLabel extends JLabel {
 
     private String text;
 
-    @InjectedResource
-    private Color accentColor;
-    @InjectedResource
-    private Color textColor;
+    @InjectedResource private Color accentColor;
+    @InjectedResource private Color textColor;
 
     //~ Constructors -----------------------------------------------------------
 

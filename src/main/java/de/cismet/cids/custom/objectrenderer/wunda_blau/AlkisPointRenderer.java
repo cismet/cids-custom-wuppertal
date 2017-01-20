@@ -22,6 +22,8 @@ import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
 import com.sun.media.jai.codec.TIFFDecodeParam;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
@@ -29,6 +31,11 @@ import de.aedsicad.aaaweb.service.util.PointLocation;
 import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.filter.ElementFilter;
+import org.jdom.input.SAXBuilder;
 
 import org.openide.util.Exceptions;
 
@@ -44,6 +51,8 @@ import java.awt.image.RenderedImage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -51,13 +60,13 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
@@ -78,7 +87,11 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.utils.alkis.AlkisPunktReportScriptlet;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 
@@ -126,8 +139,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
-    private static final Pattern ERHEBUNG_FILTER_PATTERN = Pattern.compile(
-            "<LI_Source><description>(.*)</description></LI_Source>");
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
     private static final String CARD_PREVIEW = "preview";
@@ -139,9 +150,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 //    private ImageIcon BACKWARD_PRESSED;
 //    private ImageIcon BACKWARD_SELECTED;
     private static final Color PUNKTORT_MIT_KARTENDARSTELLUNG = new Color(120, 255, 190);
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisPointRenderer.class);
-
-    public static final String[] SUFFIXES = new String[] { "tif", "jpg", "tiff", "jpeg" };
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisPointRenderer.class);
     protected static final String POINTTYPE_AUFNAHMEPUNKT = "Aufnahmepunkt";
     protected static final String POINTTYPE_SONSTIGERVERMESSUNGSPUNKT = "Sonstiger Vermessungspunkt";
     protected static XBoundingBox INITIAL_BOUNDINGBOX = new XBoundingBox(
@@ -157,7 +166,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             AlkisConstants.COMMONS.SRS_SERVICE,
             true,
             true);
-
     private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
 
             private static final String TRUE_REP = "Ja";
@@ -191,7 +199,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                     this.datenerhebungWerte.load(getClass().getResource(ALKIS_RES_PACKAGE + ERHEBUNGS_PROPERTIES)
                                 .openStream());
                 } catch (Exception ex) {
-                    log.error(ex, ex);
+                    LOG.error(ex, ex);
                 }
             }
 
@@ -199,25 +207,35 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
             @Override
             public String convertForward(final String s) {
+                String descr = "keine Angabe (-)";
+                String searchKey = "0000";
                 if (s != null) {
-                    final Matcher matcher = ERHEBUNG_FILTER_PATTERN.matcher(s);
-                    if (matcher.find()) {
-                        // take the 4 digit code
-                        final String matcherResultG1 = matcher.group(1);
-                        if ((matcherResultG1 != null) && (matcherResultG1.length() > 3)) {
-                            final String searchKey = matcherResultG1.substring(0, 4);
-                            // lookup description for code
-                            final String descr = datenerhebungWerte.getProperty(searchKey);
-                            if (descr != null) {
-                                // return result + format with html (max. column length)
-                                return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr
-                                            + "</tr></table></html>";
-                            } else {
-                                log.warn("No description found for Erhebung with key: " + searchKey);
-                            }
+                    try {
+                        final SAXBuilder builder = new SAXBuilder();
+
+                        final Reader in = new StringReader(s);
+                        final Document doc = builder.build(in);
+                        final Element root = doc.getRootElement();
+                        final ElementFilter filter = new ElementFilter("AX_Datenerhebung_Punktort");
+                        final Iterator it = root.getDescendants(filter);
+                        while (it.hasNext()) {
+                            final Element c = (Element)it.next();
+                            searchKey = c.getTextNormalize();
                         }
+                        // lookup description for code
+                        descr = datenerhebungWerte.getProperty(searchKey);
+                        if (descr != null) {
+                            // return result + format with html (max. column length)
+                            return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr
+                                        + "</tr></table></html>";
+                        } else {
+                            LOG.warn("No description found for Erhebung with key: " + searchKey);
+                        }
+                    } catch (Exception e) {
+                        LOG.error("Error in converter", e);
                     }
-                    log.warn("Could not translate response: " + s);
+
+                    LOG.warn("Could not translate response: " + s);
                 }
                 return "keine Angabe";
             }
@@ -449,12 +467,14 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     public AlkisPointRenderer() {
         retrieveableLabels = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
-        try {
-            soapProvider = new SOAPAccessProvider();
-//            searchService = soapProvider.getAlkisSearchService();
-            infoService = soapProvider.getAlkisInfoService();
-        } catch (Exception ex) {
-            log.fatal(ex, ex);
+
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+            try {
+                soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
+                infoService = soapProvider.getAlkisInfoService();
+            } catch (Exception ex) {
+                LOG.fatal(ex, ex);
+            }
         }
         initIcons();
         initComponents();
@@ -469,7 +489,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             cardLayout.show(this, CARD_1);
         } else {
             cardLayout = new CardLayout();
-            log.error("AlkisPointRenderer exspects CardLayout as major layout manager, but has " + getLayout()
+            LOG.error("AlkisPointRenderer exspects CardLayout as major layout manager, but has " + getLayout()
                         + "!");
         }
         layoutManager = pnlContent.getLayout();
@@ -478,7 +498,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             cardLayoutForContent.show(pnlContent, CARD_APMAP);
         } else {
             cardLayoutForContent = new CardLayout();
-            log.error(
+            LOG.error(
                 "AlkisPointRenderer exspects CardLayout as layout manager to display preview and AP maps, but has "
                         + getLayout()
                         + "!");
@@ -495,6 +515,18 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
+        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
+
+        final boolean billingAllowedPdf = BillingPopup.isBillingAllowed("pktlstpdf");
+        final boolean billingAllowedTxt = BillingPopup.isBillingAllowed("pktlsttxt");
+        final boolean billingAllowedHtml = billingAllowedPdf || billingAllowedTxt;
+
+        hlPunktlisteHtml.setEnabled(billingAllowedHtml
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+        hlPunktlistePdf.setEnabled(billingAllowedPdf
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+        hlPunktlisteTxt.setEnabled(billingAllowedTxt
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -571,7 +603,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             i3 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "punktlistetxt.png")));
         } catch (Exception ex) {
-            log.error(ex, ex);
+            LOG.error(ex, ex);
         }
         PUNKT_PDF = new ImageIcon(i1);
         PUNKT_HTML = new ImageIcon(i2);
@@ -1321,14 +1353,15 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtGenauigkeitsstufe, gridBagConstraints);
 
+        lblTxtDatenerhebung.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        lblTxtDatenerhebung.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 cbPunktorte,
                 org.jdesktop.beansbinding.ELProperty.create("${selectedItem.qualitaetsangabenHerkunft}"),
                 lblTxtDatenerhebung,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("keine Angabe");
-        binding.setSourceUnreadableValue("<Error>");
         binding.setConverter(ALKIS_ERHEBUNG_CONVERTER);
         bindingGroup.addBinding(binding);
 
@@ -1336,7 +1369,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 7, 7);
         panLocationInfos.add(lblTxtDatenerhebung, gridBagConstraints);
 
         srpHeadLocInfo.setBackground(java.awt.Color.darkGray);
@@ -1931,7 +1964,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
-        btnBackActionPerformed(null);
+        if (lblBack.isEnabled()) {
+            btnBackActionPerformed(null);
+        }
     }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
     /**
@@ -1968,14 +2003,17 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
-        btnForwardActionPerformed(null);
+        if (lblForw.isEnabled()) {
+            btnForwardActionPerformed(null);
+        }
     }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
      */
     private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -2019,7 +2057,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
                 final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(pointData, productType);
                 if ((url != null) && (url.trim().length() > 0)) {
-                    if (!DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
+                    if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(AlkisPointRenderer.this)) {
                         return;
                     }
 
@@ -2030,7 +2068,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                         download = new HttpDownload(
                                 new URL(url),
                                 "",
-                                DownloadManagerDialog.getJobname(),
+                                DownloadManagerDialog.getInstance().getJobName(),
                                 "Punktnachweis",
                                 productType,
                                 extension);
@@ -2039,8 +2077,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                         download = new HttpDownload(
                                 new URL(url.substring(0, parameterPosition)),
                                 parameters,
-                                AlkisPointAggregationRenderer.POST_HEADER,
-                                DownloadManagerDialog.getJobname(),
+                                AlkisProducts.POST_HEADER,
+                                DownloadManagerDialog.getInstance().getJobName(),
                                 "Punktnachweis",
                                 productType,
                                 extension);
@@ -2054,7 +2092,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                             + productType,
                     ex,
                     AlkisPointRenderer.this);
-                log.error("The URL to download product '" + productType + "' (actionTag: "
+                LOG.error("The URL to download product '" + productType + "' (actionTag: "
                             + PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.",
                     ex);
             }
@@ -2067,7 +2105,14 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlistePdfActionPerformed
-        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
+        try {
+            if (BillingPopup.doBilling("pktlstpdf", "no.yet", (Geometry)null, new ProductGroupAmount("eafifty", 1))) {
+                downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
     }                                                                                   //GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     /**
@@ -2102,7 +2147,18 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlisteTxtActionPerformed
-        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
+        try {
+            if (BillingPopup.doBilling(
+                            "pktlsttxt",
+                            "no.yet",
+                            (Geometry)null,
+                            new ProductGroupAmount("eapkt_1000", 1))) {
+                downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
     }                                                                                   //GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     /**
@@ -2143,31 +2199,48 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             try {
                 url = new URL(urlOfAPMap);
             } catch (MalformedURLException ex) {
-                log.info("Couldn't download AP map from '" + urlOfAPMap + "'.", ex);
+                LOG.info("Couldn't download AP map from '" + urlOfAPMap + "'.", ex);
                 return;
             }
 
-            CismetThreadPool.execute(new Runnable() {
+            try {
+                if (BillingPopup.doBilling(
+                                "appdf",
+                                url.toString(),
+                                (Geometry)null,
+                                new ProductGroupAmount("ea", 1))) {
+                    CismetThreadPool.execute(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
-                            final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
-                            DownloadManager.instance()
-                                    .add(
-                                        new HttpDownload(
-                                            url,
-                                            "",
-                                            DownloadManagerDialog.getJobname(),
-                                            "AP-Karte",
-                                            filename.substring(0, filename.lastIndexOf(".")),
-                                            filename.substring(filename.lastIndexOf("."))));
-                        }
-                    }
-                });
+                            @Override
+                            public void run() {
+                                if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                                                AlkisPointRenderer.this)) {
+                                    final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
+                                    DownloadManager.instance()
+                                            .add(
+                                                new HttpDownload(
+                                                    url,
+                                                    "",
+                                                    DownloadManagerDialog.getInstance().getJobName(),
+                                                    "AP-Karte",
+                                                    filename.substring(0, filename.lastIndexOf(".")),
+                                                    filename.substring(filename.lastIndexOf("."))));
+                                }
+                            }
+                        });
+                }
+            } catch (Exception e) {
+                LOG.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         }
     } //GEN-LAST:event_btnOpenActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -2194,6 +2267,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cb  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cb) {
         bindingGroup.unbind();
@@ -2209,17 +2287,27 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 if (pointcode != null) {
                     CismetThreadPool.execute(new RefreshDocumentWorker(pointcode.toString()));
                 } else {
-                    log.error("The given CidsBean (alkis_point) has no pointcode.");
+                    LOG.error("The given CidsBean (alkis_point) has no pointcode.");
                 }
             }
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(String title) {
         if (title == null) {
@@ -2231,26 +2319,51 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         lblTitle.setText(this.title);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
@@ -2292,60 +2405,12 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         this.pointLocations = pointLocations;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   pointcode  dgkBlattnummer the value of dgkBlattnummer
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static Collection<URL> getCorrespondingURLs(final String pointcode) {
-        final Collection<URL> validURLs = new LinkedList<URL>();
-
-        // The pointcode of a alkis point has a specific format:
-        // 25xx56xx1xxxxx
-        // ^  ^
-        // |  Part 2 of the "Kilometerquadrat"
-        // Part 1 of the "Kilometerquadrat"
-        if ((pointcode == null) || (pointcode.trim().length() < 9)) {
-            return validURLs;
-        }
-
-        final String kilometerquadratPart1 = pointcode.substring(2, 4);
-        final String kilometerquadratPart2 = pointcode.substring(6, 8);
-
-        final StringBuilder urlBuilder = new StringBuilder(AlkisConstants.COMMONS.APMAPS_HOST);
-        urlBuilder.append('/');
-        urlBuilder.append(kilometerquadratPart1);
-        urlBuilder.append(kilometerquadratPart2);
-        urlBuilder.append('/');
-        urlBuilder.append(AlkisConstants.COMMONS.APMAPS_PREFIX);
-        urlBuilder.append(pointcode);
-        urlBuilder.append('.');
-        for (final String suffix : SUFFIXES) {
-            URL urlToTry = null;
-            try {
-                urlToTry = new URL(urlBuilder.toString() + suffix);
-            } catch (MalformedURLException ex) {
-                log.warn("The URL '" + urlBuilder.toString() + suffix
-                            + "' is malformed. Can't load the corresponding picture.",
-                    ex);
-            }
-
-            if (urlToTry != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Valid URL: " + urlToTry.toExternalForm());
-                }
-
-                validURLs.add(urlToTry);
-            }
-        }
-        return validURLs;
     }
 
     /**
@@ -2361,9 +2426,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 "admin",
                 "sb",
                 "alkis_point",
-//                548516,
+                // 548516,
                 574043,
-//                1,
+                // 1,
                 "ALKIS-Punkt-Renderer",
                 1024,
                 768);
@@ -2400,9 +2465,20 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Point doInBackground() throws Exception {
-            return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
+            if (infoService != null) {
+                return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
+            } else {
+                return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode);
+            }
         }
 
         /**
@@ -2412,6 +2488,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             btnRetrieve.setEnabled(true);
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             setWait(false);
@@ -2431,7 +2510,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                     }
                 } catch (InterruptedException ex) {
                     restoreOnException();
-                    log.warn(ex, ex);
+                    LOG.warn(ex, ex);
                 } catch (Exception ex) {
                     // TODO show error message to user?
                     restoreOnException();
@@ -2446,7 +2525,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                     org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(
                             AlkisPointRenderer.this),
                         ei);
-                    log.error(ex, ex);
+                    LOG.error(ex, ex);
                 }
             }
         }
@@ -2470,6 +2549,17 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   list          DOCUMENT ME!
+         * @param   value         DOCUMENT ME!
+         * @param   index         DOCUMENT ME!
+         * @param   isSelected    DOCUMENT ME!
+         * @param   cellHasFocus  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Component getListCellRendererComponent(final JList list,
                 final Object value,
@@ -2509,6 +2599,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseEntered(final MouseEvent e) {
             final Object srcObj = e.getSource();
@@ -2518,6 +2613,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseExited(final MouseEvent e) {
             lblProductPreview.setIcon(null);
@@ -2548,46 +2648,57 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected BufferedImage doInBackground() throws Exception {
             BufferedImage result = null;
 
             if (pointcode == null) {
-                log.error("The current alkis point has no pointcode.");
+                LOG.error("The current alkis point has no pointcode.");
                 return result;
             }
 
-            final Collection<URL> validURLs = getCorrespondingURLs(pointcode.toString());
+            final Collection<URL> validURLs = AlkisUtils.PRODUCTS.getCorrespondingPointURLs(pointcode);
             InputStream streamToReadFrom = null;
             for (final URL url : validURLs) {
                 try {
-                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                    urlOfAPMap = url.toExternalForm();
-                    break;
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                        streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
+                        urlOfAPMap = url.toExternalForm();
+                        if (streamToReadFrom != null) {
+                            break;
+                        }
+                    }
                 } catch (MissingArgumentException ex) {
-                    log.warn("Could not read AP map from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
+                    LOG.warn("Could not read AP map from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
                 } catch (AccessMethodIsNotSupportedException ex) {
-                    log.warn("Can't access AP map URL '" + url.toExternalForm()
+                    LOG.warn("Can't access AP map URL '" + url.toExternalForm()
                                 + "' with default access method. Skipping this url.",
                         ex);
                 } catch (RequestFailedException ex) {
-                    log.warn("Requesting AP map from URL '" + url.toExternalForm() + "' failed. Skipping this url.",
+                    LOG.warn("Requesting AP map from URL '" + url.toExternalForm() + "' failed. Skipping this url.",
                         ex);
                 } catch (NoHandlerForURLException ex) {
-                    log.warn("Can't handle URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
+                    LOG.warn("Can't handle URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
                 } catch (Exception ex) {
-                    log.warn("An exception occurred while opening URL '" + url.toExternalForm()
+                    LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
                                 + "'. Skipping this url.",
                         ex);
                 }
             }
 
             if (streamToReadFrom == null) {
-                log.error("Couldn't get a connection to associated AP map.");
+                LOG.error("Couldn't get a connection to associated AP map.");
                 urlOfAPMap = null;
                 return result;
-            } else if (log.isDebugEnabled()) {
-                log.debug("Loading '" + urlOfAPMap + "'.");
+            } else if (LOG.isDebugEnabled()) {
+                LOG.debug("Loading '" + urlOfAPMap + "'.");
             }
 
             try {
@@ -2602,7 +2713,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                     result = ImageIO.read(streamToReadFrom);
                 }
             } catch (IOException ex) {
-                log.warn("Could not read image.", ex);
+                LOG.warn("Could not read image.", ex);
                 urlOfAPMap = null;
             } finally {
                 try {
@@ -2610,13 +2721,16 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                         streamToReadFrom.close();
                     }
                 } catch (IOException ex) {
-                    log.warn("Couldn't close the stream.", ex);
+                    LOG.warn("Couldn't close the stream.", ex);
                 }
             }
 
             return result;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             BufferedImage document = null;
@@ -2625,9 +2739,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                     document = get();
                 }
             } catch (InterruptedException ex) {
-                log.warn("Was interrupted while refreshing AP map.", ex);
+                LOG.warn("Was interrupted while refreshing AP map.", ex);
             } catch (ExecutionException ex) {
-                log.warn("There was an exception while refreshing AP map.", ex);
+                LOG.warn("There was an exception while refreshing AP map.", ex);
             }
 
             measuringComponent.reset();

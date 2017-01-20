@@ -28,17 +28,17 @@ import de.cismet.cids.custom.deprecated.IndentLabel;
 import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
- * de.cismet.cids.objectrenderer.CoolBplaeneRenderer.
+ * Use {@link Bplan_planRenderer} instead.
  *
- * @author   nh
- * @version  $Revision$, $Date$
+ * @author      nh
+ * @version     $Revision$, $Date$
+ * @deprecated  DOCUMENT ME!
  */
 public class BplaeneRenderer extends BlurredMapObjectRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
-    @CidsRendererTitle
-    public String compTitle;
+    @CidsRendererTitle public String compTitle;
     @CidsAttribute("STATUS")
     public Object status = "";
     @CidsAttribute("NAMEPLUS")

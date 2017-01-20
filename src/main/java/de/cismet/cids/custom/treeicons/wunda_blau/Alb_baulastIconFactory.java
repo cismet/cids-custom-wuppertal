@@ -19,7 +19,8 @@ import Sirius.navigator.ui.tree.CidsTreeObjectIconFactory;
 
 import Sirius.server.middleware.types.MetaObject;
 
-import java.util.HashSet;
+import java.util.List;
+import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,7 +30,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.tools.gui.Static2DTools;
+import de.cismet.tools.Static2DTools;
 
 /**
  * DOCUMENT ME!
@@ -42,17 +43,33 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastIconFactory.class);
-    private static ImageIcon fallback = new ImageIcon(Alb_baulastIconFactory.class.getResource(
+    private static ImageIcon FALLBACK = new ImageIcon(Alb_baulastIconFactory.class.getResource(
                 "/res/16/BaulastGrau.png"));
+
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public enum Overlay {
+
+        //~ Enum constants -----------------------------------------------------
+
+        CROSS, LOCKED, WARN, NONE
+    }
 
     //~ Instance fields --------------------------------------------------------
 
     volatile javax.swing.SwingWorker<Void, Void> objectRetrievingWorker = null;
-    final HashSet<ObjectTreeNode> listOfRetrievingObjectWorkers = new HashSet<ObjectTreeNode>();
-    private ExecutorService objectRetrievalExecutor = Executors.newFixedThreadPool(15);
+    final WeakHashMap<ObjectTreeNode, ExecutorService> listOfRetrievingObjectWorkers =
+        new WeakHashMap<ObjectTreeNode, ExecutorService>();
+    private final ExecutorService objectRetrievalExecutor = Executors.newFixedThreadPool(15);
     private final ImageIcon DELETED_ICON;
     private final ImageIcon CLOSED_ICON;
     private final ImageIcon WARNING_ICON;
+
     private final Object objectRetrievingLock = new Object();
 
     //~ Constructors -----------------------------------------------------------
@@ -121,42 +138,40 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
                 final CidsBean baulastBean = baulastMO.getBean();
                 result = node.getLeafIcon();
 
-                if (!checkIfBaulastBeansIsComplete(baulastBean)) {
-                    final Icon overlay = Static2DTools.createOverlayIcon(
-                            WARNING_ICON,
-                            result.getIconWidth(),
-                            result.getIconHeight());
-                    result = Static2DTools.mergeIcons(result, overlay);
-//                result = overlay;
-//                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(WARNING_ICON, result.getIconWidth(), result.getIconHeight()));
-//                result = Static2DTools.mergeIcons(new Icon[]{result, WARNING_ICON});
-                } else {
-                    if (baulastBean.getProperty("loeschungsdatum") != null) {
+                final Overlay ovl = getOverlayForBaulast(baulastBean);
+                // CROSS OVERLAY
+
+                switch (ovl) {
+                    case CROSS: {
                         final Icon overlay = Static2DTools.createOverlayIcon(
                                 DELETED_ICON,
                                 result.getIconWidth(),
                                 result.getIconHeight());
                         result = Static2DTools.mergeIcons(result, overlay);
-//                    result = overlay;
-//                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(DELETED_ICON, result.getIconWidth(), result.getIconHeight()));
-//                result = Static2DTools.mergeIcons(new Icon[]{result, DELETED_ICON});
-                    } else if (baulastBean.getProperty("geschlossen_am") != null) {
+                        break;
+                    }
+                    case LOCKED: {
                         final Icon overlay = Static2DTools.createOverlayIcon(
                                 CLOSED_ICON,
                                 result.getIconWidth(),
                                 result.getIconHeight());
                         result = Static2DTools.mergeIcons(result, overlay);
-//                    result = overlay;
-//                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(CLOSED_ICON, result.getIconWidth(), result.getIconHeight()));
-//                result = Static2DTools.mergeIcons(new Icon[]{result, CLOSED_ICON});
+                        break;
+                    }
+                    case WARN: {
+                        final Icon overlay = Static2DTools.createOverlayIcon(
+                                WARNING_ICON,
+                                result.getIconWidth(),
+                                result.getIconHeight());
+                        result = Static2DTools.mergeIcons(result, overlay);
                     }
                 }
                 return result;
             } else {
-                if (!listOfRetrievingObjectWorkers.contains(node)) {
-                    synchronized (listOfRetrievingObjectWorkers) {
-                        if (!listOfRetrievingObjectWorkers.contains(node)) {
-                            listOfRetrievingObjectWorkers.add(node);
+                if (!listOfRetrievingObjectWorkers.containsKey(node)) {
+                    if (!listOfRetrievingObjectWorkers.containsKey(node)) {
+                        listOfRetrievingObjectWorkers.put(node, objectRetrievalExecutor);
+                        synchronized (listOfRetrievingObjectWorkers) {
                             objectRetrievalExecutor.execute(new javax.swing.SwingWorker<Void, Void>() {
 
                                     @Override
@@ -175,15 +190,13 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
                                                 node.getMetaObject(true);
                                             }
                                         }
+
                                         return null;
                                     }
 
                                     @Override
                                     protected void done() {
                                         try {
-                                            synchronized (listOfRetrievingObjectWorkers) {
-                                                listOfRetrievingObjectWorkers.remove(node);
-                                            }
                                             final Void result = get();
                                             if (node.getPath()[0].equals(
                                                             ComponentRegistry.getRegistry().getSearchResultsTree()
@@ -198,6 +211,10 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
                                             }
                                         } catch (Exception e) {
                                             log.error("Fehler beim Laden des MetaObjects", e);
+                                        } finally {
+                                            synchronized (listOfRetrievingObjectWorkers) {
+                                                listOfRetrievingObjectWorkers.remove(node);
+                                            }
                                         }
                                     }
                                 });
@@ -207,21 +224,67 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
                     // evtl log meldungen
                 }
             }
-            return fallback;
+            return FALLBACK;
         }
 
         return null;
     }
 
     /**
-     * Checks whether or not all important attributes of a baulast are filled.
+     * DOCUMENT ME!
      *
      * @param   baulastBean  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private boolean checkIfBaulastBeansIsComplete(final CidsBean baulastBean) {
-        return (baulastBean.getProperty("laufende_nummer") != null) && (baulastBean.getProperty("lageplan") != null)
-                    && (baulastBean.getProperty("textblatt") != null);
+    private static boolean hasBaulastHistoricLandparcels(final CidsBean baulastBean) {
+        final List<CidsBean> belastete = baulastBean.getBeanCollectionProperty("flurstuecke_belastet");
+        final List<CidsBean> beguenstigte = baulastBean.getBeanCollectionProperty("flurstuecke_beguenstigt");
+        for (final CidsBean fs : belastete) {
+            if (fs.getProperty("historisch") != null) {
+                return true;
+            }
+        }
+        for (final CidsBean fs : beguenstigte) {
+            if (fs.getProperty("historisch") != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   baulastBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static boolean isBaulastGeprueft(final CidsBean baulastBean) {
+        final Boolean geprueft = (Boolean)baulastBean.getProperty("geprueft");
+        if (geprueft == null) {
+            return false;
+        } else {
+            return geprueft.booleanValue();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   baulastBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Overlay getOverlayForBaulast(final CidsBean baulastBean) {
+        if (isBaulastGeprueft(baulastBean) && (baulastBean.getProperty("loeschungsdatum") != null)) {
+            return Overlay.CROSS;
+        } else if (isBaulastGeprueft(baulastBean) && (baulastBean.getProperty("geschlossen_am") != null)) {
+            return Overlay.LOCKED;
+        } else if (!isBaulastGeprueft(baulastBean) || hasBaulastHistoricLandparcels(baulastBean)) {
+            return Overlay.WARN;
+        } else {
+            return Overlay.NONE;
+        }
     }
 }

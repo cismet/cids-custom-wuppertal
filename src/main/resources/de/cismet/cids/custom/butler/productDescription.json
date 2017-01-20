@@ -1,0 +1,499 @@
+{
+    "butler1ProductGroups": [
+        {
+            "key": "Höhendaten",
+            "butlerProducts": [
+                {
+                    "name": "1m Höhenlinie",
+                    "key": "0101",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "5m Höhenlinie",
+                    "key": "0102",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "10m Höhenlinie",
+                    "key": "0103",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "1m Punktraster",
+                    "key": "0104",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "5m Punktraster",
+                    "key": "0105",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "10m Punktraster",
+                    "key": "0106",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "25m Punktraster",
+                    "key": "0107",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "",
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regengeld - Dachpunkte",
+                    "key": "0108",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Anzahl Dachpunkte:"
+                },
+                {
+                    "name": "Regengeld - Bodenpunkte",
+                    "key": "0109",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Anzahl Bodenpunkte:"
+                }
+            ],
+            "butlerFormats": [
+                {
+                    "key": "DXF"
+                },
+                {
+                    "key": "SHAPE"
+                }
+            ],
+            "butlerResolutions": [
+                {
+                    "key": "ohne",
+                    "description": ""
+                }
+            ]
+        },
+        {
+            "key": "DGK",
+            "butlerProducts": [
+                {
+                    "name": "2011-12 Grauwert",
+                    "key": "0201",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "2011-12 Schwarz-Weiß",
+                    "key": "0202",
+                    "colorDepth": 1,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "2011-12 Grauwert XL",
+                    "key": "0203",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "2011-12 Schwarz-Weiß",
+                    "key": "0204",
+                    "colorDepth": 1,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "2012-12 Farbe",
+                    "key": "0205",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                }
+            ],
+            "butlerFormats": [
+                {
+                    "key": "TIF"
+                },
+                {
+                    "key": "GEOTIF"
+                }
+            ],
+            "butlerResolutions": [
+                {
+                    "key": "10",
+                    "description": "cm/Pixel (Beste Qualität)"
+                },
+                {
+                    "key": "15",
+                    "description": "cm/Pixel (Normale Qualität)"
+                },
+                {
+                    "key": "31",
+                    "description": "cm/Pixel (Entwurfsqualität)"
+                }
+            ]
+        },
+        {
+            "key": "Stadtkarte",
+            "butlerProducts": [
+                {
+                    "name": "Regional 2011-12 Grauwert",
+                    "key": "0301",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2011-12 Farbe",
+                    "key": "0302",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2011-12 Grauwert",
+                    "key": "0303",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2011-12 Farbe",
+                    "key": "0304",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2012-12 Grauwert",
+                    "key": "0305",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2012-12 Farbe",
+                    "key": "0306",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2013-06 Grauwert",
+                    "key": "0307",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2013-06 Farbe",
+                    "key": "0308",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2013-12 Grauwert",
+                    "key": "0309",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2013-12 Farbe",
+                    "key": "0310",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2014-06 Grauwert",
+                    "key": "0311",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Regional 2014-06 Farbe",
+                    "key": "0312",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                }
+            ],
+            "butlerFormats": [
+                {
+                    "key": "TIF"
+                },
+                {
+                    "key": "GEOTIF"
+                }
+            ],
+            "butlerResolutions": [
+                {
+                    "key": "50",
+                    "description": "cm/Pixel (Beste Qualität)"
+                },
+                {
+                    "key": "70",
+                    "description": "cm/Pixel (Normale Qualität)"
+                },
+                {
+                    "key": "150",
+                    "description": "cm/Pixel (Entwurfsqualität)"
+                }
+            ]
+        },
+        {
+            "key": "Orthophoto",
+            "butlerProducts": [
+                {
+                    "name": "Wuppertal 2002",
+                    "key": "0401",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Wuppertal 2005",
+                    "key": "0402",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Wuppertal 2007",
+                    "key": "0403",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Wuppertal 2010",
+                    "key": "0404",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Wuppertal 2012",
+                    "key": "0405",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):",
+                    "butlerResolutions": [
+                        {
+                            "key": "5",
+                            "description": "cm/Pixel (Premium Qualität)"
+                        },
+                        {
+                            "key": "10",
+                            "description": "cm/Pixel (Beste Qualität)"
+                        },
+                        {
+                            "key": "15",
+                            "description": "cm/Pixel (Normale Qualität)"
+                        },
+                        {
+                            "key": "31",
+                            "description": "cm/Pixel (Entwurfsqualität)"
+                        }
+                    ]
+                },
+                {
+                    "name": "Wuppertal 2014",
+                    "key": "0407",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):",
+                    "butlerResolutions": [
+                        {
+                            "key": "5",
+                            "description": "cm/Pixel (Premium Qualität)"
+                        },
+                        {
+                            "key": "10",
+                            "description": "cm/Pixel (Beste Qualität)"
+                        },
+                        {
+                            "key": "15",
+                            "description": "cm/Pixel (Normale Qualität)"
+                        },
+                        {
+                            "key": "31",
+                            "description": "cm/Pixel (Entwurfsqualität)"
+                        }
+                    ]
+                }
+            ],
+            "butlerFormats": [
+                {
+                    "key": "TIF"
+                },
+                {
+                    "key": "GEOTIF"
+                }
+            ],
+            "butlerResolutions": [
+                {
+                    "key": "10",
+                    "description": "cm/Pixel (Beste Qualität)"
+                },
+                {
+                    "key": "15",
+                    "description": "cm/Pixel (Normale Qualität)"
+                },
+                {
+                    "key": "31",
+                    "description": "cm/Pixel (Entwurfsqualität)"
+                }
+            ]
+        },
+        {
+            "key": "Kataster",
+            "butlerProducts": [
+                {
+                    "name": "Wuppertaler Gebäude",
+                    "key": "0501",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Anzahl Gebäude:"
+                },
+                {
+                    "name": "Wuppertaler Flurstücke",
+                    "key": "0502",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Anzahl Flurstücke:"
+                },
+                {
+                    "name": "Wuppertaler Adressen",
+                    "key": "0503",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Anzahl Adressen:"
+                }
+            ],
+            "butlerFormats": [
+                {
+                    "key": "DXF"
+                },
+                {
+                    "key": "SHAPE"
+                }
+            ],
+            "butlerResolutions": [
+                {
+                    "key": "ohne",
+                    "description": ""
+                }
+            ]
+        }
+    ],
+    "butler2ProductGroups": [
+        {
+            "key": "Butler2",
+            "butlerProducts": [
+                {
+                    "name": "Stadtgrundkarte mit kommunalen Ergänzungen, farbig",
+                    "key": "0901g",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Stadtgrundkarte mit kommunalen Ergänzungen, grau",
+                    "key": "0902",
+                    "colorDepth": null,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Karte für Feldvergleich Farbe",
+                    "key": "0903g",
+                    "colorDepth": null,
+                    "format": null,
+                    "volumeParamText": "Fläche (km²):"
+                },
+                {
+                    "name": "Karte für Feldvergleich  Grauwert",
+                    "key": "0903",
+                    "colorDepth": null,
+                    "format": null,
+                    "volumeParamText": "Fläche (km²):"
+                }
+            ],
+            "butlerFormats": [
+                {
+                    "key": "AUTOCAD/DXF"
+                },
+                {
+                    "key": "PDF"
+                },
+                {
+                    "key": "TIF"
+                }
+            ],
+            "butlerResolutions": [
+                {
+                    "key": "500",
+                    "description": "1:500"
+                },
+                {
+                    "key": "1000",
+                    "description": "1:1000"
+                }
+            ]
+
+        }
+    ]
+}

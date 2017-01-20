@@ -95,9 +95,9 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
 
         try {
             final MetaClassCacheService classcache = Lookup.getDefault().lookup(MetaClassCacheService.class);
-            timLiegMetaClass = classcache.getMetaClass(SessionManager.getSession().getUser().getDomain(), "tim_lieg");
+            timLiegMetaClass = classcache.getMetaClass("WUNDA_BLAU", "tim_lieg");
             isCurrentUserAllowedToSetHint = timLiegMetaClass.getPermissions()
-                        .hasWritePermission(SessionManager.getSession().getUser().getUserGroup());
+                        .hasWritePermission(SessionManager.getSession().getUser());
         } catch (Exception e) {
             LOG.error(
                 "An error occurred while trying to set up SetTIMNoteAction. There was a problem with the lookup mechanism or session handling.",
@@ -156,7 +156,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
             persistedHint = hint.persist();
         } catch (Exception ex) {
             LOG.error("Could not persist new entity for table 'tim_lieg'.", ex);
-            JOptionPane.showMessageDialog(CismapBroker.getInstance().getMappingComponent(),
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
                 NbBundle.getMessage(
                     SetTIMNoteAction.class,
                     "SetTIMNoteAction.actionPerformed(ActionEvent).errorMessage"),
@@ -167,7 +168,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
 
         if (persistedHint == null) {
             LOG.error("Could not persist new entity for table 'tim_lieg'.");
-            JOptionPane.showMessageDialog(CismapBroker.getInstance().getMappingComponent(),
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
                 NbBundle.getMessage(
                     SetTIMNoteAction.class,
                     "SetTIMNoteAction.actionPerformed(ActionEvent).errorMessage"),

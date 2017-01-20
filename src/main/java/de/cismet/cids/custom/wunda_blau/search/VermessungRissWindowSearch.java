@@ -8,28 +8,24 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
-import Sirius.navigator.types.treenode.DefaultMetaTreeNode;
-import Sirius.navigator.types.treenode.ObjectTreeNode;
-import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.search.CidsServerSearch;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -38,50 +34,51 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
+import javax.swing.JList;
+import javax.swing.ListModel;
 
+import de.cismet.cids.custom.objecteditors.utils.VermessungRissUtils;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
+import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultFeatureCollection;
-import de.cismet.cismap.commons.features.PureNewFeature;
-import de.cismet.cismap.commons.features.SearchFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.piccolo.PFeature;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListenerInterface;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateSearchGeometryListener;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.MetaSearchCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.cismap.commons.jtsgeometryfactories.PostGisGeometryFactory;
 
-import de.cismet.cismap.navigatorplugin.CidsFeature;
+import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.cismap.tools.gui.CidsBeanDropJPopupMenuButton;
+import de.cismet.tools.gui.StaticSwingTools;
 
-import de.cismet.tools.gui.HighlightingRadioButtonMenuItem;
-import de.cismet.tools.gui.JPopupMenuButton;
+import static javax.swing.Action.NAME;
 
 /**
  * DOCUMENT ME!
@@ -98,29 +95,29 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(VermessungRissWindowSearch.class);
-
-    private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
+    private static final String ACTION_TAG = "custom.vermessungsriss.windowsearch@WUNDA_BLAU";
+    private static final String VERAENDERUNGSART_ALL_CODE = " ";
+    private static Collection<CidsBean> veraenderungsarts = new LinkedList<CidsBean>();
 
     //~ Instance fields --------------------------------------------------------
 
-    private final boolean geoSearchEnabled;
-    private final MetaClass metaClass;
+    private boolean geoSearchEnabled;
+    private MetaClass metaClass;
     private ImageIcon icon;
-    private final MappingComponent mappingComponent;
+    private MappingComponent mappingComponent;
     private SearchControlPanel pnlSearchCancel;
-    private CidsBeanDropJPopupMenuButton btnGeoSearch;
+    private GeoSearchButton btnGeoSearch;
     private VermessungFlurstueckSelectionDialog flurstueckDialog;
     private DefaultListModel flurstuecksvermessungFilterModel = null;
-    private ImageIcon icoPluginRectangle;
-    private ImageIcon icoPluginPolygon;
-    private ImageIcon icoPluginEllipse;
-    private ImageIcon icoPluginPolyline;
-
+//    private ImageIcon icoPluginRectangle;
+//    private ImageIcon icoPluginPolygon;
+//    private ImageIcon icoPluginEllipse;
+//    private ImageIcon icoPluginPolyline;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup bgrSearch;
     private javax.swing.JButton btnAddFlurstueck;
     private javax.swing.JButton btnFilterSchluessel505To508;
     private javax.swing.JButton btnFilterSchluesselAll;
+    private javax.swing.JButton btnNewSearch;
     private javax.swing.JButton btnRemoveFlurstueck;
     private javax.swing.JCheckBox chkFilterSchluessel501;
     private javax.swing.JCheckBox chkFilterSchluessel502;
@@ -140,23 +137,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private javax.swing.JLabel lblGemarkung;
     private javax.swing.JLabel lblSchluessel;
     private javax.swing.JList lstFlurstuecke;
-    private javax.swing.JMenuItem mniSearchBuffer;
-    private javax.swing.JRadioButtonMenuItem mniSearchCidsFeature;
-    private javax.swing.JRadioButtonMenuItem mniSearchEllipse;
-    private javax.swing.JRadioButtonMenuItem mniSearchPolygon;
-    private javax.swing.JRadioButtonMenuItem mniSearchPolyline;
-    private javax.swing.JRadioButtonMenuItem mniSearchRectangle;
-    private javax.swing.JMenuItem mniSearchRedo;
-    private javax.swing.JMenuItem mniSearchShowLastFeature;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlFilterFlurstuecke;
     private javax.swing.JPanel pnlFilterRiss;
     private javax.swing.JPanel pnlFilterRissWildcards;
     private javax.swing.JPanel pnlFilterSchluessel;
     private javax.swing.JPanel pnlFilterSchluesselControls;
-    private javax.swing.JPopupMenu popMenSearch;
+    private javax.swing.JPopupMenu popChangeVeraenderungsart;
     private javax.swing.JScrollPane scpFlurstuecke;
-    private javax.swing.JSeparator sepSearchGeometries;
     private javax.swing.JTextField txtBlatt;
     private javax.swing.JTextField txtFlur;
     private javax.swing.JTextField txtGemarkung;
@@ -169,104 +157,141 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      * Creates new form VermessungRissWindowSearch.
      */
     public VermessungRissWindowSearch() {
-        mappingComponent = CismapBroker.getInstance().getMappingComponent();
-        geoSearchEnabled = mappingComponent != null;
-        metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "vermessung_riss");
+        try {
+            mappingComponent = CismapBroker.getInstance().getMappingComponent();
+            geoSearchEnabled = mappingComponent != null;
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "vermessung_riss");
 
-        byte[] iconDataFromMetaclass = new byte[] {};
+            if (metaClass != null) {
+                byte[] iconDataFromMetaclass = new byte[] {};
 
-        if (metaClass != null) {
-            iconDataFromMetaclass = metaClass.getIconData();
-        }
+                if (metaClass != null) {
+                    iconDataFromMetaclass = metaClass.getIconData();
+                }
 
-        if (iconDataFromMetaclass.length > 0) {
-            LOG.info("Using icon from metaclass.");
-            icon = new ImageIcon(metaClass.getIconData());
-        } else {
-            LOG.warn("Metaclass icon is not set. Trying to load default icon.");
-            final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
+                if (iconDataFromMetaclass.length > 0) {
+                    LOG.info("Using icon from metaclass.");
+                    icon = new ImageIcon(metaClass.getIconData());
+                } else {
+                    LOG.warn("Metaclass icon is not set. Trying to load default icon.");
+                    final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
 
-            if (urlToIcon != null) {
-                icon = new ImageIcon(urlToIcon);
-            } else {
-                icon = new ImageIcon(new byte[] {});
-            }
-        }
-
-        icoPluginRectangle = new ImageIcon(getClass().getResource("/images/pluginSearchRectangle.png"));
-        icoPluginPolygon = new ImageIcon(getClass().getResource("/images/pluginSearchPolygon.png"));
-        icoPluginEllipse = new ImageIcon(getClass().getResource("/images/pluginSearchEllipse.png"));
-        icoPluginPolyline = new ImageIcon(getClass().getResource("/images/pluginSearchPolyline.png"));
-
-        initComponents();
-
-        pnlSearchCancel = new SearchControlPanel(this);
-        final Dimension max = pnlSearchCancel.getMaximumSize();
-        final Dimension min = pnlSearchCancel.getMinimumSize();
-        final Dimension pre = pnlSearchCancel.getPreferredSize();
-        pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
-                new Double(max.getWidth()).intValue(),
-                new Double(max.getHeight() + 6).intValue()));
-        pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
-                new Double(min.getWidth()).intValue(),
-                new Double(min.getHeight() + 6).intValue()));
-        pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
-                new Double(pre.getWidth() + 6).intValue(),
-                new Double(pre.getHeight() + 6).intValue()));
-        pnlButtons.add(pnlSearchCancel);
-
-        if (geoSearchEnabled) {
-            final VermessungRissCreateSearchGeometryListener vermessungRissCreateSearchGeometryListener =
-                new VermessungRissCreateSearchGeometryListener(mappingComponent, new VermessungRissSearchTooltip(icon));
-            vermessungRissCreateSearchGeometryListener.addPropertyChangeListener(this);
-
-            pnlButtons.add(Box.createHorizontalStrut(5));
-
-            btnGeoSearch = new CidsBeanDropJPopupMenuButton(
-                    VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY,
-                    mappingComponent,
-                    null);
-            btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                        btnGeoSearchActionPerformed(evt);
-                    }
-                });
-            btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
-                    VermessungRissWindowSearch.class,
-                    "VermessungRissWindowSearch.btnGeoSearch.toolTipText"));
-            ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
-            btnGeoSearch.setFocusPainted(false);
-            pnlButtons.add(btnGeoSearch);
-
-            visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
-                    MappingComponent.CREATE_SEARCH_POLYGON));
-            mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
-            new CidsBeanDropTarget(btnGeoSearch);
-
-            ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
-                    getClass().getResource("/images/pluginSearchTarget.png")));
-        } else {
-            chkSearchInCismap.setVisible(false);
-        }
-
-        flurstuecksvermessungFilterModel = new DefaultListModel();
-        lstFlurstuecke.setModel(flurstuecksvermessungFilterModel);
-
-        flurstueckDialog = new VermessungFlurstueckSelectionDialog(false) {
-
-                @Override
-                public void okHook() {
-                    final List<CidsBean> result = getCurrentListToAdd();
-                    if (result.size() > 0) {
-                        flurstuecksvermessungFilterModel.addElement(result.get(0));
+                    if (urlToIcon != null) {
+                        icon = new ImageIcon(urlToIcon);
+                    } else {
+                        icon = new ImageIcon(new byte[] {});
                     }
                 }
-            };
 
-        flurstueckDialog.pack();
-        flurstueckDialog.setLocationRelativeTo(this);
+//                icoPluginRectangle = new ImageIcon(getClass().getResource("/images/pluginSearchRectangle.png"));
+//                icoPluginPolygon = new ImageIcon(getClass().getResource("/images/pluginSearchPolygon.png"));
+//                icoPluginEllipse = new ImageIcon(getClass().getResource("/images/pluginSearchEllipse.png"));
+//                icoPluginPolyline = new ImageIcon(getClass().getResource("/images/pluginSearchPolyline.png"));
+
+                initComponents();
+
+                new CidsBeanDropTarget((DropAwareJList)lstFlurstuecke);
+
+                pnlSearchCancel = new SearchControlPanel(this);
+                final Dimension max = pnlSearchCancel.getMaximumSize();
+                final Dimension min = pnlSearchCancel.getMinimumSize();
+                final Dimension pre = pnlSearchCancel.getPreferredSize();
+                pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
+                        new Double(max.getWidth()).intValue(),
+                        new Double(max.getHeight() + 5).intValue()));
+                pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
+                        new Double(min.getWidth()).intValue(),
+                        new Double(min.getHeight() + 5).intValue()));
+                pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
+                        new Double(pre.getWidth() + 6).intValue(),
+                        new Double(pre.getHeight() + 5).intValue()));
+                pnlButtons.add(pnlSearchCancel);
+
+                if (geoSearchEnabled) {
+                    final VermessungRissCreateSearchGeometryListener vermessungRissCreateSearchGeometryListener =
+                        new VermessungRissCreateSearchGeometryListener(
+                            mappingComponent,
+                            new VermessungRissSearchTooltip(icon));
+                    vermessungRissCreateSearchGeometryListener.addPropertyChangeListener(this);
+
+                    pnlButtons.add(Box.createHorizontalStrut(5));
+
+                    btnGeoSearch = new GeoSearchButton(
+                            VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY,
+                            mappingComponent,
+                            null);
+                    btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                            VermessungRissWindowSearch.class,
+                            "VermessungRissWindowSearch.btnGeoSearch.toolTipText"));
+                    pnlButtons.add(btnGeoSearch);
+                } else {
+                    chkSearchInCismap.setVisible(false);
+                }
+
+                flurstuecksvermessungFilterModel = new DefaultListModel();
+                lstFlurstuecke.setModel(flurstuecksvermessungFilterModel);
+
+                flurstueckDialog = new VermessungFlurstueckSelectionDialog(false) {
+
+                        @Override
+                        public void okHook() {
+                            flurstuecksvermessungFilterModel.clear();
+
+                            for (final CidsBean flurstuecksvermessung : getCurrentListToAdd()) {
+                                flurstuecksvermessungFilterModel.addElement(flurstuecksvermessung);
+                            }
+                        }
+                    };
+
+                flurstueckDialog.pack();
+
+                // Initialize the popup menu to change the veraenderungsart. Since the set of available veraenderungsart
+                // is very unlikely to change, we once load it and save it in a static Collection.
+                if ((veraenderungsarts == null) || veraenderungsarts.isEmpty()) {
+                    final Collection result;
+                    try {
+                        result = SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                            new CidsVermessungRissArtSearchStatement(
+                                                SessionManager.getSession().getUser()));
+                    } catch (final ConnectionException ex) {
+                        LOG.warn(
+                            "Could not fetch veranederungsart entries. Editing flurstuecksvermessung will not work.",
+                            ex);
+                        // TODO: USer feedback?
+                        return;
+                    }
+
+                    for (final Object veraenderungsart : result) {
+                        veraenderungsarts.add(((MetaObject)veraenderungsart).getBean());
+                    }
+                }
+
+                // create the additional Veraenderungsart 'All', which has an empty code and is the neutral element
+                // for the search.
+                final CidsBean veraenderungsartAll = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_TABLE_NAME);
+                veraenderungsartAll.setProperty(
+                    VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_CODE,
+                    VERAENDERUNGSART_ALL_CODE);
+                final String text = org.openide.util.NbBundle.getMessage(
+                        VermessungRissWindowSearch.class,
+                        "VermessungRissWindowSearch.veraenderungsart_all.name");
+                veraenderungsartAll.setProperty(VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_NAME, text);
+                popChangeVeraenderungsart.add(new ChangeVeraenderungsartAction(veraenderungsartAll));
+
+                for (final CidsBean veraenderungsart : veraenderungsarts) {
+                    popChangeVeraenderungsart.add(new VermessungRissWindowSearch.ChangeVeraenderungsartAction(
+                            veraenderungsart));
+                }
+            }
+        } catch (Throwable e) {
+            LOG.warn("Error in Constructor of VermessungsRissWindowSearch. Search will not work properly.", e);
+            geoSearchEnabled = false;
+            metaClass = null;
+            mappingComponent = null;
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -280,25 +305,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        bgrSearch = new javax.swing.ButtonGroup();
-        popMenSearch = new javax.swing.JPopupMenu();
-        mniSearchRectangle = new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(
-                    "ProgressBar.foreground"),
-                Color.WHITE);
-        mniSearchPolygon = new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(
-                    "ProgressBar.foreground"),
-                Color.WHITE);
-        mniSearchEllipse = new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(
-                    "ProgressBar.foreground"),
-                Color.WHITE);
-        mniSearchPolyline = new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(
-                    "ProgressBar.foreground"),
-                Color.WHITE);
-        sepSearchGeometries = new javax.swing.JSeparator();
-        mniSearchCidsFeature = new javax.swing.JRadioButtonMenuItem();
-        mniSearchShowLastFeature = new javax.swing.JMenuItem();
-        mniSearchRedo = new javax.swing.JMenuItem();
-        mniSearchBuffer = new javax.swing.JMenuItem();
+        popChangeVeraenderungsart = new javax.swing.JPopupMenu();
         pnlFilterRiss = new javax.swing.JPanel();
         lblSchluessel = new javax.swing.JLabel();
         lblGemarkung = new javax.swing.JLabel();
@@ -327,128 +334,12 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         btnFilterSchluessel505To508 = new javax.swing.JButton();
         pnlFilterFlurstuecke = new javax.swing.JPanel();
         scpFlurstuecke = new javax.swing.JScrollPane();
-        lstFlurstuecke = new javax.swing.JList();
+        lstFlurstuecke = new DropAwareJList();
         btnAddFlurstueck = new javax.swing.JButton();
         btnRemoveFlurstueck = new javax.swing.JButton();
         chkSearchInCismap = new javax.swing.JCheckBox();
         pnlButtons = new javax.swing.JPanel();
-
-        bgrSearch.add(mniSearchRectangle);
-        mniSearchRectangle.setSelected(true);
-        mniSearchRectangle.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchRectangle.text"));                                         // NOI18N
-        mniSearchRectangle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rectangle.png"))); // NOI18N
-        mniSearchRectangle.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    mniSearchRectangleActionPerformed(evt);
-                }
-            });
-        popMenSearch.add(mniSearchRectangle);
-
-        bgrSearch.add(mniSearchPolygon);
-        mniSearchPolygon.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchPolygon.text"));                                       // NOI18N
-        mniSearchPolygon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/polygon.png"))); // NOI18N
-        mniSearchPolygon.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    mniSearchPolygonActionPerformed(evt);
-                }
-            });
-        popMenSearch.add(mniSearchPolygon);
-
-        bgrSearch.add(mniSearchEllipse);
-        mniSearchEllipse.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchEllipse.text"));                                       // NOI18N
-        mniSearchEllipse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ellipse.png"))); // NOI18N
-        mniSearchEllipse.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    mniSearchEllipseActionPerformed(evt);
-                }
-            });
-        popMenSearch.add(mniSearchEllipse);
-
-        bgrSearch.add(mniSearchPolyline);
-        mniSearchPolyline.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchPolyline.text"));                                        // NOI18N
-        mniSearchPolyline.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/polyline.png"))); // NOI18N
-        mniSearchPolyline.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    mniSearchPolylineActionPerformed(evt);
-                }
-            });
-        popMenSearch.add(mniSearchPolyline);
-        popMenSearch.add(sepSearchGeometries);
-
-        mniSearchCidsFeature.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchCidsFeature.text"));                                       // NOI18N
-        mniSearchCidsFeature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/polygon.png"))); // NOI18N
-        mniSearchCidsFeature.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    mniSearchCidsFeatureActionPerformed(evt);
-                }
-            });
-        popMenSearch.add(mniSearchCidsFeature);
-
-        mniSearchShowLastFeature.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchShowLastFeature.text"));        // NOI18N
-        mniSearchShowLastFeature.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchShowLastFeature.toolTipText")); // NOI18N
-        mniSearchShowLastFeature.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    mniSearchShowLastFeatureActionPerformed(evt);
-                }
-            });
-        popMenSearch.add(mniSearchShowLastFeature);
-
-        mniSearchRedo.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchRedo.text"));        // NOI18N
-        mniSearchRedo.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchRedo.toolTipText")); // NOI18N
-        mniSearchRedo.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    mniSearchRedoActionPerformed(evt);
-                }
-            });
-        popMenSearch.add(mniSearchRedo);
-
-        mniSearchBuffer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/buffer.png"))); // NOI18N
-        mniSearchBuffer.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchBuffer.text"));                                      // NOI18N
-        mniSearchBuffer.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.mniSearchBuffer.toolTipText"));                               // NOI18N
-        mniSearchBuffer.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    mniSearchBufferActionPerformed(evt);
-                }
-            });
-        popMenSearch.add(mniSearchBuffer);
+        btnNewSearch = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -583,6 +474,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         pnlFilterRiss.add(pnlFilterRissWildcards, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -746,6 +638,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -761,6 +654,21 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         scpFlurstuecke.setMinimumSize(new java.awt.Dimension(266, 138));
         scpFlurstuecke.setOpaque(false);
 
+        lstFlurstuecke.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMouseClicked(evt);
+                }
+                @Override
+                public void mousePressed(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMousePressed(evt);
+                }
+                @Override
+                public void mouseReleased(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMouseReleased(evt);
+                }
+            });
         lstFlurstuecke.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 
                 @Override
@@ -836,6 +744,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -857,289 +766,32 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(pnlButtons, gridBagConstraints);
+
+        btnNewSearch.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissWindowSearch.class,
+                "VermessungRissWindowSearch.btnNewSearch.text"));        // NOI18N
+        btnNewSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                VermessungRissWindowSearch.class,
+                "VermessungRissWindowSearch.btnNewSearch.toolTipText")); // NOI18N
+        btnNewSearch.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnNewSearchActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(btnNewSearch, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRectangleActionPerformed
-        btnGeoSearch.setIcon(icoPluginRectangle);
-        btnGeoSearch.setSelectedIcon(icoPluginRectangle);
-
-        EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    ((VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                            VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY)).setMode(
-                        CreateGeometryListenerInterface.RECTANGLE);
-                    mappingComponent.setInteractionMode(
-                        VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                }
-            });
-    } //GEN-LAST:event_mniSearchRectangleActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolygonActionPerformed
-        btnGeoSearch.setIcon(icoPluginPolygon);
-        btnGeoSearch.setSelectedIcon(icoPluginPolygon);
-
-        EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    ((VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                            VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY)).setMode(
-                        CreateGeometryListenerInterface.POLYGON);
-                    mappingComponent.setInteractionMode(
-                        VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                }
-            });
-    } //GEN-LAST:event_mniSearchPolygonActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchEllipseActionPerformed
-        btnGeoSearch.setIcon(icoPluginEllipse);
-        btnGeoSearch.setSelectedIcon(icoPluginEllipse);
-
-        EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    ((VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                            VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY)).setMode(
-                        CreateGeometryListenerInterface.ELLIPSE);
-                    mappingComponent.setInteractionMode(
-                        VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                }
-            });
-    } //GEN-LAST:event_mniSearchEllipseActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolylineActionPerformed
-        btnGeoSearch.setIcon(icoPluginPolyline);
-        btnGeoSearch.setSelectedIcon(icoPluginPolyline);
-
-        EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    ((VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                            VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY)).setMode(
-                        CreateGeometryListenerInterface.LINESTRING);
-                    mappingComponent.setInteractionMode(
-                        VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                }
-            });
-    } //GEN-LAST:event_mniSearchPolylineActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void mniSearchCidsFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchCidsFeatureActionPerformed
-        EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    mappingComponent.setInteractionMode(
-                        VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                    final VermessungRissCreateSearchGeometryListener searchListener =
-                        ((VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                                VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY));
-
-                    de.cismet.tools.CismetThreadPool.execute(
-                        new javax.swing.SwingWorker<SearchFeature, Void>() {
-
-                            @Override
-                            protected SearchFeature doInBackground() throws Exception {
-                                final DefaultMetaTreeNode[] nodes = ComponentRegistry.getRegistry()
-                                                .getActiveCatalogue()
-                                                .getSelectedNodesArray();
-                                final Collection<Geometry> searchGeoms = new ArrayList<Geometry>();
-
-                                for (final DefaultMetaTreeNode dmtn : nodes) {
-                                    if (dmtn instanceof ObjectTreeNode) {
-                                        final MetaObject mo = ((ObjectTreeNode)dmtn).getMetaObject();
-                                        final CidsFeature cf = new CidsFeature(mo);
-                                        searchGeoms.add(cf.getGeometry());
-                                    }
-                                }
-
-                                final Geometry[] searchGeomsArr = searchGeoms.toArray(new Geometry[0]);
-                                final GeometryCollection coll =
-                                    new GeometryFactory().createGeometryCollection(searchGeomsArr);
-
-                                final Geometry newG = coll.buffer(0.1d);
-                                if (LOG.isDebugEnabled()) {
-                                    LOG.debug("SearchGeom " + newG.toText());
-                                }
-
-                                final SearchFeature sf = new SearchFeature(newG);
-                                sf.setGeometryType(PureNewFeature.geomTypes.MULTIPOLYGON);
-                                return sf;
-                            }
-
-                            @Override
-                            protected void done() {
-                                try {
-                                    final SearchFeature search = get();
-                                    if (search != null) {
-                                        searchListener.search(search);
-                                    }
-                                } catch (Exception e) {
-                                    LOG.error("Exception in Background Thread", e);
-                                }
-                            }
-                        });
-                }
-            });
-    } //GEN-LAST:event_mniSearchCidsFeatureActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void mniSearchShowLastFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchShowLastFeatureActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    final VermessungRissCreateSearchGeometryListener searchListener =
-                        (VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                            VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                    searchListener.showLastFeature();
-                    mappingComponent.setInteractionMode(
-                        VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                }
-            });
-    } //GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void mniSearchRedoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRedoActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    final VermessungRissCreateSearchGeometryListener searchListener =
-                        (VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                            VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                    searchListener.redoLastSearch();
-                    mappingComponent.setInteractionMode(
-                        VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                }
-            });
-    } //GEN-LAST:event_mniSearchRedoActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void mniSearchBufferActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchBufferActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    final String s = (String)JOptionPane.showInputDialog(
-                            null,
-                            "Geben Sie den Abstand des zu erzeugenden\n"       // NOI18N
-                                    + "Puffers der letzten Suchgeometrie an.", // NOI18N
-                            "Puffer",                                          // NOI18N
-                            JOptionPane.PLAIN_MESSAGE,
-                            null,
-                            null,
-                            "");                                               // NOI18N
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(s);
-                    }
-
-                    // , statt . ebenfalls erlauben
-                    if (s.matches("\\d*,\\d*")) { // NOI18N
-                        s.replace(",", ".");      // NOI18N
-                    }
-
-                    try {
-                        final float buffer = Float.valueOf(s);
-
-                        final VermessungRissCreateSearchGeometryListener searchListener =
-                            (VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                                VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                        final PureNewFeature lastFeature = searchListener.getLastSearchFeature();
-
-                        if (lastFeature != null) {
-                            // Geometrie-Daten holen
-                            final Geometry geom = lastFeature.getGeometry();
-
-                            // Puffer-Geometrie holen
-                            final Geometry bufferGeom = geom.buffer(buffer);
-
-                            // und setzen
-                            lastFeature.setGeometry(bufferGeom);
-
-                            // Geometrie ist jetzt eine Polygon (keine Linie, Ellipse, oder
-                            // �hnliches mehr)
-                            lastFeature.setGeometryType(PureNewFeature.geomTypes.POLYGON);
-
-                            for (final Object feature : mappingComponent.getFeatureCollection().getAllFeatures()) {
-                                final PFeature sel = (PFeature)mappingComponent.getPFeatureHM().get(feature);
-
-                                if (sel.getFeature().equals(lastFeature)) {
-                                    // Koordinaten der Puffer-Geometrie als Feature-Koordinaten
-                                    // setzen
-                                    sel.setCoordArr(bufferGeom.getCoordinates());
-
-                                    // refresh
-                                    sel.syncGeometry();
-
-                                    final Vector v = new Vector();
-                                    v.add(sel.getFeature());
-                                    ((DefaultFeatureCollection)mappingComponent.getFeatureCollection())
-                                            .fireFeaturesChanged(v);
-                                }
-                            }
-
-                            searchListener.search(lastFeature);
-                            mappingComponent.setInteractionMode(
-                                VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                        }
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(
-                            null,
-                            "The given value was not a floating point value.!",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE); // NOI18N
-                    } catch (Exception ex) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("", ex);          // NOI18N
-                        }
-                    }
-                }
-            });
-    }                                                   //GEN-LAST:event_mniSearchBufferActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1176,9 +828,19 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      */
     private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFlurstueckActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
+
+        for (final Object flurstuecksvermessung : flurstuecksvermessungFilterModel.toArray()) {
+            result.add((CidsBean)flurstuecksvermessung);
+        }
+
+        Collections.sort(result, AlphanumComparator.getInstance());
+
         flurstueckDialog.setCurrentListToAdd(result);
-        flurstueckDialog.setVisible(true);
-    }                                                                                    //GEN-LAST:event_btnAddFlurstueckActionPerformed
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
+            flurstueckDialog,
+            true);
+    } //GEN-LAST:event_btnAddFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1214,101 +876,82 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGeoSearchActionPerformed(final java.awt.event.ActionEvent evt) {
-        EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    mappingComponent.setInteractionMode(
-                        VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
-                }
-            });
-    }
-    /**
-     * DOCUMENT ME!
-     */
-    protected void visualizeSearchMode() {
-        if (geoSearchEnabled) {
-            visualizeSearchMode((VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                    VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY));
-        }
-    }
+    private void lstFlurstueckeMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseClicked
+    }                                                                              //GEN-LAST:event_lstFlurstueckeMouseClicked
 
     /**
      * DOCUMENT ME!
      *
-     * @param  searchListener  DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    protected void visualizeSearchMode(final CreateSearchGeometryListener searchListener) {
-        final String searchMode = searchListener.getMode();
-        final PureNewFeature lastGeometry = searchListener.getLastSearchFeature();
+    private void lstFlurstueckeMousePressed(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMousePressed
+        if (popChangeVeraenderungsart.isPopupTrigger(evt)) {
+            final int indexUnderMouse = lstFlurstuecke.locationToIndex(evt.getPoint());
 
-        if (CreateGeometryListenerInterface.RECTANGLE.equals(searchMode)) {
-            btnGeoSearch.setIcon(icoPluginRectangle);
-            btnGeoSearch.setSelectedIcon(icoPluginRectangle);
-        } else if (CreateGeometryListenerInterface.POLYGON.equals(searchMode)) {
-            btnGeoSearch.setIcon(icoPluginPolygon);
-            btnGeoSearch.setSelectedIcon(icoPluginPolygon);
-        } else if (CreateGeometryListenerInterface.ELLIPSE.equals(searchMode)) {
-            btnGeoSearch.setIcon(icoPluginEllipse);
-            btnGeoSearch.setSelectedIcon(icoPluginEllipse);
-        } else if (CreateGeometryListenerInterface.LINESTRING.equals(searchMode)) {
-            btnGeoSearch.setIcon(icoPluginPolyline);
-            btnGeoSearch.setSelectedIcon(icoPluginPolyline);
-        }
+            int[] selection = lstFlurstuecke.getSelectedIndices();
 
-        mniSearchRectangle.setSelected(CreateGeometryListenerInterface.RECTANGLE.equals(searchMode));
-        mniSearchPolygon.setSelected(CreateGeometryListenerInterface.POLYGON.equals(searchMode));
-        mniSearchEllipse.setSelected(CreateGeometryListenerInterface.ELLIPSE.equals(searchMode));
-        mniSearchPolyline.setSelected(CreateGeometryListenerInterface.LINESTRING.equals(searchMode));
-
-        if (lastGeometry == null) {
-            mniSearchShowLastFeature.setIcon(null);
-            mniSearchShowLastFeature.setEnabled(false);
-            mniSearchRedo.setIcon(null);
-            mniSearchRedo.setEnabled(false);
-            mniSearchBuffer.setEnabled(false);
-        } else {
-            switch (lastGeometry.getGeometryType()) {
-                case ELLIPSE: {
-                    mniSearchRedo.setIcon(mniSearchEllipse.getIcon());
-                    break;
-                }
-
-                case LINESTRING: {
-                    mniSearchRedo.setIcon(mniSearchPolyline.getIcon());
-                    break;
-                }
-
-                case POLYGON: {
-                    mniSearchRedo.setIcon(mniSearchPolygon.getIcon());
-                    break;
-                }
-
-                case RECTANGLE: {
-                    mniSearchRedo.setIcon(mniSearchRectangle.getIcon());
-                    break;
+            boolean selectValueUnderMouse = true;
+            if ((selection != null) && (selection.length > 0)) {
+                for (final int index : selection) {
+                    if (index == indexUnderMouse) {
+                        selectValueUnderMouse = false;
+                    }
                 }
             }
 
-            mniSearchRedo.setEnabled(true);
-            mniSearchShowLastFeature.setIcon(mniSearchRedo.getIcon());
-            mniSearchShowLastFeature.setEnabled(true);
-            mniSearchBuffer.setEnabled(true);
+            if (selectValueUnderMouse) {
+                lstFlurstuecke.setSelectedIndex(lstFlurstuecke.locationToIndex(evt.getPoint()));
+                selection = lstFlurstuecke.getSelectedIndices();
+            }
+
+            if ((selection != null) && (selection.length > 0)) {
+                popChangeVeraenderungsart.show(evt.getComponent(), evt.getX(), evt.getY());
+            }
         }
-    }
+    } //GEN-LAST:event_lstFlurstueckeMousePressed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeMouseReleased(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseReleased
+        // Hock for popup menu. The return value of JPopupMenu.isPopupTrigger() depends on the OS.
+        lstFlurstueckeMousePressed(evt);
+    } //GEN-LAST:event_lstFlurstueckeMouseReleased
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+        txtBlatt.setText("");
+        txtFlur.setText("");
+        txtGemarkung.setText("");
+        txtSchluessel.setText("");
+
+        chkFilterSchluessel501.setSelected(true);
+        chkFilterSchluessel502.setSelected(true);
+        chkFilterSchluessel503.setSelected(true);
+        chkFilterSchluessel504.setSelected(true);
+        chkFilterSchluessel505.setSelected(true);
+        chkFilterSchluessel506.setSelected(true);
+        chkFilterSchluessel507.setSelected(true);
+        chkFilterSchluessel508.setSelected(true);
+        chkFilterSchluessel600.setSelected(true);
+
+        chkSearchInCismap.setSelected(false);
+
+        flurstuecksvermessungFilterModel.clear();
+    } //GEN-LAST:event_btnNewSearchActionPerformed
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
-            visualizeSearchMode();
-        }
-
         if (VermessungRissCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
-                final CidsServerSearch cidsServerSearch = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(cidsServerSearch);
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
     }
@@ -1319,7 +962,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     }
 
     @Override
-    public CidsServerSearch getServerSearch() {
+    public MetaObjectNodeServerSearch getServerSearch() {
         return getServerSearch(null);
     }
 
@@ -1330,7 +973,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      *
      * @return  DOCUMENT ME!
      */
-    public CidsServerSearch getServerSearch(final Geometry geometry) {
+    public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final String schluessel = txtSchluessel.getText();
         final String gemarkung = txtGemarkung.getText();
         final String flur = txtFlur.getText();
@@ -1443,11 +1086,12 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
             }
         }
 
-        String geometryString = null;
+        final Geometry transformedBoundingBox;
         if (geometryToSearchFor != null) {
-            final Geometry transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
+            transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
             transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
-            geometryString = PostGisGeometryFactory.getPostGisCompliantDbString(transformedBoundingBox);
+        } else {
+            transformedBoundingBox = null;
         }
 
         return new CidsVermessungRissSearchStatement(
@@ -1456,7 +1100,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 flur,
                 blatt,
                 schluesselCollection,
-                geometryString,
+                transformedBoundingBox,
                 flurstuecke);
     }
 
@@ -1476,7 +1120,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     }
 
     @Override
-    public CidsServerSearch assembleSearch() {
+    public MetaObjectNodeServerSearch assembleSearch() {
         return getServerSearch();
     }
 
@@ -1495,5 +1139,132 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class ChangeVeraenderungsartAction extends AbstractAction {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final CidsBean veraenderungsart;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ChangeVeraenderungsartAction object.
+         *
+         * @param  veraenderungsart  DOCUMENT ME!
+         */
+        public ChangeVeraenderungsartAction(final CidsBean veraenderungsart) {
+            this.veraenderungsart = veraenderungsart;
+            final String veranderungsArtCode = (String)this.veraenderungsart.getProperty("code");
+
+            if (veranderungsArtCode.equals(VERAENDERUNGSART_ALL_CODE)) {
+                putValue(
+                    NAME,
+                    this.veraenderungsart.getProperty("name"));
+            } else {
+                putValue(
+                    NAME,
+                    veranderungsArtCode
+                            + " - "
+                            + this.veraenderungsart.getProperty("name"));
+            }
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            for (final Object flurstuecksvermessung : lstFlurstuecke.getSelectedValues()) {
+                try {
+                    final String veraenderungsArtCode = (String)veraenderungsart.getProperty(
+                            VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_CODE);
+                    // was the Veränderungsart 'All' choosen
+                    if (veraenderungsArtCode.equals(VERAENDERUNGSART_ALL_CODE)) {
+                        ((CidsBean)flurstuecksvermessung).setProperty("veraenderungsart", null);
+                    } else {
+                        ((CidsBean)flurstuecksvermessung).setProperty("veraenderungsart", veraenderungsart);
+                    }
+                    lstFlurstuecke.clearSelection();
+                    lstFlurstuecke.revalidate();
+                    lstFlurstuecke.repaint();
+                } catch (final Exception ex) {
+                    LOG.info("Couldn't set veraenderungsart to '" + veraenderungsart + "' for flurstuecksvermessung '"
+                                + flurstuecksvermessung + "'.",
+                        ex);
+                    // TODO: User feedback?
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class DropAwareJList extends JList implements CidsBeanDropListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DropAwareJList object.
+         */
+        public DropAwareJList() {
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  dataModel  DOCUMENT ME!
+         */
+        public DropAwareJList(final ListModel dataModel) {
+            super(dataModel);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Object[] listData) {
+            super(listData);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Vector listData) {
+            super(listData);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> beans) {
+            try {
+                // final List<CidsBean> landparcels = cidsBean.getBeanCollectionProperty("flurstuecksvermessung");
+                for (final CidsBean dropped : beans) {
+                    final CidsBean newEntry = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            "vermessung_flurstuecksvermessung");
+                    newEntry.setProperty("veraenderungsart", null);
+                    newEntry.setProperty("tmp_lp_orig", dropped);
+                    VermessungRissUtils.setFluerstueckKickerInVermessung(newEntry);
+                    flurstuecksvermessungFilterModel.addElement(newEntry);
+                }
+            } catch (Exception ex) {
+                LOG.error("Problem when adding the DroppedBeans", ex);
+            }
+        }
     }
 }
