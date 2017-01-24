@@ -89,7 +89,7 @@
         <dependency>
             <groupId>de.cismet.cids.custom.wupp.server</groupId>
             <artifactId>cids-custom-server-wuppertal</artifactId>
-            <version>4.0</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>de.cismet.cids.navigator.plugin</groupId>
