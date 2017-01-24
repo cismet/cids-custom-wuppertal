@@ -1078,7 +1078,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
                     final VermessungsunterlagenProperties props = new VermessungsunterlagenProperties(properties);
                     // VermUnterlagen = alter prefix. wird bei neuen Anträgen nicht mehr verwendet.
-                    final String filename = ((schluessel.contains("_")) ? "05124" : "VermUnterlagen") + "_" + schluessel
+                    final String filename = ((schluessel.contains("_")) ? "05124_" : "VermUnterlagen") + "_"
+                                + schluessel
                                 + ".zip";
                     final URL url = new URL("ftp://" + props.getFtpLogin() + ":" + props.getFtpPass() + "@"
                                     + props.getFtpHost()
