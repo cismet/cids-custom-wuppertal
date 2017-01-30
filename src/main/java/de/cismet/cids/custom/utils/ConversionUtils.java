@@ -12,13 +12,12 @@
  */
 package de.cismet.cids.custom.utils;
 
+import de.cismet.tools.Base64;
 import java.awt.image.BufferedImage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
@@ -45,7 +44,7 @@ public class ConversionUtils {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(i, "png", out);
 
-        return Base64.getEncoder().encodeToString(out.toByteArray());
+        return new String(Base64.toBase64(out.toByteArray(), false));
     }
 
     /**
@@ -58,7 +57,7 @@ public class ConversionUtils {
      * @throws  IOException  DOCUMENT ME!
      */
     public static BufferedImage String2Image(final String s) throws IOException {
-        final ByteArrayInputStream in = new ByteArrayInputStream(Base64.getDecoder().decode(s));
+        final ByteArrayInputStream in = new ByteArrayInputStream(Base64.fromBase64(s.getBytes(), false));
 
         return ImageIO.read(in);
     }
