@@ -595,6 +595,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         }
         // disable the done Button of the Dialog
         pnrDialog.enableDoneButton(false);
+        pnrDialog.memorizeAnrPrefix();
         btnErstellen.setEnabled(false);
         protokollPane.setBusy(true);
         final String anrPrefix = pnrDialog.getAnrPrefix();
