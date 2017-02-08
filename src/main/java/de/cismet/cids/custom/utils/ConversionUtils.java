@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.utils;
 
-import de.cismet.tools.Base64;
 import java.awt.image.BufferedImage;
 
 import java.io.ByteArrayInputStream;
@@ -20,6 +19,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import de.cismet.tools.Base64;
 
 /**
  * DOCUMENT ME!

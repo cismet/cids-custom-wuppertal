@@ -1168,13 +1168,20 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
         enableDoneButton(false);
         button.setEnabled(false);
-        protokollAnrPrefix = getAnrPrefix();
-        protokollAnr = getAnr();
+        memorizeAnrPrefix();
         protokollPane.setBusy(true);
         protokollPane.addMessage(executeString, BusyLoggingTextPane.Styles.INFO);
 
         warnIfNeeded();
         worker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void memorizeAnrPrefix() {
+        protokollAnrPrefix = getAnrPrefix();
+        protokollAnr = getAnr();
     }
 
     /**
@@ -1199,7 +1206,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
                             + "_"
                             + protokollAnr);
         } else {
-            download = new PointNumberDownload(result, "Punktnummer Download", "", getAnrPrefix() + "_" + getAnr());
+            download = new PointNumberDownload(
+                    result,
+                    "Punktnummer Download",
+                    "",
+                    protokollAnrPrefix
+                            + "_"
+                            + protokollAnr);
         }
 
         DownloadManager.instance().add(download);
