@@ -1237,6 +1237,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnReport.setAction(warenkorbReportAction);
         btnReport.setVisible(true);
         btnDownloadHighResImage.setVisible(true);
+
+        refreshWarenkorbDownloadAction();
     }
 
     /**
