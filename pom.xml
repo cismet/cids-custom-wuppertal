@@ -261,6 +261,18 @@
             <artifactId>slf4j-log4j12</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-jpeg</artifactId>
+            <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-tiff</artifactId>
+            <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
+            <scope>compile</scope>
+        </dependency>        
         <!-- END: Runtime dependencies -->
         
         <!-- BEGIN: Provided dependencies -->
@@ -281,34 +293,74 @@
             <artifactId>jxlayer</artifactId>
             <version>3.0.3</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>axis</groupId>
             <artifactId>axis</artifactId>
             <version>1.4</version>
-        </dependency>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>-->
         <dependency>
             <groupId>com.explodingpixels</groupId>
             <artifactId>mac_widgets</artifactId>
             <version>0.9.5</version>
         </dependency>
+        
+        <!-- BEGIN: Provided dependencies -->
+        
+        <!-- BEGIN: Test dependencies -->
+             
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.twelvemonkeys.imageio</groupId>
-            <artifactId>imageio-jpeg</artifactId>
-            <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
-        </dependency>
-        <dependency>
-            <groupId>com.twelvemonkeys.imageio</groupId>
-            <artifactId>imageio-tiff</artifactId>
-            <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
-        </dependency>        
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+            <!--
+                    Need to extend the analyze-dependencies configuration of cismet-parent.pom
+                    and exclude some dependencies from unused declared dependencies.
+                    
+                    TODO: Find put why this is neecessary?!
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>analyze-dependencies</id>
+                            <!-- 
+                                WARNING: Inheritance does not work for ignoredUnusedDeclaredDependencies
+                                Redeclare exclusiosn from https://github.com/cismet/cismet-parent if necessary
+                            -->
+                            <configuration>
+                                
+                                <ignoredUnusedDeclaredDependencies>
+                                    <!--
+                                        STRANGE maven-dependency-plugin:analyze-only behaviour:
+                                        - "package com.twelvemonkeys.imageio.metadata does not exist" if dependency com.twelvemonkeys.imageio is missing
+                                        - "Unused declared dependencies found: com.twelvemonkeys.imageio" if dependency com.twelvemonkeys.imageio is present
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>com.twelvemonkeys.imageio:imageio-jpeg</ignoredUnusedDeclaredDependency>
+                                    <ignoredUnusedDeclaredDependency>com.twelvemonkeys.imageio:imageio-tiff</ignoredUnusedDeclaredDependency>
+                                    <!-- 
+                                        jcl-over-slf4j logging bridge is needed to avoid commons-logging compatibility problems 
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>org.slf4j:jcl-over-slf4j</ignoredUnusedDeclaredDependency>
+                                </ignoredUnusedDeclaredDependencies>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>           
+            </plugins>
+        </pluginManagement>
         <finalName>cidsCustom</finalName>
     </build>
 
