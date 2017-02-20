@@ -17,6 +17,7 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.log4j.Logger;
 
 import java.awt.Component;
 
@@ -44,7 +45,6 @@ import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
-import org.apache.log4j.Logger;
 
 /**
  * DOCUMENT ME!
