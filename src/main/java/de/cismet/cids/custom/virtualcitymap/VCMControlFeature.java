@@ -1,0 +1,361 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package de.cismet.cids.custom.virtualcitymap;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.PrecisionModel;
+
+import edu.umd.cs.piccolo.PNode;
+import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
+import edu.umd.cs.piccolo.event.PInputEvent;
+
+import org.openide.util.Exceptions;
+
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Stroke;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.Refreshable;
+import de.cismet.cismap.commons.features.ChildNodesProvider;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.RequestForNonreflectingFeature;
+import de.cismet.cismap.commons.features.RequestForRotatingPivotLock;
+import de.cismet.cismap.commons.features.RequestForUnaddableHandles;
+import de.cismet.cismap.commons.features.RequestForUnmoveableHandles;
+import de.cismet.cismap.commons.features.RequestForUnremovableHandles;
+import de.cismet.cismap.commons.features.XStyledFeature;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.piccolo.PFeature;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.DeriveRule;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedCommandArea;
+import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.tools.Static2DTools;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @author   thorsten
+ * @version  $Revision$, $Date$
+ */
+public class VCMControlFeature extends DefaultStyledFeature implements XStyledFeature,
+    ChildNodesProvider,
+    RequestForUnaddableHandles,
+    RequestForUnmoveableHandles,
+    RequestForUnremovableHandles,
+    RequestForRotatingPivotLock,
+    RequestForNonreflectingFeature {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    static final ImageIcon ARROWII = new javax.swing.ImageIcon(VCMControlFeature.class.getResource(
+                "/de/cismet/cids/custom/virtualcitymap/vcm.control.png"));
+    static final Image ARROW = ARROWII.getImage();
+    static final Image OPENVCM = new javax.swing.ImageIcon(VCMControlFeature.class.getResource(
+                "/de/cismet/cids/custom/virtualcitymap/vcm22.png")).getImage();
+    static final Image ROTATE = new javax.swing.ImageIcon(VCMControlFeature.class.getResource(
+                "/de/cismet/cids/custom/virtualcitymap/turn.png")).getImage();
+
+    //~ Instance fields --------------------------------------------------------
+
+    ArrayList<PNode> children = new ArrayList<PNode>();
+    private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
+
+    private int rotationIndex = 0;
+
+    private final int[] headings = new int[] { 0, 90, 180, 270 };
+    private final double[][] sweetSpots = new double[][] {
+            { 0.5, 0 },
+            { 1, 0.5 },
+            { 0.5, 1 },
+            { 0, 0.5 }
+        };
+    private DerivedFixedPImage arrow;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new VCMControlFeature object.
+     */
+    public VCMControlFeature() {
+        setEditable(true);
+        setCanBeSelected(true);
+        setLinePaint(new Color(0,0,0,0));
+        setHighlightingEnabled(false);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public ImageIcon getIconImage() {
+        return null;
+    }
+
+    @Override
+    public String getType() {
+        return "VirtualCityMap Steuerung";
+    }
+
+    @Override
+    public JComponent getInfoComponent(final Refreshable r) {
+        return null;
+    }
+
+    @Override
+    public Stroke getLineStyle() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return "VirtualCityMap Steuerung";
+    }
+
+    @Override
+    public Collection<PNode> provideChildren(final PFeature parent) {
+        if (children.size() == 0) {
+            initPNodeChildren(parent);
+        }
+        return children;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
+    private void initPNodeChildren(final PFeature parent) {
+        final DerivedMoveArea mover = new DerivedMoveArea(parent);
+
+        arrow = new DerivedFixedPImage(ARROW, parent, new DeriveRule() {
+
+                    @Override
+                    public Geometry derive(final Geometry in) {
+                        return in.getCentroid();
+                    }
+                });
+        arrow.setSweetSpotX(0.5d);
+        arrow.setSweetSpotY(0d);
+
+        final DerivedFixedPImageCommandArea openLinkButton = new DerivedFixedPImageCommandArea(
+                OPENVCM,
+                parent,
+                new DeriveRule() {
+
+                    @Override
+                    public Geometry derive(final Geometry in) {
+                        final Coordinate[] cs = in.buffer(in.getEnvelopeInternal().getHeight() * (-0.10))
+                                        .getEnvelope()
+                                        .getCoordinates();
+                        final GeometryFactory factory = new GeometryFactory(
+                                new PrecisionModel(),
+                                CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
+                        final Point point = factory.createPoint(cs[0]);
+                        return point;
+                    }
+                }) {
+
+                @Override
+                public void mousePressed(final PInputEvent event) {
+                    openVCM();
+                }
+            };
+        openLinkButton.setSweetSpotX(0.5d);
+        openLinkButton.setSweetSpotY(0.5d);
+
+        final DerivedFixedPImageCommandArea rotateButton = new DerivedFixedPImageCommandArea(
+                ROTATE,
+                parent,
+                new DeriveRule() {
+
+                    @Override
+                    public Geometry derive(final Geometry in) {
+                        final Coordinate[] cs = in.buffer(in.getEnvelopeInternal().getHeight() * (-0.10))
+                                        .getEnvelope()
+                                        .getCoordinates();
+                        final GeometryFactory factory = new GeometryFactory(
+                                new PrecisionModel(),
+                                CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
+                        final Point point = factory.createPoint(cs[3]);
+                        return point;
+                    }
+                }) {
+
+                @Override
+                public void mousePressed(final PInputEvent event) {
+                    VCMControlFeature.this.rotate();
+                }
+            };
+        rotateButton.setSweetSpotX(0.5d);
+        rotateButton.setSweetSpotY(0.5d);
+
+        children.add(arrow);
+        children.add(mover);
+        children.add(rotateButton);
+        children.add(openLinkButton);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void openVCM() {
+        final Point point = getGeometry().getCentroid();
+        final double distance = getGeometry().getEnvelopeInternal().getHeight()
+                    * 1.10;
+        final String user = "wuppertal";
+        final String password = "xxx";
+        final double groundPosX = point.getX();
+        final double groundPosY = point.getY();
+        final double groundPosZ = 192.2062;
+        final int heading = headings[rotationIndex];
+        final double camPosX = groundPosX;
+        final double camPosY = groundPosY;
+        final double camPosZ = groundPosZ + distance;
+        final int epsg = 25832;
+
+        final String url = String.format(
+                "http://%s:%s@wuppertal.virtualcitymap.de/?startingmap=Oblique%sMap&lang=de&groundPosition=%s,%s,%s&distance=%s&pitch=-90.00&heading=%s&roll=0.00&cameraPosition=%s,%s,%s&epsg=%s&",
+                user,
+                password,
+                "%20",
+                groundPosX
+                        + "",
+                groundPosY
+                        + "",
+                groundPosZ
+                        + "",
+                distance
+                        + "",
+                heading
+                        + "",
+                camPosX
+                        + "",
+                camPosY
+                        + "",
+                camPosZ
+                        + "",
+                epsg
+                        + "");
+        System.out.println(url);
+        try {
+            de.cismet.tools.BrowserLauncher.openURL(url);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void rotate() {
+        if (rotationIndex >= 3) {
+            rotationIndex = 0;
+        } else {
+            rotationIndex += 1;
+        }
+        final ImageIcon rotated = Static2DTools.rotate(ARROWII, headings[rotationIndex], false);
+        arrow.setImage(rotated.getImage());
+        arrow.setSweetSpotX(sweetSpots[rotationIndex][0]);
+        arrow.setSweetSpotY(sweetSpots[rotationIndex][1]);
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public class DerivedMoveArea extends DerivedCommandArea {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+
+        private PFeature parentFeature;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DerivedCommandArea object.
+         *
+         * @param  parent  DOCUMENT ME!
+         */
+        public DerivedMoveArea(final PFeature parent) {
+            super(parent, new DeriveRule() {
+
+                    @Override
+                    public Geometry derive(final Geometry in) {
+                        return getGeometry().buffer(in.getEnvelopeInternal().getHeight() * (-0.05));
+                    }
+                });
+            setPaint(Color.white);
+            setStroke(null);
+            setTransparency(0.3f);
+            parentFeature = parent;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void mouseClicked(final PInputEvent event) {
+            super.mouseClicked(event);
+            if ((event.getClickCount() > 1) && event.isLeftMouseButton()) {
+                System.out.println("turn");
+            } else if ((event.getClickCount() == 1) && event.isRightMouseButton()) {
+                System.out.println("open");
+            }
+        }
+
+        // Moving
+        @Override
+        public void mousePressed(final PInputEvent event) {
+            super.mousePressed(event);
+            ((PBasicInputEventHandler)mappingComponent.getInputListener(MappingComponent.MOVE_POLYGON)).mousePressed(
+                event);
+        }
+
+        @Override
+        public void mouseDragged(final PInputEvent event) {
+            super.mouseDragged(event);
+            ((PBasicInputEventHandler)mappingComponent.getInputListener(MappingComponent.MOVE_POLYGON)).mouseDragged(
+                event);
+        }
+
+        @Override
+        public void mouseReleased(final PInputEvent event) {
+            super.mouseReleased(event);
+
+            ((PBasicInputEventHandler)mappingComponent.getInputListener(MappingComponent.MOVE_POLYGON)).mouseReleased(
+                event);
+        }
+
+        @Override
+        public void mouseMoved(final PInputEvent event) {
+            super.mouseMoved(event);
+//                mappingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            ((PBasicInputEventHandler)mappingComponent.getInputListener(MappingComponent.MOVE_POLYGON)).mouseMoved(
+                event);
+        }
+    }
+}
