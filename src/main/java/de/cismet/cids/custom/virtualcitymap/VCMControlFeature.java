@@ -66,11 +66,8 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     RequestForUnaddableHandles,
     RequestForUnmoveableHandles,
     RequestForUnremovableHandles,
-//    RequestForHidingHandles ,
     RequestForRotatingPivotLock,
-    RequestForNonreflectingFeature{
-
-
+    RequestForNonreflectingFeature {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -343,6 +340,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
 
             ((PBasicInputEventHandler)mappingComponent.getInputListener(MappingComponent.MOVE_POLYGON)).mouseReleased(
                 event);
+            mappingComponent.ensureVisibilityOfSpecialFeatures(VCMControlFeature.class, true);
         }
 
         @Override
