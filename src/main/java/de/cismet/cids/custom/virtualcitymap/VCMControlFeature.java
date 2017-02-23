@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.virtualcitymap;
 
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedFixedPImageCommandArea;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedFixedPImage;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -256,7 +258,6 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
                         + "",
                 epsg
                         + "");
-        System.out.println(url);
         try {
             de.cismet.tools.BrowserLauncher.openURL(url);
         } catch (Exception ex) {
@@ -316,16 +317,6 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         }
 
         //~ Methods ------------------------------------------------------------
-
-        @Override
-        public void mouseClicked(final PInputEvent event) {
-            super.mouseClicked(event);
-            if ((event.getClickCount() > 1) && event.isLeftMouseButton()) {
-                System.out.println("turn");
-            } else if ((event.getClickCount() == 1) && event.isRightMouseButton()) {
-                System.out.println("open");
-            }
-        }
 
         // Moving
         @Override
