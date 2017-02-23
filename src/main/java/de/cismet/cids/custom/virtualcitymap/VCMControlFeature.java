@@ -12,8 +12,6 @@
  */
 package de.cismet.cids.custom.virtualcitymap;
 
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedFixedPImageCommandArea;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedFixedPImage;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -40,6 +38,7 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.features.ChildNodesProvider;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.RequestForHidingHandles;
 import de.cismet.cismap.commons.features.RequestForNonreflectingFeature;
 import de.cismet.cismap.commons.features.RequestForRotatingPivotLock;
 import de.cismet.cismap.commons.features.RequestForUnaddableHandles;
@@ -50,6 +49,8 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.DeriveRule;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedCommandArea;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedFixedPImage;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedFixedPImageCommandArea;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.tools.Static2DTools;
@@ -65,8 +66,11 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     RequestForUnaddableHandles,
     RequestForUnmoveableHandles,
     RequestForUnremovableHandles,
+//    RequestForHidingHandles ,
     RequestForRotatingPivotLock,
-    RequestForNonreflectingFeature {
+    RequestForNonreflectingFeature{
+
+
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -102,7 +106,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     public VCMControlFeature() {
         setEditable(true);
         setCanBeSelected(true);
-        setLinePaint(new Color(0,0,0,0));
+        setLinePaint(new Color(0, 0, 0, 0));
         setHighlightingEnabled(false);
     }
 
