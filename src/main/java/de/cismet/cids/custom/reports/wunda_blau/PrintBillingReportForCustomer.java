@@ -122,28 +122,55 @@ public class PrintBillingReportForCustomer {
      * DOCUMENT ME!
      */
     public void print() {
-        Collection<CidsBean> filteredBuchungen_mwst0 = new ArrayList<CidsBean>();
-        BigDecimal nettoSum_0 = null;
-        BigDecimal bruttoSum_0 = null;
+        final Object[] mwst0 = new Object[3];
+        final Object[] kataster_mwst0 = new Object[3];
+        final Object[] baulasten_mwst0 = new Object[3];
+        final Object[] mwst19 = new Object[3];
+
+        final Collection<CidsBean> filteredBuchungen_mwst0 = new ArrayList<CidsBean>();
+        final Collection<CidsBean> filteredBuchungen_kataster_mwst0 = new ArrayList<CidsBean>();
+        final Collection<CidsBean> filteredBuchungen_baulasten_mwst0 = new ArrayList<CidsBean>();
         boolean noData = true;
         if (billingInformation.containsKey(0d)) {
             final HashMap<String, Object> mwst_information_0 = billingInformation.get(0d);
-            filteredBuchungen_mwst0 = (Collection<CidsBean>)mwst_information_0.get("billings");
-            nettoSum_0 = (BigDecimal)mwst_information_0.get("netto_summe");
-            bruttoSum_0 = (BigDecimal)mwst_information_0.get("brutto_summe");
+            final Collection<CidsBean> billings = (Collection<CidsBean>)mwst_information_0.get("billings");
+            filteredBuchungen_mwst0.addAll(billings);
+            BigDecimal katasterNetto = new BigDecimal(0.0);
+            BigDecimal katasterBrutto = new BigDecimal(0.0);
+            BigDecimal baulastenNetto = new BigDecimal(0.0);
+            BigDecimal baulastenBrutto = new BigDecimal(0.0);
+            for (final CidsBean billing : billings) {
+                if ("bla".equals(billing.getProperty("produktkey"))
+                            || "blab_be".equals(billing.getProperty("produktkey"))) {
+                    filteredBuchungen_baulasten_mwst0.add(billing);
+                    baulastenNetto = baulastenNetto.add(new BigDecimal((Double)billing.getProperty("netto_summe")));
+                    baulastenBrutto = baulastenBrutto.add(new BigDecimal((Double)billing.getProperty("brutto_summe")));
+                } else {
+                    filteredBuchungen_kataster_mwst0.add(billing);
+                    katasterNetto = katasterNetto.add(new BigDecimal((Double)billing.getProperty("netto_summe")));
+                    katasterBrutto = katasterBrutto.add(new BigDecimal((Double)billing.getProperty("brutto_summe")));
+                }
+            }
+            mwst0[1] = (BigDecimal)mwst_information_0.get("netto_summe");
+            mwst0[2] = (BigDecimal)mwst_information_0.get("brutto_summe");
+            kataster_mwst0[1] = katasterNetto;
+            kataster_mwst0[2] = katasterBrutto;
+            baulasten_mwst0[1] = baulastenNetto;
+            baulasten_mwst0[2] = baulastenBrutto;
             noData = false;
         }
-
-        Collection<CidsBean> filteredBuchungen_mwst19 = new ArrayList<CidsBean>();
-        BigDecimal nettoSum_19 = null;
-        BigDecimal bruttoSum_19 = null;
+        mwst0[0] = filteredBuchungen_mwst0;
+        kataster_mwst0[0] = filteredBuchungen_kataster_mwst0;
+        baulasten_mwst0[0] = filteredBuchungen_baulasten_mwst0;
+        final Collection<CidsBean> filteredBuchungen_mwst19 = new ArrayList<CidsBean>();
         if (billingInformation.containsKey(19d)) {
             final HashMap<String, Object> mwst_information_19 = billingInformation.get(19d);
-            filteredBuchungen_mwst19 = (Collection<CidsBean>)billingInformation.get(19d).get("billings");
-            nettoSum_19 = (BigDecimal)mwst_information_19.get("netto_summe");
-            bruttoSum_19 = (BigDecimal)mwst_information_19.get("brutto_summe");
+            filteredBuchungen_mwst19.addAll((Collection<CidsBean>)billingInformation.get(19d).get("billings"));
+            mwst19[1] = (BigDecimal)mwst_information_19.get("netto_summe");
+            mwst19[2] = (BigDecimal)mwst_information_19.get("brutto_summe");
             noData = false;
         }
+        mwst19[0] = filteredBuchungen_mwst19;
 
         if (noData && !isRechnungsanlage) {
             // the report is an empty Buchungsbeleg
@@ -159,12 +186,10 @@ public class PrintBillingReportForCustomer {
         } else {
             final BillingBuchungsbelegReport report = new BillingBuchungsbelegReport(
                     kundeBean,
-                    filteredBuchungen_mwst0,
-                    nettoSum_0,
-                    bruttoSum_0,
-                    filteredBuchungen_mwst19,
-                    nettoSum_19,
-                    bruttoSum_19,
+                    mwst0,
+                    kataster_mwst0,
+                    baulasten_mwst0,
+                    mwst19,
                     fromDate_tillDate[0],
                     fromDate_tillDate[1],
                     mwstValue,
