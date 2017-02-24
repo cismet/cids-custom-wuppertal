@@ -329,7 +329,6 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
      * DOCUMENT ME!
      */
     public void removeFeature() {
-        LOG.fatal("yeah!");
         CismapBroker.getInstance().getMappingComponent().getFeatureCollection().removeFeature(this);
     }
 
