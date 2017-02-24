@@ -31,8 +31,6 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
-import de.cismet.cids.custom.nas.PointNumberReservationToolbarComponentProvider;
-
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
@@ -158,8 +156,8 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
                     }
                 });
             super.setToolTipText(NbBundle.getMessage(
-                    PointNumberReservationToolbarComponentProvider.class,
-                    "PointNumberReservationToolbarComponent.tooltip"));
+                    VirtualCityMapToolbarComponentProvider.class,
+                    "VirtualCityMapToolbarComponent.tooltip"));
             this.setIcon(icon);
             setFocusPainted(false);
             setBorderPainted(false);
