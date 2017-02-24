@@ -12,6 +12,9 @@
  */
 package de.cismet.cids.custom.virtualcitymap;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.openide.util.NbBundle;
@@ -48,9 +51,8 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
 
     private static VCMControlFeature currentVCMControlFeature = null;
 
-    //~ Instance fields --------------------------------------------------------
-
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            VirtualCityMapToolbarComponentProvider.class);
 
     //~ Methods ----------------------------------------------------------------
 
@@ -61,17 +63,37 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
 
     @Override
     public Collection<ToolbarComponentDescription> getToolbarComponents() {
-        final JButton b = new JButton("Punktnummern");
+        if (checkActionTag()) {
+            final List<ToolbarComponentDescription> preparationList = new LinkedList<ToolbarComponentDescription>();
+            final ToolbarComponentDescription description = new ToolbarComponentDescription(
+                    "tlbMain",
+                    new VirtualCityMapToolbarComponentProvider.VirtualCityMapButton(),
+                    ToolbarPositionHint.AFTER,
+                    "cmdPan");
+            preparationList.add(description);
 
-        final List<ToolbarComponentDescription> preparationList = new LinkedList<ToolbarComponentDescription>();
-        final ToolbarComponentDescription description = new ToolbarComponentDescription(
-                "tlbMain",
-                new VirtualCityMapToolbarComponentProvider.VirtualCityMapButton(),
-                ToolbarPositionHint.AFTER,
-                "cmdPan");
-        preparationList.add(description);
+            return Collections.unmodifiableList(preparationList);
+        } else {
+            return null;
+        }
+    }
 
-        return Collections.unmodifiableList(preparationList);
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean checkActionTag() {
+        final String actionTag = VCMProperties.getInstance().getActionAttr();
+        boolean result;
+        try {
+            result = SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), actionTag)
+                        != null;
+        } catch (final ConnectionException ex) {
+            LOG.info("Can not check ActionTag: " + actionTag, ex);
+            result = false;
+        }
+        return result;
     }
 
     //~ Inner Classes ----------------------------------------------------------

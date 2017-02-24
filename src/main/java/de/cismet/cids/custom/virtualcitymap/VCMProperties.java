@@ -37,6 +37,7 @@ public class VCMProperties extends Properties {
     private static final String PROP_URL_TEMPLATE = "URL_TEMPLATE";
     private static final String PROP_USER = "USER";
     private static final String PROP_PASSWORD = "PASSWORD";
+    private static final String PROP_ACTION_ATTR = "ACTION_ATTR";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -74,6 +75,15 @@ public class VCMProperties extends Properties {
      */
     public String getPassword() {
         return getProperty(PROP_PASSWORD);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getActionAttr() {
+        return getProperty(PROP_ACTION_ATTR);
     }
 
     /**

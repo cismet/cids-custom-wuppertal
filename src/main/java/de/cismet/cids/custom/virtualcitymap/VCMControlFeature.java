@@ -12,6 +12,9 @@
  */
 package de.cismet.cids.custom.virtualcitymap;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -222,6 +225,24 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
 
     /**
      * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean checkActionTag() {
+        final String actionTag = properties.getActionAttr();
+        boolean result;
+        try {
+            result = SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), actionTag)
+                        != null;
+        } catch (final ConnectionException ex) {
+            LOG.info("Can not check ActionTag: " + actionTag, ex);
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     public void openVCM() {
         if (properties.isEmpty()) {
@@ -230,6 +251,12 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
             LOG.info("trying to load the properties from server_resource");
             properties.load();
         }
+
+        if (!checkActionTag()) {
+            LOG.info("checkActionTag() failed. ActionAttr=" + properties.getActionAttr());
+            return;
+        }
+
         final Point point = getGeometry().getCentroid();
         final double distance = getGeometry().getEnvelopeInternal().getHeight()
                     * 1.10;
