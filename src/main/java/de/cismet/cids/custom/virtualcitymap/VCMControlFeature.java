@@ -48,6 +48,7 @@ import de.cismet.cismap.commons.features.RequestForUnmoveableHandles;
 import de.cismet.cismap.commons.features.RequestForUnremovableHandles;
 import de.cismet.cismap.commons.features.XStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.piccolo.FixedPImage;
 import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.DeriveRule;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedCommandArea;
@@ -82,6 +83,8 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
                 "/de/cismet/cids/custom/virtualcitymap/vcm22.png")).getImage();
     static final Image ROTATE = new javax.swing.ImageIcon(VCMControlFeature.class.getResource(
                 "/de/cismet/cids/custom/virtualcitymap/turn.png")).getImage();
+    static final Image REMOVE = new javax.swing.ImageIcon(VCMControlFeature.class.getResource(
+                "/de/cismet/cids/custom/virtualcitymap/remove.png")).getImage();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -98,7 +101,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
             { 0.5, 1 },
             { 0, 0.5 }
         };
-    private DerivedFixedPImage arrow;
+    private FixedPImage arrow;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -141,7 +144,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
 
     @Override
     public Collection<PNode> provideChildren(final PFeature parent) {
-        if (children.size() == 0) {
+        if (children.isEmpty()) {
             initPNodeChildren(parent);
         }
         return children;
@@ -153,8 +156,33 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
      * @param  parent  DOCUMENT ME!
      */
     private void initPNodeChildren(final PFeature parent) {
-        final DerivedMoveArea mover = new DerivedMoveArea(parent);
+        children.add(createArrow(parent));
+        children.add(createMover(parent));
+        children.add(createRotateArea(parent));
+        children.add(createLinkArea(parent));
+        children.add(createCloseArea(parent));
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   parent  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private DerivedMoveArea createMover(final PFeature parent) {
+        final DerivedMoveArea mover = new DerivedMoveArea(parent);
+        return mover;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   parent  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private FixedPImage createArrow(final PFeature parent) {
         arrow = new DerivedFixedPImage(ARROW, parent, new DeriveRule() {
 
                     @Override
@@ -165,33 +193,18 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         arrow.setSweetSpotX(0.5d);
         arrow.setSweetSpotY(0d);
 
-        final DerivedFixedPImageCommandArea openLinkButton = new DerivedFixedPImageCommandArea(
-                OPENVCM,
-                parent,
-                new DeriveRule() {
+        return arrow;
+    }
 
-                    @Override
-                    public Geometry derive(final Geometry in) {
-                        final Coordinate[] cs = in.buffer(in.getEnvelopeInternal().getHeight() * (-0.10))
-                                        .getEnvelope()
-                                        .getCoordinates();
-                        final GeometryFactory factory = new GeometryFactory(
-                                new PrecisionModel(),
-                                CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
-                        final Point point = factory.createPoint(cs[0]);
-                        return point;
-                    }
-                }) {
-
-                @Override
-                public void mousePressed(final PInputEvent event) {
-                    openVCM();
-                }
-            };
-        openLinkButton.setSweetSpotX(0.5d);
-        openLinkButton.setSweetSpotY(0.5d);
-
-        final DerivedFixedPImageCommandArea rotateButton = new DerivedFixedPImageCommandArea(
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   parent  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private FixedPImage createRotateArea(final PFeature parent) {
+        final DerivedFixedPImageCommandArea rotateArea = new DerivedFixedPImageCommandArea(
                 ROTATE,
                 parent,
                 new DeriveRule() {
@@ -214,13 +227,84 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
                     VCMControlFeature.this.rotate();
                 }
             };
-        rotateButton.setSweetSpotX(0.5d);
-        rotateButton.setSweetSpotY(0.5d);
+        rotateArea.setSweetSpotX(0.5d);
+        rotateArea.setSweetSpotY(0.5d);
 
-        children.add(arrow);
-        children.add(mover);
-        children.add(rotateButton);
-        children.add(openLinkButton);
+        return rotateArea;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   parent  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private FixedPImage createLinkArea(final PFeature parent) {
+        final DerivedFixedPImageCommandArea linkArea = new DerivedFixedPImageCommandArea(
+                OPENVCM,
+                parent,
+                new DeriveRule() {
+
+                    @Override
+                    public Geometry derive(final Geometry in) {
+                        final Coordinate[] cs = in.buffer(in.getEnvelopeInternal().getHeight() * (-0.10))
+                                        .getEnvelope()
+                                        .getCoordinates();
+                        final GeometryFactory factory = new GeometryFactory(
+                                new PrecisionModel(),
+                                CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
+                        final Point point = factory.createPoint(cs[0]);
+                        return point;
+                    }
+                }) {
+
+                @Override
+                public void mousePressed(final PInputEvent event) {
+                    openVCM();
+                }
+            };
+        linkArea.setSweetSpotX(0.5d);
+        linkArea.setSweetSpotY(0.5d);
+
+        return linkArea;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   parent  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private FixedPImage createCloseArea(final PFeature parent) {
+        final DerivedFixedPImageCommandArea closeArea = new DerivedFixedPImageCommandArea(
+                REMOVE,
+                parent,
+                new DeriveRule() {
+
+                    @Override
+                    public Geometry derive(final Geometry in) {
+                        final Coordinate[] cs = in.buffer(in.getEnvelopeInternal().getHeight() * (-0.10))
+                                        .getEnvelope()
+                                        .getCoordinates();
+                        final GeometryFactory factory = new GeometryFactory(
+                                new PrecisionModel(),
+                                CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
+                        final Point point = factory.createPoint(cs[2]);
+                        return point;
+                    }
+                }) {
+
+                @Override
+                public void mousePressed(final PInputEvent event) {
+                    removeFeature();
+                }
+            };
+        closeArea.setSweetSpotX(0.5d);
+        closeArea.setSweetSpotY(0.5d);
+
+        return closeArea;
     }
 
     /**
@@ -239,6 +323,14 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
             result = false;
         }
         return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void removeFeature() {
+        LOG.fatal("yeah!");
+        CismapBroker.getInstance().getMappingComponent().getFeatureCollection().removeFeature(this);
     }
 
     /**
