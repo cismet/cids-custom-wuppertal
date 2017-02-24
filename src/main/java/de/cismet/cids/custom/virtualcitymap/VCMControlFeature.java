@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.virtualcitymap;
 
+import Sirius.navigator.connection.SessionManager;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -22,23 +24,27 @@ import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
-import org.openide.util.Exceptions;
-
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Stroke;
 
+import java.io.StringReader;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
+
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.features.ChildNodesProvider;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.features.RequestForHidingHandles;
 import de.cismet.cismap.commons.features.RequestForNonreflectingFeature;
 import de.cismet.cismap.commons.features.RequestForRotatingPivotLock;
 import de.cismet.cismap.commons.features.RequestForUnaddableHandles;
@@ -71,6 +77,11 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
 
     //~ Static fields/initializers ---------------------------------------------
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VCMControlFeature.class);
+    private static final String PROP_URL_TEMPLATE = "URL_TEMPLATE";
+    private static final String PROP_USER = "USER";
+    private static final String PROP_PASSWORD = "PASSWORD";
+
     static final ImageIcon ARROWII = new javax.swing.ImageIcon(VCMControlFeature.class.getResource(
                 "/de/cismet/cids/custom/virtualcitymap/vcm.control.png"));
     static final Image ARROW = ARROWII.getImage();
@@ -83,6 +94,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
 
     ArrayList<PNode> children = new ArrayList<PNode>();
     private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
+    private final Properties properties = new Properties();
 
     private int rotationIndex = 0;
 
@@ -105,6 +117,8 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         setCanBeSelected(true);
         setLinePaint(new Color(0, 0, 0, 0));
         setHighlightingEnabled(false);
+
+        loadProperties();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -221,12 +235,34 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     /**
      * DOCUMENT ME!
      */
+    private void loadProperties() {
+        try {
+            final String propertiesString = (String)SessionManager.getSession().getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                                GetServerResourceServerAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                WundaBlauServerResources.VCM_PROPERTIES.getValue());
+            properties.load(new StringReader(propertiesString));
+        } catch (final Exception ex) {
+            LOG.warn("could not load properties.", ex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     public void openVCM() {
+        if (properties.isEmpty()) {
+            LOG.warn("openVCM openVCM(). properties are empty. you should check this server_resource: "
+                        + WundaBlauServerResources.VCM_PROPERTIES.getValue());
+            LOG.info("trying to load the properties from server_resource");
+            loadProperties();
+        }
         final Point point = getGeometry().getCentroid();
         final double distance = getGeometry().getEnvelopeInternal().getHeight()
                     * 1.10;
-        final String user = "wuppertal";
-        final String password = "xxx";
+        final String user = properties.getProperty(PROP_USER);
+        final String password = properties.getProperty(PROP_PASSWORD);
         final double groundPosX = point.getX();
         final double groundPosY = point.getY();
         final double groundPosZ = 192.2062;
@@ -237,10 +273,9 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         final int epsg = 25832;
 
         final String url = String.format(
-                "http://%s:%s@wuppertal.virtualcitymap.de/?startingmap=Oblique%sMap&lang=de&groundPosition=%s,%s,%s&distance=%s&pitch=-90.00&heading=%s&roll=0.00&cameraPosition=%s,%s,%s&epsg=%s&",
+                properties.getProperty(PROP_URL_TEMPLATE),
                 user,
                 password,
-                "%20",
                 groundPosX
                         + "",
                 groundPosY
@@ -262,7 +297,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         try {
             de.cismet.tools.BrowserLauncher.openURL(url);
         } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.error("error while browserlaunching url: " + url, ex);
         }
     }
 
@@ -291,8 +326,6 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     public class DerivedMoveArea extends DerivedCommandArea {
 
         //~ Instance fields ----------------------------------------------------
-
-        private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
         private PFeature parentFeature;
 
