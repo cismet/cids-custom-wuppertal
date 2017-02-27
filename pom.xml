@@ -10,7 +10,7 @@
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>4.0.7</version>
+    <version>4.1</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal}</name>
@@ -31,8 +31,8 @@
         <connection>scm:https://github.com/cismet/cids-custom-wuppertal.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-custom-wuppertal.git</developerConnection>
         <url>https://github.com/cismet/cids-custom-wuppertal</url>
-      <tag>v4.0.7</tag>
-  </scm>
+        <tag>v4.1</tag>
+    </scm>
 
     <repositories>
         <repository>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>de.cismet.cismap</groupId>
             <artifactId>cismap-plugin</artifactId>
-            <version>4.0</version>
+            <version>4.1</version>
         </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>de.cismet.cids.custom.wupp.server</groupId>
             <artifactId>cids-custom-server-wuppertal</artifactId>
-            <version>4.0.6</version>
+            <version>4.1</version>
         </dependency>
         <dependency>
             <groupId>de.cismet.cids.navigator.plugin</groupId>
