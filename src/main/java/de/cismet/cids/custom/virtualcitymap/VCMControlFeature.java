@@ -41,6 +41,7 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.features.ChildNodesProvider;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.RequestForHidingHandles;
 import de.cismet.cismap.commons.features.RequestForNonreflectingFeature;
 import de.cismet.cismap.commons.features.RequestForRotatingPivotLock;
 import de.cismet.cismap.commons.features.RequestForUnaddableHandles;
@@ -70,7 +71,8 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     RequestForUnmoveableHandles,
     RequestForUnremovableHandles,
     RequestForRotatingPivotLock,
-    RequestForNonreflectingFeature {
+    RequestForNonreflectingFeature,
+    RequestForHidingHandles {
 
     //~ Static fields/initializers ---------------------------------------------
 
