@@ -61,17 +61,10 @@
     </properties>
 
     <dependencies>
-        <!-- temporarily added for testing purpose --> 
-        <dependency>
-            <groupId>de.cismet.commons</groupId>
-            <artifactId>cismap-commons</artifactId>
-            <version>4.1-SNAPSHOT</version>
-        </dependency> 
-               
         <dependency>
             <groupId>de.cismet.cismap</groupId>
             <artifactId>cismap-plugin</artifactId>
-            <version>4.1-SNAPSHOT</version>
+            <version>4.1</version>
         </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>
