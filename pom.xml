@@ -168,30 +168,6 @@
                 <version>5.0-SNAPSHOT</version>
             </dependency>
             <!-- END: managed cids-dependencies -->  
-            
-            <!--
-                Require upper bound dependencies error for commons-codec:commons-codec:1.6
-            
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.10</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>2.6</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jfree</groupId>
-                <artifactId>jcommon</artifactId>
-                <version>1.0.23</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jfree</groupId>
-                <artifactId>jfreechart</artifactId>
-                <version>1.0.19</version>
-            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
@@ -338,6 +314,36 @@
             <scope>compile</scope>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swing-layout</artifactId>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>edu.umd</groupId>
+            <artifactId>piccolo</artifactId>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-awt</artifactId>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
         <!-- END: managed dependencies -->
 
         <!-- BEGIN: Runtime dependencies -->
@@ -393,13 +399,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>edu.umd</groupId>
-            <artifactId>piccolo</artifactId>
-            <version>1.2</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.2.2</version>
@@ -411,13 +410,6 @@
                     <artifactId>stax-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-util-lookup</artifactId>
-            <version>RELEASE701</version>
-            <scope>compile</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -455,30 +447,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-awt</artifactId>
-            <version>RELEASE701</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>net.java.dev.fuse</groupId>
             <artifactId>fuse-core</artifactId>
             <version>0.4</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-util</artifactId>
-            <version>RELEASE701</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.swinglabs</groupId>
-            <artifactId>swing-layout</artifactId>
-            <version>1.0.3</version>
             <scope>compile</scope>
             <type>jar</type>
         </dependency>
@@ -552,6 +523,13 @@
                 </plugin>           
             </plugins>
         </pluginManagement>
+        
+        <!-- 
+            DANGER DANGER DANGER DANGER DANGER DANGER DANGER DANGER DANGER DANGER
+            the artifact has to be renamed du to compatibility reasons to the cidsDistribution 
+            
+            See https://cismet.slack.com/files/jruiz/F3ZC7HX7V/Snapshot_als_finalName_in_pom_xml
+        -->
         <finalName>cidsCustom</finalName>
     </build>
 
