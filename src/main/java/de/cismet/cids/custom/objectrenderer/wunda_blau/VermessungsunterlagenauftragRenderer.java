@@ -13,8 +13,15 @@ import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -36,6 +43,7 @@ import java.net.URL;
 import java.text.DateFormat;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -59,6 +67,11 @@ import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSear
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenHelper;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenProperties;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenUtils;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenException;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenJobException;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenTaskException;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenTaskRetryException;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenValidatorException;
 import de.cismet.cids.custom.wunda_blau.search.server.KundeByVermessungsStellenNummerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -80,6 +93,7 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -120,7 +134,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JDialog exceptionDialog;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -128,9 +144,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
     private javax.swing.JList<String> jList3;
+    private javax.swing.JList<VermessungsunterlagenException> jList4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -138,9 +158,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
@@ -197,6 +219,15 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         pnlMap.add(mappingComponent, BorderLayout.CENTER);
 
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        final SimpleModule module = new SimpleModule();
+        module.addDeserializer(
+            VermessungsunterlagenException.class,
+            new VermessungsunterlagenExceptionJsonDeserializer());
+        module.addDeserializer(
+            VermessungsunterlagenTaskException.class,
+            new VermessungsunterlagenTaskExceptionJsonDeserializer());
+        objectMapper.registerModule(module);
+        exceptionDialog.pack();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -219,6 +250,14 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         buttonGroup1 = new javax.swing.ButtonGroup();
+        exceptionDialog = new javax.swing.JDialog();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jList4 = new javax.swing.JList<VermessungsunterlagenException>();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         roundedPanel2 = new de.cismet.tools.gui.RoundedPanel();
@@ -308,6 +347,80 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         panTitleString.add(filler1, gridBagConstraints);
 
         panTitle.add(panTitleString, java.awt.BorderLayout.CENTER);
+
+        exceptionDialog.setTitle("Fehler bei der Erzeugung des Auftrags.");
+        exceptionDialog.setModal(true);
+        exceptionDialog.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+
+        jLabel7.setText("Während der Verarbeitung des Auftrags kam es zu einem Fehler.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel8.add(jLabel7, gridBagConstraints);
+
+        jButton1.setText("Schließen");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        jPanel8.add(jButton1, gridBagConstraints);
+
+        jList4.setModel(new DefaultListModel<VermessungsunterlagenException>());
+        jList4.setToolTipText("");
+        jList4.setCellRenderer(new VermessungsunterlagenExceptionListCellRenderer());
+        jList4.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    jList4MouseClicked(evt);
+                }
+            });
+        jScrollPane4.setViewportView(jList4);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        jPanel8.add(jScrollPane4, gridBagConstraints);
+
+        jLabel8.setText("Fehler-Typ: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel8.add(jLabel8, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel8.add(jLabel9, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        exceptionDialog.getContentPane().add(jPanel8, gridBagConstraints);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -1107,24 +1220,68 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             }
         } else if (Boolean.FALSE.equals(cidsBean.getProperty("status"))) {
             final String exception_json = (String)cidsBean.getProperty("exception_json");
-            Exception exception = null;
-            boolean parseError = false;
+            Exception exception;
             try {
-                exception = objectMapper.readValue(exception_json, Exception.class);
+                try {
+                    // new way
+                    exception = objectMapper.readValue(exception_json, VermessungsunterlagenException.class);
+                } catch (final Exception ex) {
+                    // old way
+                    exception = objectMapper.readValue(exception_json, Exception.class);
+                }
+
+                if (exception instanceof VermessungsunterlagenException) {
+                    // new way
+                    final VermessungsunterlagenException ex = (VermessungsunterlagenException)exception;
+                    if (ex instanceof VermessungsunterlagenJobException) {
+                        final VermessungsunterlagenJobException jobEx = (VermessungsunterlagenJobException)ex;
+                        final VermessungsunterlagenTaskException taskEx = jobEx.getCause();
+
+                        jLabel9.setText("Task " + taskEx.getTask());
+                        if (taskEx instanceof VermessungsunterlagenTaskRetryException) {
+                            final VermessungsunterlagenTaskRetryException retryEx =
+                                (VermessungsunterlagenTaskRetryException)taskEx;
+                            for (final VermessungsunterlagenException retry : retryEx.getExceptions()) {
+                                ((DefaultListModel<VermessungsunterlagenException>)jList4.getModel()).addElement(retry);
+                            }
+                        } else {
+                            ((DefaultListModel<VermessungsunterlagenException>)jList4.getModel()).addElement(taskEx);
+                        }
+                    } else if (ex instanceof VermessungsunterlagenValidatorException) {
+                        jLabel9.setText("Validierung");
+                        ((DefaultListModel<VermessungsunterlagenException>)jList4.getModel()).addElement(ex);
+                    } else {
+                        jLabel9.setText("Job (kritisch)");
+                        ((DefaultListModel<VermessungsunterlagenException>)jList4.getModel()).addElement(ex);
+                    }
+                    StaticSwingTools.showDialog(exceptionDialog);
+                } else {
+                    // old way
+                    final ErrorInfo errorInfo = new ErrorInfo(
+                            "Fehler bei der Erzeugung des Auftrags.",
+                            "Fehlermeldung:\n\n"
+                                    + exception.getMessage()
+                                    + "\n\nSiehe Details.",
+                            null,
+                            null,
+                            exception,
+                            Level.ALL,
+                            null);
+                    JXErrorPane.showDialog(this, errorInfo);
+                }
             } catch (final IOException ex) {
+                // fallback
                 exception = ex;
-                parseError = true;
+                final ErrorInfo errorInfo = new ErrorInfo(
+                        "Fehler",
+                        "Die Fehlermeldung konnte nicht geparst werden.",
+                        null,
+                        null,
+                        exception,
+                        Level.ALL,
+                        null);
+                JXErrorPane.showDialog(this, errorInfo);
             }
-            final ErrorInfo errorInfo = new ErrorInfo(
-                    "Fehler",
-                    parseError ? "Die Fehlermeldung konnte nicht geparst werden."
-                               : (exception.getMessage() + "\n\nSiehe Details."),
-                    null,
-                    null,
-                    exception,
-                    Level.ALL,
-                    null);
-            JXErrorPane.showDialog(this, errorInfo);
         }
     } //GEN-LAST:event_jXHyperlink1ActionPerformed
 
@@ -1215,6 +1372,40 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 }
             }.execute();
     } //GEN-LAST:event_jCheckBox1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jList4MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList4MouseClicked
+        if (evt.getClickCount() > 1) {
+            final int index = jList4.getSelectedIndex();
+            final VermessungsunterlagenException ex = (VermessungsunterlagenException)
+                ((DefaultListModel<VermessungsunterlagenException>)jList4.getModel()).getElementAt(index);
+            final ErrorInfo errorInfo = new ErrorInfo(
+                    "Fehler",
+                    ex.getMessage()
+                            + "\n\nSiehe Details.",
+                    null,
+                    null,
+                    ex,
+                    Level.ALL,
+                    null);
+            JXErrorPane.showDialog(this, errorInfo);
+        }
+    }                                                                      //GEN-LAST:event_jList4MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        exceptionDialog.setVisible(false);
+        ((DefaultListModel<VermessungsunterlagenException>)jList4.getModel()).clear();
+        jLabel9.setText("");
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1566,6 +1757,126 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             } else {
                 component.setEnabled(false);
             }
+            return component;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class VermessungsunterlagenExceptionJsonDeserializer extends StdDeserializer<VermessungsunterlagenException> {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new CidsBeanJsonDeserializer object.
+         */
+        public VermessungsunterlagenExceptionJsonDeserializer() {
+            super(VermessungsunterlagenException.class);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public VermessungsunterlagenException deserialize(final JsonParser jp, final DeserializationContext dc)
+                throws IOException, JsonProcessingException {
+            final ObjectNode on = jp.readValueAsTree();
+            if (on.has("type")) {
+                final JsonNode typeNode = on.get("type");
+                final VermessungsunterlagenException.Type type = (VermessungsunterlagenException.Type)
+                    objectMapper.treeToValue(typeNode, VermessungsunterlagenException.Type.class);
+                switch (type) {
+                    case VALIDATOR: {
+                        return objectMapper.treeToValue(on, VermessungsunterlagenValidatorException.class);
+                    }
+                    case JOB: {
+                        return objectMapper.treeToValue(on, VermessungsunterlagenJobException.class);
+                    }
+                    case TASK: {
+                        return objectMapper.treeToValue(on, VermessungsunterlagenTaskException.class);
+                    }
+                    case OTHER: {
+                        return objectMapper.treeToValue(on, VermessungsunterlagenException.class);
+                    }
+                }
+            }
+            throw new RuntimeException("invalid VermessungsunterlagenException");
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class VermessungsunterlagenTaskExceptionJsonDeserializer
+            extends StdDeserializer<VermessungsunterlagenTaskException> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final ObjectMapper defaultMapper = new ObjectMapper();
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new CidsBeanJsonDeserializer object.
+         */
+        public VermessungsunterlagenTaskExceptionJsonDeserializer() {
+            super(VermessungsunterlagenTaskException.class);
+            defaultMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public VermessungsunterlagenTaskException deserialize(final JsonParser jp, final DeserializationContext dc)
+                throws IOException, JsonProcessingException {
+            final ObjectNode on = jp.readValueAsTree();
+            if (on.has("taskExceptionType")) {
+                final JsonNode typeNode = on.get("taskExceptionType");
+                final VermessungsunterlagenTaskException.TaskExceptionType taskExceptionType =
+                    (VermessungsunterlagenTaskException.TaskExceptionType)objectMapper.treeToValue(
+                        typeNode,
+                        VermessungsunterlagenTaskException.TaskExceptionType.class);
+                switch (taskExceptionType) {
+                    case RETRY: {
+                        return objectMapper.treeToValue(on, VermessungsunterlagenTaskRetryException.class);
+                    }
+                    case SINGLE: {
+                        return defaultMapper.treeToValue(on, VermessungsunterlagenTaskException.class);
+                    }
+                }
+            }
+            throw new RuntimeException("invalid VermessungsunterlagenTaskException");
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class VermessungsunterlagenExceptionListCellRenderer extends DefaultListCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final VermessungsunterlagenException ex = (VermessungsunterlagenException)value;
+            final String newvalue = DATE_FORMAT.format(new Date(new Double(ex.getTimeMillis()).longValue()))
+                        + " " + ex.getMessage();
+            final Component component = super.getListCellRendererComponent(
+                    list,
+                    newvalue,
+                    index,
+                    isSelected,
+                    cellHasFocus);
             return component;
         }
     }
