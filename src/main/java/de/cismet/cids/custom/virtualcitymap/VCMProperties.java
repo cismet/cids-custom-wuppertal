@@ -37,7 +37,7 @@ public class VCMProperties extends Properties {
     private static final String PROP_URL_TEMPLATE = "URL_TEMPLATE";
     private static final String PROP_USER = "USER";
     private static final String PROP_PASSWORD = "PASSWORD";
-    private static final String PROP_ACTION_ATTR = "ACTION_ATTR";
+    private static final String PROP_TOOLBAR_CONFATTR = "TOOLBAR_CONFATTR";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -82,8 +82,8 @@ public class VCMProperties extends Properties {
      *
      * @return  DOCUMENT ME!
      */
-    public String getActionAttr() {
-        return getProperty(PROP_ACTION_ATTR);
+    public String getToolbarConfAttr() {
+        return getProperty(PROP_TOOLBAR_CONFATTR);
     }
 
     /**
