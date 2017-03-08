@@ -51,6 +51,8 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             VirtualCityMapToolbarComponentProvider.class);
+    private static final String HINTSEPARATOR_BEFORE = "<";
+    private static final String HINTSEPARATOR_AFTER = ">";
 
     //~ Methods ----------------------------------------------------------------
 
@@ -61,13 +63,18 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
 
     @Override
     public Collection<ToolbarComponentDescription> getToolbarComponents() {
-        if (checkActionTag()) {
+        final Object[] toolbarConfig = getToolbarConfig();
+        if (toolbarConfig != null) {
+            final String toolbarId = (String)toolbarConfig[0];
+            final ToolbarPositionHint toolbarPositionHint = (ToolbarPositionHint)toolbarConfig[1];
+            final String toolbarHintTarget = (String)toolbarConfig[2];
+
             final List<ToolbarComponentDescription> preparationList = new LinkedList<ToolbarComponentDescription>();
             final ToolbarComponentDescription description = new ToolbarComponentDescription(
-                    "tlbMain",
+                    toolbarId,
                     new VirtualCityMapToolbarComponentProvider.VirtualCityMapButton(),
-                    ToolbarPositionHint.AFTER,
-                    "cmdPan");
+                    toolbarPositionHint,
+                    toolbarHintTarget);
             preparationList.add(description);
 
             return Collections.unmodifiableList(preparationList);
@@ -81,17 +88,28 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
      *
      * @return  DOCUMENT ME!
      */
-    public boolean checkActionTag() {
-        final String actionTag = VCMProperties.getInstance().getActionAttr();
-        boolean result;
+    public Object[] getToolbarConfig() {
+        final String configAttr = VCMProperties.getInstance().getToolbarConfAttr();
         try {
-            result = SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), actionTag)
-                        != null;
+            final String result = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), configAttr);
+            if (result != null) {
+                if (result.contains(HINTSEPARATOR_BEFORE)) {
+                    final String[] split = result.split(HINTSEPARATOR_BEFORE);
+                    if (split.length == 2) {
+                        return new Object[] { split[0], ToolbarPositionHint.BEFORE, split[1] };
+                    }
+                } else if (result.contains(HINTSEPARATOR_AFTER)) {
+                    final String[] split = result.split(HINTSEPARATOR_AFTER);
+                    if (split.length == 2) {
+                        return new Object[] { split[0], ToolbarPositionHint.AFTER, split[1] };
+                    }
+                }
+            }
         } catch (final ConnectionException ex) {
-            LOG.info("Can not check ActionTag: " + actionTag, ex);
-            result = false;
+            LOG.info("Can not check ConfigAttr: " + configAttr, ex);
         }
-        return result;
+        return null;
     }
 
     //~ Inner Classes ----------------------------------------------------------
