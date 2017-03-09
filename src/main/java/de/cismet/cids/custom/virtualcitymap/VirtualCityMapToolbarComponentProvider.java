@@ -90,24 +90,26 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
      */
     public Object[] getToolbarConfig() {
         final String configAttr = VCMProperties.getInstance().getToolbarConfAttr();
-        try {
-            final String result = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), configAttr);
-            if (result != null) {
-                if (result.contains(HINTSEPARATOR_BEFORE)) {
-                    final String[] split = result.split(HINTSEPARATOR_BEFORE);
-                    if (split.length == 2) {
-                        return new Object[] { split[0], ToolbarPositionHint.BEFORE, split[1] };
-                    }
-                } else if (result.contains(HINTSEPARATOR_AFTER)) {
-                    final String[] split = result.split(HINTSEPARATOR_AFTER);
-                    if (split.length == 2) {
-                        return new Object[] { split[0], ToolbarPositionHint.AFTER, split[1] };
+        if (configAttr != null) {
+            try {
+                final String result = SessionManager.getConnection()
+                            .getConfigAttr(SessionManager.getSession().getUser(), configAttr);
+                if (result != null) {
+                    if (result.contains(HINTSEPARATOR_BEFORE)) {
+                        final String[] split = result.split(HINTSEPARATOR_BEFORE);
+                        if (split.length == 2) {
+                            return new Object[] { split[0], ToolbarPositionHint.BEFORE, split[1] };
+                        }
+                    } else if (result.contains(HINTSEPARATOR_AFTER)) {
+                        final String[] split = result.split(HINTSEPARATOR_AFTER);
+                        if (split.length == 2) {
+                            return new Object[] { split[0], ToolbarPositionHint.AFTER, split[1] };
+                        }
                     }
                 }
+            } catch (final ConnectionException ex) {
+                LOG.info("Can not check ConfigAttr: " + configAttr, ex);
             }
-        } catch (final ConnectionException ex) {
-            LOG.info("Can not check ConfigAttr: " + configAttr, ex);
         }
         return null;
     }
