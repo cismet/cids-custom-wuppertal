@@ -17,7 +17,7 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jxl.common.Logger;
+import org.apache.log4j.Logger;
 
 import java.awt.Component;
 
