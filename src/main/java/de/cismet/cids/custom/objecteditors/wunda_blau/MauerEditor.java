@@ -3520,6 +3520,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
     @Override
     public void dispose() {
+        ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
         bindingGroup.unbind();
     }
 
