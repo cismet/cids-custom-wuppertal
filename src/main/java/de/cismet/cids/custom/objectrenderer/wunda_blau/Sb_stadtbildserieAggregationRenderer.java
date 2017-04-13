@@ -1520,8 +1520,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      */
     private int countAnzahlWarenkorbInHighRes() {
         int count = 0;
-        for (final String bildnummer : selectedStadtbilder) {
-            if (highResStadtbilder.contains(bildnummer)) {
+        for (final CidsBean selectedStadtbild : getSelectedStadtbilder()) {
+            if (highResStadtbilder.contains((String)selectedStadtbild.getProperty("bildnummer"))) {
                 count++;
             }
         }
