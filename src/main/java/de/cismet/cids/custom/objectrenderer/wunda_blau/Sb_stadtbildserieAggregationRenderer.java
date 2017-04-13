@@ -232,10 +232,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 }
             };
 
+        initComponents();
+
         refreshVorauswahlDownloadAction();
         refreshWarenkorbDownloadAction();
-
-        initComponents();
 
         btnDownloadHighResImage.setAction(vorauswahlDownloadAction);
         btnReport.setAction(vorauswahlReportAction);
