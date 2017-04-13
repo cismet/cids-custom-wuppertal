@@ -198,55 +198,25 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
 
         if (katKlasse != null) {
             if (katKlasse.equals("1")) {
-                return Color.decode("#FF0000");
+                return Color.decode("#FB858B");
             } else if (katKlasse.equals("11")) {
-                final Paint texturePaint = createTexturePaint(KatType.KOMP);
-
-                if (texturePaint != null) {
-                    return texturePaint;
-                } else {
-                    return Color.decode("#FF0000");
-                }
+                return Color.decode("#F90921");
             } else if (katKlasse.equals("2")) {
-                return Color.decode("#007300");
+                return Color.decode("#84BA84");
             } else if (katKlasse.equals("22")) {
-                final Paint texturePaint = createTexturePaint(KatType.FORST);
-
-                if (texturePaint != null) {
-                    return texturePaint;
-                } else {
-                    return Color.decode("#007300");
-                }
+                return Color.decode("#167500");
             } else if (katKlasse.equals("3")) {
-                return Color.decode("#FFFF80");
+                return Color.decode("#FCFF96");
             } else if (katKlasse.equals("33")) {
-                final Paint texturePaint = createTexturePaint(KatType.DACH);
-
-                if (texturePaint != null) {
-                    return texturePaint;
-                } else {
-                    return Color.decode("#FFFF80");
-                }
+                return Color.decode("#FBFF22");
             } else if (katKlasse.equals("4")) {
-                return Color.decode("#FAC864");
+                return Color.decode("#F9D990");
             } else if (katKlasse.equals("44")) {
-                final Paint texturePaint = createTexturePaint(KatType.PLANUNG);
-
-                if (texturePaint != null) {
-                    return texturePaint;
-                } else {
-                    return Color.decode("#FAC864");
-                }
+                return Color.decode("#F5B121");
             } else if (katKlasse.equals("5")) {
-                return Color.decode("#C000C0");
+                return Color.decode("#DC79DD");
             } else if (katKlasse.equals("55")) {
-                final Paint texturePaint = createTexturePaint(KatType.ART);
-
-                if (texturePaint != null) {
-                    return texturePaint;
-                } else {
-                    return Color.decode("#C000C0");
-                }
+                return Color.decode("#BE00C1");
             }
         }
 
