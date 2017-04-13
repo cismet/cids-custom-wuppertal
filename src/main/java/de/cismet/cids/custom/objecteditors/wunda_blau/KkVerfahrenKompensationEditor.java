@@ -193,6 +193,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -360,6 +361,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         jLabel24 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         taBemerkung = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
         panFlaechenMainSub3 = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -477,8 +479,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
                 txtFlaecheId,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
+        binding.setSourceNullValue("null");
+        binding.setSourceUnreadableValue("null");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -781,6 +783,9 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(10, 4, 10, 7);
         add(panFlaechenMainSub2, gridBagConstraints);
 
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
         panFlaechenMainSub3.setMinimumSize(new java.awt.Dimension(225, 40));
         panFlaechenMainSub3.setOpaque(false);
         panFlaechenMainSub3.setLayout(new java.awt.GridBagLayout());
@@ -819,9 +824,10 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.4;
         gridBagConstraints.weighty = 2.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 4, 10, 4);
-        add(panFlaechenMainSub3, gridBagConstraints);
+        jPanel2.add(panFlaechenMainSub3, gridBagConstraints);
 
         panFlaechenMainSubTabbedPane.setLayout(new java.awt.GridBagLayout());
 
@@ -1129,10 +1135,19 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weightx = 0.6;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        add(panFlaechenMainSubTabbedPane, gridBagConstraints);
+        jPanel2.add(panFlaechenMainSubTabbedPane, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jPanel2, gridBagConstraints);
 
         rpGIS.setLayout(new java.awt.GridBagLayout());
 
