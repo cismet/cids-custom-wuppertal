@@ -9,6 +9,8 @@ package de.cismet.cids.custom.alkisfortfuehrung;
 
 import Sirius.navigator.connection.SessionManager;
 
+import Sirius.util.collections.MultiMap;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -35,6 +37,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SortOrder;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -64,6 +67,7 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
 
     private boolean lockDateButtons = false;
     private final WKTReader wktreader = new WKTReader();
+    private final MultiMap geomsMap = new MultiMap();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCloseDialog;
@@ -117,17 +121,19 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
         jXTable1.getColumnModel().getColumn(0).setCellRenderer(jXTable1.getDefaultRenderer(String.class));
         jXTable1.getColumnModel().getColumn(1).setCellRenderer(jXTable1.getDefaultRenderer(String.class));
         jXTable1.getColumnModel().getColumn(2).setCellRenderer(jXTable1.getDefaultRenderer(String.class));
+        jXTable1.getColumnModel().getColumn(3).setCellRenderer(jXTable1.getDefaultRenderer(String.class));
 
-        jXTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
-        jXTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
+        jXTable1.getColumnModel().getColumn(0).setPreferredWidth(80);
+        jXTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
         jXTable1.getColumnModel().getColumn(2).setPreferredWidth(200);
+        jXTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
 
         jXTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jXTable1.setDragEnabled(false);
 
         jXTable1.getTableHeader().setResizingAllowed(true);
         jXTable1.getTableHeader().setReorderingAllowed(false);
-        // jXTable1.setSortOrder(1, SortOrder.ASCENDING);
+        jXTable1.setSortOrder(1, SortOrder.ASCENDING);
 
         jXTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -189,7 +195,7 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
                 "FortfuehrungsanlaesseDialog.title")); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 643));
+        jPanel1.setPreferredSize(new java.awt.Dimension(900, 643));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         panPeriod.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -413,6 +419,8 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
                 org.openide.util.NbBundle.getMessage(
                     FortfuehrungsanlaesseDialog.class,
                     "FortfuehrungsanlaesseDialog.jPanel3.border.title"))); // NOI18N
+        jPanel3.setMinimumSize(new java.awt.Dimension(220, 42));
+        jPanel3.setPreferredSize(new java.awt.Dimension(220, 42));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -459,7 +467,6 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         panDetail.add(jPanel11, gridBagConstraints);
@@ -796,11 +803,14 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
         final FortfuehrungItem selectedFortfuehrungItem = getSelectedFortfuehrungItem();
         if (selectedFortfuehrungItem != null) {
             jProgressBar1.setVisible(true);
-            final List<Geometry> geoms = new ArrayList<Geometry>(selectedFortfuehrungItem.getGeoms().size());
-            for (final Geometry geom : selectedFortfuehrungItem.getGeoms()) {
-                geoms.add(geom.buffer(FLURSTUECKBUFFER_FOR_KASSENZEICHEN_GEOMSEARCH));
+            final Collection<Geometry> geoms = (Collection<Geometry>)geomsMap.get(selectedFortfuehrungItem.getFfn());
+            final List<Geometry> bufferedGeoms = new ArrayList<Geometry>(geoms.size());
+            for (final Geometry geom : geoms) {
+                bufferedGeoms.add(geom.buffer(FLURSTUECKBUFFER_FOR_KASSENZEICHEN_GEOMSEARCH));
             }
-            searchObjects(new GeometryCollection(GeometryFactory.toGeometryArray(geoms), geoms.get(0).getFactory()));
+            searchObjects(new GeometryCollection(
+                    GeometryFactory.toGeometryArray(bufferedGeoms),
+                    bufferedGeoms.get(0).getFactory()));
         } else {
             lblDokumentLink.setEnabled(false);
             setDetailEnabled(false);
@@ -878,7 +888,8 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      */
-    private void refreshFortfuehrungsList() {
+    protected void refreshFortfuehrungsList() {
+        geomsMap.clear();
         new SwingWorker<Collection<FortfuehrungItem>, Void>() {
 
                 @Override
@@ -900,8 +911,8 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
                             ffnMap.put(id, item);
                         } else {
                             final FortfuehrungItem ffn = ffnMap.get(id);
-                            if (ffn.getFortfuehrung_id() == null) {
-                                ffn.setFortfuehrung_id(item.getFortfuehrung_id());
+                            if (ffn.getFortfuehrungId() == null) {
+                                ffn.setFortfuehrungId(item.getFortfuehrungId());
                             }
                         }
                         final Geometry geom = wktreader.read((String)rawItem[6]);
@@ -914,7 +925,7 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
                                 currentCrs);
                         transformedAlkisLandparcelGeom.setSRID(currentSrid);
 
-                        ffnMap.get(id).getGeoms().add(transformedAlkisLandparcelGeom);
+                        geomsMap.put(item.getFfn(), transformedAlkisLandparcelGeom);
                     }
                     final List<FortfuehrungItem> items = new ArrayList<FortfuehrungItem>(ffnMap.values());
                     Collections.sort(items);
