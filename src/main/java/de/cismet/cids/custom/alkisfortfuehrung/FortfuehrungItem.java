@@ -37,11 +37,9 @@ public class FortfuehrungItem implements Comparable<FortfuehrungItem> {
     private final String ffn;
     private final String anlass;
     private final Date beginn;
-    private final Integer flurstueck_id;
-    private final String flurstueck_alt;
-    private final String flurstueck_neu;
-    @Setter private Integer fortfuehrung_id;
-    private final Collection<Geometry> geoms = new ArrayList<>();
+    private final String flurstueckAlt;
+    private final String flurstueckNeu;
+    @Setter private Integer fortfuehrungId;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -51,7 +49,7 @@ public class FortfuehrungItem implements Comparable<FortfuehrungItem> {
      * @return  DOCUMENT ME!
      */
     public boolean isIst_abgearbeitet() {
-        return fortfuehrung_id != null;
+        return fortfuehrungId != null;
     }
 
     @Override

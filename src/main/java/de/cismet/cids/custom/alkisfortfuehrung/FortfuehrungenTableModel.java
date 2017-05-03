@@ -28,11 +28,13 @@ public class FortfuehrungenTableModel extends AbstractTableModel {
 
     private static final String[] COLUMN_NAMES = {
             "Datum",
+            "FFN",
             "Art",
             ""
         };
 
     private static final Class[] COLUMN_CLASSES = {
+            String.class,
             String.class,
             String.class,
             String.class
@@ -101,7 +103,7 @@ public class FortfuehrungenTableModel extends AbstractTableModel {
             }
             case 1: {
                 try {
-                    return item.getAnlass();
+                    return item.getFfn();
                 } catch (Exception e) {
                     LOG.warn("exception in tablemodel", e);
                     return "";
@@ -109,8 +111,16 @@ public class FortfuehrungenTableModel extends AbstractTableModel {
             }
             case 2: {
                 try {
-                    final String flurstueck_alt = item.getFlurstueck_alt();
-                    final String flurstueck_neu = item.getFlurstueck_neu();
+                    return item.getAnlass();
+                } catch (Exception e) {
+                    LOG.warn("exception in tablemodel", e);
+                    return "";
+                }
+            }
+            case 3: {
+                try {
+                    final String flurstueck_alt = item.getFlurstueckAlt();
+                    final String flurstueck_neu = item.getFlurstueckNeu();
                     if (flurstueck_alt.equals(flurstueck_neu)) {
                         return flurstueck_alt;
                     } else {
