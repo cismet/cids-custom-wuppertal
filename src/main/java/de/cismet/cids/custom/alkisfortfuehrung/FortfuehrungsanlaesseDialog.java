@@ -85,7 +85,6 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
@@ -181,7 +180,6 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
         panDetail = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         lblDokumentLink = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
         jPanel11 = getObjectsPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -419,8 +417,6 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
                 org.openide.util.NbBundle.getMessage(
                     FortfuehrungsanlaesseDialog.class,
                     "FortfuehrungsanlaesseDialog.jPanel3.border.title"))); // NOI18N
-        jPanel3.setMinimumSize(new java.awt.Dimension(220, 42));
-        jPanel3.setPreferredSize(new java.awt.Dimension(220, 42));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -439,24 +435,12 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(lblDokumentLink, gridBagConstraints);
-
-        final javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel3.add(jPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -801,6 +785,10 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
             return;
         }
         final FortfuehrungItem selectedFortfuehrungItem = getSelectedFortfuehrungItem();
+        setDetailEnabled(false);
+        setObjects(null);
+        setDokumentLink(null);
+
         if (selectedFortfuehrungItem != null) {
             jProgressBar1.setVisible(true);
             final Collection<Geometry> geoms = (Collection<Geometry>)geomsMap.get(selectedFortfuehrungItem.getFfn());
@@ -811,11 +799,6 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
             searchObjects(new GeometryCollection(
                     GeometryFactory.toGeometryArray(bufferedGeoms),
                     bufferedGeoms.get(0).getFactory()));
-        } else {
-            lblDokumentLink.setEnabled(false);
-            setDetailEnabled(false);
-            setObjects(null);
-            setDokumentLink(null);
         }
     }
 
@@ -848,10 +831,11 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
     protected void setDokumentLink(final String dokumentUrl) {
         if (dokumentUrl != null) {
             lblDokumentLink.setText("<html><a href=\"" + dokumentUrl + "\">Dokument im Browser anzeigen</a>");
+            lblDokumentLink.setEnabled(true);
             lblDokumentLink.setToolTipText(dokumentUrl);
             lblDokumentLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         } else {
-            lblDokumentLink.setText("");
+            lblDokumentLink.setEnabled(false);
             lblDokumentLink.setToolTipText(null);
             lblDokumentLink.setCursor(Cursor.getDefaultCursor());
         }
