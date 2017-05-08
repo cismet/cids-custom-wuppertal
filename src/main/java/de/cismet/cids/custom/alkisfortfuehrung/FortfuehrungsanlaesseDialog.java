@@ -132,7 +132,7 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
 
         jXTable1.getTableHeader().setResizingAllowed(true);
         jXTable1.getTableHeader().setReorderingAllowed(false);
-        jXTable1.setSortOrder(1, SortOrder.ASCENDING);
+        jXTable1.setSortOrder(0, SortOrder.ASCENDING);
 
         jXTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -941,6 +941,15 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
                     }
                 }
             }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected FortfuehrungenTableModel getTableModel() {
+        return (FortfuehrungenTableModel)jXTable1.getModel();
     }
 
     /**
