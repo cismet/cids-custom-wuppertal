@@ -139,11 +139,16 @@ public class AlkisProductDownloadHelper {
             final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
-                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product, null);
+                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                        queryID,
+                        product,
+                        SessionManager.getSession().getUser(),
+                        null);
 
                 final URL urlFertigungsvermerk = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
                         queryID,
                         product,
+                        SessionManager.getSession().getUser(),
                         AlkisUtils.getFertigungsVermerk("WV ein"));
                 final Map<String, String> requestPerUsage = new HashMap<String, String>();
                 requestPerUsage.put("WV ein", (urlFertigungsvermerk != null) ? urlFertigungsvermerk.toString() : null);
@@ -243,7 +248,8 @@ public class AlkisProductDownloadHelper {
                 final URL url = AlkisUtils.PRODUCTS.productEinzelnachweisStichtagsbezogenUrl(
                         queryID,
                         product,
-                        stichtag);
+                        stichtag,
+                        SessionManager.getSession().getUser());
 
                 if (url != null) {
                     String filename = product + "." + completeBuchungsblattCode.replace("/", "--").trim();
@@ -346,6 +352,7 @@ public class AlkisProductDownloadHelper {
                     url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
                             parcelCode,
                             product,
+                            SessionManager.getSession().getUser(),
                             AlkisUtils.getFertigungsVermerk("WV ein"));
 
                     if (url != null) {
