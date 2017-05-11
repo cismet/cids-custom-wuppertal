@@ -799,7 +799,10 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         panFlaechenMainSub3.add(jLabel25, gridBagConstraints);
 
+        jScrollPane3.setHorizontalScrollBar(null);
+
         taNebenbest.setColumns(20);
+        taNebenbest.setLineWrap(true);
         taNebenbest.setRows(5);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
