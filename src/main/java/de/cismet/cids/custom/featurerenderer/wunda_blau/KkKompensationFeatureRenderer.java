@@ -12,17 +12,12 @@
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
-import com.vividsolutions.jts.geom.Geometry;
-
-import edu.umd.cs.piccolo.PNode;
-
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
-
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
-import java.awt.TexturePaint;
+import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -40,7 +35,6 @@ import javax.swing.JComponent;
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
 import de.cismet.cismap.commons.Refreshable;
-import de.cismet.cismap.commons.gui.piccolo.PFixedTexturePaint;
 import de.cismet.cismap.commons.gui.piccolo.SelectionAwareTexturePaint;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
@@ -197,23 +191,23 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
         final String katKlasse = getKatKlasse();
 
         if (katKlasse != null) {
-            if (katKlasse.equals("1")) {
+            if (katKlasse.startsWith("1")) {
                 return Color.decode("#FB858B");
             } else if (katKlasse.equals("11")) {
                 return Color.decode("#F90921");
-            } else if (katKlasse.equals("2")) {
+            } else if (katKlasse.startsWith("2")) {
                 return Color.decode("#84BA84");
             } else if (katKlasse.equals("22")) {
                 return Color.decode("#167500");
-            } else if (katKlasse.equals("3")) {
+            } else if (katKlasse.startsWith("3")) {
                 return Color.decode("#FCFF96");
             } else if (katKlasse.equals("33")) {
                 return Color.decode("#FBFF22");
-            } else if (katKlasse.equals("4")) {
+            } else if (katKlasse.startsWith("4")) {
                 return Color.decode("#F9D990");
             } else if (katKlasse.equals("44")) {
                 return Color.decode("#F5B121");
-            } else if (katKlasse.equals("5")) {
+            } else if (katKlasse.startsWith("5")) {
                 return Color.decode("#DC79DD");
             } else if (katKlasse.equals("55")) {
                 return Color.decode("#BE00C1");
@@ -242,7 +236,38 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getLinePaint(final CidsFeature subFeature) {
+        final String katKlasse = getKatKlasse();
+
+        if (katKlasse != null) {
+            if (katKlasse.equals("1")) {
+                return Color.decode("#FB858B");
+            } else if (katKlasse.equals("11")) {
+                return Color.BLACK;
+            } else if (katKlasse.equals("2")) {
+                return Color.decode("#84BA84");
+            } else if (katKlasse.equals("22")) {
+                return Color.BLACK;
+            } else if (katKlasse.equals("3")) {
+                return Color.decode("#FCFF96");
+            } else if (katKlasse.equals("33")) {
+                return Color.BLACK;
+            } else if (katKlasse.equals("4")) {
+                return Color.decode("#F9D990");
+            } else if (katKlasse.equals("44")) {
+                return Color.BLACK;
+            } else if (katKlasse.equals("5")) {
+                return Color.decode("#DC79DD");
+            } else if (katKlasse.equals("55")) {
+                return Color.BLACK;
+            }
+        }
+
         return Color.BLACK;
+    }
+
+    @Override
+    public Stroke getLineStyle() {
+        return new BasicStroke(2.0f);
     }
 
     @Override
@@ -252,7 +277,7 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getLinePaint() {
-        return Color.decode("#000000");
+        return getLinePaint(null);
     }
 
     @Override
