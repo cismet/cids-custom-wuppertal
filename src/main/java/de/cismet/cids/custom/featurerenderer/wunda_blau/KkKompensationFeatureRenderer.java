@@ -267,7 +267,13 @@ public class KkKompensationFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Stroke getLineStyle() {
-        return new BasicStroke(2.0f);
+        final String katKlasse = getKatKlasse();
+
+        if ((katKlasse != null) && (katKlasse.length() == 2)) {
+            return new BasicStroke(2.0f);
+        }
+
+        return null;
     }
 
     @Override
