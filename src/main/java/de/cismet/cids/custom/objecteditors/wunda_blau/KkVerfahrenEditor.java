@@ -62,6 +62,8 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.KompensationskatasterBeanTable;
 import de.cismet.cids.custom.wunda_blau.search.server.BPlanByGeometrySearch;
+import de.cismet.cids.custom.wunda_blau.search.server.KkKompensationNextSchluesselSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.KkVerfahrenSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -71,6 +73,7 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
+import de.cismet.cids.server.search.AbstractCidsServerSearch;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
@@ -1482,6 +1485,24 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private void btnAddLaufendeNummer1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummer1ActionPerformed
         try {
             final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_kompensation");
+            final String schluessel = getSchluessel();
+
+            if (schluessel == null) {
+                LOG.error("Cannot determine new value for property schluessel");
+                JOptionPane.showMessageDialog(
+                    this,
+                    NbBundle.getMessage(
+                        KkVerfahrenEditor.class,
+                        "KkVerfahrenEditor.btnAddLaufendeNummer1ActionPerformed.message"),
+                    NbBundle.getMessage(
+                        KkVerfahrenEditor.class,
+                        "KkVerfahrenEditor.btnAddLaufendeNummer1ActionPerformed.title"),
+                    JOptionPane.ERROR_MESSAGE);
+
+                return;
+            }
+
+            bean.setProperty("schluessel", schluessel);
 
             cidsBean.addCollectionElement("kompensationen", bean);
             ((CustomJListModel)lstFlaechen.getModel()).refresh();
@@ -1491,6 +1512,29 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             LOG.error("Cannot add new kk_kompensation object", e);
         }
     } //GEN-LAST:event_btnAddLaufendeNummer1ActionPerformed
+
+    /**
+     * Determines the next schluessel value from the db sequence.
+     *
+     * @return  the next schluessel value or null, if it cannot be retrieved
+     */
+    private String getSchluessel() {
+        try {
+            final AbstractCidsServerSearch search = new KkKompensationNextSchluesselSearch();
+            final List res = (List)SessionManager.getProxy()
+                        .customServerSearch(SessionManager.getSession().getUser(), search);
+
+            if ((res != null) && (res.size() == 1) && (res.get(0) != null)) {
+                return res.get(0).toString();
+            } else {
+                LOG.error("Cannot retrieve verfahren object");
+            }
+        } catch (Exception e) {
+            LOG.error("Error while retrieving verfahren object", e);
+        }
+
+        return null;
+    }
 
     /**
      * DOCUMENT ME!

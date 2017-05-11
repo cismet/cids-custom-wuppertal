@@ -473,6 +473,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 3);
         panFlaechenMainSub1.add(jLabel20, gridBagConstraints);
 
+        txtFlaecheId.setEnabled(false);
+
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -629,7 +631,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
         cboFlaecheSchutzstatus.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cboFlaecheSchutzstatusActionPerformed(evt);
                 }
@@ -652,7 +653,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
         txtFlaecheJahrDerUmsetzung.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     txtFlaecheJahrDerUmsetzungActionPerformed(evt);
                 }
@@ -855,7 +855,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         btnAddMass.setPreferredSize(new java.awt.Dimension(39, 20));
         btnAddMass.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnAddMassActionPerformed(evt);
                 }
@@ -875,7 +874,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         btnRemMass.setPreferredSize(new java.awt.Dimension(39, 20));
         btnRemMass.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnRemMassActionPerformed(evt);
                 }
@@ -901,7 +899,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         btnAddKontr.setPreferredSize(new java.awt.Dimension(39, 20));
         btnAddKontr.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnAddKontrActionPerformed(evt);
                 }
@@ -921,7 +918,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         btnRemKontr.setPreferredSize(new java.awt.Dimension(39, 20));
         btnRemKontr.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnRemKontrActionPerformed(evt);
                 }
@@ -961,7 +957,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         btnAddBioAus.setPreferredSize(new java.awt.Dimension(39, 20));
         btnAddBioAus.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnAddBioAusActionPerformed(evt);
                 }
@@ -980,7 +975,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         btnRemBioAus.setPreferredSize(new java.awt.Dimension(39, 20));
         btnRemBioAus.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnRemBioAusActionPerformed(evt);
                 }
@@ -1011,7 +1005,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         btnAddBioEin.setPreferredSize(new java.awt.Dimension(39, 20));
         btnAddBioEin.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnAddBioEinActionPerformed(evt);
                 }
@@ -1030,7 +1023,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         btnRemBioEin.setPreferredSize(new java.awt.Dimension(39, 20));
         btnRemBioEin.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnRemBioEinActionPerformed(evt);
                 }
@@ -1047,7 +1039,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
         jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
 
-                @Override
                 public void stateChanged(final javax.swing.event.ChangeEvent evt) {
                     jTabbedPane1StateChanged(evt);
                 }

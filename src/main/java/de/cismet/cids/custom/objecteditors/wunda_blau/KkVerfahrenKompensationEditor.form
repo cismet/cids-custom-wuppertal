@@ -117,6 +117,9 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="txtFlaecheId">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.schluessel}" target="txtFlaecheId" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
