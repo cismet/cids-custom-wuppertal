@@ -22,6 +22,8 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.NbBundle;
+
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -41,13 +43,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -1633,6 +1641,10 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             xtKosten.setModel(model);
             xtKosten.getColumn(1).setCellEditor(new DateCellEditor());
             xtKosten.getColumn(2).setCellEditor(new DateCellEditor());
+            xtKosten.getColumn(0).setCellRenderer(new RightAlignedTableCellRenderer());
+            xtKosten.getColumn(1).setCellRenderer(new RightAlignedTableCellRenderer());
+            xtKosten.getColumn(2).setCellRenderer(new RightAlignedTableCellRenderer());
+            xtKosten.getColumn(3).setCellRenderer(new RightAlignedTableCellRenderer());
             lstFlaechen.setModel(new CustomJListModel("kompensationen"));
             if (lstFlaechen.getModel().getSize() > 0) {
                 lstFlaechen.setSelectedIndex(0);
@@ -1690,6 +1702,16 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     public boolean prepareForSave() {
         List<CidsBean> kompBeans = null;
         final ObjectAttribute bezAttribute = cidsBean.getMetaObject().getAttribute("bezeichnung");
+        final CidsBean grundlage = (CidsBean)cidsBean.getProperty("grundlage");
+
+        if (grundlage == null) {
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.prepareForSave.grundlage.message"),
+                NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.prepareForSave.grundlage.title"),
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
         if ((bezAttribute != null) && bezAttribute.isChanged()) {
             // the cs_cache table must be updated for the kompensation objects
@@ -1814,6 +1836,32 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             Collections.sort(l, beanComparator);
 
             return l.get(index);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class RightAlignedTableCellRenderer extends DefaultTableCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getTableCellRendererComponent(final JTable table,
+                final Object value,
+                final boolean isSelected,
+                final boolean hasFocus,
+                final int row,
+                final int column) {
+            final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); // To change body of generated methods, choose Tools | Templates.
+
+            if (c instanceof JLabel) {
+                ((JLabel)c).setHorizontalAlignment(JLabel.RIGHT);
+            }
+
+            return c;
         }
     }
 }
