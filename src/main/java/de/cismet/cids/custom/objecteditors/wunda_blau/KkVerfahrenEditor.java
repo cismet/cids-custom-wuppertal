@@ -22,6 +22,8 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.NbBundle;
+
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -45,15 +47,20 @@ import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.KompensationskatasterBeanTable;
 import de.cismet.cids.custom.wunda_blau.search.server.BPlanByGeometrySearch;
+import de.cismet.cids.custom.wunda_blau.search.server.KkKompensationNextSchluesselSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -63,6 +70,10 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
+
+import de.cismet.cids.server.search.AbstractCidsServerSearch;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
@@ -89,7 +100,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     BorderProvider,
     RequestsFullSizeComponent,
     PropertyChangeListener,
-    EditorSaveListener {
+    EditorSaveListener,
+    CidsBeanDropListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -117,6 +129,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
 
     private CidsBean cidsBean = null;
     private final CardLayout cardLayout;
+    private List<CidsBean> beansToRemoveFromOtherVerfahren = new ArrayList<CidsBean>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddLaufendeNummer;
@@ -273,6 +286,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             makeReadOnly(chkAusgleich);
             makeReadOnly(chkErsatzzahlung);
             makeReadOnly(chkErstattung);
+        } else {
+            new CidsBeanDropTarget(this);
         }
     }
 
@@ -1474,6 +1489,24 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private void btnAddLaufendeNummer1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummer1ActionPerformed
         try {
             final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_kompensation");
+            final String schluessel = getSchluessel();
+
+            if (schluessel == null) {
+                LOG.error("Cannot determine new value for property schluessel");
+                JOptionPane.showMessageDialog(
+                    this,
+                    NbBundle.getMessage(
+                        KkVerfahrenEditor.class,
+                        "KkVerfahrenEditor.btnAddLaufendeNummer1ActionPerformed.message"),
+                    NbBundle.getMessage(
+                        KkVerfahrenEditor.class,
+                        "KkVerfahrenEditor.btnAddLaufendeNummer1ActionPerformed.title"),
+                    JOptionPane.ERROR_MESSAGE);
+
+                return;
+            }
+
+            bean.setProperty("schluessel", schluessel);
 
             cidsBean.addCollectionElement("kompensationen", bean);
             ((CustomJListModel)lstFlaechen.getModel()).refresh();
@@ -1483,6 +1516,29 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             LOG.error("Cannot add new kk_kompensation object", e);
         }
     } //GEN-LAST:event_btnAddLaufendeNummer1ActionPerformed
+
+    /**
+     * Determines the next schluessel value from the db sequence.
+     *
+     * @return  the next schluessel value or null, if it cannot be retrieved
+     */
+    private String getSchluessel() {
+        try {
+            final AbstractCidsServerSearch search = new KkKompensationNextSchluesselSearch();
+            final List res = (List)SessionManager.getProxy()
+                        .customServerSearch(SessionManager.getSession().getUser(), search);
+
+            if ((res != null) && (res.size() == 1) && (res.get(0) != null)) {
+                return res.get(0).toString();
+            } else {
+                LOG.error("Cannot retrieve verfahren object");
+            }
+        } catch (Exception e) {
+            LOG.error("Error while retrieving verfahren object", e);
+        }
+
+        return null;
+    }
 
     /**
      * DOCUMENT ME!
@@ -1633,6 +1689,10 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             xtKosten.setModel(model);
             xtKosten.getColumn(1).setCellEditor(new DateCellEditor());
             xtKosten.getColumn(2).setCellEditor(new DateCellEditor());
+            xtKosten.getColumn(0).setCellRenderer(new RightAlignedTableCellRenderer());
+            xtKosten.getColumn(1).setCellRenderer(new RightAlignedTableCellRenderer());
+            xtKosten.getColumn(2).setCellRenderer(new RightAlignedTableCellRenderer());
+            xtKosten.getColumn(3).setCellRenderer(new RightAlignedTableCellRenderer());
             lstFlaechen.setModel(new CustomJListModel("kompensationen"));
             if (lstFlaechen.getModel().getSize() > 0) {
                 lstFlaechen.setSelectedIndex(0);
@@ -1690,6 +1750,16 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     public boolean prepareForSave() {
         List<CidsBean> kompBeans = null;
         final ObjectAttribute bezAttribute = cidsBean.getMetaObject().getAttribute("bezeichnung");
+        final CidsBean grundlage = (CidsBean)cidsBean.getProperty("grundlage");
+
+        if (grundlage == null) {
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.prepareForSave.grundlage.message"),
+                NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.prepareForSave.grundlage.title"),
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
         if ((bezAttribute != null) && bezAttribute.isChanged()) {
             // the cs_cache table must be updated for the kompensation objects
@@ -1732,6 +1802,34 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         }
 
         return true;
+    }
+
+    @Override
+    public void beansDropped(final ArrayList<CidsBean> al) {
+        boolean question = false;
+
+        for (final CidsBean bean : al) {
+            if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("kk_kompensation")) {
+                if (!question) {
+                    question = true;
+                    final int answer = JOptionPane.showConfirmDialog(
+                            this,
+                            NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.beansDropped.message"),
+                            NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.beansDropped.title"),
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (answer != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
+                cidsBean.addCollectionElement("kompensationen", bean);
+                ((CustomJListModel)lstFlaechen.getModel()).refresh();
+                lstFlaechen.setSelectedValue(bean, true);
+                lstFlaechenValueChanged(null);
+                cidsBean.setArtificialChangeFlag(true);
+                // a db trigger will remove the reference between this kompensation and its previous verfahren
+            }
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1814,6 +1912,32 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             Collections.sort(l, beanComparator);
 
             return l.get(index);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class RightAlignedTableCellRenderer extends DefaultTableCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getTableCellRendererComponent(final JTable table,
+                final Object value,
+                final boolean isSelected,
+                final boolean hasFocus,
+                final int row,
+                final int column) {
+            final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); // To change body of generated methods, choose Tools | Templates.
+
+            if (c instanceof JLabel) {
+                ((JLabel)c).setHorizontalAlignment(JLabel.RIGHT);
+            }
+
+            return c;
         }
     }
 }
