@@ -1337,100 +1337,100 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-    }//GEN-LAST:event_lblBackMouseClicked
+    }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, "main");
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }//GEN-LAST:event_btnBackActionPerformed
+    }                                                                           //GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, "costsAndDocs");
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-    }//GEN-LAST:event_btnForwardActionPerformed
+    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-    }//GEN-LAST:event_lblForwMouseClicked
+    }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkAusgleichActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAusgleichActionPerformed
+    private void chkAusgleichActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkAusgleichActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_chkAusgleichActionPerformed
+    } //GEN-LAST:event_chkAusgleichActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLaufendeNummernValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLaufendeNummernValueChanged
-    }//GEN-LAST:event_lstLaufendeNummernValueChanged
+    private void lstLaufendeNummernValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstLaufendeNummernValueChanged
+    }                                                                                             //GEN-LAST:event_lstLaufendeNummernValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddLaufendeNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLaufendeNummerActionPerformed
-    }//GEN-LAST:event_btnAddLaufendeNummerActionPerformed
+    private void btnAddLaufendeNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummerActionPerformed
+    }                                                                                        //GEN-LAST:event_btnAddLaufendeNummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLaufendeNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLaufendeNummerActionPerformed
-    }//GEN-LAST:event_btnRemoveLaufendeNummerActionPerformed
+    private void btnRemoveLaufendeNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveLaufendeNummerActionPerformed
+    }                                                                                           //GEN-LAST:event_btnRemoveLaufendeNummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCopyBaulastActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyBaulastActionPerformed
-    }//GEN-LAST:event_btnCopyBaulastActionPerformed
+    private void btnCopyBaulastActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCopyBaulastActionPerformed
+    }                                                                                  //GEN-LAST:event_btnCopyBaulastActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPasteBaulastActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteBaulastActionPerformed
-    }//GEN-LAST:event_btnPasteBaulastActionPerformed
+    private void btnPasteBaulastActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPasteBaulastActionPerformed
+    }                                                                                   //GEN-LAST:event_btnPasteBaulastActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlaechenValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFlaechenValueChanged
+    private void lstFlaechenValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFlaechenValueChanged
         final Object o = lstFlaechen.getSelectedValue();
 
         if (o instanceof CidsBean) {
@@ -1445,7 +1445,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         }
 
         refreshLabels();
-    }//GEN-LAST:event_lstFlaechenValueChanged
+    } //GEN-LAST:event_lstFlaechenValueChanged
 
     /**
      * DOCUMENT ME!
@@ -1486,7 +1486,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddLaufendeNummer1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLaufendeNummer1ActionPerformed
+    private void btnAddLaufendeNummer1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummer1ActionPerformed
         try {
             final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_kompensation");
             final String schluessel = getSchluessel();
@@ -1515,7 +1515,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         } catch (Exception e) {
             LOG.error("Cannot add new kk_kompensation object", e);
         }
-    }//GEN-LAST:event_btnAddLaufendeNummer1ActionPerformed
+    } //GEN-LAST:event_btnAddLaufendeNummer1ActionPerformed
 
     /**
      * Determines the next schluessel value from the db sequence.
@@ -1545,7 +1545,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLaufendeNummer1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLaufendeNummer1ActionPerformed
+    private void btnRemoveLaufendeNummer1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveLaufendeNummer1ActionPerformed
         final Object selectedObject = lstFlaechen.getSelectedValue();
 
         if (selectedObject instanceof CidsBean) {
@@ -1558,14 +1558,14 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                 lstFlaechenValueChanged(null);
             }
         }
-    }//GEN-LAST:event_btnRemoveLaufendeNummer1ActionPerformed
+    } //GEN-LAST:event_btnRemoveLaufendeNummer1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddLaufendeNummer2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLaufendeNummer2ActionPerformed
+    private void btnAddLaufendeNummer2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummer2ActionPerformed
         try {
             final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_v_kosten");
 
@@ -1573,14 +1573,14 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         } catch (Exception e) {
             LOG.error("Cannot add new kk_v_kosten object", e);
         }
-    }//GEN-LAST:event_btnAddLaufendeNummer2ActionPerformed
+    } //GEN-LAST:event_btnAddLaufendeNummer2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLaufendeNummer2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLaufendeNummer2ActionPerformed
+    private void btnRemoveLaufendeNummer2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveLaufendeNummer2ActionPerformed
         final int[] selectedRows = xtKosten.getSelectedRows();
         final List<Integer> modelRows = new ArrayList<Integer>();
 
@@ -1594,7 +1594,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         for (final Integer row : modelRows) {
             ((KompensationskatasterBeanTable)xtKosten.getModel()).removeRow(row);
         }
-    }//GEN-LAST:event_btnRemoveLaufendeNummer2ActionPerformed
+    } //GEN-LAST:event_btnRemoveLaufendeNummer2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1604,15 +1604,15 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      * @throws  java.beans.PropertyVetoException  DOCUMENT ME!
      */
     private void chkAusgleichVetoableChange(final java.beans.PropertyChangeEvent evt)
-            throws java.beans.PropertyVetoException {//GEN-FIRST:event_chkAusgleichVetoableChange
-    }//GEN-LAST:event_chkAusgleichVetoableChange
+            throws java.beans.PropertyVetoException { //GEN-FIRST:event_chkAusgleichVetoableChange
+    }                                                 //GEN-LAST:event_chkAusgleichVetoableChange
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblLastInMap1MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLastInMap1MouseClicked
+    private void lblLastInMap1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblLastInMap1MouseClicked
         final List<CidsBean> beans = cidsBean.getBeanCollectionProperty("kompensationen");
         final List<CidsFeature> features = new ArrayList<CidsFeature>();
 
@@ -1626,7 +1626,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                         new CidsFeature[features.size()]));
             worker.execute();
         }
-    }//GEN-LAST:event_lblLastInMap1MouseClicked
+    } //GEN-LAST:event_lblLastInMap1MouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1806,14 +1806,28 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
 
     @Override
     public void beansDropped(final ArrayList<CidsBean> al) {
+        boolean question = false;
+
         for (final CidsBean bean : al) {
             if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("kk_kompensation")) {
+                if (!question) {
+                    question = true;
+                    final int answer = JOptionPane.showConfirmDialog(
+                            this,
+                            NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.beansDropped.message"),
+                            NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.beansDropped.title"),
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (answer != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
                 cidsBean.addCollectionElement("kompensationen", bean);
                 ((CustomJListModel)lstFlaechen.getModel()).refresh();
                 lstFlaechen.setSelectedValue(bean, true);
                 lstFlaechenValueChanged(null);
                 cidsBean.setArtificialChangeFlag(true);
-                //a db trigger will remove the reference between this kompensation and its previous verfahren
+                // a db trigger will remove the reference between this kompensation and its previous verfahren
             }
         }
     }
