@@ -135,11 +135,14 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     private javax.swing.Box.Filler gluFiller;
     private javax.swing.Box.Filler gluFillerControls;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblBemerkung;
     private javax.swing.JLabel lblFestlegungsart;
     private javax.swing.JLabel lblGeometrie;
     private javax.swing.JLabel lblHeaderDocument;
     private javax.swing.JLabel lblHistorisch;
+    private javax.swing.JLabel lblHoeheUeberNHN;
+    private javax.swing.JLabel lblHoeheUeberNHN2016;
     private javax.swing.JLabel lblHoeheUeberNN;
     private javax.swing.JLabel lblLagebezeichnung;
     private javax.swing.JLabel lblLagegenauigkeit;
@@ -162,6 +165,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     private javax.swing.JToggleButton togZoom;
     private javax.swing.JTextArea txaBemerkung;
     private javax.swing.JTextField txtDGKBlattnummer;
+    private javax.swing.JTextField txtHoeheUeberNHN;
+    private javax.swing.JTextField txtHoeheUeberNHN2016;
     private javax.swing.JTextField txtHoeheUeberNN;
     private javax.swing.JTextField txtLagebezeichnung;
     private javax.swing.JTextField txtLaufendeNummer;
@@ -199,6 +204,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             txtLagebezeichnung.setEditable(false);
             cmbLagegenauigkeit.setEditable(false);
             cmbLagegenauigkeit.setEnabled(false);
+            txtHoeheUeberNHN2016.setEditable(false);
+            txtHoeheUeberNHN.setEditable(false);
             txtHoeheUeberNN.setEditable(false);
             txtMessungsjahr.setEditable(false);
             txaBemerkung.setEditable(false);
@@ -229,8 +236,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 new java.awt.Dimension(32767, 22));
         pnlSimpleAttributes = new de.cismet.tools.gui.RoundedPanel();
         txtDGKBlattnummer = new javax.swing.JTextField();
-        lblHoeheUeberNN = new javax.swing.JLabel();
-        txtHoeheUeberNN = new javax.swing.JTextField();
+        lblHoeheUeberNHN2016 = new javax.swing.JLabel();
+        txtHoeheUeberNHN2016 = new javax.swing.JTextField();
         lblFestlegungsart = new javax.swing.JLabel();
         cmbFestlegungsart = new DefaultBindableReferenceCombo();
         lblLagebezeichnung = new javax.swing.JLabel();
@@ -259,6 +266,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gluFillDescription = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+        txtHoeheUeberNN = new javax.swing.JTextField();
+        lblHoeheUeberNN = new javax.swing.JLabel();
+        txtHoeheUeberNHN = new javax.swing.JTextField();
+        lblHoeheUeberNHN = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderDocument = new javax.swing.JLabel();
@@ -296,8 +308,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         pnlSimpleAttributes.setAlpha(0);
         pnlSimpleAttributes.setLayout(new java.awt.GridBagLayout());
 
-        txtDGKBlattnummer.setMinimumSize(new java.awt.Dimension(100, 20));
-        txtDGKBlattnummer.setPreferredSize(new java.awt.Dimension(100, 20));
+        txtDGKBlattnummer.setPreferredSize(new java.awt.Dimension(145, 27));
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -321,28 +332,28 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.25;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtDGKBlattnummer, gridBagConstraints);
 
-        lblHoeheUeberNN.setText(org.openide.util.NbBundle.getMessage(
+        lblHoeheUeberNHN2016.setText(org.openide.util.NbBundle.getMessage(
                 NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblHoeheUeberNN.text")); // NOI18N
+                "NivellementPunktEditor.lblHoeheUeberNHN2016.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlSimpleAttributes.add(lblHoeheUeberNN, gridBagConstraints);
+        pnlSimpleAttributes.add(lblHoeheUeberNHN2016, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_ueber_nn}"),
-                txtHoeheUeberNN,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_ueber_nhn2016}"),
+                txtHoeheUeberNHN2016,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(CONVERTER_HOEHE);
         bindingGroup.addBinding(binding);
@@ -351,10 +362,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlSimpleAttributes.add(txtHoeheUeberNN, gridBagConstraints);
+        pnlSimpleAttributes.add(txtHoeheUeberNHN2016, gridBagConstraints);
 
         lblFestlegungsart.setText(org.openide.util.NbBundle.getMessage(
                 NivellementPunktEditor.class,
@@ -367,6 +379,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblFestlegungsart, gridBagConstraints);
 
+        cmbFestlegungsart.setPreferredSize(new java.awt.Dimension(145, 27));
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -378,9 +392,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(cmbFestlegungsart, gridBagConstraints);
 
@@ -407,8 +421,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         pnlSimpleAttributes.add(txtLagebezeichnung, gridBagConstraints);
 
@@ -435,8 +450,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(cmbLagegenauigkeit, gridBagConstraints);
 
@@ -463,8 +479,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtMessungsjahr, gridBagConstraints);
 
@@ -491,8 +508,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtPunktnummerNRW, gridBagConstraints);
 
@@ -503,14 +521,13 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblBemerkung, gridBagConstraints);
 
         txaBemerkung.setColumns(20);
-        txaBemerkung.setRows(5);
+        txaBemerkung.setRows(3);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -525,9 +542,10 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(scpBemerkung, gridBagConstraints);
 
@@ -535,8 +553,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 NivellementPunktEditor.class,
                 "NivellementPunktEditor.lblGeometrie.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -554,10 +572,12 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         }
         if (!readOnly) {
             gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 7;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 6;
+            gridBagConstraints.gridwidth = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+            gridBagConstraints.weightx = 1.0;
             gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             pnlSimpleAttributes.add(cmbGeometrie, gridBagConstraints);
         }
@@ -579,15 +599,17 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnlSimpleAttributes.add(lblPunktnummerWUPSeparator, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnlSimpleAttributes.add(gluFiller, gridBagConstraints);
 
         txtLaufendeNummer.setColumns(3);
+        txtLaufendeNummer.setPreferredSize(new java.awt.Dimension(145, 27));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -611,9 +633,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.25;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtLaufendeNummer, gridBagConstraints);
 
@@ -647,8 +669,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(chkHistorisch, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -658,6 +681,69 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnlSimpleAttributes.add(gluFillDescription, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_ueber_nn}"),
+                txtHoeheUeberNN,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(CONVERTER_HOEHE);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlSimpleAttributes.add(txtHoeheUeberNN, gridBagConstraints);
+
+        lblHoeheUeberNN.setText(org.openide.util.NbBundle.getMessage(
+                NivellementPunktEditor.class,
+                "NivellementPunktEditor.lblHoeheUeberNN.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        pnlSimpleAttributes.add(lblHoeheUeberNN, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_ueber_nhn}"),
+                txtHoeheUeberNHN,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(CONVERTER_HOEHE);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlSimpleAttributes.add(txtHoeheUeberNHN, gridBagConstraints);
+
+        lblHoeheUeberNHN.setText(org.openide.util.NbBundle.getMessage(
+                NivellementPunktEditor.class,
+                "NivellementPunktEditor.lblHoeheUeberNHN.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        pnlSimpleAttributes.add(lblHoeheUeberNHN, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlSimpleAttributes.add(jPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1165,17 +1251,35 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     public boolean prepareForSave() {
         boolean save = true;
 
-        Float hoehe = null;
         try {
-            hoehe = Float.valueOf(txtHoeheUeberNN.getText().replace(',', '.'));
-        } catch (NumberFormatException e) {
-        }
-
-        if (hoehe == null) {
+            Float.valueOf(txtHoeheUeberNHN2016.getText().replace(',', '.'));
+        } catch (final NumberFormatException e) {
             save = false;
             JOptionPane.showMessageDialog(
                 StaticSwingTools.getParentFrame(this),
                 "Die angegebene Höhe ist ungültig.",
+                "Fehler aufgetreten",
+                JOptionPane.WARNING_MESSAGE);
+        }
+
+        try {
+            Float.valueOf(txtHoeheUeberNN.getText().replace(',', '.'));
+        } catch (final NumberFormatException e) {
+            save = false;
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(this),
+                "Die angegebene historische NN Höhe ist ungültig.",
+                "Fehler aufgetreten",
+                JOptionPane.WARNING_MESSAGE);
+        }
+
+        try {
+            Float.valueOf(txtHoeheUeberNHN.getText().replace(',', '.'));
+        } catch (final NumberFormatException e) {
+            save = false;
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(this),
+                "Die angegebene historische NHN Höhe ist ungültig.",
                 "Fehler aufgetreten",
                 JOptionPane.WARNING_MESSAGE);
         }
