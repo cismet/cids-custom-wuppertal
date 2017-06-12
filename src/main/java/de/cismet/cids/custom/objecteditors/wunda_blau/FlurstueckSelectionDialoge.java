@@ -99,7 +99,6 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
         this.createEnabled = createEnabled;
         setTitle("Bitte Flurstück auswählen");
         initComponents();
-        getRootPane().setDefaultButton(btnFlurstueckAddMenOk);
         setSize(419, 144);
 
         final ListCellRenderer lcr = new ListCellRenderer() {
