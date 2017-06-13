@@ -16,6 +16,8 @@ import org.jdesktop.beansbinding.Converter;
 import org.openide.util.Exceptions;
 
 import com.vividsolutions.jts.geom.Geometry;
+import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
+import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
@@ -39,6 +41,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
     private CidsBean cidsBean=null;
     private Converter DefaultCismapGeometryComboBoxEditor;
+    protected static final Converter<Integer, String> CONVERTER_LEER = new IntegerNumberConverter();
+    protected static final Converter<Float, String> CONVERTER_LEERD = new NumberConverter();
     /**
      * Creates new form pflege_st_flurstuecke
      */
@@ -311,6 +315,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jPanel1.add(txtBis, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laenge}"), txtLaenge, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(CONVERTER_LEERD);
         bindingGroup.addBinding(binding);
 
         txtLaenge.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -328,6 +333,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jPanel1.add(txtLaenge, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.tiefe}"), txtTiefe, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(CONVERTER_LEERD);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -340,6 +346,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jPanel1.add(txtTiefe, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.breite}"), txtBreite, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(CONVERTER_LEERD);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -673,6 +680,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.einlaeufe}"), txtEinlaeufe, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("-");
+        binding.setConverter(CONVERTER_LEER);
         bindingGroup.addBinding(binding);
 
         txtEinlaeufe.addActionListener(new java.awt.event.ActionListener() {
@@ -694,6 +702,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.durchlaesse}"), txtDurchlaesse, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("-");
+        binding.setConverter(CONVERTER_LEER);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -781,6 +790,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.maehen_intervall}"), txtMaehenIntervall, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("-");
+        binding.setConverter(CONVERTER_LEER);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -863,8 +873,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         txtSchneidenIntervall.setPreferredSize(new java.awt.Dimension(30, 19));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schneiden_intevall}"), txtSchneidenIntervall, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("-");
+        binding.setConverter(CONVERTER_LEER);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1035,7 +1046,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 4, 0, 0);
         jPanel10.add(jLabel38, gridBagConstraints);
 
@@ -1051,9 +1062,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
         jPanel10.add(dcletztePflege, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1232,7 +1242,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jPanel3.add(txtBemerkung, gridBagConstraints);
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel17.setText("Geometrie");
+        jLabel17.setText("Geometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -1327,6 +1337,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 0);
         jPanel8.add(jPanel3, gridBagConstraints);
@@ -1466,6 +1477,20 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         chkBefKleinpflaster.setEnabled(istGraben);
         txtEinlaeufe.setEnabled(istGraben);
         txtDurchlaesse.setEnabled(istGraben);
+        if (istGraben==false){
+            chkBefUnbefestigt.setSelected(istGraben);
+            chkBefHalbschalen.setSelected(istGraben);
+            chkBefAsphaltNatur.setSelected(istGraben);
+            chkBefGrosspflaster.setSelected(istGraben);
+            chkBefAsphalt.setSelected(istGraben);
+            chkBefGittersteine.setSelected(istGraben);
+            chkBefSchotter.setSelected(istGraben);
+            chkBefBoeschung.setSelected(istGraben);
+            chkBefBasament.setSelected(istGraben);
+            chkBefKleinpflaster.setSelected(istGraben);
+            txtEinlaeufe.setText("");
+            txtDurchlaesse.setText("");
+        }
     }
     
     private void istMaehen(){
@@ -1474,7 +1499,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         txtMaehenIntervall.setEnabled(istMaehen);
         chkMaehenHandschnitt.setEnabled(istMaehen);
         if (istMaehen==false){
-            txtMaehenIntervall.setText("0");
+            txtMaehenIntervall.setText("");
             chkMaehenHandschnitt.setSelected(istMaehen);
         }
     }
@@ -1485,7 +1510,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         txtSchneidenIntervall.setEnabled(istSchneiden);
         chkSchneidenHandschnitt.setEnabled(istSchneiden);
         if (istSchneiden==false){
-            txtSchneidenIntervall.setText("0");
+            txtSchneidenIntervall.setText("");
             chkSchneidenHandschnitt.setSelected(istSchneiden);
         }
         
