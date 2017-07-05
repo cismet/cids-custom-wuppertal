@@ -116,15 +116,8 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-<!--                <version>5.0.10</version>-->
-                <version>5.2-SNAPSHOT</version>
+                <version>5.2</version>
                 <type>jar</type>
-<!--                <exclusions>
-                <exclusion>
-                    <groupId>de.aedsicad</groupId>
-                    <artifactId>aaaweb-soap-connector</artifactId>             
-                </exclusion>
-                </exclusions>-->
             </dependency>
             
             <dependency>
@@ -440,8 +433,7 @@
        <dependency>
             <groupId>de.aedsicad</groupId>
             <artifactId>aaaweb-soap-connector</artifactId>
-            <!--<version>6.3.16.1</version>-->
-            <version>6.3-SNAPSHOT</version>
+            <version>6.3.16.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.sun.mail</groupId>
@@ -449,19 +441,6 @@
                 </exclusion>
             </exclusions>
         </dependency>  
-<!--        <dependency>
-            <groupId>de.aedsicad</groupId>
-            <artifactId>aaawebclient</artifactId>
-            <version>6.3.16.1</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>-->
-<!--        <dependency>
-            <groupId>de.aedsicad</groupId>
-            <artifactId>aaaweb-soap-connector</artifactId>
-            <version>6.3.16.1</version>
-            <version>6.3-SNAPSHOT</version>
-        </dependency>      -->
         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jcommon</artifactId>
