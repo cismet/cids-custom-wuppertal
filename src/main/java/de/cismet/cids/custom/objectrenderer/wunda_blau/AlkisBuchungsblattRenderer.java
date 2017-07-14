@@ -2096,10 +2096,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(soapProvider.getIdentityCard(),
                         soapProvider.getService(),
                         AlkisUtils.fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));
-                buchungsblatt = infoService.getBuchungsblattWithUUID(soapProvider.getIdentityCard(),
+                final Buchungsblatt[] buchungsblaetter = infoService.getBuchungsblaetter(soapProvider.getIdentityCard(),
                         soapProvider.getService(),
-                        uuids[0],
+                        uuids,
                         true);
+                buchungsblatt = buchungsblaetter[0];
             } else {
                 buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisUtils.fixBuchungslattCode(
                             String.valueOf(bean.getProperty("buchungsblattcode"))));
