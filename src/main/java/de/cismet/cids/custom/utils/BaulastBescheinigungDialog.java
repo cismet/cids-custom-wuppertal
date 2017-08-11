@@ -1180,15 +1180,18 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
                     if (INFO_SERVICE != null) {
+                        final String aToken = SOAP_PROVIDER.login();
+
                         final String[] uuids = INFO_SERVICE.translateBuchungsblattCodeIntoUUIds(
-                                SOAP_PROVIDER.getIdentityCard(),
+                                aToken,
                                 SOAP_PROVIDER.getService(),
                                 AlkisUtils.fixBuchungslattCode(buchungsblattcode));
-                        final Buchungsblatt[] buchungsblaetter = INFO_SERVICE.getBuchungsblaetter(SOAP_PROVIDER
-                                        .getIdentityCard(),
+                        final Buchungsblatt[] buchungsblaetter = INFO_SERVICE.getBuchungsblaetter(
+                                aToken,
                                 SOAP_PROVIDER.getService(),
                                 uuids,
                                 true);
+                        SOAP_PROVIDER.logout();
                         buchungsblatt = buchungsblaetter[0];
                     } else {
                         buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(

@@ -2093,13 +2093,17 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         protected Buchungsblatt doInBackground() throws Exception {
             Buchungsblatt buchungsblatt;
             if (infoService != null) {
-                final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(soapProvider.getIdentityCard(),
+                final String aToken = soapProvider.login();
+                final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(
+                        aToken,
                         soapProvider.getService(),
                         AlkisUtils.fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));
-                final Buchungsblatt[] buchungsblaetter = infoService.getBuchungsblaetter(soapProvider.getIdentityCard(),
+                final Buchungsblatt[] buchungsblaetter = infoService.getBuchungsblaetter(
+                        aToken,
                         soapProvider.getService(),
                         uuids,
                         true);
+                soapProvider.logout();
                 buchungsblatt = buchungsblaetter[0];
             } else {
                 buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisUtils.fixBuchungslattCode(

@@ -2474,10 +2474,15 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
          */
         @Override
         protected Point doInBackground() throws Exception {
-            if (infoService != null) {
-                return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
-            } else {
-                return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode);
+            try {
+                final String aToken = soapProvider.login();
+                if (infoService != null) {
+                    return infoService.getPoint(aToken, soapProvider.getService(), pointCode);
+                } else {
+                    return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode);
+                }
+            } finally {
+                soapProvider.logout();
             }
         }
 
