@@ -6,15 +6,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 
-
-
-
-
-
-
 import org.jdesktop.beansbinding.Converter;
-
-
 
 import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
@@ -27,10 +19,6 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 //import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
-
-
-;
-
 
 
 /**
@@ -318,11 +306,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         binding.setConverter(CONVERTER_LEERD);
         bindingGroup.addBinding(binding);
 
-        txtLaenge.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtLaengeKeyTyped(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -683,11 +666,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         binding.setConverter(CONVERTER_LEER);
         bindingGroup.addBinding(binding);
 
-        txtEinlaeufe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEinlaeufeActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 13;
@@ -1290,11 +1268,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.prioritaet}"), cbPrioritaet, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        cbPrioritaet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbPrioritaetActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -1310,11 +1283,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zustaendig}"), cbZustaendig, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        cbZustaendig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbZustaendigActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -1421,10 +1389,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtEinlaeufeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEinlaeufeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEinlaeufeActionPerformed
-
     private void chkGrabenStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_chkGrabenStateChanged
         // TODO add your handling code here:
         istGraben();
@@ -1439,29 +1403,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         // TODO add your handling code here:
         istSchneiden();
     }//GEN-LAST:event_chkSchneidenStateChanged
-
-    private void cbPrioritaetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPrioritaetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbPrioritaetActionPerformed
-
-    private void cbZustaendigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbZustaendigActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbZustaendigActionPerformed
-
-    private void txtLaengeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLaengeKeyTyped
-     /*   String eingabe;
-        double nummer;
-        System.out.println("keyty");
-       
-        eingabe = txtLaenge.getText();
-        try {
-            nummer = Double.parseDouble(eingabe);
-        } catch (NumberFormatException ex){
-            System.out.println("Bitte geben Sie einen gültigen Wert ein!");
-        }
-        */
-        
-    }//GEN-LAST:event_txtLaengeKeyTyped
     private void istGraben(){
         boolean istGraben = chkGraben.isSelected();
         
