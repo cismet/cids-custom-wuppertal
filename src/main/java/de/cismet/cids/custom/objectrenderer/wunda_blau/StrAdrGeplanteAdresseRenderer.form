@@ -292,7 +292,6 @@
                   <BindingProperties>
                     <BindingProperty name="text" source="Form" sourcePath="${cidsBean.grund.name}" target="lblGrund" targetPath="text" updateStrategy="0" immediately="false">
                       <Property name="nullValue" type="java.lang.String" value="-"/>
-                      <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
                     </BindingProperty>
                   </BindingProperties>
                   <Constraints>

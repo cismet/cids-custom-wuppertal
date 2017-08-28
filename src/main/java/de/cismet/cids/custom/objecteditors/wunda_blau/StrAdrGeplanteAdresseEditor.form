@@ -343,9 +343,6 @@
                   <BindingProperties>
                     <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.grund}" target="cbGrund" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                   </BindingProperties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbGrundActionPerformed"/>
-                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(true) "/>
                   </AuxValues>

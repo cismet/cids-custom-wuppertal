@@ -9,7 +9,6 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
-import Sirius.server.localserver.attribute.ObjectAttribute;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import javax.swing.*;
@@ -24,7 +23,6 @@ import org.openide.util.NbBundle;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -39,7 +37,6 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.tools.gui.StaticSwingTools;
 import java.text.Collator;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.ZoneId;
 import java.util.Collections;
 
@@ -56,7 +53,6 @@ import org.openide.util.Exceptions;
 public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,EditorSaveListener {
 
     private CidsBean cidsBean=null;
-    private Converter DefaultCismapGeometryComboBoxEditor;
     private static final Logger LOG = Logger.getLogger(StrAdrGeplanteAdresseEditor.class);
     //private Object newId = null;
     
@@ -323,11 +319,6 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.grund}"), cbGrund, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        cbGrund.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbGrundActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -707,10 +698,6 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void cbGrundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGrundActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbGrundActionPerformed
 
     private void dcAlkisPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dcAlkisPropertyChange
         // TODO add your handling code here:

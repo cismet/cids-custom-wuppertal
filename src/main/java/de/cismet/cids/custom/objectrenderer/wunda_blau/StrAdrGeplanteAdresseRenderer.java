@@ -17,10 +17,7 @@ import org.apache.log4j.Logger;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-import javax.swing.JOptionPane;
 
-import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import org.openide.util.Exceptions;
 
@@ -243,7 +240,6 @@ public class StrAdrGeplanteAdresseRenderer extends javax.swing.JPanel implements
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.grund.name}"), lblGrund, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
