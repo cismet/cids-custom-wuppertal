@@ -5,14 +5,14 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-import de.cismet.tools.BrowserLauncher;
-import de.cismet.tools.gui.FooterComponentProvider;
+
+
 import java.awt.event.MouseAdapter;
-import javax.swing.JComponent;
-import org.openide.util.Exceptions;
+
+
 
 /**
  *

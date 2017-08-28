@@ -5,33 +5,33 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.ui.RequestsFullSizeComponent;
-import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
-import java.awt.event.MouseAdapter;
-import javax.swing.*;
-import java.util.Arrays;
+
+
+
+
+
+
 
 import org.jdesktop.beansbinding.Converter;
-import org.openide.util.Exceptions;
 
-import com.vividsolutions.jts.geom.Geometry;
+
+
 import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.FastBindableReferenceCombo;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 //import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
 
-import de.cismet.tools.BrowserLauncher;
-import de.cismet.tools.gui.FooterComponentProvider;
-import java.beans.PropertyChangeListener;
-import java.util.Locale;
+
+;
+
+
 
 /**
  *
@@ -40,7 +40,7 @@ import java.util.Locale;
 public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer {
 
     private CidsBean cidsBean=null;
-    private Converter DefaultCismapGeometryComboBoxEditor;
+    //private Converter DefaultCismapGeometryComboBoxEditor;
     protected static final Converter<Integer, String> CONVERTER_LEER = new IntegerNumberConverter();
     protected static final Converter<Float, String> CONVERTER_LEERD = new NumberConverter();
     /**
