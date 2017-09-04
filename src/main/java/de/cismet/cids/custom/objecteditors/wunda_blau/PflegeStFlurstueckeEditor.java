@@ -18,6 +18,8 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+import java.awt.event.MouseAdapter;
+//import javax.swing.JOptionPane;
 //import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
 
 
@@ -28,6 +30,7 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer {
 
     private CidsBean cidsBean=null;
+    private boolean isEditor=true;
     //private Converter DefaultCismapGeometryComboBoxEditor;
     protected static final Converter<Integer, String> CONVERTER_LEER = new IntegerNumberConverter();
     protected static final Converter<Float, String> CONVERTER_LEERD = new NumberConverter();
@@ -37,6 +40,12 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     public PflegeStFlurstueckeEditor() {
         initComponents();
         ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString("georeferenz");
+    }
+    
+    public PflegeStFlurstueckeEditor(boolean createEditor) {
+        this.isEditor = createEditor;
+        initComponents();
+        
     }
 
     /**
@@ -50,9 +59,11 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        if (!isEditor){
+            jPanel12 = new javax.swing.JPanel();
+        }
         jPanel8 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -60,7 +71,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        txtID = new javax.swing.JTextField();
         txtStadtbezirk = new javax.swing.JTextField();
         txtStrasse = new javax.swing.JTextField();
         txtVon = new javax.swing.JTextField();
@@ -98,6 +108,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         panFiller8 = new javax.swing.JPanel();
         txtEinlaeufe = new javax.swing.JTextField();
         txtDurchlaesse = new javax.swing.JTextField();
+        panFiller_rechts = new javax.swing.JPanel();
+        panFiller_mitte = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -106,6 +118,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         chkMaehen = new javax.swing.JCheckBox();
         chkMaehenHandschnitt = new javax.swing.JCheckBox();
         txtMaehenIntervall = new javax.swing.JTextField();
+        panFiller_rechts1 = new javax.swing.JPanel();
+        panFiller_mitte1 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
@@ -113,6 +127,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         chkSchneiden = new javax.swing.JCheckBox();
         chkSchneidenHandschnitt = new javax.swing.JCheckBox();
         txtSchneidenIntervall = new javax.swing.JTextField();
+        panFiller_rechts2 = new javax.swing.JPanel();
+        panFiller_mitte2 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -126,13 +142,14 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         chkReinAusbaggern = new javax.swing.JCheckBox();
         chkReinGrabenschleuder = new javax.swing.JCheckBox();
         chkReinHandreinigung = new javax.swing.JCheckBox();
+        panFiller_rechts3 = new javax.swing.JPanel();
+        panFiller_mitte3 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabel38 = new javax.swing.JLabel();
         dcletztePflege = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        panFiller6 = new javax.swing.JPanel();
+        panFiller_zwischen1 = new javax.swing.JPanel();
         panFiller7 = new javax.swing.JPanel();
-        panFiller5 = new javax.swing.JPanel();
-        panFiller9 = new javax.swing.JPanel();
+        panFiller_zwischen = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
@@ -141,45 +158,78 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel44 = new javax.swing.JLabel();
         chkAltbestand = new javax.swing.JCheckBox();
         txtBemerkung = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
-        panFiller11 = new javax.swing.JPanel();
-        cbGeom = new DefaultCismapGeometryComboBoxEditor();
+        if (isEditor) {
+            jLabel17 = new javax.swing.JLabel();
+        }
+        if (isEditor) {
+            cbGeom = new DefaultCismapGeometryComboBoxEditor();
+        }
         cbPrioritaet = new DefaultBindableReferenceCombo(true) ;
         cbZustaendig = new DefaultBindableReferenceCombo(true) ;
         dcAufnahme = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        panFiller11 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        semiRoundedPanel7 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel39 = new javax.swing.JLabel();
+        panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
         panFiller2 = new javax.swing.JPanel();
         panFiller10 = new javax.swing.JPanel();
         panFiller12 = new javax.swing.JPanel();
 
+        setMinimumSize(new java.awt.Dimension(1200, 650));
+        setPreferredSize(new java.awt.Dimension(1200, 650));
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel8.setMinimumSize(new java.awt.Dimension(600, 800));
+        if (!isEditor){
+            jPanel12.setOpaque(false);
+        }
+        if (!isEditor){
+            jPanel12.setPreferredSize(new java.awt.Dimension(1200, 670));
+        }
+
+        if (!isEditor){
+
+            javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+            jPanel12.setLayout(jPanel12Layout);
+            jPanel12Layout.setHorizontalGroup(
+                jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 0, Short.MAX_VALUE)
+            );
+            jPanel12Layout.setVerticalGroup(
+                jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 0, Short.MAX_VALUE)
+            );
+
+        }
+
+        if (!isEditor){
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+            add(jPanel12, gridBagConstraints);
+            jPanel12.addMouseListener(new MouseAdapter() {});
+        }
+
+        jPanel8.setMinimumSize(new java.awt.Dimension(1200, 770));
         jPanel8.setName(""); // NOI18N
         jPanel8.setOpaque(false);
-        jPanel8.setPreferredSize(new java.awt.Dimension(504, 720));
+        jPanel8.setPreferredSize(new java.awt.Dimension(1200, 670));
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(1000, 124));
+        jPanel1.setMinimumSize(new java.awt.Dimension(500, 110));
         jPanel1.setName(""); // NOI18N
         jPanel1.setOpaque(false);
-        jPanel1.setPreferredSize(new java.awt.Dimension(500, 200));
+        jPanel1.setPreferredSize(new java.awt.Dimension(500, 180));
         jPanel1.setRequestFocusEnabled(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("ID:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
-        jPanel1.add(jLabel1, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Stadtbezirk:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
         jPanel1.add(jLabel3, gridBagConstraints);
@@ -188,7 +238,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel5.setText("Straße:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
         jPanel1.add(jLabel5, gridBagConstraints);
@@ -197,7 +247,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel7.setText("von:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
         jPanel1.add(jLabel7, gridBagConstraints);
@@ -206,7 +256,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel9.setText("bis:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
         jPanel1.add(jLabel9, gridBagConstraints);
@@ -215,7 +265,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel11.setText("Länge:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
         jPanel1.add(jLabel11, gridBagConstraints);
@@ -224,7 +274,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel13.setText("Tiefe:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
         jPanel1.add(jLabel13, gridBagConstraints);
@@ -233,33 +283,19 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel15.setText("Breite:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
         jPanel1.add(jLabel15, gridBagConstraints);
 
-        txtID.setEditable(false);
-        txtID.setMinimumSize(new java.awt.Dimension(800, 19));
-        txtID.setName(""); // NOI18N
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_ONCE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.id}"), txtID, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel1.add(txtID, gridBagConstraints);
-
         txtStadtbezirk.setName(""); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stadtbezirk}"), txtStadtbezirk, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stadtbezirk}"), txtStadtbezirk, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -271,7 +307,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -283,7 +319,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -295,7 +331,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -308,7 +344,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -321,7 +357,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -334,7 +370,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -349,15 +385,16 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 2, 0);
         jPanel8.add(jPanel1, gridBagConstraints);
 
-        jPanel2.setMinimumSize(new java.awt.Dimension(500, 266));
+        jPanel2.setMinimumSize(new java.awt.Dimension(500, 270));
         jPanel2.setName(""); // NOI18N
         jPanel2.setOpaque(false);
-        jPanel2.setPreferredSize(new java.awt.Dimension(500, 330));
+        jPanel2.setPreferredSize(new java.awt.Dimension(500, 290));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Graben", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        jPanel4.setMinimumSize(new java.awt.Dimension(370, 282));
         jPanel4.setOpaque(false);
-        jPanel4.setPreferredSize(new java.awt.Dimension(240, 300));
+        jPanel4.setPreferredSize(new java.awt.Dimension(200, 287));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -499,9 +536,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkGraben, gridBagConstraints);
 
         chkBefUnbefestigt.setContentAreaFilled(false);
@@ -513,8 +551,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         istGraben();
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefUnbefestigt, gridBagConstraints);
 
@@ -526,8 +565,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefHalbschalen, gridBagConstraints);
 
@@ -539,8 +579,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefAsphaltNatur, gridBagConstraints);
 
@@ -552,8 +593,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefGrosspflaster, gridBagConstraints);
 
@@ -565,8 +607,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefAsphalt, gridBagConstraints);
 
@@ -578,8 +621,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefGittersteine, gridBagConstraints);
 
@@ -591,8 +635,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefSchotter, gridBagConstraints);
 
@@ -604,8 +649,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefBoeschung, gridBagConstraints);
 
@@ -617,8 +663,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefBasament, gridBagConstraints);
 
@@ -630,8 +677,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel4.add(chkBefKleinpflaster, gridBagConstraints);
 
@@ -652,11 +700,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel4.add(panFiller8, gridBagConstraints);
 
+        txtEinlaeufe.setMinimumSize(new java.awt.Dimension(30, 19));
         txtEinlaeufe.setName(""); // NOI18N
         txtEinlaeufe.setPreferredSize(new java.awt.Dimension(30, 19));
 
@@ -667,14 +714,14 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 4);
         jPanel4.add(txtEinlaeufe, gridBagConstraints);
 
+        txtDurchlaesse.setMinimumSize(new java.awt.Dimension(30, 19));
         txtDurchlaesse.setPreferredSize(new java.awt.Dimension(30, 19));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.durchlaesse}"), txtDurchlaesse, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -684,26 +731,64 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 14;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 4);
         jPanel4.add(txtDurchlaesse, gridBagConstraints);
+
+        javax.swing.GroupLayout panFiller_rechtsLayout = new javax.swing.GroupLayout(panFiller_rechts);
+        panFiller_rechts.setLayout(panFiller_rechtsLayout);
+        panFiller_rechtsLayout.setHorizontalGroup(
+            panFiller_rechtsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFiller_rechtsLayout.setVerticalGroup(
+            panFiller_rechtsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 15;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel4.add(panFiller_rechts, gridBagConstraints);
+
+        javax.swing.GroupLayout panFiller_mitteLayout = new javax.swing.GroupLayout(panFiller_mitte);
+        panFiller_mitte.setLayout(panFiller_mitteLayout);
+        panFiller_mitteLayout.setHorizontalGroup(
+            panFiller_mitteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFiller_mitteLayout.setVerticalGroup(
+            panFiller_mitteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 15;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(panFiller_mitte, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         jPanel2.add(jPanel4, gridBagConstraints);
 
+        jPanel5.setMinimumSize(new java.awt.Dimension(293, 278));
         jPanel5.setOpaque(false);
-        jPanel5.setPreferredSize(new java.awt.Dimension(250, 256));
+        jPanel5.setPreferredSize(new java.awt.Dimension(292, 278));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mähen", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        jPanel6.setMinimumSize(new java.awt.Dimension(143, 93));
         jPanel6.setOpaque(false);
-        jPanel6.setPreferredSize(new java.awt.Dimension(140, 100));
+        jPanel6.setPreferredSize(new java.awt.Dimension(150, 100));
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -712,7 +797,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(4, 6, 4, 4);
+        gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 4);
         jPanel6.add(jLabel2, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -746,7 +831,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel6.add(chkMaehen, gridBagConstraints);
 
         chkMaehenHandschnitt.setContentAreaFilled(false);
@@ -758,11 +846,13 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         istMaehen();
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel6.add(chkMaehenHandschnitt, gridBagConstraints);
 
+        txtMaehenIntervall.setMinimumSize(new java.awt.Dimension(30, 19));
         txtMaehenIntervall.setPreferredSize(new java.awt.Dimension(30, 19));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.maehen_intervall}"), txtMaehenIntervall, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -772,13 +862,48 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 2);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 4);
         jPanel6.add(txtMaehenIntervall, gridBagConstraints);
+
+        javax.swing.GroupLayout panFiller_rechts1Layout = new javax.swing.GroupLayout(panFiller_rechts1);
+        panFiller_rechts1.setLayout(panFiller_rechts1Layout);
+        panFiller_rechts1Layout.setHorizontalGroup(
+            panFiller_rechts1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFiller_rechts1Layout.setVerticalGroup(
+            panFiller_rechts1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel6.add(panFiller_rechts1, gridBagConstraints);
+
+        javax.swing.GroupLayout panFiller_mitte1Layout = new javax.swing.GroupLayout(panFiller_mitte1);
+        panFiller_mitte1.setLayout(panFiller_mitte1Layout);
+        panFiller_mitte1Layout.setHorizontalGroup(
+            panFiller_mitte1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFiller_mitte1Layout.setVerticalGroup(
+            panFiller_mitte1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel6.add(panFiller_mitte1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -787,8 +912,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jPanel5.add(jPanel6, gridBagConstraints);
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Schneiden", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        jPanel7.setMinimumSize(new java.awt.Dimension(143, 93));
         jPanel7.setOpaque(false);
-        jPanel7.setPreferredSize(new java.awt.Dimension(140, 100));
+        jPanel7.setPreferredSize(new java.awt.Dimension(150, 100));
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
         jLabel33.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -797,7 +923,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(4, 6, 4, 4);
+        gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 4);
         jPanel7.add(jLabel33, gridBagConstraints);
 
         jLabel34.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -831,7 +957,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel7.add(chkSchneiden, gridBagConstraints);
 
         chkSchneidenHandschnitt.setBackground(new java.awt.Color(245, 245, 245));
@@ -844,10 +973,13 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         istSchneiden();
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel7.add(chkSchneidenHandschnitt, gridBagConstraints);
 
+        txtSchneidenIntervall.setMinimumSize(new java.awt.Dimension(30, 19));
         txtSchneidenIntervall.setPreferredSize(new java.awt.Dimension(30, 19));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schneiden_intevall}"), txtSchneidenIntervall, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -857,13 +989,48 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 2);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 4);
         jPanel7.add(txtSchneidenIntervall, gridBagConstraints);
+
+        javax.swing.GroupLayout panFiller_rechts2Layout = new javax.swing.GroupLayout(panFiller_rechts2);
+        panFiller_rechts2.setLayout(panFiller_rechts2Layout);
+        panFiller_rechts2Layout.setHorizontalGroup(
+            panFiller_rechts2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFiller_rechts2Layout.setVerticalGroup(
+            panFiller_rechts2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel7.add(panFiller_rechts2, gridBagConstraints);
+
+        javax.swing.GroupLayout panFiller_mitte2Layout = new javax.swing.GroupLayout(panFiller_mitte2);
+        panFiller_mitte2.setLayout(panFiller_mitte2Layout);
+        panFiller_mitte2Layout.setHorizontalGroup(
+            panFiller_mitte2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFiller_mitte2Layout.setVerticalGroup(
+            panFiller_mitte2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel7.add(panFiller_mitte2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -873,7 +1040,9 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         jPanel9.setBackground(new java.awt.Color(245, 245, 245));
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Reinigung", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        jPanel9.setMinimumSize(new java.awt.Dimension(215, 129));
         jPanel9.setOpaque(false);
+        jPanel9.setPreferredSize(new java.awt.Dimension(215, 129));
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -882,7 +1051,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 4);
         jPanel9.add(jLabel6, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -890,7 +1059,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 4);
         jPanel9.add(jLabel12, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -899,7 +1068,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 4);
         jPanel9.add(jLabel8, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -908,7 +1077,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 4);
         jPanel9.add(jLabel10, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -917,7 +1086,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 4);
         jPanel9.add(jLabel14, gridBagConstraints);
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -926,7 +1095,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+        gridBagConstraints.insets = new java.awt.Insets(4, 10, 0, 4);
         jPanel9.add(jLabel16, gridBagConstraints);
 
         chkReinPrivatreinigung.setContentAreaFilled(false);
@@ -937,7 +1106,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel9.add(chkReinPrivatreinigung, gridBagConstraints);
@@ -950,7 +1119,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel9.add(chkReinKranwagen, gridBagConstraints);
@@ -963,7 +1132,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel9.add(chkReinWildrautbuerste, gridBagConstraints);
@@ -976,7 +1145,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel9.add(chkReinAusbaggern, gridBagConstraints);
@@ -989,7 +1158,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel9.add(chkReinGrabenschleuder, gridBagConstraints);
@@ -1002,21 +1171,59 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         jPanel9.add(chkReinHandreinigung, gridBagConstraints);
+
+        javax.swing.GroupLayout panFiller_rechts3Layout = new javax.swing.GroupLayout(panFiller_rechts3);
+        panFiller_rechts3.setLayout(panFiller_rechts3Layout);
+        panFiller_rechts3Layout.setHorizontalGroup(
+            panFiller_rechts3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFiller_rechts3Layout.setVerticalGroup(
+            panFiller_rechts3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel9.add(panFiller_rechts3, gridBagConstraints);
+
+        javax.swing.GroupLayout panFiller_mitte3Layout = new javax.swing.GroupLayout(panFiller_mitte3);
+        panFiller_mitte3.setLayout(panFiller_mitte3Layout);
+        panFiller_mitte3Layout.setHorizontalGroup(
+            panFiller_mitte3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFiller_mitte3Layout.setVerticalGroup(
+            panFiller_mitte3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel9.add(panFiller_mitte3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel5.add(jPanel9, gridBagConstraints);
 
-        jPanel10.setMinimumSize(new java.awt.Dimension(250, 25));
+        jPanel10.setMinimumSize(new java.awt.Dimension(293, 25));
         jPanel10.setOpaque(false);
-        jPanel10.setPreferredSize(new java.awt.Dimension(217, 25));
+        jPanel10.setPreferredSize(new java.awt.Dimension(217, 40));
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -1041,7 +1248,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 0);
         jPanel10.add(dcletztePflege, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1052,14 +1259,14 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 5, 0);
         jPanel5.add(jPanel10, gridBagConstraints);
 
-        javax.swing.GroupLayout panFiller6Layout = new javax.swing.GroupLayout(panFiller6);
-        panFiller6.setLayout(panFiller6Layout);
-        panFiller6Layout.setHorizontalGroup(
-            panFiller6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panFiller_zwischen1Layout = new javax.swing.GroupLayout(panFiller_zwischen1);
+        panFiller_zwischen1.setLayout(panFiller_zwischen1Layout);
+        panFiller_zwischen1Layout.setHorizontalGroup(
+            panFiller_zwischen1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        panFiller6Layout.setVerticalGroup(
-            panFiller6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panFiller_zwischen1Layout.setVerticalGroup(
+            panFiller_zwischen1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -1067,12 +1274,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel5.add(panFiller6, gridBagConstraints);
+        jPanel5.add(panFiller_zwischen1, gridBagConstraints);
 
         javax.swing.GroupLayout panFiller7Layout = new javax.swing.GroupLayout(panFiller7);
         panFiller7.setLayout(panFiller7Layout);
@@ -1101,14 +1306,14 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         jPanel2.add(jPanel5, gridBagConstraints);
 
-        javax.swing.GroupLayout panFiller5Layout = new javax.swing.GroupLayout(panFiller5);
-        panFiller5.setLayout(panFiller5Layout);
-        panFiller5Layout.setHorizontalGroup(
-            panFiller5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panFiller_zwischenLayout = new javax.swing.GroupLayout(panFiller_zwischen);
+        panFiller_zwischen.setLayout(panFiller_zwischenLayout);
+        panFiller_zwischenLayout.setHorizontalGroup(
+            panFiller_zwischenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        panFiller5Layout.setVerticalGroup(
-            panFiller5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panFiller_zwischenLayout.setVerticalGroup(
+            panFiller_zwischenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -1117,46 +1322,26 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(panFiller5, gridBagConstraints);
-
-        javax.swing.GroupLayout panFiller9Layout = new javax.swing.GroupLayout(panFiller9);
-        panFiller9.setLayout(panFiller9Layout);
-        panFiller9Layout.setHorizontalGroup(
-            panFiller9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFiller9Layout.setVerticalGroup(
-            panFiller9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        jPanel2.add(panFiller9, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(panFiller_zwischen, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 0);
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 4, 0, 0);
         jPanel8.add(jPanel2, gridBagConstraints);
 
-        jPanel3.setMinimumSize(new java.awt.Dimension(218, 190));
+        jPanel3.setMinimumSize(new java.awt.Dimension(218, 200));
         jPanel3.setOpaque(false);
-        jPanel3.setPreferredSize(new java.awt.Dimension(400, 170));
+        jPanel3.setPreferredSize(new java.awt.Dimension(500, 190));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jLabel36.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel36.setText("Altbestand:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 2, 4);
         jPanel3.add(jLabel36, gridBagConstraints);
 
         jLabel37.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -1203,7 +1388,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 2, 2);
         jPanel3.add(chkAltbestand, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"), txtBemerkung, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -1219,14 +1404,79 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel3.add(txtBemerkung, gridBagConstraints);
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel17.setText("Geometrie:");
+        if (isEditor) {
+            jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+            jLabel17.setText("Geometrie:");
+        }
+        if (isEditor) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+            gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+            jPanel3.add(jLabel17, gridBagConstraints);
+        }
+
+        if (isEditor) {
+            if (isEditor) {
+                cbGeom.setPreferredSize(new java.awt.Dimension(32, 23));
+            }
+
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"), cbGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
+            bindingGroup.addBinding(binding);
+
+        }
+        if (isEditor) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 5;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.insets = new java.awt.Insets(2, 2, 0, 2);
+            jPanel3.add(cbGeom, gridBagConstraints);
+        }
+
+        cbPrioritaet.setMaximumSize(new java.awt.Dimension(200, 23));
+        cbPrioritaet.setMinimumSize(new java.awt.Dimension(150, 23));
+        cbPrioritaet.setPreferredSize(new java.awt.Dimension(150, 23));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.prioritaet}"), cbPrioritaet, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
-        jPanel3.add(jLabel17, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel3.add(cbPrioritaet, gridBagConstraints);
+
+        cbZustaendig.setMaximumSize(new java.awt.Dimension(200, 23));
+        cbZustaendig.setMinimumSize(new java.awt.Dimension(150, 23));
+        cbZustaendig.setPreferredSize(new java.awt.Dimension(150, 23));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zustaendig}"), cbZustaendig, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel3.add(cbZustaendig, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aufnahmedatum}"), dcAufnahme, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(dcAufnahme.getConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 1, 2, 2);
+        jPanel3.add(dcAufnahme, gridBagConstraints);
 
         javax.swing.GroupLayout panFiller11Layout = new javax.swing.GroupLayout(panFiller11);
         panFiller11.setLayout(panFiller11Layout);
@@ -1241,74 +1491,65 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel3.add(panFiller11, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"), cbGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-        jPanel3.add(cbGeom, gridBagConstraints);
-
-        cbPrioritaet.setMaximumSize(new java.awt.Dimension(200, 20));
-        cbPrioritaet.setMinimumSize(new java.awt.Dimension(150, 20));
-        cbPrioritaet.setPreferredSize(new java.awt.Dimension(150, 20));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.prioritaet}"), cbPrioritaet, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-        jPanel3.add(cbPrioritaet, gridBagConstraints);
-
-        cbZustaendig.setMaximumSize(new java.awt.Dimension(200, 20));
-        cbZustaendig.setMinimumSize(new java.awt.Dimension(150, 20));
-        cbZustaendig.setPreferredSize(new java.awt.Dimension(150, 20));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zustaendig}"), cbZustaendig, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-        jPanel3.add(cbZustaendig, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aufnahmedatum}"), dcAufnahme, org.jdesktop.beansbinding.BeanProperty.create("date"));
-        binding.setConverter(dcAufnahme.getConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-        jPanel3.add(dcAufnahme, gridBagConstraints);
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(panFiller11, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 0);
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 4, 0, 0);
         jPanel8.add(jPanel3, gridBagConstraints);
+
+        jPanel11.setMinimumSize(new java.awt.Dimension(680, 770));
+        jPanel11.setName(""); // NOI18N
+        jPanel11.setOpaque(false);
+        jPanel11.setPreferredSize(new java.awt.Dimension(680, 670));
+        jPanel11.setLayout(new java.awt.GridBagLayout());
+
+        semiRoundedPanel7.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel7.setMinimumSize(new java.awt.Dimension(44, 25));
+        semiRoundedPanel7.setPreferredSize(new java.awt.Dimension(44, 25));
+        semiRoundedPanel7.setLayout(new java.awt.GridBagLayout());
+
+        jLabel39.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel39.setText("Lage");
+        jLabel39.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        semiRoundedPanel7.add(jLabel39, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 6, 0, 2);
+        jPanel11.add(semiRoundedPanel7, gridBagConstraints);
+
+        panPreviewMap.setMinimumSize(new java.awt.Dimension(100, 500));
+        panPreviewMap.setPreferredSize(new java.awt.Dimension(100, 450));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 7, 20, 3);
+        jPanel11.add(panPreviewMap, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        jPanel8.add(jPanel11, gridBagConstraints);
 
         panFiller2.setBackground(new java.awt.Color(245, 245, 245));
         panFiller2.setOpaque(false);
@@ -1326,7 +1567,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1355,7 +1597,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
@@ -1463,7 +1705,24 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     }
 
     @Override
-    public void setCidsBean(CidsBean cb) {
+    public void setCidsBean(final CidsBean cb) {
+        //dispose();  Wenn Aufruf hier, dann wird ein neu gezeichnetes Polygon nicht erkannt.
+        bindingGroup.unbind();
+        
+         if (cb != null) {
+            this.cidsBean=cb;
+            //8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen für Zuständigkeit und Priorität nicht gefüllt werden
+            //evtl. kann dies verbessert werden.
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                    bindingGroup,
+                    cb);
+            panPreviewMap.initMap(cb, "georeferenz.geo_field");
+                
+            bindingGroup.bind();
+         }
+    }
+    
+  /*  public void setCidsBean(CidsBean cb) {
         //dispose();  Wenn Aufruf hier, dann wird ein neu gezeichnetes Polygon nicht erkannt.
         bindingGroup.unbind();
         this.cidsBean=cb;
@@ -1473,29 +1732,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
                 bindingGroup,
                 cb);
         bindingGroup.bind();
-     /* Kopie aus Kompensation
-        if (cb == getCidsBean()) {
-            return;
-        }
-        dispose();
-        bindingGroup.unbind();
-       
-        this.cidsBean = cb;
-
-        if (cb != null) {
-            if (cbGeom.isEditable()) {
-                ((DefaultCismapGeometryComboBoxEditor)cbGeom).setCidsMetaObject(cb.getMetaObject());
-                ((DefaultCismapGeometryComboBoxEditor)cbGeom).initForNewBinding(); --> böse
-            }
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                cb);
-            bindingGroup.bind();
-        } else {
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).initForNewBinding();
-            cbGeom.setSelectedIndex(-1);
-        }*/
-    }
+    }*/
 
     @Override
     public void dispose() {
@@ -1542,7 +1779,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private javax.swing.JCheckBox chkSchneidenHandschnitt;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcAufnahme;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcletztePflege;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1574,6 +1810,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel42;
@@ -1585,6 +1822,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1597,17 +1836,25 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private javax.swing.JPanel panFiller11;
     private javax.swing.JPanel panFiller12;
     private javax.swing.JPanel panFiller2;
-    private javax.swing.JPanel panFiller5;
-    private javax.swing.JPanel panFiller6;
     private javax.swing.JPanel panFiller7;
     private javax.swing.JPanel panFiller8;
-    private javax.swing.JPanel panFiller9;
+    private javax.swing.JPanel panFiller_mitte;
+    private javax.swing.JPanel panFiller_mitte1;
+    private javax.swing.JPanel panFiller_mitte2;
+    private javax.swing.JPanel panFiller_mitte3;
+    private javax.swing.JPanel panFiller_rechts;
+    private javax.swing.JPanel panFiller_rechts1;
+    private javax.swing.JPanel panFiller_rechts2;
+    private javax.swing.JPanel panFiller_rechts3;
+    private javax.swing.JPanel panFiller_zwischen;
+    private javax.swing.JPanel panFiller_zwischen1;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel7;
     private javax.swing.JTextField txtBemerkung;
     private javax.swing.JTextField txtBis;
     private javax.swing.JTextField txtBreite;
     private javax.swing.JTextField txtDurchlaesse;
     private javax.swing.JTextField txtEinlaeufe;
-    private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtLaenge;
     private javax.swing.JTextField txtMaehenIntervall;
     private javax.swing.JTextField txtSchneidenIntervall;
