@@ -277,7 +277,7 @@ public class Sb_stadtbildUtils {
         final String locationOfPreviewImage = "VB/" + firstCharacter + "/VB_" + imageNumber;
         for (final String fileEnding : IMAGE_FILE_FORMATS) {
             try {
-                final String urlName = "http://s102x003/archivar/" + locationOfPreviewImage + "." + fileEnding;
+                final String urlName = "http://Sw0040/archivar/" + locationOfPreviewImage + "." + fileEnding;
                 final URL url = new URL(urlName);
                 final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
                 if (accessible) {
@@ -304,7 +304,7 @@ public class Sb_stadtbildUtils {
         final String locationOfPreviewImage = "SB/" + firstCharacter + "/SB_" + imageNumber;
         for (final String fileEnding : IMAGE_FILE_FORMATS) {
             try {
-                final String urlName = "http://s102x003/archivar/" + locationOfPreviewImage + "." + fileEnding;
+                final String urlName = "http://Sw0040/archivar/" + locationOfPreviewImage + "." + fileEnding;
                 final URL url = new URL(urlName);
                 final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
                 if (accessible) {
