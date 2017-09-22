@@ -16,7 +16,7 @@
     <version>5.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>${names.cids.custom-wuppertal}</name>
+    <name>${names.cids.custom-wuppertal} [${project.version}]</name>
     <description>!!! description pending !!!</description>
     
     <scm>
