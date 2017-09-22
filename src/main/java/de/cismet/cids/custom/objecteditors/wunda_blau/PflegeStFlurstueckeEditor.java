@@ -181,6 +181,23 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     public PflegeStFlurstueckeEditor(final boolean createEditor) {
         this.isEditor = createEditor;
         initComponents();
+        if (!isEditor) {
+            txtStadtbezirk.setEditable(false);
+            txtStrasse.setEditable(false);
+            txtVon.setEditable(false);
+            txtBis.setEditable(false);
+            txtLaenge.setEditable(false);
+            txtTiefe.setEditable(false);
+            txtBreite.setEditable(false);
+            txtMaehenIntervall.setEditable(false);
+            txtSchneidenIntervall.setEditable(false);
+            txtEinlaeufe.setEditable(false);
+            txtDurchlaesse.setEditable(false);
+            txtBemerkung.setEditable(false);
+
+            dcletztePflege.setEditable(false);
+            dcAufnahme.setEditable(false);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -583,7 +600,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 4);
         jPanel4.add(jLabel31, gridBagConstraints);
 
-        jLabel30.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
+        jLabel30.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel30.setText("Befestigung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2136,8 +2153,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
     /*  public void setCidsBean(CidsBean cb) {
      *    //dispose();  Wenn Aufruf hier, dann wird ein neu gezeichnetes Polygon nicht erkannt.   bindingGroup.unbind();
-     *   this.cidsBean=cb;   //8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen für Zuständigkeit und
-     * Priorität nicht gefüllt werden   //evtl. kann dies verbessert werden.
+     * this.cidsBean=cb;   //8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen für Zuständigkeit und Priorität
+     * nicht gefüllt werden   //evtl. kann dies verbessert werden.
      * DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
      * bindingGroup,           cb);   bindingGroup.bind();}*/
 
