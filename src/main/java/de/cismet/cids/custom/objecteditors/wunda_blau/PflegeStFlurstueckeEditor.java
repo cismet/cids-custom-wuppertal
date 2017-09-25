@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Converter;
 
 import java.awt.event.MouseAdapter;
@@ -21,6 +22,7 @@ import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
@@ -36,7 +38,8 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer {
+public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
+    BindingGroupStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -2171,5 +2174,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
     @Override
     public void setTitle(final String string) {
+    }
+
+    @Override
+    public BindingGroup getBindingGroup() {
+        return bindingGroup;
     }
 }
