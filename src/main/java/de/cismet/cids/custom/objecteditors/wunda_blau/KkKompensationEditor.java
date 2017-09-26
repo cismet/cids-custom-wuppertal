@@ -73,36 +73,54 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void setCidsBean(final CidsBean cidsBean) {
-        kompensationBean = cidsBean;
+    public void setCidsBean(final CidsBean kompensationBean) {
+        this.kompensationBean = kompensationBean;
 
-        if (cidsBean != null) {
+        if (kompensationBean != null) {
             try {
-                final AbstractCidsServerSearch search = new KkVerfahrenSearch(cidsBean.getMetaObject().getId());
+                final AbstractCidsServerSearch search = new KkVerfahrenSearch(kompensationBean.getMetaObject().getId());
                 final List res = (List)SessionManager.getProxy()
                             .customServerSearch(SessionManager.getSession().getUser(), search);
 
                 if ((res != null) && (res.size() == 1)) {
-                    verfahrenBean = ((MetaObject)res.get(0)).getBean();
-                    if (editable) {
-                        verfahrenBean.addPropertyChangeListener(this);
-                    }
-                    super.setCidsBean(verfahrenBean);
-                    selectKompensation(cidsBean);
+                    setVerfahrenBean(((MetaObject)res.get(0)).getBean());
+                    selectKompensation(kompensationBean);
                 } else {
+                    setVerfahrenBean(null);
                     LOG.error("Cannot retrieve verfahren object");
                 }
             } catch (Exception e) {
+                setVerfahrenBean(null);
                 LOG.error("Error while retrieving verfahren object", e);
             }
+        } else {
+            super.setCidsBean(null);
+            setVerfahrenBean(null);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  verfahrenBean  DOCUMENT ME!
+     */
+    private void setVerfahrenBean(final CidsBean verfahrenBean) {
+        if (this.verfahrenBean != null) {
+            this.verfahrenBean.removePropertyChangeListener(this);
+        }
+
+        this.verfahrenBean = verfahrenBean;
+        super.setCidsBean(verfahrenBean);
+
+        if ((verfahrenBean != null) && editable) {
+            LOG.fatal("add propchange: " + verfahrenBean);
+            verfahrenBean.addPropertyChangeListener(this);
         }
     }
 
     @Override
     public void editorClosed(final EditorClosedEvent event) {
-        if (verfahrenBean != null) {
-            verfahrenBean.removePropertyChangeListener(this);
-        }
+        setCidsBean(null);
     }
 
     @Override
@@ -113,11 +131,9 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
 
                 // ensures that the kompensation object will be updated (this updates the table cs_cache).
                 List<CidsBean> kompBeans = null;
-                if ((verfahrenBean != null)) {
-                    final Object colObj = verfahrenBean.getProperty("kompensationen");
-                    if (colObj instanceof Collection) {
-                        kompBeans = (List<CidsBean>)colObj;
-                    }
+                final Object colObj = verfahrenBean.getProperty("kompensationen");
+                if (colObj instanceof Collection) {
+                    kompBeans = (List<CidsBean>)colObj;
                 }
 
                 if (kompBeans != null) {
