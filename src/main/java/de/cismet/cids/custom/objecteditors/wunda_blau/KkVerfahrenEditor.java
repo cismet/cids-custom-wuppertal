@@ -51,6 +51,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -1431,16 +1432,19 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      * @param  evt  DOCUMENT ME!
      */
     private void lstFlaechenValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFlaechenValueChanged
-        final Object o = lstFlaechen.getSelectedValue();
+        final CidsBean oldBean = edFlaeche.getCidsBean();
+        if (oldBean != null) {
+            LOG.info("remove propchange verfahrenkompensation: " + oldBean);
+            oldBean.removePropertyChangeListener(this);
+        }
 
+        final Object o = lstFlaechen.getSelectedValue();
         if (o instanceof CidsBean) {
             final CidsBean bean = (CidsBean)o;
-            bean.removePropertyChangeListener(this);
-            bean.addPropertyChangeListener(this);
-            edFlaeche.setCidsBean(bean);
+            setEdFlaecheBean(bean);
             initBPlan(bean);
         } else {
-            edFlaeche.setCidsBean(null);
+            setEdFlaecheBean(null);
             labBPlan.setText(" ");
         }
 
@@ -1670,6 +1674,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
+
         this.cidsBean = cidsBean;
 
         if (cidsBean != null) {
@@ -1697,6 +1702,27 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             if (lstFlaechen.getModel().getSize() > 0) {
                 lstFlaechen.setSelectedIndex(0);
             }
+        } else {
+            setEdFlaecheBean(null);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  edFlaecheBean  DOCUMENT ME!
+     */
+    private void setEdFlaecheBean(final CidsBean edFlaecheBean) {
+        final CidsBean oldBean = edFlaeche.getCidsBean();
+        if (oldBean != null) {
+            LOG.info("remove propchange verfahrenkompensation: " + oldBean);
+            oldBean.removePropertyChangeListener(this);
+        }
+
+        edFlaeche.setCidsBean(edFlaecheBean);
+        if (edFlaecheBean != null) {
+            LOG.info("add propchange verfahrenkompensation: " + edFlaecheBean);
+            edFlaecheBean.addPropertyChangeListener(this);
         }
     }
 
@@ -1711,6 +1737,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
 
     @Override
     public void dispose() {
+        setCidsBean(null);
+        edFlaeche.dispose();
+        bindingGroup.unbind();
     }
 
     @Override
@@ -1744,13 +1773,14 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
 
     @Override
     public void editorClosed(final EditorClosedEvent event) {
+        setCidsBean(null);
     }
 
     @Override
     public boolean prepareForSave() {
-        List<CidsBean> kompBeans = null;
         final ObjectAttribute bezAttribute = cidsBean.getMetaObject().getAttribute("bezeichnung");
         final CidsBean grundlage = (CidsBean)cidsBean.getProperty("grundlage");
+        final List<CidsBean> kompensationen = cidsBean.getBeanCollectionProperty("kompensationen");
 
         if (grundlage == null) {
             JOptionPane.showMessageDialog(
@@ -1761,44 +1791,82 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             return false;
         }
 
+        for (final CidsBean kompensation : kompensationen) {
+            for (final CidsBean ausgangsbiotop : kompensation.getBeanCollectionProperty("ausgangsbiotope")) {
+                if ((ausgangsbiotop == null) || (ausgangsbiotop.getProperty("name") == null)) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        NbBundle.getMessage(
+                            KkVerfahrenEditor.class,
+                            "KkVerfahrenEditor.prepareForSave.ausgangsbiotop.message"),
+                        NbBundle.getMessage(
+                            KkVerfahrenEditor.class,
+                            "KkVerfahrenEditor.prepareForSave.ausgangsbiotop.title"),
+                        JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+            for (final CidsBean zielbiotop : kompensation.getBeanCollectionProperty("zielbiotope")) {
+                if ((zielbiotop == null) || (zielbiotop.getProperty("biotop") == null)) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        NbBundle.getMessage(
+                            KkVerfahrenEditor.class,
+                            "KkVerfahrenEditor.prepareForSave.zielbiotop.message"),
+                        NbBundle.getMessage(
+                            KkVerfahrenEditor.class,
+                            "KkVerfahrenEditor.prepareForSave.zielbiotop.title"),
+                        JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+            for (final CidsBean massnahme : kompensation.getBeanCollectionProperty("massnahmen")) {
+                if ((massnahme == null) || (massnahme.getProperty("massnahme") == null)) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        NbBundle.getMessage(
+                            KkVerfahrenEditor.class,
+                            "KkVerfahrenEditor.prepareForSave.massnahme.message"),
+                        NbBundle.getMessage(
+                            KkVerfahrenEditor.class,
+                            "KkVerfahrenEditor.prepareForSave.massnahme.title"),
+                        JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+        }
+
         if ((bezAttribute != null) && bezAttribute.isChanged()) {
-            // the cs_cache table must be updated for the kompensation objects
-            if ((cidsBean != null)) {
-                final Object colObj = cidsBean.getProperty("kompensationen");
-                if (colObj instanceof Collection) {
-                    kompBeans = (List<CidsBean>)colObj;
-                }
-            }
+            // ensures that the kompensation object will be updated (this updates the table cs_cache).
 
-            if ((kompBeans != null) && (kompBeans.size() > 0)) {
-                final Executor exec = CismetExecutors.newSingleThreadExecutor();
-                for (final CidsBean tmp : kompBeans) {
-                    // use invoke later to ensure that the verfahren object will be saved first
-                    EventQueue.invokeLater(new Thread() {
+            SwingUtilities.invokeLater(new Runnable() {
 
-                            @Override
-                            public void run() {
-                                // do not persist the beans in edt. This can happen in the background.
-                                exec.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Executor exec = CismetExecutors.newSingleThreadExecutor();
+                        exec.execute(new Runnable() {
 
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                // this ensures that the kompensation object will be saved (updated).
-                                                // Without update, the cs_cache table will not be updated, but this is
-                                                // required, if the attribute bezeichnung of the verfahren has changed
-                                                tmp.getMetaObject().setStatus(MetaObject.MODIFIED);
-                                                tmp.getMetaObject().getAttribute("name").setChanged(true);
-                                                tmp.persist();
-                                            } catch (Exception e) {
-                                                LOG.error("Error while saving kompensation object", e);
-                                            }
+                                @Override
+                                public void run() {
+                                    for (final CidsBean kompBean : kompensationen) {
+                                        try {
+                                            final MetaObject kompMo = SessionManager.getProxy()
+                                                        .getMetaObject(
+                                                            SessionManager.getSession().getUser(),
+                                                            kompBean.getMetaObject().getId(),
+                                                            kompBean.getMetaObject().getClassID(),
+                                                            kompBean.getMetaObject().getDomain());
+                                            kompMo.setStatus(MetaObject.MODIFIED);
+                                            kompMo.getAttribute("name").setChanged(true);
+                                            kompMo.getBean().persist();
+                                        } catch (Exception e) {
+                                            LOG.error("Error while saving kompensation object", e);
                                         }
-                                    });
-                            }
-                        });
-                }
-            }
+                                    }
+                                }
+                            });
+                    }
+                });
         }
 
         return true;
