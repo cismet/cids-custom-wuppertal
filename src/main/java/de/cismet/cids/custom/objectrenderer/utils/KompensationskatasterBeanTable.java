@@ -158,6 +158,7 @@ public class KompensationskatasterBeanTable extends AbstractTableModel {
             } else {
                 getBeanList().get(rowIndex).setProperty(attributes[columnIndex], aValue);
             }
+            bean.setProperty(collectionPropertyName, getBeanList());
         } catch (Exception ex) {
             LOG.error("Cannot set property " + attributes[columnIndex] + " new value: " + String.valueOf(aValue), ex);
         }

@@ -354,6 +354,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         txtFlaecheAusfuehrender = new javax.swing.JTextField();
         dcAufnahme = new de.cismet.cids.editors.DefaultBindableDateChooser();
         if (editable) {
+            LOG.info("create cbGeom");
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         lblGeometrie = new javax.swing.JLabel();
@@ -756,7 +757,9 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         panFlaechenMainSub2.add(jLabel24, gridBagConstraints);
 
         taBemerkung.setColumns(20);
+        taBemerkung.setLineWrap(true);
         taBemerkung.setRows(5);
+        taBemerkung.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -806,6 +809,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         taNebenbest.setColumns(20);
         taNebenbest.setLineWrap(true);
         taNebenbest.setRows(5);
+        taNebenbest.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1403,12 +1407,17 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         if (cidsBean == getCidsBean()) {
             return;
         }
-        dispose();
-        bindingGroup.unbind();
-        if (cidsBean != null) {
-            cidsBean.addPropertyChangeListener(this);
+
+        if (editable && (this.cidsBean != null)) {
+            LOG.info("remove propchange kompensation: " + this.cidsBean);
+            this.cidsBean.removePropertyChangeListener(this);
         }
+        bindingGroup.unbind();
         this.cidsBean = cidsBean;
+        if (editable && (this.cidsBean != null)) {
+            LOG.info("add propchange kompensation: " + this.cidsBean);
+            this.cidsBean.addPropertyChangeListener(this);
+        }
 
         if (cidsBean != null) {
             if (editable) {
@@ -1420,7 +1429,10 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 cidsBean);
             bindingGroup.bind();
         } else {
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).initForNewBinding();
+            if (editable) {
+                ((DefaultCismapGeometryComboBoxEditor)cbGeom).initForNewBinding();
+                cbGeom.setSelectedIndex(-1);
+            }
             txtFlaecheAusfuehrender.setText("");
             txtFlaecheId.setText("");
             txtFlaecheJahrDerUmsetzung.setText("");
@@ -1432,7 +1444,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             cboFlaecheKategorie.setSelectedIndex(-1);
             cboFlaecheLandschaftsplan.setSelectedIndex(-1);
             cboFlaecheSchutzstatus.setSelectedIndex(-1);
-            cbGeom.setSelectedIndex(-1);
         }
 
         final KompensationskatasterBeanTable massnahmenModel = new KompensationskatasterBeanTable(
@@ -1474,7 +1485,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         xtBiotopeAus.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(AUSGANGS_BIOTOP_MC));
         initMap();
 
-        if (cidsBean != null) {
+        if (this.cidsBean != null) {
             double qm = -1.0;
             final Geometry g = (Geometry)cidsBean.getProperty("geometrie.geo_field");
 
@@ -1646,11 +1657,13 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
     @Override
     public void dispose() {
+        setCidsBean(null);
+        bindingGroup = null;
         if (editable) {
+            LOG.info("dispose cbGeom");
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
-        }
-        if (cidsBean != null) {
-            cidsBean.removePropertyChangeListener(this);
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setCidsMetaObject(null);
+            cbGeom = null;
         }
     }
 
