@@ -31,6 +31,9 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
@@ -43,7 +46,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class VirtualCityMapToolbarComponentProvider implements ToolbarComponentsProvider {
+public class VirtualCityMapToolbarComponentProvider implements ToolbarComponentsProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -93,7 +97,9 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
         if (configAttr != null) {
             try {
                 final String result = SessionManager.getConnection()
-                            .getConfigAttr(SessionManager.getSession().getUser(), configAttr);
+                            .getConfigAttr(SessionManager.getSession().getUser(),
+                                configAttr,
+                                getClientConnectionContext());
                 if (result != null) {
                     if (result.contains(HINTSEPARATOR_BEFORE)) {
                         final String[] split = result.split(HINTSEPARATOR_BEFORE);
@@ -112,6 +118,11 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
             }
         }
         return null;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

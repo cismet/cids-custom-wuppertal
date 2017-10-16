@@ -80,6 +80,9 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -95,7 +98,8 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  */
 public class BillingKundeRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanRenderer,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1004,7 +1008,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 itsMe = SessionManager.getConnection()
                             .hasConfigAttr(SessionManager.getSession().getUser(),
                                     "custom.billing.tree."
-                                    + (String)kundeBean.getProperty("name_intern"));
+                                    + (String)kundeBean.getProperty("name_intern"),
+                                    getClientConnectionContext());
             } catch (final Exception ex) {
             }
             pnlVerwendungszweck.initVerwendungszweckCheckBoxes(itsMe);
@@ -1276,7 +1281,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 protected Collection<MetaObject> doInBackground() throws Exception {
                     // return cidsBillingSearchStatement.performServerSearch();
                     return SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), cidsBillingSearchStatement);
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                    cidsBillingSearchStatement,
+                                    getClientConnectionContext());
                 }
 
                 @Override
@@ -1335,6 +1342,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             };
         pnlTimeFilters.setFilterSettingChangedAction(filterAction);
         pnlVerwendungszweck.setFilterSettingChangedAction(filterAction);
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

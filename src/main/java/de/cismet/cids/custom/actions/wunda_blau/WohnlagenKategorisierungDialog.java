@@ -52,6 +52,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.cismap.cidslayer.CidsLayerFeature;
 
@@ -63,7 +65,7 @@ import de.cismet.cismap.commons.featureservice.AbstractFeatureService;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
+public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -638,7 +640,8 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
                                 .executeTask(
                                     WohnlagenKategorisierungServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    null,
+                                    getClientConnectionContext(),
+                                    (Object)null,
                                     new ServerActionParameter<MetaObjectNode>(
                                         WohnlagenKategorisierungServerAction.ParameterType.KATEGORIE.toString(),
                                         kategorieNode),
@@ -717,5 +720,10 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
      */
     private void inputChanged() {
         btnOk.setEnabled((buttonGroup1.getSelection() != null) || !jTextArea1.getText().trim().isEmpty());
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

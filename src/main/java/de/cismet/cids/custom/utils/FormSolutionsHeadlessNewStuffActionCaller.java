@@ -26,6 +26,9 @@ import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuf
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -34,7 +37,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FormSolutionsHeadlessNewStuffActionCaller {
+public class FormSolutionsHeadlessNewStuffActionCaller implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -69,7 +72,12 @@ public class FormSolutionsHeadlessNewStuffActionCaller {
      */
     private void executeTask() {
         try {
-            SessionManager.getProxy().executeTask(FormSolutionServerNewStuffAvailableAction.TASK_NAME, DOMAIN, null);
+            SessionManager.getProxy()
+                    .executeTask(
+                        FormSolutionServerNewStuffAvailableAction.TASK_NAME,
+                        DOMAIN,
+                        getClientConnectionContext(),
+                        (Object)null);
         } catch (ConnectionException ex) {
             System.err.println("error executing task");
             ex.printStackTrace();
@@ -109,5 +117,10 @@ public class FormSolutionsHeadlessNewStuffActionCaller {
             LOG.error("Error while login", ex);
             return false;
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

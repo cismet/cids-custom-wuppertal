@@ -58,7 +58,11 @@ import javax.swing.SwingConstants;
 import javax.swing.event.EventListenerList;
 import javax.swing.tree.TreePath;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.RetrievalServiceLayer;
@@ -230,7 +234,8 @@ public class OabUtilities {
                             .getMetaObject(SessionManager.getSession().getUser(),
                                 mo.getID(),
                                 mo.getClassID(),
-                                mo.getDomain());
+                                mo.getDomain(),
+                                getConnectionContext());
                 return copy.getBean();
             } catch (final ConnectionException ex) {
                 throw new IllegalStateException("cannot re-fetch cidsbean", ex); // NOI18N
@@ -239,7 +244,14 @@ public class OabUtilities {
             return source;
         }
     }
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(OabUtilities.class.getSimpleName());
+    }
     /**
      * DOCUMENT ME!
      *

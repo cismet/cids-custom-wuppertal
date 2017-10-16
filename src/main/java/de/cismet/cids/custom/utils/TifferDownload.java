@@ -25,6 +25,8 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ImageAnnotator;
 import de.cismet.cids.custom.wunda_blau.search.actions.TifferAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 
@@ -38,7 +40,7 @@ import static de.cismet.cids.custom.wunda_blau.search.actions.TifferAction.Param
  * @see      TifferAction
  * @see      ImageAnnotator
  */
-public class TifferDownload extends AbstractDownload {
+public class TifferDownload extends AbstractDownload implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -115,7 +117,8 @@ public class TifferDownload extends AbstractDownload {
                         .executeTask(
                                 TifferAction.ACTION_NAME,
                                 "WUNDA_BLAU",
-                                null,
+                                getClientConnectionContext(),
+                                (Object)null,
                                 paramNummer,
                                 paramScale,
                                 paramFormat,
@@ -158,5 +161,10 @@ public class TifferDownload extends AbstractDownload {
         return new ServerActionParameter(
                 SUBDIR.toString(),
                 subdir);
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

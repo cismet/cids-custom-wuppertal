@@ -34,13 +34,16 @@ import java.util.logging.Level;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class StichtagChooserDialog extends javax.swing.JDialog {
+public class StichtagChooserDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -283,10 +286,12 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
 
                 @Override
                 protected Date doInBackground() throws Exception {
-                    return (Date)SessionManager.getProxy().executeTask(
-                            "getDate",
-                            "WUNDA_BLAU",
-                            null);
+                    return (Date)SessionManager.getProxy()
+                                .executeTask(
+                                        "getDate",
+                                        "WUNDA_BLAU",
+                                        getClientConnectionContext(),
+                                        (Object)null);
                 }
 
                 @Override
@@ -402,5 +407,10 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
      */
     public Date getDate() {
         return datepicker.getDate();
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

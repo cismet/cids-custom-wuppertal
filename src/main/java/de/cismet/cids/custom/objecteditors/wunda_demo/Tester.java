@@ -42,6 +42,9 @@ import de.cismet.cids.editors.CidsObjectEditorFactory;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -50,7 +53,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class Tester extends javax.swing.JFrame {
+public class Tester extends javax.swing.JFrame implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -118,7 +121,7 @@ public class Tester extends javax.swing.JFrame {
 
         initComponents();
 
-        final MetaObject mo = meta.getMetaObject(u, 2, AAPERSON_CLASSID, domain);
+        final MetaObject mo = meta.getMetaObject(u, 2, AAPERSON_CLASSID, domain, getClientConnectionContext());
         final JComponent c = CidsObjectEditorFactory.getInstance().getEditor(mo);
         getContentPane().add(c, BorderLayout.CENTER);
     }
@@ -155,6 +158,11 @@ public class Tester extends javax.swing.JFrame {
                     }
                 }
             });
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(Tester.class.getSimpleName());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

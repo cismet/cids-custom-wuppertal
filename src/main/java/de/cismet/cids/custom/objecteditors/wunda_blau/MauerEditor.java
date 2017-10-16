@@ -115,6 +115,8 @@ import de.cismet.cids.editors.EditorSaveListener.EditorSaveStatus;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -151,7 +153,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     EditorSaveListener,
     FooterComponentProvider,
     TitleComponentProvider,
-    BorderProvider {
+    BorderProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -3606,7 +3609,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             if (mauerNummer != null) {
                 final CidsServerSearch search = new MauerNummerSearch(mauerNummer);
                 final Collection res = SessionManager.getProxy()
-                            .customServerSearch(SessionManager.getSession().getUser(), search);
+                            .customServerSearch(SessionManager.getSession().getUser(),
+                                search,
+                                getClientConnectionContext());
 
                 final ArrayList<ArrayList> tmp = (ArrayList<ArrayList>)res;
 
@@ -4052,6 +4057,11 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         return new EmptyBorder(new Insets(10, 10, 10, 10));
     }
 
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -4281,7 +4291,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
                 query += "FROM " + MB_MC.getTableName();
                 query += " WHERE server = 's102x003/WebDAV' and path = '/cids/mauern/bilder/';  ";
-                final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+                final MetaObject[] metaObjects = SessionManager.getProxy()
+                            .getMetaObjectByQuery(query, 0, getClientConnectionContext());
 
                 final CidsBean url = CidsBeanSupport.createNewCidsBeanFromTableName("url");
                 url.setProperty("url_base_id", metaObjects[0].getBean());

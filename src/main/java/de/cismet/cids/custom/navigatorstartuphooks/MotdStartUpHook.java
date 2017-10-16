@@ -21,6 +21,9 @@ import org.openide.util.lookup.ServiceProvider;
 import de.cismet.cids.custom.motd.MotdDialog;
 import de.cismet.cids.custom.wunda_blau.startuphooks.MotdWundaStartupHook;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 
 import de.cismet.tools.configuration.StartupHook;
@@ -32,7 +35,7 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class MotdStartUpHook implements StartupHook {
+public class MotdStartUpHook implements StartupHook, ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -46,7 +49,8 @@ public class MotdStartUpHook implements StartupHook {
             if (SessionManager.getConnection().hasConfigAttr(
                             SessionManager.getSession().getUser(),
                             "csm://"
-                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD)) {
+                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD,
+                            getClientConnectionContext())) {
                 CidsServerMessageNotifier.getInstance()
                         .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
             }
@@ -59,7 +63,8 @@ public class MotdStartUpHook implements StartupHook {
             if (SessionManager.getConnection().hasConfigAttr(
                             SessionManager.getSession().getUser(),
                             "csm://"
-                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN)) {
+                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN,
+                            getClientConnectionContext())) {
                 CidsServerMessageNotifier.getInstance()
                         .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN);
             }
@@ -68,5 +73,10 @@ public class MotdStartUpHook implements StartupHook {
                         + " nicht abfragen. Keine Meldung des Tages !",
                 ex);
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

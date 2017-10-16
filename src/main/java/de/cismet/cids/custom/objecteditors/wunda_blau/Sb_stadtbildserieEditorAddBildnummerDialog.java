@@ -36,6 +36,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -44,7 +47,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDialog {
+public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDialog
+        implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -298,7 +302,10 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
                     + " order by bildnummer";
         try {
             final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(SessionManager.getSession().getUser(), query, DOMAIN);
+                        .getMetaObjectByQuery(SessionManager.getSession().getUser(),
+                            query,
+                            DOMAIN,
+                            getClientConnectionContext());
             for (final MetaObject mo : metaObjects) {
                 final CidsBean cb = mo.getBean();
                 stadtBilderBeans.put((String)cb.getProperty("bildnummer"), cb);
@@ -439,6 +446,11 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         }
         lblWarning.setText("");
         btnOk.setEnabled(true);
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -661,7 +673,9 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         protected Integer doInBackground() throws Exception {
             final Sb_maxBildnummerFetcherServerSearch maxBildnummerFetcher = new Sb_maxBildnummerFetcherServerSearch();
             final Collection maxBildnummerCollection = SessionManager.getConnection()
-                        .customServerSearch(SessionManager.getSession().getUser(), maxBildnummerFetcher);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                            maxBildnummerFetcher,
+                            getClientConnectionContext());
             if ((maxBildnummerCollection != null) && !maxBildnummerCollection.isEmpty()) {
                 final ArrayList firstColumnObject = (ArrayList)maxBildnummerCollection.toArray(new Object[1])[0];
                 final Object firstRowObject = firstColumnObject.get(0);

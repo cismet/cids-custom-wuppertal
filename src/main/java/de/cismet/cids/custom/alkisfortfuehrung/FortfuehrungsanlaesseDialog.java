@@ -43,6 +43,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -55,7 +57,8 @@ import de.cismet.tools.BrowserLauncher;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
+public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog
+        implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -885,7 +888,9 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
                     final CidsServerSearch itemSearch = createFortfuehrungItemSearch(dpiFrom.getDate(),
                             dpiTo.getDate());
                     final Collection<Object[]> rawItems = (Collection<Object[]>)SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), itemSearch);
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                        itemSearch,
+                                        getClientConnectionContext());
                     final Map<Integer, FortfuehrungItem> ffnMap = new HashMap<>();
                     for (final Object[] rawItem : rawItems) {
                         final FortfuehrungItem item = createFortfuehrungItem(rawItem);
@@ -958,6 +963,11 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
      * @param  enabled  DOCUMENT ME!
      */
     protected abstract void setDetailEnabled(final boolean enabled);
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
 
     //~ Inner Classes ----------------------------------------------------------
 

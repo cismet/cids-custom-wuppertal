@@ -25,6 +25,9 @@ import java.util.List;
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.wunda_blau.search.server.BerechtigungspruefungOffeneAnfragenStatement;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
 
@@ -34,7 +37,8 @@ import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNotifierListener {
+public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNotifierListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -55,7 +59,9 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
     private BerechtigungspruefungMessageNotifier() {
         try {
             final String confAttr = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), CONFATTR_PRODUKTTYPES);
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                            CONFATTR_PRODUKTTYPES,
+                            getClientConnectionContext());
             if (confAttr != null) {
                 final BerechtigungspruefungKonfiguration conf = BerechtigungspruefungKonfiguration.INSTANCE;
                 final Collection<String> existingTypes = new ArrayList<String>(conf.getProdukte().size());
@@ -126,7 +132,8 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
     public List<String> getOffeneAnfragen() throws ConnectionException {
         final List<String> offeneAnfragen = (List<String>)SessionManager.getProxy()
                     .customServerSearch(SessionManager.getSession().getUser(),
-                            new BerechtigungspruefungOffeneAnfragenStatement(produkttypeList));
+                            new BerechtigungspruefungOffeneAnfragenStatement(produkttypeList),
+                            getClientConnectionContext());
         return offeneAnfragen;
     }
 
@@ -181,6 +188,11 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
         for (final BerechtigungspruefungMessageNotifierListener listener : listeners) {
             listener.anfrageRemoved(key);
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

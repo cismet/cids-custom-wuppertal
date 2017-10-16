@@ -50,6 +50,9 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
@@ -58,7 +61,8 @@ import de.cismet.tools.collections.TypeSafeCollections;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements DisposableCidsBeanStore {
+public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -377,7 +381,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
                     search.setRepresentationFields(new String[] { "id", "strasse", "nummer" });
                     search.setGebaudeId(gebaeudeId);
                     final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                                .customServerSearch(search);
+                                .customServerSearch(search, getClientConnectionContext());
                     for (final LightweightMetaObject lwmo : lwmos) {
                         lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -429,5 +433,10 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     @Override
     public void dispose() {
         bindingGroup.unbind();
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

@@ -18,8 +18,6 @@ import Sirius.navigator.types.treenode.RootTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.tree.MetaCatalogueTree;
 
-import org.openide.util.Exceptions;
-
 import java.awt.EventQueue;
 import java.awt.Frame;
 
@@ -29,13 +27,16 @@ import javax.swing.tree.TreePath;
 
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FSReloadBestellungenDialog extends javax.swing.JDialog {
+public class FSReloadBestellungenDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -155,7 +156,8 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog {
                             .executeTask(SessionManager.getSession().getUser(),
                                 FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                null);
+                                ClientConnectionContext.create(FSReloadBestellungenDialog.class.getSimpleName()),
+                                (Object)null);
                     return null;
                 }
 
@@ -179,7 +181,8 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog {
         final TreePath selectionPath = currentTree.getSelectionPath();
         if ((selectionPath != null) && (selectionPath.getPath().length > 0)) {
             try {
-                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(
+                            getClientConnectionContext()));
 
                 final Runnable r = new Runnable() {
 
@@ -199,5 +202,10 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog {
             } catch (ConnectionException ex) {
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

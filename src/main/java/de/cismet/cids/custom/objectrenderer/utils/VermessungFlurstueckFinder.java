@@ -25,6 +25,8 @@ import java.util.Comparator;
 import de.cismet.cids.custom.wunda_blau.search.server.VeraenderungsartLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.VermessungFlurstueckKickerLightweightSearch;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -99,7 +101,8 @@ public class VermessungFlurstueckFinder {
             search.setSearchFor(VermessungFlurstueckKickerLightweightSearch.SearchFor.ALLE_FLUSTUECKE);
             search.setRepresentationFields(
                 new String[] { FLURSTUECK_GEMARKUNG, FLURSTUECK_FLUR, FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -136,7 +139,8 @@ public class VermessungFlurstueckFinder {
                 new VermessungFlurstueckKickerLightweightSearch();
             search.setSearchFor(VermessungFlurstueckKickerLightweightSearch.SearchFor.ALLE_GEMARKUNGEN);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_GEMARKUNG, VERMESSUNG_GEMARKUNG_NAME });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -167,7 +171,8 @@ public class VermessungFlurstueckFinder {
             search.setSearchFor(VermessungFlurstueckKickerLightweightSearch.SearchFor.GEMARKUNG);
             search.setGemarkungsnummer(Integer.toString(gemarkung));
             search.setRepresentationFields(new String[] { "id", VERMESSUNG_GEMARKUNG_NAME });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -198,7 +203,8 @@ public class VermessungFlurstueckFinder {
             search.setSearchFor(VermessungFlurstueckKickerLightweightSearch.SearchFor.FLURE);
             search.setGemarkungsnummer(gemarkungsnummer);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_FLUR });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -225,7 +231,8 @@ public class VermessungFlurstueckFinder {
             final VeraenderungsartLightweightSearch search = new VeraenderungsartLightweightSearch();
             search.setRepresentationFields(
                 new String[] { "id", VERMESSUNG_VERAENDERUNGSART_CODE, VERMESSUNG_VERAENDERUNGSART_NAME });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -265,7 +272,8 @@ public class VermessungFlurstueckFinder {
             search.setGemarkungsnummer(gemarkungsnummer);
             search.setFlur(flur);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -317,7 +325,8 @@ public class VermessungFlurstueckFinder {
             search.setNenner(nenner);
             search.setRepresentationFields(
                 new String[] { "id", FLURSTUECK_GEMARKUNG, FLURSTUECK_FLUR, FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -344,5 +353,14 @@ public class VermessungFlurstueckFinder {
             LOG.error(ex, ex);
             return null;
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(VermessungFlurstueckFinder.class.getSimpleName());
     }
 }

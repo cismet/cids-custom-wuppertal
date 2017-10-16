@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.cismet.cids.custom.butler.DigitalDataExportToolbarComponentProvider;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Product;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerAction;
@@ -28,6 +29,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearch
 import de.cismet.cids.custom.wunda_blau.search.server.NasPointSearch;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -130,7 +132,7 @@ public abstract class NasFeeCalculator {
                 null,
                 g);
         final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                    .customServerSearch(SessionManager.getSession().getUser(), search, getConnectionContext());
         return c.get(0);
     }
 
@@ -166,7 +168,13 @@ public abstract class NasFeeCalculator {
                 NasZaehlObjekteServerAction.Parameter.GEOMETRY.toString(),
                 geom);
         final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
-                    .executeTask(NasZaehlObjekteServerAction.TASK_NAME, "WUNDA_BLAU", null, sapType, sapGeom);
+                    .executeTask(
+                            NasZaehlObjekteServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            getConnectionContext(),
+                            (Object)null,
+                            sapType,
+                            sapGeom);
         return c.get(0);
     }
 
@@ -273,5 +281,14 @@ public abstract class NasFeeCalculator {
         }
         fee += amount * basePrice;
         return fee;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(DigitalDataExportToolbarComponentProvider.class.getSimpleName());
     }
 }

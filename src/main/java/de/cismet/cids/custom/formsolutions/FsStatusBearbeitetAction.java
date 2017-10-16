@@ -21,6 +21,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionBestellungCha
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 
 import de.cismet.cids.utils.abstracts.AbstractCidsBeanAction;
 
@@ -66,6 +67,7 @@ public class FsStatusBearbeitetAction extends AbstractCidsBeanAction {
                     .executeTask(SessionManager.getSession().getUser(),
                         FormSolutionBestellungChangeStatusServerAction.TASK_NAME,
                         "WUNDA_BLAU",
+                        ClientConnectionContext.create(FsStatusBearbeitetAction.class.getSimpleName()),
                         mon,
                         paramErledigt);
         } catch (final Exception ex) {

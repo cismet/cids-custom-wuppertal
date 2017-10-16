@@ -36,6 +36,8 @@ import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuf
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -43,7 +45,7 @@ import de.cismet.cids.server.actions.ServerActionParameter;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FSReloadProduktDialog extends javax.swing.JDialog {
+public class FSReloadProduktDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -179,7 +181,8 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
                                 .executeTask(SessionManager.getSession().getUser(),
                                     FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    null,
+                                    ClientConnectionContext.create(FSReloadProduktDialog.class.getSimpleName()),
+                                    (Object)null,
                                     paramMon,
                                     paramStep);
                     } catch (final ConnectionException ex3) {
@@ -207,7 +210,8 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
         final TreePath selectionPath = currentTree.getSelectionPath();
         if ((selectionPath != null) && (selectionPath.getPath().length > 0)) {
             try {
-                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(
+                            getClientConnectionContext()));
 
                 final Runnable r = new Runnable() {
 
@@ -227,5 +231,10 @@ public class FSReloadProduktDialog extends javax.swing.JDialog {
             } catch (ConnectionException ex) {
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

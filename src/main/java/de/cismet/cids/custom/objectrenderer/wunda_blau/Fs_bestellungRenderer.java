@@ -57,6 +57,8 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -86,7 +88,8 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  */
 public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1627,7 +1630,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                                 landparcelcode,
                                 null);
                         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                        search,
+                                        getClientConnectionContext());
                         if (!mons.isEmpty()) {
                             return mons.iterator().next();
                         } else {
@@ -1703,6 +1708,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

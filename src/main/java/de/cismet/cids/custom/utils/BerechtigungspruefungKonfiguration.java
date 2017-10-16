@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 
 import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
 
@@ -56,6 +57,7 @@ public class BerechtigungspruefungKonfiguration {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
+                            ClientConnectionContext.create(BerechtigungspruefungKonfiguration.class.getSimpleName()),
                             WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;

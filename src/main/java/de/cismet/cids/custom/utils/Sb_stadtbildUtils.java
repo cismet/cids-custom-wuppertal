@@ -55,6 +55,8 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 import de.cismet.commons.concurrency.CismetConcurrency;
 
 import de.cismet.security.WebAccessManager;
@@ -186,7 +188,8 @@ public class Sb_stadtbildUtils {
                 }
                 final MetaObject[] wuppertal;
                 try {
-                    wuppertal = SessionManager.getProxy().getMetaObjectByQuery(wuppertalQuery.toString(), 0);
+                    wuppertal = SessionManager.getProxy()
+                                .getMetaObjectByQuery(wuppertalQuery.toString(), 0, getConnectionContext());
                     if (wuppertal.length > 0) {
                         return wuppertal[0].getBean();
                     }
@@ -222,7 +225,8 @@ public class Sb_stadtbildUtils {
                 }
                 final MetaObject[] r102;
                 try {
-                    r102 = SessionManager.getProxy().getMetaObjectByQuery(r102Query.toString(), 0);
+                    r102 = SessionManager.getProxy()
+                                .getMetaObjectByQuery(r102Query.toString(), 0, getConnectionContext());
                     if (r102.length > 0) {
                         return r102[0].getBean();
                     }
@@ -543,6 +547,15 @@ public class Sb_stadtbildUtils {
             }
         }
         return GraphicsUtilities.convertToBufferedImage(toReturn);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(BaulastBescheinigungUtils.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

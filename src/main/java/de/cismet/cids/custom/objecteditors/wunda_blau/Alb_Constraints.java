@@ -21,6 +21,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.Alb_BaulastblattChecker;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 /**
@@ -104,7 +105,7 @@ public class Alb_Constraints {
     public static boolean checkUniqueBlattNummer(final String blattnummer, final int id) throws ConnectionException {
         final CidsServerSearch search = new Alb_BaulastblattChecker(blattnummer, id);
         final Collection result = SessionManager.getConnection()
-                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                    .customServerSearch(SessionManager.getSession().getUser(), search, getConnectionContext());
         if ((result != null) && (result.size() > 0)) {
             final Object o = result.iterator().next();
             if (o instanceof List) {
@@ -144,7 +145,7 @@ public class Alb_Constraints {
             throws ConnectionException {
         final CidsServerSearch search = new Alb_BaulastChecker(blattnummer, laufendeNr, id);
         final Collection result = SessionManager.getConnection()
-                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                    .customServerSearch(SessionManager.getSession().getUser(), search, getConnectionContext());
         if ((result != null) && (result.size() > 0)) {
             final Object o = result.iterator().next();
             if (o instanceof List) {
@@ -219,5 +220,14 @@ public class Alb_Constraints {
         final Object eintragungsDatumObj = baulastBean.getProperty("eintragungsdatum");
 
         return (eintragungsDatumObj != null) && (eintragungsDatumObj instanceof Date);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(Alb_Constraints.class.getSimpleName());
     }
 }

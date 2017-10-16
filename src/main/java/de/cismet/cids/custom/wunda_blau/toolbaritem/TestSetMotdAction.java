@@ -24,6 +24,8 @@ import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
 
 import de.cismet.cids.server.actions.PublishCidsServerMessageAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.tools.StaticDebuggingTools;
 
@@ -34,7 +36,8 @@ import de.cismet.tools.StaticDebuggingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsClientToolbarItem.class)
-public class TestSetMotdAction extends AbstractAction implements CidsClientToolbarItem {
+public class TestSetMotdAction extends AbstractAction implements CidsClientToolbarItem,
+    ClientConnectionContextProvider {
 
     //~ Constructors -----------------------------------------------------------
 
@@ -60,7 +63,8 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                         && SessionManager.getConnection()
                         .hasConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://"
-                                + PublishCidsServerMessageAction.TASK_NAME);
+                                + PublishCidsServerMessageAction.TASK_NAME,
+                                getClientConnectionContext());
         } catch (ConnectionException ex) {
             return false;
         }
@@ -78,6 +82,7 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                             SessionManager.getSession().getUser(),
                             PublishCidsServerMessageAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
+                            getClientConnectionContext(),
                             message,
                             new ServerActionParameter<String>(
                                 PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
@@ -88,6 +93,7 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                             SessionManager.getSession().getUser(),
                             PublishCidsServerMessageAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
+                            getClientConnectionContext(),
                             message.substring(0, Math.min(40, message.length())),
                             new ServerActionParameter<String>(
                                 PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
@@ -96,5 +102,10 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                 Exceptions.printStackTrace(ex);
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

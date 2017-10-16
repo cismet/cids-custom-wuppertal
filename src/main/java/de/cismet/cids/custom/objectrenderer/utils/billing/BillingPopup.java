@@ -57,6 +57,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -285,7 +287,8 @@ public class BillingPopup extends javax.swing.JDialog {
             final ProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         final User user = SessionManager.getSession().getUser();
-        final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
+        final String modus = SessionManager.getConnection()
+                    .getConfigAttr(user, MODE_CONFIG_ATTR, getConnectionContext());
         if (modus != null) {
             instance.initialize(product, defaultRequest, requestPerUsage, geom, downloadInfo, amounts);
             return instance.shouldGoOn;
@@ -463,7 +466,8 @@ public class BillingPopup extends javax.swing.JDialog {
      * @throws  Exception  DOCUMENT ME!
      */
     public static boolean hasUserBillingMode() throws Exception {
-        return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), MODE_CONFIG_ATTR)
+        return SessionManager.getConnection()
+                    .getConfigAttr(SessionManager.getSession().getUser(), MODE_CONFIG_ATTR, getConnectionContext())
                     != null;
     }
 
@@ -1000,7 +1004,8 @@ public class BillingPopup extends javax.swing.JDialog {
 
         CidsBean externalUser = null;
         try {
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query, 0, getConnectionContext());
             if ((metaObjects != null) && (metaObjects.length > 0)) {
                 externalUser = metaObjects[0].getBean();
             }
@@ -1115,9 +1120,16 @@ public class BillingPopup extends javax.swing.JDialog {
     public static boolean isBillingAllowed() {
         try {
             final User user = SessionManager.getSession().getUser();
-            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) == null)
-                        || ((SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) != null)
-                            && (SessionManager.getConnection().getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR) != null));
+            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR, getConnectionContext())
+                            == null)
+                        || ((SessionManager.getConnection().getConfigAttr(
+                                    user,
+                                    MODE_CONFIG_ATTR,
+                                    getConnectionContext()) != null)
+                            && (SessionManager.getConnection().getConfigAttr(
+                                    user,
+                                    ALLOWED_USAGE_CONFIG_ATTR,
+                                    getConnectionContext()) != null));
         } catch (ConnectionException ex) {
             LOG.error("error while checking configAttr", ex);
             return false;
@@ -1134,8 +1146,12 @@ public class BillingPopup extends javax.swing.JDialog {
     public static boolean isBillingAllowed(final String product) {
         try {
             final User user = SessionManager.getSession().getUser();
-            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) == null)
-                        || ((SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) != null)
+            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR, getConnectionContext())
+                            == null)
+                        || ((SessionManager.getConnection().getConfigAttr(
+                                    user,
+                                    MODE_CONFIG_ATTR,
+                                    getConnectionContext()) != null)
                             && (getAllowedUsages(user, product).length > 0));
         } catch (ConnectionException ex) {
             LOG.error("error while checking configAttr", ex);
@@ -1157,7 +1173,7 @@ public class BillingPopup extends javax.swing.JDialog {
         final Set<String> allowedUsages = new LinkedHashSet<String>();
 
         final String rawAllowedUsageLines = SessionManager.getConnection()
-                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR);
+                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR, getConnectionContext());
         if (rawAllowedUsageLines != null) {
             for (final String rawAllowedUsageLine : rawAllowedUsageLines.split("\n")) {
                 final int indexOfAllowed = rawAllowedUsageLine.indexOf(":");
@@ -1171,7 +1187,7 @@ public class BillingPopup extends javax.swing.JDialog {
 
         if (!allowedUsages.isEmpty()) {
             final String rawRestrcitedUsageLines = SessionManager.getConnection()
-                        .getConfigAttr(user, RESTRICTED_USAGE_CONFIG_ATTR);
+                        .getConfigAttr(user, RESTRICTED_USAGE_CONFIG_ATTR, getConnectionContext());
             if (rawRestrcitedUsageLines != null) {
                 for (final String rawRestrcitedUsageLine : rawRestrcitedUsageLines.split("\n")) {
                     final int indexOfRestricted = rawRestrcitedUsageLine.indexOf(":");
@@ -1220,7 +1236,8 @@ public class BillingPopup extends javax.swing.JDialog {
         final User user = SessionManager.getSession().getUser();
 
         // Auslesen des Modus für diesen User
-        final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
+        final String modus = SessionManager.getConnection()
+                    .getConfigAttr(user, MODE_CONFIG_ATTR, getConnectionContext());
 
         currentMode = modi.get(modus);
         if (currentMode == null) {
@@ -1447,6 +1464,7 @@ public class BillingPopup extends javax.swing.JDialog {
                         .executeTask(SessionManager.getSession().getUser(),
                             BerechtigungspruefungAnfrageServerAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
+                            ClientConnectionContext.create(BillingPopup.class.getSimpleName()),
                             fileData,
                             params.toArray(new ServerActionParameter[0]));
             return (String)ret;
@@ -1491,6 +1509,15 @@ public class BillingPopup extends javax.swing.JDialog {
                     }
                 }
             }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(BillingPopup.class.getSimpleName());
     }
 
     //~ Inner Interfaces -------------------------------------------------------

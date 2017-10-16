@@ -22,9 +22,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.text.DateFormat;
@@ -44,7 +42,6 @@ import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
@@ -52,6 +49,8 @@ import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation
 import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -71,7 +70,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class PointNumberReservationPanel extends javax.swing.JPanel {
+public class PointNumberReservationPanel extends javax.swing.JPanel implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -647,7 +646,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        null,
+                                        getClientConnectionContext(),
+                                        (Object)null,
                                         action,
                                         prefix,
                                         aNummer,
@@ -746,7 +746,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        null,
+                                        getClientConnectionContext(),
+                                        (Object)null,
                                         action,
                                         prefix,
                                         aNummer);
@@ -912,5 +913,10 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 lblAnzWarnAnzahl.setVisible(false);
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

@@ -80,6 +80,8 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.BooleanToStringConverter;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -106,7 +108,9 @@ import de.cismet.tools.gui.downloadmanager.HttpOrFtpDownload;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer, TitleComponentProvider {
+public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer,
+    TitleComponentProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1182,6 +1186,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                                 .executeTask(SessionManager.getSession().getUser(),
                                     GetServerResourceServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
+                                    getClientConnectionContext(),
                                     WundaBlauServerResources.VERMESSUNGSUNTERLAGENPORTAL_PROPERTIES.getValue());
                     if (ret instanceof Exception) {
                         throw (Exception)ret;
@@ -1304,9 +1309,14 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                                 if (cidsBean.getProperty("historisch") != null) {
                                     return cidsBean;
                                 } else {
-                                    final MetaObjectNode mon = FlurstueckRenderer.searchAlkisLandparcel(cidsBean);
+                                    final MetaObjectNode mon = FlurstueckRenderer.searchAlkisLandparcel(
+                                            cidsBean,
+                                            getClientConnectionContext());
                                     final MetaObject mo = SessionManager.getProxy()
-                                                .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                                .getMetaObject(mon.getObjectId(),
+                                                    mon.getClassId(),
+                                                    mon.getDomain(),
+                                                    getClientConnectionContext());
                                     return mo.getBean();
                                 }
                             }
@@ -1530,7 +1540,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         if ((mos != null) && (mos.length > 0)) {
             final MetaObject mo = mos[0];
             final CidsBean kickerBean = SessionManager.getProxy()
-                        .getMetaObject(mo.getId(), mo.getClassID(), "WUNDA_BLAU")
+                        .getMetaObject(mo.getId(), mo.getClassID(), "WUNDA_BLAU", getClientConnectionContext())
                         .getBean();
 
             return (CidsBean)kickerBean.getProperty("fs_referenz");
@@ -1704,7 +1714,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         final CidsServerSearch search = new KundeByVermessungsStellenNummerSearch(
                                 vermessungsstelle.substring(2));
                         final Collection res = SessionManager.getProxy()
-                                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                        search,
+                                        getClientConnectionContext());
                         if ((res == null) || res.isEmpty()) {
                             return "nicht registrierte Vermessungsstelle";
                         } else {
@@ -1725,6 +1737,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     }
                 }
             }.execute();
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

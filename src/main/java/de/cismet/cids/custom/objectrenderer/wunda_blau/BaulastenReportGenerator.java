@@ -54,6 +54,8 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
 import de.cismet.tools.gui.WebAccessMultiPagePictureReader;
@@ -149,7 +151,7 @@ public class BaulastenReportGenerator {
      */
     public static String createFertigungsVermerk(final User user) throws ConnectionException {
         final String fertigungsVermerk = SessionManager.getConnection()
-                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU");
+                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU", getConnectionContext());
         if (fertigungsVermerk != null) {
             return fertigungsVermerk;
         } else {
@@ -162,6 +164,15 @@ public class BaulastenReportGenerator {
             }
             return "";
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(BaulastenReportGenerator.class.getSimpleName());
     }
 
     /**

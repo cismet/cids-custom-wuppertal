@@ -19,7 +19,6 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
@@ -51,7 +50,6 @@ import javax.swing.ListModel;
 
 import de.cismet.cids.custom.objecteditors.utils.VermessungRissUtils;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
-import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -65,6 +63,8 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -90,7 +90,8 @@ import static javax.swing.Action.NAME;
 public class VermessungRissWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -253,7 +254,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         result = SessionManager.getProxy()
                                     .customServerSearch(SessionManager.getSession().getUser(),
                                             new CidsVermessungRissArtSearchStatement(
-                                                SessionManager.getSession().getUser()));
+                                                SessionManager.getSession().getUser()),
+                                            getClientConnectionContext());
                     } catch (final ConnectionException ex) {
                         LOG.warn(
                             "Could not fetch veranederungsart entries. Editing flurstuecksvermessung will not work.",
@@ -1139,6 +1141,11 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -66,6 +66,8 @@ import de.cismet.cids.custom.utils.nas.NasProduct;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 //import de.cismet.cids.custom.utils.nas.NasProductTemplate;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -92,7 +94,9 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class NasDialog extends javax.swing.JDialog implements ChangeListener, DocumentListener {
+public class NasDialog extends javax.swing.JDialog implements ChangeListener,
+    DocumentListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -289,6 +293,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
+                            getClientConnectionContext(),
                             WundaBlauServerResources.NAS_PRODUCT_DESCRIPTION_JSON.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
@@ -318,10 +323,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasActionAttribute(final String actionAttributeString) {
+    public boolean validateUserHasActionAttribute(final String actionAttributeString) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), actionAttributeString)
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                actionAttributeString,
+                                getClientConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
@@ -1222,6 +1229,11 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
     @Override
     public void changedUpdate(final DocumentEvent e) {
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

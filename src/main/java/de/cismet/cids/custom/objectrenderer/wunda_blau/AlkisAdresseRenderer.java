@@ -43,6 +43,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -61,7 +64,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     BorderProvider,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -146,7 +150,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
                     search.setRepresentationFields(new String[] { "id", "strasse", "nummer" });
                     search.setGebaudeId(gebaeudeId);
                     final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                                .customServerSearch(search);
+                                .customServerSearch(search, getClientConnectionContext());
                     for (final LightweightMetaObject lwmo : lwmos) {
                         lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -720,5 +724,10 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     @Override
     public void dispose() {
         bindingGroup.unbind();
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

@@ -98,6 +98,9 @@ import de.cismet.cids.editors.converters.SqlDateToStringConverter;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.Crs;
@@ -129,7 +132,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    EditorSaveListener {
+    EditorSaveListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -352,7 +356,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             try {
                 result = SessionManager.getProxy()
                             .customServerSearch(SessionManager.getSession().getUser(),
-                                    new CidsVermessungRissArtSearchStatement(SessionManager.getSession().getUser()));
+                                    new CidsVermessungRissArtSearchStatement(SessionManager.getSession().getUser()),
+                                    getClientConnectionContext());
             } catch (final ConnectionException ex) {
                 LOG.warn("Could not fetch veranederungsart entries. Editing flurstuecksvermessung will not work.", ex);
                 // TODO: USer feedback?
@@ -2294,7 +2299,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         final Collection result;
 
         try {
-            result = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), search);
+            result = SessionManager.getProxy()
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                                search,
+                                getClientConnectionContext());
         } catch (final ConnectionException ex) {
             LOG.error("Could not check if the natural key of this measurement sketch is valid.", ex);
             JOptionPane.showMessageDialog(
@@ -2637,6 +2645,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlMeasureComponentWrapper.invalidate();
         pnlMeasureComponentWrapper.validate();
         pnlMeasureComponentWrapper.repaint();
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

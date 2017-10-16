@@ -8,19 +8,15 @@
 package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
-
-import org.openide.util.Exceptions;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
-
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
-import de.cismet.tools.gui.downloadmanager.ByteArrayDownload;
 
 /**
  * A ByteArrayDownload writes a given byte array to the file system. Using the DownloadManager this class can be used to
@@ -29,7 +25,7 @@ import de.cismet.tools.gui.downloadmanager.ByteArrayDownload;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class ByteArrayActionDownload extends AbstractDownload {
+public class ByteArrayActionDownload extends AbstractDownload implements ClientConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -81,7 +77,13 @@ public class ByteArrayActionDownload extends AbstractDownload {
 
         final Object ret;
         try {
-            ret = SessionManager.getProxy().executeTask(taskname, "WUNDA_BLAU", body, params);
+            ret = SessionManager.getProxy()
+                        .executeTask(
+                                taskname,
+                                "WUNDA_BLAU",
+                                getClientConnectionContext(),
+                                body,
+                                params);
 
             if (ret instanceof Exception) {
                 final Exception ex = (Exception)ret;
@@ -127,5 +129,10 @@ public class ByteArrayActionDownload extends AbstractDownload {
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

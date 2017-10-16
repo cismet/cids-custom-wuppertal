@@ -63,6 +63,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.FeatureGroups;
 import de.cismet.cismap.commons.gui.MappingComponent;
@@ -148,6 +151,15 @@ public class ObjectRendererUtils {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(ObjectRendererUtils.class.getSimpleName());
+    }
 
     /**
      * DOCUMENT ME!
@@ -290,7 +302,12 @@ public class ObjectRendererUtils {
         try {
             final User user = SessionManager.getSession().getUser();
             final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabName);
-            return SessionManager.getProxy().getAllLightweightMetaObjectsForClass(mc.getID(), user, fields, formatter);
+            return SessionManager.getProxy()
+                        .getAllLightweightMetaObjectsForClass(mc.getID(),
+                            user,
+                            fields,
+                            formatter,
+                            getConnectionContext());
         } catch (Exception ex) {
             log.error(ex, ex);
         }
@@ -435,7 +452,8 @@ public class ObjectRendererUtils {
     public static boolean checkActionTag(final String tagToCheck) {
         boolean result;
         try {
-            result = SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), tagToCheck)
+            result = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), tagToCheck, getConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Can not check ActionTag!", ex);

@@ -21,12 +21,12 @@ import org.openide.util.lookup.ServiceProvider;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.SwingUtilities;
-
 import de.cismet.cids.custom.utils.butler.ButlerRequestInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -40,7 +40,7 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class ButlerStartUpHook implements StartupHook {
+public class ButlerStartUpHook implements StartupHook, ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -67,7 +67,9 @@ public class ButlerStartUpHook implements StartupHook {
         boolean hasButlerAccess = false;
         try {
             hasButlerAccess = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://butler1Query") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://butler1Query",
+                                getClientConnectionContext()) != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Butler!", ex);
         }
@@ -81,7 +83,8 @@ public class ButlerStartUpHook implements StartupHook {
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    null,
+                                    getClientConnectionContext(),
+                                    (Object)null,
                                     paramMethod);
             } catch (ConnectionException ex) {
                 log.error("error while getting the list of undelivered butler 1 requests from server", ex);
@@ -122,5 +125,10 @@ public class ButlerStartUpHook implements StartupHook {
     public static void main(final String[] args) {
         final ButlerStartUpHook cptHook = new ButlerStartUpHook();
         cptHook.restartPendingButler1Requests();
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

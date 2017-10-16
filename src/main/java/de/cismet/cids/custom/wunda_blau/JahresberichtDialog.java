@@ -37,13 +37,16 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class JahresberichtDialog extends javax.swing.JDialog {
+public class JahresberichtDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -364,7 +367,8 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         try {
             final Collection<MetaObject> metaObjects = SessionManager.getProxy()
                         .customServerSearch(SessionManager.getSession().getUser(),
-                            cidsBillingSearchStatement);
+                            cidsBillingSearchStatement,
+                            getClientConnectionContext());
 
             if (metaObjects == null) {
                 LOG.error("Billing metaobjects was null.");
@@ -380,5 +384,10 @@ public class JahresberichtDialog extends javax.swing.JDialog {
             LOG.error("Error while filtering the billings.", ex);
             return null;
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

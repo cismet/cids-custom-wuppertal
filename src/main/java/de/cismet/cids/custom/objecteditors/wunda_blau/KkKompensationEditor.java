@@ -29,6 +29,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
 
 /**
@@ -37,7 +39,8 @@ import de.cismet.cids.server.search.AbstractCidsServerSearch;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSaveListener {
+public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSaveListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -74,7 +77,9 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
             try {
                 final AbstractCidsServerSearch search = new KkVerfahrenSearch(cidsBean.getMetaObject().getId());
                 final List res = (List)SessionManager.getProxy()
-                            .customServerSearch(SessionManager.getSession().getUser(), search);
+                            .customServerSearch(SessionManager.getSession().getUser(),
+                                    search,
+                                    getClientConnectionContext());
 
                 if ((res != null) && (res.size() == 1)) {
                     setVerfahrenBean(((MetaObject)res.get(0)).getBean());
@@ -145,5 +150,10 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
     public void dispose() {
         setCidsBean(null);
         super.dispose();
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

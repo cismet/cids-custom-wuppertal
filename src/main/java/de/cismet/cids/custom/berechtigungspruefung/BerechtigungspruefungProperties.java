@@ -21,6 +21,7 @@ import java.util.Properties;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -80,6 +81,7 @@ public class BerechtigungspruefungProperties
                             .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
+                                ClientConnectionContext.create(BerechtigungspruefungProperties.class.getSimpleName()),
                                 WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_PROPERTIES.getValue());
                 if (ret instanceof Exception) {
                     throw (Exception)ret;

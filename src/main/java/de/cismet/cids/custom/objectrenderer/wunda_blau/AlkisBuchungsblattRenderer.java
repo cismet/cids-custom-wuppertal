@@ -56,8 +56,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -106,6 +104,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -126,9 +127,6 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
-import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -140,7 +138,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     BorderProvider,
     TitleComponentProvider,
     FooterComponentProvider,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1729,11 +1728,16 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                                             null);
 
                                     final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                                                .customServerSearch(SessionManager.getSession().getUser(), search);
+                                                .customServerSearch(SessionManager.getSession().getUser(),
+                                                    search,
+                                                    getClientConnectionContext());
                                     if (!mons.isEmpty()) {
                                         final MetaObjectNode mon = mons.iterator().next();
                                         final CidsBean flurstueck = SessionManager.getProxy()
-                                                    .getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU")
+                                                    .getMetaObject(mon.getObjectId(),
+                                                            mon.getClassId(),
+                                                            "WUNDA_BLAU",
+                                                            getClientConnectionContext())
                                                     .getBean();
                                         selectedFlurstuecke.add(flurstueck);
                                     }
@@ -2040,6 +2044,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     public static int getNextColor() {
         return nextColor;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

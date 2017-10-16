@@ -25,8 +25,6 @@ import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import org.openide.util.Exceptions;
-
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -61,6 +59,9 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.netutil.Proxy;
 
 import de.cismet.tools.PasswordEncrypter;
@@ -73,7 +74,9 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class VermessungUmleitungPanel extends javax.swing.JPanel implements DocumentListener, CidsBeanDropListener {
+public class VermessungUmleitungPanel extends javax.swing.JPanel implements DocumentListener,
+    CidsBeanDropListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -291,7 +294,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         + "' and gemarkung=" + props[1]
                         + " and flur ilike '" + props[2]
                         + "' and blatt ilike '" + StringUtils.stripStart(props[3], "0") + "'";
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query, 0, getClientConnectionContext());
             return (metaObjects != null) && (metaObjects.length == 1) && (metaObjects[0] != null);
         } catch (ConnectionException ex) {
             LOG.error("Error while checkig if riss exists", ex);
@@ -929,6 +933,11 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         tfName.getDocument().addDocumentListener(this);
         checkIfLinkDocumentExists(false);
     }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
 
     //~ Inner Classes ----------------------------------------------------------
 

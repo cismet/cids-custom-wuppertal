@@ -36,6 +36,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -44,7 +47,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialog {
+public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialog
+        implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -191,7 +195,8 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                         .getAllLightweightMetaObjectsForClass(metaClass.getID(),
                                 SessionManager.getSession().getUser(),
                                 new String[] { "NAME" },
-                                "%1$2s");
+                                "%1$2s",
+                                getClientConnectionContext());
         } else {
             LOG.warn("MetaClass is null. Probably the permissions for the class SB_SUCHWORT are missing.");
         }
@@ -522,5 +527,10 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                     dialog.setVisible(true);
                 }
             });
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

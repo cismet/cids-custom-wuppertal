@@ -8,7 +8,6 @@
 package de.cismet.cids.custom.commons.searchgeometrylistener;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.Node;
 
@@ -18,16 +17,16 @@ import edu.umd.cs.piccolo.PNode;
 
 import org.apache.log4j.Logger;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -42,7 +41,8 @@ import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListener
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCreateSearchGeometryListener {
+public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCreateSearchGeometryListener
+        implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -108,7 +108,9 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
                 protected Node[] doInBackground() throws Exception {
                     Node[] result = null;
                     final Collection searchResult = SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), search);
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                    search,
+                                    getClientConnectionContext());
 
                     if (isCancelled()) {
                         return result;
@@ -152,5 +154,10 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
     @Override
     protected PNode getPointerAnnotation() {
         return null;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

@@ -21,6 +21,8 @@ import java.util.Properties;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -28,7 +30,7 @@ import de.cismet.cids.server.actions.GetServerResourceServerAction;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class VCMProperties extends Properties {
+public class VCMProperties extends Properties implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -104,11 +106,17 @@ public class VCMProperties extends Properties {
                         .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
+                                getClientConnectionContext(),
                                 WundaBlauServerResources.VCM_PROPERTIES.getValue());
             super.load(new StringReader(propertiesString));
         } catch (final Exception ex) {
             LOG.warn("could not load properties.", ex);
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -69,6 +69,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
@@ -94,7 +97,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     FooterComponentProvider,
     TitleComponentProvider,
     ListDataListener,
-    Sb_stadtbildserieGridObjectListener {
+    Sb_stadtbildserieGridObjectListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1572,6 +1576,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         return tooltipText;
     }
 
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1618,7 +1627,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                             + " stadtbild= " + stadtbild.getProperty("id").toString();
                 try {
                     final MetaObject[] metaObjects = SessionManager.getProxy()
-                                .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+                                .getMetaObjectByQuery(SessionManager.getSession().getUser(),
+                                    query,
+                                    getClientConnectionContext());
                     final CidsBean array = metaObjects[0].getBean();
                     final MetaClass mcSerie = ClassCacheMultiple.getMetaClass(DOMAIN, "sb_stadtbildserie");
                     query = "SELECT "
@@ -1630,7 +1641,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                 + " WHERE "
                                 + " id= " + array.getProperty("sb_stadtbildserie_reference").toString();
                     final MetaObject[] serieMetaObjects = SessionManager.getProxy()
-                                .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+                                .getMetaObjectByQuery(SessionManager.getSession().getUser(),
+                                    query,
+                                    getClientConnectionContext());
                     stadtbildSerie = serieMetaObjects[0].getBean();
                 } catch (ConnectionException ex) {
                     LOG.error("Could not determine the Stadtbildserie of Stadtbild " + stadtbild.toString(), ex);

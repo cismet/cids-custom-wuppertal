@@ -38,6 +38,8 @@ import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.Berechti
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.CredentialsAwareHttpDownlaod;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -521,10 +523,20 @@ public class AlkisProductDownloadHelper {
             return (SessionManager.getConnection().hasConfigAttr(
                         SessionManager.getSession().getUser(),
                         "berechtigungspruefung_"
-                                + downloadType));
+                                + downloadType,
+                        getConnectionContext()));
         } catch (final Exception ex) {
             LOG.info("could now check Berechtigungspruefung confattr", ex);
             return false;
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(AlkisProductDownloadHelper.class.getSimpleName());
     }
 }

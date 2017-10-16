@@ -27,6 +27,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -108,7 +110,8 @@ public class Sb_RestrictionLevelUtils {
                 }
                 final MetaObject[] noRestriction;
                 try {
-                    noRestriction = SessionManager.getProxy().getMetaObjectByQuery(noRestrictionQuery.toString(), 0);
+                    noRestriction = SessionManager.getProxy()
+                                .getMetaObjectByQuery(noRestrictionQuery.toString(), 0, getConnectionContext());
                     if (noRestriction.length > 0) {
                         return noRestriction[0].getBean();
                     }
@@ -226,6 +229,15 @@ public class Sb_RestrictionLevelUtils {
         }
 
         return new BulletPointSettings(colorImage, tooltipText);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(BaulastBescheinigungUtils.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

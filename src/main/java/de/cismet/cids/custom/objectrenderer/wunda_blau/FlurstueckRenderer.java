@@ -59,6 +59,9 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.BoundingBox;
@@ -88,7 +91,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProvider,
     CidsBeanRenderer,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -469,7 +473,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 
                 @Override
                 protected MetaObjectNode doInBackground() throws Exception {
-                    return searchAlkisLandparcel(cidsBean);
+                    return searchAlkisLandparcel(cidsBean, getClientConnectionContext());
                 }
 
                 @Override
@@ -496,13 +500,15 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     /**
      * DOCUMENT ME!
      *
-     * @param   fsBean  DOCUMENT ME!
+     * @param   fsBean   DOCUMENT ME!
+     * @param   context  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static MetaObjectNode searchAlkisLandparcel(final CidsBean fsBean) throws Exception {
+    public static MetaObjectNode searchAlkisLandparcel(final CidsBean fsBean, final ClientConnectionContext context)
+            throws Exception {
         final String z = String.valueOf(fsBean.getProperty("fstnr_z"));
         final String n = String.valueOf(fsBean.getProperty("fstnr_n"));
 
@@ -522,7 +528,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 null);
 
         final Collection<Node> nodes = SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), stmnt);
+                    .customServerSearch(SessionManager.getSession().getUser(), stmnt, context);
         return ((nodes != null) && !nodes.isEmpty()) ? (MetaObjectNode)nodes.iterator().next() : null;
     }
 
@@ -678,5 +684,10 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

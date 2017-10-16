@@ -75,6 +75,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -98,7 +100,8 @@ import de.cismet.tools.gui.StaticSwingTools;
 public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1281,7 +1284,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final User user = SessionManager.getSession().getUser();
             final String query = "select " + mc.getID() + "," + mc.getPrimaryKey() + " from " + mc.getTableName();
             final MetaObject[] einschraenkungenMo = SessionManager.getProxy()
-                        .getMetaObjectByQuery(user, query, "WUNDA_BLAU");
+                        .getMetaObjectByQuery(user, query, "WUNDA_BLAU", getClientConnectionContext());
             final ArrayList<CidsBean> einschraenkungen = new ArrayList<CidsBean>(einschraenkungenMo.length);
             for (final MetaObject mo : einschraenkungenMo) {
                 einschraenkungen.add(mo.getBean());
@@ -1606,6 +1609,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         }
     }
 
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1648,7 +1656,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 try {
                     ((MetaObjectNodesStadtbildSerieSearchStatement)search).setPreparationExecution(true);
                     final Collection searchResult = SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), search);
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                    search,
+                                    getClientConnectionContext());
                     if (!searchResult.isEmpty()) {
                         final Object firstResult = searchResult.toArray()[0];
                         if (firstResult instanceof Integer) {

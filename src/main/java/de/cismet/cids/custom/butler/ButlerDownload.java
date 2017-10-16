@@ -42,6 +42,7 @@ import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 
 import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
@@ -406,7 +407,8 @@ public class ButlerDownload extends HttpDownload {
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    null,
+                                    ClientConnectionContext.create(ButlerDownload.class.getSimpleName()),
+                                    (Object)null,
                                     paramMethod,
                                     paramOrderId,
                                     paramProduct,
@@ -430,7 +432,8 @@ public class ButlerDownload extends HttpDownload {
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    null,
+                                    ClientConnectionContext.create(ButlerDownload.class.getSimpleName()),
+                                    (Object)null,
                                     paramMethod,
                                     paramOrderId,
                                     paramProduct,
@@ -469,12 +472,14 @@ public class ButlerDownload extends HttpDownload {
                         .toString(),
                 ButlerQueryAction.METHOD_TYPE.CANCEL);
         try {
-            SessionManager.getProxy().executeTask(
-                SERVER_ACTION,
-                "WUNDA_BLAU",
-                null,
-                paramOrderId,
-                paramMethod);
+            SessionManager.getProxy()
+                    .executeTask(
+                        SERVER_ACTION,
+                        "WUNDA_BLAU",
+                        ClientConnectionContext.create(ButlerDownload.class.getSimpleName()),
+                        (Object)null,
+                        paramOrderId,
+                        paramMethod);
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }

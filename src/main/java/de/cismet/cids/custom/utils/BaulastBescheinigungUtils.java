@@ -52,9 +52,10 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
-import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -310,7 +311,8 @@ public class BaulastBescheinigungUtils {
                                     mcBaulast.getID(),
                                     info.getBlattnummer(),
                                     info.getLaufende_nummer()),
-                                0);
+                                0,
+                                getConnectionContext());
                 BAULAST_CACHE.put(info, mos[0].getBean());
             } catch (ConnectionException ex) {
                 LOG.error(ex, ex);
@@ -548,7 +550,8 @@ public class BaulastBescheinigungUtils {
                                 pruefungQuery,
                                 mcBerechtigungspruefung.getID(),
                                 user.getKey()),
-                            0);
+                            0,
+                            getConnectionContext());
             if (mos != null) {
                 final Collection<CidsBean> beans = new ArrayList<CidsBean>(mos.length);
                 for (final MetaObject mo : mos) {
@@ -582,7 +585,8 @@ public class BaulastBescheinigungUtils {
 
             final MetaObject[] mos = SessionManager.getProxy()
                         .getMetaObjectByQuery(String.format(pruefungQuery, mcBerechtigungspruefung.getID(), schluessel),
-                            0);
+                            0,
+                            getConnectionContext());
             if ((mos != null) && (mos.length > 0)) {
                 return mos[0].getBean();
             }
@@ -612,6 +616,15 @@ public class BaulastBescheinigungUtils {
         } else {
             return s1.compareTo(s2);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(BaulastBescheinigungUtils.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

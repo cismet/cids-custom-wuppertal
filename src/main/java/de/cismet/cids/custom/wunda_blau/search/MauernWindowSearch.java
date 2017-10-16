@@ -68,6 +68,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -89,7 +91,8 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1382,7 +1385,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer_eigentuemer");
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
             query += "FROM " + MB_MC.getTableName() + ";";
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query, 0, getClientConnectionContext());
             for (int i = 0; i < metaObjects.length; i++) {
                 final CidsBean b = metaObjects[i].getBean();
                 eigentuemerListModel.addElement(b);
@@ -1419,7 +1423,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer_lastklasse");
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
             query += "FROM " + MB_MC.getTableName() + ";";
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query, 0, getClientConnectionContext());
             for (int i = 0; i < metaObjects.length; i++) {
                 final CidsBean b = metaObjects[i].getBean();
                 lastKlasseListModel.addElement(b);
@@ -1487,6 +1492,11 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -42,6 +42,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -55,7 +57,8 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     SearchControlListener,
-    ActionTagProtected {
+    ActionTagProtected,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -736,7 +739,8 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_abrechnungsturnus");
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " \n";
             query += "FROM " + MB_MC.getTableName();
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query.toString(), 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query.toString(), 0, getClientConnectionContext());
             for (final MetaObject abrechnungsturnus : metaObjects) {
                 cboAbrechnungsturnus.addItem(abrechnungsturnus.getBean());
             }
@@ -755,7 +759,8 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " \n";
             query += "FROM " + MB_MC.getTableName();
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query, 0, getClientConnectionContext());
             for (final MetaObject abrechnungsturnus : metaObjects) {
                 cboBenutzer.addItem(abrechnungsturnus.getBean());
             }
@@ -789,5 +794,10 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     @Override
     public boolean checkActionTag() {
         return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

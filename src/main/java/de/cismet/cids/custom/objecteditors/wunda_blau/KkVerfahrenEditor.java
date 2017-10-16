@@ -74,6 +74,8 @@ import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
 import de.cismet.cids.server.search.CidsServerSearch;
 
@@ -102,7 +104,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     RequestsFullSizeComponent,
     PropertyChangeListener,
     EditorSaveListener,
-    CidsBeanDropListener {
+    CidsBeanDropListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1530,7 +1533,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         try {
             final AbstractCidsServerSearch search = new KkKompensationNextSchluesselSearch();
             final List res = (List)SessionManager.getProxy()
-                        .customServerSearch(SessionManager.getSession().getUser(), search);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                                search,
+                                getClientConnectionContext());
 
             if ((res != null) && (res.size() == 1) && (res.get(0) != null)) {
                 return res.get(0).toString();
@@ -1649,7 +1654,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                             final CidsServerSearch bPlanSearch = new BPlanByGeometrySearch(geom.toText());
 
                             final List bplan = (List)SessionManager.getProxy()
-                                        .customServerSearch(SessionManager.getSession().getUser(), bPlanSearch);
+                                        .customServerSearch(SessionManager.getSession().getUser(),
+                                                bPlanSearch,
+                                                getClientConnectionContext());
 
                             if ((bplan != null) && (bplan.size() > 0)) {
                                 labBPlan.setText("BPlan: " + String.valueOf(bplan.get(0)));
@@ -1855,7 +1862,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                                                             SessionManager.getSession().getUser(),
                                                             kompBean.getMetaObject().getId(),
                                                             kompBean.getMetaObject().getClassID(),
-                                                            kompBean.getMetaObject().getDomain());
+                                                            kompBean.getMetaObject().getDomain(),
+                                                            getClientConnectionContext());
                                             kompMo.setStatus(MetaObject.MODIFIED);
                                             kompMo.getAttribute("name").setChanged(true);
                                             kompMo.getBean().persist();
@@ -1898,6 +1906,11 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                 // a db trigger will remove the reference between this kompensation and its previous verfahren
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

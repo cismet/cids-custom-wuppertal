@@ -54,6 +54,9 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -64,7 +67,9 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRenderer, EditorSaveListener {
+public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRenderer,
+    EditorSaveListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -779,7 +784,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             try {
                 final TreePath selectionPath = ComponentRegistry.getRegistry().getCatalogueTree().getSelectionPath();
                 if ((selectionPath != null) && (selectionPath.getPath().length > 0)) {
-                    final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+                    final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(
+                                getClientConnectionContext()));
                     ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(
                         rootTreeNode);
                     ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
@@ -853,7 +859,9 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                     + " order by billing_kundengruppe.name";
         try {
             final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+                        .getMetaObjectByQuery(SessionManager.getSession().getUser(),
+                            query,
+                            getClientConnectionContext());
             for (final MetaObject mo : metaObjects) {
                 final CidsBean cb = mo.getBean();
                 kundengruppen.add(cb);
@@ -880,7 +888,9 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                     + " order by billing_kunden_logins.name";
         try {
             final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+                        .getMetaObjectByQuery(SessionManager.getSession().getUser(),
+                            query,
+                            getClientConnectionContext());
             for (final MetaObject mo : metaObjects) {
                 final CidsBean cb = mo.getBean();
                 kundenLogins.add(cb);
@@ -924,6 +934,11 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
      */
     public void setKundenLogins(final List<CidsBean> kundenLogins) {
         this.kundenLogins = kundenLogins;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -98,6 +98,8 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -132,7 +134,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     FooterComponentProvider,
     BeanInitializerProvider,
     Sb_StadtbildserieProvider,
-    EditorSaveListener {
+    EditorSaveListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1927,7 +1930,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                             GET_GEOM_FROM_ADRESSE,
                             ((CidsBean)cidsBean.getProperty("strasse")).getPrimaryKeyValue().intValue(),
                             txtHausnummer.getText());
-                    final MetaObject[] results = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+                    final MetaObject[] results = SessionManager.getProxy()
+                                .getMetaObjectByQuery(query, 0, getClientConnectionContext());
                     if (results.length > 0) {
                         final CidsBean result = results[0].getBean();
                         final Geometry geometry = (Geometry)result.getProperty("geo_field");
@@ -2481,6 +2485,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         }
     }
 
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -2694,7 +2703,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     .executeTask(
                         Sb_stadtbildserieUpdatePruefhinweisAction.TASK_NAME,
                         "WUNDA_BLAU",
-                        null,
+                        getClientConnectionContext(),
+                        (Object)null,
                         paramComment,
                         paramSBSid);
             return null;

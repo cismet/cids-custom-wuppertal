@@ -54,6 +54,8 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -80,7 +82,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     CidsBeanDropListener,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -655,7 +658,9 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public boolean checkActionTag() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search@WUNDA_BLAU")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "navigator.baulasten.search@WUNDA_BLAU",
+                                getClientConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
@@ -733,5 +738,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

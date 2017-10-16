@@ -41,6 +41,8 @@ import de.cismet.cids.custom.utils.butler.ButlerResolution;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.tools.StaticDecimalTools;
 
@@ -50,7 +52,8 @@ import de.cismet.tools.StaticDecimalTools;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelectionListener {
+public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelectionListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -681,7 +684,9 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
                 c = (ArrayList<Integer>)SessionManager.getProxy()
                             .executeTask(
                                     NasZaehlObjekteServerAction.TASK_NAME,
-                                    null,
+                                    "WUNDA_BLAU",
+                                    getClientConnectionContext(),
+                                    (Object)null,
                                     sapType,
                                     sapGeom);
                 return "" + c.get(0);
@@ -704,5 +709,10 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
         }
         final double areaInKm = geom.getArea() / (1000 * 1000);
         return StaticDecimalTools.round("0.0##", areaInKm);
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

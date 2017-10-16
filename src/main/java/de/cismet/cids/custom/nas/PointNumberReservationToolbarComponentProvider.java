@@ -13,7 +13,6 @@
 package de.cismet.cids.custom.nas;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 
 import org.apache.log4j.Logger;
 
@@ -31,6 +30,9 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -44,7 +46,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class PointNumberReservationToolbarComponentProvider implements ToolbarComponentsProvider {
+public class PointNumberReservationToolbarComponentProvider implements ToolbarComponentsProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -81,15 +84,22 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
      *
      * @return  DOCUMENT ME!
      */
-    private static boolean validateUserHasAccess() {
+    private boolean validateUserHasAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://pointNumberReservation")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://pointNumberReservation",
+                                getClientConnectionContext())
                         != null;
         } catch (final Exception ex) {
             LOG.error("Could not validate action tag for PunktnummernReservierung!", ex);
         }
         return false;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

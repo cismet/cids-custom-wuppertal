@@ -66,6 +66,8 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
@@ -96,7 +98,8 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements DisposableCidsBeanStore,
     BorderProvider,
     RequestsFullSizeComponent,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1617,7 +1620,9 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                                 final CidsServerSearch gemeindeSearch = new GemeindeByGeometrySearch(geom.toText());
 
                                 final List gemeinde = (List)SessionManager.getProxy()
-                                            .customServerSearch(SessionManager.getSession().getUser(), gemeindeSearch);
+                                            .customServerSearch(SessionManager.getSession().getUser(),
+                                                    gemeindeSearch,
+                                                    getClientConnectionContext());
 
                                 if ((gemeinde != null) && (gemeinde.size() > 0)) {
                                     labGem.setText(String.valueOf(gemeinde.get(0)));
@@ -1687,6 +1692,11 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         if (evt.getPropertyName().equals("geometrie")) {
             initMap();
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

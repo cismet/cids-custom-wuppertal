@@ -34,6 +34,9 @@ import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.nas.NasDialog;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -98,7 +101,9 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     public static boolean validateUserHasButler1Access() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://butler1Query")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://butler1Query",
+                                getConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Butler!", ex);
@@ -116,12 +121,23 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     public static boolean validateUserHasNasAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://nasDataQuery",
+                                getConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Butler!", ex);
         }
         return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(DigitalDataExportToolbarComponentProvider.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

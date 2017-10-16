@@ -67,6 +67,9 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -79,7 +82,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
  */
 public class BillingKundeAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -916,7 +920,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                     // return cidsBillingSearchStatement.performServerSearch();
                     return SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),
-                                    cidsBillingSearchStatement);
+                                    cidsBillingSearchStatement,
+                                    getClientConnectionContext());
                 }
 
                 @Override
@@ -1225,6 +1230,11 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

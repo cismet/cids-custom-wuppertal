@@ -51,6 +51,9 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.utils.MetaClassCacheService;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -71,7 +74,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CommonFeatureAction.class)
-public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAction {
+public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAction, ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -194,7 +197,7 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
 
         RootTreeNode rootTreeNode = null;
         try {
-            rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+            rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(getClientConnectionContext()));
         } catch (ConnectionException ex) {
             LOG.error("Updating catalogue tree after successful insertion of 'tim_lieg' entity failed.", ex);
             return;
@@ -245,5 +248,10 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
     @Override
     public int getSorter() {
         return 10;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

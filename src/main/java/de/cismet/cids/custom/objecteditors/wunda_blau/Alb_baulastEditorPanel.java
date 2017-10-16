@@ -81,6 +81,9 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.NavigatorAttributeEditorGui;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.AlphaContainer;
@@ -92,7 +95,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore {
+public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -965,7 +969,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         try {
             final BaulastArtLightweightSearch search = new BaulastArtLightweightSearch();
             search.setRepresentationFields(new String[] { "baulast_art" });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -1260,7 +1265,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                     }
 
                     final User user = SessionManager.getSession().getUser();
-                    final boolean finalCheckEnable = SessionManager.getProxy().hasConfigAttr(user, ATAG_FINAL_CHECK)
+                    final boolean finalCheckEnable = SessionManager.getProxy()
+                                .hasConfigAttr(user, ATAG_FINAL_CHECK, getClientConnectionContext())
                                 && (!user.getName().equals(cidsBean.getProperty("bearbeitet_von"))
                                     || ((cidsBean.getProperty("geprueft") != null)
                                         && (Boolean)cidsBean.getProperty("geprueft")))
@@ -1359,6 +1365,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         bdcEintragungsdatum.getEditor().setFormatterFactory(factory);
         bdcGeschlossenAm.getEditor().setFormatterFactory(factory);
         bdcLoeschungsdatum.getEditor().setFormatterFactory(factory);
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

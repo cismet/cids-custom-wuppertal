@@ -25,13 +25,16 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.wunda_blau.search.server.Sb_minAufnahmedatumYearFetcherServerSearch;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
+public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -338,6 +341,11 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
         dpFTTill.setDate(null);
     }
 
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -363,7 +371,9 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
             final Sb_minAufnahmedatumYearFetcherServerSearch minYearFetcher =
                 new Sb_minAufnahmedatumYearFetcherServerSearch();
             final Collection minYearCollection = SessionManager.getConnection()
-                        .customServerSearch(SessionManager.getSession().getUser(), minYearFetcher);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                            minYearFetcher,
+                            getClientConnectionContext());
             if ((minYearCollection != null) && !minYearCollection.isEmpty()) {
                 final ArrayList firstColumnObject = (ArrayList)minYearCollection.toArray(new Object[1])[0];
                 final Object firstRowObject = firstColumnObject.get(0);

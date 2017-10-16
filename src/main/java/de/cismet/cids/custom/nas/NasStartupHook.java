@@ -25,6 +25,8 @@ import de.cismet.cids.custom.utils.nas.NasProductInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -37,7 +39,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManager;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class NasStartupHook implements StartupHook {
+public class NasStartupHook implements StartupHook, ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -58,7 +60,10 @@ public class NasStartupHook implements StartupHook {
                     boolean hasNasAccess = false;
                     try {
                         hasNasAccess = SessionManager.getConnection()
-                                    .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery") != null;
+                                    .getConfigAttr(
+                                            SessionManager.getSession().getUser(),
+                                            "csa://nasDataQuery",
+                                            getClientConnectionContext()) != null;
                     } catch (ConnectionException ex) {
                         log.error("Could not validate action tag for NAS!", ex);
                     }
@@ -69,11 +74,13 @@ public class NasStartupHook implements StartupHook {
                         HashMap<String, NasProductInfo> openOrderIds = null;
                         try {
                             openOrderIds = (HashMap<String, NasProductInfo>)SessionManager
-                                        .getProxy().executeTask(
-                                        SEVER_ACTION,
-                                        "WUNDA_BLAU",
-                                        null,
-                                        paramMethod);
+                                        .getProxy()
+                                        .executeTask(
+                                                SEVER_ACTION,
+                                                "WUNDA_BLAU",
+                                                getClientConnectionContext(),
+                                                (Object)null,
+                                                paramMethod);
                         } catch (Exception ex) {
                             log.error("error while getting the list of undelivered nas orders from server", ex);
                         }
@@ -101,5 +108,10 @@ public class NasStartupHook implements StartupHook {
                     }
                 }
             }).start();
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

@@ -21,6 +21,9 @@ import org.openide.util.lookup.ServiceProvider;
 
 import de.cismet.cids.custom.wunda_blau.startuphooks.MotdWundaStartupHook;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
@@ -34,7 +37,7 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class TotdStartUpHook implements StartupHook {
+public class TotdStartUpHook implements StartupHook, ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -49,7 +52,8 @@ public class TotdStartUpHook implements StartupHook {
                 if (SessionManager.getConnection().hasConfigAttr(
                                 SessionManager.getSession().getUser(),
                                 "csm://"
-                                + MotdWundaStartupHook.MOTD_MESSAGE_TOTD)) {
+                                + MotdWundaStartupHook.MOTD_MESSAGE_TOTD,
+                                getClientConnectionContext())) {
                     CidsServerMessageNotifier.getInstance()
                             .subscribe(new CidsServerMessageNotifierListener() {
 
@@ -71,5 +75,10 @@ public class TotdStartUpHook implements StartupHook {
                     ex);
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

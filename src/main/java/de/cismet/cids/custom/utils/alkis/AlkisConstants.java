@@ -20,6 +20,7 @@ import java.util.Properties;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -45,6 +46,7 @@ public final class AlkisConstants {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
+                            ClientConnectionContext.create(AlkisConstants.class.getSimpleName()),
                             WundaBlauServerResources.ALKIS_CONF.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;

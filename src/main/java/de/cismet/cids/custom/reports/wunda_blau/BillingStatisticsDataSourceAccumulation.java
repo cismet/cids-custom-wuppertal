@@ -25,6 +25,9 @@ import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportSer
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.joinCidsBeanIds;
 
 /**
@@ -35,7 +38,7 @@ import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.j
  * @version  $Revision$, $Date$
  * @see      BillingStatisticsReportServerSearch
  */
-public class BillingStatisticsDataSourceAccumulation {
+public class BillingStatisticsDataSourceAccumulation implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -160,12 +163,19 @@ public class BillingStatisticsDataSourceAccumulation {
         try {
             final BillingStatisticsReportServerSearch search = createServerSearch();
             final Collection searchResultsCol = SessionManager.getConnection()
-                        .customServerSearch(SessionManager.getSession().getUser(), search);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                            search,
+                            getClientConnectionContext());
             // get the HashMap from the search results, it is supposed that it is the only result.
             searchResults = (HashMap<String, Collection>)searchResultsCol.iterator().next();
         } catch (ConnectionException ex) {
             LOG.error("Could not fetch the data for the report.", ex);
             searchResults = null;
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

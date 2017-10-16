@@ -54,6 +54,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cismap.cidslayer.CidsLayerFeature;
 
 import de.cismet.cismap.commons.features.CommonFeatureAction;
@@ -97,7 +100,8 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
             isActive = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://"
-                                + WohnlagenKategorisierungServerAction.TASK_NAME)
+                                + WohnlagenKategorisierungServerAction.TASK_NAME,
+                                getConnectionContext())
                         != null;
         } catch (final Exception ex) {
             LOG.error("Could not validate action tag (custom.wohnlage.kategorisierung_featureaction)!", ex);
@@ -185,5 +189,14 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
     @Override
     public List<Feature> getSourceFeatures() {
         return features;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(WohnlagenKategorisierungFeatureAction.class.getSimpleName());
     }
 }

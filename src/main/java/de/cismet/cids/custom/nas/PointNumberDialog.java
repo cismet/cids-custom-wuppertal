@@ -66,6 +66,8 @@ import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationS
 import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSearch;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -82,7 +84,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class PointNumberDialog extends javax.swing.JDialog {
+public class PointNumberDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -324,7 +326,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void configureFreigebenTab() throws ConnectionException {
         // if user does not have the right to do freigaben, remove the tab
         hasFreigabeAccess = SessionManager.getConnection()
-                    .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
+                    .getConfigAttr(SessionManager.getSession().getUser(),
+                            "custom.nas.punktNummernFreigabe",
+                            getClientConnectionContext())
                     != null;
         if (!hasFreigabeAccess) {
             tbpModus.remove(pnlFreigeben);
@@ -339,7 +343,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void configureVerlaengernTab() throws ConnectionException {
         // if user does not have the right to do freigaben, remove the tab
         hasVerlaengernAccess = SessionManager.getConnection()
-                    .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernVerlaengern")
+                    .getConfigAttr(SessionManager.getSession().getUser(),
+                            "custom.nas.punktNummernVerlaengern",
+                            getClientConnectionContext())
                     != null;
         if (!hasVerlaengernAccess) {
             tbpModus.remove(pnlVerlaengern);
@@ -1507,7 +1513,19 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
                 getAnrPrefix());
 
-        return (List<String>)SessionManager.getProxy().executeTask(SEVER_ACTION, "WUNDA_BLAU", null, action, prefix);
+        return (List<String>)SessionManager.getProxy()
+                    .executeTask(
+                            SEVER_ACTION,
+                            "WUNDA_BLAU",
+                            getClientConnectionContext(),
+                            (Object)null,
+                            action,
+                            prefix);
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1606,13 +1624,15 @@ public class PointNumberDialog extends javax.swing.JDialog {
                         PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
                         PointNumberReserverationServerAction.ACTION_TYPE.GET_POINT_NUMBERS);
                 final Collection<PointNumberReservation> pointNumbers = (Collection<PointNumberReservation>)
-                    SessionManager.getProxy().executeTask(
-                        SEVER_ACTION,
-                        "WUNDA_BLAU",
-                        null,
-                        action,
-                        prefix,
-                        aNummer);
+                    SessionManager.getProxy()
+                            .executeTask(
+                                    SEVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    getClientConnectionContext(),
+                                    (Object)null,
+                                    action,
+                                    prefix,
+                                    aNummer);
 
                 dontReloadPnrsForThisAnr = anrPrefix + anr;
                 return pointNumbers;
@@ -1727,7 +1747,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
         protected Collection doInBackground() throws Exception {
             final CidsServerSearch search = new VermessungsStellenNummerSearch(user);
             final Collection res = SessionManager.getProxy()
-                        .customServerSearch(SessionManager.getSession().getUser(), search);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                            search,
+                            getClientConnectionContext());
             if ((res == null) || res.isEmpty()) {
             }
             return res;
@@ -1824,7 +1846,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
                             .executeTask(
                                     SEVER_ACTION,
                                     "WUNDA_BLAU",
-                                    null,
+                                    getClientConnectionContext(),
+                                    (Object)null,
                                     action,
                                     prefix,
                                     aNummer,
@@ -1988,7 +2011,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
                         .executeTask(
                                 SEVER_ACTION,
                                 "WUNDA_BLAU",
-                                null,
+                                getClientConnectionContext(),
+                                (Object)null,
                                 allSaps.toArray(new ServerActionParameter[0]));
             if ((result != null) && !result.isSuccessfull()) {
                 res.setSuccessful(false);

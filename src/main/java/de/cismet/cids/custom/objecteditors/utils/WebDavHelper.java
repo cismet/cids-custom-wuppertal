@@ -22,7 +22,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
@@ -33,6 +32,8 @@ import javax.swing.ProgressMonitorInputStream;
 import de.cismet.cids.custom.wunda_blau.search.actions.WebDavTunnelAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
 
@@ -42,7 +43,7 @@ import de.cismet.netutil.Proxy;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class WebDavHelper {
+public class WebDavHelper implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -134,6 +135,7 @@ public class WebDavHelper {
                     .executeTask(
                         WEBDAV_OVER_TUNNEL,
                         "WUNDA_BLAU",
+                        getClientConnectionContext(),
                         bytes,
                         putSAP,
                         proxySAP,
@@ -178,7 +180,8 @@ public class WebDavHelper {
                         .executeTask(
                             WEBDAV_OVER_TUNNEL,
                             "WUNDA_BLAU",
-                            null,
+                            getClientConnectionContext(),
+                            (Object)null,
                             deleteSAP,
                             proxySAP,
                             usernameSAP,
@@ -226,7 +229,8 @@ public class WebDavHelper {
                     .executeTask(
                             WebDavHelper.WEBDAV_OVER_TUNNEL,
                             "WUNDA_BLAU",
-                            null,
+                            getClientConnectionContext(),
+                            (Object)null,
                             getSAP,
                             proxySAP,
                             usernameSAP,
@@ -281,5 +285,10 @@ public class WebDavHelper {
             LOG.error("Unsupported encoding.", e);
         }
         return url;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

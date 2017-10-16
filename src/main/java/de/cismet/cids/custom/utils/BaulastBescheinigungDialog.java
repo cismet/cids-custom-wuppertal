@@ -68,10 +68,12 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -80,7 +82,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class BaulastBescheinigungDialog extends javax.swing.JDialog {
+public class BaulastBescheinigungDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -416,7 +418,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 berechtigungspruefung = SessionManager.getConnection()
                             .hasConfigAttr(
                                     SessionManager.getSession().getUser(),
-                                    "berechtigungspruefung_baulastbescheinigung");
+                                    "berechtigungspruefung_baulastbescheinigung",
+                                    getClientConnectionContext());
             } catch (final ConnectionException ex) {
                 LOG.info("could not check config attr", ex);
             }
@@ -464,7 +467,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         try {
             checkProtokollPane = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
-                                "baulast.bescheinigung.protokollpane_enabled");
+                                "baulast.bescheinigung.protokollpane_enabled",
+                                getClientConnectionContext());
         } catch (ConnectionException ex) {
         }
         jPanel8.setVisible(checkProtokollPane != null);
@@ -594,7 +598,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private static void fillFlurstueckeToBaulastenMaps(final Collection<CidsBean> flurstuecke,
+    private void fillFlurstueckeToBaulastenMaps(final Collection<CidsBean> flurstuecke,
             final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap,
             final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) throws Exception {
         addMessage("\n===");
@@ -685,40 +689,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
-     */
-    private static Set<CidsBean> createTestFlurstuecke() {
-        final String query = "select %d, id \n"
-                    + "from alkis_landparcel \n"
-                    + "where gemarkung ilike 'Barmen' and flur ilike '224' and fstck_zaehler ilike '0012%%'";
-
-        final MetaClass mcFlurstueck = ClassCacheMultiple.getMetaClass(
-                "WUNDA_BLAU",
-                "alkis_landparcel");
-
-        final Set<CidsBean> flurstuecke = new HashSet<CidsBean>();
-        try {
-            final MetaObject[] mos = SessionManager.getProxy()
-                        .getMetaObjectByQuery(String.format(
-                                query,
-                                mcFlurstueck.getID(),
-                                mcFlurstueck.getPrimaryKey()),
-                            0);
-            for (final MetaObject mo : mos) {
-                flurstuecke.add(mo.getBean());
-            }
-        } catch (ConnectionException ex) {
-            LOG.fatal(ex, ex);
-        }
-
-        addMessage("Anzahl Flurstücke: " + flurstuecke.size());
-
-        return flurstuecke;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param   flurstuecke  DOCUMENT ME!
      * @param   belastet     DOCUMENT ME!
      *
@@ -726,7 +696,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private static Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Collection<CidsBean> flurstuecke,
+    private Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Collection<CidsBean> flurstuecke,
             final boolean belastet) throws Exception {
         final String queryBeguenstigt = "SELECT %d, alb_baulast.%s \n"
                     + "FROM alb_baulast_flurstuecke_beguenstigt, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
@@ -781,10 +751,14 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
-                final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(search);
+                final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                            .customServerSearch(search, getClientConnectionContext());
                 for (final MetaObjectNode mon : mons) {
                     final MetaObject mo = SessionManager.getProxy()
-                                .getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU");
+                                .getMetaObject(mon.getObjectId(),
+                                    mon.getClassId(),
+                                    "WUNDA_BLAU",
+                                    getClientConnectionContext());
                     if ((mo.getBean() != null) && (mo.getBean() != null)
                                 && (mo.getBean().getProperty("loeschungsdatum") != null)) {
                         continue;
@@ -806,7 +780,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                     mcBaulast.getID(),
                                     mcBaulast.getPrimaryKey(),
                                     alkisId),
-                                0);
+                                0,
+                                getClientConnectionContext());
                 for (final MetaObject mo : mos) {
                     final CidsBean baulast = mo.getBean();
                     final Boolean geprueft = (Boolean)baulast.getProperty("geprueft");
@@ -928,7 +903,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
      * @throws  Exception             DOCUMENT ME!
      * @throws  InterruptedException  DOCUMENT ME!
      */
-    private static Map<String, Collection<CidsBean>> createGrundstueckeToFlurstueckeMap(
+    private Map<String, Collection<CidsBean>> createGrundstueckeToFlurstueckeMap(
             final Collection<CidsBean> flurstuecke) throws Exception {
         addMessage("\n===\n\nZuordnung der Flurstücke zu Grundstücken...");
 
@@ -1013,7 +988,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
                                         + "WHERE " + mcGemarkung.getTableName() + ".gemarkungsnummer = "
                                         + Integer.parseInt(gemarkungsnummer) + " "
                                         + "LIMIT 1;";
-                            final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(pruefungQuery, 0);
+                            final MetaObject[] mos = SessionManager.getProxy()
+                                        .getMetaObjectByQuery(pruefungQuery, 0, getClientConnectionContext());
 
                             final String key;
                             if ((mos != null) && (mos.length > 0)) {
@@ -1199,6 +1175,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog {
         }
 
         return buchungsblatt;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -65,6 +65,9 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -86,7 +89,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -559,13 +563,15 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
 
                                         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                                     .customServerSearch(SessionManager.getSession().getUser(),
-                                                        search);
+                                                        search,
+                                                        getClientConnectionContext());
                                         if (!mons.isEmpty()) {
                                             final MetaObjectNode mon = mons.iterator().next();
                                             final CidsBean flurstueck = SessionManager.getProxy()
                                                         .getMetaObject(mon.getObjectId(),
                                                                 mon.getClassId(),
-                                                                "WUNDA_BLAU")
+                                                                "WUNDA_BLAU",
+                                                                getClientConnectionContext())
                                                         .getBean();
                                             selectedFlurstuecke.add(flurstueck);
                                         }
@@ -789,6 +795,11 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         }
 
         return result;
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

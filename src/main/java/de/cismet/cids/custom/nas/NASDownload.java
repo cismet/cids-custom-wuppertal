@@ -35,6 +35,8 @@ import de.cismet.cids.custom.utils.nas.NasProduct;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
 
@@ -44,7 +46,7 @@ import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class NASDownload extends AbstractCancellableDownload {
+public class NASDownload extends AbstractCancellableDownload implements ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -199,6 +201,11 @@ public class NASDownload extends AbstractCancellableDownload {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
 
     /**
      * DOCUMENT ME!
@@ -454,7 +461,8 @@ public class NASDownload extends AbstractCancellableDownload {
                         .executeTask(
                                 SEVER_ACTION,
                                 "WUNDA_BLAU",
-                                null,
+                                getClientConnectionContext(),
+                                (Object)null,
                                 paramTemplate,
                                 paramGeom,
                                 paramRequest,
@@ -477,12 +485,14 @@ public class NASDownload extends AbstractCancellableDownload {
                         .toString(),
                 NasDataQueryAction.METHOD_TYPE.CANCEL);
         try {
-            SessionManager.getProxy().executeTask(
-                SEVER_ACTION,
-                "WUNDA_BLAU",
-                null,
-                paramOrderId,
-                paramMethod);
+            SessionManager.getProxy()
+                    .executeTask(
+                        SEVER_ACTION,
+                        "WUNDA_BLAU",
+                        getClientConnectionContext(),
+                        (Object)null,
+                        paramOrderId,
+                        paramMethod);
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }
@@ -528,7 +538,8 @@ public class NASDownload extends AbstractCancellableDownload {
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        null,
+                                        getClientConnectionContext(),
+                                        (Object)null,
                                         paramOrderId,
                                         paramMethod);
                 } catch (ConnectionException ex) {

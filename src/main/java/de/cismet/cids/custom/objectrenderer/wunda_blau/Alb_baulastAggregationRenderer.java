@@ -35,6 +35,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.tools.gui.BorderProvider;
@@ -51,7 +54,8 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    CidsBeanAggregationRenderer {
+    CidsBeanAggregationRenderer,
+    ClientConnectionContextProvider {
 
     //~ Enums ------------------------------------------------------------------
 
@@ -87,6 +91,11 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -221,7 +230,8 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
                 final String query = "select " + mcBaulastBlatt.getID() + ", " + mcBaulastBlatt.getPrimaryKey()
                             + " from "
                             + mcBaulastBlatt.getTableName() + " where blattnummer ilike '" + blattnummer + "'"; // NOI18N
-                final MetaObject[] res = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+                final MetaObject[] res = SessionManager.getProxy()
+                            .getMetaObjectByQuery(query, 0, getClientConnectionContext());
 
                 if ((res != null) && (res.length > 0)) {
                     final CidsBean cidsBean = res[0].getBean();

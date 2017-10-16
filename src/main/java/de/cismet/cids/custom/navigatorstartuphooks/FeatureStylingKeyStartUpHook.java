@@ -17,6 +17,9 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.lookup.ServiceProvider;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.tools.configuration.StartupHook;
@@ -28,7 +31,7 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class FeatureStylingKeyStartUpHook implements StartupHook {
+public class FeatureStylingKeyStartUpHook implements StartupHook, ClientConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -40,12 +43,19 @@ public class FeatureStylingKeyStartUpHook implements StartupHook {
     public void applicationStarted() {
         try {
             final String stylingKey = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "feature.styling");
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                            "feature.styling",
+                            getClientConnectionContext());
             if (stylingKey != null) {
                 CismapBroker.getInstance().setFeatureStylingComponentKey(stylingKey);
             }
         } catch (Exception e) {
             log.warn("Exception during retrievel of configuration attribute feature.styling", e);
         }
+    }
+
+    @Override
+    public ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

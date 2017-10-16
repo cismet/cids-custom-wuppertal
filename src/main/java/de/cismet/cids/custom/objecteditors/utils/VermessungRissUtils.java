@@ -24,6 +24,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -111,7 +113,8 @@ public class VermessungRissUtils {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("SQL: kickerQuery:" + kickerQuery.toString());
             }
-            final MetaObject[] kickers = SessionManager.getProxy().getMetaObjectByQuery(kickerQuery.toString(), 0);
+            final MetaObject[] kickers = SessionManager.getProxy()
+                        .getMetaObjectByQuery(kickerQuery.toString(), 0, getConnectionContext());
             if (kickers.length > 0) {
                 kicker = kickers[0].getBean();
             }
@@ -127,7 +130,8 @@ public class VermessungRissUtils {
                 final MetaObject gemarkungObject = SessionManager.getProxy()
                             .getMetaObject(new Integer(gemarkung),
                                 vermessungGemarkungClass.getId(),
-                                "WUNDA_BLAU");
+                                "WUNDA_BLAU",
+                                getConnectionContext());
                 final CidsBean vGemarkungBean = gemarkungObject.getBean();
 
                 kicker.setProperty("gemarkung", vGemarkungBean);
@@ -157,7 +161,7 @@ public class VermessungRissUtils {
                     LOG.debug("SQL: flurstueckQuery:" + fQuery.toString());
                 }
                 final MetaObject[] matchedLandparcels = SessionManager.getProxy()
-                            .getMetaObjectByQuery(fQuery.toString(), 0);
+                            .getMetaObjectByQuery(fQuery.toString(), 0, getConnectionContext());
                 if (matchedLandparcels.length > 0) {
                     kicker.setProperty("flurstueck", matchedLandparcels[0].getBean());
                 }
@@ -168,5 +172,14 @@ public class VermessungRissUtils {
             // delete the "tmp_lp_orig" property
             vermessung.setProperty("tmp_lp_orig", null);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getConnectionContext() {
+        return ClientConnectionContext.create(VermessungRissUtils.class.getSimpleName());
     }
 }
