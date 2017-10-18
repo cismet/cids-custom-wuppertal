@@ -1768,6 +1768,10 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     class VermessungsunterlagenExceptionJsonDeserializer extends StdDeserializer<VermessungsunterlagenException> {
 
+        //~ Instance fields ----------------------------------------------------
+
+        private final ObjectMapper defaultMapper = new ObjectMapper();
+
         //~ Constructors -------------------------------------------------------
 
         /**
@@ -1775,6 +1779,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
          */
         public VermessungsunterlagenExceptionJsonDeserializer() {
             super(VermessungsunterlagenException.class);
+
+            defaultMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1798,7 +1804,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         return objectMapper.treeToValue(on, VermessungsunterlagenTaskException.class);
                     }
                     case OTHER: {
-                        return objectMapper.treeToValue(on, VermessungsunterlagenException.class);
+                        return defaultMapper.treeToValue(on, VermessungsunterlagenException.class);
                     }
                 }
             }
