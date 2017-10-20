@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
 
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
@@ -37,14 +38,15 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.jdesktop.beansbinding.BindingGroup;
 import org.openide.util.Exceptions;
 
 /**
  *
  * @author sandra
  */
-public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,EditorSaveListener {
-
+//public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,EditorSaveListener {
+public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,EditorSaveListener, BindingGroupStore {
     private CidsBean cidsBean=null;
     private boolean isEditor = true;
     private static final Logger LOG = Logger.getLogger(StrAdrGeplanteAdresseEditor.class);
@@ -546,6 +548,11 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.grund}"), cbGrund, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        cbGrund.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbGrundItemStateChanged(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -828,6 +835,11 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         Collections.sort(cblStrassen, umlautCollator);
         cbStrassenname.setModel(new DefaultComboBoxModel(cblStrassen.toArray()));
     }//GEN-LAST:event_cbStrassennameMouseClicked
+
+    private void cbGrundItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbGrundItemStateChanged
+        // TODO add your handling code here:
+        grundIsSet();
+    }//GEN-LAST:event_cbGrundItemStateChanged
     private void pruefeEditieren(){
         try{
             CidsBean myCB= this.getCidsBean();
@@ -868,22 +880,37 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
             txtBemerkung.setEnabled(false);
         }
     }
+     
+    private void grundIsSet(){
+        Date myDate = dcHistorisch.getDate();
+        Integer iGrund = cbGrund.getSelectedIndex();
+        if (myDate != null){
+            if (iGrund != -1){
+                nichtEditieren();
+            }
+        }
+    } 
     
     private void histDatumIsSet(){
         Date myDate = dcHistorisch.getDate();
         if (myDate != null){
-            dcGeplant.setEnabled(false);
-            dcBauantrag.setEnabled(false);
-            dcVorhanden.setEnabled(false);
-            //Geom existiert nur bei Editor
-            if (this.isEditor){
-                cbGeom.setEnabled(false);
+            Integer iGrund = cbGrund.getSelectedIndex();
+            if (iGrund != -1){
+                nichtEditieren();
+            }else{
+                dcGeplant.setEnabled(false);
+                dcBauantrag.setEnabled(false);
+                dcVorhanden.setEnabled(false);
+                //Geom existiert nur bei Editor
+                if (this.isEditor){
+                    cbGeom.setEnabled(false);
+                }
             }
         }else{
             Date alkisDate = dcAlkis.getDate();
             try{
-                CidsBean myCB= this.getCidsBean();
                 boolean booledit = true;
+                CidsBean myCB= this.getCidsBean();
                 if (myCB.getProperty("kein_edit") != null){
                     String sEdit = myCB.getProperty("kein_edit").toString();
                     if (sEdit == "true"){
@@ -904,7 +931,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
             }
            
         }
-    }
+    }  
         
     private void setAdresseFest(){
         CidsBean myCidsBean = this.getCidsBean();
@@ -1337,5 +1364,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
     @Override
     public void editorClosed(EditorClosedEvent ece) {
+    }
+
+    @Override
+    public BindingGroup getBindingGroup() {
+        return bindingGroup;
     }
 }
