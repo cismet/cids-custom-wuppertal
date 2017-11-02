@@ -62,7 +62,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     public StrAdrGeplanteAdresseEditor(boolean boolEditor) {
         this.isEditor = boolEditor;
         initComponents();
-        nichtEditieren();
+        noEdit();
     }
 
     /**
@@ -635,7 +635,9 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/dialog-warning.png"))); // NOI18N
         jLabel2.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel2.text")); // NOI18N
+        jLabel2.setToolTipText("Gebäude noch nicht eingemessen.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -736,7 +738,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         panWasDatum.add(panFillerMitteWasDatum, gridBagConstraints);
 
         panWas.setName(""); // NOI18N
@@ -876,7 +878,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     }//GEN-LAST:event_txtAdr_zusatzFocusLost
 
     private void cbStrassennameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrassennameActionPerformed
-        setAdresseFest();
+        setAddressNoEdit();
         if (cbStrassenname.getSelectedItem() != null){
             lblSchluessel.setText(String.valueOf(getOtherTableValue("str_adr_strasse",getMyWhere(cbStrassenname.getSelectedItem().toString())).getProperty("strasse")));
         }
@@ -893,7 +895,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     }//GEN-LAST:event_cbStrassennamePropertyChange
 
     private void txtBemerkungPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtBemerkungPropertyChange
-        pruefeEditieren();
+        checkEdit();
     }//GEN-LAST:event_txtBemerkungPropertyChange
 
     private void cbStrassennameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbStrassennameMouseClicked
@@ -907,13 +909,14 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     private void cbGrundItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbGrundItemStateChanged
         grundIsSet();
     }//GEN-LAST:event_cbGrundItemStateChanged
-    private void pruefeEditieren(){
+    private void checkEdit(){
         try{
             CidsBean myCB= this.getCidsBean();
             if (myCB.getProperty("kein_edit") != null){ 
                 String sEdit = myCB.getProperty("kein_edit").toString();
-                if (sEdit == "true"){
-                    nichtEditieren();
+                //if (sEdit == "true"){
+                if ("true".equalsIgnoreCase(sEdit)){
+                    noEdit();
                 }
             }
         }catch (Exception e) {
@@ -924,11 +927,11 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     private void alkisDatumIsSet(){
         Date myDate = dcAlkis.getDate();
         if (myDate != null){
-           nichtEditieren();
+           noEdit();
         }
     }
     
-     private void nichtEditieren(){
+     private void noEdit(){
         cbStrassenname.setEnabled(false);
         ftxHausnr.setEnabled(false);
         txtAdr_zusatz.setEnabled(false);
@@ -953,7 +956,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         Integer iGrund = cbGrund.getSelectedIndex();
         if (myDate != null){
             if (iGrund != -1){
-                nichtEditieren();
+                noEdit();
             }
         }
     } 
@@ -963,7 +966,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         if (myDate != null){
             Integer iGrund = cbGrund.getSelectedIndex();
             if (iGrund != -1){
-                nichtEditieren();
+                noEdit();
             }else{
                 dcGeplant.setEnabled(false);
                 dcBauantrag.setEnabled(false);
@@ -980,7 +983,8 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
                 CidsBean myCB= this.getCidsBean();
                 if (myCB.getProperty("kein_edit") != null){
                     String sEdit = myCB.getProperty("kein_edit").toString();
-                    if (sEdit == "true"){
+                    //if (sEdit == "true"){
+                    if ("true".equalsIgnoreCase(sEdit)){
                         booledit = false;
                     }
                 }
@@ -1000,7 +1004,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         }
     }  
         
-    private void setAdresseFest(){
+    private void setAddressNoEdit(){
         CidsBean myCidsBean = this.getCidsBean();
         try {
             if (myCidsBean != null) {
@@ -1012,7 +1016,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
                 }
             }
          } catch (Exception e) {
-                LOG.warn("Could not determine cidsBeans in setAdresseFest. ", e);
+                LOG.warn("Could not determine cidsBeans in setAddressNoEdit. ", e);
             }
     }
      
@@ -1051,6 +1055,56 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         return " where name ilike '" + myWhere + "'";
     }
             
+    private StringBuilder checkDateRange (Date checkDate, String welchesDatum, String fehlerFrueh, String fehlerSpaet){
+        final StringBuilder errorMessage = new StringBuilder();
+        LocalDate ld;
+        //date range
+        LocalDate fruehDatum = LocalDate.of(1999,1,1);
+        LocalDate jetztDatum = LocalDate.now();
+        LocalDate spaetDatum = jetztDatum.plusDays(100);
+        
+        if (checkDate != null){
+            ld = checkDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if(ld.isBefore(fruehDatum)){
+                LOG.warn("Wrong '" + welchesDatum + "' specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(
+                        StrAdrGeplanteAdresseEditor.class,
+                        "StrAdrGeplanteAdresseEditor.prepareForSave()." + fehlerFrueh));
+            }
+            if(ld.isAfter(spaetDatum)){
+                LOG.warn("Wrong '" + welchesDatum + "' specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(
+                        StrAdrGeplanteAdresseEditor.class,
+                        "StrAdrGeplanteAdresseEditor.prepareForSave()." + fehlerSpaet));
+            }
+        }
+        return errorMessage;
+    }
+    
+    private StringBuilder noSelectedItem (Object controlValue, String welchesObject, String fehler){
+        final StringBuilder errorMessage = new StringBuilder();
+        
+        if (controlValue == null ) {
+            LOG.warn("No '" + welchesObject + "' specified. Skip persisting.");
+            errorMessage.append(NbBundle.getMessage(
+                    StrAdrGeplanteAdresseEditor.class,
+                    "StrAdrGeplanteAdresseEditor.prepareForSave()." + fehler));
+        }
+        return errorMessage;
+    }
+    
+    private StringBuilder getDateBefore (Date dateBefore, Date dateAfter, String welcheDati, String fehler ){
+        final StringBuilder errorMessage = new StringBuilder();
+        
+        if (dateBefore.before(dateAfter)){
+                    LOG.warn("Wrong '" + welcheDati + "' specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(
+                        StrAdrGeplanteAdresseEditor.class,
+                        "StrAdrGeplanteAdresseEditor.prepareForSave()." + fehler));
+                }
+        return errorMessage;
+    }
+    
     @Override
     public boolean prepareForSave(){
         //return checkHausnummer();
@@ -1083,31 +1137,15 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
                     "StrAdrGeplanteAdresseEditor.prepareForSave().wrongZusatz"));
         }
         
-        
         //Vorhaben
-        if ((cbVorhaben.getSelectedIndex()== -1) ) {
-            LOG.warn("No 'vorhaben' specified. Skip persisting.");
-            errorMessage.append(NbBundle.getMessage(
-                    StrAdrGeplanteAdresseEditor.class,
-                    "StrAdrGeplanteAdresseEditor.prepareForSave().noVorhaben"));
-        }
+        errorMessage.append(noSelectedItem(cbVorhaben.getSelectedItem(), "vorhaben", "noVorhaben"));
         
         //Antrag
-        if ((cbAntragsteller.getSelectedIndex()== -1) ) {
-            LOG.warn("No 'antrag' specified. Skip persisting.");
-            errorMessage.append(NbBundle.getMessage(
-                    StrAdrGeplanteAdresseEditor.class,
-                    "StrAdrGeplanteAdresseEditor.prepareForSave().noAntrag"));
-        }
+        errorMessage.append(noSelectedItem(cbAntragsteller.getSelectedItem(), "antrag", "noAntrag"));
         
         //Strasse
-        if (cbStrassenname.getSelectedItem() == null ) {
-            LOG.warn("No 'strasse' specified. Skip persisting.");
-            errorMessage.append(NbBundle.getMessage(
-                    StrAdrGeplanteAdresseEditor.class,
-                    "StrAdrGeplanteAdresseEditor.prepareForSave().noStrasse"));
-        }
-        
+        errorMessage.append(noSelectedItem(cbStrassenname.getSelectedItem(), "strasse", "noStrasse"));
+     
         //geom
         if ((cbGeom.getSelectedItem() == null) || cbGeom.getSelectedItem().toString().trim().isEmpty()) {
             LOG.warn("No 'geom' specified. Skip persisting.");
@@ -1116,80 +1154,18 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
                     "StrAdrGeplanteAdresseEditor.prepareForSave().noGeom"));
         }
         
-        //date range
-        LocalDate fruehDatum = LocalDate.of(1999,1,1);
-        LocalDate jetztDatum = LocalDate.now();
-        LocalDate spaetDatum = jetztDatum.plusDays(100);
-        Date dt;
-        LocalDate ld;
         //geplant
-        if (dcGeplant.getDate() != null){
-            dt = dcGeplant.getDate();
-            ld = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if(ld.isBefore(fruehDatum)){
-                LOG.warn("Wrong 'geplant date' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschGeplantFrueh"));
-            }
-            if(ld.isAfter(spaetDatum)){
-                LOG.warn("Wrong 'geplant date' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschGeplantSpaet"));
-            }
-        }
+        errorMessage.append(checkDateRange(dcGeplant.getDate(), "geplant date", "datFalschGeplantFrueh", "datFalschGeplantSpaet"));
+
         //bauantrag
-        if (dcBauantrag.getDate() != null){
-            dt = dcBauantrag.getDate();
-            ld = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if(ld.isBefore(fruehDatum)){
-                LOG.warn("Wrong 'bauantrag date' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschBauantragFrueh"));
-            }
-            if(ld.isAfter(spaetDatum)){
-                LOG.warn("Wrong 'bauantrag date' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschBauantragSpaet"));
-            }
-        }
+        errorMessage.append(checkDateRange(dcBauantrag.getDate(), "bauantrag date", "datFalschBauantragFrueh", "datFalschBauantragSpaet"));
+    
         //vorhanden
-        if (dcVorhanden.getDate() != null){
-            dt = dcVorhanden.getDate();
-            ld = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if(ld.isBefore(fruehDatum)){
-                LOG.warn("Wrong 'vorhanden date' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschVorhandenFrueh"));
-            }
-            if(ld.isAfter(spaetDatum)){
-                LOG.warn("Wrong 'vorhanden date' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschVorhandenSpaet"));
-            }
-        }
+        errorMessage.append(checkDateRange(dcVorhanden.getDate(), "vorhanden date", "datFalschVorhandenFrueh", "datFalschVorhandenSpaet"));
+      
         //historisch
-        if (dcHistorisch.getDate() != null){
-            dt = dcHistorisch.getDate();
-            ld = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if(ld.isBefore(fruehDatum)){
-                LOG.warn("Wrong 'historisch date' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschHistorischFrueh"));
-            }
-            if(ld.isAfter(spaetDatum)){
-                LOG.warn("Wrong 'historisch date' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschHistorischSpaet"));
-            }
-        }
+        errorMessage.append(checkDateRange(dcHistorisch.getDate(), "historisch date", "datFalschHistorischFrueh", "datFalschHistorischSpaet"));
+
          //date geplant, bauantrag, vorhanden
         if ((dcGeplant.getDate() == null) && dcBauantrag.getDate() == null && dcVorhanden.getDate() == null) {
             LOG.warn("No 'date' specified. Skip persisting.");
@@ -1198,75 +1174,34 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
                     "StrAdrGeplanteAdresseEditor.prepareForSave().noDate"));
         } else { //Datumsangaben in richtiger Reihenfolge
             if ((dcGeplant.getDate() != null) && dcBauantrag.getDate() != null) {
-                if (dcGeplant.getDate().after(dcBauantrag.getDate())){
-                    LOG.warn("Wrong 'date (geplant-bauantrag)' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschGeplantBauantrag"));
-                }
+                errorMessage.append(getDateBefore(dcBauantrag.getDate(), dcGeplant.getDate(), "date (geplant-bauantrag)", "datFalschGeplantBauantrag"));
             }
             if ((dcGeplant.getDate() != null) && dcVorhanden.getDate() != null) {
-                if (dcGeplant.getDate().after(dcVorhanden.getDate())){
-                    LOG.warn("Wrong 'date (geplant-vorhanden)' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschGeplantVorhanden"));
-                }
+                errorMessage.append(getDateBefore(dcVorhanden.getDate(), dcGeplant.getDate(), "date (geplant-vorhanden)", "datFalschGeplantVorhanden"));
             }
-            
             if ((dcBauantrag.getDate() != null) && dcVorhanden.getDate() != null) {
-                if (dcBauantrag.getDate().after(dcVorhanden.getDate())){
-                    LOG.warn("Wrong 'date (bauantrag-vorhanden)' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschBauantragVorhanden"));
-                }
+                errorMessage.append(getDateBefore(dcVorhanden.getDate(), dcBauantrag.getDate(), "date (bauantrag-vorhanden)", "datFalschBauantragVorhanden"));
             }
         }
         
          //date historisch
         if (dcHistorisch.getDate() != null) {
             if (dcGeplant.getDate() != null) {
-                if (dcHistorisch.getDate().before(dcGeplant.getDate())){
-                    LOG.warn("Wrong 'date (geplant-historisch)' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschGeplantHistorisch"));
-                }
+               errorMessage.append(getDateBefore(dcHistorisch.getDate(), dcGeplant.getDate(), "date (geplant-historisch)", "datFalschGeplantHistorisch"));
             }
             if (dcVorhanden.getDate() != null) {
-                if (dcHistorisch.getDate().before(dcVorhanden.getDate())){
-                    LOG.warn("Wrong 'date (vorhanden-historisch)' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschVorhandenHistorisch"));
-                }
+               errorMessage.append(getDateBefore(dcHistorisch.getDate(), dcVorhanden.getDate(), "date (vorhanden-historisch)", "datFalschVorhandenHistorisch"));
             }
             if (dcBauantrag.getDate() != null) {
-                if (dcHistorisch.getDate().before(dcBauantrag.getDate())){
-                    LOG.warn("Wrong 'date (bauantrag-historisch)' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datFalschBauantragHistorisch"));
-                }
+               errorMessage.append(getDateBefore(dcHistorisch.getDate(), dcBauantrag.getDate(), "date (bauantrag-historisch)", "datFalschBauantragHistorisch"));
             }
             //grund muss ausgewählt werden
-            if ( ((cbGrund.getSelectedItem() == null) ) ) {
-                LOG.warn("No 'grund' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datHistorischGrund")); 
-            }
+            errorMessage.append(noSelectedItem(cbGrund.getSelectedItem(), "grund", "datHistorischGrund"));
         }
         
         //grund ausgewaehlt
         if ( ((cbGrund.getSelectedItem() != null) ) ) {
-            if (dcHistorisch.getDate() == null) {
-                    LOG.warn("No 'historisch' specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(
-                        StrAdrGeplanteAdresseEditor.class,
-                        "StrAdrGeplanteAdresseEditor.prepareForSave().datGrundHistorisch"));                
-            }
+            errorMessage.append(noSelectedItem(dcHistorisch.getDate(), "historisch", "datGrundHistorisch"));
         }
         
         //Beim Speichern einer nicht historischen neuen Adresse
@@ -1275,18 +1210,20 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
             //Adresse bereits vorhanden
             if (myCB.getMetaObject().getStatus()==MetaObject.NEW){
                 if (dcHistorisch.getDate() == null) {
-                    String myStrasse = getOtherTableValue("str_adr_strasse",getMyWhere(cbStrassenname.getSelectedItem().toString())).getProperty("id").toString();
-                    String myHausnummer = ftxHausnr.getText();
-                    String myZusatz = txtAdr_zusatz.getText().trim();
-                    String myQuery = null;
+                    if (cbStrassenname.getSelectedItem() != null){
+                        String myStrasse = getOtherTableValue("str_adr_strasse",getMyWhere(cbStrassenname.getSelectedItem().toString())).getProperty("id").toString();
+                        String myHausnummer = ftxHausnr.getText();
+                        String myZusatz = txtAdr_zusatz.getText().trim();
+                        String myQuery = null;
 
-                    myQuery = " where fk_strasse_id = " + myStrasse + " and hausnr = " + myHausnummer + " and trim(adr_zusatz) ilike '" + myZusatz + "' and dat_historisch is null";
+                        myQuery = " where fk_strasse_id = " + myStrasse + " and hausnr = " + myHausnummer + " and trim(adr_zusatz) ilike '" + myZusatz + "' and dat_historisch is null";
 
-                    if(getOtherTableValue("str_adr_geplante_adresse", myQuery) != null){
-                    LOG.warn("Not unique 'adress' specified. Skip persisting.");
-                            errorMessage.append(NbBundle.getMessage(
-                                StrAdrGeplanteAdresseEditor.class,
-                                "StrAdrGeplanteAdresseEditor.prepareForSave().adresseVorhanden"));   
+                        if(getOtherTableValue("str_adr_geplante_adresse", myQuery) != null){
+                        LOG.warn("Not unique 'adress' specified. Skip persisting.");
+                                errorMessage.append(NbBundle.getMessage(
+                                    StrAdrGeplanteAdresseEditor.class,
+                                    "StrAdrGeplanteAdresseEditor.prepareForSave().adresseVorhanden"));   
+                        }
                     }
                 }
             }else{
@@ -1296,19 +1233,12 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
               CidsBean dbBean = getOtherTableValue("str_adr_geplante_adresse", myQuery);
               
               if(dbBean != null ){
-                  if(dcHistorisch.getDate() == null){
-                      LOG.warn("Before 'historisch' specified. Skip persisting.");
-                            errorMessage.append(NbBundle.getMessage(
-                                StrAdrGeplanteAdresseEditor.class,
-                                "StrAdrGeplanteAdresseEditor.prepareForSave().historischVorhanden"));   
-                  }
+                errorMessage.append(noSelectedItem(dcHistorisch.getDate(), "freies historisch", "historischVorhanden"));
               }
             }
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
-        
-
         
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(
