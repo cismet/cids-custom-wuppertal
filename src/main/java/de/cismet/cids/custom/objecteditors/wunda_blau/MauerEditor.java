@@ -456,7 +456,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         map = new MappingComponent();
         pnlMap.setLayout(new BorderLayout());
         pnlMap.add(map, BorderLayout.CENTER);
-        webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+        webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
         setEditable();
         final LayoutManager layout = getLayout();
         if (layout instanceof CardLayout) {
@@ -4279,8 +4279,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
                 final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "url_base");
                 String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
+                final String protokoll = WEB_DAV_DIRECTORY.substring(0, WEB_DAV_DIRECTORY.indexOf("://")) + "://";
+
                 query += "FROM " + MB_MC.getTableName();
-                query += " WHERE server = 's102x003/WebDAV' and path = '/cids/mauern/bilder/';  ";
+                query += " WHERE '" + protokoll + "' || server || path  = '" + WEB_DAV_DIRECTORY + "';  ";
                 final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
 
                 final CidsBean url = CidsBeanSupport.createNewCidsBeanFromTableName("url");

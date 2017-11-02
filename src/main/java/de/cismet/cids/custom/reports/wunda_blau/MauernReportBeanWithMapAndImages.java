@@ -94,7 +94,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         WEB_DAV_PASSWORD = pass;
         WEB_DAV_USER = webDavBundle.getString("user");
         WEB_DAV_DIRECTORY = webDavBundle.getString("url");
-        this.webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+        this.webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
         MAP_URL = java.util.ResourceBundle.getBundle(
                 "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url");
 
