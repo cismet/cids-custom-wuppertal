@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>5.4-SNAPSHOT</version>
+                <version>5.4.1-aaaweb-6.4-pre-release-1</version>
                 <type>jar</type>
             </dependency>
             
@@ -433,7 +433,7 @@
        <dependency>
             <groupId>de.aedsicad</groupId>
             <artifactId>aaaweb-soap-connector</artifactId>
-            <version>6.4-SNAPSHOT</version>
+            <version>6.4-pre-release-1</version>
         </dependency>  
         <dependency>
             <groupId>jfree</groupId>
