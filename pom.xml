@@ -13,7 +13,7 @@
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>5.3-SNAPSHOT</version>
+    <version>5.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal} [${project.version}]</name>
@@ -60,13 +60,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>5.1.3</version>
+                <version>5.1.4</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>5.1.3</version>
+                <version>5.1.4</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>

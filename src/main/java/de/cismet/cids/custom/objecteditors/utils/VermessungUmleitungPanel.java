@@ -210,7 +210,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         jXBusyLabel1.setSize(16, 16);
         tfName.getDocument().addDocumentListener(this);
         if (!initError) {
-            webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+            webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
         }
         new CidsBeanDropTarget(this);
         new CidsBeanDropTarget(tfName);
