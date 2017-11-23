@@ -15,6 +15,7 @@ package de.cismet.cids.custom.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -32,7 +33,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.reports.wunda_blau.PrintJahresberichtReport;
-import de.cismet.cids.custom.reports.wunda_blau.PrintStatisticsReport;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -50,6 +50,10 @@ public class JahresberichtDialog extends javax.swing.JDialog {
     private static final Logger LOG = org.apache.log4j.Logger.getLogger(JahresberichtDialog.class);
 
     private static JahresberichtDialog INSTANCE = null;
+
+    //~ Instance fields --------------------------------------------------------
+
+    private SwingWorker worker;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -156,6 +160,7 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
 
         spnYear.setModel(new javax.swing.SpinnerNumberModel());
@@ -233,7 +238,7 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         jPanel1.add(jProgressBar1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -252,8 +257,12 @@ public class JahresberichtDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+        if (worker != null) {
+            worker.cancel(true);
+        }
+
         setVisible(false);
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    } //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -286,43 +295,104 @@ public class JahresberichtDialog extends javax.swing.JDialog {
         }
         final Date tillDate = tmpTillDate;
 
+        jProgressBar1.setString(org.openide.util.NbBundle.getMessage(
+                JahresberichtDialog.class,
+                "JahresberichtDialog.jProgressBar1.string"));
         jProgressBar1.setIndeterminate(true);
         jProgressBar1.setStringPainted(true);
-        btnCancel.setEnabled(false);
         btnOk.setEnabled(false);
 
-        new SwingWorker<Collection, Void>() {
+        if (worker != null) {
+            worker.cancel(true);
+        }
+        worker = new SwingWorker<Collection, Integer>() {
 
                 @Override
                 protected Collection doInBackground() throws Exception {
-                    return createBillingsForStatisticsReport(fromDate, tillDate);
+                    final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement();
+
+                    cidsBillingSearchStatement.setAbrechnungsdatumFrom(fromDate);
+                    cidsBillingSearchStatement.setAbrechnungsdatumTill(tillDate);
+                    cidsBillingSearchStatement.setKostentyp(CidsBillingSearchStatement.Kostentyp.KOSTENPFLICHTIG);
+                    cidsBillingSearchStatement.setShowAbgerechneteBillings(null);
+
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Query to get the billings: " + cidsBillingSearchStatement.generateQuery());
+                    }
+
+                    try {
+                        final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                        cidsBillingSearchStatement);
+
+                        if (mons == null) {
+                            LOG.error("Billing metaobjects was null.");
+                            return null;
+                        } else {
+                            publish(mons.size());
+                            final List<CidsBean> billingBeans = new ArrayList<>(mons.size());
+                            for (final MetaObjectNode mon : mons) {
+                                if (isCancelled()) {
+                                    break;
+                                }
+                                if (mon != null) {
+                                    publish(billingBeans.size() + 1);
+                                    final MetaObject mo = SessionManager.getProxy()
+                                                .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                    final CidsBean bean = (mo != null) ? mo.getBean() : null;
+                                    billingBeans.add(bean);
+                                }
+                            }
+                            return billingBeans;
+                        }
+                    } catch (final Exception ex) {
+                        LOG.error("Error while filtering the billings.", ex);
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void process(final List<Integer> chunks) {
+                    for (final Integer chunk : chunks) {
+                        if (jProgressBar1.isIndeterminate()) {
+                            jProgressBar1.setIndeterminate(false);
+                            jProgressBar1.setMaximum(chunk);
+                            jProgressBar1.setValue(0);
+                        } else {
+                            final String string = "Lade Buchung " + chunk + " von " + jProgressBar1.getMaximum();
+                            jProgressBar1.setValue(chunk);
+                            jProgressBar1.setString(string);
+                        }
+                    }
                 }
 
                 @Override
                 protected void done() {
                     try {
-                        final Collection<CidsBean> billings = get();
-                        if (billings.isEmpty()) {
-                            JOptionPane.showMessageDialog(
-                                JahresberichtDialog.this,
-                                lblNoBillingsText.getText(),
-                                lblNoBillingsTitle.getText(),
-                                JOptionPane.ERROR_MESSAGE);
-                        } else {
-                            final Date[] fromDate_tillDate = new Date[2];
-                            fromDate_tillDate[0] = fromDate;
-                            fromDate_tillDate[1] = tillDate;
+                        if (!isCancelled()) {
+                            final Collection<CidsBean> billings = get();
+                            if (billings.isEmpty()) {
+                                JOptionPane.showMessageDialog(
+                                    JahresberichtDialog.this,
+                                    lblNoBillingsText.getText(),
+                                    lblNoBillingsTitle.getText(),
+                                    JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                final Date[] fromDate_tillDate = new Date[2];
+                                fromDate_tillDate[0] = fromDate;
+                                fromDate_tillDate[1] = tillDate;
 
-                            final SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
-                            final String fileName = (fullYear) ? ("BezReg_JB_" + year)
-                                                               : ("BezReg_JB_" + year + "_bis_" + format1.format(now));
-                            final PrintJahresberichtReport report = new PrintJahresberichtReport(
-                                    year,
-                                    fromDate_tillDate,
-                                    billings);
-                            report.print();
-                            setVisible(false);
+                                final SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+                                final String fileName = (fullYear)
+                                    ? ("BezReg_JB_" + year) : ("BezReg_JB_" + year + "_bis_" + format1.format(now));
+                                final PrintJahresberichtReport report = new PrintJahresberichtReport(
+                                        year,
+                                        fromDate_tillDate,
+                                        billings);
+                                report.print();
+                            }
                         }
+                        setVisible(false);
                     } catch (final Exception ex) {
                         LOG.error(ex, ex);
                         JOptionPane.showMessageDialog(
@@ -331,54 +401,14 @@ public class JahresberichtDialog extends javax.swing.JDialog {
                             lblErrorBillingsTitle.getText(),
                             JOptionPane.ERROR_MESSAGE);
                     } finally {
+                        jProgressBar1.setMaximum(0);
+                        jProgressBar1.setValue(0);
                         jProgressBar1.setStringPainted(false);
                         jProgressBar1.setIndeterminate(false);
-                        btnCancel.setEnabled(true);
                         btnOk.setEnabled(true);
                     }
                 }
-            }.execute();
+            };
+        worker.execute();
     } //GEN-LAST:event_btnOkActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   fromDate  DOCUMENT ME!
-     * @param   tillDate  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private List<CidsBean> createBillingsForStatisticsReport(final Date fromDate, final Date tillDate) {
-        final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement(SessionManager
-                        .getSession().getUser());
-
-        cidsBillingSearchStatement.setAbrechnungsdatumFrom(fromDate);
-        cidsBillingSearchStatement.setAbrechnungsdatumTill(tillDate);
-        cidsBillingSearchStatement.setKostentyp(CidsBillingSearchStatement.Kostentyp.KOSTENPFLICHTIG);
-        cidsBillingSearchStatement.setShowAbgerechneteBillings(null);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Query to get the billings: " + cidsBillingSearchStatement.generateQuery());
-        }
-
-        try {
-            final Collection<MetaObject> metaObjects = SessionManager.getProxy()
-                        .customServerSearch(SessionManager.getSession().getUser(),
-                            cidsBillingSearchStatement);
-
-            if (metaObjects == null) {
-                LOG.error("Billing metaobjects was null.");
-                return null;
-            } else {
-                final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.size());
-                for (final MetaObject mo : metaObjects) {
-                    billingBeans.add(mo.getBean());
-                }
-                return billingBeans;
-            }
-        } catch (final Exception ex) {
-            LOG.error("Error while filtering the billings.", ex);
-            return null;
-        }
-    }
 }
