@@ -36,7 +36,6 @@ import javax.swing.JComponent;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
-import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesBillingSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -648,57 +647,56 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     @Override
     public MetaObjectNodeServerSearch getServerSearch() {
-        final MetaObjectNodesBillingSearchStatement metaObjectNodesBillingSearchStatement =
-            new MetaObjectNodesBillingSearchStatement(SessionManager.getSession().getUser(),
-                txtCustomerName.getText().trim());
+        final CidsBillingSearchStatement billingSearch = new CidsBillingSearchStatement(txtCustomerName.getText()
+                        .trim());
 
         final Object abrechnungsturnus = cboAbrechnungsturnus.getSelectedItem();
         String abrechnungsturnusID = "";
         if (abrechnungsturnus instanceof CidsBean) {
             abrechnungsturnusID = ((CidsBean)abrechnungsturnus).getProperty("id").toString();
         }
-        metaObjectNodesBillingSearchStatement.setAbrechnungsturnusID(abrechnungsturnusID);
+        billingSearch.setAbrechnungsturnusID(abrechnungsturnusID);
 
-        metaObjectNodesBillingSearchStatement.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
-        metaObjectNodesBillingSearchStatement.setProjekt(txtProjekt.getText());
+        billingSearch.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
+        billingSearch.setProjekt(txtProjekt.getText());
 
         final Object user = cboBenutzer.getSelectedItem();
         String userID = "";
         if (user instanceof CidsBean) {
             userID = ((CidsBean)user).getProperty("id").toString();
         }
-        metaObjectNodesBillingSearchStatement.setUserID(userID);
+        billingSearch.setUserID(userID);
 
         final Date[] fromDate_tillDate = pnlTimeFilters.chooseDates();
-        metaObjectNodesBillingSearchStatement.setFrom(fromDate_tillDate[0]);
-        metaObjectNodesBillingSearchStatement.setTill(fromDate_tillDate[1]);
+        billingSearch.setFrom(fromDate_tillDate[0]);
+        billingSearch.setTill(fromDate_tillDate[1]);
 
-        metaObjectNodesBillingSearchStatement.setVerwendungszweckKeys(
+        billingSearch.setVerwendungszweckKeys(
             pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
 
-        metaObjectNodesBillingSearchStatement.setKostentyp(chooseKostentyp());
+        billingSearch.setKostentyp(chooseKostentyp());
 
         if ((cboAbgerechnet.isSelected() && cboNichtAbgerechnet.isSelected())) {
-            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(null);
+            billingSearch.setShowAbgerechneteBillings(null);
         } else if (cboAbgerechnet.isSelected()) {
-            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(true);
+            billingSearch.setShowAbgerechneteBillings(true);
         } else if (cboNichtAbgerechnet.isSelected()) {
-            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(false);
+            billingSearch.setShowAbgerechneteBillings(false);
         } else {
-            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(null);
+            billingSearch.setShowAbgerechneteBillings(null);
         }
 
         if ((cboStorniert.isSelected() && cboNichtStorniert.isSelected())) {
-            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(null);
+            billingSearch.setShowStornierteBillings(null);
         } else if (cboStorniert.isSelected()) {
-            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(true);
+            billingSearch.setShowStornierteBillings(true);
         } else if (cboNichtStorniert.isSelected()) {
-            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(false);
+            billingSearch.setShowStornierteBillings(false);
         } else {
-            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(null);
+            billingSearch.setShowStornierteBillings(null);
         }
 
-        return metaObjectNodesBillingSearchStatement;
+        return billingSearch;
     }
 
     @Override

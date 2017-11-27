@@ -168,7 +168,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         jXBusyLabel1.setSize(16, 16);
         setModeLabeltext();
         tfName.getDocument().addDocumentListener(this);
-        webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+        webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
     }
 
     //~ Methods ----------------------------------------------------------------
