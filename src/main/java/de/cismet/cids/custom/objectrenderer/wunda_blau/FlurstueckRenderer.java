@@ -53,7 +53,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -434,7 +434,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhFortfuehrungsnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhFortfuehrungsnummerActionPerformed
+    private void jxhFortfuehrungsnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhFortfuehrungsnummerActionPerformed
         final String fnr = String.valueOf(cidsBean.getProperty("fortfuehrungsnummer"));
         if ((cidsBean.getProperty("fortfuehrungsnummer") != null) && (fnr != null) && (fnr.trim().length() > 0)) {
             try {
@@ -457,14 +457,14 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 LOG.error("Hier muss noch ne Messagebox hin", e);
             }
         }
-    }                                                                                          //GEN-LAST:event_jxhFortfuehrungsnummerActionPerformed
+    }//GEN-LAST:event_jxhFortfuehrungsnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         final SwingWorker<MetaObjectNode, Void> searchWorker = new SwingWorker<MetaObjectNode, Void>() {
 
                 @Override
@@ -491,7 +491,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 }
             };
         CismetThreadPool.execute(searchWorker);
-    } //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -46,7 +46,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
 import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
@@ -555,7 +555,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
+    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnErstellenActionPerformed
         pnrDialog.warnIfNeeded();
 
 // check anr
@@ -806,7 +806,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             };
 
         isAntragExistingWorker.execute();
-    } //GEN-LAST:event_btnErstellenActionPerformed
+    }//GEN-LAST:event_btnErstellenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -858,31 +858,31 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshNbzActionPerformed
+    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshNbzActionPerformed
         checkNummerierungsbezirke();
         btnRefreshNbz.setVisible(false);
         this.invalidate();
         this.validate();
         this.repaint();
-    }                                                                                 //GEN-LAST:event_btnRefreshNbzActionPerformed
+    }//GEN-LAST:event_btnRefreshNbzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_jspAnzahlStateChanged
+    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspAnzahlStateChanged
 //        handleAnzahlSpinnderChanged();
-    } //GEN-LAST:event_jspAnzahlStateChanged
+    }//GEN-LAST:event_jspAnzahlStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbNbzActionPerformed
+    private void cbNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNbzActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cbNbzActionPerformed
+    }//GEN-LAST:event_cbNbzActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -59,7 +59,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -400,46 +400,46 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisNRWActionPerformed
+    private void jxlBestandsnachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisNRWActionPerformed
         downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF, true);
-    }                                                                                          //GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
+    }//GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisKommunalActionPerformed
+    private void jxlBestandsnachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisKommunalActionPerformed
         downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF, true);
-    }                                                                                               //GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
+    }//GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisKommunalInternActionPerformed
+    private void jxlBestandsnachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisKommunalInternActionPerformed
         downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF, true);
-    }                                                                                                     //GEN-LAST:event_jxlBestandsnachweisKommunalInternActionPerformed
+    }//GEN-LAST:event_jxlBestandsnachweisKommunalInternActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBuchungsblaetterFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblBuchungsblaetterFocusLost
+    private void tblBuchungsblaetterFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblBuchungsblaetterFocusLost
         map.gotoInitialBoundingBox();
         tblBuchungsblaetter.clearSelection();
-    }                                                                                //GEN-LAST:event_tblBuchungsblaetterFocusLost
+    }//GEN-LAST:event_tblBuchungsblaetterFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlBestandsnachweisStichtagNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisStichtagNRWActionPerformed
+    private void hlBestandsnachweisStichtagNRWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisStichtagNRWActionPerformed
         downloadEinzelnachweisStichtagProduct(true);
-    }                                                                                                 //GEN-LAST:event_hlBestandsnachweisStichtagNRWActionPerformed
+    }//GEN-LAST:event_hlBestandsnachweisStichtagNRWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -503,7 +503,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
+    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
         final Collection<CidsBean> selectedFlurstuecke = new ArrayList<CidsBean>();
         for (final CidsBeanWrapper wrapper : cidsBeanWrappers) {
             if (wrapper.isSelected()) {
@@ -511,7 +511,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             }
         }
         BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, AlkisBuchungsblattAggregationRenderer.this);
-    }                                                                                           //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
+    }//GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
