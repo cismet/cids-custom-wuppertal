@@ -54,7 +54,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.KompensationskatasterBeanTable;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.server.GemeindeByGeometrySearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1251,97 +1251,97 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboFlaecheSchutzstatusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboFlaecheSchutzstatusActionPerformed
+    private void cboFlaecheSchutzstatusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFlaecheSchutzstatusActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cboFlaecheSchutzstatusActionPerformed
+    }//GEN-LAST:event_cboFlaecheSchutzstatusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtFlaecheJahrDerUmsetzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtFlaecheJahrDerUmsetzungActionPerformed
+    private void txtFlaecheJahrDerUmsetzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFlaecheJahrDerUmsetzungActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtFlaecheJahrDerUmsetzungActionPerformed
+    }//GEN-LAST:event_txtFlaecheJahrDerUmsetzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBioAusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBioAusActionPerformed
+    private void btnAddBioAusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBioAusActionPerformed
         addObjectToTable(xtBiotopeAus, "KK_AUSGANGSBIOTOP");
-    }                                                                                //GEN-LAST:event_btnAddBioAusActionPerformed
+    }//GEN-LAST:event_btnAddBioAusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemBioAusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemBioAusActionPerformed
+    private void btnRemBioAusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemBioAusActionPerformed
         removeObjectsFromTable(xtBiotopeAus);
-    }                                                                                //GEN-LAST:event_btnRemBioAusActionPerformed
+    }//GEN-LAST:event_btnRemBioAusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddKontrActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddKontrActionPerformed
+    private void btnAddKontrActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddKontrActionPerformed
         addObjectToTable(xtKontrollen, "kk_massnahmenkontrolle");
-    }                                                                               //GEN-LAST:event_btnAddKontrActionPerformed
+    }//GEN-LAST:event_btnAddKontrActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemKontrActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemKontrActionPerformed
+    private void btnRemKontrActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemKontrActionPerformed
         removeObjectsFromTable(xtKontrollen);
-    }                                                                               //GEN-LAST:event_btnRemKontrActionPerformed
+    }//GEN-LAST:event_btnRemKontrActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddMassActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddMassActionPerformed
+    private void btnAddMassActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMassActionPerformed
         addObjectToTable(xtMassnahmen, "kk_kompensationsmassnahmen");
-    }                                                                              //GEN-LAST:event_btnAddMassActionPerformed
+    }//GEN-LAST:event_btnAddMassActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemMassActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemMassActionPerformed
+    private void btnRemMassActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemMassActionPerformed
         removeObjectsFromTable(xtMassnahmen);
-    }                                                                              //GEN-LAST:event_btnRemMassActionPerformed
+    }//GEN-LAST:event_btnRemMassActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemBioEinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemBioEinActionPerformed
+    private void btnRemBioEinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemBioEinActionPerformed
         removeObjectsFromTable(xtBiotopeEin);
-    }                                                                                //GEN-LAST:event_btnRemBioEinActionPerformed
+    }//GEN-LAST:event_btnRemBioEinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBioEinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBioEinActionPerformed
+    private void btnAddBioEinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBioEinActionPerformed
         addObjectToTable(xtBiotopeEin, "kk_zielbiotope");
-    }                                                                                //GEN-LAST:event_btnAddBioEinActionPerformed
+    }//GEN-LAST:event_btnAddBioEinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTabbedPane1StateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_jTabbedPane1StateChanged
+    private void jTabbedPane1StateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         if (tabPaneCardLayout != null) {
             switch (jTabbedPane1.getSelectedIndex()) {
                 case 0: {
@@ -1358,7 +1358,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 }
             }
         }
-    }                                                                                //GEN-LAST:event_jTabbedPane1StateChanged
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     /**
      * DOCUMENT ME!
