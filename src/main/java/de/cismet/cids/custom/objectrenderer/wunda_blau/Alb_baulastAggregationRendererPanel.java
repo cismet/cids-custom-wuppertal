@@ -55,7 +55,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -365,17 +365,17 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedBaulasten = getSelectedBaulasten();
 
         if (selectedBaulasten.isEmpty()) {
@@ -425,7 +425,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                     return null;
                 }
             }.execute();
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
