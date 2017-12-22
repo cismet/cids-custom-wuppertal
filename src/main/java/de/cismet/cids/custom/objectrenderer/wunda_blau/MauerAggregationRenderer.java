@@ -323,7 +323,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlKatasterblattActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlKatasterblattActionPerformed
+    private void jxlKatasterblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlKatasterblattActionPerformed
         final List<CidsBean> reportBeans = new LinkedList<CidsBean>();
         for (final CidsBeanWrapper beanWrapper : cidsBeanWrappers) {
             if (beanWrapper.isSelected()) {
@@ -331,14 +331,14 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
             }
         }
         MauernReportGenerator.generateKatasterBlatt(reportBeans, MauerAggregationRenderer.this);
-    }//GEN-LAST:event_jxlKatasterblattActionPerformed
+    }                                                                                    //GEN-LAST:event_jxlKatasterblattActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlHauptinfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlHauptinfoActionPerformed
+    private void jxlHauptinfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlHauptinfoActionPerformed
         final List<CidsBean> reportBeans = new LinkedList<CidsBean>();
         for (final CidsBeanWrapper beanWrapper : cidsBeanWrappers) {
             if (beanWrapper.isSelected()) {
@@ -346,18 +346,18 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
             }
         }
         MauernReportGenerator.generateMainInfo(reportBeans, MauerAggregationRenderer.this);
-    }//GEN-LAST:event_jxlHauptinfoActionPerformed
+    }                                                                                //GEN-LAST:event_jxlHauptinfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblMauernFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblMauernFocusLost
+    private void tblMauernFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblMauernFocusLost
         map.gotoInitialBoundingBox();
         map.getFeatureCollection().addFeatures(pointFeatures);
         tblMauern.clearSelection();
-    }//GEN-LAST:event_tblMauernFocusLost
+    }                                                                      //GEN-LAST:event_tblMauernFocusLost
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
