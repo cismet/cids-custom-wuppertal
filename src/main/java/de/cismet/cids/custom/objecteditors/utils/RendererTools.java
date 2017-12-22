@@ -23,7 +23,10 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicSpinnerUI;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
@@ -82,6 +85,46 @@ public class RendererTools {
         if (editorComponent instanceof JTextComponent) {
             ((JTextComponent)editorComponent).setDisabledTextColor(Color.black);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  spinner  DOCUMENT ME!
+     */
+    public static void jSpinnerShouldLookLikeLabel(final JSpinner spinner) {
+        spinner.setEnabled(false);
+        spinner.setUI(new EmtpySpinnerUI());
+        final Component editorComponent = spinner.getEditor();
+        if (editorComponent instanceof JSpinner.NumberEditor) {
+            final JSpinner.NumberEditor editor = (JSpinner.NumberEditor)editorComponent;
+            editor.getTextField().setDisabledTextColor(Color.BLACK);
+            editor.getTextField().setOpaque(false);
+            editor.getTextField().setBorder(null);
+        }
+        spinner.getEditor().setOpaque(false);
+        spinner.getEditor().setBorder(null);
+        spinner.setBorder(null);
+        spinner.setOpaque(false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  combobox  DOCUMENT ME!
+     */
+    public static void jComboboxShouldLookLikeLabel(final JComboBox combobox) {
+        combobox.setEnabled(false);
+        combobox.setUI(new EmptyComboBoxUI());
+        final Component editorComponent = combobox.getEditor().getEditorComponent();
+        if (editorComponent instanceof JTextComponent) {
+            final JTextComponent editor = (JTextComponent)editorComponent;
+            editor.setDisabledTextColor(Color.BLACK);
+            editor.setOpaque(false);
+            editor.setBorder(null);
+        }
+        combobox.setBorder(null);
+        combobox.setOpaque(false);
     }
 
     /**
@@ -187,6 +230,41 @@ public class RendererTools {
                 setText((value == null) ? "" : value.toString());
             }
             return this;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    static class EmtpySpinnerUI extends BasicSpinnerUI {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Component createNextButton() {
+            return null;
+        }
+
+        @Override
+        protected Component createPreviousButton() {
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    static class EmptyComboBoxUI extends BasicComboBoxUI {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected JButton createArrowButton() {
+            return null;
         }
     }
 }
