@@ -13,8 +13,8 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import de.cismet.cids.custom.utils.alkis.AlkisConf;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.VermessungsRissReportHelper;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 /**
  * DOCUMENT ME!
