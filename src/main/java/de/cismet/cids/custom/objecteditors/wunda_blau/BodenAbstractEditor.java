@@ -630,7 +630,7 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlurstueckActionPerformed
+    private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFlurstueckActionPerformed
 
         fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
@@ -640,14 +640,14 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
             fsDialoge,
             true);
-    }//GEN-LAST:event_btnAddFlurstueckActionPerformed
+    } //GEN-LAST:event_btnAddFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
+    private void btnRemoveFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
         final Object[] selection = lstFlurstuecke.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -670,14 +670,14 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveFlurstueckActionPerformed
+    }                                                                                       //GEN-LAST:event_btnRemoveFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeMouseClicked
+    private void lstFlurstueckeMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseClicked
         if (!editable) {
             if (evt.getClickCount() > 1) {
                 handleJumpToListeSelectionBean(lstFlurstuecke);
@@ -685,24 +685,24 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
                 lstFlurstueckeValueChanged(null);
             }
         }
-    }//GEN-LAST:event_lstFlurstueckeMouseClicked
+    }                                                                              //GEN-LAST:event_lstFlurstueckeMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblFlINMapMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblFlINMapMouseClicked
+    private void lblFlINMapMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblFlINMapMouseClicked
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(allSelectedObjects, editable);
-    }//GEN-LAST:event_lblFlINMapMouseClicked
+    }                                                                          //GEN-LAST:event_lblFlINMapMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFlurstueckeValueChanged
+    private void lstFlurstueckeValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFlurstueckeValueChanged
         if (!editable) {
             final Object selectedObj = lstFlurstuecke.getSelectedValue();
             if (selectedObj instanceof CidsBean) {
@@ -710,7 +710,7 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
                 map.highlightFeature(f, 1000, HIGHLIGHTING);
             }
         }
-    }//GEN-LAST:event_lstFlurstueckeValueChanged
+    }                                                                                         //GEN-LAST:event_lstFlurstueckeValueChanged
 
     /**
      * DOCUMENT ME!
