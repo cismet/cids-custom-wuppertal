@@ -105,7 +105,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         btnRemoveArt1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         treppeBauteilZustandKostenPanel4 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel(false);
+            new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel(false, true);
         jPanel26 = new javax.swing.JPanel();
         panAllgemein5 = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungTitle5 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -213,8 +213,6 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
                 org.jdesktop.beansbinding.ELProperty.create("${mauerBean.lagebezeichnung}"),
                 jXHyperlink1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
@@ -282,11 +280,9 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${mauerBean.materialtyp}"),
+                org.jdesktop.beansbinding.ELProperty.create("${mauerBean.materialtyp.name}"),
                 jLabel1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -352,7 +348,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
-        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(mauerBean));
+        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(mauerBean), false);
     }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     @Override
@@ -366,9 +362,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
      * @param  mauerBean  DOCUMENT ME!
      */
     public void setMauerBean(final CidsBean mauerBean) {
-        bindingGroup.unbind();
         this.mauerBean = mauerBean;
-        bindingGroup.bind();
     }
 
     /**

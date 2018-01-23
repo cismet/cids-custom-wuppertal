@@ -19,6 +19,8 @@ import java.awt.Component;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
@@ -34,7 +36,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class MauernReportGenerator {
+public class TreppenReportGenerator {
 
     //~ Methods ----------------------------------------------------------------
 
@@ -49,14 +51,14 @@ public class MauernReportGenerator {
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    final Collection<MauernReportBean> reportBeans = new LinkedList<>();
+                    final Collection<TreppenReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBean(b));
+                        reportBeans.add(new TreppenReportBean(b, (TreppeEditor)parent));
                     }
                     boolean ready;
                     do {
                         ready = true;
-                        for (final MauernReportBean m : reportBeans) {
+                        for (final TreppenReportBean m : reportBeans) {
                             if (!m.isReadyToProceed()) {
                                 ready = false;
                                 break;
@@ -75,11 +77,11 @@ public class MauernReportGenerator {
 
             DownloadManager.instance()
                     .add(new JasperReportDownload(
-                            "/de/cismet/cids/custom/reports/wunda_blau/mauer-katasterblatt.jasper",
+                            "/de/cismet/cids/custom/reports/wunda_blau/treppe-katasterblatt.jasper",
                             dataSourceGenerator,
                             jobname,
-                            "Mauer Katasterblatt",
-                            "mauern_katasterblatt"));
+                            "Treppe Katasterblatt",
+                            "treppen_katasterblatt"));
         }
     }
 
@@ -94,14 +96,14 @@ public class MauernReportGenerator {
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    final Collection<MauernReportBean> reportBeans = new LinkedList<>();
+                    final Collection<TreppenReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBean(b));
+                        reportBeans.add(new TreppenReportBean(b, (TreppeEditor)parent));
                     }
                     boolean ready;
                     do {
                         ready = true;
-                        for (final MauernReportBean m : reportBeans) {
+                        for (final TreppenReportBean m : reportBeans) {
                             if (!m.isReadyToProceed()) {
                                 ready = false;
                                 break;
@@ -119,11 +121,11 @@ public class MauernReportGenerator {
 
             DownloadManager.instance()
                     .add(new JasperReportExcelDownload(
-                            "/de/cismet/cids/custom/reports/wunda_blau/mauer-hauptinfo.jasper",
+                            "/de/cismet/cids/custom/reports/wunda_blau/treppe-hauptinfo.jasper",
                             dataSourceGenerator,
                             jobname,
-                            "Mauer Hauptinfo",
-                            "mauern_hauptinfo"));
+                            "Treppe Hauptinfo",
+                            "treppen_hauptinfo"));
         }
     }
 }

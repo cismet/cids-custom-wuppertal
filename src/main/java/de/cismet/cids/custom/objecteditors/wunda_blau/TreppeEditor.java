@@ -96,6 +96,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.reports.wunda_blau.TreppenReportGenerator;
 import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -224,6 +225,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo2;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo3;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo4;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo5;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo6;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo7;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo8;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox10;
     private javax.swing.JCheckBox jCheckBox11;
@@ -273,6 +278,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel79;
@@ -477,6 +486,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
             RendererTools.makeReadOnly(defaultBindableReferenceCombo2);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo3);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo6);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo7);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo8);
             RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser1);
             RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser2);
             RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser3);
@@ -623,6 +636,14 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         jLabel49 = new javax.swing.JLabel();
         jLabel47 = new javax.swing.JLabel();
         jTextField14 = new javax.swing.JTextField();
+        defaultBindableReferenceCombo5 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel51 = new javax.swing.JLabel();
+        defaultBindableReferenceCombo6 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        jLabel52 = new javax.swing.JLabel();
+        defaultBindableReferenceCombo7 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        jLabel53 = new javax.swing.JLabel();
+        defaultBindableReferenceCombo8 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         jPanel30 = new javax.swing.JPanel();
         panZusammenfassung = new de.cismet.tools.gui.RoundedPanel();
         panZusammenfassungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -1850,6 +1871,122 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
         jPanel9.add(jTextField14, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beurteilung_standsicherheit}"),
+                defaultBindableReferenceCombo5,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        jPanel9.add(defaultBindableReferenceCombo5, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel50,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel50.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        jPanel9.add(jLabel50, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel51,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel51.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        jPanel9.add(jLabel51, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beurteilung_verkehrssicherheit}"),
+                defaultBindableReferenceCombo6,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        jPanel9.add(defaultBindableReferenceCombo6, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel52,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel52.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        jPanel9.add(jLabel52, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beurteilung_dauerhaftigkeit}"),
+                defaultBindableReferenceCombo7,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        jPanel9.add(defaultBindableReferenceCombo7, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel53,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel53.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        jPanel9.add(jLabel53, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.notwendigkeit_eingriff}"),
+                defaultBindableReferenceCombo8,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        jPanel9.add(defaultBindableReferenceCombo8, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -3134,132 +3271,130 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
         jTabbedPane1.setSelectedIndex(1);
-    }//GEN-LAST:event_jXHyperlink1ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink2ActionPerformed
+    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
         jTabbedPane1.setSelectedIndex(2);
-    }//GEN-LAST:event_jXHyperlink2ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink3ActionPerformed
+    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink3ActionPerformed
         jTabbedPane1.setSelectedIndex(3);
-    }//GEN-LAST:event_jXHyperlink3ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink4ActionPerformed
+    private void jXHyperlink4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink4ActionPerformed
         jTabbedPane1.setSelectedIndex(4);
-    }//GEN-LAST:event_jXHyperlink4ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink5ActionPerformed
+    private void jXHyperlink5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink5ActionPerformed
         jTabbedPane1.setSelectedIndex(5);
-    }//GEN-LAST:event_jXHyperlink5ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink6ActionPerformed
+    private void jXHyperlink6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink6ActionPerformed
         jTabbedPane1.setSelectedIndex(6);
-    }//GEN-LAST:event_jXHyperlink6ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    } //GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
         ((CardLayout)getLayout()).show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }//GEN-LAST:event_btnInfoActionPerformed
+    }                                                                           //GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
         ((CardLayout)getLayout()).show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    }//GEN-LAST:event_btnImagesActionPerformed
+    }                                                                             //GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        final Collection<CidsBean> c = new LinkedList<>();
-        c.add(cidsBean);
-        // MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this);
-    }//GEN-LAST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        TreppenReportGenerator.generateKatasterBlatt(Arrays.asList(new CidsBean[] { cidsBean }), TreppeEditor.this);
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
+    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
         if (!evt.getValueIsAdjusting() && listListenerEnabled) {
             loadFoto();
         }
-    }//GEN-LAST:event_lstFotosValueChanged
+    }                                                                                   //GEN-LAST:event_lstFotosValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddImgActionPerformed
+    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
             final File[] selFiles = fileChooser.getSelectedFiles();
             if ((selFiles != null) && (selFiles.length > 0)) {
                 CismetThreadPool.execute(new ImageUploadWorker(Arrays.asList(selFiles)));
             }
         }
-    }//GEN-LAST:event_btnAddImgActionPerformed
+    }                                                                             //GEN-LAST:event_btnAddImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!initCopm
      */
-    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveImgActionPerformed
+    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveImgActionPerformed
         final Object[] selection = lstFotos.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3305,7 +3440,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveImgActionPerformed
+    } //GEN-LAST:event_btnRemoveImgActionPerformed
     /**
      * DOCUMENT ME!
      *
@@ -3365,27 +3500,27 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() - 1);
-    }//GEN-LAST:event_btnPrevImgActionPerformed
+    }                                                                              //GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() + 1);
-    }//GEN-LAST:event_btnNextImgActionPerformed
+    }                                                                              //GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jCheckBox2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void jCheckBox2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jCheckBox2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    } //GEN-LAST:event_jCheckBox2ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -3397,6 +3532,20 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         bindingGroup.unbind();
         lblTitle.setText("Treppe: " + cidsBean);
         this.cidsBean = cidsBean;
+        if (editable && (cidsBean != null)) {
+            CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
+            if (entwaesserungBean == null) {
+                try {
+                    entwaesserungBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_entwaesserung");
+                    entwaesserungBean.setProperty(
+                        "zustand",
+                        CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_zustand"));
+                    cidsBean.setProperty("entwaesserung", entwaesserungBean);
+                } catch (final Exception ex) {
+                    LOG.error("could not create entwaesserung bean", ex);
+                }
+            }
+        }
         initMap();
         overview.recalculateAll();
         bindingGroup.bind();
@@ -3645,6 +3794,33 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         } finally {
             IOUtils.closeQuietly(iStream);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Double getZustandStuetzmauern() {
+        return overview.getZustandStuetzmauern();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Double getKostenStuetzmauern() {
+        return overview.getKostenStuetzmauern();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Map<CidsBean, CidsBean> getMauerBeans() {
+        return treppeStuetzmauernPanel1.getMauerBeans();
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -3899,10 +4075,22 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
          * DOCUMENT ME!
          */
         private void recalculateStuetzmauern() {
-            setZustandStuetzmauern(2.4);
+            double zustandGesamt = 0;
+            double kostenGesamt = 0;
             if (cidsBean != null) {
-                setKostenStuetzmauern(0);
+                for (final CidsBean zustandBean : treppeStuetzmauernPanel1.getZustandBeans()) {
+                    final Double zustand = (zustandBean != null) ? (Double)zustandBean.getProperty("gesamt") : null;
+                    final Double kosten = (zustandBean != null) ? (Double)zustandBean.getProperty("kosten") : null;
+
+                    kostenGesamt += ((kosten != null) ? kosten : 0);
+                    if ((zustand != null) && (zustand > zustandGesamt)) {
+                        zustandGesamt = zustand;
+                    }
+                }
             }
+
+            setZustandStuetzmauern(zustandGesamt);
+            setKostenStuetzmauern(kostenGesamt);
         }
 
         /**

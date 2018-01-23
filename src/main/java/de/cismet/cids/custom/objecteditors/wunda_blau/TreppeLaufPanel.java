@@ -401,8 +401,8 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.tiefe}"),
                 jSpinner2,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
-        binding.setSourceNullValue(0);
-        binding.setSourceUnreadableValue(0);
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -421,8 +421,8 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.breite}"),
                 jSpinner3,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
-        binding.setSourceNullValue(0);
-        binding.setSourceUnreadableValue(0);
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -441,8 +441,8 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe}"),
                 jSpinner4,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
-        binding.setSourceNullValue(0);
-        binding.setSourceUnreadableValue(0);
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

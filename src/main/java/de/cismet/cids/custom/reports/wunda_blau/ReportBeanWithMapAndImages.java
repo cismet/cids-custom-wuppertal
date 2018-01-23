@@ -13,6 +13,9 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
@@ -22,15 +25,11 @@ import java.io.InputStream;
 
 import java.text.NumberFormat;
 
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -40,10 +39,7 @@ import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.netutil.Proxy;
-
 import de.cismet.tools.CismetThreadPool;
-import de.cismet.tools.PasswordEncrypter;
 
 /**
  * DOCUMENT ME!
@@ -51,12 +47,12 @@ import de.cismet.tools.PasswordEncrypter;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class MauernReportBeanWithMapAndImages extends MauernReportBean {
+public class ReportBeanWithMapAndImages {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            MauernReportBeanWithMapAndImages.class);
+            ReportBeanWithMapAndImages.class);
     private static String WEB_DAV_DIRECTORY;
     private static String WEB_DAV_USER;
     private static String WEB_DAV_PASSWORD;
@@ -66,42 +62,43 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
     //~ Instance fields --------------------------------------------------------
 
     Image mapImage = null;
-    Image img0 = null;
-    Image img1 = null;
-    private final WebDavHelper webDavHelper;
-    private boolean proceed = false;
     private boolean mapError = false;
-    private boolean image0Error = false;
-    private boolean image1Error = false;
     private String masstab = "";
+    private final CidsBean cidsBean;
+    private final ImageState imgState0 = new ImageState();
+    private final ImageState imgState1 = new ImageState();
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new MauernBeanWithMapAndImages object.
      *
-     * @param  mauer  DOCUMENT ME!
+     * @param  cidsBean  DOCUMENT ME!
+     * @param  geomProp  DOCUMENT ME!
+     * @param  imgsProp  DOCUMENT ME!
      */
-    public MauernReportBeanWithMapAndImages(final CidsBean mauer) {
-        super(mauer);
-        final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
-        String pass = webDavBundle.getString("password");
+    public ReportBeanWithMapAndImages(final CidsBean cidsBean, final String geomProp, final String imgsProp) {
+        this.cidsBean = cidsBean;
+        LOG.fatal("ReportBeanWithMapAndImages");
+//        final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
+//        String pass = webDavBundle.getString("password");
+//
+//        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
+//            pass = PasswordEncrypter.decryptString(pass);
+//        }
+//
+//        WEB_DAV_PASSWORD = pass;
+//        WEB_DAV_USER = webDavBundle.getString("user");
+//        WEB_DAV_DIRECTORY = webDavBundle.getString("url");
+//        final WebDavHelper webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
 
-        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-            pass = PasswordEncrypter.decryptString(pass);
-        }
-
-        WEB_DAV_PASSWORD = pass;
-        WEB_DAV_USER = webDavBundle.getString("user");
-        WEB_DAV_DIRECTORY = webDavBundle.getString("url");
-        this.webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
         MAP_URL = java.util.ResourceBundle.getBundle(
                 "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url");
 
         final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
                     MAP_URL));
 
-        final Geometry g = (Geometry)mauer.getProperty("georeferenz.geo_field");
+        final Geometry g = (Geometry)cidsBean.getProperty(geomProp);
         if (g == null) {
             mapError = true;
             LOG.info("Geometry is null. Can not create a map for the mauer katasterblatt report");
@@ -120,10 +117,10 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
             mapProvider.setCenterMapOnResize(true);
 
             final int height = Integer.parseInt(NbBundle.getMessage(
-                        MauernReportBeanWithMapAndImages.class,
+                        ReportBeanWithMapAndImages.class,
                         "MauernReportBeanWithMapAndImages.mapHeight"));
             final int width = Integer.parseInt(NbBundle.getMessage(
-                        MauernReportBeanWithMapAndImages.class,
+                        ReportBeanWithMapAndImages.class,
                         "MauernReportBeanWithMapAndImages.mapWidth"));
             final XBoundingBox boundingBox = new XBoundingBox(g);
             mapProvider.setBoundingBox(boundingBox);
@@ -132,74 +129,29 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                 final Image img = f.get();
                 masstab = "1:" + NumberFormat.getIntegerInstance().format(mapProvider.getImageScaleDenominator());
                 mapImage = img;
-            } catch (InterruptedException ex) {
-                mapError = true;
-            } catch (ExecutionException ex) {
+            } catch (final Exception ex) {
                 mapError = true;
             }
         }
 
-        final List<CidsBean> images = CidsBeanSupport.getBeanCollectionFromProperty(mauer, "bilder");
-        final StringBuilder url0Builder = new StringBuilder();
+//        final List<CidsBean> images = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, imgsProp);
+//        final StringBuilder url0Builder = new StringBuilder();
+//
+//        final StringBuilder url1Builder = new StringBuilder();
+//        for (final CidsBean b : images) {
+//            final Integer nr = (Integer)b.getProperty("laufende_nummer");
+//            if (nr == 1) {
+//                url0Builder.append(b.getProperty("url.object_name").toString());
+//            } else if (nr == 2) {
+//                url1Builder.append(b.getProperty("url.object_name").toString());
+//            }
+//        }
+//
+//        loadImage(url0Builder.toString(), imgState0, webDavHelper);
+//        loadImage(url1Builder.toString(), imgState1, webDavHelper);
 
-        final StringBuilder url1Builder = new StringBuilder();
-        for (final CidsBean b : images) {
-            final Integer nr = (Integer)b.getProperty("laufende_nummer");
-            if (nr == 1) {
-                url0Builder.append(b.getProperty("url.object_name").toString());
-            } else if (nr == 2) {
-                url1Builder.append(b.getProperty("url.object_name").toString());
-            }
-        }
-
-        CismetThreadPool.execute(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        if (url0Builder.toString().equals("")) {
-                            image0Error = true;
-                            return;
-                        }
-                        final InputStream iStream = webDavHelper.getFileFromWebDAV(
-                                url0Builder.toString(),
-                                WEB_DAV_DIRECTORY);
-                        img0 = ImageIO.read(iStream);
-                        if (img0 == null) {
-                            image0Error = true;
-                            LOG.warn("error during image retrieval from Webdav");
-                        }
-
-                        System.out.println(img0);
-                    } catch (Exception e) {
-                        image0Error = true;
-                    }
-                }
-            });
-
-        CismetThreadPool.execute(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        if (url1Builder.toString().equals("")) {
-                            image1Error = true;
-                            return;
-                        }
-                        final InputStream iStream = webDavHelper.getFileFromWebDAV(
-                                url1Builder.toString(),
-                                WEB_DAV_DIRECTORY);
-                        img1 = ImageIO.read(iStream);
-                        if (img1 == null) {
-                            image1Error = true;
-                            LOG.warn("error during image retrieval from Webdav");
-                        }
-                        System.out.println(img1);
-                    } catch (Exception e) {
-                        image1Error = true;
-                    }
-                }
-            });
+        imgState0.setError(true);
+        imgState1.setError(true);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -207,10 +159,52 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
     /**
      * DOCUMENT ME!
      *
+     * @param  url           DOCUMENT ME!
+     * @param  imgState      DOCUMENT ME!
+     * @param  webDavHelper  DOCUMENT ME!
+     */
+    private void loadImage(final String url, final ImageState imgState, final WebDavHelper webDavHelper) {
+        CismetThreadPool.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        if (url.equals("")) {
+                            imgState.setError(true);
+                            return;
+                        }
+                        final InputStream iStream = webDavHelper.getFileFromWebDAV(
+                                url,
+                                WEB_DAV_DIRECTORY);
+                        final Image img = ImageIO.read(iStream);
+                        if (img == null) {
+                            imgState.setError(true);
+                            LOG.warn("error during image retrieval from Webdav");
+                        }
+                        imgState.setImg(img);
+                    } catch (final Exception e) {
+                        imgState.setError(true);
+                    }
+                }
+            });
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getCidsBean() {
+        return cidsBean;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     public Image getImg0() {
-        return img0;
+        return imgState0.getImg();
     }
 
     /**
@@ -219,7 +213,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
      * @param  img0  DOCUMENT ME!
      */
     public void setImg0(final Image img0) {
-        this.img0 = img0;
+        this.imgState0.setImg(img0);
     }
 
     /**
@@ -228,7 +222,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
      * @return  DOCUMENT ME!
      */
     public Image getImg1() {
-        return img1;
+        return imgState1.getImg();
     }
 
     /**
@@ -237,7 +231,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
      * @param  img1  DOCUMENT ME!
      */
     public void setImg1(final Image img1) {
-        this.img1 = img1;
+        this.imgState1.setImg(img1);
     }
 
     /**
@@ -281,10 +275,26 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
      *
      * @return  DOCUMENT ME!
      */
-    @Override
     public boolean isReadyToProceed() {
-        return ((mapImage != null) || mapError)
-                    && ((img0 != null) || image0Error)
-                    && ((img1 != null) || image1Error);
+        return (cidsBean != null) && ((mapImage != null) || mapError)
+                    && ((imgState0.getImg() != null) || imgState0.isError())
+                    && ((imgState1.getImg() != null) || imgState1.isError());
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @Getter
+    @Setter
+    class ImageState {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private Image img;
+        private boolean error;
     }
 }

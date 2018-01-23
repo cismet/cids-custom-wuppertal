@@ -55,7 +55,7 @@
         <BindingProperty name="cidsBean" source="Form" sourcePath="${zustandBean}" target="treppeBauteilZustandKostenPanel4" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
       </BindingProperties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel(false)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel(false, true)"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -149,10 +149,7 @@
                     </Component>
                     <Component class="org.jdesktop.swingx.JXHyperlink" name="jXHyperlink1">
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${mauerBean.lagebezeichnung}" target="jXHyperlink1" targetPath="text" updateStrategy="0" immediately="false">
-                          <Property name="nullValue" type="java.lang.String" value="-"/>
-                          <Property name="incompletePathValue" type="java.lang.String" value="-"/>
-                        </BindingProperty>
+                        <BindingProperty name="text" source="Form" sourcePath="${mauerBean.lagebezeichnung}" target="jXHyperlink1" targetPath="text" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jXHyperlink1ActionPerformed"/>
@@ -215,10 +212,7 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel1">
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${mauerBean.materialtyp}" target="jLabel1" targetPath="text" updateStrategy="0" immediately="false">
-                          <Property name="nullValue" type="java.lang.String" value="-"/>
-                          <Property name="incompletePathValue" type="java.lang.String" value="-"/>
-                        </BindingProperty>
+                        <BindingProperty name="text" source="Form" sourcePath="${mauerBean.materialtyp.name}" target="jLabel1" targetPath="text" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

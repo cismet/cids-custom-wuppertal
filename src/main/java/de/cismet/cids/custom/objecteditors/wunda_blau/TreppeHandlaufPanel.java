@@ -199,7 +199,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.handlauf.bemerkung}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
                 jTextArea8,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -247,7 +247,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.handlauf.beschreibung}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
                 jTextArea9,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);

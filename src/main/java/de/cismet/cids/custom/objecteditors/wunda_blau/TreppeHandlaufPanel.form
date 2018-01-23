@@ -153,7 +153,7 @@
                             <Property name="wrapStyleWord" type="boolean" value="true"/>
                           </Properties>
                           <BindingProperties>
-                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.handlauf.bemerkung}" target="jTextArea8" targetPath="text" updateStrategy="0" immediately="false"/>
+                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkung}" target="jTextArea8" targetPath="text" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                         </Component>
                       </SubComponents>
@@ -202,7 +202,7 @@
                             <Property name="wrapStyleWord" type="boolean" value="true"/>
                           </Properties>
                           <BindingProperties>
-                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.handlauf.beschreibung}" target="jTextArea9" targetPath="text" updateStrategy="0" immediately="false"/>
+                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.beschreibung}" target="jTextArea9" targetPath="text" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                         </Component>
                       </SubComponents>

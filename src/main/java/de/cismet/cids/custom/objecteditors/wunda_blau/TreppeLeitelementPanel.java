@@ -199,7 +199,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.absturzsicherung.bemerkung}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
                 jTextArea4,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -247,7 +247,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.absturzsicherung.beschreibung}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
                 jTextArea7,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
