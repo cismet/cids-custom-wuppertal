@@ -13,7 +13,6 @@ import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 
@@ -45,7 +44,7 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
     //~ Instance fields --------------------------------------------------------
 
     final StyledFeature previewGeometry = new DefaultStyledFeature();
-    private MappingComponent previewMap;
+    private final MappingComponent previewMap;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -141,6 +140,9 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
                                     }
                                 });
                             previewMap.setInteractionMode("MUTE");
+                            if (previewMap.getFeatureCollection().contains(previewGeometry)) {
+                                previewMap.getFeatureCollection().removeFeature(previewGeometry);
+                            }
                             previewMap.getFeatureCollection().addFeature(previewGeometry);
                             previewMap.setAnimationDuration(duration);
                         }
