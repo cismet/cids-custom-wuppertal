@@ -86,7 +86,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
             RendererTools.makeReadOnly(jCheckBox1);
             RendererTools.makeReadOnly(jCheckBox2);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
-            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo1);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo1);
             RendererTools.makeReadOnly(jTextArea2);
             RendererTools.makeReadOnly(jTextField19);
         }

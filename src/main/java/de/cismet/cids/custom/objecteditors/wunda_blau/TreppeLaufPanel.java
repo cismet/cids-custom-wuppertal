@@ -93,19 +93,19 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
                 CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_TREPPENLAUF"));
         } catch (final Exception ex) {
         }
-        makeDoubleSpinnerWithoutButtons(jSpinner2);
-        makeDoubleSpinnerWithoutButtons(jSpinner3);
-        makeDoubleSpinnerWithoutButtons(jSpinner4);
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner2, 2);
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner3, 2);
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner4, 2);
         if (!editable) {
             RendererTools.makeReadOnly(jSpinner1);
             RendererTools.makeReadOnly(jSpinner2);
             RendererTools.makeReadOnly(jSpinner3);
             RendererTools.makeReadOnly(jSpinner4);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner1);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner2);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner3);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner4);
-            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo1);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner1);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner2);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner3);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner4);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo1);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
             RendererTools.makeReadOnly(jTextArea3);
             RendererTools.makeReadOnly(jTextField22);
@@ -534,32 +534,5 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
      */
     public void setParent(final TreppeLaeufePanel parent) {
         this.parent = parent;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  spinner  DOCUMENT ME!
-     */
-    private static void makeDoubleSpinnerWithoutButtons(final JSpinner spinner) {
-        spinner.setUI(new BasicSpinnerUI() {
-
-                @Override
-                protected Component createNextButton() {
-                    return null;
-                }
-
-                @Override
-                protected Component createPreviousButton() {
-                    return null;
-                }
-            });
-
-        final JSpinner.NumberEditor editor = (JSpinner.NumberEditor)spinner.getEditor();
-        final int digits = (int)Math.round(Math.log10(1 / editor.getModel().getStepSize().doubleValue()));
-
-        final DecimalFormat format = editor.getFormat();
-        format.setMinimumFractionDigits(digits);
-        format.setMaximumFractionDigits(digits);
     }
 }

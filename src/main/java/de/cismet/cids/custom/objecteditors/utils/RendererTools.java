@@ -12,15 +12,19 @@
 package de.cismet.cids.custom.objecteditors.utils;
 
 import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.plaf.basic.BasicDatePickerUI;
 
 import java.awt.Color;
 import java.awt.Component;
+
+import java.text.DecimalFormat;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -65,14 +69,50 @@ public class RendererTools {
             final JComboBox cb = (JComboBox)comp;
             cb.setEnabled(false);
             cb.setRenderer(new CustomListCellRenderer());
+        } else if (comp instanceof JSpinner) {
+            final JSpinner sp = (JSpinner)comp;
+            sp.setOpaque(false);
+            sp.setBorder(null);
+            sp.getEditor().setOpaque(false);
+            ((JSpinner.DefaultEditor)sp.getEditor()).getTextField().setOpaque(false);
         } else if (comp instanceof DefaultBindableDateChooser) {
             final DefaultBindableDateChooser dc = (DefaultBindableDateChooser)comp;
             dc.setEnabled(false);
+            ((Component)dc.getComponents()[1]).setVisible(false);
+            ((JFormattedTextField)dc.getComponents()[0]).setOpaque(false);
+            ((JFormattedTextField)dc.getComponents()[0]).setBorder(null);
         } else if (comp instanceof JCheckBox) {
             ((JCheckBox)comp).setEnabled(false);
         } else if (comp != null) {
             comp.setEnabled(false);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  spinner  DOCUMENT ME!
+     * @param  digits   DOCUMENT ME!
+     */
+    public static void makeDoubleSpinnerWithoutButtons(final JSpinner spinner, final int digits) {
+        spinner.setUI(new BasicSpinnerUI() {
+
+                @Override
+                protected Component createNextButton() {
+                    return null;
+                }
+
+                @Override
+                protected Component createPreviousButton() {
+                    return null;
+                }
+            });
+
+        final JSpinner.NumberEditor editor = (JSpinner.NumberEditor)spinner.getEditor();
+
+        final DecimalFormat format = editor.getFormat();
+        format.setMinimumFractionDigits(digits);
+        format.setMaximumFractionDigits(digits);
     }
 
     /**

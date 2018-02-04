@@ -35,6 +35,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
@@ -79,6 +80,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
@@ -88,6 +90,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.basic.BasicSpinnerUI;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -269,6 +272,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
@@ -283,6 +287,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
@@ -307,9 +312,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea6;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
@@ -319,7 +325,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
@@ -450,6 +455,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                     }
                 });
         timer.setRepeats(false);
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner1, 0);
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner2, 0);
         if (!editable) {
             RendererTools.makeReadOnly(jTextArea6);
             RendererTools.makeReadOnly(jCheckBox1);
@@ -463,12 +470,12 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
             RendererTools.makeReadOnly(jCheckBox9);
             RendererTools.makeReadOnly(jCheckBox10);
             RendererTools.makeReadOnly(jCheckBox11);
-            RendererTools.makeReadOnly(jTextField1);
+            RendererTools.makeReadOnly(jSpinner1);
+            RendererTools.makeReadOnly(jSpinner2);
             RendererTools.makeReadOnly(jTextField2);
             RendererTools.makeReadOnly(jTextField3);
             RendererTools.makeReadOnly(jTextField4);
             RendererTools.makeReadOnly(jTextField5);
-            RendererTools.makeReadOnly(jTextField6);
             RendererTools.makeReadOnly(jTextField7);
             RendererTools.makeReadOnly(jTextField8);
             RendererTools.makeReadOnly(jTextField9);
@@ -490,15 +497,21 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
             RendererTools.makeReadOnly(defaultBindableReferenceCombo6);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo7);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo8);
-            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser1);
-            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser2);
-            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser3);
-            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser4);
-            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser5);
-            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser6);
-            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo2);
-            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo3);
-            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo4);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo2);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo3);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo4);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo5);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo6);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo7);
+//            RendererTools.jComboboxShouldLookLikeLabel(defaultBindableReferenceCombo8);
+//            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser1);
+//            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser2);
+//            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser3);
+//            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser4);
+//            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser5);
+//            RendererTools.jxDatePickerShouldLookLikeLabel(defaultBindableDateChooser6);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner1);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner2);
         }
         btnAddImg.setVisible(editable);
         btnRemoveImg.setVisible(editable);
@@ -573,7 +586,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         panBeschreibungContent = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -631,7 +643,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         defaultBindableReferenceCombo2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         defaultBindableReferenceCombo3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         jLabel85 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
         jLabel48 = new javax.swing.JLabel();
         jLabel49 = new javax.swing.JLabel();
         jLabel47 = new javax.swing.JLabel();
@@ -644,6 +655,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         defaultBindableReferenceCombo7 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         jLabel53 = new javax.swing.JLabel();
         defaultBindableReferenceCombo8 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jSpinner2 = new javax.swing.JSpinner();
         jPanel30 = new javax.swing.JPanel();
         panZusammenfassung = new de.cismet.tools.gui.RoundedPanel();
         panZusammenfassungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -879,29 +894,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         jPanel9.add(jLabel1, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
-                jTextField1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jTextField1ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
-        jPanel9.add(jTextField1, gridBagConstraints);
-
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel2,
@@ -909,12 +901,11 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 5);
         jPanel9.add(jLabel2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
@@ -923,9 +914,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
@@ -1456,6 +1447,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         jPanel9.add(jLabel12, gridBagConstraints);
 
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel13,
             org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel13.text")); // NOI18N
@@ -1555,6 +1547,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         jPanel9.add(jLabel17, gridBagConstraints);
 
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel18,
             org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel18.text")); // NOI18N
@@ -1602,6 +1595,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         jPanel9.add(jLabel45, gridBagConstraints);
 
+        jLabel46.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel46,
             org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel46.text")); // NOI18N
@@ -1824,15 +1818,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 4);
         jPanel9.add(jLabel85, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
-        jPanel9.add(jTextField6, gridBagConstraints);
 
+        jLabel48.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel48,
             org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel48.text")); // NOI18N
@@ -1843,6 +1830,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
         jPanel9.add(jLabel48, gridBagConstraints);
 
+        jLabel49.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel49,
             org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel49.text")); // NOI18N
@@ -1853,6 +1841,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
         jPanel9.add(jLabel49, gridBagConstraints);
 
+        jLabel47.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel47,
             org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel47.text")); // NOI18N
@@ -1987,6 +1976,66 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
         jPanel9.add(defaultBindableReferenceCombo8, gridBagConstraints);
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        jSpinner1.setUI(new NoButtonsSpinnerUI());
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strassenschluessel}"),
+                jSpinner1,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        jPanel9.add(jSpinner1, gridBagConstraints);
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel7,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel7.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 5);
+        jPanel9.add(jLabel7, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel36,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel36.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        jPanel9.add(jLabel36, gridBagConstraints);
+
+        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        jSpinner2.setUI(new NoButtonsSpinnerUI());
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
+                jSpinner2,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        jPanel9.add(jSpinner2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -3325,15 +3374,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_jTextField1ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
         ((CardLayout)getLayout()).show(this, "card1");
         btnImages.setEnabled(true);
@@ -4338,6 +4378,26 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                     resizeListenerEnabled = true;
                 }
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class NoButtonsSpinnerUI extends BasicSpinnerUI {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Component createNextButton() {
+            return null;
+        }
+
+        @Override
+        protected Component createPreviousButton() {
+            return null;
         }
     }
 }

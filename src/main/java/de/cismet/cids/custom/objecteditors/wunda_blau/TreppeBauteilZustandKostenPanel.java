@@ -16,9 +16,6 @@ import org.openide.util.Exceptions;
 
 import java.awt.Component;
 
-import java.text.DecimalFormat;
-
-import javax.swing.JSpinner;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -155,7 +152,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         this.manual = manual;
         initComponents();
 
-        makeDoubleSpinnerWithoutButtons(jSpinner1, 2);
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner1, 2);
         if (!editable) {
             RendererTools.makeReadOnly(jSpinner1);
             RendererTools.makeReadOnly(jSpinner2);
@@ -163,11 +160,11 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
             RendererTools.makeReadOnly(jSpinner4);
             RendererTools.makeReadOnly(jSpinner5);
             RendererTools.makeReadOnly(jTextArea1);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner1);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner2);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner3);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner4);
-            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner5);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner1);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner2);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner3);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner4);
+//            RendererTools.jSpinnerShouldLookLikeLabel(jSpinner5);
         }
 
         jSpinner2.setVisible(!manual);
@@ -326,7 +323,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         jPanel2.add(jLabel7, gridBagConstraints);
 
         jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.0d));
-        jSpinner1.setUI(new NoButtonsSpinnerUI());
+        jSpinner1.setUI(new TreppeEditor.NoButtonsSpinnerUI());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -452,7 +449,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         jPanel1.add(filler1, gridBagConstraints);
 
         jSpinner2.setModel(new javax.swing.SpinnerNumberModel(-1, -1, 4, 1));
-        jSpinner2.setUI(new NoButtonsSpinnerUI());
+        jSpinner2.setUI(new TreppeEditor.NoButtonsSpinnerUI());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -477,7 +474,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         jPanel1.add(jSpinner2, gridBagConstraints);
 
         jSpinner3.setModel(new javax.swing.SpinnerNumberModel(-1, -1, 4, 1));
-        jSpinner3.setUI(new NoButtonsSpinnerUI());
+        jSpinner3.setUI(new TreppeEditor.NoButtonsSpinnerUI());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -504,7 +501,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         jPanel1.add(jSpinner3, gridBagConstraints);
 
         jSpinner4.setModel(new javax.swing.SpinnerNumberModel(-1, -1, 4, 1));
-        jSpinner4.setUI(new NoButtonsSpinnerUI());
+        jSpinner4.setUI(new TreppeEditor.NoButtonsSpinnerUI());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -531,7 +528,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         jPanel1.add(jSpinner4, gridBagConstraints);
 
         jSpinner5.setModel(new javax.swing.SpinnerNumberModel(-1, -1, 4, 1));
-        jSpinner5.setUI(new NoButtonsSpinnerUI());
+        jSpinner5.setUI(new TreppeEditor.NoButtonsSpinnerUI());
         jSpinner5.setEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -674,55 +671,6 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
 
         if ((cidsBean != null) && editable) {
             recalculateGesamt();
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  spinner  DOCUMENT ME!
-     * @param  digits   DOCUMENT ME!
-     */
-    private static void makeDoubleSpinnerWithoutButtons(final JSpinner spinner, final int digits) {
-        spinner.setUI(new BasicSpinnerUI() {
-
-                @Override
-                protected Component createNextButton() {
-                    return null;
-                }
-
-                @Override
-                protected Component createPreviousButton() {
-                    return null;
-                }
-            });
-
-        final JSpinner.NumberEditor editor = (JSpinner.NumberEditor)spinner.getEditor();
-
-        final DecimalFormat format = editor.getFormat();
-        format.setMinimumFractionDigits(digits);
-        format.setMaximumFractionDigits(digits);
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    class NoButtonsSpinnerUI extends BasicSpinnerUI {
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        protected Component createNextButton() {
-            return null;
-        }
-
-        @Override
-        protected Component createPreviousButton() {
-            return null;
         }
     }
 }
