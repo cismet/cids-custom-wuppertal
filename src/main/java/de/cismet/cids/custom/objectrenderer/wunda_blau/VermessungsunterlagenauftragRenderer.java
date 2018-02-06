@@ -62,7 +62,7 @@ import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConver
 import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenHelper;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenProperties;
@@ -1785,6 +1785,10 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     class VermessungsunterlagenExceptionJsonDeserializer extends StdDeserializer<VermessungsunterlagenException> {
 
+        //~ Instance fields ----------------------------------------------------
+
+        private final ObjectMapper defaultMapper = new ObjectMapper();
+
         //~ Constructors -------------------------------------------------------
 
         /**
@@ -1792,6 +1796,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
          */
         public VermessungsunterlagenExceptionJsonDeserializer() {
             super(VermessungsunterlagenException.class);
+
+            defaultMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1815,7 +1821,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         return objectMapper.treeToValue(on, VermessungsunterlagenTaskException.class);
                     }
                     case OTHER: {
-                        return objectMapper.treeToValue(on, VermessungsunterlagenException.class);
+                        return defaultMapper.treeToValue(on, VermessungsunterlagenException.class);
                     }
                 }
             }

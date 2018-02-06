@@ -9,7 +9,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.utils.alkis;
+package de.cismet.cids.custom.utils.alkisconstants;
 
 import Sirius.navigator.connection.SessionManager;
 
@@ -18,6 +18,7 @@ import java.io.StringReader;
 import java.util.Properties;
 
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
+import de.cismet.cids.custom.utils.alkis.AlkisConf;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
