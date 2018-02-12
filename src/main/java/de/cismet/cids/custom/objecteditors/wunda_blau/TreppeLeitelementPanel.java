@@ -12,10 +12,13 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import org.apache.log4j.Logger;
+
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
@@ -25,7 +28,11 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBeanStore {
+public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(TreppeLeitelementPanel.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -35,9 +42,15 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemoveArt1;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel68;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
     private javax.swing.JScrollPane jScrollPane5;
@@ -77,6 +90,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
                 bindingGroup,
                 CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ABSTURZSICHERUNG"));
         } catch (final Exception ex) {
+            LOG.error(ex, ex);
         }
         if (!editable) {
             RendererTools.makeReadOnly(jTextField22);
@@ -98,70 +112,43 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        btnRemoveArt1 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
-        treppeBauteilZustandKostenPanel3 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel(editable);
         jPanel24 = new javax.swing.JPanel();
         panAllgemein4 = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungTitle4 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderAllgemein5 = new javax.swing.JLabel();
         panBeschreibungContent4 = new javax.swing.JPanel();
         jPanel25 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
-        jLabel66 = new javax.swing.JLabel();
-        jLabel68 = new javax.swing.JLabel();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        jTextArea7 = new javax.swing.JTextArea();
         jLabel62 = new javax.swing.JLabel();
         jTextField22 = new javax.swing.JTextField();
+        jLabel68 = new javax.swing.JLabel();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTextArea7 = new javax.swing.JTextArea();
+        jLabel66 = new javax.swing.JLabel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextArea4 = new javax.swing.JTextArea();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        jPanel1 = new javax.swing.JPanel();
+        btnRemoveArt1 = new javax.swing.JButton();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        treppeBauteilZustandKostenPanel3 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel(editable);
+        jSeparator1 = new javax.swing.JSeparator();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
-
-        btnRemoveArt1.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveArt1.setMaximumSize(new java.awt.Dimension(43, 25));
-        btnRemoveArt1.setMinimumSize(new java.awt.Dimension(43, 25));
-        btnRemoveArt1.setPreferredSize(new java.awt.Dimension(43, 25));
-        btnRemoveArt1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnRemoveArt1ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHEAST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        add(btnRemoveArt1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        add(jSeparator1, gridBagConstraints);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zustand}"),
-                treppeBauteilZustandKostenPanel3,
-                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        add(treppeBauteilZustandKostenPanel3, gridBagConstraints);
 
         jPanel24.setOpaque(false);
         jPanel24.setLayout(new java.awt.GridBagLayout());
@@ -185,6 +172,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
         panAllgemein4.add(panBeschreibungTitle4, gridBagConstraints);
 
         panBeschreibungContent4.setOpaque(false);
@@ -193,54 +181,48 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         jPanel25.setOpaque(false);
         jPanel25.setLayout(new java.awt.GridBagLayout());
 
-        jTextArea4.setLineWrap(true);
-        jTextArea4.setWrapStyleWord(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel62,
+            org.openide.util.NbBundle.getMessage(TreppeLeitelementPanel.class, "TreppeLeitelementPanel.jLabel62.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        jPanel25.add(jLabel62, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
-                jTextArea4,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
+                jTextField22,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jScrollPane5.setViewportView(jTextArea4);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
-        jPanel25.add(jScrollPane5, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel66,
-            org.openide.util.NbBundle.getMessage(TreppeLeitelementPanel.class, "TreppeLeitelementPanel.jLabel66.text")); // NOI18N
-        jLabel66.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.weighty = 10.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 10);
-        jPanel25.add(jLabel66, gridBagConstraints);
+        jPanel25.add(jTextField22, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel68,
             org.openide.util.NbBundle.getMessage(TreppeLeitelementPanel.class, "TreppeLeitelementPanel.jLabel68.text")); // NOI18N
-        jLabel68.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.weighty = 10.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 10);
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         jPanel25.add(jLabel68, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 20, 0);
+        jPanel25.add(filler4, gridBagConstraints);
 
+        jTextArea7.setColumns(20);
         jTextArea7.setLineWrap(true);
         jTextArea7.setWrapStyleWord(true);
 
@@ -256,38 +238,49 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
         jPanel25.add(jScrollPane8, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel62,
-            org.openide.util.NbBundle.getMessage(TreppeLeitelementPanel.class, "TreppeLeitelementPanel.jLabel62.text")); // NOI18N
+            jLabel66,
+            org.openide.util.NbBundle.getMessage(TreppeLeitelementPanel.class, "TreppeLeitelementPanel.jLabel66.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 10);
-        jPanel25.add(jLabel62, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        jPanel25.add(jLabel66, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 20, 0);
+        jPanel25.add(filler5, gridBagConstraints);
+
+        jTextArea4.setColumns(20);
+        jTextArea4.setLineWrap(true);
+        jTextArea4.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
-                jTextField22,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                jTextArea4,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        jScrollPane5.setViewportView(jTextArea4);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
-        jPanel25.add(jTextField22, gridBagConstraints);
+        jPanel25.add(jScrollPane5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -312,17 +305,85 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         jPanel24.add(panAllgemein4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel24.add(filler1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         add(jPanel24, gridBagConstraints);
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        btnRemoveArt1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveArt1.setBorderPainted(false);
+        btnRemoveArt1.setContentAreaFilled(false);
+        btnRemoveArt1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveArt1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHEAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel1.add(btnRemoveArt1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(filler3, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zustand}"),
+                treppeBauteilZustandKostenPanel3,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(treppeBauteilZustandKostenPanel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        add(jPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        add(jSeparator1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        add(filler2, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -356,5 +417,10 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
      */
     public void setParent(final TreppeLeitelementePanel parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
     }
 }

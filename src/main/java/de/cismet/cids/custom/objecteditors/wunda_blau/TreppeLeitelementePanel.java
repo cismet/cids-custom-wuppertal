@@ -12,11 +12,15 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import org.apache.log4j.Logger;
+
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 
 import java.util.List;
 
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.dynamics.Disposable;
 
 /**
  * DOCUMENT ME!
@@ -24,7 +28,11 @@ import de.cismet.cids.dynamics.CidsBean;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeLeitelementePanel extends javax.swing.JPanel {
+public class TreppeLeitelementePanel extends javax.swing.JPanel implements Disposable {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(TreppeLeitelementePanel.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -179,9 +187,8 @@ public class TreppeLeitelementePanel extends javax.swing.JPanel {
 
         btnAddArt1.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddArt1.setMaximumSize(new java.awt.Dimension(43, 25));
-        btnAddArt1.setMinimumSize(new java.awt.Dimension(43, 25));
-        btnAddArt1.setPreferredSize(new java.awt.Dimension(43, 25));
+        btnAddArt1.setBorderPainted(false);
+        btnAddArt1.setContentAreaFilled(false);
         btnAddArt1.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -209,7 +216,17 @@ public class TreppeLeitelementePanel extends javax.swing.JPanel {
             cidsBean.setProperty("zustand", CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND"));
             addLeitelementPanel(cidsBean);
             cidsBeans.add(cidsBean);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
         }
     }                                                                              //GEN-LAST:event_btnAddArt1ActionPerformed
+
+    @Override
+    public void dispose() {
+        for (final Component comp : jPanel1.getComponents()) {
+            if (comp instanceof TreppeLeitelementPanel) {
+                ((TreppeLeitelementPanel)comp).dispose();
+            }
+        }
+    }
 }

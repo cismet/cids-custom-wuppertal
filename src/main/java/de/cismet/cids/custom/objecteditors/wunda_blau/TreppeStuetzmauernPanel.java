@@ -17,7 +17,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
-import org.openide.util.Exceptions;
+import org.apache.log4j.Logger;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
@@ -42,7 +43,11 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeStuetzmauernPanel extends javax.swing.JPanel {
+public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Disposable {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(TreppeStuetzmauernPanel.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -81,6 +86,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel {
         try {
             new CidsBeanDropTarget(jLabel1);
         } catch (final Exception ex) {
+            LOG.error(ex, ex);
         }
     }
 
@@ -128,7 +134,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel {
                                         final CidsBean mauerBean = get();
                                         addMauerPanel(cidsBean, mauerBean);
                                     } catch (final Exception ex) {
-                                        Exceptions.printStackTrace(ex);
+                                        LOG.error(ex, ex);
                                     }
                                 }
                             }.execute();
@@ -165,9 +171,9 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel {
             summe += (kostenKopf != null) ? kostenKopf : 0;
 
             final CidsBean zustandBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND");
-            zustandBean.setProperty("verkehrssicherheit", -1);
-            zustandBean.setProperty("dauerhaftigkeit", -1);
-            zustandBean.setProperty("standsicherheit", -1);
+            zustandBean.setProperty("verkehrssicherheit", null);
+            zustandBean.setProperty("dauerhaftigkeit", null);
+            zustandBean.setProperty("standsicherheit", null);
             zustandBean.setProperty("sanierungsmassnahmen", "siehe Mauer-Beschreibung");
             zustandBean.setProperty("gesamt", mauerBean.getProperty("zustand_gesamt"));
             zustandBean.setProperty("kosten", summe);
@@ -175,8 +181,8 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel {
             zustandBeanMap.put(cidsBean, zustandBean);
 
             panel.setZustandBean(zustandBean);
-        } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
         }
         panel.setCidsBean(cidsBean);
         panel.setParent(this);
@@ -301,6 +307,15 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel {
         add(jLabel1, gridBagConstraints);
     }                                                                                           // </editor-fold>//GEN-END:initComponents
 
+    @Override
+    public void dispose() {
+        for (final Component comp : jPanel1.getComponents()) {
+            if (comp instanceof TreppeStuetzmauerPanel) {
+                ((TreppeStuetzmauerPanel)comp).dispose();
+            }
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -332,8 +347,8 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel {
                         }
                     }
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
             }
         }
     }
