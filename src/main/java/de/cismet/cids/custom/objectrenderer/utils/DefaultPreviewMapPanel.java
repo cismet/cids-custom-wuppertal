@@ -33,8 +33,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
- * @version  $Revision$, $Date$
- * Sandra Simmert 12.2.2018: Parameter GEO_BUFFER und MAP_CALL_STRING von außen steuerbar.
+ * @version  $Revision$, $Date$ Sandra Simmert 12.2.2018: Parameter GEO_BUFFER und MAP_CALL_STRING von außen steuerbar.
  */
 public class DefaultPreviewMapPanel extends javax.swing.JPanel {
 
@@ -76,8 +75,13 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
      *
      * @param  cidsBean               DOCUMENT ME!
      * @param  geometryAttributeName  DOCUMENT ME!
+     * @param  geoBuffer              DOCUMENT ME!
+     * @param  mapURL                 DOCUMENT ME!
      */
-   public void initMap(final CidsBean cidsBean, final String geometryAttributeName, final double geoBuffer, final String mapURL) {
+    public void initMap(final CidsBean cidsBean,
+            final String geometryAttributeName,
+            final double geoBuffer,
+            final String mapURL) {
         boolean showMap = false;
         if (cidsBean != null) {
             final Object geoObj = cidsBean.getProperty(geometryAttributeName);
@@ -157,14 +161,30 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
         }
         showMap(showMap);
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean               DOCUMENT ME!
+     * @param  geometryAttributeName  DOCUMENT ME!
+     * @param  geoBuffer              DOCUMENT ME!
+     */
     public void initMap(final CidsBean cidsBean, final String geometryAttributeName, final double geoBuffer) {
-        initMap(cidsBean, geometryAttributeName, geoBuffer,AlkisConstants.COMMONS.MAP_CALL_STRING);
+        initMap(cidsBean, geometryAttributeName, geoBuffer, AlkisConstants.COMMONS.MAP_CALL_STRING);
     }
-    
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean               DOCUMENT ME!
+     * @param  geometryAttributeName  DOCUMENT ME!
+     */
     public void initMap(final CidsBean cidsBean, final String geometryAttributeName) {
-        initMap(cidsBean, geometryAttributeName, AlkisConstants.COMMONS.GEO_BUFFER,AlkisConstants.COMMONS.MAP_CALL_STRING);
+        initMap(
+            cidsBean,
+            geometryAttributeName,
+            AlkisConstants.COMMONS.GEO_BUFFER,
+            AlkisConstants.COMMONS.MAP_CALL_STRING);
     }
 
     /**
