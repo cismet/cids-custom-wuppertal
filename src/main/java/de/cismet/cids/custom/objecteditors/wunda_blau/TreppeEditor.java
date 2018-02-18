@@ -1188,19 +1188,21 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         this.cidsBean = cidsBean;
         bindingGroup.bind();
 
-        if ((cidsBean != null) && editable) {
-            CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
-            if (entwaesserungBean == null) {
-                try {
-                    entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
-                            "WUNDA_BLAU",
-                            "treppe_entwaesserung");
-                    entwaesserungBean.setProperty(
-                        "zustand",
-                        CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_zustand"));
-                    cidsBean.setProperty("entwaesserung", entwaesserungBean);
-                } catch (final Exception ex) {
-                    LOG.error("could not create entwaesserung bean", ex);
+        if ((cidsBean != null)) {
+            if (editable) {
+                CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
+                if (entwaesserungBean == null) {
+                    try {
+                        entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
+                                "WUNDA_BLAU",
+                                "treppe_entwaesserung");
+                        entwaesserungBean.setProperty(
+                            "zustand",
+                            CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_zustand"));
+                        cidsBean.setProperty("entwaesserung", entwaesserungBean);
+                    } catch (final Exception ex) {
+                        LOG.error("could not create entwaesserung bean", ex);
+                    }
                 }
             }
             overview.recalculateAll();

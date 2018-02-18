@@ -761,9 +761,9 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.bind();
-        this.cidsBean = cidsBean;
         bindingGroup.unbind();
+        this.cidsBean = cidsBean;
+        bindingGroup.bind();
 
         if (cidsBean != null) {
             if (lstFotos.getModel().getSize() > 0) {
