@@ -19,8 +19,14 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import org.openide.awt.Mnemonics;
+import org.openide.util.NbBundle;
+
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,8 +34,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -58,11 +69,9 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     private final HashMap<CidsBean, CidsBean> zustandBeanMap = new HashMap<>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel treppeStuetzmauerPanel1;
+    javax.swing.Box.Filler filler1;
+    javax.swing.JPanel jPanel1;
+    de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel treppeStuetzmauerPanel1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -93,14 +102,6 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
         initComponents();
-        jLabel1.setVisible(editable);
-        jScrollPane1.getViewport().setOpaque(false);
-
-        try {
-            new CidsBeanDropTarget(jLabel1);
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -291,7 +292,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        final javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -299,16 +300,21 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         if (netbeansDesignDummy) {
             treppeStuetzmauerPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel();
         }
-        jLabel1 = new DroppedLabel();
+        final javax.swing.JLabel jLabel1 = new DroppedLabel();
 
+        setName("Form"); // NOI18N
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setBorder(null);
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
         jScrollPane1.setOpaque(false);
 
+        jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        filler1.setName("filler1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -316,7 +322,9 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(filler1, gridBagConstraints);
+
         if (netbeansDesignDummy) {
+            treppeStuetzmauerPanel1.setName("treppeStuetzmauerPanel1"); // NOI18N
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
             gridBagConstraints.weightx = 1.0;
@@ -330,6 +338,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(jScrollPane1, gridBagConstraints);
+        jScrollPane1.getViewport().setOpaque(false);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(
@@ -340,6 +349,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
                 TreppeStuetzmauernPanel.class,
                 "TreppeStuetzmauernPanel.jLabel1.text"));                                       // NOI18N
         jLabel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jLabel1.setName("jLabel1");                                                             // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -348,6 +358,12 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel1, gridBagConstraints);
+        jLabel1.setVisible(editable);
+        try {
+            new CidsBeanDropTarget(jLabel1);
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
     }                                                                                           // </editor-fold>//GEN-END:initComponents
 
     @Override

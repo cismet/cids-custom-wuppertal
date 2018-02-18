@@ -2,18 +2,19 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
+    <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
     <Property name="opaque" type="boolean" value="false"/>
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
-    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
-    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
-    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="0"/>
     <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,40,0,0,2,-68"/>
   </AuxValues>
 
@@ -21,6 +22,7 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel26">
       <Properties>
+        <Property name="name" type="java.lang.String" value="jPanel26" noResource="true"/>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
       <Constraints>
@@ -32,6 +34,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
         <Container class="de.cismet.tools.gui.RoundedPanel" name="panAllgemein5">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="panAllgemein5" noResource="true"/>
+          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="11" weightX="0.0" weightY="0.0"/>
@@ -45,6 +50,7 @@
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="33" green="33" red="33" type="rgb"/>
                 </Property>
+                <Property name="name" type="java.lang.String" value="panBeschreibungTitle5" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -63,12 +69,14 @@
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeStuetzmauerPanel.lblHeaderAllgemein6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
+                    <Property name="name" type="java.lang.String" value="lblHeaderAllgemein6" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="panBeschreibungContent5">
               <Properties>
+                <Property name="name" type="java.lang.String" value="panBeschreibungContent5" noResource="true"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
               <Constraints>
@@ -81,6 +89,7 @@
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="jPanel36">
                   <Properties>
+                    <Property name="name" type="java.lang.String" value="jPanel36" noResource="true"/>
                     <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
@@ -96,6 +105,7 @@
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeStuetzmauerPanel.jLabel62.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="jLabel62" noResource="true"/>
                       </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -105,6 +115,7 @@
                     </Component>
                     <Container class="javax.swing.JPanel" name="jPanel1">
                       <Properties>
+                        <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
                         <Property name="opaque" type="boolean" value="false"/>
                       </Properties>
                       <Constraints>
@@ -120,6 +131,7 @@
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                               <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeStuetzmauerPanel.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                             </Property>
+                            <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -128,12 +140,18 @@
                           </Constraints>
                         </Component>
                         <Component class="org.jdesktop.swingx.JXHyperlink" name="jXHyperlink1">
+                          <Properties>
+                            <Property name="name" type="java.lang.String" value="jXHyperlink1" noResource="true"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${mauerBean.mauer_nummer}" target="jXHyperlink1" targetPath="text" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jXHyperlink1ActionPerformed"/>
                           </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="0" anchor="21" weightX="0.0" weightY="0.0"/>
@@ -145,6 +163,7 @@
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[32767, 0]"/>
                             </Property>
+                            <Property name="name" type="java.lang.String" value="filler1" noResource="true"/>
                           </Properties>
                           <AuxValues>
                             <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
@@ -158,10 +177,14 @@
                         <Component class="javax.swing.JTextField" name="jTextField1">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
+                            <Property name="name" type="java.lang.String" value="jTextField1" noResource="true"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${mauerBean.lagebezeichnung}" target="jTextField1" targetPath="text" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="2" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="0" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -175,6 +198,7 @@
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeStuetzmauerPanel.jLabel79.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="jLabel79" noResource="true"/>
                       </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -185,10 +209,14 @@
                     <Component class="javax.swing.JTextField" name="jTextField2">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
+                        <Property name="name" type="java.lang.String" value="jTextField2" noResource="true"/>
                       </Properties>
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${mauerBean.stuetzmauertyp.name}" target="jTextField2" targetPath="text" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                      </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="0" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -200,6 +228,7 @@
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeStuetzmauerPanel.jLabel78.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="jLabel78" noResource="true"/>
                       </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -208,9 +237,15 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextField3">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jTextField3" noResource="true"/>
+                      </Properties>
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.wo}" target="jTextField3" targetPath="text" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                      </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="0" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -218,6 +253,9 @@
                       </Constraints>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane5">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jScrollPane5" noResource="true"/>
+                      </Properties>
                       <AuxValues>
                         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                       </AuxValues>
@@ -234,10 +272,14 @@
                             <Property name="columns" type="int" value="20"/>
                             <Property name="lineWrap" type="boolean" value="true"/>
                             <Property name="wrapStyleWord" type="boolean" value="true"/>
+                            <Property name="name" type="java.lang.String" value="jTextArea4" noResource="true"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkung}" target="jTextArea4" targetPath="text" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                          </AuxValues>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -246,6 +288,7 @@
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeStuetzmauerPanel.jLabel66.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="jLabel66" noResource="true"/>
                       </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -258,6 +301,7 @@
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[0, 32767]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="filler6" noResource="true"/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.VerticalGlue"/>
@@ -279,6 +323,7 @@
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[0, 32767]"/>
             </Property>
+            <Property name="name" type="java.lang.String" value="filler2" noResource="true"/>
           </Properties>
           <AuxValues>
             <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.VerticalGlue"/>
@@ -293,6 +338,7 @@
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel3">
       <Properties>
+        <Property name="name" type="java.lang.String" value="jPanel3" noResource="true"/>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
       <Constraints>
@@ -304,6 +350,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
         <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel" name="treppeBauteilZustandKostenPanel4">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="treppeBauteilZustandKostenPanel4" noResource="true"/>
+          </Properties>
           <BindingProperties>
             <BindingProperty name="cidsBean" source="Form" sourcePath="${zustandBean}" target="treppeBauteilZustandKostenPanel4" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
           </BindingProperties>
@@ -321,6 +370,7 @@
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[0, 32767]"/>
             </Property>
+            <Property name="name" type="java.lang.String" value="filler4" noResource="true"/>
           </Properties>
           <AuxValues>
             <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.VerticalGlue"/>
@@ -338,10 +388,14 @@
             </Property>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
+            <Property name="name" type="java.lang.String" value="btnRemoveArt1" noResource="true"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveArt1ActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="14" weightX="1.0" weightY="0.0"/>
@@ -351,6 +405,9 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="jSeparator1" noResource="true"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="0" gridY="1" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -362,6 +419,7 @@
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[0, 32767]"/>
         </Property>
+        <Property name="name" type="java.lang.String" value="filler3" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.VerticalGlue"/>

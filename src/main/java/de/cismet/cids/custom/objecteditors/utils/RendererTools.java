@@ -12,13 +12,13 @@
 package de.cismet.cids.custom.objecteditors.utils;
 
 import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.plaf.basic.BasicDatePickerUI;
 
 import java.awt.Color;
 import java.awt.Component;
 
 import java.text.DecimalFormat;
 
+import javax.swing.AbstractButton;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -28,6 +28,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.plaf.basic.BasicButtonListener;
+import javax.swing.plaf.basic.BasicCheckBoxUI;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicSpinnerUI;
@@ -77,12 +79,18 @@ public class RendererTools {
             ((JSpinner.DefaultEditor)sp.getEditor()).getTextField().setOpaque(false);
         } else if (comp instanceof DefaultBindableDateChooser) {
             final DefaultBindableDateChooser dc = (DefaultBindableDateChooser)comp;
-            dc.setEnabled(false);
+            dc.setEditable(false);
             ((Component)dc.getComponents()[1]).setVisible(false);
             ((JFormattedTextField)dc.getComponents()[0]).setOpaque(false);
             ((JFormattedTextField)dc.getComponents()[0]).setBorder(null);
         } else if (comp instanceof JCheckBox) {
-            ((JCheckBox)comp).setEnabled(false);
+            ((JCheckBox)comp).setUI(new BasicCheckBoxUI() {
+
+                    @Override
+                    protected BasicButtonListener createButtonListener(final AbstractButton b) {
+                        return null;
+                    }
+                });
         } else if (comp != null) {
             comp.setEnabled(false);
         }

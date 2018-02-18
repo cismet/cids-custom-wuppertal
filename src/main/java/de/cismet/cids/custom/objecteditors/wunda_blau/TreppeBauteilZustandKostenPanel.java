@@ -14,12 +14,39 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+
+import org.openide.awt.Mnemonics;
+import org.openide.util.NbBundle;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.text.DecimalFormat;
 
+import javax.swing.Box;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingWorker;
+import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -27,6 +54,9 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
+
+import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.SemiRoundedPanel;
 
 /**
  * DOCUMENT ME!
@@ -103,36 +133,17 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
     private final NumberFormatter nf = new NumberFormatter(new DecimalFormat("#0"));
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
-    private javax.swing.JFormattedTextField jFormattedTextField3;
-    private javax.swing.JFormattedTextField jFormattedTextField4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JLabel lblHeaderAllgemein;
-    private de.cismet.tools.gui.RoundedPanel panZusammenfassung;
-    private javax.swing.JPanel panZusammenfassungContent;
-    private de.cismet.tools.gui.SemiRoundedPanel panZusammenfassungTitle;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    JFormattedTextField jFormattedTextField1;
+    JFormattedTextField jFormattedTextField2;
+    JFormattedTextField jFormattedTextField3;
+    JFormattedTextField jFormattedTextField4;
+    JLabel jLabel1;
+    JLabel jLabel2;
+    JLabel jLabel3;
+    JLabel jLabel4;
+    JSpinner jSpinner1;
+    JTextArea jTextArea1;
+    private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -195,415 +206,425 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+        GridBagConstraints gridBagConstraints;
+        bindingGroup = new BindingGroup();
 
-        panZusammenfassung = new de.cismet.tools.gui.RoundedPanel();
-        panZusammenfassungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblHeaderAllgemein = new javax.swing.JLabel();
-        panZusammenfassungContent = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField(nf);
-        jFormattedTextField2 = new javax.swing.JFormattedTextField(nf);
-        jFormattedTextField3 = new javax.swing.JFormattedTextField(nf);
-        jFormattedTextField4 = new javax.swing.JFormattedTextField(nf);
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        jLabel11 = new javax.swing.JLabel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jLabel6 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        jSpinner1 = new javax.swing.JSpinner();
+        final RoundedPanel panZusammenfassung = new RoundedPanel();
+        final SemiRoundedPanel panZusammenfassungTitle = new SemiRoundedPanel();
+        final JLabel lblHeaderAllgemein = new JLabel();
+        final JPanel panZusammenfassungContent = new JPanel();
+        final JPanel jPanel2 = new JPanel();
+        final JLabel jLabel5 = new JLabel();
+        final JPanel jPanel4 = new JPanel();
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
+        jLabel3 = new JLabel();
+        jLabel4 = new JLabel();
+        jFormattedTextField1 = new JFormattedTextField(nf);
+        jFormattedTextField2 = new JFormattedTextField(nf);
+        jFormattedTextField3 = new JFormattedTextField(nf);
+        jFormattedTextField4 = new JFormattedTextField(nf);
+        final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final Box.Filler filler5 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final Box.Filler filler6 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final Box.Filler filler7 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final JLabel jLabel11 = new JLabel();
+        final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        final JScrollPane jScrollPane1 = new JScrollPane();
+        jTextArea1 = new JTextArea();
+        final JLabel jLabel6 = new JLabel();
+        final JPanel jPanel3 = new JPanel();
+        final JLabel jLabel7 = new JLabel();
+        final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        jSpinner1 = new JSpinner();
 
+        setName("Form"); // NOI18N
         setOpaque(false);
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new GridBagLayout());
 
-        panZusammenfassung.setLayout(new java.awt.GridBagLayout());
+        panZusammenfassung.setName("panZusammenfassung"); // NOI18N
+        panZusammenfassung.setLayout(new GridBagLayout());
 
-        panZusammenfassungTitle.setBackground(new java.awt.Color(51, 51, 51));
-        panZusammenfassungTitle.setLayout(new java.awt.FlowLayout());
+        panZusammenfassungTitle.setBackground(new Color(51, 51, 51));
+        panZusammenfassungTitle.setName("panZusammenfassungTitle"); // NOI18N
+        panZusammenfassungTitle.setLayout(new FlowLayout());
 
-        lblHeaderAllgemein.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
+        lblHeaderAllgemein.setForeground(new Color(255, 255, 255));
+        Mnemonics.setLocalizedText(
             lblHeaderAllgemein,
-            org.openide.util.NbBundle.getMessage(
+            NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
                 "TreppeBauteilZustandKostenPanel.lblHeaderAllgemein.text")); // NOI18N
+        lblHeaderAllgemein.setName("lblHeaderAllgemein");                    // NOI18N
         panZusammenfassungTitle.add(lblHeaderAllgemein);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         panZusammenfassung.add(panZusammenfassungTitle, gridBagConstraints);
 
+        panZusammenfassungContent.setName("panZusammenfassungContent"); // NOI18N
         panZusammenfassungContent.setOpaque(false);
-        panZusammenfassungContent.setLayout(new java.awt.GridBagLayout());
+        panZusammenfassungContent.setLayout(new GridBagLayout());
 
+        jPanel2.setName("jPanel2"); // NOI18N
         jPanel2.setOpaque(false);
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        jPanel2.setLayout(new GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
+        Mnemonics.setLocalizedText(
             jLabel5,
-            org.openide.util.NbBundle.getMessage(
-                TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel5.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+            NbBundle.getMessage(TreppeBauteilZustandKostenPanel.class, "TreppeBauteilZustandKostenPanel.jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5");                                                                                      // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         jPanel2.add(jLabel5, gridBagConstraints);
 
+        jPanel4.setName("jPanel4"); // NOI18N
         jPanel4.setOpaque(false);
-        jPanel4.setLayout(new java.awt.GridBagLayout());
+        jPanel4.setLayout(new GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
+        Mnemonics.setLocalizedText(
             jLabel1,
-            org.openide.util.NbBundle.getMessage(
+            NbBundle.getMessage(TreppeBauteilZustandKostenPanel.class, "TreppeBauteilZustandKostenPanel.jLabel1.text")); // NOI18N
+        jLabel1.setToolTipText(NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel1.text"));        // NOI18N
-        jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(
-                TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel1.toolTipText")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+                "TreppeBauteilZustandKostenPanel.jLabel1.toolTipText"));                                                 // NOI18N
+        jLabel1.setName("jLabel1");                                                                                      // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 7);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 7);
         jPanel4.add(jLabel1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
+        Mnemonics.setLocalizedText(
             jLabel2,
-            org.openide.util.NbBundle.getMessage(
+            NbBundle.getMessage(TreppeBauteilZustandKostenPanel.class, "TreppeBauteilZustandKostenPanel.jLabel2.text")); // NOI18N
+        jLabel2.setToolTipText(NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel2.text"));        // NOI18N
-        jLabel2.setToolTipText(org.openide.util.NbBundle.getMessage(
-                TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel2.toolTipText")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+                "TreppeBauteilZustandKostenPanel.jLabel2.toolTipText"));                                                 // NOI18N
+        jLabel2.setName("jLabel2");                                                                                      // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 7);
+        gridBagConstraints.insets = new Insets(2, 10, 2, 7);
         jPanel4.add(jLabel2, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
+        Mnemonics.setLocalizedText(
             jLabel3,
-            org.openide.util.NbBundle.getMessage(
+            NbBundle.getMessage(TreppeBauteilZustandKostenPanel.class, "TreppeBauteilZustandKostenPanel.jLabel3.text")); // NOI18N
+        jLabel3.setToolTipText(NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel3.text"));        // NOI18N
-        jLabel3.setToolTipText(org.openide.util.NbBundle.getMessage(
-                TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel3.toolTipText")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+                "TreppeBauteilZustandKostenPanel.jLabel3.toolTipText"));                                                 // NOI18N
+        jLabel3.setName("jLabel3");                                                                                      // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 7);
+        gridBagConstraints.insets = new Insets(2, 10, 2, 7);
         jPanel4.add(jLabel3, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
+        Mnemonics.setLocalizedText(
             jLabel4,
-            org.openide.util.NbBundle.getMessage(
+            NbBundle.getMessage(TreppeBauteilZustandKostenPanel.class, "TreppeBauteilZustandKostenPanel.jLabel4.text")); // NOI18N
+        jLabel4.setToolTipText(NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel4.text"));        // NOI18N
-        jLabel4.setToolTipText(org.openide.util.NbBundle.getMessage(
-                TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel4.toolTipText")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+                "TreppeBauteilZustandKostenPanel.jLabel4.toolTipText"));                                                 // NOI18N
+        jLabel4.setName("jLabel4");                                                                                      // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 7);
+        gridBagConstraints.insets = new Insets(2, 10, 2, 7);
         jPanel4.add(jLabel4, gridBagConstraints);
 
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        jFormattedTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jFormattedTextField1.setText(org.openide.util.NbBundle.getMessage(
+        jFormattedTextField1.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#0"))));
+        jFormattedTextField1.setHorizontalAlignment(JTextField.CENTER);
+        jFormattedTextField1.setText(NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
                 "TreppeBauteilZustandKostenPanel.jFormattedTextField1.text")); // NOI18N
+        jFormattedTextField1.setName("jFormattedTextField1");                  // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.standsicherheit}"),
+                ELProperty.create("${cidsBean.standsicherheit}"),
                 jFormattedTextField1,
-                org.jdesktop.beansbinding.BeanProperty.create("value"));
+                BeanProperty.create("value"));
         binding.setConverter(CONVERTER_INT);
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
         jPanel4.add(jFormattedTextField1, gridBagConstraints);
 
-        jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        jFormattedTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jFormattedTextField2.setText(org.openide.util.NbBundle.getMessage(
+        jFormattedTextField2.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#0"))));
+        jFormattedTextField2.setHorizontalAlignment(JTextField.CENTER);
+        jFormattedTextField2.setText(NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
                 "TreppeBauteilZustandKostenPanel.jFormattedTextField1.text")); // NOI18N
+        jFormattedTextField2.setName("jFormattedTextField2");                  // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verkehrssicherheit}"),
+                ELProperty.create("${cidsBean.verkehrssicherheit}"),
                 jFormattedTextField2,
-                org.jdesktop.beansbinding.BeanProperty.create("value"));
+                BeanProperty.create("value"));
         binding.setConverter(CONVERTER_INT);
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
         jPanel4.add(jFormattedTextField2, gridBagConstraints);
 
-        jFormattedTextField3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        jFormattedTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jFormattedTextField3.setText(org.openide.util.NbBundle.getMessage(
+        jFormattedTextField3.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#0"))));
+        jFormattedTextField3.setHorizontalAlignment(JTextField.CENTER);
+        jFormattedTextField3.setText(NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
                 "TreppeBauteilZustandKostenPanel.jFormattedTextField1.text")); // NOI18N
+        jFormattedTextField3.setName("jFormattedTextField3");                  // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dauerhaftigkeit}"),
+                ELProperty.create("${cidsBean.dauerhaftigkeit}"),
                 jFormattedTextField3,
-                org.jdesktop.beansbinding.BeanProperty.create("value"));
+                BeanProperty.create("value"));
         binding.setConverter(CONVERTER_INT);
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 2);
         jPanel4.add(jFormattedTextField3, gridBagConstraints);
 
         jFormattedTextField4.setEditable(false);
-        jFormattedTextField4.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.0"))));
-        jFormattedTextField4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jFormattedTextField4.setText(org.openide.util.NbBundle.getMessage(
+        jFormattedTextField4.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#0.0"))));
+        jFormattedTextField4.setHorizontalAlignment(JTextField.CENTER);
+        jFormattedTextField4.setText(NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
                 "TreppeBauteilZustandKostenPanel.jFormattedTextField4.text_1")); // NOI18N
+        jFormattedTextField4.setName("jFormattedTextField4");                    // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gesamt}"),
+                ELProperty.create("${cidsBean.gesamt}"),
                 jFormattedTextField4,
-                org.jdesktop.beansbinding.BeanProperty.create("value"));
+                BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
         jPanel4.add(jFormattedTextField4, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
+
+        filler4.setName("filler4"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.insets = new Insets(0, 10, 0, 10);
         jPanel4.add(filler4, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
+
+        filler5.setName("filler5"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.insets = new Insets(0, 10, 0, 10);
         jPanel4.add(filler5, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
+
+        filler6.setName("filler6"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        gridBagConstraints.insets = new Insets(0, 20, 0, 20);
         jPanel4.add(filler6, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
+
+        filler7.setName("filler7"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.insets = new Insets(0, 10, 0, 10);
         jPanel4.add(filler7, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(jPanel4, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
+        Mnemonics.setLocalizedText(
             jLabel11,
-            org.openide.util.NbBundle.getMessage(
+            NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
                 "TreppeBauteilZustandKostenPanel.jLabel11.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        jLabel11.setName("jLabel11");                              // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         jPanel2.add(jLabel11, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
+
+        filler3.setName("filler3"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 20, 0);
+        gridBagConstraints.insets = new Insets(20, 0, 20, 0);
         jPanel2.add(filler3, gridBagConstraints);
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(4);
         jTextArea1.setWrapStyleWord(true);
+        jTextArea1.setName("jTextArea1"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sanierungsmassnahmen}"),
+                ELProperty.create("${cidsBean.sanierungsmassnahmen}"),
                 jTextArea1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(jTextArea1);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
         jPanel2.add(jScrollPane1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
+        Mnemonics.setLocalizedText(
             jLabel6,
-            org.openide.util.NbBundle.getMessage(
-                TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel6.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+            NbBundle.getMessage(TreppeBauteilZustandKostenPanel.class, "TreppeBauteilZustandKostenPanel.jLabel6.text")); // NOI18N
+        jLabel6.setName("jLabel6");                                                                                      // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         jPanel2.add(jLabel6, gridBagConstraints);
 
+        jPanel3.setName("jPanel3"); // NOI18N
         jPanel3.setOpaque(false);
-        jPanel3.setLayout(new java.awt.GridBagLayout());
+        jPanel3.setLayout(new GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
+        Mnemonics.setLocalizedText(
             jLabel7,
-            org.openide.util.NbBundle.getMessage(
-                TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jLabel7.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+            NbBundle.getMessage(TreppeBauteilZustandKostenPanel.class, "TreppeBauteilZustandKostenPanel.jLabel7.text")); // NOI18N
+        jLabel7.setName("jLabel7");                                                                                      // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        gridBagConstraints.insets = new Insets(0, 2, 0, 0);
         jPanel3.add(jLabel7, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
+
+        filler2.setName("filler2"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 45, 0, 45);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 45, 0, 45);
         jPanel3.add(filler2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
+
+        filler1.setName("filler1"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         jPanel3.add(filler1, gridBagConstraints);
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.01d));
+        jSpinner1.setModel(new SpinnerNumberModel(0.0d, 0.0d, null, 0.01d));
+        jSpinner1.setName("jSpinner1"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kosten}"),
+                ELProperty.create("${cidsBean.kosten}"),
                 jSpinner1,
-                org.jdesktop.beansbinding.BeanProperty.create("value"));
+                BeanProperty.create("value"));
         binding.setSourceNullValue(0d);
         binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
         jPanel3.add(jSpinner1, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(jPanel3, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panZusammenfassungContent.add(jPanel2, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panZusammenfassung.add(panZusammenfassungContent, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(panZusammenfassung, gridBagConstraints);
