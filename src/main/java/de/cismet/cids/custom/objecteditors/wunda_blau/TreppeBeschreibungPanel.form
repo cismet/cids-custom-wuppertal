@@ -709,7 +709,10 @@
                         <Property name="name" type="java.lang.String" value="jCheckBox3" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ist_zugaenge}" target="jCheckBox3" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ist_zugaenge}" target="jCheckBox3" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -759,7 +762,10 @@
                         <Property name="name" type="java.lang.String" value="jCheckBox4" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ist_gebaeude}" target="jCheckBox4" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ist_gebaeude}" target="jCheckBox4" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -809,7 +815,10 @@
                         <Property name="name" type="java.lang.String" value="jCheckBox5" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ist_beleuchtung}" target="jCheckBox5" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ist_beleuchtung}" target="jCheckBox5" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1171,7 +1180,10 @@
                         <Property name="name" type="java.lang.String" value="jCheckBox1" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ist_gesperrt}" target="jCheckBox1" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ist_gesperrt}" target="jCheckBox1" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>

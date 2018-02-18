@@ -628,32 +628,32 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosValueChanged(final ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
+    private void lstFotosValueChanged(final ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
         if (!evt.getValueIsAdjusting() && listListenerEnabled) {
             loadFoto();
         }
-    }//GEN-LAST:event_lstFotosValueChanged
+    }                                                                 //GEN-LAST:event_lstFotosValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddImgActionPerformed
+    private void btnAddImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
             final File[] selFiles = fileChooser.getSelectedFiles();
             if ((selFiles != null) && (selFiles.length > 0)) {
                 CismetThreadPool.execute(new ImageUploadWorker(Arrays.asList(selFiles)));
             }
         }
-    }//GEN-LAST:event_btnAddImgActionPerformed
+    }                                                              //GEN-LAST:event_btnAddImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveImgActionPerformed
+    private void btnRemoveImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveImgActionPerformed
         final Object[] selection = lstFotos.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -699,25 +699,25 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveImgActionPerformed
+    } //GEN-LAST:event_btnRemoveImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() - 1);
-    }//GEN-LAST:event_btnPrevImgActionPerformed
+    }                                                               //GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() + 1);
-    }//GEN-LAST:event_btnNextImgActionPerformed
+    }                                                               //GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -929,6 +929,8 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                 ELProperty.create("${cidsBean.ist_zugaenge}"),
                 jCheckBox3,
                 BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -990,6 +992,8 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                 ELProperty.create("${cidsBean.ist_gebaeude}"),
                 jCheckBox4,
                 BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1051,6 +1055,8 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                 ELProperty.create("${cidsBean.ist_beleuchtung}"),
                 jCheckBox5,
                 BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1395,6 +1401,8 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                 ELProperty.create("${cidsBean.ist_gesperrt}"),
                 jCheckBox1,
                 BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
