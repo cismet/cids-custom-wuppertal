@@ -75,8 +75,6 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private boolean isAlive = true;
-
     private final boolean editable;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -191,7 +189,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel29.add(jLabel79, gridBagConstraints);
 
         defaultBindableReferenceCombo4.setName("defaultBindableReferenceCombo4"); // NOI18N
@@ -210,7 +208,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel29.add(defaultBindableReferenceCombo4, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -221,7 +219,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel29.add(jLabel80, gridBagConstraints);
 
         defaultBindableReferenceCombo5.setName("defaultBindableReferenceCombo5"); // NOI18N
@@ -238,7 +236,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel29.add(defaultBindableReferenceCombo5, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -250,7 +248,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel29.add(jLabel78, gridBagConstraints);
 
         jPanel2.setName("jPanel2"); // NOI18N
@@ -280,7 +278,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel29.add(jPanel2, gridBagConstraints);
 
         filler4.setName("filler4"); // NOI18N
@@ -288,7 +286,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(20, 0, 20, 0);
+        gridBagConstraints.insets = new Insets(19, 0, 19, 0);
         jPanel29.add(filler4, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -384,18 +382,15 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        if (cidsBean != null) {
-            bindingGroup.unbind();
-            if (isAlive) {
-                bindingGroup.bind();
-            }
-        }
+        bindingGroup.bind();
     }
 
     @Override
     public void dispose() {
-        isAlive = false;
+        bindingGroup.unbind();
         treppeBauteilZustandKostenPanel1.dispose();
+        cidsBean = null;
     }
 }

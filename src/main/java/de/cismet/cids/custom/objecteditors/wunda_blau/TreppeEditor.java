@@ -1184,27 +1184,25 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         lblTitle.setText("Treppe: " + cidsBean);
+        bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        if (cidsBean != null) {
-            if (editable) {
-                CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
-                if (entwaesserungBean == null) {
-                    try {
-                        entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
-                                "WUNDA_BLAU",
-                                "treppe_entwaesserung");
-                        entwaesserungBean.setProperty(
-                            "zustand",
-                            CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_zustand"));
-                        cidsBean.setProperty("entwaesserung", entwaesserungBean);
-                    } catch (final Exception ex) {
-                        LOG.error("could not create entwaesserung bean", ex);
-                    }
+        bindingGroup.bind();
+
+        if ((cidsBean != null) && editable) {
+            CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
+            if (entwaesserungBean == null) {
+                try {
+                    entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            "treppe_entwaesserung");
+                    entwaesserungBean.setProperty(
+                        "zustand",
+                        CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_zustand"));
+                    cidsBean.setProperty("entwaesserung", entwaesserungBean);
+                } catch (final Exception ex) {
+                    LOG.error("could not create entwaesserung bean", ex);
                 }
             }
-
-            bindingGroup.unbind();
-            bindingGroup.bind();
             overview.recalculateAll();
         }
 
@@ -1222,6 +1220,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
     @Override
     public void dispose() {
+        bindingGroup.unbind();
+
         treppeHandlaeufePanel2.dispose();
         treppePodestePanel1.dispose();
         treppeLeitelementePanel1.dispose();
@@ -1229,7 +1229,15 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         treppeEntwaesserung1.dispose();
         treppeStuetzmauernPanel1.dispose();
         treppePicturePanel1.dispose();
-        bindingGroup.unbind();
+
+        treppeHandlaeufePanel2 = null;
+        treppePodestePanel1 = null;
+        treppeLeitelementePanel1 = null;
+        treppeHandlaeufePanel2 = null;
+        treppeEntwaesserung1 = null;
+        treppeStuetzmauernPanel1 = null;
+        treppePicturePanel1 = null;
+        cidsBean = null;
     }
 
     @Override

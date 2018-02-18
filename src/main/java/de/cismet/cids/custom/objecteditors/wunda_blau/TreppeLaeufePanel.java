@@ -285,7 +285,9 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable 
     public void dispose() {
         for (final Component comp : jPanel1.getComponents()) {
             if (comp instanceof TreppeLaufPanel) {
-                ((TreppeLaufPanel)comp).dispose();
+                final TreppeLaufPanel panel = (TreppeLaufPanel)comp;
+                panel.dispose();
+                jPanel1.remove(panel);
             }
         }
     }

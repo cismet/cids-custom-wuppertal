@@ -277,7 +277,6 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
         jPanel1.add(jspFotoList, gridBagConstraints);
 
         pnlCtrlButtons.setName("pnlCtrlButtons"); // NOI18N
@@ -316,7 +315,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 0);
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         jPanel1.add(pnlCtrlButtons, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -325,7 +324,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 0);
         jPanel2.add(jPanel1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -525,7 +524,6 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
     private boolean listListenerEnabled = true;
     private boolean resizeListenerEnabled;
     private CidsBean cidsBean;
-    private boolean isAlive = true;
     private ImageResizeWorker currentResizeWorker;
 
     private CidsBean fotoCidsBean;
@@ -630,32 +628,32 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosValueChanged(final ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
+    private void lstFotosValueChanged(final ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
         if (!evt.getValueIsAdjusting() && listListenerEnabled) {
             loadFoto();
         }
-    }                                                                 //GEN-LAST:event_lstFotosValueChanged
+    }//GEN-LAST:event_lstFotosValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
+    private void btnAddImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddImgActionPerformed
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
             final File[] selFiles = fileChooser.getSelectedFiles();
             if ((selFiles != null) && (selFiles.length > 0)) {
                 CismetThreadPool.execute(new ImageUploadWorker(Arrays.asList(selFiles)));
             }
         }
-    }                                                              //GEN-LAST:event_btnAddImgActionPerformed
+    }//GEN-LAST:event_btnAddImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveImgActionPerformed
+    private void btnRemoveImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveImgActionPerformed
         final Object[] selection = lstFotos.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -701,25 +699,25 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveImgActionPerformed
+    }//GEN-LAST:event_btnRemoveImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() - 1);
-    }                                                               //GEN-LAST:event_btnPrevImgActionPerformed
+    }//GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() + 1);
-    }                                                               //GEN-LAST:event_btnNextImgActionPerformed
+    }//GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -763,16 +761,15 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.bind();
         this.cidsBean = cidsBean;
+        bindingGroup.unbind();
+
         if (cidsBean != null) {
-            bindingGroup.unbind();
-            if (isAlive) {
-                bindingGroup.bind();
-                if (lstFotos.getModel().getSize() > 0) {
-                    lstFotos.setSelectedIndex(0);
-                }
-                initMap();
+            if (lstFotos.getModel().getSize() > 0) {
+                lstFotos.setSelectedIndex(0);
             }
+            initMap();
         }
     }
 
@@ -995,7 +992,10 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
     @Override
     public void dispose() {
-        isAlive = false;
+        bindingGroup.unbind();
+        map.getFeatureCollection().removeAllFeatures();
+        map.dispose();
+        cidsBean = null;
     }
 
     /**

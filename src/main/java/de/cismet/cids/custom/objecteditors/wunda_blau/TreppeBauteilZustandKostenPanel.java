@@ -70,7 +70,6 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
 
     private static final Logger LOG = Logger.getLogger(TreppeBauteilZustandKostenPanel.class);
     private static final TreppeEditor.IntegerToLongConverter CONVERTER_INT = new TreppeEditor.IntegerToLongConverter();
-    private static final TreppeEditor.DoubleToLongConverter CONVERTER_DOUBLE = new TreppeEditor.DoubleToLongConverter();
 
     private static final double[][][] MATRIX_DSV = {
             // V=0, V=1, V=2, V=3, V=4
@@ -115,7 +114,6 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
 
     private final boolean editable;
     private CidsBean cidsBean;
-    private boolean isAlive = true;
     private final PropertyChangeListener propChangeListener = new PropertyChangeListener() {
 
             @Override
@@ -282,7 +280,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel2.add(jLabel5, gridBagConstraints);
 
         jPanel4.setName("jPanel4"); // NOI18N
@@ -301,7 +299,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 7);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 7);
         jPanel4.add(jLabel1, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -316,7 +314,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 7);
+        gridBagConstraints.insets = new Insets(1, 10, 1, 7);
         jPanel4.add(jLabel2, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -331,7 +329,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 7);
+        gridBagConstraints.insets = new Insets(1, 10, 1, 7);
         jPanel4.add(jLabel3, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -346,7 +344,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 7);
+        gridBagConstraints.insets = new Insets(1, 10, 1, 7);
         jPanel4.add(jLabel4, gridBagConstraints);
 
         jFormattedTextField1.setFormatterFactory(new DefaultFormatterFactory(
@@ -371,7 +369,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel4.add(jFormattedTextField1, gridBagConstraints);
 
         jFormattedTextField2.setFormatterFactory(new DefaultFormatterFactory(
@@ -396,7 +394,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel4.add(jFormattedTextField2, gridBagConstraints);
 
         jFormattedTextField3.setFormatterFactory(new DefaultFormatterFactory(
@@ -421,7 +419,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 2);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 2);
         jPanel4.add(jFormattedTextField3, gridBagConstraints);
 
         jFormattedTextField4.setEditable(false);
@@ -446,7 +444,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel4.add(jFormattedTextField4, gridBagConstraints);
 
         filler4.setName("filler4"); // NOI18N
@@ -501,7 +499,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel2.add(jLabel11, gridBagConstraints);
 
         filler3.setName("filler3"); // NOI18N
@@ -509,7 +507,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(20, 0, 20, 0);
+        gridBagConstraints.insets = new Insets(19, 0, 19, 0);
         jPanel2.add(filler3, gridBagConstraints);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -535,7 +533,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel2.add(jScrollPane1, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -546,7 +544,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel2.add(jLabel6, gridBagConstraints);
 
         jPanel3.setName("jPanel3"); // NOI18N
@@ -676,11 +674,9 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         if (this.cidsBean != null) {
             this.cidsBean.removePropertyChangeListener(propChangeListener);
         }
-        this.cidsBean = cidsBean;
         bindingGroup.unbind();
-        if (isAlive) {
-            bindingGroup.bind();
-        }
+        this.cidsBean = cidsBean;
+        bindingGroup.bind();
         if (cidsBean != null) {
             cidsBean.addPropertyChangeListener(propChangeListener);
         }
@@ -691,9 +687,11 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
 
     @Override
     public void dispose() {
-        isAlive = false;
-        if (this.cidsBean != null) {
-            this.cidsBean.removePropertyChangeListener(propChangeListener);
+        bindingGroup.unbind();
+
+        if (cidsBean != null) {
+            cidsBean.removePropertyChangeListener(propChangeListener);
+            cidsBean = null;
         }
     }
 }

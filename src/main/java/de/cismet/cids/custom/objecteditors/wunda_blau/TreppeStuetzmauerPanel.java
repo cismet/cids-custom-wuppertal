@@ -102,9 +102,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         final Box.Filler filler6 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final JPanel jPanel3 = new JPanel();
-        final TreppeBauteilZustandKostenPanel treppeBauteilZustandKostenPanel4 = new TreppeBauteilZustandKostenPanel(
-                false,
-                true);
+        treppeBauteilZustandKostenPanel4 = new TreppeBauteilZustandKostenPanel(false, true);
         final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         btnRemoveArt1 = new JButton();
         final JSeparator jSeparator1 = new JSeparator();
@@ -158,7 +156,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel36.add(jLabel62, gridBagConstraints);
 
         jPanel1.setName("jPanel1"); // NOI18N
@@ -174,7 +172,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 10, 1, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
 
         jXHyperlink1.setName("jXHyperlink1"); // NOI18N
@@ -194,7 +192,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel1.add(jXHyperlink1, gridBagConstraints);
 
         filler1.setName("filler1"); // NOI18N
@@ -221,13 +219,13 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel1.add(jTextField1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel36.add(jPanel1, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -238,7 +236,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel36.add(jLabel79, gridBagConstraints);
 
         jTextField2.setEditable(false);
@@ -256,7 +254,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel36.add(jTextField2, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -267,7 +265,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel36.add(jLabel78, gridBagConstraints);
 
         jTextField3.setName("jTextField3"); // NOI18N
@@ -284,7 +282,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel36.add(jTextField3, gridBagConstraints);
 
         jScrollPane5.setName("jScrollPane5"); // NOI18N
@@ -309,7 +307,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel36.add(jScrollPane5, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -320,7 +318,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel36.add(jLabel66, gridBagConstraints);
 
         filler6.setName("filler6"); // NOI18N
@@ -328,7 +326,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(20, 0, 20, 0);
+        gridBagConstraints.insets = new Insets(19, 0, 19, 0);
         jPanel36.add(filler6, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -468,7 +466,6 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private boolean isAlive = true;
     private CidsBean mauerBean;
     private CidsBean zustandBean;
     private TreppeStuetzmauernPanel parent;
@@ -481,6 +478,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     JTextField jTextField2;
     JTextField jTextField3;
     JXHyperlink jXHyperlink1;
+    TreppeBauteilZustandKostenPanel treppeBauteilZustandKostenPanel4;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -557,13 +555,9 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        if (cidsBean != null) {
-            bindingGroup.unbind();
-            if (isAlive) {
-                bindingGroup.bind();
-            }
-        }
+        bindingGroup.bind();
     }
 
     /**
@@ -595,6 +589,12 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
 
     @Override
     public void dispose() {
-        isAlive = false;
+        bindingGroup.unbind();
+
+        parent = null;
+        cidsBean = null;
+        mauerBean = null;
+        zustandBean = null;
+        treppeBauteilZustandKostenPanel4.dispose();
     }
 }

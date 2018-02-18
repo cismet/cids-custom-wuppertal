@@ -285,7 +285,9 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
     public void dispose() {
         for (final Component comp : jPanel1.getComponents()) {
             if (comp instanceof TreppeHandlaufPanel) {
-                ((TreppeHandlaufPanel)comp).dispose();
+                final TreppeHandlaufPanel panel = (TreppeHandlaufPanel)comp;
+                panel.dispose();
+                jPanel1.remove(panel);
             }
         }
     }

@@ -148,7 +148,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel25.add(jLabel62, gridBagConstraints);
 
         jTextField22.setName("jTextField22"); // NOI18N
@@ -165,7 +165,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel25.add(jTextField22, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -176,7 +176,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel25.add(jLabel68, gridBagConstraints);
 
         filler4.setName("filler4"); // NOI18N
@@ -184,7 +184,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(20, 0, 20, 0);
+        gridBagConstraints.insets = new Insets(19, 0, 19, 0);
         jPanel25.add(filler4, gridBagConstraints);
 
         jScrollPane8.setName("jScrollPane8"); // NOI18N
@@ -209,7 +209,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel25.add(jScrollPane8, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -220,7 +220,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel25.add(jLabel66, gridBagConstraints);
 
         filler5.setName("filler5"); // NOI18N
@@ -228,7 +228,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(20, 0, 20, 0);
+        gridBagConstraints.insets = new Insets(19, 0, 19, 0);
         jPanel25.add(filler5, gridBagConstraints);
 
         jScrollPane5.setName("jScrollPane5"); // NOI18N
@@ -253,7 +253,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel25.add(jScrollPane5, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -392,7 +392,6 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private boolean isAlive = true;
     private TreppeLeitelementePanel parent;
     private final boolean editable;
 
@@ -449,13 +448,9 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        if (cidsBean != null) {
-            bindingGroup.unbind();
-            if (isAlive) {
-                bindingGroup.bind();
-            }
-        }
+        bindingGroup.bind();
     }
 
     /**
@@ -469,6 +464,9 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
 
     @Override
     public void dispose() {
-        isAlive = false;
+        bindingGroup.unbind();
+        treppeBauteilZustandKostenPanel3.dispose();
+        cidsBean = null;
+        parent = null;
     }
 }

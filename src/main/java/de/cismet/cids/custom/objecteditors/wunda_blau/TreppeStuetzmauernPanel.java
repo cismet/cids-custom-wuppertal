@@ -19,14 +19,8 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
-import org.openide.awt.Mnemonics;
-import org.openide.util.NbBundle;
-
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,13 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -121,39 +110,39 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      * @param  cidsBeans  DOCUMENT ME!
      */
     public void setCidsBeans(final List<CidsBean> cidsBeans) {
-        zustandBeanMap.clear();
-        jPanel1.removeAll();
-
-        this.cidsBeans = cidsBeans;
-
-        for (final CidsBean cidsBean : cidsBeans) {
-            final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
-            if ((mauerId != null)) {
-                new SwingWorker<CidsBean, Void>() {
-
-                        @Override
-                        protected CidsBean doInBackground() throws Exception {
-                            final MetaClass mc = CidsBean.getMetaClassFromTableName(
-                                    "WUNDA_BLAU",
-                                    "mauer");
-                            final MetaObject mo = SessionManager.getProxy()
-                                        .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU");
-                            final CidsBean mauerBean = mo.getBean();
-                            return mauerBean;
-                        }
-
-                        @Override
-                        protected void done() {
-                            try {
-                                final CidsBean mauerBean = get();
-                                addMauerPanel(cidsBean, mauerBean);
-                            } catch (final Exception ex) {
-                                LOG.error("error while adding panel", ex);
-                            }
-                        }
-                    }.execute();
-            }
-        }
+//        zustandBeanMap.clear();
+//        jPanel1.removeAll();
+//
+//        this.cidsBeans = cidsBeans;
+//
+//        for (final CidsBean cidsBean : cidsBeans) {
+//            final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
+//            if ((mauerId != null)) {
+//                new SwingWorker<CidsBean, Void>() {
+//
+//                        @Override
+//                        protected CidsBean doInBackground() throws Exception {
+//                            final MetaClass mc = CidsBean.getMetaClassFromTableName(
+//                                    "WUNDA_BLAU",
+//                                    "mauer");
+//                            final MetaObject mo = SessionManager.getProxy()
+//                                        .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU");
+//                            final CidsBean mauerBean = mo.getBean();
+//                            return mauerBean;
+//                        }
+//
+//                        @Override
+//                        protected void done() {
+//                            try {
+//                                final CidsBean mauerBean = get();
+//                                addMauerPanel(cidsBean, mauerBean);
+//                            } catch (final Exception ex) {
+//                                LOG.error("error while adding panel", ex);
+//                            }
+//                        }
+//                    }.execute();
+//            }
+//        }
     }
 
     /**
@@ -370,9 +359,12 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     public void dispose() {
         for (final Component comp : jPanel1.getComponents()) {
             if (comp instanceof TreppeStuetzmauerPanel) {
-                ((TreppeStuetzmauerPanel)comp).dispose();
+                final TreppeStuetzmauerPanel panel = (TreppeStuetzmauerPanel)comp;
+                panel.dispose();
+                jPanel1.remove(panel);
             }
         }
+        zustandBeanMap.clear();
     }
 
     //~ Inner Classes ----------------------------------------------------------

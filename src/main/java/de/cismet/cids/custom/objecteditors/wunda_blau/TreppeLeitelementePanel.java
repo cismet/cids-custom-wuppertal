@@ -286,7 +286,9 @@ public class TreppeLeitelementePanel extends javax.swing.JPanel implements Dispo
     public void dispose() {
         for (final Component comp : jPanel1.getComponents()) {
             if (comp instanceof TreppeLeitelementPanel) {
-                ((TreppeLeitelementPanel)comp).dispose();
+                final TreppeLeitelementPanel panel = (TreppeLeitelementPanel)comp;
+                panel.dispose();
+                jPanel1.remove(panel);
             }
         }
     }
