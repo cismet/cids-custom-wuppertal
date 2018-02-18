@@ -29,7 +29,13 @@ public class MauernReportBean extends ReportBeanWithMapAndImages {
      * @param  mauer  DOCUMENT ME!
      */
     public MauernReportBean(final CidsBean mauer) {
-        super(mauer, "georeferenz.geo_field", "bilder");
+        super(
+            mauer,
+            "georeferenz.geo_field",
+            "bilder",
+            "url",
+            java.util.ResourceBundle.getBundle(
+                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"));
     }
 
     //~ Methods ----------------------------------------------------------------

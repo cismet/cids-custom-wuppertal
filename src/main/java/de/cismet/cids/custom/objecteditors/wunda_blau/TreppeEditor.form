@@ -402,9 +402,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.zustandStuetzmauern}" target="jLabel22" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="6" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -416,9 +413,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.zustandTreppen}" target="jLabel23" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -430,9 +424,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.zustandPodeste}" target="jLabel24" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="2" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -444,9 +435,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.zustandAbsturzsicherung}" target="jLabel25" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="3" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -456,11 +444,11 @@
                             <Component class="javax.swing.JLabel" name="jLabel26">
                               <Properties>
                                 <Property name="horizontalAlignment" type="int" value="0"/>
+                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeEditor.jLabel26.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                                </Property>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.zustandHandlauf}" target="jLabel26" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="4" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -470,11 +458,11 @@
                             <Component class="javax.swing.JLabel" name="jLabel27">
                               <Properties>
                                 <Property name="horizontalAlignment" type="int" value="0"/>
+                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeEditor.jLabel27.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                                </Property>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.zustandEntwaesserung}" target="jLabel27" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="5" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -484,11 +472,11 @@
                             <Component class="javax.swing.JLabel" name="jLabel28">
                               <Properties>
                                 <Property name="horizontalAlignment" type="int" value="0"/>
+                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeEditor.jLabel28.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                                </Property>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.zustandGesamt}" target="jLabel28" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="7" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -500,12 +488,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.kostenTreppen}" target="jLabel29" targetPath="text" updateStrategy="0" immediately="false">
-                                  <Property name="nullValue" type="java.lang.String" value="0,00 &#x20ac;"/>
-                                  <Property name="incompletePathValue" type="java.lang.String" value="0,00 &#x20ac;"/>
-                                </BindingProperty>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="1" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="12" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -517,9 +499,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.kostenPodeste}" target="jLabel30" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="2" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="12" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -531,9 +510,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.kostenAbsturzsicherung}" target="jLabel31" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="3" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="12" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -545,9 +521,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.kostenHandlauf}" target="jLabel32" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="4" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="12" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -559,9 +532,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.kostenEntwaesserung}" target="jLabel33" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="5" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="12" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -573,9 +543,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.kostenStuetzmauern}" target="jLabel34" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="6" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="12" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -587,9 +554,6 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="horizontalTextPosition" type="int" value="0"/>
                               </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${overview.kostenGesamt}" target="jLabel35" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                   <GridBagConstraints gridX="7" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="12" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>

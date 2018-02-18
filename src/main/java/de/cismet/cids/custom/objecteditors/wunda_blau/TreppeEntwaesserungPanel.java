@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.server.middleware.types.MetaClass;
+
 import org.apache.log4j.Logger;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -20,7 +22,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 /**
  * DOCUMENT ME!
@@ -33,21 +35,30 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TreppeEntwaesserungPanel.class);
+    private static final MetaClass MC__ENTWAESSERUNG_ART = ClassCacheMultiple.getMetaClass(
+            "WUNDA_BLAU",
+            "TREPPE_ENTWAESSERUNG_ART");
+    private static final MetaClass MC__ENTWAESSERUNG_ABLEITUNG = ClassCacheMultiple.getMetaClass(
+            "WUNDA_BLAU",
+            "TREPPE_ENTWAESSERUNG_ABLEITUNG");
 
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
+    private boolean isAlive = true;
 
     private final boolean editable;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo4;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo5;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel79;
+    private javax.swing.JLabel jLabel80;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel28;
@@ -80,16 +91,10 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
     public TreppeEntwaesserungPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
-        try {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ENTWAESSERUNG"));
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
         if (!editable) {
             RendererTools.makeReadOnly(jTextArea6);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
         }
     }
 
@@ -112,7 +117,15 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         panBeschreibungContent6 = new javax.swing.JPanel();
         jPanel29 = new javax.swing.JPanel();
         jLabel79 = new javax.swing.JLabel();
-        defaultBindableReferenceCombo4 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        defaultBindableReferenceCombo4 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__ENTWAESSERUNG_ART,
+                true,
+                false);
+        jLabel80 = new javax.swing.JLabel();
+        defaultBindableReferenceCombo5 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__ENTWAESSERUNG_ABLEITUNG,
+                true,
+                false);
         jLabel78 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
@@ -174,29 +187,54 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
                 "TreppeEntwaesserungPanel.jLabel79.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         jPanel29.add(jLabel79, gridBagConstraints);
 
-        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.art}");
-        final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJComboBoxBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                        this,
-                        eLProperty,
-                        defaultBindableReferenceCombo4);
-        bindingGroup.addBinding(jComboBoxBinding);
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art}"),
+                defaultBindableReferenceCombo4,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
         jPanel29.add(defaultBindableReferenceCombo4, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel80,
+            org.openide.util.NbBundle.getMessage(
+                TreppeEntwaesserungPanel.class,
+                "TreppeEntwaesserungPanel.jLabel80.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        jPanel29.add(jLabel80, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ableitung}"),
+                defaultBindableReferenceCombo5,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
+        jPanel29.add(defaultBindableReferenceCombo5, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel78,
@@ -206,7 +244,6 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         jLabel78.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
@@ -218,7 +255,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         jTextArea6.setLineWrap(true);
         jTextArea6.setWrapStyleWord(true);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
@@ -232,7 +269,6 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -240,7 +276,6 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         jPanel29.add(jPanel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 20, 0);
@@ -330,14 +365,18 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        bindingGroup.bind();
+        if (cidsBean != null) {
+            bindingGroup.unbind();
+            if (isAlive) {
+                bindingGroup.bind();
+            }
+        }
     }
 
     @Override
     public void dispose() {
-        bindingGroup.unbind();
+        isAlive = false;
         treppeBauteilZustandKostenPanel1.dispose();
     }
 }

@@ -46,7 +46,13 @@ public class TreppenReportBean extends ReportBeanWithMapAndImages {
      * @param  editor  DOCUMENT ME!
      */
     public TreppenReportBean(final CidsBean treppe, final TreppeEditor editor) {
-        super(treppe, "geometrie.geo_field", "bilder");
+        super(
+            treppe,
+            "geometrie.geo_field",
+            "bilder",
+            "url_treppen",
+            java.util.ResourceBundle.getBundle(
+                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"));
 
         zustandStuetzmauern = editor.getZustandStuetzmauern();
         kostenStuetzmauern = editor.getKostenStuetzmauern();

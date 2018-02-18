@@ -12,7 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.server.middleware.types.MetaClass;
+
 import org.apache.log4j.Logger;
+
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.wunda_blau.search.server.TreppeMaterialArtLightweightSearch;
@@ -21,7 +25,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 /**
  * DOCUMENT ME!
@@ -35,9 +39,20 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
 
     private static final Logger LOG = Logger.getLogger(TreppePodestPanel.class);
 
+    private static final MetaClass MC__PODEST_MATERIAL = ClassCacheMultiple.getMetaClass(
+            "WUNDA_BLAU",
+            "TREPPE_PODEST_MATERIAL");
+    private static final MetaClass MC__PODEST_FUGEN = ClassCacheMultiple.getMetaClass(
+            "WUNDA_BLAU",
+            "TREPPE_PODEST_FUGEN");
+    private static final MetaClass MC__ENTWAESSERUNG_ART = ClassCacheMultiple.getMetaClass(
+            "WUNDA_BLAU",
+            "TREPPE_ENTWAESSERUNG_ART");
+
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
+    private boolean isAlive = true;
     private TreppePodestePanel parent;
     private final boolean editable;
     private final TreppeMaterialArtLightweightSearch materialArtSearch1;
@@ -112,13 +127,6 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         materialArtSearch2.setTypId(2);
 
         initComponents();
-        try {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_PODEST"));
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
         if (!editable) {
             RendererTools.makeReadOnly(jCheckBox1);
             RendererTools.makeReadOnly(jCheckBox2);
@@ -164,7 +172,10 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         jLabel56 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__PODEST_MATERIAL,
+                true,
+                false);
         fastBindableReferenceCombo1 = new de.cismet.cids.editors.FastBindableReferenceCombo(
                 materialArtSearch1,
                 materialArtSearch1.getRepresentationPattern(),
@@ -175,9 +186,15 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
                 materialArtSearch2.getRepresentationFields());
         jSeparator3 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
-        defaultBindableReferenceCombo4 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        defaultBindableReferenceCombo4 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__ENTWAESSERUNG_ART,
+                true,
+                false);
         jLabel3 = new javax.swing.JLabel();
-        defaultBindableReferenceCombo5 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        defaultBindableReferenceCombo5 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__PODEST_FUGEN,
+                true,
+                false);
         jLabel55 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
@@ -303,6 +320,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
         jPanel3.add(jTextField19, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -642,8 +660,15 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         materialArtSearch1.setMaterialId((Integer)cidsBean.getProperty("material.id"));
         materialArtSearch2.setMaterialId((Integer)cidsBean.getProperty("material.id"));
 
-        fastBindableReferenceCombo1.refreshModel();
-        fastBindableReferenceCombo2.refreshModel();
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    fastBindableReferenceCombo1.refreshModel();
+                    fastBindableReferenceCombo2.refreshModel();
+                    return null;
+                }
+            }.execute();
     }
 
     @Override
@@ -653,11 +678,13 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
+            bindingGroup.unbind();
+            if (isAlive) {
+                bindingGroup.bind();
+            }
             refreshMaterialTyp();
-            bindingGroup.bind();
         }
     }
 
@@ -672,6 +699,6 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
 
     @Override
     public void dispose() {
-        bindingGroup.unbind();
+        isAlive = false;
     }
 }

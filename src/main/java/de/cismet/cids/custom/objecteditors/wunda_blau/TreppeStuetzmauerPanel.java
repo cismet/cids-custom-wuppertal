@@ -24,8 +24,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
-
 /**
  * DOCUMENT ME!
  *
@@ -41,6 +39,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
+    private boolean isAlive = true;
     private CidsBean mauerBean;
     private CidsBean zustandBean;
     private TreppeStuetzmauernPanel parent;
@@ -95,13 +94,6 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     public TreppeStuetzmauerPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
-        try {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_STUETZMAUER"));
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
 
         if (!editable) {
             RendererTools.makeReadOnly(jTextField1);
@@ -513,10 +505,12 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
-            bindingGroup.bind();
+            bindingGroup.unbind();
+            if (isAlive) {
+                bindingGroup.bind();
+            }
         }
     }
 
@@ -549,6 +543,6 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
 
     @Override
     public void dispose() {
-        bindingGroup.unbind();
+        isAlive = false;
     }
 }

@@ -19,6 +19,7 @@ import java.beans.PropertyChangeListener;
 
 import java.text.DecimalFormat;
 
+import javax.swing.SwingWorker;
 import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -84,6 +85,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
 
     private final boolean editable;
     private CidsBean cidsBean;
+    private boolean isAlive = true;
     private final PropertyChangeListener propChangeListener = new PropertyChangeListener() {
 
             @Override
@@ -112,7 +114,6 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
     private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JFormattedTextField jFormattedTextField3;
     private javax.swing.JFormattedTextField jFormattedTextField4;
-    private javax.swing.JFormattedTextField jFormattedTextField5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -125,6 +126,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblHeaderAllgemein;
     private de.cismet.tools.gui.RoundedPanel panZusammenfassung;
@@ -165,12 +167,13 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
 
         initComponents();
 
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner1, 2);
         if (!editable) {
             RendererTools.makeReadOnly(jFormattedTextField1);
             RendererTools.makeReadOnly(jFormattedTextField2);
             RendererTools.makeReadOnly(jFormattedTextField3);
             RendererTools.makeReadOnly(jFormattedTextField4);
-            RendererTools.makeReadOnly(jFormattedTextField5);
+            RendererTools.makeReadOnly(jSpinner1);
             RendererTools.makeReadOnly(jTextArea1);
         }
 
@@ -237,7 +240,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
-        jFormattedTextField5 = new javax.swing.JFormattedTextField();
+        jSpinner1 = new javax.swing.JSpinner();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -558,28 +561,22 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         gridBagConstraints.weightx = 1.0;
         jPanel3.add(filler1, gridBagConstraints);
 
-        jFormattedTextField5.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,###.00"))));
-        jFormattedTextField5.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jFormattedTextField5.setText(org.openide.util.NbBundle.getMessage(
-                TreppeBauteilZustandKostenPanel.class,
-                "TreppeBauteilZustandKostenPanel.jFormattedTextField5.text_1")); // NOI18N
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.01d));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kosten}"),
-                jFormattedTextField5,
+                jSpinner1,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
-        binding.setConverter(CONVERTER_DOUBLE);
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
-        jPanel3.add(jFormattedTextField5, gridBagConstraints);
+        jPanel3.add(jSpinner1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -618,26 +615,34 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
      * DOCUMENT ME!
      */
     private void recalculateGesamt() {
-        final Integer standsicherheit = (Integer)cidsBean.getProperty("standsicherheit");
-        final Integer verkehrssicherheit = (Integer)cidsBean.getProperty("verkehrssicherheit");
-        final Integer dauerhaftigkeit = (Integer)cidsBean.getProperty("dauerhaftigkeit");
+        final CidsBean cidsBean = this.cidsBean;
+        new SwingWorker<Void, Void>() {
 
-        try {
-            if ((standsicherheit != null) && (verkehrssicherheit != null) && (dauerhaftigkeit != null)
-                        && (standsicherheit >= 0)
-                        && (verkehrssicherheit >= 0)
-                        && (dauerhaftigkeit >= 0)
-                        && (standsicherheit < MATRIX_DSV[0].length)
-                        && (verkehrssicherheit < MATRIX_DSV[0][0].length)
-                        && (dauerhaftigkeit < MATRIX_DSV.length)) {
-                final double zustand = MATRIX_DSV[dauerhaftigkeit][standsicherheit][verkehrssicherheit];
-                cidsBean.setProperty("gesamt", zustand);
-            } else {
-                cidsBean.setProperty("gesamt", null);
-            }
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
+                @Override
+                protected Void doInBackground() throws Exception {
+                    final Integer standsicherheit = (Integer)cidsBean.getProperty("standsicherheit");
+                    final Integer verkehrssicherheit = (Integer)cidsBean.getProperty("verkehrssicherheit");
+                    final Integer dauerhaftigkeit = (Integer)cidsBean.getProperty("dauerhaftigkeit");
+
+                    try {
+                        if ((standsicherheit != null) && (verkehrssicherheit != null) && (dauerhaftigkeit != null)
+                                    && (standsicherheit >= 0)
+                                    && (verkehrssicherheit >= 0)
+                                    && (dauerhaftigkeit >= 0)
+                                    && (standsicherheit < MATRIX_DSV[0].length)
+                                    && (verkehrssicherheit < MATRIX_DSV[0][0].length)
+                                    && (dauerhaftigkeit < MATRIX_DSV.length)) {
+                            final double zustand = MATRIX_DSV[dauerhaftigkeit][standsicherheit][verkehrssicherheit];
+                            cidsBean.setProperty("gesamt", zustand);
+                        } else {
+                            cidsBean.setProperty("gesamt", null);
+                        }
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                    return null;
+                }
+            }.execute();
     }
 
     @Override
@@ -650,23 +655,24 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
         if (this.cidsBean != null) {
             this.cidsBean.removePropertyChangeListener(propChangeListener);
         }
-        bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        bindingGroup.bind();
-
-        if ((cidsBean != null)) {
+        bindingGroup.unbind();
+        if (isAlive) {
+            bindingGroup.bind();
+        }
+        if (cidsBean != null) {
             cidsBean.addPropertyChangeListener(propChangeListener);
-            if (editable) {
-                recalculateGesamt();
-            }
+        }
+        if (editable) {
+            recalculateGesamt();
         }
     }
 
     @Override
     public void dispose() {
+        isAlive = false;
         if (this.cidsBean != null) {
             this.cidsBean.removePropertyChangeListener(propChangeListener);
         }
-        bindingGroup.unbind();
     }
 }

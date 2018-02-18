@@ -44,7 +44,6 @@ import de.cismet.cids.custom.reports.wunda_blau.TreppenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
@@ -162,13 +161,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     public TreppeEditor(final boolean editable) {
         this.editable = editable;
         initComponents();
-        try {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE"));
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
 
         jTabbedPane1.setUI(new TabbedPaneUITransparent());
         jTabbedPane1.addChangeListener(new ChangeListener() {
@@ -200,7 +192,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
             "WUNDA_BLAU",
             null,
             "admin",
-            "9eh1nich10hne",
+            "xxx",
             "treppe",
             4,
             1000,
@@ -564,15 +556,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel22.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.zustandStuetzmauern}"),
-                jLabel22,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
@@ -582,15 +565,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel23.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.zustandTreppen}"),
-                jLabel23,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -600,15 +574,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel24.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.zustandPodeste}"),
-                jLabel24,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -618,15 +583,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel25.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.zustandAbsturzsicherung}"),
-                jLabel25,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
@@ -635,16 +591,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         jPanel11.add(jLabel25, gridBagConstraints);
 
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel26,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel26.text")); // NOI18N
         jLabel26.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.zustandHandlauf}"),
-                jLabel26,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -653,16 +603,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         jPanel11.add(jLabel26, gridBagConstraints);
 
         jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel27,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel27.text")); // NOI18N
         jLabel27.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.zustandEntwaesserung}"),
-                jLabel27,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
@@ -671,16 +615,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         jPanel11.add(jLabel27, gridBagConstraints);
 
         jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel28,
+            org.openide.util.NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel28.text")); // NOI18N
         jLabel28.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.zustandGesamt}"),
-                jLabel28,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 2;
@@ -690,17 +628,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel29.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.kostenTreppen}"),
-                jLabel29,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("0,00 €");
-        binding.setSourceUnreadableValue("0,00 €");
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -710,15 +637,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel30.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.kostenPodeste}"),
-                jLabel30,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -728,15 +646,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel31.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.kostenAbsturzsicherung}"),
-                jLabel31,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
@@ -746,15 +655,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel32.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.kostenHandlauf}"),
-                jLabel32,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
@@ -764,15 +664,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel33.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.kostenEntwaesserung}"),
-                jLabel33,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
@@ -782,15 +673,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel34.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.kostenStuetzmauern}"),
-                jLabel34,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
@@ -800,15 +682,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         jLabel35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel35.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${overview.kostenGesamt}"),
-                jLabel35,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 3;
@@ -1021,7 +894,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(panZusammenfassung, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"),
@@ -1296,28 +1169,41 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
         lblTitle.setText("Treppe: " + cidsBean);
         this.cidsBean = cidsBean;
-        if (editable && (cidsBean != null)) {
-            CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
-            if (entwaesserungBean == null) {
-                try {
-                    entwaesserungBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_entwaesserung");
-                    entwaesserungBean.setProperty(
-                        "zustand",
-                        CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_zustand"));
-                    cidsBean.setProperty("entwaesserung", entwaesserungBean);
-                } catch (final Exception ex) {
-                    LOG.error("could not create entwaesserung bean", ex);
+        if (cidsBean != null) {
+            if (editable) {
+                CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
+                if (entwaesserungBean == null) {
+                    try {
+                        entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
+                                "WUNDA_BLAU",
+                                "treppe_entwaesserung");
+                        entwaesserungBean.setProperty(
+                            "zustand",
+                            CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_zustand"));
+                        cidsBean.setProperty("entwaesserung", entwaesserungBean);
+                    } catch (final Exception ex) {
+                        LOG.error("could not create entwaesserung bean", ex);
+                    }
                 }
             }
+
+            bindingGroup.unbind();
+            bindingGroup.bind();
+            overview.recalculateAll();
         }
 
-        overview.recalculateAll();
-        bindingGroup.bind();
-
         ((CardLayout)getLayout()).show(this, "card1");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ZustandOverview getOverview() {
+        return overview;
     }
 
     @Override
@@ -1422,22 +1308,23 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        private void recalculateAll() {
-            recalculateTreppenlaeufe();
-            recalculatePodeste();
-            recalculateHandlauf();
-            recalculateAbsturzsicherung();
-            recalculateEntwaesserung();
-            recalculateStuetzmauern();
-            recalculateGesamt();
-
+        public void recalculateAll() {
+            if (cidsBean != null) {
+                recalculateTreppenlaeufe();
+                recalculatePodeste();
+                recalculateHandlauf();
+                recalculateAbsturzsicherung();
+                recalculateEntwaesserung();
+                recalculateStuetzmauern();
+                recalculateGesamt();
+            }
             refreshView();
         }
 
         /**
          * DOCUMENT ME!
          */
-        private void refreshView() {
+        public void refreshView() {
             final Currency eur = Currency.getInstance("EUR");
             final NumberFormat formatKosten = NumberFormat.getCurrencyInstance(Locale.GERMANY);
             formatKosten.setCurrency(eur);
@@ -1540,7 +1427,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        private void recalculateTreppenlaeufe() {
+        public void recalculateTreppenlaeufe() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
             if (cidsBean != null) {
@@ -1561,7 +1448,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        private void recalculatePodeste() {
+        public void recalculatePodeste() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
             if (cidsBean != null) {
@@ -1582,7 +1469,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        private void recalculateHandlauf() {
+        public void recalculateHandlauf() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
             if (cidsBean != null) {
@@ -1604,7 +1491,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        private void recalculateAbsturzsicherung() {
+        public void recalculateAbsturzsicherung() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
             if (cidsBean != null) {
@@ -1626,7 +1513,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        private void recalculateEntwaesserung() {
+        public void recalculateEntwaesserung() {
             final Double zustand = (cidsBean != null) ? (Double)cidsBean.getProperty("entwaesserung.zustand.gesamt")
                                                       : null;
             final Double kosten = (cidsBean != null) ? (Double)cidsBean.getProperty("entwaesserung.zustand.kosten")
@@ -1639,7 +1526,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        private void recalculateStuetzmauern() {
+        public void recalculateStuetzmauern() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
             if (cidsBean != null) {
@@ -1661,7 +1548,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        private void recalculateGesamt() {
+        public void recalculateGesamt() {
             final double[] kostenAll = new double[] {
                     kostenTreppen,
                     kostenPodeste,

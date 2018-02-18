@@ -31,7 +31,6 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -170,6 +169,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
     private boolean listListenerEnabled = true;
     private boolean resizeListenerEnabled;
     private CidsBean cidsBean;
+    private boolean isAlive = true;
     private ImageResizeWorker currentResizeWorker;
 
     private CidsBean fotoCidsBean;
@@ -238,6 +238,24 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                     lstFotos.repaint();
                 }
             };
+
+        lstFotos.getModel().addListDataListener(new ListDataListener() {
+
+                @Override
+                public void intervalAdded(final ListDataEvent e) {
+                    defineButtonStatus();
+                }
+
+                @Override
+                public void intervalRemoved(final ListDataEvent e) {
+                    defineButtonStatus();
+                }
+
+                @Override
+                public void contentsChanged(final ListDataEvent e) {
+                    defineButtonStatus();
+                }
+            });
 
         timer = new Timer(300, new ActionListener() {
 
@@ -466,6 +484,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         pnlFoto.setOpaque(false);
         pnlFoto.setLayout(new java.awt.GridBagLayout());
 
+        lblPicture.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblPicture,
             org.openide.util.NbBundle.getMessage(TreppePicturePanel.class, "TreppePicturePanel.lblPicture.text")); // NOI18N
@@ -679,8 +698,6 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
             final String fileObj = (String)fotoCidsBean.getProperty("url.object_name");
             boolean cacheHit = false;
             if (fileObj != null) {
-//                final String[] file = fileObj.toString().split("/");
-//                final String object_name = file[file.length - 1];
                 final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(fileObj);
                 if (cachedImageRef != null) {
                     final BufferedImage cachedImage = cachedImageRef.get();
@@ -709,32 +726,17 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        bindingGroup.bind();
-
-        lstFotos.getModel().addListDataListener(new ListDataListener() {
-
-                @Override
-                public void intervalAdded(final ListDataEvent e) {
-                    defineButtonStatus();
+        if (cidsBean != null) {
+            bindingGroup.unbind();
+            if (isAlive) {
+                bindingGroup.bind();
+                if (lstFotos.getModel().getSize() > 0) {
+                    lstFotos.setSelectedIndex(0);
                 }
-
-                @Override
-                public void intervalRemoved(final ListDataEvent e) {
-                    defineButtonStatus();
-                }
-
-                @Override
-                public void contentsChanged(final ListDataEvent e) {
-                    defineButtonStatus();
-                }
-            });
-        if (lstFotos.getModel().getSize() > 0) {
-            lstFotos.setSelectedIndex(0);
+                initMap();
+            }
         }
-
-        initMap();
     }
 
     /**
@@ -956,33 +958,35 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
     @Override
     public void dispose() {
+        isAlive = false;
     }
 
     /**
      * DOCUMENT ME!
      */
     private void initMap() {
-        try {
-            if (cidsBean != null) {
-                final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
-                if (geoObj instanceof Geometry) {
-                    final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                            AlkisConstants.COMMONS.SRS_SERVICE);
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
-                    }
-                    final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                                AlkisConstants.COMMONS.GEO_BUFFER));
-                    final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
-                                    + (box.getHeight() * box.getHeight()));
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Buffer for map: " + diagonalLength);
-                    }
-                    final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(diagonalLength));
-                    final Runnable mapRunnable = new Runnable() {
+        if (cidsBean != null) {
+            final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
+            if (geoObj instanceof Geometry) {
+                new SwingWorker<Void, Void>() {
 
-                            @Override
-                            public void run() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            try {
+                                final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
+                                        AlkisConstants.COMMONS.SRS_SERVICE);
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                                }
+                                final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
+                                            AlkisConstants.COMMONS.GEO_BUFFER));
+                                final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
+                                                + (box.getHeight() * box.getHeight()));
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("Buffer for map: " + diagonalLength);
+                                }
+                                final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(
+                                            diagonalLength));
                                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
                                 mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                                 mappingModel.addHome(new XBoundingBox(
@@ -1026,17 +1030,13 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                                 map.setInteractionMode("MUTE");
                                 map.getFeatureCollection().addFeature(dsf);
                                 map.setAnimationDuration(duration);
+                            } catch (final Exception ex) {
+                                LOG.error("error while init map", ex);
                             }
-                        };
-                    if (EventQueue.isDispatchThread()) {
-                        mapRunnable.run();
-                    } else {
-                        EventQueue.invokeLater(mapRunnable);
-                    }
-                }
+                            return null;
+                        }
+                    }.execute();
             }
-        } catch (final Exception ex) {
-            LOG.error("error while init map", ex);
         }
     }
 

@@ -25,11 +25,14 @@ import java.io.InputStream;
 
 import java.text.NumberFormat;
 
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.Future;
 
 import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -39,7 +42,10 @@ import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.netutil.Proxy;
+
 import de.cismet.tools.CismetThreadPool;
+import de.cismet.tools.PasswordEncrypter;
 
 /**
  * DOCUMENT ME!
@@ -73,27 +79,34 @@ public class ReportBeanWithMapAndImages {
     /**
      * Creates a new MauernBeanWithMapAndImages object.
      *
-     * @param  cidsBean  DOCUMENT ME!
-     * @param  geomProp  DOCUMENT ME!
-     * @param  imgsProp  DOCUMENT ME!
+     * @param  cidsBean    DOCUMENT ME!
+     * @param  geomProp    DOCUMENT ME!
+     * @param  imgsProp    DOCUMENT ME!
+     * @param  davUrlProp  DOCUMENT ME!
+     * @param  mapUrl      DOCUMENT ME!
      */
-    public ReportBeanWithMapAndImages(final CidsBean cidsBean, final String geomProp, final String imgsProp) {
+    public ReportBeanWithMapAndImages(final CidsBean cidsBean,
+            final String geomProp,
+            final String imgsProp,
+            final String davUrlProp,
+            final String mapUrl) {
         this.cidsBean = cidsBean;
-        LOG.fatal("ReportBeanWithMapAndImages");
-//        final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
-//        String pass = webDavBundle.getString("password");
-//
-//        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-//            pass = PasswordEncrypter.decryptString(pass);
-//        }
-//
-//        WEB_DAV_PASSWORD = pass;
-//        WEB_DAV_USER = webDavBundle.getString("user");
-//        WEB_DAV_DIRECTORY = webDavBundle.getString("url");
-//        final WebDavHelper webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
+        final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
+        String pass = webDavBundle.getString("password");
 
-        MAP_URL = java.util.ResourceBundle.getBundle(
-                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url");
+        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
+            pass = PasswordEncrypter.decryptString(pass);
+        }
+
+        WEB_DAV_PASSWORD = pass;
+        WEB_DAV_USER = webDavBundle.getString("user");
+        WEB_DAV_DIRECTORY = webDavBundle.getString(davUrlProp);
+        final WebDavHelper webDavHelper = new WebDavHelper(Proxy.fromPreferences(),
+                WEB_DAV_USER,
+                WEB_DAV_PASSWORD,
+                false);
+
+        MAP_URL = mapUrl;
 
         final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
                     MAP_URL));
@@ -134,24 +147,21 @@ public class ReportBeanWithMapAndImages {
             }
         }
 
-//        final List<CidsBean> images = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, imgsProp);
-//        final StringBuilder url0Builder = new StringBuilder();
-//
-//        final StringBuilder url1Builder = new StringBuilder();
-//        for (final CidsBean b : images) {
-//            final Integer nr = (Integer)b.getProperty("laufende_nummer");
-//            if (nr == 1) {
-//                url0Builder.append(b.getProperty("url.object_name").toString());
-//            } else if (nr == 2) {
-//                url1Builder.append(b.getProperty("url.object_name").toString());
-//            }
-//        }
-//
-//        loadImage(url0Builder.toString(), imgState0, webDavHelper);
-//        loadImage(url1Builder.toString(), imgState1, webDavHelper);
+        final List<CidsBean> images = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, imgsProp);
+        final StringBuilder url0Builder = new StringBuilder();
 
-        imgState0.setError(true);
-        imgState1.setError(true);
+        final StringBuilder url1Builder = new StringBuilder();
+        for (final CidsBean b : images) {
+            final Integer nr = (Integer)b.getProperty("laufende_nummer");
+            if (nr == 1) {
+                url0Builder.append(b.getProperty("url.object_name").toString());
+            } else if (nr == 2) {
+                url1Builder.append(b.getProperty("url.object_name").toString());
+            }
+        }
+
+        loadImage(url0Builder.toString(), imgState0, webDavHelper);
+        loadImage(url1Builder.toString(), imgState1, webDavHelper);
     }
 
     //~ Methods ----------------------------------------------------------------

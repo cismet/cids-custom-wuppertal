@@ -12,10 +12,13 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.server.middleware.types.MetaClass;
+
 import org.apache.log4j.Logger;
 
 import java.awt.Component;
 
+import javax.swing.SwingWorker;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -25,7 +28,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 /**
  * DOCUMENT ME!
@@ -38,10 +41,14 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TreppeLaufPanel.class);
+    private static final MetaClass MC__TREPPENLAUF_MATERIAL = ClassCacheMultiple.getMetaClass(
+            "WUNDA_BLAU",
+            "TREPPE_TREPPENLAUF_MATERIAL");
 
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
+    private boolean isAlive = true;
     private TreppeLaeufePanel parent;
     private final boolean editable;
     private final TreppeMaterialArtLightweightSearch materialArtSearch1;
@@ -126,13 +133,6 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         materialArtSearch2.setTypId(2);
 
         initComponents();
-        try {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_TREPPENLAUF"));
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner2, 2);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner3, 2);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner4, 2);
@@ -195,7 +195,10 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         jLabel61 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__TREPPENLAUF_MATERIAL,
+                true,
+                false);
         fastBindableReferenceCombo1 = new de.cismet.cids.editors.FastBindableReferenceCombo(
                 materialArtSearch1,
                 materialArtSearch1.getRepresentationPattern(),
@@ -791,8 +794,15 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         materialArtSearch1.setMaterialId((Integer)cidsBean.getProperty("material.id"));
         materialArtSearch2.setMaterialId((Integer)cidsBean.getProperty("material.id"));
 
-        fastBindableReferenceCombo1.refreshModel();
-        fastBindableReferenceCombo2.refreshModel();
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    fastBindableReferenceCombo1.refreshModel();
+                    fastBindableReferenceCombo2.refreshModel();
+                    return null;
+                }
+            }.execute();
     }
 
     @Override
@@ -802,11 +812,13 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
+            bindingGroup.unbind();
+            if (isAlive) {
+                bindingGroup.bind();
+            }
             refreshMaterialTyp();
-            bindingGroup.bind();
         }
     }
 
@@ -821,6 +833,6 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
 
     @Override
     public void dispose() {
-        bindingGroup.unbind();
+        isAlive = false;
     }
 }

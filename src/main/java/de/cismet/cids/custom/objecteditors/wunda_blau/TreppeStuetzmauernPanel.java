@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -51,6 +52,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
     //~ Instance fields --------------------------------------------------------
 
+    private final boolean netbeansDesignDummy;
     private List<CidsBean> cidsBeans;
     private final boolean editable;
     private final HashMap<CidsBean, CidsBean> zustandBeanMap = new HashMap<>();
@@ -69,15 +71,26 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      * Creates a new TreppeStuetzmauernPanel object.
      */
     public TreppeStuetzmauernPanel() {
-        this(true);
+        this(true, true);
+    }
+
+    /**
+     * Creates a new TreppeStuetzmauernPanel object.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public TreppeStuetzmauernPanel(final boolean editable) {
+        this(editable, false);
     }
 
     /**
      * Creates new form TreppeStuetzmauernPanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable             DOCUMENT ME!
+     * @param  netbeansDesignDummy  DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel(final boolean editable) {
+    public TreppeStuetzmauernPanel(final boolean editable, final boolean netbeansDesignDummy) {
+        this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
         initComponents();
         jLabel1.setVisible(editable);
@@ -112,34 +125,32 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
         this.cidsBeans = cidsBeans;
 
-        if (cidsBeans != null) {
-            for (final CidsBean cidsBean : cidsBeans) {
-                if (cidsBean != null) {
-                    final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
-                    if ((mauerId != null)) {
-                        new SwingWorker<CidsBean, Void>() {
+        for (final CidsBean cidsBean : cidsBeans) {
+            final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
+            if ((mauerId != null)) {
+                new SwingWorker<CidsBean, Void>() {
 
-                                @Override
-                                protected CidsBean doInBackground() throws Exception {
-                                    final MetaClass mc = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "mauer");
-                                    final MetaObject mo = SessionManager.getProxy()
-                                                .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU");
-                                    final CidsBean mauerBean = mo.getBean();
-                                    return mauerBean;
-                                }
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                                    "WUNDA_BLAU",
+                                    "mauer");
+                            final MetaObject mo = SessionManager.getProxy()
+                                        .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU");
+                            final CidsBean mauerBean = mo.getBean();
+                            return mauerBean;
+                        }
 
-                                @Override
-                                protected void done() {
-                                    try {
-                                        final CidsBean mauerBean = get();
-                                        addMauerPanel(cidsBean, mauerBean);
-                                    } catch (final Exception ex) {
-                                        LOG.error(ex, ex);
-                                    }
-                                }
-                            }.execute();
-                    }
-                }
+                        @Override
+                        protected void done() {
+                            try {
+                                final CidsBean mauerBean = get();
+                                addMauerPanel(cidsBean, mauerBean);
+                            } catch (final Exception ex) {
+                                LOG.error("error while adding panel", ex);
+                            }
+                        }
+                    }.execute();
             }
         }
     }
@@ -152,55 +163,84 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      */
     private void addMauerPanel(final CidsBean cidsBean, final CidsBean mauerBean) {
         jPanel1.remove(filler1);
-        final TreppeStuetzmauerPanel panel = new TreppeStuetzmauerPanel(editable);
-        panel.setMauerBean(mauerBean);
-        try {
-            final Integer kostenGelaender = (Integer)mauerBean.getProperty("san_kosten_gelaender");
-            final Integer kostenGruendung = (Integer)mauerBean.getProperty("san_kosten_gruendung");
-            final Integer kostenverformung = (Integer)mauerBean.getProperty("san_kosten_verformung");
-            final Integer kostenGelaende = (Integer)mauerBean.getProperty("san_kosten_gelaende");
-            final Integer kostenAnsicht = (Integer)mauerBean.getProperty("san_kosten_ansicht");
-            final Integer kostenKopf = (Integer)mauerBean.getProperty("san_kosten_kopf");
 
-            double summe = 0;
-            summe += (kostenGelaender != null) ? kostenGelaender : 0;
-            summe += (kostenGruendung != null) ? kostenGruendung : 0;
-            summe += (kostenverformung != null) ? kostenverformung : 0;
-            summe += (kostenGelaende != null) ? kostenGelaende : 0;
-            summe += (kostenAnsicht != null) ? kostenAnsicht : 0;
-            summe += (kostenKopf != null) ? kostenKopf : 0;
+        new SwingWorker<JPanel, Void>() {
 
-            final CidsBean zustandBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND");
-            zustandBean.setProperty("verkehrssicherheit", null);
-            zustandBean.setProperty("dauerhaftigkeit", null);
-            zustandBean.setProperty("standsicherheit", null);
-            zustandBean.setProperty("sanierungsmassnahmen", "siehe Mauer-Beschreibung");
-            zustandBean.setProperty("gesamt", mauerBean.getProperty("zustand_gesamt"));
-            zustandBean.setProperty("kosten", summe);
+                @Override
+                protected JPanel doInBackground() throws Exception {
+                    final TreppeStuetzmauerPanel panel = new TreppeStuetzmauerPanel(editable);
+                    panel.setMauerBean(mauerBean);
 
-            zustandBeanMap.put(cidsBean, zustandBean);
+                    final Integer kostenGelaender = (Integer)mauerBean.getProperty("san_kosten_gelaender");
+                    final Integer kostenGruendung = (Integer)mauerBean.getProperty("san_kosten_gruendung");
+                    final Integer kostenverformung = (Integer)mauerBean.getProperty("san_kosten_verformung");
+                    final Integer kostenGelaende = (Integer)mauerBean.getProperty("san_kosten_gelaende");
+                    final Integer kostenAnsicht = (Integer)mauerBean.getProperty("san_kosten_ansicht");
+                    final Integer kostenKopf = (Integer)mauerBean.getProperty("san_kosten_kopf");
 
-            panel.setZustandBean(zustandBean);
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
-        panel.setCidsBean(cidsBean);
-        panel.setParent(this);
+                    double summe = 0;
+                    summe += (kostenGelaender != null) ? kostenGelaender : 0;
+                    summe += (kostenGruendung != null) ? kostenGruendung : 0;
+                    summe += (kostenverformung != null) ? kostenverformung : 0;
+                    summe += (kostenGelaende != null) ? kostenGelaende : 0;
+                    summe += (kostenAnsicht != null) ? kostenAnsicht : 0;
+                    summe += (kostenKopf != null) ? kostenKopf : 0;
 
-        final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        jPanel1.add(panel, gridBagConstraints);
+                    final CidsBean zustandBean = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            "TREPPE_ZUSTAND");
+                    zustandBean.setProperty("verkehrssicherheit", null);
+                    zustandBean.setProperty("dauerhaftigkeit", null);
+                    zustandBean.setProperty("standsicherheit", null);
+                    zustandBean.setProperty("sanierungsmassnahmen", "siehe Mauer-Beschreibung");
+                    zustandBean.setProperty("gesamt", mauerBean.getProperty("zustand_gesamt"));
+                    zustandBean.setProperty("kosten", summe);
 
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
-        gridBagConstraints.weighty = 1.0;
-        jPanel1.add(filler1, gridBagConstraints);
+                    zustandBeanMap.put(cidsBean, zustandBean);
 
-        jPanel1.repaint();
+                    panel.setZustandBean(zustandBean);
+                    panel.setCidsBean(cidsBean);
+                    panel.setParent(TreppeStuetzmauernPanel.this);
+
+                    return panel;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final JPanel panel = get();
+
+                        final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+                        gridBagConstraints.gridx = 0;
+                        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                        gridBagConstraints.weightx = 1.0;
+                        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+                        jPanel1.add(panel, gridBagConstraints);
+
+                        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
+                        gridBagConstraints.weighty = 1.0;
+                        jPanel1.add(filler1, gridBagConstraints);
+
+                        jPanel1.repaint();
+
+                        refreshOverview();
+                    } catch (final Exception ex) {
+                        LOG.error("error while adding panel", ex);
+                    }
+                }
+            }.execute();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshOverview() {
+        final TreppeEditor treppeEditor = ((TreppeEditor)getParent().getParent().getParent().getParent());
+        final TreppeEditor.ZustandOverview overview = treppeEditor.getOverview();
+        overview.recalculateStuetzmauern();
+        overview.recalculateGesamt();
+        overview.refreshView();
+    }
     /**
      * DOCUMENT ME!
      *
@@ -227,10 +267,9 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
             final CidsBean cidsBean = panel.getCidsBean();
             zustandBeanMap.remove(cidsBean);
             cidsBeans.remove(cidsBean);
-            panel.setCidsBean(null);
-            panel.setParent(null);
             jPanel1.remove(panel);
             jPanel1.repaint();
+            refreshOverview();
         }
     }
 
@@ -257,7 +296,9 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        treppeStuetzmauerPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel();
+        if (netbeansDesignDummy) {
+            treppeStuetzmauerPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel();
+        }
         jLabel1 = new DroppedLabel();
 
         setOpaque(false);
@@ -275,10 +316,12 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(filler1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel1.add(treppeStuetzmauerPanel1, gridBagConstraints);
+        if (netbeansDesignDummy) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            jPanel1.add(treppeStuetzmauerPanel1, gridBagConstraints);
+        }
 
         jScrollPane1.setViewportView(jPanel1);
 

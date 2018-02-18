@@ -14,6 +14,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 
+import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
@@ -33,7 +34,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -49,6 +50,13 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
     private static final Logger LOG = Logger.getLogger(TreppeBeschreibungPanel.class);
     private static final TreppeEditor.IntegerToLongConverter CONVERTER_INT = new TreppeEditor.IntegerToLongConverter();
+    private static final MetaClass MC__PRUEFUNGSART = ClassCacheMultiple.getMetaClass(
+            "WUNDA_BLAU",
+            "TREPPE_PRUEFUNGSART");
+    private static final MetaClass MC__BEURTEILUNG = ClassCacheMultiple.getMetaClass(
+            "WUNDA_BLAU",
+            "TREPPE_BEURTEILUNG");
+    private static final MetaClass MC__EINSATZ = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_EINSATZ");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -179,13 +187,7 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
     public TreppeBeschreibungPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
-        try {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE"));
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
+
         if (!editable) {
             RendererTools.makeReadOnly(jCheckBox1);
             RendererTools.makeReadOnly(jCheckBox2);
@@ -302,8 +304,14 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         defaultBindableDateChooser6 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         defaultBindableDateChooser4 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         defaultBindableDateChooser5 = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        defaultBindableReferenceCombo3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        defaultBindableReferenceCombo2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        defaultBindableReferenceCombo3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__PRUEFUNGSART,
+                true,
+                false);
+        defaultBindableReferenceCombo2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__PRUEFUNGSART,
+                true,
+                false);
         jLabel49 = new javax.swing.JLabel();
         jLabel48 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -342,10 +350,22 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jPanel7 = new javax.swing.JPanel();
         jLabel52 = new javax.swing.JLabel();
         jLabel53 = new javax.swing.JLabel();
-        defaultBindableReferenceCombo7 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        defaultBindableReferenceCombo8 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        defaultBindableReferenceCombo5 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        defaultBindableReferenceCombo6 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        defaultBindableReferenceCombo7 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__BEURTEILUNG,
+                true,
+                false);
+        defaultBindableReferenceCombo8 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__EINSATZ,
+                true,
+                false);
+        defaultBindableReferenceCombo5 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__BEURTEILUNG,
+                true,
+                false);
+        defaultBindableReferenceCombo6 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                MC__BEURTEILUNG,
+                true,
+                false);
         jPanel30 = new javax.swing.JPanel();
 
         setOpaque(false);
@@ -745,6 +765,15 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                 TreppeBeschreibungPanel.class,
                 "TreppeBeschreibungPanel.jCheckBox3.text")); // NOI18N
         jCheckBox3.setContentAreaFilled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ist_zugaenge}"),
+                jCheckBox3,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -793,6 +822,15 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                 TreppeBeschreibungPanel.class,
                 "TreppeBeschreibungPanel.jCheckBox4.text")); // NOI18N
         jCheckBox4.setContentAreaFilled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ist_gebaeude}"),
+                jCheckBox4,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -841,6 +879,15 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                 TreppeBeschreibungPanel.class,
                 "TreppeBeschreibungPanel.jCheckBox5.text")); // NOI18N
         jCheckBox5.setContentAreaFilled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ist_beleuchtung}"),
+                jCheckBox5,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -1711,11 +1758,11 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
             this.cidsBean.removePropertyChangeListener(propChangeListener);
         }
 
-        bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        bindingGroup.bind();
-
         if ((cidsBean != null)) {
+            bindingGroup.unbind();
+            bindingGroup.bind();
+
             cidsBean.addPropertyChangeListener(propChangeListener);
             reloadStrasse();
         }

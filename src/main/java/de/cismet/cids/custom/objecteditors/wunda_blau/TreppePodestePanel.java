@@ -19,6 +19,9 @@ import java.awt.GridBagConstraints;
 
 import java.util.List;
 
+import javax.swing.JPanel;
+import javax.swing.SwingWorker;
+
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
 
@@ -36,6 +39,7 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
 
     //~ Instance fields --------------------------------------------------------
 
+    private final boolean netbeansDesignDummy;
     private List<CidsBean> cidsBeans;
     private final boolean editable;
 
@@ -53,15 +57,26 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
      * Creates a new TreppePodestePanel object.
      */
     public TreppePodestePanel() {
-        this(true);
+        this(true, true);
+    }
+
+    /**
+     * Creates a new TreppePodestePanel object.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public TreppePodestePanel(final boolean editable) {
+        this(editable, false);
     }
 
     /**
      * Creates new form TreppePodestePanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable             DOCUMENT ME!
+     * @param  netbeansDesignDummy  DOCUMENT ME!
      */
-    public TreppePodestePanel(final boolean editable) {
+    public TreppePodestePanel(final boolean editable, final boolean netbeansDesignDummy) {
+        this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
         initComponents();
         btnAddArt1.setVisible(editable);
@@ -82,9 +97,6 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
 
         if (cidsBeans != null) {
             for (final CidsBean cidsBean : cidsBeans) {
-                final TreppePodestPanel panel = new TreppePodestPanel(editable);
-                panel.setCidsBean(cidsBean);
-                panel.setParent(this);
                 addPodestPanel(cidsBean);
             }
         }
@@ -97,22 +109,39 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
      */
     private void addPodestPanel(final CidsBean cidsBean) {
         jPanel1.remove(filler1);
-        final TreppePodestPanel panel = new TreppePodestPanel(editable);
-        panel.setCidsBean(cidsBean);
-        panel.setParent(this);
 
-        final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        jPanel1.add(panel, gridBagConstraints);
+        new SwingWorker<JPanel, Void>() {
 
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
-        gridBagConstraints.weighty = 1.0;
-        jPanel1.add(filler1, gridBagConstraints);
+                @Override
+                protected JPanel doInBackground() throws Exception {
+                    final TreppePodestPanel panel = new TreppePodestPanel(editable);
+                    panel.setCidsBean(cidsBean);
+                    panel.setParent(TreppePodestePanel.this);
+                    return panel;
+                }
 
-        jPanel1.repaint();
+                @Override
+                protected void done() {
+                    try {
+                        final JPanel panel = get();
+
+                        final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+                        gridBagConstraints.gridx = 0;
+                        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                        gridBagConstraints.weightx = 1.0;
+                        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+                        jPanel1.add(panel, gridBagConstraints);
+
+                        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
+                        gridBagConstraints.weighty = 1.0;
+                        jPanel1.add(filler1, gridBagConstraints);
+
+                        jPanel1.repaint();
+                    } catch (final Exception ex) {
+                        LOG.error("error while adding panel", ex);
+                    }
+                }
+            }.execute();
     }
 
     /**
@@ -122,10 +151,7 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
      */
     public void removePodestPanel(final TreppePodestPanel panel) {
         if (panel != null) {
-            final CidsBean cidsBean = panel.getCidsBean();
-            cidsBeans.remove(cidsBean);
-            panel.setCidsBean(null);
-            panel.setParent(null);
+            cidsBeans.remove(panel.getCidsBean());
             jPanel1.remove(panel);
             jPanel1.repaint();
         }
@@ -154,7 +180,9 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        treppePodestPanel2 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppePodestPanel();
+        if (netbeansDesignDummy) {
+            treppePodestPanel2 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppePodestPanel();
+        }
         btnAddArt1 = new javax.swing.JButton();
 
         setOpaque(false);
@@ -172,10 +200,12 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(filler1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel1.add(treppePodestPanel2, gridBagConstraints);
+        if (netbeansDesignDummy) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            jPanel1.add(treppePodestPanel2, gridBagConstraints);
+        }
 
         jScrollPane1.setViewportView(jPanel1);
 
