@@ -171,6 +171,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         Mnemonics.setLocalizedText(
             jLabel69,
             NbBundle.getMessage(TreppeHandlaufPanel.class, "TreppeHandlaufPanel.jLabel69.text")); // NOI18N
+        jLabel69.setVerticalAlignment(SwingConstants.TOP);
         jLabel69.setName("jLabel69");                                                             // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -215,6 +216,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         Mnemonics.setLocalizedText(
             jLabel67,
             NbBundle.getMessage(TreppeHandlaufPanel.class, "TreppeHandlaufPanel.jLabel67.text")); // NOI18N
+        jLabel67.setVerticalAlignment(SwingConstants.TOP);
         jLabel67.setName("jLabel67");                                                             // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

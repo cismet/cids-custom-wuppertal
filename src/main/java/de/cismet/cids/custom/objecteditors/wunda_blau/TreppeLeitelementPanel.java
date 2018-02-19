@@ -171,6 +171,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         Mnemonics.setLocalizedText(
             jLabel68,
             NbBundle.getMessage(TreppeLeitelementPanel.class, "TreppeLeitelementPanel.jLabel68.text")); // NOI18N
+        jLabel68.setVerticalAlignment(SwingConstants.TOP);
         jLabel68.setName("jLabel68");                                                                   // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -215,6 +216,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         Mnemonics.setLocalizedText(
             jLabel66,
             NbBundle.getMessage(TreppeLeitelementPanel.class, "TreppeLeitelementPanel.jLabel66.text")); // NOI18N
+        jLabel66.setVerticalAlignment(SwingConstants.TOP);
         jLabel66.setName("jLabel66");                                                                   // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
