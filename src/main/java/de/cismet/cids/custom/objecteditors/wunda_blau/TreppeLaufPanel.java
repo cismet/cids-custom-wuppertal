@@ -568,6 +568,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         Mnemonics.setLocalizedText(
             jLabel60,
             NbBundle.getMessage(TreppeLaufPanel.class, "TreppeLaufPanel.jLabel60.text")); // NOI18N
+        jLabel60.setVerticalAlignment(SwingConstants.TOP);
         jLabel60.setName("jLabel60");                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

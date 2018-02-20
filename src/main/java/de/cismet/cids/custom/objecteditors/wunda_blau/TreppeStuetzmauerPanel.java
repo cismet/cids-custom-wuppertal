@@ -313,6 +313,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         Mnemonics.setLocalizedText(
             jLabel66,
             NbBundle.getMessage(TreppeStuetzmauerPanel.class, "TreppeStuetzmauerPanel.jLabel66.text")); // NOI18N
+        jLabel66.setVerticalAlignment(SwingConstants.TOP);
         jLabel66.setName("jLabel66");                                                                   // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

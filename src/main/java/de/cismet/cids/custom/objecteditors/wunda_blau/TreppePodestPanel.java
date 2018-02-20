@@ -441,6 +441,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         Mnemonics.setLocalizedText(
             jLabel55,
             NbBundle.getMessage(TreppePodestPanel.class, "TreppePodestPanel.jLabel55.text")); // NOI18N
+        jLabel55.setVerticalAlignment(SwingConstants.TOP);
         jLabel55.setName("jLabel55");                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

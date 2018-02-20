@@ -45,6 +45,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
@@ -494,6 +495,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
             NbBundle.getMessage(
                 TreppeBauteilZustandKostenPanel.class,
                 "TreppeBauteilZustandKostenPanel.jLabel11.text")); // NOI18N
+        jLabel11.setVerticalAlignment(SwingConstants.TOP);
         jLabel11.setName("jLabel11");                              // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
