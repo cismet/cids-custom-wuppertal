@@ -296,7 +296,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new GridBagLayout());
 
-        jSpinner4.setModel(new SpinnerNumberModel(0.0d, 0.0d, null, 0.01d));
+        jSpinner4.setModel(new SpinnerNumberModel(0.0d, 0.0d, null, 1.0E-4d));
         jSpinner4.setName("jSpinner4"); // NOI18N
 
         binding = Bindings.createAutoBinding(
@@ -317,7 +317,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel3.add(jSpinner4, gridBagConstraints);
 
-        jSpinner2.setModel(new SpinnerNumberModel(0.0d, 0.0d, null, 0.01d));
+        jSpinner2.setModel(new SpinnerNumberModel(0.0d, 0.0d, null, 1.0E-4d));
         jSpinner2.setName("jSpinner2"); // NOI18N
 
         binding = Bindings.createAutoBinding(
@@ -798,9 +798,9 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         materialArtSearch2.setTypId(2);
 
         initComponents();
-        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner2, 2);
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner2, 4);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner3, 2);
-        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner4, 2);
+        RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner4, 4);
         if (!editable) {
             RendererTools.makeReadOnly(jSpinner1);
             RendererTools.makeReadOnly(jSpinner2);
