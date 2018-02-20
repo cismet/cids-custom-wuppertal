@@ -423,6 +423,8 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
     public TreppeLeitelementPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
+        jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
+        jTextArea7.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jTextField22);
             RendererTools.makeReadOnly(jTextArea4);

@@ -802,6 +802,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner2, 4);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner3, 2);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner4, 4);
+        jTextArea3.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jSpinner1);
             RendererTools.makeReadOnly(jSpinner2);

@@ -423,6 +423,8 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
     public TreppeHandlaufPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
+        jTextArea8.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
+        jTextArea9.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jTextField22);
             RendererTools.makeReadOnly(jTextArea8);

@@ -15,6 +15,8 @@ import org.jdesktop.swingx.JXDatePicker;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import java.text.DecimalFormat;
 
@@ -28,6 +30,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicCheckBoxUI;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
@@ -313,6 +316,29 @@ public class RendererTools {
         @Override
         protected JButton createArrowButton() {
             return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class NoTabTextAreaKeyAdapter extends KeyAdapter {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void keyPressed(final KeyEvent evt) {
+            final JTextArea textArea = (JTextArea)evt.getComponent();
+            if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+                if (evt.getModifiers() > 0) {
+                    textArea.transferFocusBackward();
+                } else {
+                    textArea.transferFocus();
+                }
+                evt.consume();
+            }
         }
     }
 }

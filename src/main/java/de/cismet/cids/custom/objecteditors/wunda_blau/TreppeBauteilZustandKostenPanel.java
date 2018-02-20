@@ -177,6 +177,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
 
         initComponents();
 
+        jTextArea1.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner1, 2);
         if (!editable) {
             RendererTools.makeReadOnly(jFormattedTextField1);

@@ -669,6 +669,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         materialArtSearch2.setTypId(2);
 
         initComponents();
+        jTextArea2.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jCheckBox1);
             RendererTools.makeReadOnly(jCheckBox2);

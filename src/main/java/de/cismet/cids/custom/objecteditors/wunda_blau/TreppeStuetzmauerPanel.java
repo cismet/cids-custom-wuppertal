@@ -501,6 +501,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         this.editable = editable;
         initComponents();
 
+        jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jTextField1);
             RendererTools.makeReadOnly(jTextField2);

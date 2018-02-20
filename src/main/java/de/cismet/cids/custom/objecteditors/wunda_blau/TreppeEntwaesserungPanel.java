@@ -102,6 +102,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
     public TreppeEntwaesserungPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
+        jTextArea6.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jTextArea6);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
