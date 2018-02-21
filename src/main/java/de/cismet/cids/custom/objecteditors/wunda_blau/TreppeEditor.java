@@ -54,6 +54,8 @@ import java.util.Comparator;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -1723,11 +1725,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         private int makeInt(final String nummer) {
             int i = Integer.MAX_VALUE;
             try {
-                i = Integer.parseInt(nummer.trim());
+                final Matcher matcher = Pattern.compile("\\d+").matcher(nummer);
+                matcher.find();
+                i = Integer.valueOf(matcher.group());
             } catch (final Exception ex) {
-                if (nummer.contains("-")) {
-                    i = makeInt(nummer.split("-")[0]);
-                }
             }
             return i;
         }
