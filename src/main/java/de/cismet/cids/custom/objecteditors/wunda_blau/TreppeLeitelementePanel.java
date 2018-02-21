@@ -22,6 +22,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.Box;
@@ -196,6 +197,7 @@ public class TreppeLeitelementePanel extends javax.swing.JPanel implements Dispo
         this.cidsBeans = cidsBeans;
 
         if (cidsBeans != null) {
+            Collections.sort(cidsBeans, new TreppeEditor.TeilementComparator("nummer"));
             for (final CidsBean cidsBean : cidsBeans) {
                 addLeitelementPanel(cidsBean);
             }

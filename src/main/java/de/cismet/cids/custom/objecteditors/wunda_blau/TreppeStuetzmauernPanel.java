@@ -24,6 +24,7 @@ import java.awt.GridBagConstraints;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,32 +116,35 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
         this.cidsBeans = cidsBeans;
 
-        for (final CidsBean cidsBean : cidsBeans) {
-            final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
-            if ((mauerId != null)) {
-                new SwingWorker<CidsBean, Void>() {
+        if (cidsBeans != null) {
+            Collections.sort(cidsBeans, new TreppeEditor.TeilementComparator("id"));
+            for (final CidsBean cidsBean : cidsBeans) {
+                final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
+                if ((mauerId != null)) {
+                    new SwingWorker<CidsBean, Void>() {
 
-                        @Override
-                        protected CidsBean doInBackground() throws Exception {
-                            final MetaClass mc = CidsBean.getMetaClassFromTableName(
-                                    "WUNDA_BLAU",
-                                    "mauer");
-                            final MetaObject mo = SessionManager.getProxy()
-                                        .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU");
-                            final CidsBean mauerBean = mo.getBean();
-                            return mauerBean;
-                        }
-
-                        @Override
-                        protected void done() {
-                            try {
-                                final CidsBean mauerBean = get();
-                                addMauerPanel(cidsBean, mauerBean);
-                            } catch (final Exception ex) {
-                                LOG.error("error while adding panel", ex);
+                            @Override
+                            protected CidsBean doInBackground() throws Exception {
+                                final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                                        "WUNDA_BLAU",
+                                        "mauer");
+                                final MetaObject mo = SessionManager.getProxy()
+                                            .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU");
+                                final CidsBean mauerBean = mo.getBean();
+                                return mauerBean;
                             }
-                        }
-                    }.execute();
+
+                            @Override
+                            protected void done() {
+                                try {
+                                    final CidsBean mauerBean = get();
+                                    addMauerPanel(cidsBean, mauerBean);
+                                } catch (final Exception ex) {
+                                    LOG.error("error while adding panel", ex);
+                                }
+                            }
+                        }.execute();
+                }
             }
         }
     }
