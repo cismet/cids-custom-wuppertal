@@ -660,7 +660,7 @@ public class TreppeBauteilZustandKostenPanel extends javax.swing.JPanel implemen
                             cidsBean.setProperty("gesamt", null);
                         }
                     } catch (final Exception ex) {
-                        LOG.error(ex, ex);
+                        LOG.warn("Zustand konnte nicht berechnet werden.", ex);
                     }
                     return null;
                 }

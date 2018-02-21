@@ -32,6 +32,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
 
@@ -211,6 +213,13 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
      */
     private void addHandlaufPanel(final CidsBean cidsBean) {
         jPanel1.remove(filler1);
+        final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = cidsBeans.size();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(filler1, gridBagConstraints);
+
         new SwingWorker<JPanel, Void>() {
 
                 @Override
@@ -230,16 +239,15 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
                         gridBagConstraints.gridx = 0;
                         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                         gridBagConstraints.weightx = 1.0;
+                        gridBagConstraints.gridy = cidsBeans.indexOf(cidsBean);
                         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
                         jPanel1.add(panel, gridBagConstraints);
 
-                        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
-                        gridBagConstraints.weighty = 1.0;
-                        jPanel1.add(filler1, gridBagConstraints);
-
                         jPanel1.repaint();
                     } catch (final Exception ex) {
-                        LOG.error("error while adding panel", ex);
+                        final String message = "Fehler beim Hinzufügen des Handlaufs.";
+                        LOG.error(message, ex);
+                        ObjectRendererUtils.showExceptionWindowToUser(message, ex, TreppeHandlaeufePanel.this);
                     }
                 }
             }.execute();
@@ -279,7 +287,9 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
             addHandlaufPanel(cidsBean);
             cidsBeans.add(cidsBean);
         } catch (final Exception ex) {
-            LOG.error(ex, ex);
+            final String message = "Fehler beim Erzeugen des Handlaufs.";
+            LOG.error(message, ex);
+            ObjectRendererUtils.showExceptionWindowToUser(message, ex, this);
         }
     }                                                               //GEN-LAST:event_btnAddArt1ActionPerformed
 

@@ -19,8 +19,14 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import org.openide.awt.Mnemonics;
+import org.openide.util.NbBundle;
+
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,9 +35,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
+
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
@@ -59,9 +72,9 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     private final HashMap<CidsBean, CidsBean> zustandBeanMap = new HashMap<>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.Box.Filler filler1;
-    javax.swing.JPanel jPanel1;
-    de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel treppeStuetzmauerPanel1;
+    Box.Filler filler1;
+    JPanel jPanel1;
+    TreppeStuetzmauerPanel treppeStuetzmauerPanel1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -117,7 +130,6 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         this.cidsBeans = cidsBeans;
 
         if (cidsBeans != null) {
-            Collections.sort(cidsBeans, new TreppeEditor.TeilementComparator("id"));
             for (final CidsBean cidsBean : cidsBeans) {
                 final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
                 if ((mauerId != null)) {
@@ -140,7 +152,13 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
                                     final CidsBean mauerBean = get();
                                     addMauerPanel(cidsBean, mauerBean);
                                 } catch (final Exception ex) {
-                                    LOG.error("error while adding panel", ex);
+                                    final String message = "Fehler beim Laden der Stützmauer. (mauerId: " + mauerId
+                                                + ")";
+                                    LOG.error(message, ex);
+                                    ObjectRendererUtils.showExceptionWindowToUser(
+                                        message,
+                                        ex,
+                                        TreppeStuetzmauernPanel.this);
                                 }
                             }
                         }.execute();
@@ -157,6 +175,12 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      */
     private void addMauerPanel(final CidsBean cidsBean, final CidsBean mauerBean) {
         jPanel1.remove(filler1);
+        final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = cidsBeans.size();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(filler1, gridBagConstraints);
 
         new SwingWorker<JPanel, Void>() {
 
@@ -206,20 +230,19 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
                         final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
                         gridBagConstraints.gridx = 0;
+                        gridBagConstraints.gridy = cidsBeans.indexOf(cidsBean);
                         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                         gridBagConstraints.weightx = 1.0;
                         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
                         jPanel1.add(panel, gridBagConstraints);
 
-                        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
-                        gridBagConstraints.weighty = 1.0;
-                        jPanel1.add(filler1, gridBagConstraints);
-
                         jPanel1.repaint();
 
                         refreshOverview();
                     } catch (final Exception ex) {
-                        LOG.error("error while adding panel", ex);
+                        final String message = "Fehler beim Hinzufügen der Stützmauer.";
+                        LOG.error(message, ex);
+                        ObjectRendererUtils.showExceptionWindowToUser(message, ex, TreppeStuetzmauernPanel.this);
                     }
                 }
             }.execute();
@@ -283,21 +306,19 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
+        GridBagConstraints gridBagConstraints;
 
-        final javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        final JScrollPane jScrollPane1 = new JScrollPane();
+        jPanel1 = new JPanel();
+        filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         if (netbeansDesignDummy) {
-            treppeStuetzmauerPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel();
+            treppeStuetzmauerPanel1 = new TreppeStuetzmauerPanel();
         }
-        final javax.swing.JLabel jLabel1 = new DroppedLabel();
+        final JLabel jLabel1 = new DroppedLabel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new GridBagLayout());
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -305,59 +326,56 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setOpaque(false);
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        jPanel1.setLayout(new GridBagLayout());
 
         filler1.setName("filler1"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(filler1, gridBagConstraints);
 
         if (netbeansDesignDummy) {
             treppeStuetzmauerPanel1.setName("treppeStuetzmauerPanel1"); // NOI18N
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.weightx = 1.0;
             jPanel1.add(treppeStuetzmauerPanel1, gridBagConstraints);
         }
 
         jScrollPane1.setViewportView(jPanel1);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(jScrollPane1, gridBagConstraints);
         jScrollPane1.getViewport().setOpaque(false);
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cismap/commons/gui/metasearch/mauer.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
+        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cismap/commons/gui/metasearch/mauer.png"))); // NOI18N
+        Mnemonics.setLocalizedText(
             jLabel1,
-            org.openide.util.NbBundle.getMessage(
-                TreppeStuetzmauernPanel.class,
-                "TreppeStuetzmauernPanel.jLabel1.text"));                                       // NOI18N
-        jLabel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jLabel1.setName("jLabel1");                                                             // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+            NbBundle.getMessage(TreppeStuetzmauernPanel.class, "TreppeStuetzmauernPanel.jLabel1.text"));              // NOI18N
+        jLabel1.setBorder(BorderFactory.createEtchedBorder());
+        jLabel1.setName("jLabel1");                                                                                   // NOI18N
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 20;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         add(jLabel1, gridBagConstraints);
         jLabel1.setVisible(editable);
         try {
             new CidsBeanDropTarget(jLabel1);
         } catch (final Exception ex) {
-            LOG.error(ex, ex);
+            LOG.warn("error while init CidsBeanDropTarget", ex);
         }
-    }                                                                                           // </editor-fold>//GEN-END:initComponents
+    }                                                                                                                 // </editor-fold>//GEN-END:initComponents
 
     @Override
     public void dispose() {
@@ -403,7 +421,9 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
                     }
                 }
             } catch (final Exception ex) {
-                LOG.error(ex, ex);
+                final String message = "Fehler beim Erzeugen der Stützmauer.";
+                LOG.error(message, ex);
+                ObjectRendererUtils.showExceptionWindowToUser(message, ex, this);
             }
         }
     }

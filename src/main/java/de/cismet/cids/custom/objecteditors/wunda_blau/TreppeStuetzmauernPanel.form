@@ -105,7 +105,7 @@
         <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jLabel1.setVisible(editable);&#xa;try {&#xa;    new CidsBeanDropTarget(jLabel1);&#xa;} catch (final Exception ex) {&#xa;    LOG.error(ex, ex);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jLabel1.setVisible(editable);&#xa;try {&#xa;    new CidsBeanDropTarget(jLabel1);&#xa;} catch (final Exception ex) {&#xa;    LOG.warn(&quot;error while init CidsBeanDropTarget&quot;, ex);&#xa;}"/>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DroppedLabel()"/>
       </AuxValues>
       <Constraints>

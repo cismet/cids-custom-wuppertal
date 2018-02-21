@@ -1816,7 +1816,7 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                                 jTextField6.setText(null);
                             }
                         } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                            LOG.warn("Straße konnte nichte geladen werden.", ex);
                         }
                     }
                 }.execute();

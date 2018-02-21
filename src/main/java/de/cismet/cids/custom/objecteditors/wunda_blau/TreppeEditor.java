@@ -71,6 +71,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 import de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.reports.wunda_blau.TreppenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1261,13 +1262,13 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
             try {
                 cidsBean.setProperty("gesamtkosten", overview.getKostenGesamt());
             } catch (Exception ex) {
-                LOG.error("error while setting gesamtkosten", ex);
+                LOG.warn("error while setting gesamtkosten", ex);
             }
 
             try {
                 cidsBean.setProperty("gesamtzustand", overview.getZustandGesamt());
             } catch (Exception ex) {
-                LOG.error("error while setting gesamtzustand", ex);
+                LOG.warn("error while setting gesamtzustand", ex);
             }
         }
 
@@ -1701,9 +1702,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                 final String nummer1 = (o1 != null) ? (String)o1.getProperty(prop) : null;
                 final String nummer2 = (o2 != null) ? (String)o2.getProperty(prop) : null;
                 if (nummer1 == null) {
-                    return -1;
-                } else if (nummer2 == null) {
                     return 1;
+                } else if (nummer2 == null) {
+                    return -1;
                 } else {
                     final int i1 = makeInt(nummer1);
                     final int i2 = makeInt(nummer2);
@@ -1720,7 +1721,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
          * @return  DOCUMENT ME!
          */
         private int makeInt(final String nummer) {
-            int i = Integer.MIN_VALUE;
+            int i = Integer.MAX_VALUE;
             try {
                 i = Integer.parseInt(nummer.trim());
             } catch (final Exception ex) {

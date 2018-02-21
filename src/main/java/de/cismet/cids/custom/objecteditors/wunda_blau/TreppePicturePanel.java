@@ -165,7 +165,9 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
             webdavHelper = new WebDavHelper(Proxy.fromPreferences(), user, pass, false);
         } catch (final Exception ex) {
-            LOG.error(ex, ex);
+            final String message = "Fehler beim Initialisieren der Bilderablage.";
+            LOG.error(message, ex);
+            ObjectRendererUtils.showExceptionWindowToUser(message, ex, null);
         }
 
         WEBDAV_DIRECTORY = directory;
@@ -970,6 +972,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                     deleteBean.delete();
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
+                    showExceptionToUser(ex, this);
                 }
             }
         } else {
