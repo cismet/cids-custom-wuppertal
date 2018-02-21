@@ -50,6 +50,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
@@ -1081,103 +1082,103 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         ((CardLayout)getLayout()).show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }                                                            //GEN-LAST:event_btnInfoActionPerformed
+    }//GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
         ((CardLayout)getLayout()).show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    }                                                              //GEN-LAST:event_btnImagesActionPerformed
+    }//GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         TreppenReportGenerator.generateKatasterBlatt(Arrays.asList(new CidsBean[] { cidsBean }), TreppeEditor.this);
-    }                                                              //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink6ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink6ActionPerformed
+    private void jXHyperlink6ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jXHyperlink6ActionPerformed
         jTabbedPane1.setSelectedIndex(6);
-    }                                                                 //GEN-LAST:event_jXHyperlink6ActionPerformed
+    }//GEN-LAST:event_jXHyperlink6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink5ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink5ActionPerformed
+    private void jXHyperlink5ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jXHyperlink5ActionPerformed
         jTabbedPane1.setSelectedIndex(5);
-    }                                                                 //GEN-LAST:event_jXHyperlink5ActionPerformed
+    }//GEN-LAST:event_jXHyperlink5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink4ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink4ActionPerformed
+    private void jXHyperlink4ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jXHyperlink4ActionPerformed
         jTabbedPane1.setSelectedIndex(4);
-    }                                                                 //GEN-LAST:event_jXHyperlink4ActionPerformed
+    }//GEN-LAST:event_jXHyperlink4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink3ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink3ActionPerformed
+    private void jXHyperlink3ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jXHyperlink3ActionPerformed
         jTabbedPane1.setSelectedIndex(3);
-    }                                                                 //GEN-LAST:event_jXHyperlink3ActionPerformed
+    }//GEN-LAST:event_jXHyperlink3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink2ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
+    private void jXHyperlink2ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jXHyperlink2ActionPerformed
         jTabbedPane1.setSelectedIndex(2);
-    }                                                                 //GEN-LAST:event_jXHyperlink2ActionPerformed
+    }//GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         jTabbedPane1.setSelectedIndex(1);
-    }                                                                 //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTabbedPane1StateChanged(final ChangeEvent evt) { //GEN-FIRST:event_jTabbedPane1StateChanged
+    private void jTabbedPane1StateChanged(final ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         if (evt.getSource() instanceof JTabbedPane) {
             final JTabbedPane pane = (JTabbedPane)evt.getSource();
             if (pane.getSelectedIndex() == 0) {
                 overview.recalculateAll();
             }
         }
-    }                                                              //GEN-LAST:event_jTabbedPane1StateChanged
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     @Override
     public CidsBean getCidsBean() {
@@ -1234,15 +1235,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         treppeEntwaesserung1.dispose();
         treppeStuetzmauernPanel1.dispose();
         treppePicturePanel1.dispose();
-
-        treppeHandlaeufePanel2 = null;
-        treppePodestePanel1 = null;
-        treppeLeitelementePanel1 = null;
-        treppeHandlaeufePanel2 = null;
-        treppeEntwaesserung1 = null;
-        treppeStuetzmauernPanel1 = null;
-        treppePicturePanel1 = null;
-        cidsBean = null;
     }
 
     @Override
