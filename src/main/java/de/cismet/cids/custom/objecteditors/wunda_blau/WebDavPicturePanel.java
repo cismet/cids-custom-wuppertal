@@ -58,6 +58,8 @@ import java.io.InputStream;
 
 import java.lang.ref.SoftReference;
 
+import java.text.DecimalFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -133,46 +135,19 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanStore, EditorSaveListener, Disposable {
+public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanStore, EditorSaveListener, Disposable {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(TreppePicturePanel.class);
+    private static final Logger LOG = Logger.getLogger(WebDavPicturePanel.class);
 
-    private static final ImageIcon ERROR_ICON = new ImageIcon(TreppeEditor.class.getResource(
+    private static final ImageIcon ERROR_ICON = new ImageIcon(WebDavPicturePanel.class.getResource(
                 "/de/cismet/cids/custom/objecteditors/wunda_blau/file-broken.png"));
-    private static final ImageIcon FOLDER_ICON = new ImageIcon(TreppeEditor.class.getResource(
+    private static final ImageIcon FOLDER_ICON = new ImageIcon(WebDavPicturePanel.class.getResource(
                 "/de/cismet/cids/custom/objecteditors/wunda_blau/inode-directory.png"));
     private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile(
             ".*\\.(bmp|png|jpg|jpeg|tif|tiff|wbmp)$",
             Pattern.CASE_INSENSITIVE);
-
-    private static final String WEBDAV_DIRECTORY;
-    private static final WebDavHelper WEBDAV_HELPER;
-
-    static {
-        String directory = null;
-        WebDavHelper webdavHelper = null;
-        try {
-            final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
-            String pass = bundle.getString("password");
-
-            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-                pass = PasswordEncrypter.decryptString(pass);
-            }
-            final String user = bundle.getString("user");
-            directory = bundle.getString("url_treppen");
-
-            webdavHelper = new WebDavHelper(Proxy.fromPreferences(), user, pass, false);
-        } catch (final Exception ex) {
-            final String message = "Fehler beim Initialisieren der Bilderablage.";
-            LOG.error(message, ex);
-            ObjectRendererUtils.showExceptionWindowToUser(message, ex, null);
-        }
-
-        WEBDAV_DIRECTORY = directory;
-        WEBDAV_HELPER = webdavHelper;
-    }
 
     private static final int CACHE_SIZE = 20;
     private static final Map<String, SoftReference<BufferedImage>> IMAGE_CACHE =
@@ -235,7 +210,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         lblHeaderFotos.setForeground(new Color(255, 255, 255));
         Mnemonics.setLocalizedText(
             lblHeaderFotos,
-            NbBundle.getMessage(TreppePicturePanel.class, "TreppePicturePanel.lblHeaderFotos.text")); // NOI18N
+            NbBundle.getMessage(WebDavPicturePanel.class, "WebDavPicturePanel.lblHeaderFotos.text")); // NOI18N
         lblHeaderFotos.setName("lblHeaderFotos");                                                     // NOI18N
         pnlHeaderFotos.add(lblHeaderFotos);
 
@@ -260,7 +235,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         lstFotos.setName("lstFotos"); // NOI18N
         lstFotos.setPreferredSize(new Dimension(250, 130));
 
-        final ELProperty eLProperty = ELProperty.create("${cidsBean.bilder}");
+        final ELProperty eLProperty = ELProperty.create("${cidsBean." + beanCollProp + "}");
         final JListBinding jListBinding = SwingBindings.createJListBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -289,7 +264,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         Mnemonics.setLocalizedText(
             btnAddImg,
-            NbBundle.getMessage(TreppePicturePanel.class, "TreppePicturePanel.btnAddImg.text"));               // NOI18N
+            NbBundle.getMessage(WebDavPicturePanel.class, "WebDavPicturePanel.btnAddImg.text"));               // NOI18N
         btnAddImg.setBorderPainted(false);
         btnAddImg.setContentAreaFilled(false);
         btnAddImg.setName("btnAddImg");                                                                        // NOI18N
@@ -302,7 +277,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         Mnemonics.setLocalizedText(
             btnRemoveImg,
-            NbBundle.getMessage(TreppePicturePanel.class, "TreppePicturePanel.btnRemoveImg.text"));               // NOI18N
+            NbBundle.getMessage(WebDavPicturePanel.class, "WebDavPicturePanel.btnRemoveImg.text"));               // NOI18N
         btnRemoveImg.setBorderPainted(false);
         btnRemoveImg.setContentAreaFilled(false);
         btnRemoveImg.setName("btnRemoveImg");                                                                     // NOI18N
@@ -368,7 +343,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         lblVorschau.setForeground(new Color(255, 255, 255));
         Mnemonics.setLocalizedText(
             lblVorschau,
-            NbBundle.getMessage(TreppePicturePanel.class, "TreppePicturePanel.lblVorschau.text")); // NOI18N
+            NbBundle.getMessage(WebDavPicturePanel.class, "WebDavPicturePanel.lblVorschau.text")); // NOI18N
         lblVorschau.setName("lblVorschau");                                                        // NOI18N
         semiRoundedPanel2.add(lblVorschau);
 
@@ -387,7 +362,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         lblPicture.setHorizontalAlignment(SwingConstants.CENTER);
         Mnemonics.setLocalizedText(
             lblPicture,
-            NbBundle.getMessage(TreppePicturePanel.class, "TreppePicturePanel.lblPicture.text")); // NOI18N
+            NbBundle.getMessage(WebDavPicturePanel.class, "WebDavPicturePanel.lblPicture.text")); // NOI18N
         lblPicture.setName("lblPicture");                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -425,7 +400,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         btnPrevImg.setIcon(new ImageIcon(getClass().getResource("/res/arrow-left.png")));         // NOI18N
         Mnemonics.setLocalizedText(
             btnPrevImg,
-            NbBundle.getMessage(TreppePicturePanel.class, "TreppePicturePanel.btnPrevImg.text")); // NOI18N
+            NbBundle.getMessage(WebDavPicturePanel.class, "WebDavPicturePanel.btnPrevImg.text")); // NOI18N
         btnPrevImg.setBorderPainted(false);
         btnPrevImg.setFocusPainted(false);
         btnPrevImg.setName("btnPrevImg");                                                         // NOI18N
@@ -441,7 +416,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         btnNextImg.setIcon(new ImageIcon(getClass().getResource("/res/arrow-right.png")));        // NOI18N
         Mnemonics.setLocalizedText(
             btnNextImg,
-            NbBundle.getMessage(TreppePicturePanel.class, "TreppePicturePanel.btnNextImg.text")); // NOI18N
+            NbBundle.getMessage(WebDavPicturePanel.class, "WebDavPicturePanel.btnNextImg.text")); // NOI18N
         btnNextImg.setBorderPainted(false);
         btnNextImg.setFocusPainted(false);
         btnNextImg.setName("btnNextImg");                                                         // NOI18N
@@ -497,25 +472,32 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
         @Override
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnAddImg) {
-                TreppePicturePanel.this.btnAddImgActionPerformed(evt);
+                WebDavPicturePanel.this.btnAddImgActionPerformed(evt);
             } else if (evt.getSource() == btnRemoveImg) {
-                TreppePicturePanel.this.btnRemoveImgActionPerformed(evt);
+                WebDavPicturePanel.this.btnRemoveImgActionPerformed(evt);
             } else if (evt.getSource() == btnPrevImg) {
-                TreppePicturePanel.this.btnPrevImgActionPerformed(evt);
+                WebDavPicturePanel.this.btnPrevImgActionPerformed(evt);
             } else if (evt.getSource() == btnNextImg) {
-                TreppePicturePanel.this.btnNextImgActionPerformed(evt);
+                WebDavPicturePanel.this.btnNextImgActionPerformed(evt);
             }
         }
 
         @Override
         public void valueChanged(final ListSelectionEvent evt) {
             if (evt.getSource() == lstFotos) {
-                TreppePicturePanel.this.lstFotosValueChanged(evt);
+                WebDavPicturePanel.this.lstFotosValueChanged(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
 
     //~ Instance fields --------------------------------------------------------
+
+    private final WebDavHelper webdavHelper;
+    private final String webdavDirectory;
+    private final String beanCollProp;
+    private final String geoFieldProp;
+    private final String numberProp;
+    private final String bildClassName;
 
     private final JFileChooser fileChooser = new JFileChooser();
     private final List<CidsBean> removeNewAddedFotoBean = new ArrayList<>();
@@ -546,18 +528,53 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new TreppePicturePanel object.
+     * Creates a new WebDavPicturePanel object.
      */
-    public TreppePicturePanel() {
-        this(true);
+    public WebDavPicturePanel() {
+        this(true, "url", "bilder", "", "", "");
     }
 
     /**
-     * Creates new form TreppePicturePanel.
+     * Creates new form WebDavPicturePanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable       DOCUMENT ME!
+     * @param  urlProp        DOCUMENT ME!
+     * @param  beanCollProp   DOCUMENT ME!
+     * @param  bildClassName  DOCUMENT ME!
+     * @param  numberProp     DOCUMENT ME!
+     * @param  geoFieldProp   DOCUMENT ME!
      */
-    public TreppePicturePanel(final boolean editable) {
+    public WebDavPicturePanel(final boolean editable,
+            final String urlProp,
+            final String beanCollProp,
+            final String bildClassName,
+            final String numberProp,
+            final String geoFieldProp) {
+        this.beanCollProp = beanCollProp;
+        this.bildClassName = bildClassName;
+        this.numberProp = numberProp;
+        this.geoFieldProp = geoFieldProp;
+        String webdavDirectory = null;
+        WebDavHelper webdavHelper = null;
+        try {
+            final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
+            String pass = bundle.getString("password");
+
+            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
+                pass = PasswordEncrypter.decryptString(pass);
+            }
+            final String user = bundle.getString("user");
+            webdavDirectory = bundle.getString(urlProp);
+
+            webdavHelper = new WebDavHelper(Proxy.fromPreferences(), user, pass, false);
+        } catch (final Exception ex) {
+            final String message = "Fehler beim Initialisieren der Bilderablage.";
+            LOG.error(message, ex);
+            ObjectRendererUtils.showExceptionWindowToUser(message, ex, null);
+        }
+        this.webdavDirectory = webdavDirectory;
+        this.webdavHelper = webdavHelper;
+
         initComponents();
 
         fileChooser.setFileFilter(new FileFilter() {
@@ -667,7 +684,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 try {
                     listListenerEnabled = false;
                     final List<Object> removeList = Arrays.asList(selection);
-                    final List<CidsBean> fotos = cidsBean.getBeanCollectionProperty("bilder");
+                    final List<CidsBean> fotos = cidsBean.getBeanCollectionProperty(beanCollProp);
                     if (fotos != null) {
                         fotos.removeAll(removeList);
                     }
@@ -822,7 +839,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
      * @throws  Exception  DOCUMENT ME!
      */
     private BufferedImage downloadImageFromWebDAV(final String fileName) throws Exception {
-        final InputStream iStream = WEBDAV_HELPER.getFileFromWebDAV(fileName, WEBDAV_DIRECTORY);
+        final InputStream iStream = webdavHelper.getFileFromWebDAV(fileName, webdavDirectory);
         try {
             final ImageInputStream iiStream = ImageIO.createImageInputStream(iStream);
             final Iterator<ImageReader> itReader = ImageIO.getImageReaders(iiStream);
@@ -967,7 +984,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
 
                 try {
-                    WEBDAV_HELPER.deleteFileFromWebDAV(fileName,
+                    webdavHelper.deleteFileFromWebDAV(fileName,
                         fileDir.toString());
                     deleteBean.delete();
                 } catch (final Exception ex) {
@@ -982,7 +999,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 fileDir.append(deleteBean.getProperty("url.url_base_id.prot_prefix").toString());
                 fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
                 fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
-                WEBDAV_HELPER.deleteFileFromWebDAV(fileName,
+                webdavHelper.deleteFileFromWebDAV(fileName,
                     fileDir.toString());
             }
         }
@@ -1006,7 +1023,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
      */
     private void initMap() {
         if (cidsBean != null) {
-            final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
+            final Object geoObj = cidsBean.getProperty(geoFieldProp);
             if (geoObj instanceof Geometry) {
                 new SwingWorker<Void, Void>() {
 
@@ -1114,18 +1131,21 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
             final Collection<CidsBean> newBeans = new ArrayList<>();
             int laufendeNummer = lstFotos.getModel().getSize() + 1;
             for (final File imageFile : fotos) {
-                WEBDAV_HELPER.uploadFileToWebDAV(
-                    imageFile.getName(),
+                final Object number = cidsBean.getProperty(numberProp);
+                final String fileName = ((number == null)
+                        ? "____" : new DecimalFormat("#0000").format(Integer.parseInt(number.toString()))) + "-"
+                            + laufendeNummer + "_" + imageFile.getName();
+                webdavHelper.uploadFileToWebDAV(fileName,
                     imageFile,
-                    WEBDAV_DIRECTORY,
-                    TreppePicturePanel.this);
+                    webdavDirectory,
+                    WebDavPicturePanel.this);
 
                 final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "url_base");
 
-                final String protPrefix = WEBDAV_DIRECTORY.substring(0, WEBDAV_DIRECTORY.indexOf("://")) + "://";
-                final String server = WEBDAV_DIRECTORY.substring(protPrefix.length(),
-                        WEBDAV_DIRECTORY.indexOf("/", protPrefix.length()));
-                final String path = WEBDAV_DIRECTORY.substring(protPrefix.length() + server.length());
+                final String protPrefix = webdavDirectory.substring(0, webdavDirectory.indexOf("://")) + "://";
+                final String server = webdavDirectory.substring(protPrefix.length(),
+                        webdavDirectory.indexOf("/", protPrefix.length()));
+                final String path = webdavDirectory.substring(protPrefix.length() + server.length());
 
                 final String query = String.format(
                         "SELECT %s, %s FROM %s WHERE prot_prefix ILIKE '%s' AND server ILIKE '%s' AND path ILIKE '%s';",
@@ -1150,9 +1170,9 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
                 final CidsBean url = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "url");
                 url.setProperty("url_base_id", urlBase);
-                url.setProperty("object_name", imageFile.getName());
+                url.setProperty("object_name", fileName);
 
-                final CidsBean newFotoBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "Treppe_bild");
+                final CidsBean newFotoBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", bildClassName);
                 newFotoBean.setProperty("laufende_nummer", laufendeNummer);
                 newFotoBean.setProperty("name", imageFile.getName());
                 newFotoBean.setProperty("url", url);
@@ -1167,7 +1187,7 @@ public class TreppePicturePanel extends javax.swing.JPanel implements CidsBeanSt
             try {
                 final Collection<CidsBean> newBeans = get();
                 if (!newBeans.isEmpty()) {
-                    final List<CidsBean> oldBeans = cidsBean.getBeanCollectionProperty("bilder");
+                    final List<CidsBean> oldBeans = cidsBean.getBeanCollectionProperty(beanCollProp);
                     oldBeans.addAll(newBeans);
                     removeNewAddedFotoBean.addAll(newBeans);
                     lstFotos.setSelectedValue(newBeans.iterator().next(), true);

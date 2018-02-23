@@ -179,7 +179,13 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         treppeEntwaesserung1 = new TreppeEntwaesserungPanel(editable);
         final JPanel jPanel7 = new JPanel();
         treppeStuetzmauernPanel1 = new TreppeStuetzmauernPanel(editable);
-        treppePicturePanel1 = new TreppePicturePanel(editable);
+        treppePicturePanel1 = new WebDavPicturePanel(
+                editable,
+                "url_treppen",
+                "bilder",
+                "Treppe_bild",
+                "nummer",
+                "geometrie.geo_field");
 
         final FormListener formListener = new FormListener();
 
@@ -1033,7 +1039,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     TreppeHandlaeufePanel treppeHandlaeufePanel2;
     TreppeLaeufePanel treppeLaeufePanel1;
     TreppeLeitelementePanel treppeLeitelementePanel1;
-    TreppePicturePanel treppePicturePanel1;
+    WebDavPicturePanel treppePicturePanel1;
     TreppePodestePanel treppePodestePanel1;
     TreppeStuetzmauernPanel treppeStuetzmauernPanel1;
     private BindingGroup bindingGroup;

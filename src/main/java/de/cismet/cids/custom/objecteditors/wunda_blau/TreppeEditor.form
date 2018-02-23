@@ -1243,7 +1243,7 @@
         </Container>
       </SubComponents>
     </Container>
-    <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppePicturePanel" name="treppePicturePanel1">
+    <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel" name="treppePicturePanel1">
       <Properties>
         <Property name="name" type="java.lang.String" value="treppePicturePanel1" noResource="true"/>
       </Properties>
@@ -1251,7 +1251,7 @@
         <BindingProperty name="cidsBean" source="Form" sourcePath="${cidsBean}" target="treppePicturePanel1" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
       </BindingProperties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.TreppePicturePanel(editable)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(editable, &quot;url_treppen&quot;, &quot;bilder&quot;, &quot;Treppe_bild&quot;, &quot;nummer&quot;, &quot;geometrie.geo_field&quot;)"/>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
       </AuxValues>
       <Constraints>
