@@ -14,20 +14,13 @@ package de.cismet.cids.custom.reports.wunda_blau;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import org.apache.log4j.Logger;
-
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
-import javax.swing.Timer;
-
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cismap.commons.gui.printing.JasperReportCsvDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
 import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
@@ -43,11 +36,6 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  */
 public class MauernReportGenerator {
 
-    //~ Static fields/initializers ---------------------------------------------
-
-    private static final Logger LOG = Logger.getLogger(MauernReportGenerator.class);
-    private static boolean forceQuit = false;
-
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -61,24 +49,15 @@ public class MauernReportGenerator {
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    final Collection<MauernReportBeanWithMapAndImages> reportBeans =
-                        new LinkedList<MauernReportBeanWithMapAndImages>();
+                    final Collection<MauernReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBeanWithMapAndImages(b));
+                        reportBeans.add(new MauernReportBean(b));
                     }
-                    boolean ready = false;
-
-                    final Timer timer = new Timer(5000, new ActionListener() {
-
-                                @Override
-                                public void actionPerformed(final ActionEvent e) {
-                                    forceQuit = true;
-                                }
-                            });
+                    boolean ready;
                     do {
                         ready = true;
-                        for (final MauernReportBeanWithMapAndImages m : reportBeans) {
-                            if (!m.isReadyToProceed() || forceQuit) {
+                        for (final MauernReportBean m : reportBeans) {
+                            if (!m.isReadyToProceed()) {
                                 ready = false;
                                 break;
                             }
@@ -115,7 +94,7 @@ public class MauernReportGenerator {
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    final Collection<MauernReportBean> reportBeans = new LinkedList<MauernReportBean>();
+                    final Collection<MauernReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
                         reportBeans.add(new MauernReportBean(b));
                     }

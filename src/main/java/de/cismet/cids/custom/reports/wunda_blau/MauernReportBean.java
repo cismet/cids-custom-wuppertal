@@ -19,11 +19,7 @@ import de.cismet.cids.dynamics.CidsBean;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class MauernReportBean {
-
-    //~ Instance fields --------------------------------------------------------
-
-    CidsBean mauer;
+public class MauernReportBean extends ReportBeanWithMapAndImages {
 
     //~ Constructors -----------------------------------------------------------
 
@@ -33,7 +29,13 @@ public class MauernReportBean {
      * @param  mauer  DOCUMENT ME!
      */
     public MauernReportBean(final CidsBean mauer) {
-        this.mauer = mauer;
+        super(
+            mauer,
+            "georeferenz.geo_field",
+            "bilder",
+            "url",
+            java.util.ResourceBundle.getBundle(
+                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -44,24 +46,6 @@ public class MauernReportBean {
      * @return  DOCUMENT ME!
      */
     public CidsBean getMauer() {
-        return mauer;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  mauer  DOCUMENT ME!
-     */
-    public void setMauer(final CidsBean mauer) {
-        this.mauer = mauer;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public boolean isReadyToProceed() {
-        return (mauer != null);
+        return getCidsBean();
     }
 }

@@ -15,15 +15,6 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
-import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
-
-import com.vividsolutions.jts.geom.Geometry;
-
-import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
-import edu.umd.cs.piccolo.event.PInputEvent;
-
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXErrorPane;
@@ -32,60 +23,22 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.lang.ref.SoftReference;
-
-import java.net.URL;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.event.IIOReadProgressListener;
-import javax.imageio.stream.ImageInputStream;
-
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.ProgressMonitor;
-import javax.swing.SwingWorker;
-import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -99,11 +52,7 @@ import de.cismet.cids.custom.objecteditors.utils.DoubleNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.reports.wunda_blau.MauernReportGenerator;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.server.MauerNummerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -111,29 +60,12 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
-import de.cismet.cids.editors.EditorSaveListener.EditorSaveStatus;
-
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-
-import de.cismet.cismap.commons.CrsTransformer;
-import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.features.StyledFeature;
-import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-
-import de.cismet.netutil.Proxy;
-
-import de.cismet.tools.CismetThreadPool;
-import de.cismet.tools.PasswordEncrypter;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -153,69 +85,16 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     TitleComponentProvider,
     BorderProvider {
 
-    //~ Static fields/initializers ---------------------------------------------
-
-    private static final ImageIcon ERROR_ICON = new ImageIcon(MauerEditor.class.getResource(
-                "/de/cismet/cids/custom/objecteditors/wunda_blau/file-broken.png"));
-    private static final String WEB_DAV_DIRECTORY;
-    private static final String WEB_DAV_USER;
-    private static final String WEB_DAV_PASSWORD;
-    private static final String FILE_PREFIX = "FOTO-";
-    private static final int CACHE_SIZE = 20;
-    private static final Map<String, SoftReference<BufferedImage>> IMAGE_CACHE =
-        new LinkedHashMap<String, SoftReference<BufferedImage>>(CACHE_SIZE) {
-
-            @Override
-            protected boolean removeEldestEntry(final Map.Entry<String, SoftReference<BufferedImage>> eldest) {
-                return size() >= CACHE_SIZE;
-            }
-        };
-
-    private static final ImageIcon FOLDER_ICON = new ImageIcon(MauerEditor.class.getResource(
-                "/de/cismet/cids/custom/objecteditors/wunda_blau/inode-directory.png"));
-    private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile(
-            ".*\\.(bmp|png|jpg|jpeg|tif|tiff|wbmp)$",
-            Pattern.CASE_INSENSITIVE);
-
-    static {
-        final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
-        String pass = bundle.getString("password");
-
-        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-            pass = PasswordEncrypter.decryptString(pass);
-        }
-
-        WEB_DAV_PASSWORD = pass;
-        WEB_DAV_USER = bundle.getString("user");
-        WEB_DAV_DIRECTORY = bundle.getString("url");
-    }
-
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
     private String title;
     private final Logger log = Logger.getLogger(MauerEditor.class);
-    private MappingComponent map;
     private boolean editable;
     private CardLayout cardLayout;
-    private CidsBean fotoCidsBean;
-    private final PropertyChangeListener listRepaintListener;
-    private BufferedImage image;
-    private final Timer timer;
-    private ImageResizeWorker currentResizeWorker;
-    private boolean resizeListenerEnabled;
-    private final WebDavHelper webDavHelper;
-    private final JFileChooser fileChooser;
-    private final List<CidsBean> removedFotoBeans = new ArrayList<CidsBean>();
-    private final List<CidsBean> removeNewAddedFotoBean = new ArrayList<CidsBean>();
-    private boolean listListenerEnabled;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddImg;
     private javax.swing.JButton btnImages;
     private javax.swing.JButton btnInfo;
-    private javax.swing.JButton btnNextImg;
-    private javax.swing.JButton btnPrevImg;
-    private javax.swing.JButton btnRemoveImg;
     private javax.swing.JButton btnReport;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbArtErstePruefung;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbArtLetztePruefung;
@@ -274,11 +153,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JScrollPane jspAllgemeineInfos;
-    private javax.swing.JScrollPane jspFotoList;
     private javax.swing.JLabel lblBauwerksbuchfertigstellung;
     private javax.swing.JLabel lblBeschreibungGelaender;
     private javax.swing.JLabel lblBesonderheiten;
-    private org.jdesktop.swingx.JXBusyLabel lblBusy;
     private javax.swing.JLabel lblDauerhaftigkeit;
     private javax.swing.JLabel lblEigentuemer;
     private javax.swing.JLabel lblEingriffAnsicht;
@@ -297,12 +174,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblFiller6;
     private javax.swing.JLabel lblFiller7;
     private javax.swing.JLabel lblFiller8;
-    private javax.swing.JLabel lblFiller9;
-    private javax.swing.JLabel lblFotos;
     private javax.swing.JLabel lblGelaenderHeader;
     private javax.swing.JLabel lblGeom;
     private javax.swing.JLabel lblHeaderAllgemein;
-    private javax.swing.JLabel lblHeaderFotos;
     private javax.swing.JLabel lblHoeheMin;
     private javax.swing.JLabel lblImages;
     private javax.swing.JLabel lblInfo;
@@ -322,7 +196,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblMauertyp;
     private javax.swing.JLabel lblNaechstePruefung;
     private javax.swing.JLabel lblNeigung;
-    private javax.swing.JLabel lblPicture;
     private javax.swing.JLabel lblPruefung1;
     private javax.swing.JLabel lblSanKostenAnsicht;
     private javax.swing.JLabel lblSanKostenAnsicht1;
@@ -345,7 +218,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUmgebung;
     private javax.swing.JLabel lblVerkehrssicherheit;
-    private javax.swing.JLabel lblVorschau;
     private javax.swing.JLabel lblZustandAnsicht;
     private javax.swing.JLabel lblZustandGelaender;
     private javax.swing.JLabel lblZustandGesamt;
@@ -358,7 +230,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblbeschreibungGruendung1;
     private javax.swing.JLabel lblbeschreibungGruendung2;
     private javax.swing.JLabel lblbeschreibungKopf;
-    private javax.swing.JList lstFotos;
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panLeft;
     private javax.swing.JPanel panRight;
@@ -366,11 +237,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private de.cismet.tools.gui.RoundedPanel pnlAllgemein;
     private de.cismet.tools.gui.RoundedPanel pnlAnsicht;
     private javax.swing.JPanel pnlCard1;
-    private javax.swing.JPanel pnlCard2;
-    private javax.swing.JPanel pnlCtrlBtn;
-    private javax.swing.JPanel pnlCtrlButtons;
-    private javax.swing.JPanel pnlFoto;
-    private de.cismet.tools.gui.RoundedPanel pnlFotos;
     private de.cismet.tools.gui.RoundedPanel pnlGelaende;
     private de.cismet.tools.gui.RoundedPanel pnlGelaender;
     private de.cismet.tools.gui.SemiRoundedPanel pnlGelaenderHeader;
@@ -379,18 +245,14 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private de.cismet.tools.gui.SemiRoundedPanel pnlGruendungHeader1;
     private de.cismet.tools.gui.SemiRoundedPanel pnlGruendungHeader2;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderAllgemein;
-    private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderFotos;
     private javax.swing.JPanel pnlHoehe;
     private de.cismet.tools.gui.RoundedPanel pnlKopf;
     private de.cismet.tools.gui.SemiRoundedPanel pnlKopfAnsicht;
     private de.cismet.tools.gui.SemiRoundedPanel pnlKopfHeader;
     private javax.swing.JPanel pnlLeft;
-    private javax.swing.JPanel pnlMap;
     private javax.swing.JPanel pnlScrollPane;
     private de.cismet.tools.gui.RoundedPanel pnlVerformung;
-    private de.cismet.tools.gui.RoundedPanel pnlVorschau;
     private de.cismet.tools.gui.RoundedPanel roundedScrollPanel;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
     private javax.swing.JTextArea taBeschreibungAnsicht;
     private javax.swing.JTextArea taBeschreibungGelaender;
     private javax.swing.JTextArea taBeschreibungGruendung;
@@ -428,6 +290,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JTextField tfZustandGruendung1;
     private javax.swing.JTextField tfZustandGruendung2;
     private javax.swing.JTextField tfZustandKopf;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel webDavPicturePanel1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -453,57 +316,88 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         }
         jScrollPane3.getViewport().setOpaque(false);
         jspAllgemeineInfos.getViewport().setOpaque(false);
-        map = new MappingComponent();
-        pnlMap.setLayout(new BorderLayout());
-        pnlMap.add(map, BorderLayout.CENTER);
-        webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
-        setEditable();
-        final LayoutManager layout = getLayout();
-        if (layout instanceof CardLayout) {
-            cardLayout = (CardLayout)layout;
-            cardLayout.show(this, "card1");
+
+        if (!editable) {
+            RendererTools.makeReadOnly(jScrollPane1);
+            RendererTools.makeReadOnly(jScrollPane2);
+            RendererTools.makeReadOnly(jScrollPane4);
+            RendererTools.makeReadOnly(jScrollPane5);
+            RendererTools.makeReadOnly(jScrollPane6);
+            RendererTools.makeReadOnly(jScrollPane7);
+            RendererTools.makeReadOnly(jScrollPane8);
+            RendererTools.makeReadOnly(jScrollPane9);
+            RendererTools.makeReadOnly(jScrollPane10);
+            RendererTools.makeReadOnly(jScrollPane11);
+            RendererTools.makeReadOnly(jScrollPane12);
+            RendererTools.makeReadOnly(jScrollPane13);
+            RendererTools.makeReadOnly(jScrollPane14);
+            RendererTools.makeReadOnly(jScrollPane15);
+            RendererTools.makeReadOnly(jScrollPane17);
+            RendererTools.makeReadOnly(taLagebeschreibung);
+            RendererTools.makeReadOnly(taNeigung);
+            RendererTools.makeReadOnly(tfUmgebung);
+            RendererTools.makeReadOnly(tfLaenge);
+            RendererTools.makeReadOnly(taBeschreibungAnsicht);
+            RendererTools.makeReadOnly(taBeschreibungGelaender);
+            RendererTools.makeReadOnly(taBeschreibungGruendung);
+            RendererTools.makeReadOnly(taBeschreibungGruendung1);
+            RendererTools.makeReadOnly(taBeschreibungGruendung2);
+            RendererTools.makeReadOnly(taBeschreibungKopf);
+            RendererTools.makeReadOnly(taLagebeschreibung);
+            RendererTools.makeReadOnly(taNeigung);
+            RendererTools.makeReadOnly(taSanMassnahmeAnsicht);
+            RendererTools.makeReadOnly(taSanMassnahmeGelaender);
+            RendererTools.makeReadOnly(taSanMassnahmeGruendung);
+            RendererTools.makeReadOnly(taSanMassnahmeGruendung1);
+            RendererTools.makeReadOnly(taSanMassnahmeGruendung2);
+            RendererTools.makeReadOnly(taSanMassnahmeKopf);
+            RendererTools.makeReadOnly(taBesonderheiten);
+            RendererTools.makeReadOnly(tfLaenge);
+            RendererTools.makeReadOnly(tfSanKostenAnsicht);
+            RendererTools.makeReadOnly(tfSanKostenGelaender);
+            RendererTools.makeReadOnly(tfSanKostenGruendung);
+            RendererTools.makeReadOnly(tfSanKostenGruendung1);
+            RendererTools.makeReadOnly(tfSanKostenGruendung2);
+            RendererTools.makeReadOnly(tfSanKostenKopf);
+            RendererTools.makeReadOnly(tfUmgebung);
+            RendererTools.makeReadOnly(tfZustandAnsicht);
+            RendererTools.makeReadOnly(tfZustandGelaender);
+            RendererTools.makeReadOnly(tfZustandGruendung);
+            RendererTools.makeReadOnly(tfZustandGruendung1);
+            RendererTools.makeReadOnly(tfZustandGruendung2);
+            RendererTools.makeReadOnly(tfZustandKopf);
+            RendererTools.makeReadOnly(tfStaerkeOben);
+            RendererTools.makeReadOnly(tfStaerke_unten);
+            RendererTools.makeReadOnly(tfLastabstand);
+            RendererTools.makeReadOnly(tfHoeheMax);
+            RendererTools.makeReadOnly(tfHoeheMin);
+            RendererTools.makeReadOnly(tfMauerNummer);
+            RendererTools.makeReadOnly(tfLagebezeichnung);
+            RendererTools.makeReadOnly(dcSanierung);
+            RendererTools.makeReadOnly(tfZustandGesamt);
+            RendererTools.makeReadOnly(cbEigentuemer);
+            RendererTools.makeReadOnly(cbMaterialtyp);
+            RendererTools.makeReadOnly(cbStuetzmauertyp);
+            RendererTools.makeReadOnly(cbArtErstePruefung);
+            RendererTools.makeReadOnly(cbArtLetztePruefung);
+            RendererTools.makeReadOnly(cbArtNaechstePruefung1);
+            RendererTools.makeReadOnly(cbStandsicherheit);
+            RendererTools.makeReadOnly(cbVerkehrssicherheit);
+            RendererTools.makeReadOnly(cbDauerhaftigkeit);
+            RendererTools.makeReadOnly(cbLastklasse);
+            RendererTools.makeReadOnly(cbMauertyp);
+            RendererTools.makeReadOnly(cbEingriffAnsicht);
+            RendererTools.makeReadOnly(cbEingriffGelaende);
+            RendererTools.makeReadOnly(cbEingriffGelaender);
+            RendererTools.makeReadOnly(cbEingriffGruendung);
+            RendererTools.makeReadOnly(cbEingriffKopf);
+            RendererTools.makeReadOnly(cbEingriffVerformung);
+            RendererTools.makeReadOnly(dcErstePruefung);
+            RendererTools.makeReadOnly(dcLetztePruefung);
+            RendererTools.makeReadOnly(dcNaechstePruefung);
+            RendererTools.makeReadOnly(dcBauwerksbuchfertigstellung);
         }
-        this.listListenerEnabled = true;
-        fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileFilter() {
 
-                @Override
-                public boolean accept(final File f) {
-                    return f.isDirectory() || IMAGE_FILE_PATTERN.matcher(f.getName()).matches();
-                }
-
-                @Override
-                public String getDescription() {
-                    return "Bilddateien";
-                }
-            });
-        fileChooser.setMultiSelectionEnabled(true);
-        listRepaintListener = new PropertyChangeListener() {
-
-                @Override
-                public void propertyChange(final PropertyChangeEvent evt) {
-                    lstFotos.repaint();
-                }
-            };
-
-        timer = new Timer(300, new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent e) {
-                        if (resizeListenerEnabled) {
-//                    if (isShowing()) {
-                            if (currentResizeWorker != null) {
-                                currentResizeWorker.cancel(true);
-                            }
-                            currentResizeWorker = new ImageResizeWorker();
-                            CismetThreadPool.execute(currentResizeWorker);
-//                    } else {
-//                        timer.restart();
-//                    }
-                        }
-                    }
-                });
-        timer.setRepeats(false);
         setLimitDocumentFilter(tfMauerNummer, 50);
         setLimitDocumentFilter(tfLagebezeichnung, 500);
         setLimitDocumentFilter(taBeschreibungAnsicht, 500);
@@ -736,27 +630,13 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jScrollPane15 = new javax.swing.JScrollPane();
         taSanMassnahmeGruendung2 = new javax.swing.JTextArea();
         cbEingriffVerformung = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        pnlCard2 = new javax.swing.JPanel();
-        pnlFotos = new de.cismet.tools.gui.RoundedPanel();
-        pnlHeaderFotos = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblHeaderFotos = new javax.swing.JLabel();
-        lblFiller9 = new javax.swing.JLabel();
-        lblFotos = new javax.swing.JLabel();
-        jspFotoList = new javax.swing.JScrollPane();
-        lstFotos = new javax.swing.JList();
-        pnlCtrlButtons = new javax.swing.JPanel();
-        btnAddImg = new javax.swing.JButton();
-        btnRemoveImg = new javax.swing.JButton();
-        pnlVorschau = new de.cismet.tools.gui.RoundedPanel();
-        semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblVorschau = new javax.swing.JLabel();
-        pnlFoto = new javax.swing.JPanel();
-        lblPicture = new javax.swing.JLabel();
-        lblBusy = new org.jdesktop.swingx.JXBusyLabel(new Dimension(75, 75));
-        pnlCtrlBtn = new javax.swing.JPanel();
-        btnPrevImg = new javax.swing.JButton();
-        btnNextImg = new javax.swing.JButton();
-        pnlMap = new javax.swing.JPanel();
+        webDavPicturePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(
+                editable,
+                "url_mauern",
+                "bilder",
+                "mauer_bilder",
+                "mauer_nummer",
+                "georeferenz.geo_field");
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
@@ -3095,222 +2975,15 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         add(pnlCard1, "card1");
 
-        pnlCard2.setOpaque(false);
-        pnlCard2.setLayout(new java.awt.GridBagLayout());
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"),
+                webDavPicturePanel1,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
 
-        pnlFotos.setMinimumSize(new java.awt.Dimension(400, 200));
-        pnlFotos.setPreferredSize(new java.awt.Dimension(400, 200));
-        pnlFotos.setLayout(new java.awt.GridBagLayout());
-
-        pnlHeaderFotos.setBackground(new java.awt.Color(51, 51, 51));
-        pnlHeaderFotos.setForeground(new java.awt.Color(51, 51, 51));
-        pnlHeaderFotos.setLayout(new java.awt.FlowLayout());
-
-        lblHeaderFotos.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeaderFotos.setText(org.openide.util.NbBundle.getMessage(
-                MauerEditor.class,
-                "MauerEditor.lblHeaderFotos.text")); // NOI18N
-        pnlHeaderFotos.add(lblHeaderFotos);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        pnlFotos.add(pnlHeaderFotos, gridBagConstraints);
-
-        lblFiller9.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblFiller9.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlFotos.add(lblFiller9, gridBagConstraints);
-
-        lblFotos.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblFotos.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        pnlFotos.add(lblFotos, gridBagConstraints);
-
-        jspFotoList.setMinimumSize(new java.awt.Dimension(250, 130));
-
-        lstFotos.setMinimumSize(new java.awt.Dimension(250, 130));
-        lstFotos.setPreferredSize(new java.awt.Dimension(250, 130));
-
-        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.bilder}");
-        final org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJListBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                        this,
-                        eLProperty,
-                        lstFotos);
-        bindingGroup.addBinding(jListBinding);
-
-        lstFotos.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
-                    lstFotosValueChanged(evt);
-                }
-            });
-        jspFotoList.setViewportView(lstFotos);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-        pnlFotos.add(jspFotoList, gridBagConstraints);
-
-        pnlCtrlButtons.setOpaque(false);
-        pnlCtrlButtons.setLayout(new java.awt.GridBagLayout());
-
-        btnAddImg.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png")));    // NOI18N
-        btnAddImg.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.btnAddImg.text")); // NOI18N
-        btnAddImg.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnAddImgActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlCtrlButtons.add(btnAddImg, gridBagConstraints);
-
-        btnRemoveImg.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png")));       // NOI18N
-        btnRemoveImg.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.btnRemoveImg.text")); // NOI18N
-        btnRemoveImg.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnRemoveImgActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        pnlCtrlButtons.add(btnRemoveImg, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        pnlFotos.add(pnlCtrlButtons, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 10);
-        pnlCard2.add(pnlFotos, gridBagConstraints);
-
-        pnlVorschau.setLayout(new java.awt.GridBagLayout());
-
-        semiRoundedPanel2.setBackground(new java.awt.Color(51, 51, 51));
-        semiRoundedPanel2.setLayout(new java.awt.FlowLayout());
-
-        lblVorschau.setForeground(new java.awt.Color(255, 255, 255));
-        lblVorschau.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblVorschau.text")); // NOI18N
-        semiRoundedPanel2.add(lblVorschau);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        pnlVorschau.add(semiRoundedPanel2, gridBagConstraints);
-
-        pnlFoto.setOpaque(false);
-        pnlFoto.setLayout(new java.awt.GridBagLayout());
-
-        lblPicture.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblPicture.text")); // NOI18N
-        pnlFoto.add(lblPicture, new java.awt.GridBagConstraints());
-
-        lblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblBusy.setMaximumSize(new java.awt.Dimension(140, 40));
-        lblBusy.setMinimumSize(new java.awt.Dimension(140, 60));
-        lblBusy.setPreferredSize(new java.awt.Dimension(140, 60));
-        pnlFoto.add(lblBusy, new java.awt.GridBagConstraints());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlVorschau.add(pnlFoto, gridBagConstraints);
-
-        pnlCtrlBtn.setOpaque(false);
-        pnlCtrlBtn.setPreferredSize(new java.awt.Dimension(100, 50));
-        pnlCtrlBtn.setLayout(new java.awt.GridBagLayout());
-
-        btnPrevImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-left.png")));               // NOI18N
-        btnPrevImg.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.btnPrevImg.text")); // NOI18N
-        btnPrevImg.setBorderPainted(false);
-        btnPrevImg.setFocusPainted(false);
-        btnPrevImg.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnPrevImgActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        pnlCtrlBtn.add(btnPrevImg, gridBagConstraints);
-
-        btnNextImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-right.png")));              // NOI18N
-        btnNextImg.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.btnNextImg.text")); // NOI18N
-        btnNextImg.setBorderPainted(false);
-        btnNextImg.setFocusPainted(false);
-        btnNextImg.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnNextImgActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        pnlCtrlBtn.add(btnNextImg, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        pnlVorschau.add(pnlCtrlBtn, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.8;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 15);
-        pnlCard2.add(pnlVorschau, gridBagConstraints);
-
-        pnlMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        pnlMap.setMinimumSize(new java.awt.Dimension(400, 200));
-        pnlMap.setPreferredSize(new java.awt.Dimension(400, 200));
-        pnlMap.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 10);
-        pnlCard2.add(pnlMap, gridBagConstraints);
-
-        add(pnlCard2, "card2");
+        add(webDavPicturePanel1, "card2");
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -3347,35 +3020,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
-        lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() - 1);
-    }                                                                              //GEN-LAST:event_btnPrevImgActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
-        lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() + 1);
-    }                                                                              //GEN-LAST:event_btnNextImgActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
-        if (!evt.getValueIsAdjusting() && listListenerEnabled) {
-            loadFoto();
-        }
-    }                                                                                   //GEN-LAST:event_lstFotosValueChanged
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tfStaerke_untenActionPerformed
         // TODO add your handling code here:
     } //GEN-LAST:event_tfStaerke_untenActionPerformed
@@ -3385,75 +3029,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
-        if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
-            final File[] selFiles = fileChooser.getSelectedFiles();
-            if ((selFiles != null) && (selFiles.length > 0)) {
-                CismetThreadPool.execute(new ImageUploadWorker(Arrays.asList(selFiles)));
-            }
-        }
-    }                                                                             //GEN-LAST:event_btnAddImgActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveImgActionPerformed
-        final Object[] selection = lstFotos.getSelectedValues();
-        if ((selection != null) && (selection.length > 0)) {
-            final int answer = JOptionPane.showConfirmDialog(
-                    StaticSwingTools.getParentFrame(this),
-                    "Sollen die Fotos wirklich gelöscht werden?",
-                    "Fotos entfernen",
-                    JOptionPane.YES_NO_OPTION);
-            if (answer == JOptionPane.YES_OPTION) {
-                try {
-                    listListenerEnabled = false;
-                    final List<Object> removeList = Arrays.asList(selection);
-                    final List<CidsBean> fotos = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "bilder");
-                    if (fotos != null) {
-                        fotos.removeAll(removeList);
-                    }
-                    // TODO set the laufende_nr
-                    for (int i = 0; i < lstFotos.getModel().getSize(); i++) {
-                        final CidsBean foto = (CidsBean)lstFotos.getModel().getElementAt(i);
-                        foto.setProperty("laufende_nummer", i + 1);
-                    }
-
-                    for (final Object toDeleteObj : removeList) {
-                        if (toDeleteObj instanceof CidsBean) {
-                            final CidsBean fotoToDelete = (CidsBean)toDeleteObj;
-                            final String file = String.valueOf(fotoToDelete.getProperty("url.object_name"));
-                            IMAGE_CACHE.remove(file);
-                            removedFotoBeans.add(fotoToDelete);
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error(e, e);
-                    showExceptionToUser(e, this);
-                } finally {
-                    // TODO check the laufende_nummer attribute
-                    listListenerEnabled = true;
-                    final int modelSize = lstFotos.getModel().getSize();
-                    if (modelSize > 0) {
-                        lstFotos.setSelectedIndex(0);
-                    } else {
-                        image = null;
-                        lblPicture.setIcon(FOLDER_ICON);
-                    }
-                }
-            }
-        }
-    } //GEN-LAST:event_btnRemoveImgActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
-        final Collection<CidsBean> c = new LinkedList<CidsBean>();
+        final Collection<CidsBean> c = new LinkedList<>();
         c.add(cidsBean);
         MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this);
     }                                                                             //GEN-LAST:event_btnReportActionPerformed
@@ -3493,34 +3070,21 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix")
                         + ((lagebez != null) ? lagebez : "");
             lblTitle.setText(this.title);
-            initMap();
-            bindingGroup.bind();
-            lstFotos.getModel().addListDataListener(new ListDataListener() {
-
-                    @Override
-                    public void intervalAdded(final ListDataEvent e) {
-                        defineButtonStatus();
-                    }
-
-                    @Override
-                    public void intervalRemoved(final ListDataEvent e) {
-                        defineButtonStatus();
-                    }
-
-                    @Override
-                    public void contentsChanged(final ListDataEvent e) {
-                        defineButtonStatus();
-                    }
-                });
-            if (lstFotos.getModel().getSize() > 0) {
-                lstFotos.setSelectedIndex(0);
-            }
+        }
+        bindingGroup.bind();
+        final LayoutManager layout = getLayout();
+        if (layout instanceof CardLayout) {
+            cardLayout = (CardLayout)layout;
+            cardLayout.show(this, "card1");
         }
     }
 
     @Override
     public void dispose() {
-        ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
+        webDavPicturePanel1.dispose();
+        if (cbGeom != null) {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
+        }
         bindingGroup.unbind();
     }
 
@@ -3559,33 +3123,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
     @Override
     public void editorClosed(final EditorClosedEvent event) {
-        if (EditorSaveStatus.SAVE_SUCCESS == event.getStatus()) {
-            for (final CidsBean deleteBean : removedFotoBeans) {
-                final String fileName = (String)deleteBean.getProperty("url_object_name");
-                final StringBuilder fileDir = new StringBuilder();
-                fileDir.append(deleteBean.getProperty("url.url_base_id.prot_prefix").toString());
-                fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
-                fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
-
-                try {
-                    webDavHelper.deleteFileFromWebDAV(fileName,
-                        fileDir.toString());
-                    deleteBean.delete();
-                } catch (Exception ex) {
-                    log.error(ex, ex);
-                }
-            }
-        } else {
-            for (final CidsBean deleteBean : removeNewAddedFotoBean) {
-                final String fileName = (String)deleteBean.getProperty("url.object_name");
-                final StringBuilder fileDir = new StringBuilder();
-                fileDir.append(deleteBean.getProperty("url.url_base_id.prot_prefix").toString());
-                fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
-                fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
-                webDavHelper.deleteFileFromWebDAV(fileName,
-                    fileDir.toString());
-            }
-        }
+        webDavPicturePanel1.editorClosed(event);
     }
 
     @Override
@@ -3644,365 +3182,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void initMap() {
-        if (cidsBean != null) {
-            final Object geoObj = cidsBean.getProperty("georeferenz.geo_field");
-            if (geoObj instanceof Geometry) {
-                final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        AlkisConstants.COMMONS.SRS_SERVICE);
-                if (log.isDebugEnabled()) {
-                    log.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
-                }
-                final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                            AlkisConstants.COMMONS.GEO_BUFFER));
-                final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
-                                + (box.getHeight() * box.getHeight()));
-                if (log.isDebugEnabled()) {
-                    log.debug("Buffer for map: " + diagonalLength);
-                }
-                final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(diagonalLength));
-                final Runnable mapRunnable = new Runnable() {
-
-                        @Override
-                        public void run() {
-                            final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
-                            mappingModel.addHome(new XBoundingBox(
-                                    bufferedBox.getX1(),
-                                    bufferedBox.getY1(),
-                                    bufferedBox.getX2(),
-                                    bufferedBox.getY2(),
-                                    AlkisConstants.COMMONS.SRS_SERVICE,
-                                    true));
-                            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                        AlkisConstants.COMMONS.MAP_CALL_STRING));
-                            swms.setName("Mauer");
-                            final StyledFeature dsf = new DefaultStyledFeature();
-                            dsf.setGeometry(pureGeom);
-                            dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
-                            dsf.setLineWidth(3);
-                            dsf.setLinePaint(new Color(1, 0, 0, 1f));
-                            // add the raster layer to the model
-                            mappingModel.addLayer(swms);
-                            // set the model
-                            map.setMappingModel(mappingModel);
-                            // initial positioning of the map
-                            final int duration = map.getAnimationDuration();
-                            map.setAnimationDuration(0);
-                            map.gotoInitialBoundingBox();
-                            // interaction mode
-                            map.setInteractionMode(MappingComponent.ZOOM);
-                            // finally when all configurations are done ...
-                            map.unlock();
-                            map.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
-
-                                    @Override
-                                    public void mouseClicked(final PInputEvent evt) {
-                                        if (evt.getClickCount() > 1) {
-                                            final CidsBean bean = cidsBean;
-                                            ObjectRendererUtils.switchToCismapMap();
-                                            ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
-                                        }
-                                    }
-                                });
-                            map.setInteractionMode("MUTE");
-                            map.getFeatureCollection().addFeature(dsf);
-                            map.setAnimationDuration(duration);
-                        }
-                    };
-                if (EventQueue.isDispatchThread()) {
-                    mapRunnable.run();
-                } else {
-                    EventQueue.invokeLater(mapRunnable);
-                }
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void setEditable() {
-        if (!editable) {
-            RendererTools.makeReadOnly(jScrollPane1);
-            RendererTools.makeReadOnly(jScrollPane2);
-            RendererTools.makeReadOnly(jScrollPane4);
-            RendererTools.makeReadOnly(jScrollPane5);
-            RendererTools.makeReadOnly(jScrollPane6);
-            RendererTools.makeReadOnly(jScrollPane7);
-            RendererTools.makeReadOnly(jScrollPane8);
-            RendererTools.makeReadOnly(jScrollPane9);
-            RendererTools.makeReadOnly(jScrollPane10);
-            RendererTools.makeReadOnly(jScrollPane11);
-            RendererTools.makeReadOnly(jScrollPane12);
-            RendererTools.makeReadOnly(jScrollPane13);
-            RendererTools.makeReadOnly(jScrollPane14);
-            RendererTools.makeReadOnly(jScrollPane15);
-            RendererTools.makeReadOnly(jScrollPane17);
-            RendererTools.makeReadOnly(jspFotoList);
-            RendererTools.makeReadOnly(taLagebeschreibung);
-            RendererTools.makeReadOnly(taNeigung);
-            RendererTools.makeReadOnly(tfUmgebung);
-            RendererTools.makeReadOnly(tfLaenge);
-            RendererTools.makeReadOnly(taBeschreibungAnsicht);
-            RendererTools.makeReadOnly(taBeschreibungGelaender);
-            RendererTools.makeReadOnly(taBeschreibungGruendung);
-            RendererTools.makeReadOnly(taBeschreibungGruendung1);
-            RendererTools.makeReadOnly(taBeschreibungGruendung2);
-            RendererTools.makeReadOnly(taBeschreibungKopf);
-            RendererTools.makeReadOnly(taLagebeschreibung);
-            RendererTools.makeReadOnly(taNeigung);
-            RendererTools.makeReadOnly(taSanMassnahmeAnsicht);
-            RendererTools.makeReadOnly(taSanMassnahmeGelaender);
-            RendererTools.makeReadOnly(taSanMassnahmeGruendung);
-            RendererTools.makeReadOnly(taSanMassnahmeGruendung1);
-            RendererTools.makeReadOnly(taSanMassnahmeGruendung2);
-            RendererTools.makeReadOnly(taSanMassnahmeKopf);
-            RendererTools.makeReadOnly(taBesonderheiten);
-            RendererTools.makeReadOnly(tfLaenge);
-            RendererTools.makeReadOnly(tfSanKostenAnsicht);
-            RendererTools.makeReadOnly(tfSanKostenGelaender);
-            RendererTools.makeReadOnly(tfSanKostenGruendung);
-            RendererTools.makeReadOnly(tfSanKostenGruendung1);
-            RendererTools.makeReadOnly(tfSanKostenGruendung2);
-            RendererTools.makeReadOnly(tfSanKostenKopf);
-            RendererTools.makeReadOnly(tfUmgebung);
-            RendererTools.makeReadOnly(tfZustandAnsicht);
-            RendererTools.makeReadOnly(tfZustandGelaender);
-            RendererTools.makeReadOnly(tfZustandGruendung);
-            RendererTools.makeReadOnly(tfZustandGruendung1);
-            RendererTools.makeReadOnly(tfZustandGruendung2);
-            RendererTools.makeReadOnly(tfZustandKopf);
-            RendererTools.makeReadOnly(tfStaerkeOben);
-            RendererTools.makeReadOnly(tfStaerke_unten);
-            RendererTools.makeReadOnly(tfLastabstand);
-            RendererTools.makeReadOnly(tfHoeheMax);
-            RendererTools.makeReadOnly(tfHoeheMin);
-            RendererTools.makeReadOnly(tfMauerNummer);
-            RendererTools.makeReadOnly(tfLagebezeichnung);
-            RendererTools.makeReadOnly(dcSanierung);
-            RendererTools.makeReadOnly(tfZustandGesamt);
-            RendererTools.makeReadOnly(lstFotos);
-            RendererTools.makeReadOnly(cbEigentuemer);
-            RendererTools.makeReadOnly(cbMaterialtyp);
-            RendererTools.makeReadOnly(cbStuetzmauertyp);
-            RendererTools.makeReadOnly(cbArtErstePruefung);
-            RendererTools.makeReadOnly(cbArtLetztePruefung);
-            RendererTools.makeReadOnly(cbArtNaechstePruefung1);
-            RendererTools.makeReadOnly(cbStandsicherheit);
-            RendererTools.makeReadOnly(cbVerkehrssicherheit);
-            RendererTools.makeReadOnly(cbDauerhaftigkeit);
-            RendererTools.makeReadOnly(cbLastklasse);
-            RendererTools.makeReadOnly(cbMauertyp);
-            RendererTools.makeReadOnly(cbEingriffAnsicht);
-            RendererTools.makeReadOnly(cbEingriffGelaende);
-            RendererTools.makeReadOnly(cbEingriffGelaender);
-            RendererTools.makeReadOnly(cbEingriffGruendung);
-            RendererTools.makeReadOnly(cbEingriffKopf);
-            RendererTools.makeReadOnly(cbEingriffVerformung);
-            RendererTools.makeReadOnly(dcErstePruefung);
-            RendererTools.makeReadOnly(dcLetztePruefung);
-            RendererTools.makeReadOnly(dcNaechstePruefung);
-            RendererTools.makeReadOnly(dcBauwerksbuchfertigstellung);
-            btnAddImg.setVisible(editable);
-            btnRemoveImg.setVisible(editable);
-        }
-    }
-
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void loadFoto() {
-        final Object fotoObj = lstFotos.getSelectedValue();
-        if (fotoCidsBean != null) {
-            fotoCidsBean.removePropertyChangeListener(listRepaintListener);
-        }
-        if (fotoObj instanceof CidsBean) {
-            fotoCidsBean = (CidsBean)fotoObj;
-            fotoCidsBean.addPropertyChangeListener(listRepaintListener);
-            final Object fileObj = fotoCidsBean.getProperty("url.object_name");
-            boolean cacheHit = false;
-            if (fileObj != null) {
-//                final String[] file = fileObj.toString().split("/");
-//                final String object_name = file[file.length - 1];
-                final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(fileObj);
-                if (cachedImageRef != null) {
-                    final BufferedImage cachedImage = cachedImageRef.get();
-                    if (cachedImage != null) {
-                        cacheHit = true;
-                        image = cachedImage;
-                        showWait(true);
-                        resizeListenerEnabled = true;
-                        timer.restart();
-                    }
-                }
-                if (!cacheHit) {
-                    CismetThreadPool.execute(new LoadSelectedImageWorker(fileObj.toString()));
-                }
-            }
-        } else {
-            image = null;
-            lblPicture.setIcon(FOLDER_ICON);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  tooltip  DOCUMENT ME!
-     */
-    private void indicateError(final String tooltip) {
-        lblPicture.setIcon(ERROR_ICON);
-        lblPicture.setText("Fehler beim Übertragen des Bildes!");
-        lblPicture.setToolTipText(tooltip);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  wait  DOCUMENT ME!
-     */
-    private void showWait(final boolean wait) {
-        if (wait) {
-            if (!lblBusy.isBusy()) {
-//                cardLayout.show(pnlFoto, "busy");
-                lblPicture.setIcon(null);
-                lblBusy.setBusy(true);
-                btnAddImg.setEnabled(false);
-                btnRemoveImg.setEnabled(false);
-                lstFotos.setEnabled(false);
-                btnPrevImg.setEnabled(false);
-                btnNextImg.setEnabled(false);
-            }
-        } else {
-//            cardLayout.show(pnlFoto, "preview");
-            lblBusy.setBusy(false);
-            lblBusy.setVisible(false);
-            btnAddImg.setEnabled(true);
-            btnRemoveImg.setEnabled(true);
-            lstFotos.setEnabled(true);
-            defineButtonStatus();
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   fileName  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private BufferedImage downloadImageFromUrl(final String fileName) {
-        try {
-            final URL url = new URL(fileName);
-            final BufferedImage img = ImageIO.read(url);
-            return img;
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        }
-        return null;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   fileName  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    private BufferedImage downloadImageFromWebDAV(final String fileName) throws Exception {
-        final InputStream iStream = webDavHelper.getFileFromWebDAV(fileName, WEB_DAV_DIRECTORY);
-        try {
-            final ImageInputStream iiStream = ImageIO.createImageInputStream(iStream);
-            final Iterator<ImageReader> itReader = ImageIO.getImageReaders(iiStream);
-            final ImageReader reader = itReader.next();
-            final ProgressMonitor monitor = new ProgressMonitor(this, "Bild wird übertragen...", "", 0, 100);
-//            monitor.setMillisToPopup(500);
-            reader.addIIOReadProgressListener(new IIOReadProgressListener() {
-
-                    @Override
-                    public void sequenceStarted(final ImageReader source, final int minIndex) {
-                    }
-
-                    @Override
-                    public void sequenceComplete(final ImageReader source) {
-                    }
-
-                    @Override
-                    public void imageStarted(final ImageReader source, final int imageIndex) {
-                        monitor.setProgress(monitor.getMinimum());
-                    }
-
-                    @Override
-                    public void imageProgress(final ImageReader source, final float percentageDone) {
-                        if (monitor.isCanceled()) {
-                            try {
-                                iiStream.close();
-                            } catch (IOException ex) {
-                                // NOP
-                            }
-                        } else {
-                            monitor.setProgress(Math.round(percentageDone));
-                        }
-                    }
-
-                    @Override
-                    public void imageComplete(final ImageReader source) {
-                        monitor.setProgress(monitor.getMaximum());
-                    }
-
-                    @Override
-                    public void thumbnailStarted(final ImageReader source,
-                            final int imageIndex,
-                            final int thumbnailIndex) {
-                    }
-
-                    @Override
-                    public void thumbnailProgress(final ImageReader source, final float percentageDone) {
-                    }
-
-                    @Override
-                    public void thumbnailComplete(final ImageReader source) {
-                    }
-
-                    @Override
-                    public void readAborted(final ImageReader source) {
-                        monitor.close();
-                    }
-                });
-
-            final ImageReadParam param = reader.getDefaultReadParam();
-            reader.setInput(iiStream, true, true);
-            final BufferedImage result;
-            try {
-                result = reader.read(0, param);
-            } finally {
-                reader.dispose();
-                iiStream.close();
-            }
-            return result;
-        } finally {
-            IOUtils.closeQuietly(iStream);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void defineButtonStatus() {
-        final int selectedIdx = lstFotos.getSelectedIndex();
-        btnPrevImg.setEnabled(selectedIdx > 0);
-        btnNextImg.setEnabled((selectedIdx < (lstFotos.getModel().getSize() - 1)) && (selectedIdx > -1));
     }
 
     /**
@@ -4104,219 +3286,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             if ((fb.getDocument().getLength() + str.length()
                             - length) <= maxCharacters) {
                 super.replace(fb, offs, length, str, a);
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    final class LoadSelectedImageWorker extends SwingWorker<BufferedImage, Void> {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private final String file;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new LoadSelectedImageWorker object.
-         *
-         * @param  toLoad  DOCUMENT ME!
-         */
-        public LoadSelectedImageWorker(final String toLoad) {
-            this.file = toLoad;
-            lblPicture.setText("");
-            lblPicture.setToolTipText(null);
-            showWait(true);
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        protected BufferedImage doInBackground() throws Exception {
-            if ((file != null) && (file.length() > 0)) {
-                return downloadImageFromWebDAV(file);
-//                return downloadImageFromUrl(file);
-            }
-            return null;
-        }
-
-        @Override
-        protected void done() {
-            try {
-                image = get();
-                if (image != null) {
-                    IMAGE_CACHE.put(file, new SoftReference<BufferedImage>(image));
-                    resizeListenerEnabled = true;
-                    timer.restart();
-                } else {
-                    indicateError("Bild konnte nicht geladen werden: Unbekanntes Bildformat");
-                }
-            } catch (InterruptedException ex) {
-                image = null;
-                log.warn(ex, ex);
-            } catch (ExecutionException ex) {
-                image = null;
-                log.error(ex, ex);
-                String causeMessage = "";
-                final Throwable cause = ex.getCause();
-                if (cause != null) {
-                    causeMessage = cause.getMessage();
-                }
-                indicateError(causeMessage);
-            } finally {
-                if (image == null) {
-                    showWait(false);
-                }
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    final class ImageResizeWorker extends SwingWorker<ImageIcon, Void> {
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new ImageResizeWorker object.
-         */
-        public ImageResizeWorker() {
-            // TODO image im EDT auslesen und final speichern!
-            if (image != null) {
-                lblPicture.setText("Wird neu skaliert...");
-                lstFotos.setEnabled(false);
-            }
-//            log.fatal("RESIZE Image!", new Exception());
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        protected ImageIcon doInBackground() throws Exception {
-            if (image != null) {
-//                if (panButtons.getSize().getWidth() + 10 < panPreview.getSize().getWidth()) {
-                // ImageIcon result = new ImageIcon(ImageUtil.adjustScale(image, panPreview, 20, 20));
-                final ImageIcon result = new ImageIcon(adjustScale(image, pnlFoto, 20, 20));
-                return result;
-//                } else {
-//                    return new ImageIcon(image);
-//                }
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        protected void done() {
-            if (!isCancelled()) {
-                try {
-                    resizeListenerEnabled = false;
-                    final ImageIcon result = get();
-                    lblPicture.setIcon(result);
-                    lblPicture.setText("");
-                    lblPicture.setToolTipText(null);
-                } catch (InterruptedException ex) {
-                    log.warn(ex, ex);
-                } catch (ExecutionException ex) {
-                    log.error(ex, ex);
-                    lblPicture.setText("Fehler beim Skalieren!");
-                } finally {
-                    showWait(false);
-                    if (currentResizeWorker == this) {
-                        currentResizeWorker = null;
-                    }
-                    resizeListenerEnabled = true;
-                }
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    final class ImageUploadWorker extends SwingWorker<Collection<CidsBean>, Void> {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private final Collection<File> fotos;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new ImageUploadWorker object.
-         *
-         * @param  fotos  DOCUMENT ME!
-         */
-        public ImageUploadWorker(final Collection<File> fotos) {
-            this.fotos = fotos;
-            lblPicture.setText("");
-            lblPicture.setToolTipText(null);
-            showWait(true);
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        protected Collection<CidsBean> doInBackground() throws Exception {
-            final Collection<CidsBean> newBeans = new ArrayList<CidsBean>();
-            int i = lstFotos.getModel().getSize() + 1;
-            for (final File imageFile : fotos) {
-//                final String webFileName = WebDavHelper.generateWebDAVFileName(FILE_PREFIX, imageFile);
-                webDavHelper.uploadFileToWebDAV(
-                    imageFile.getName(),
-                    imageFile,
-                    WEB_DAV_DIRECTORY,
-                    MauerEditor.this);
-
-                final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "url_base");
-                String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
-                final String protokoll = WEB_DAV_DIRECTORY.substring(0, WEB_DAV_DIRECTORY.indexOf("://")) + "://";
-
-                query += "FROM " + MB_MC.getTableName();
-                query += " WHERE '" + protokoll + "' || server || path  = '" + WEB_DAV_DIRECTORY + "';  ";
-                final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
-
-                final CidsBean url = CidsBeanSupport.createNewCidsBeanFromTableName("url");
-                url.setProperty("url_base_id", metaObjects[0].getBean());
-                url.setProperty("object_name", imageFile.getName());
-
-                final CidsBean newFotoBean = CidsBeanSupport.createNewCidsBeanFromTableName("Mauer_bilder");
-                newFotoBean.setProperty("laufende_nummer", i);
-                newFotoBean.setProperty("name", imageFile.getName());
-                newFotoBean.setProperty("url", url);
-                newBeans.add(newFotoBean);
-                i++;
-            }
-            return newBeans;
-        }
-
-        @Override
-        protected void done() {
-            try {
-                final Collection<CidsBean> newBeans = get();
-                if (!newBeans.isEmpty()) {
-                    final List<CidsBean> oldBeans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "bilder");
-                    oldBeans.addAll(newBeans);
-                    removeNewAddedFotoBean.addAll(newBeans);
-                    lstFotos.setSelectedValue(newBeans.iterator().next(), true);
-                } else {
-                    lblPicture.setIcon(FOLDER_ICON);
-                }
-            } catch (InterruptedException ex) {
-                log.warn(ex, ex);
-            } catch (ExecutionException ex) {
-                log.error(ex, ex);
-            } finally {
-                showWait(false);
             }
         }
     }

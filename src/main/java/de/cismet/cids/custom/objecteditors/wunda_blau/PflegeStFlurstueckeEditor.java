@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Converter;
 
@@ -19,6 +21,7 @@ import java.awt.event.MouseAdapter;
 
 import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -29,6 +32,10 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
+import de.cismet.cismap.commons.CrsTransformer;
+
+import de.cismet.tools.StaticDecimalTools;
 //import javax.swing.JOptionPane;
 //import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
 
@@ -51,6 +58,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
     private CidsBean cidsBean = null;
     private boolean isEditor = true;
+    private Geometry geom;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbGeom;
@@ -121,6 +129,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelFlaeche;
+    private javax.swing.JLabel jLabelm2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -133,6 +143,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelGeom;
     private javax.swing.JPanel panFiller10;
     private javax.swing.JPanel panFiller11;
     private javax.swing.JPanel panFiller12;
@@ -314,16 +325,17 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         jLabel44 = new javax.swing.JLabel();
         chkAltbestand = new javax.swing.JCheckBox();
         txtBemerkung = new javax.swing.JTextField();
-        if (isEditor) {
-            jLabel17 = new javax.swing.JLabel();
-        }
-        if (isEditor) {
-            cbGeom = new DefaultCismapGeometryComboBoxEditor();
-        }
         cbPrioritaet = new DefaultBindableReferenceCombo(true);
         cbZustaendig = new DefaultBindableReferenceCombo(true);
         dcAufnahme = new de.cismet.cids.editors.DefaultBindableDateChooser();
         panFiller11 = new javax.swing.JPanel();
+        jPanelGeom = new javax.swing.JPanel();
+        if (isEditor) {
+            cbGeom = new DefaultCismapGeometryComboBoxEditor();
+        }
+        jLabelm2 = new javax.swing.JLabel();
+        jLabelFlaeche = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
         semiRoundedPanel7 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel39 = new javax.swing.JLabel();
@@ -354,7 +366,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
             jPanel12Layout.setVerticalGroup(
                 jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                     0,
-                    670,
+                    770,
                     Short.MAX_VALUE));
         }
 
@@ -1786,43 +1798,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel3.add(txtBemerkung, gridBagConstraints);
 
-        if (isEditor) {
-            jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-            jLabel17.setText("Geometrie:");
-        }
-        if (isEditor) {
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-            gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
-            jPanel3.add(jLabel17, gridBagConstraints);
-        }
-
-        if (isEditor) {
-            if (isEditor) {
-                cbGeom.setPreferredSize(new java.awt.Dimension(32, 23));
-            }
-
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"),
-                    cbGeom,
-                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
-            bindingGroup.addBinding(binding);
-        }
-        if (isEditor) {
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 5;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.insets = new java.awt.Insets(2, 2, 0, 2);
-            jPanel3.add(cbGeom, gridBagConstraints);
-        }
-
         cbPrioritaet.setMaximumSize(new java.awt.Dimension(200, 23));
         cbPrioritaet.setMinimumSize(new java.awt.Dimension(150, 23));
         cbPrioritaet.setPreferredSize(new java.awt.Dimension(150, 23));
@@ -1900,6 +1875,69 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(panFiller11, gridBagConstraints);
+
+        jPanelGeom.setLayout(new java.awt.GridBagLayout());
+
+        if (isEditor) {
+            cbGeom.setName(""); // NOI18N
+            if (isEditor) {
+            }
+
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"),
+                    cbGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
+            bindingGroup.addBinding(binding);
+        }
+        if (isEditor) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+            jPanelGeom.add(cbGeom, gridBagConstraints);
+        }
+
+        jLabelm2.setText("m²");
+        jLabelm2.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        jPanelGeom.add(jLabelm2, gridBagConstraints);
+
+        jLabelFlaeche.setText("0.0");
+        jLabelFlaeche.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 5);
+        jPanelGeom.add(jLabelFlaeche, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel3.add(jPanelGeom, gridBagConstraints);
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        if (isEditor) {
+            jLabel17.setText("Geometrie:");
+        } else {
+            jLabel17.setText("Fläche:");
+        }
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 4);
+        jPanel3.add(jLabel17, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2131,6 +2169,28 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  g  DOCUMENT ME!
+     */
+    public void setGeometry(final Geometry g) {
+        geom = g;
+        jLabelFlaeche.setText(getFlaeche());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getFlaeche() {
+        if (geom == null) {
+            return "0.0";
+        }
+        return StaticDecimalTools.round("0.0##", geom.getArea());
+    }
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -2152,6 +2212,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
             bindingGroup.bind();
         }
+        setGeometry(CrsTransformer.transformToGivenCrs(
+                (Geometry)cidsBean.getProperty(
+                    "georeferenz.geo_field"),
+                AlkisConstants.COMMONS.SRS_SERVICE));
     }
 
     /*  public void setCidsBean(CidsBean cb) {

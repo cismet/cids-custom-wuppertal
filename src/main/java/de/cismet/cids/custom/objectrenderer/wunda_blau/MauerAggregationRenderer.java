@@ -48,7 +48,7 @@ import javax.swing.table.TableColumn;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.reports.wunda_blau.MauernReportGenerator;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
