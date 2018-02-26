@@ -33,7 +33,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
- * @version  $Revision$, $Date$
+ * @version  $Revision$, $Date$ Sandra Simmert 12.2.2018: Parameter GEO_BUFFER und MAP_CALL_STRING von außen steuerbar.
  */
 public class DefaultPreviewMapPanel extends javax.swing.JPanel {
 
@@ -75,8 +75,13 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
      *
      * @param  cidsBean               DOCUMENT ME!
      * @param  geometryAttributeName  DOCUMENT ME!
+     * @param  geoBuffer              DOCUMENT ME!
+     * @param  mapURL                 DOCUMENT ME!
      */
-    public void initMap(final CidsBean cidsBean, final String geometryAttributeName) {
+    public void initMap(final CidsBean cidsBean,
+            final String geometryAttributeName,
+            final double geoBuffer,
+            final String mapURL) {
         boolean showMap = false;
         if (cidsBean != null) {
             final Object geoObj = cidsBean.getProperty(geometryAttributeName);
@@ -85,10 +90,10 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
                         AlkisConstants.COMMONS.SRS_SERVICE);
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                    LOG.debug("ALKISConstants.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
                 }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                            AlkisConstants.COMMONS.GEO_BUFFER));
+                            geoBuffer));
                 final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
                                 + (box.getHeight() * box.getHeight()));
                 if (LOG.isDebugEnabled()) {
@@ -109,7 +114,7 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
                                     AlkisConstants.COMMONS.SRS_SERVICE,
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                        AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                        mapURL));
                             swms.setName(cidsBean.getClass().getSimpleName());
 
                             previewGeometry.setGeometry(pureGeom);
@@ -155,6 +160,31 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
             }
         }
         showMap(showMap);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean               DOCUMENT ME!
+     * @param  geometryAttributeName  DOCUMENT ME!
+     * @param  geoBuffer              DOCUMENT ME!
+     */
+    public void initMap(final CidsBean cidsBean, final String geometryAttributeName, final double geoBuffer) {
+        initMap(cidsBean, geometryAttributeName, geoBuffer, AlkisConstants.COMMONS.MAP_CALL_STRING);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean               DOCUMENT ME!
+     * @param  geometryAttributeName  DOCUMENT ME!
+     */
+    public void initMap(final CidsBean cidsBean, final String geometryAttributeName) {
+        initMap(
+            cidsBean,
+            geometryAttributeName,
+            AlkisConstants.COMMONS.GEO_BUFFER,
+            AlkisConstants.COMMONS.MAP_CALL_STRING);
     }
 
     /**
