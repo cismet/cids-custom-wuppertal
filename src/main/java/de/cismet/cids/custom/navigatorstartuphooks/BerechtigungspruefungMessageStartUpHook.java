@@ -147,8 +147,7 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
                                 .executeTask(
                                     BerechtigungspruefungAnfrageServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    ClientConnectionContext.create(
-                                        BerechtigungspruefungMessageStartUpHook.class.getSimpleName()),
+                                    getClientConnectionContext(),
                                     (Object)null,
                                     new ServerActionParameter<String>(
                                         BerechtigungspruefungAnfrageServerAction.ParameterType.ABGEHOLT.toString(),

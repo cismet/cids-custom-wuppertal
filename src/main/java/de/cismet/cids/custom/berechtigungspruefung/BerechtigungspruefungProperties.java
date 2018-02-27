@@ -59,6 +59,15 @@ public class BerechtigungspruefungProperties
         return BerechtigungspruefungProperties.LazyInitialiser.INSTANCE;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(BerechtigungspruefungProperties.class.getSimpleName());
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -81,7 +90,7 @@ public class BerechtigungspruefungProperties
                             .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                ClientConnectionContext.create(BerechtigungspruefungProperties.class.getSimpleName()),
+                                getClientConnectionContext(),
                                 WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_PROPERTIES.getValue());
                 if (ret instanceof Exception) {
                     throw (Exception)ret;

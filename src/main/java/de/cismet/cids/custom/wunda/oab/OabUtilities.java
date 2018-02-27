@@ -235,7 +235,7 @@ public class OabUtilities {
                                 mo.getID(),
                                 mo.getClassID(),
                                 mo.getDomain(),
-                                getConnectionContext());
+                                getClientConnectionContext());
                 return copy.getBean();
             } catch (final ConnectionException ex) {
                 throw new IllegalStateException("cannot re-fetch cidsbean", ex); // NOI18N
@@ -249,7 +249,7 @@ public class OabUtilities {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(OabUtilities.class.getSimpleName());
     }
     /**

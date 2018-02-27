@@ -47,7 +47,7 @@ public final class AlkisConstants {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            ClientConnectionContext.create(AlkisConstants.class.getSimpleName()),
+                            getClientConnectionContext(),
                             WundaBlauServerResources.ALKIS_CONF.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
@@ -70,5 +70,16 @@ public final class AlkisConstants {
      * Creates a new AlkisConstants object.
      */
     private AlkisConstants() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(AlkisConstants.class.getSimpleName());
     }
 }

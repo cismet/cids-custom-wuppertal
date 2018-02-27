@@ -132,7 +132,7 @@ public abstract class NasFeeCalculator {
                 null,
                 g);
         final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), search, getConnectionContext());
+                    .customServerSearch(SessionManager.getSession().getUser(), search, getClientConnectionContext());
         return c.get(0);
     }
 
@@ -171,7 +171,7 @@ public abstract class NasFeeCalculator {
                     .executeTask(
                             NasZaehlObjekteServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            getConnectionContext(),
+                            getClientConnectionContext(),
                             (Object)null,
                             sapType,
                             sapGeom);
@@ -288,7 +288,7 @@ public abstract class NasFeeCalculator {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(DigitalDataExportToolbarComponentProvider.class.getSimpleName());
     }
 }

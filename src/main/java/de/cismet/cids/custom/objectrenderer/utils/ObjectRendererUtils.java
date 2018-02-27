@@ -155,15 +155,6 @@ public class ObjectRendererUtils {
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getConnectionContext() {
-        return ClientConnectionContext.create(ObjectRendererUtils.class.getSimpleName());
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  metaObjectList  DOCUMENT ME!
      * @param  clear           DOCUMENT ME!
      */
@@ -307,7 +298,7 @@ public class ObjectRendererUtils {
                             user,
                             fields,
                             formatter,
-                            getConnectionContext());
+                            getClientConnectionContext());
         } catch (Exception ex) {
             log.error(ex, ex);
         }
@@ -453,7 +444,7 @@ public class ObjectRendererUtils {
         boolean result;
         try {
             result = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), tagToCheck, getConnectionContext())
+                        .getConfigAttr(SessionManager.getSession().getUser(), tagToCheck, getClientConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Can not check ActionTag!", ex);
@@ -772,6 +763,15 @@ public class ObjectRendererUtils {
         final ImagedButtonMouseAdapter ibma = new ImagedButtonMouseAdapter(button, highlight, pressed);
         button.addMouseListener(ibma);
         return ibma;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(ObjectRendererUtils.class.getSimpleName());
     }
 }
 

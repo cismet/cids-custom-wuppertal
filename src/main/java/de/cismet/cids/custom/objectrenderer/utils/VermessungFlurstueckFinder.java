@@ -102,7 +102,7 @@ public class VermessungFlurstueckFinder {
             search.setRepresentationFields(
                 new String[] { FLURSTUECK_GEMARKUNG, FLURSTUECK_FLUR, FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -140,7 +140,7 @@ public class VermessungFlurstueckFinder {
             search.setSearchFor(VermessungFlurstueckKickerLightweightSearch.SearchFor.ALLE_GEMARKUNGEN);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_GEMARKUNG, VERMESSUNG_GEMARKUNG_NAME });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -172,7 +172,7 @@ public class VermessungFlurstueckFinder {
             search.setGemarkungsnummer(Integer.toString(gemarkung));
             search.setRepresentationFields(new String[] { "id", VERMESSUNG_GEMARKUNG_NAME });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -204,7 +204,7 @@ public class VermessungFlurstueckFinder {
             search.setGemarkungsnummer(gemarkungsnummer);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_FLUR });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -232,7 +232,7 @@ public class VermessungFlurstueckFinder {
             search.setRepresentationFields(
                 new String[] { "id", VERMESSUNG_VERAENDERUNGSART_CODE, VERMESSUNG_VERAENDERUNGSART_NAME });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -273,7 +273,7 @@ public class VermessungFlurstueckFinder {
             search.setFlur(flur);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -326,7 +326,7 @@ public class VermessungFlurstueckFinder {
             search.setRepresentationFields(
                 new String[] { "id", FLURSTUECK_GEMARKUNG, FLURSTUECK_FLUR, FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -360,7 +360,7 @@ public class VermessungFlurstueckFinder {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(VermessungFlurstueckFinder.class.getSimpleName());
     }
 }

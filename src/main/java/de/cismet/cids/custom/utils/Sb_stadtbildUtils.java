@@ -189,7 +189,7 @@ public class Sb_stadtbildUtils {
                 final MetaObject[] wuppertal;
                 try {
                     wuppertal = SessionManager.getProxy()
-                                .getMetaObjectByQuery(wuppertalQuery.toString(), 0, getConnectionContext());
+                                .getMetaObjectByQuery(wuppertalQuery.toString(), 0, getClientConnectionContext());
                     if (wuppertal.length > 0) {
                         return wuppertal[0].getBean();
                     }
@@ -226,7 +226,7 @@ public class Sb_stadtbildUtils {
                 final MetaObject[] r102;
                 try {
                     r102 = SessionManager.getProxy()
-                                .getMetaObjectByQuery(r102Query.toString(), 0, getConnectionContext());
+                                .getMetaObjectByQuery(r102Query.toString(), 0, getClientConnectionContext());
                     if (r102.length > 0) {
                         return r102[0].getBean();
                     }
@@ -554,8 +554,8 @@ public class Sb_stadtbildUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
-        return ClientConnectionContext.create(BaulastBescheinigungUtils.class.getSimpleName());
+    public static ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(Sb_stadtbildUtils.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

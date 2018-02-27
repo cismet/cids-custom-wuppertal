@@ -181,7 +181,7 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Client
                                 .executeTask(SessionManager.getSession().getUser(),
                                     FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    ClientConnectionContext.create(FSReloadProduktDialog.class.getSimpleName()),
+                                    getClientConnectionContext(),
                                     (Object)null,
                                     paramMon,
                                     paramStep);

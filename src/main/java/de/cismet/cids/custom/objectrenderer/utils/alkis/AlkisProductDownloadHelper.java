@@ -524,7 +524,7 @@ public class AlkisProductDownloadHelper {
                         SessionManager.getSession().getUser(),
                         "berechtigungspruefung_"
                                 + downloadType,
-                        getConnectionContext()));
+                        getClientConnectionContext()));
         } catch (final Exception ex) {
             LOG.info("could now check Berechtigungspruefung confattr", ex);
             return false;
@@ -536,7 +536,7 @@ public class AlkisProductDownloadHelper {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(AlkisProductDownloadHelper.class.getSimpleName());
     }
 }

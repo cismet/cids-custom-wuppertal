@@ -47,6 +47,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import de.cismet.cids.custom.butler.DigitalDataExportToolbarComponentProvider;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.actions.WohnlagenKategorisierungServerAction;
 
@@ -101,7 +102,7 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://"
                                 + WohnlagenKategorisierungServerAction.TASK_NAME,
-                                getConnectionContext())
+                                getClientConnectionContext())
                         != null;
         } catch (final Exception ex) {
             LOG.error("Could not validate action tag (custom.wohnlage.kategorisierung_featureaction)!", ex);
@@ -196,7 +197,7 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(WohnlagenKategorisierungFeatureAction.class.getSimpleName());
     }
 }

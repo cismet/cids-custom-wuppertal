@@ -18,8 +18,6 @@ import javax.swing.ImageIcon;
 
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionBestellungChangeStatusServerAction;
 
-import de.cismet.cids.dynamics.CidsBean;
-
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 
@@ -67,11 +65,20 @@ public class FsStatusBearbeitetAction extends AbstractCidsBeanAction {
                     .executeTask(SessionManager.getSession().getUser(),
                         FormSolutionBestellungChangeStatusServerAction.TASK_NAME,
                         "WUNDA_BLAU",
-                        ClientConnectionContext.create(FsStatusBearbeitetAction.class.getSimpleName()),
+                        getClientConnectionContext(),
                         mon,
                         paramErledigt);
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(FsStatusBearbeitetAction.class.getSimpleName());
     }
 }

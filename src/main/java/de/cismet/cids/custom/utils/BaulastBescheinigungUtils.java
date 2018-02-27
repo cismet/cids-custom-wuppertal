@@ -312,7 +312,7 @@ public class BaulastBescheinigungUtils {
                                     info.getBlattnummer(),
                                     info.getLaufende_nummer()),
                                 0,
-                                getConnectionContext());
+                                getClientConnectionContext());
                 BAULAST_CACHE.put(info, mos[0].getBean());
             } catch (ConnectionException ex) {
                 LOG.error(ex, ex);
@@ -551,7 +551,7 @@ public class BaulastBescheinigungUtils {
                                 mcBerechtigungspruefung.getID(),
                                 user.getKey()),
                             0,
-                            getConnectionContext());
+                            getClientConnectionContext());
             if (mos != null) {
                 final Collection<CidsBean> beans = new ArrayList<CidsBean>(mos.length);
                 for (final MetaObject mo : mos) {
@@ -586,7 +586,7 @@ public class BaulastBescheinigungUtils {
             final MetaObject[] mos = SessionManager.getProxy()
                         .getMetaObjectByQuery(String.format(pruefungQuery, mcBerechtigungspruefung.getID(), schluessel),
                             0,
-                            getConnectionContext());
+                            getClientConnectionContext());
             if ((mos != null) && (mos.length > 0)) {
                 return mos[0].getBean();
             }
@@ -623,7 +623,7 @@ public class BaulastBescheinigungUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(BaulastBescheinigungUtils.class.getSimpleName());
     }
 

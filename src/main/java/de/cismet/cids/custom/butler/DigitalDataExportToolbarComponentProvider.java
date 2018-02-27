@@ -103,7 +103,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://butler1Query",
-                                getConnectionContext())
+                                getClientConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Butler!", ex);
@@ -123,7 +123,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://nasDataQuery",
-                                getConnectionContext())
+                                getClientConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Butler!", ex);
@@ -136,7 +136,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(DigitalDataExportToolbarComponentProvider.class.getSimpleName());
     }
 

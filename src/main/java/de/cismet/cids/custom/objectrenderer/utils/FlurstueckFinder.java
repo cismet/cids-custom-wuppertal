@@ -80,7 +80,7 @@ public class FlurstueckFinder {
             search.setRepresentationFields(
                 new String[] { FLURSTUECK_GEMARKUNG, FLURSTUECK_FLUR, FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -116,7 +116,7 @@ public class FlurstueckFinder {
             search.setSearchFor(AlbFlurstueckKickerLightweightSearch.SearchFor.GEMARKUNGEN);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_GEMARKUNG, GEMARKUNG_NAME });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -147,7 +147,7 @@ public class FlurstueckFinder {
             search.setGemarkungsnummer(gemarkungsnummer);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_FLUR });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -180,7 +180,7 @@ public class FlurstueckFinder {
             search.setFlur(flur);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -221,7 +221,7 @@ public class FlurstueckFinder {
             search.setFlur(flur);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_ZAEHLER });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -258,7 +258,7 @@ public class FlurstueckFinder {
             search.setZaehler(zaehler);
             search.setRepresentationFields(new String[] { "id", FLURSTUECK_NENNER });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -299,7 +299,7 @@ public class FlurstueckFinder {
             search.setRepresentationFields(
                 new String[] { "id", FLURSTUECK_GEMARKUNG, FLURSTUECK_FLUR, FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getConnectionContext());
+                        .customServerSearch(search, getClientConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -329,7 +329,7 @@ public class FlurstueckFinder {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(FlurstueckFinder.class.getSimpleName());
     }
 }

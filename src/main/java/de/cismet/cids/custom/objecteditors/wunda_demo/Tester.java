@@ -162,7 +162,7 @@ public class Tester extends javax.swing.JFrame implements ClientConnectionContex
 
     @Override
     public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(Tester.class.getSimpleName());
+        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

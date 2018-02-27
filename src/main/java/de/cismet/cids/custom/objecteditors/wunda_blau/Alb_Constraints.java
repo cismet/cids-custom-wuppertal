@@ -105,7 +105,7 @@ public class Alb_Constraints {
     public static boolean checkUniqueBlattNummer(final String blattnummer, final int id) throws ConnectionException {
         final CidsServerSearch search = new Alb_BaulastblattChecker(blattnummer, id);
         final Collection result = SessionManager.getConnection()
-                    .customServerSearch(SessionManager.getSession().getUser(), search, getConnectionContext());
+                    .customServerSearch(SessionManager.getSession().getUser(), search, getClientConnectionContext());
         if ((result != null) && (result.size() > 0)) {
             final Object o = result.iterator().next();
             if (o instanceof List) {
@@ -145,7 +145,7 @@ public class Alb_Constraints {
             throws ConnectionException {
         final CidsServerSearch search = new Alb_BaulastChecker(blattnummer, laufendeNr, id);
         final Collection result = SessionManager.getConnection()
-                    .customServerSearch(SessionManager.getSession().getUser(), search, getConnectionContext());
+                    .customServerSearch(SessionManager.getSession().getUser(), search, getClientConnectionContext());
         if ((result != null) && (result.size() > 0)) {
             final Object o = result.iterator().next();
             if (o instanceof List) {
@@ -227,7 +227,7 @@ public class Alb_Constraints {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(Alb_Constraints.class.getSimpleName());
     }
 }

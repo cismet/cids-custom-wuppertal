@@ -114,7 +114,7 @@ public class VermessungRissUtils {
                 LOG.debug("SQL: kickerQuery:" + kickerQuery.toString());
             }
             final MetaObject[] kickers = SessionManager.getProxy()
-                        .getMetaObjectByQuery(kickerQuery.toString(), 0, getConnectionContext());
+                        .getMetaObjectByQuery(kickerQuery.toString(), 0, getClientConnectionContext());
             if (kickers.length > 0) {
                 kicker = kickers[0].getBean();
             }
@@ -131,7 +131,7 @@ public class VermessungRissUtils {
                             .getMetaObject(new Integer(gemarkung),
                                 vermessungGemarkungClass.getId(),
                                 "WUNDA_BLAU",
-                                getConnectionContext());
+                                getClientConnectionContext());
                 final CidsBean vGemarkungBean = gemarkungObject.getBean();
 
                 kicker.setProperty("gemarkung", vGemarkungBean);
@@ -161,7 +161,7 @@ public class VermessungRissUtils {
                     LOG.debug("SQL: flurstueckQuery:" + fQuery.toString());
                 }
                 final MetaObject[] matchedLandparcels = SessionManager.getProxy()
-                            .getMetaObjectByQuery(fQuery.toString(), 0, getConnectionContext());
+                            .getMetaObjectByQuery(fQuery.toString(), 0, getClientConnectionContext());
                 if (matchedLandparcels.length > 0) {
                     kicker.setProperty("flurstueck", matchedLandparcels[0].getBean());
                 }
@@ -179,7 +179,7 @@ public class VermessungRissUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(VermessungRissUtils.class.getSimpleName());
     }
 }

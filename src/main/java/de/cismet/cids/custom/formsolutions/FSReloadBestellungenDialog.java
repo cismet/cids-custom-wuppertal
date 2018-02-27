@@ -156,7 +156,7 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog implements C
                             .executeTask(SessionManager.getSession().getUser(),
                                 FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                ClientConnectionContext.create(FSReloadBestellungenDialog.class.getSimpleName()),
+                                getClientConnectionContext(),
                                 (Object)null);
                     return null;
                 }

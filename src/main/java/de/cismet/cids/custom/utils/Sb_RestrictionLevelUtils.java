@@ -111,7 +111,7 @@ public class Sb_RestrictionLevelUtils {
                 final MetaObject[] noRestriction;
                 try {
                     noRestriction = SessionManager.getProxy()
-                                .getMetaObjectByQuery(noRestrictionQuery.toString(), 0, getConnectionContext());
+                                .getMetaObjectByQuery(noRestrictionQuery.toString(), 0, getClientConnectionContext());
                     if (noRestriction.length > 0) {
                         return noRestriction[0].getBean();
                     }
@@ -236,8 +236,8 @@ public class Sb_RestrictionLevelUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
-        return ClientConnectionContext.create(BaulastBescheinigungUtils.class.getSimpleName());
+    public static ClientConnectionContext getClientConnectionContext() {
+        return ClientConnectionContext.create(Sb_RestrictionLevelUtils.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

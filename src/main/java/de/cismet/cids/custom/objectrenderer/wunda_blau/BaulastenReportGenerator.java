@@ -151,7 +151,7 @@ public class BaulastenReportGenerator {
      */
     public static String createFertigungsVermerk(final User user) throws ConnectionException {
         final String fertigungsVermerk = SessionManager.getConnection()
-                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU", getConnectionContext());
+                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU", getClientConnectionContext());
         if (fertigungsVermerk != null) {
             return fertigungsVermerk;
         } else {
@@ -171,7 +171,7 @@ public class BaulastenReportGenerator {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientConnectionContext getConnectionContext() {
+    public static ClientConnectionContext getClientConnectionContext() {
         return ClientConnectionContext.create(BaulastenReportGenerator.class.getSimpleName());
     }
 
