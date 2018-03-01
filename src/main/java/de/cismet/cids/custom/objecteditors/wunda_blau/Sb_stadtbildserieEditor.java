@@ -724,7 +724,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddSuchwort.setText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieEditor.class,
-                "WebDavPicturePanel.btnAddImg.text"));                                                         // NOI18N
+                "MauerEditor.btnRemoveImg.text"));                                                             // NOI18N
         btnAddSuchwort.setPreferredSize(new java.awt.Dimension(46, 21));
         btnAddSuchwort.addActionListener(new java.awt.event.ActionListener() {
 
@@ -769,7 +769,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddImageNumber.setText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieEditor.class,
-                "WebDavPicturePanel.btnAddImg.text"));                                                         // NOI18N
+                "MauerEditor.btnRemoveImg.text"));                                                             // NOI18N
         btnAddImageNumber.setPreferredSize(new java.awt.Dimension(46, 21));
         btnAddImageNumber.addActionListener(new java.awt.event.ActionListener() {
 
