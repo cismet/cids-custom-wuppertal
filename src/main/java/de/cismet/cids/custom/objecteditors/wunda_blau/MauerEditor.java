@@ -62,7 +62,7 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -86,7 +86,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     FooterComponentProvider,
     TitleComponentProvider,
     BorderProvider,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -95,6 +95,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private final Logger log = Logger.getLogger(MauerEditor.class);
     private boolean editable;
     private CardLayout cardLayout;
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImages;
     private javax.swing.JButton btnInfo;
@@ -303,16 +305,19 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * Creates new form MauerEditor.
      */
     public MauerEditor() {
-        this(true);
+        this(true, null);
     }
 
     /**
      * Creates a new MauerEditor object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public MauerEditor(final boolean editable) {
+    public MauerEditor(final boolean editable, final ClientConnectionContext connectionContext) {
         this.editable = editable;
+        this.connectionContext = connectionContext;
+
         initComponents();
         if (editable) {
             pnlLeft.setPreferredSize(new Dimension(500, 900));
@@ -639,7 +644,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 "bilder",
                 "mauer_bilder",
                 "mauer_nummer",
-                "georeferenz.geo_field");
+                "georeferenz.geo_field",
+                getConnectionContext());
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
@@ -3035,7 +3041,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         final Collection<CidsBean> c = new LinkedList<>();
         c.add(cidsBean);
-        MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this);
+        MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this, getConnectionContext());
     }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     /**
@@ -3149,7 +3155,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 final Collection res = SessionManager.getProxy()
                             .customServerSearch(SessionManager.getSession().getUser(),
                                 search,
-                                getClientConnectionContext());
+                                getConnectionContext());
 
                 final ArrayList<ArrayList> tmp = (ArrayList<ArrayList>)res;
 
@@ -3240,8 +3246,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

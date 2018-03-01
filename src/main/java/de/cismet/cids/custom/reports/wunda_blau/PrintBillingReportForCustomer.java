@@ -40,6 +40,10 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -51,7 +55,7 @@ import de.cismet.tools.gui.downloadmanager.Download;
  *
  * @version  $Revision$, $Date$
  */
-public class PrintBillingReportForCustomer {
+public class PrintBillingReportForCustomer implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -85,6 +89,7 @@ public class PrintBillingReportForCustomer {
     private final boolean showBillingWithoutCostInReport;
     private DownloadFinishedObserver downloadFinishedObserver = new DownloadFinishedObserver();
     private final BillingDoneListener billingDoneListener;
+    private final ClientConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -98,6 +103,7 @@ public class PrintBillingReportForCustomer {
      * @param  panel                           DOCUMENT ME!
      * @param  showBillingWithoutCostInReport  DOCUMENT ME!
      * @param  billingDoneListener             DOCUMENT ME!
+     * @param  connectionContext               DOCUMENT ME!
      */
     public PrintBillingReportForCustomer(final CidsBean kundeBean,
             final Collection<CidsBean> billingsBeans,
@@ -105,7 +111,8 @@ public class PrintBillingReportForCustomer {
             final boolean isRechnungsanlage,
             final JPanel panel,
             final boolean showBillingWithoutCostInReport,
-            final BillingDoneListener billingDoneListener) {
+            final BillingDoneListener billingDoneListener,
+            final ClientConnectionContext connectionContext) {
         this.kundeBean = kundeBean;
         this.fromDate_tillDate = fromDate_tillDate;
         this.isRechnungsanlage = isRechnungsanlage;
@@ -114,6 +121,7 @@ public class PrintBillingReportForCustomer {
         this.showBillingWithoutCostInReport = showBillingWithoutCostInReport;
         totalSum = generateStatisticsForTheReport(billingsBeans);
         this.billingDoneListener = billingDoneListener;
+        this.connectionContext = connectionContext;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -363,7 +371,7 @@ public class PrintBillingReportForCustomer {
                                 try {
                                     billing.setProperty("abrechnungsdatum", new Timestamp(new Date().getTime()));
                                     billing.setProperty("abgerechnet", Boolean.TRUE);
-                                    billing.persist();
+                                    billing.persist(getConnectionContext());
                                 } catch (final Exception ex) {
                                     LOG.error("Error while setting value or persisting of billing.", ex);
                                     final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
@@ -403,6 +411,11 @@ public class PrintBillingReportForCustomer {
      */
     public void setDownloadFinishedObserver(final DownloadFinishedObserver downloadFinishedObserver) {
         this.downloadFinishedObserver = downloadFinishedObserver;
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Interfaces -------------------------------------------------------

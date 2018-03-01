@@ -47,6 +47,8 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsTreppenSearchStatement
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -68,7 +70,8 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -84,6 +87,8 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbMapSearch;
@@ -145,7 +150,7 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
         try {
             initComponents();
             // todo just for debug
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -206,6 +211,16 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -818,7 +833,7 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
 
     @Override

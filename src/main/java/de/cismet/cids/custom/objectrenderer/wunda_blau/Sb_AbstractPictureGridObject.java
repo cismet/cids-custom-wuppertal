@@ -19,13 +19,16 @@ import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public abstract class Sb_AbstractPictureGridObject {
+public abstract class Sb_AbstractPictureGridObject implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -34,7 +37,25 @@ public abstract class Sb_AbstractPictureGridObject {
     private LastShownImage lastShownImage;
     private boolean preview;
 
+    private final ClientConnectionContext connectionContext;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new Sb_AbstractPictureGridObject object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Sb_AbstractPictureGridObject(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -94,7 +115,8 @@ public abstract class Sb_AbstractPictureGridObject {
         final Object mightBeAnImage = Sb_stadtbildUtils.fetchImageForBildnummer(
                 getStadtbildserie(),
                 bildnummer,
-                priority);
+                priority,
+                getConnectionContext());
         if (mightBeAnImage instanceof Image) {
             lastShownImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
             final Image toReturn = (Image)mightBeAnImage;

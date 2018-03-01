@@ -33,6 +33,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
@@ -206,7 +208,10 @@ public class TreppenReportTester {
      * @throws  Exception  DOCUMENT ME!
      */
     public void go(final CidsBean bean) throws Exception {
-        final TreppenReportBean reportBean = new TreppenReportBean(bean, null);
+        final TreppenReportBean reportBean = new TreppenReportBean(
+                bean,
+                null,
+                ClientConnectionContext.createDeprecated());
 
         LOG.fatal("report bean created");
 

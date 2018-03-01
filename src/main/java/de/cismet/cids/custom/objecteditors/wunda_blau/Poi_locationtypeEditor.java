@@ -21,23 +21,21 @@ import Sirius.server.middleware.types.MetaObject;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import java.net.URL;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.logging.Level;
 
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
+
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
@@ -50,13 +48,16 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled {
+public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled, ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String latestIconUrl = null;
     private String title = "";
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnMenAbort;
@@ -93,15 +94,31 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form LocationinstanceEditor.
+     * Creates a new Poi_locationtypeEditor object.
      */
     public Poi_locationtypeEditor() {
+        this(null);
+    }
+
+    /**
+     * Creates new form LocationinstanceEditor.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Poi_locationtypeEditor(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
         dlgAddLocationType.pack();
         dlgAddLocationType.getRootPane().setDefaultButton(btnMenOk);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -138,7 +155,8 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         final MetaObject[] lebenslagen = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
                     .getLightweightMetaObjectsForTable(
                         "poi_spatialreferencesystemusinggeographicidentifiers",
-                        new String[] { "theme" });
+                        new String[] { "theme" },
+                        getConnectionContext());
         if (lebenslagen != null) {
             Arrays.sort(lebenslagen);
             cbTypes = new javax.swing.JComboBox(lebenslagen);

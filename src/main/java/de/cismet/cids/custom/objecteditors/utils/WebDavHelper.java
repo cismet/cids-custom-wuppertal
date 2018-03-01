@@ -33,7 +33,6 @@ import de.cismet.cids.custom.wunda_blau.search.actions.WebDavTunnelAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
 
@@ -43,7 +42,7 @@ import de.cismet.netutil.Proxy;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class WebDavHelper implements ClientConnectionContextProvider {
+public class WebDavHelper {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -97,17 +96,19 @@ public class WebDavHelper implements ClientConnectionContextProvider {
     /**
      * DOCUMENT ME!
      *
-     * @param   fileName         DOCUMENT ME!
-     * @param   toUpload         DOCUMENT ME!
-     * @param   webDavDirectory  DOCUMENT ME!
-     * @param   parent           DOCUMENT ME!
+     * @param   fileName           DOCUMENT ME!
+     * @param   toUpload           DOCUMENT ME!
+     * @param   webDavDirectory    DOCUMENT ME!
+     * @param   parent             DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     public void uploadFileToWebDAV(final String fileName,
             final File toUpload,
             final String webDavDirectory,
-            final Component parent) throws Exception {
+            final Component parent,
+            final ClientConnectionContext connectionContext) throws Exception {
         final BufferedInputStream bfis = new BufferedInputStream(new ProgressMonitorInputStream(
                     parent,
                     "Bild wird übertragen...",
@@ -135,7 +136,7 @@ public class WebDavHelper implements ClientConnectionContextProvider {
                     .executeTask(
                         WEBDAV_OVER_TUNNEL,
                         "WUNDA_BLAU",
-                        getClientConnectionContext(),
+                        connectionContext,
                         bytes,
                         putSAP,
                         proxySAP,
@@ -150,13 +151,15 @@ public class WebDavHelper implements ClientConnectionContextProvider {
     /**
      * DOCUMENT ME!
      *
-     * @param   fileName         DOCUMENT ME!
-     * @param   webDavDirectory  DOCUMENT ME!
+     * @param   fileName           DOCUMENT ME!
+     * @param   webDavDirectory    DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public boolean deleteFileFromWebDAV(final String fileName,
-            final String webDavDirectory) {
+            final String webDavDirectory,
+            final ClientConnectionContext connectionContext) {
         if ((fileName != null) && (fileName.length() > 0)) {
             try {
                 final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(
@@ -180,7 +183,7 @@ public class WebDavHelper implements ClientConnectionContextProvider {
                         .executeTask(
                             WEBDAV_OVER_TUNNEL,
                             "WUNDA_BLAU",
-                            getClientConnectionContext(),
+                            connectionContext,
                             (Object)null,
                             deleteSAP,
                             proxySAP,
@@ -198,15 +201,17 @@ public class WebDavHelper implements ClientConnectionContextProvider {
     /**
      * DOCUMENT ME!
      *
-     * @param   fileName         DOCUMENT ME!
-     * @param   webDavDirectory  DOCUMENT ME!
+     * @param   fileName           DOCUMENT ME!
+     * @param   webDavDirectory    DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     public InputStream getFileFromWebDAV(final String fileName,
-            final String webDavDirectory) throws Exception {
+            final String webDavDirectory,
+            final ClientConnectionContext connectionContext) throws Exception {
         final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY
                         .toString(),
                 proxy);
@@ -229,7 +234,7 @@ public class WebDavHelper implements ClientConnectionContextProvider {
                     .executeTask(
                             WebDavHelper.WEBDAV_OVER_TUNNEL,
                             "WUNDA_BLAU",
-                            getClientConnectionContext(),
+                            connectionContext,
                             (Object)null,
                             getSAP,
                             proxySAP,
@@ -285,10 +290,5 @@ public class WebDavHelper implements ClientConnectionContextProvider {
             LOG.error("Unsupported encoding.", e);
         }
         return url;
-    }
-
-    @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

@@ -26,7 +26,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportSer
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.joinCidsBeanIds;
 
@@ -38,7 +38,7 @@ import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.j
  * @version  $Revision$, $Date$
  * @see      BillingStatisticsReportServerSearch
  */
-public class BillingStatisticsDataSourceAccumulation implements ClientConnectionContextProvider {
+public class BillingStatisticsDataSourceAccumulation implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -51,15 +51,20 @@ public class BillingStatisticsDataSourceAccumulation implements ClientConnection
 
     private HashMap<String, Collection> searchResults;
 
+    private final ClientConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new DataSourceCollection object.
      *
-     * @param  billingBeans  DOCUMENT ME!
+     * @param  billingBeans       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public BillingStatisticsDataSourceAccumulation(final Collection<CidsBean> billingBeans) {
+    public BillingStatisticsDataSourceAccumulation(final Collection<CidsBean> billingBeans,
+            final ClientConnectionContext connectionContext) {
         this.billingBeans = billingBeans;
+        this.connectionContext = connectionContext;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -165,7 +170,7 @@ public class BillingStatisticsDataSourceAccumulation implements ClientConnection
             final Collection searchResultsCol = SessionManager.getConnection()
                         .customServerSearch(SessionManager.getSession().getUser(),
                             search,
-                            getClientConnectionContext());
+                            getConnectionContext());
             // get the HashMap from the search results, it is supposed that it is the only result.
             searchResults = (HashMap<String, Collection>)searchResultsCol.iterator().next();
         } catch (ConnectionException ex) {
@@ -175,7 +180,7 @@ public class BillingStatisticsDataSourceAccumulation implements ClientConnection
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 
@@ -25,7 +25,7 @@ import de.cismet.tools.gui.downloadmanager.AbstractDownload;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class ByteArrayActionDownload extends AbstractDownload implements ClientConnectionContextProvider {
+public class ByteArrayActionDownload extends AbstractDownload implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -33,18 +33,21 @@ public class ByteArrayActionDownload extends AbstractDownload implements ClientC
     private final Object body;
     private final ServerActionParameter[] params;
 
+    private final ClientConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new ByteArrayDownload object.
      *
-     * @param  taskname   DOCUMENT ME!
-     * @param  body       DOCUMENT ME!
-     * @param  params     DOCUMENT ME!
-     * @param  title      The title of the download.
-     * @param  directory  The directory of the download.
-     * @param  filename   The name of the file to be created.
-     * @param  extension  The extension of the file to be created.
+     * @param  taskname           DOCUMENT ME!
+     * @param  body               DOCUMENT ME!
+     * @param  params             DOCUMENT ME!
+     * @param  title              The title of the download.
+     * @param  directory          The directory of the download.
+     * @param  filename           The name of the file to be created.
+     * @param  extension          The extension of the file to be created.
+     * @param  connectionContext  DOCUMENT ME!
      */
     public ByteArrayActionDownload(final String taskname,
             final Object body,
@@ -52,12 +55,14 @@ public class ByteArrayActionDownload extends AbstractDownload implements ClientC
             final String title,
             final String directory,
             final String filename,
-            final String extension) {
+            final String extension,
+            final ClientConnectionContext connectionContext) {
         this.taskname = taskname;
         this.body = body;
         this.params = params;
         this.title = title;
         this.directory = directory;
+        this.connectionContext = connectionContext;
 
         status = State.WAITING;
 
@@ -77,13 +82,12 @@ public class ByteArrayActionDownload extends AbstractDownload implements ClientC
 
         final Object ret;
         try {
-            ret = SessionManager.getProxy()
-                        .executeTask(
-                                taskname,
-                                "WUNDA_BLAU",
-                                getClientConnectionContext(),
-                                body,
-                                params);
+            ret = SessionManager.getProxy().executeTask(
+                    taskname,
+                    "WUNDA_BLAU",
+                    getConnectionContext(),
+                    body,
+                    params);
 
             if (ret instanceof Exception) {
                 final Exception ex = (Exception)ret;
@@ -132,7 +136,7 @@ public class ByteArrayActionDownload extends AbstractDownload implements ClientC
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

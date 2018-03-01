@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -31,11 +31,15 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class FeatureStylingKeyStartUpHook implements StartupHook, ClientConnectionContextProvider {
+public class FeatureStylingKeyStartUpHook implements StartupHook, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger log = Logger.getLogger(FeatureStylingKeyStartUpHook.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -45,7 +49,7 @@ public class FeatureStylingKeyStartUpHook implements StartupHook, ClientConnecti
             final String stylingKey = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                             "feature.styling",
-                            getClientConnectionContext());
+                            getConnectionContext());
             if (stylingKey != null) {
                 CismapBroker.getInstance().setFeatureStylingComponentKey(stylingKey);
             }
@@ -55,7 +59,12 @@ public class FeatureStylingKeyStartUpHook implements StartupHook, ClientConnecti
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

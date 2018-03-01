@@ -69,7 +69,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
@@ -82,7 +82,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class BaulastBescheinigungDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
+public class BaulastBescheinigungDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -117,6 +117,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         new HashSet<BerechtigungspruefungBescheinigungGruppeInfo>();
 
     private SwingWorker worker;
+
+    private final ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass()
+                    .getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.commons.gui.progress.BusyStatusPanel busyStatusPanel1;
@@ -395,7 +398,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
             jTextField2.setText(new SimpleDateFormat("yy").format(new Date()) + "-");
 
-            jPanel1.setVisible(!BillingPopup.hasUserBillingMode());
+            jPanel1.setVisible(!BillingPopup.hasUserBillingMode(getConnectionContext()));
 
             prepareDownload(flurstueckeList);
 
@@ -419,12 +422,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             .hasConfigAttr(
                                     SessionManager.getSession().getUser(),
                                     "berechtigungspruefung_baulastbescheinigung",
-                                    getClientConnectionContext());
+                                    getConnectionContext());
             } catch (final ConnectionException ex) {
                 LOG.info("could not check config attr", ex);
             }
 
-            final boolean hasBilling = BillingPopup.hasUserBillingMode();
+            final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
             final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
                 new BerechtigungspruefungBescheinigungDownloadInfo(
                     hasBilling ? null : jTextField2.getText(),
@@ -440,6 +443,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             (berechtigungspruefung
                                 && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
                                 ? downloadInfo : null,
+                            getConnectionContext(),
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
                 final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
                 if ((berechnung != null) && !berechnung.trim().isEmpty()) {
@@ -468,7 +472,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             checkProtokollPane = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "baulast.bescheinigung.protokollpane_enabled",
-                                getClientConnectionContext());
+                                getConnectionContext());
         } catch (ConnectionException ex) {
         }
         jPanel8.setVisible(checkProtokollPane != null);
@@ -752,13 +756,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                     throw new InterruptedException();
                 }
                 final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                            .customServerSearch(search, getClientConnectionContext());
+                            .customServerSearch(search, getConnectionContext());
                 for (final MetaObjectNode mon : mons) {
                     final MetaObject mo = SessionManager.getProxy()
                                 .getMetaObject(mon.getObjectId(),
                                     mon.getClassId(),
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext());
+                                    getConnectionContext());
                     if ((mo.getBean() != null) && (mo.getBean() != null)
                                 && (mo.getBean().getProperty("loeschungsdatum") != null)) {
                         continue;
@@ -781,7 +785,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                     mcBaulast.getPrimaryKey(),
                                     alkisId),
                                 0,
-                                getClientConnectionContext());
+                                getConnectionContext());
                 for (final MetaObject mo : mos) {
                     final CidsBean baulast = mo.getBean();
                     final Boolean geprueft = (Boolean)baulast.getProperty("geprueft");
@@ -989,7 +993,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                         + Integer.parseInt(gemarkungsnummer) + " "
                                         + "LIMIT 1;";
                             final MetaObject[] mos = SessionManager.getProxy()
-                                        .getMetaObjectByQuery(pruefungQuery, 0, getClientConnectionContext());
+                                        .getMetaObjectByQuery(pruefungQuery, 0, getConnectionContext());
 
                             final String key;
                             if ((mos != null) && (mos.length > 0)) {
@@ -1178,8 +1182,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

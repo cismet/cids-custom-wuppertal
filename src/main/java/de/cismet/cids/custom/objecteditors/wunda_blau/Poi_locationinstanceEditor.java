@@ -54,6 +54,9 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
@@ -69,7 +72,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled {
+public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled, ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -82,6 +85,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
     private ImageIcon statusGrey = new javax.swing.ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-offline.png"));
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddThema;
     private javax.swing.JButton btnAddZusNamen;
@@ -165,9 +171,20 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Poi_locationinstanceEditor.
+     * Creates a new Poi_locationinstanceEditor object.
      */
     public Poi_locationinstanceEditor() {
+        this(null);
+    }
+
+    /**
+     * Creates new form Poi_locationinstanceEditor.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Poi_locationinstanceEditor(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
         dlgAddLocationType.pack();
         dlgAddZusNamen.pack();
@@ -215,6 +232,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -339,7 +361,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panAddLocationType = new javax.swing.JPanel();
         lblAuswaehlen = new javax.swing.JLabel();
         final MetaObject[] locationtypes = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
-                    .getLightweightMetaObjectsForTable("poi_locationtype", new String[] { "identification" });
+                    .getLightweightMetaObjectsForTable(
+                        "poi_locationtype",
+                        new String[] { "identification" },
+                        getConnectionContext());
         if (locationtypes != null) {
             Arrays.sort(locationtypes);
             cbTypes = new javax.swing.JComboBox(locationtypes);

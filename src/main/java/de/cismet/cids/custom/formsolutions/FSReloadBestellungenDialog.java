@@ -28,7 +28,7 @@ import javax.swing.tree.TreePath;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -36,11 +36,13 @@ import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FSReloadBestellungenDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
+public class FSReloadBestellungenDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
     private boolean autoRefreshEnabled = false;
+
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -53,9 +55,12 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog implements C
 
     /**
      * Creates new form ReloadDialog.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FSReloadBestellungenDialog() {
+    public FSReloadBestellungenDialog(final ClientConnectionContext connectionContext) {
         super((Frame)null, true);
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
@@ -156,7 +161,7 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog implements C
                             .executeTask(SessionManager.getSession().getUser(),
                                 FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                getClientConnectionContext(),
+                                getConnectionContext(),
                                 (Object)null);
                     return null;
                 }
@@ -182,8 +187,8 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog implements C
         if ((selectionPath != null) && (selectionPath.getPath().length > 0)) {
             try {
                 final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(
-                            getClientConnectionContext()));
-
+                            getConnectionContext()),
+                        getConnectionContext());
                 final Runnable r = new Runnable() {
 
                         @Override
@@ -205,7 +210,7 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog implements C
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

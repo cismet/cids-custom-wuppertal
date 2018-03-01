@@ -26,7 +26,7 @@ import java.util.Collection;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -42,7 +42,7 @@ import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListener
  * @version  $Revision$, $Date$
  */
 public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCreateSearchGeometryListener
-        implements ClientConnectionContextProvider {
+        implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -54,6 +54,10 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
     public static final String ACTION_SEARCH_DONE = "ACTION_SEARCH_DONE";
     public static final String ACTION_SEARCH_FAILED = "ACTION_SEARCH_FAILED";
 
+    //~ Instance fields --------------------------------------------------------
+
+    private final ClientConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -61,10 +65,14 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
      *
      * @param  mc                  DOCUMENT ME!
      * @param  propChangeListener  DOCUMENT ME!
+     * @param  connectionContext   DOCUMENT ME!
      */
     public NodesSearchCreateSearchGeometryListener(final MappingComponent mc,
-            final PropertyChangeListener propChangeListener) {
+            final PropertyChangeListener propChangeListener,
+            final ClientConnectionContext connectionContext) {
         super(mc, INPUT_LISTENER_NAME);
+
+        this.connectionContext = connectionContext;
 
         setMode(CreateGeometryListenerInterface.POLYGON);
 
@@ -110,7 +118,7 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
                     final Collection searchResult = SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),
                                     search,
-                                    getClientConnectionContext());
+                                    getConnectionContext());
 
                     if (isCancelled()) {
                         return result;
@@ -157,7 +165,7 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

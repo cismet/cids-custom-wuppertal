@@ -26,7 +26,7 @@ import javax.swing.SwingWorker;
 import de.cismet.cids.custom.wunda_blau.search.server.Sb_minAufnahmedatumYearFetcherServerSearch;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -34,12 +34,16 @@ import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientConnectionContextProvider {
+public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_StadtbildTimeTabs.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboYear;
@@ -342,8 +346,13 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientCo
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -373,7 +382,7 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientCo
             final Collection minYearCollection = SessionManager.getConnection()
                         .customServerSearch(SessionManager.getSession().getUser(),
                             minYearFetcher,
-                            getClientConnectionContext());
+                            getConnectionContext());
             if ((minYearCollection != null) && !minYearCollection.isEmpty()) {
                 final ArrayList firstColumnObject = (ArrayList)minYearCollection.toArray(new Object[1])[0];
                 final Object firstRowObject = firstColumnObject.get(0);

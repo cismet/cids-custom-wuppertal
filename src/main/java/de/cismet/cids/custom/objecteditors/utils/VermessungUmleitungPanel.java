@@ -60,7 +60,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
 
@@ -76,7 +76,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class VermessungUmleitungPanel extends javax.swing.JPanel implements DocumentListener,
     CidsBeanDropListener,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -174,6 +174,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     private URL lastCheckedURL;
     private String escapeText;
 
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateDocument;
     private javax.swing.JButton btnPlatzhalter;
@@ -194,21 +196,26 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alb_baulastUmleitungPanel.
+     * Creates a new VermessungUmleitungPanel object.
      */
     public VermessungUmleitungPanel() {
-        this(MODE.VERMESSUNGSRISS, null);
+        this(MODE.VERMESSUNGSRISS, null, null);
     }
 
     /**
      * Creates a new Alb_baulastUmleitungPanel object.
      *
-     * @param  m       DOCUMENT ME!
-     * @param  editor  DOCUMENT ME!
+     * @param  m                  DOCUMENT ME!
+     * @param  editor             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public VermessungUmleitungPanel(final MODE m, final VermessungRissEditor editor) {
+    public VermessungUmleitungPanel(final MODE m,
+            final VermessungRissEditor editor,
+            final ClientConnectionContext connectionContext) {
         this.mode = m;
         this.editor = editor;
+        this.connectionContext = connectionContext;
+
         initComponents();
         jXBusyLabel1.setSize(16, 16);
         tfName.getDocument().addDocumentListener(this);
@@ -295,7 +302,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         + " and flur ilike '" + props[2]
                         + "' and blatt ilike '" + StringUtils.stripStart(props[3], "0") + "'";
             final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(query, 0, getClientConnectionContext());
+                        .getMetaObjectByQuery(query, 0, getConnectionContext());
             return (metaObjects != null) && (metaObjects.length == 1) && (metaObjects[0] != null);
         } catch (ConnectionException ex) {
             LOG.error("Error while checkig if riss exists", ex);
@@ -443,7 +450,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                     return webDavHelper.deleteFileFromWebDAV(
                             filename
                                     + ".txt",
-                            createDirName());
+                            createDirName(),
+                            getConnectionContext());
                 }
 
                 @Override
@@ -522,7 +530,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                                 + ".txt",
                         f,
                         createDirName(),
-                        editor);
+                        editor,
+                        getConnectionContext());
                     return true;
                 }
 
@@ -935,8 +944,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

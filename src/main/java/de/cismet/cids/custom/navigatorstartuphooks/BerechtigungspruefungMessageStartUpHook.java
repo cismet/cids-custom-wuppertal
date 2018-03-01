@@ -34,7 +34,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
@@ -51,11 +51,15 @@ import de.cismet.tools.configuration.StartupHook;
 @ServiceProvider(service = StartupHook.class)
 public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
     CidsServerMessageNotifierListener,
-    ClientConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BerechtigungspruefungMessageStartUpHook.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -71,7 +75,7 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
                                             SessionManager.getSession().getUser(),
                                             "csm://"
                                             + BerechtigungspruefungProperties.getInstance().getCsmAnfrage(),
-                                            getClientConnectionContext())) {
+                                            getConnectionContext())) {
                                 CidsServerMessageNotifier.getInstance()
                                         .subscribe(
                                             BerechtigungspruefungMessageNotifier.getInstance(),
@@ -89,7 +93,7 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
                                             SessionManager.getSession().getUser(),
                                             "csm://"
                                             + BerechtigungspruefungProperties.getInstance().getCsmBearbeitung(),
-                                            getClientConnectionContext())) {
+                                            getConnectionContext())) {
                                 CidsServerMessageNotifier.getInstance()
                                         .subscribe(
                                             BerechtigungspruefungMessageNotifier.getInstance(),
@@ -127,8 +131,7 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
                         + mcBerechtigungspruefung.getTableName() + " WHERE benutzer LIKE '" + benutzer
                         + "' AND pruefstatus IS NOT NULL AND abgeholt IS NOT TRUE";
 
-            final MetaObject[] mos = SessionManager.getProxy()
-                        .getMetaObjectByQuery(query, 0, getClientConnectionContext());
+            final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(query, 0, getConnectionContext());
             if ((mos != null) && (mos.length > 0)) {
                 for (final MetaObject mo : mos) {
                     final CidsBean berechtigungspruefungBean = mo.getBean();
@@ -138,7 +141,11 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
                         BerechtigungspruefungFreigabeDialog.getInstance().showFreigabe(berechtigungspruefungBean);
                         final String produkttyp = (String)berechtigungspruefungBean.getProperty("produkttyp");
                         final String downloadInfo = (String)berechtigungspruefungBean.getProperty("downloadinfo_json");
-                        AlkisProductDownloadHelper.download(schluessel, produkttyp, downloadInfo);
+                        AlkisProductDownloadHelper.download(
+                            schluessel,
+                            produkttyp,
+                            downloadInfo,
+                            getConnectionContext());
                     } else {
                         BerechtigungspruefungStornoDialog.getInstance().showStorno(berechtigungspruefungBean);
                     }
@@ -147,7 +154,7 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
                                 .executeTask(
                                     BerechtigungspruefungAnfrageServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext(),
+                                    getConnectionContext(),
                                     (Object)null,
                                     new ServerActionParameter<String>(
                                         BerechtigungspruefungAnfrageServerAction.ParameterType.ABGEHOLT.toString(),
@@ -163,7 +170,12 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

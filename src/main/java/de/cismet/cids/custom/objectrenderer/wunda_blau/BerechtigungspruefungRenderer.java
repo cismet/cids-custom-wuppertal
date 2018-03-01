@@ -72,7 +72,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -94,7 +94,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -119,6 +119,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
     private final Map<String, String> freigabegruendeMap = new HashMap<String, String>();
     private final Map<String, String> ablehnungsgruendeMap = new HashMap<String, String>();
+
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFreigeben;
@@ -221,9 +223,20 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Fs_BestellungRenderer.
+     * Creates a new BerechtigungspruefungRenderer object.
      */
     public BerechtigungspruefungRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form Fs_BestellungRenderer.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public BerechtigungspruefungRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         initComponents();
 
@@ -1506,7 +1519,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         + (String)cidsBean.getProperty("schluessel"),
                 DownloadManagerDialog.getInstance().getJobName(),
                 pureName,
-                ext);
+                ext,
+                getConnectionContext());
         DownloadManager.instance().add(download);
     } //GEN-LAST:event_hlDateianhangValueActionPerformed
 
@@ -1610,7 +1624,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         try {
             AlkisProductDownloadHelper.download((String)cidsBean.getProperty("schluessel"),
                 downloadInfo.getProduktTyp(),
-                (String)cidsBean.getProperty("downloadinfo_json"));
+                (String)cidsBean.getProperty("downloadinfo_json"),
+                getConnectionContext());
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
@@ -1692,7 +1707,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                                     .executeTask(SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
-                                            getClientConnectionContext(),
+                                            getConnectionContext(),
                                             schluessel,
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.KOMMENTAR
@@ -2036,11 +2051,11 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 null);
 
         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), search, getClientConnectionContext());
+                    .customServerSearch(SessionManager.getSession().getUser(), search, getConnectionContext());
         if (!mons.isEmpty()) {
             final MetaObjectNode mon = mons.iterator().next();
             return SessionManager.getProxy()
-                        .getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU", getClientConnectionContext())
+                        .getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU", getConnectionContext())
                         .getBean();
         } else {
             return null;
@@ -2072,8 +2087,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -42,7 +42,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -57,7 +57,7 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     SearchControlListener,
     ActionTagProtected,
-    ClientConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -68,6 +68,8 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     private SearchControlPanel pnlSearchCancel;
     private ImageIcon icon;
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cboAbgerechnet;
     private javax.swing.JComboBox cboAbrechnungsturnus;
@@ -110,7 +112,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     public BillingWindowSearch() {
         try {
             initComponents();
-            if (ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+            if (ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext())) {
                 // do only if really needed because this is time consuming
                 setAbrechnungsturnusIntoComboBox();
                 setUsersIntoComboBox();
@@ -127,7 +129,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                 icon = new ImageIcon(new byte[] {});
             }
 
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -738,7 +740,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " \n";
             query += "FROM " + MB_MC.getTableName();
             final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(query.toString(), 0, getClientConnectionContext());
+                        .getMetaObjectByQuery(query.toString(), 0, getConnectionContext());
             for (final MetaObject abrechnungsturnus : metaObjects) {
                 cboAbrechnungsturnus.addItem(abrechnungsturnus.getBean());
             }
@@ -758,7 +760,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " \n";
             query += "FROM " + MB_MC.getTableName();
             final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(query, 0, getClientConnectionContext());
+                        .getMetaObjectByQuery(query, 0, getConnectionContext());
             for (final MetaObject abrechnungsturnus : metaObjects) {
                 cboBenutzer.addItem(abrechnungsturnus.getBean());
             }
@@ -791,11 +793,16 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

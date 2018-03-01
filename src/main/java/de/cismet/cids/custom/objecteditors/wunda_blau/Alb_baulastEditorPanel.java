@@ -82,7 +82,7 @@ import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.NavigatorAttributeEditorGui;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -96,7 +96,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -139,6 +139,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private Object oldPruefdatum;
     private Object oldPruefkommentar;
     private final WeakHashMap<CidsBean, String> propStringMap = new WeakHashMap<CidsBean, String>();
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser bdcBefristungsdatum;
     private de.cismet.cids.editors.DefaultBindableDateChooser bdcEintragungsdatum;
@@ -198,16 +201,19 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      * Creates new form Alb_baulastEditorPanel.
      */
     public Alb_baulastEditorPanel() {
-        this(true);
+        this(true, null);
     }
 
     /**
      * Creates new form Alb_baulastEditorPanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastEditorPanel(final boolean editable) {
+    public Alb_baulastEditorPanel(final boolean editable, final ClientConnectionContext connectionContext) {
         this.editable = editable;
+        this.connectionContext = connectionContext;
+
         this.editableComponents = new ArrayList<JComponent>();
         initComponents();
         initEditableComponents();
@@ -970,7 +976,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             final BaulastArtLightweightSearch search = new BaulastArtLightweightSearch();
             search.setRepresentationFields(new String[] { "baulast_art" });
             final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                        .customServerSearch(search, getClientConnectionContext());
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -1266,7 +1272,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
                     final User user = SessionManager.getSession().getUser();
                     final boolean finalCheckEnable = SessionManager.getProxy()
-                                .hasConfigAttr(user, ATAG_FINAL_CHECK, getClientConnectionContext())
+                                .hasConfigAttr(user, ATAG_FINAL_CHECK, getConnectionContext())
                                 && (!user.getName().equals(cidsBean.getProperty("bearbeitet_von"))
                                     || ((cidsBean.getProperty("geprueft") != null)
                                         && (Boolean)cidsBean.getProperty("geprueft")))
@@ -1368,8 +1374,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

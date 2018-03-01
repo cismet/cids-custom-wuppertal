@@ -46,6 +46,8 @@ import de.cismet.cids.custom.wupp.client.alkis.ParcelInputFieldConfig;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -67,7 +69,8 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -88,6 +91,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
@@ -167,7 +172,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             icon = new ImageIcon(mc.getIconData());
             initComponents();
             ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -213,6 +218,16 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -848,18 +863,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      */
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
-//    @Override
-//    public boolean checkActionTag() {
-//        try {
-//            return SessionManager.getConnection()
-//                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.search") != null;
-//        } catch (ConnectionException ex) {
-//            log.error("Can not validate ActionTag for Alkis Suche!", ex);
-//            return false;
-//        }
-//    }
 
     /**
      * DOCUMENT ME!

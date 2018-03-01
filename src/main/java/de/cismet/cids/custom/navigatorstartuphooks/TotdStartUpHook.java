@@ -22,7 +22,7 @@ import org.openide.util.lookup.ServiceProvider;
 import de.cismet.cids.custom.wunda_blau.startuphooks.MotdWundaStartupHook;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
@@ -37,11 +37,15 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class TotdStartUpHook implements StartupHook, ClientConnectionContextProvider {
+public class TotdStartUpHook implements StartupHook, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TotdStartUpHook.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -53,7 +57,7 @@ public class TotdStartUpHook implements StartupHook, ClientConnectionContextProv
                                 SessionManager.getSession().getUser(),
                                 "csm://"
                                 + MotdWundaStartupHook.MOTD_MESSAGE_TOTD,
-                                getClientConnectionContext())) {
+                                getConnectionContext())) {
                     CidsServerMessageNotifier.getInstance()
                             .subscribe(new CidsServerMessageNotifierListener() {
 
@@ -78,7 +82,12 @@ public class TotdStartUpHook implements StartupHook, ClientConnectionContextProv
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

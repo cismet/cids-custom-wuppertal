@@ -355,7 +355,7 @@
       <SubComponents>
         <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel" name="panBaulastEditor">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable, connectionContext)"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

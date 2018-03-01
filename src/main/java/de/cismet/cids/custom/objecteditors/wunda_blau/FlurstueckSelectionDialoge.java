@@ -41,6 +41,10 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -53,7 +57,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
+public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -66,6 +70,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
     private List<CidsBean> currentListToAdd;
     private final boolean createEnabled;
+    private final ClientConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFlurstueckAddMenCancel;
     private javax.swing.JButton btnFlurstueckAddMenOk;
@@ -87,16 +92,18 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
      * Creates a new FlurstueckSelectionDialoge object.
      */
     public FlurstueckSelectionDialoge() {
-        this(true);
+        this(true, ClientConnectionContext.createDeprecated());
     }
 
     /**
      * Creates new form FlurstueckSelectionDialoge.
      *
-     * @param  createEnabled  DOCUMENT ME!
+     * @param  createEnabled      DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FlurstueckSelectionDialoge(final boolean createEnabled) {
+    public FlurstueckSelectionDialoge(final boolean createEnabled, final ClientConnectionContext connectionContext) {
         this.createEnabled = createEnabled;
+        this.connectionContext = connectionContext;
         setTitle("Bitte Flurstück auswählen");
         initComponents();
         setSize(419, 144);
@@ -455,7 +462,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                     if (position < 0) {
                         try {
                             if (MetaObject.NEW == beanToAdd.getMetaObject().getStatus()) {
-                                beanToAdd = beanToAdd.persist();
+                                beanToAdd = beanToAdd.persist(getConnectionContext());
                             }
                             currentListToAdd.add(-position - 1, beanToAdd);
                         } catch (Exception ex) {
@@ -650,6 +657,11 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
             log.error(ex, ex);
         }
         return null;
+    }
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

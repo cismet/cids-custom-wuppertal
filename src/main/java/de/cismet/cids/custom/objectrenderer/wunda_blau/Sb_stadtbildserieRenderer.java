@@ -11,6 +11,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -25,7 +27,16 @@ public class Sb_stadtbildserieRenderer extends Sb_stadtbildserieEditor {
      * Creates a new Sb_stadtbildserieRenderer object.
      */
     public Sb_stadtbildserieRenderer() {
-        super(false);
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new Sb_stadtbildserieRenderer object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Sb_stadtbildserieRenderer(final ClientConnectionContext connectionContext) {
+        super(false, connectionContext);
     }
 
     //~ Methods ----------------------------------------------------------------

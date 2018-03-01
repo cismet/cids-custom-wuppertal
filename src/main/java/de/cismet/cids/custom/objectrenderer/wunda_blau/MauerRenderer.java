@@ -15,6 +15,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -29,7 +31,16 @@ public class MauerRenderer extends MauerEditor {
      * Creates a new MauerRenderer object.
      */
     public MauerRenderer() {
-        super(false);
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new MauerRenderer object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public MauerRenderer(final ClientConnectionContext connectionContext) {
+        super(false, connectionContext);
     }
 
     //~ Methods ----------------------------------------------------------------

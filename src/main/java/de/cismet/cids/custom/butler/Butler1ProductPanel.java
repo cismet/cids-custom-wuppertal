@@ -42,7 +42,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerActi
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.StaticDecimalTools;
 
@@ -53,7 +53,7 @@ import de.cismet.tools.StaticDecimalTools;
  * @version  $Revision$, $Date$
  */
 public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelectionListener,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -67,6 +67,8 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     ArrayList<ButlerResolution> defaultGroupResolutions;
     ArrayList<ButlerFormat> formats;
     private Geometry geom;
+
+    private final ClientConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
     private javax.swing.JComboBox cbProduktGruppe;
@@ -96,8 +98,11 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
 
     /**
      * Creates new form Butler1ProductPanel.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Butler1ProductPanel() {
+    public Butler1ProductPanel(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         loadPrductDescriptions();
         initComponents();
         lstProdukt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -499,7 +504,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     public static void main(final String[] args) {
         final JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.getContentPane().add(new Butler1ProductPanel());
+        f.getContentPane().add(new Butler1ProductPanel(ClientConnectionContext.createDeprecated()));
         f.pack();
         f.setVisible(true);
     }
@@ -685,7 +690,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
                             .executeTask(
                                     NasZaehlObjekteServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext(),
+                                    getConnectionContext(),
                                     (Object)null,
                                     sapType,
                                     sapGeom);
@@ -712,7 +717,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

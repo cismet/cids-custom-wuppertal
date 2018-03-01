@@ -8,29 +8,17 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import com.guigarage.jgrid.JGrid;
-import com.guigarage.jgrid.renderer.GridCellRenderer;
-
-import java.awt.AlphaComposite;
-import java.awt.Component;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.commons.concurrency.CismetExecutors;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -38,20 +26,25 @@ import de.cismet.commons.concurrency.CismetExecutors;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieGridObjectListener {
+public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieGridObjectListener,
+    ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
     /** Is used to avoid that a Stadtbild is shown twice in the grid. */
-    HashSet<Sb_SingleStadtbildGridObject> modelProxy = new HashSet<Sb_SingleStadtbildGridObject>();
+    private final HashSet<Sb_SingleStadtbildGridObject> modelProxy = new HashSet<>();
+    private final ClientConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new Sb_SelectedStadtbilderJGrid object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_SingleStadtbildJGrid() {
-        this.setModel(new DefaultListModel<Sb_SingleStadtbildGridObject>());
+    public Sb_SingleStadtbildJGrid(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        this.setModel(new DefaultListModel<>());
         this.getCellRendererManager().setDefaultRenderer(new Sb_SingleStadtbildGridRenderer());
     }
 
@@ -68,7 +61,8 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             final Sb_SingleStadtbildGridObject gridObject = new Sb_SingleStadtbildGridObject(
                     b,
                     source,
-                    ((DefaultListModel)this.getModel()));
+                    ((DefaultListModel)this.getModel()),
+                    getConnectionContext());
             if (!modelProxy.contains(gridObject)) {
                 gridObject.startThreadToDetermineIfHighResImageAvailable();
                 ((DefaultListModel)this.getModel()).addElement(gridObject);
@@ -82,7 +76,8 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         final Sb_SingleStadtbildGridObject gridObject = new Sb_SingleStadtbildGridObject(
                 stadtbild,
                 source,
-                ((DefaultListModel)this.getModel()));
+                ((DefaultListModel)this.getModel()),
+                getConnectionContext());
         if (!modelProxy.contains(gridObject)) {
             gridObject.startThreadToDetermineIfHighResImageAvailable();
             ((DefaultListModel)this.getModel()).addElement(gridObject);
@@ -95,7 +90,8 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         final Sb_SingleStadtbildGridObject objectToRemove = new Sb_SingleStadtbildGridObject(
                 stadtbild,
                 source,
-                ((DefaultListModel)this.getModel()));
+                ((DefaultListModel)this.getModel()),
+                getConnectionContext());
         final DefaultListModel model = (DefaultListModel)this.getModel();
         if (modelProxy.contains(objectToRemove)) {
             model.removeElement(objectToRemove);
@@ -110,7 +106,8 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             final Sb_SingleStadtbildGridObject objectToRemove = new Sb_SingleStadtbildGridObject(
                     chosenStadtbilder,
                     source,
-                    ((DefaultListModel)this.getModel()));
+                    ((DefaultListModel)this.getModel()),
+                    getConnectionContext());
             model.removeElement(objectToRemove);
             modelProxy.remove(objectToRemove);
         }
@@ -123,7 +120,8 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             final Sb_SingleStadtbildGridObject objectToAdd = new Sb_SingleStadtbildGridObject(
                     chosenStadtbilder,
                     source,
-                    ((DefaultListModel)this.getModel()));
+                    ((DefaultListModel)this.getModel()),
+                    getConnectionContext());
             objectToAdd.startThreadToDetermineIfHighResImageAvailable();
             model.addElement(objectToAdd);
             modelProxy.add(objectToAdd);
@@ -139,5 +137,10 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             final Sb_stadtbildserieGridObject sb_stadtbildserieGridObject = object.getLocationOfStadtbild();
             sb_stadtbildserieGridObject.deselectStadtbildOfSerie(object.getStadtbild());
         }
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

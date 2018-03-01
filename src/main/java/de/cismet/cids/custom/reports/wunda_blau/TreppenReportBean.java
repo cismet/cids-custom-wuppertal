@@ -22,6 +22,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -42,17 +44,21 @@ public class TreppenReportBean extends ReportBeanWithMapAndImages {
     /**
      * Creates a new MauernReportBean object.
      *
-     * @param  treppe  DOCUMENT ME!
-     * @param  editor  DOCUMENT ME!
+     * @param  treppe             DOCUMENT ME!
+     * @param  editor             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppenReportBean(final CidsBean treppe, final TreppeEditor editor) {
+    public TreppenReportBean(final CidsBean treppe,
+            final TreppeEditor editor,
+            final ClientConnectionContext connectionContext) {
         super(
             treppe,
             "geometrie.geo_field",
             "bilder",
             "url_treppen",
             java.util.ResourceBundle.getBundle(
-                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"));
+                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"),
+            connectionContext);
 
         zustandStuetzmauern = editor.getZustandStuetzmauern();
         kostenStuetzmauern = editor.getKostenStuetzmauern();

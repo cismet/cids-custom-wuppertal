@@ -55,7 +55,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -69,7 +69,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     EditorSaveListener,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -85,6 +85,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     private Set<CidsBean> touchedKundenLogins = new HashSet<CidsBean>();
 
     private CidsBean cidsBean;
+
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemKundenLogin;
@@ -130,6 +132,17 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
      * Creates a new BillingKundeEditor object.
      */
     public BillingKundeEditor() {
+        this(null);
+    }
+
+    /**
+     * Creates a new BillingKundeEditor object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public BillingKundeEditor(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
         try {
             new CidsBeanDropTarget(lstKundenLogins);
@@ -754,7 +767,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 // persist the bean, this should also happen if the bean was only touched. This means, that the
                 // customer bean was removed.
                 try {
-                    gruppenBean.persist();
+                    gruppenBean.persist(getConnectionContext());
                 } catch (Exception ex) {
                     Log.error(ex.getMessage(), ex);
                 }
@@ -774,7 +787,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 // persist the bean, this should also happen if the bean was only touched. This means, that the
                 // customer bean was removed.
                 try {
-                    loginBean.persist();
+                    loginBean.persist(getConnectionContext());
                 } catch (Exception ex) {
                     Log.error(ex.getMessage(), ex);
                 }
@@ -785,7 +798,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 final TreePath selectionPath = ComponentRegistry.getRegistry().getCatalogueTree().getSelectionPath();
                 if ((selectionPath != null) && (selectionPath.getPath().length > 0)) {
                     final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(
-                                getClientConnectionContext()));
+                                getConnectionContext()),
+                            getConnectionContext());
                     ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(
                         rootTreeNode);
                     ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
@@ -861,7 +875,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             final MetaObject[] metaObjects = SessionManager.getProxy()
                         .getMetaObjectByQuery(SessionManager.getSession().getUser(),
                             query,
-                            getClientConnectionContext());
+                            getConnectionContext());
             for (final MetaObject mo : metaObjects) {
                 final CidsBean cb = mo.getBean();
                 kundengruppen.add(cb);
@@ -890,7 +904,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             final MetaObject[] metaObjects = SessionManager.getProxy()
                         .getMetaObjectByQuery(SessionManager.getSession().getUser(),
                             query,
-                            getClientConnectionContext());
+                            getConnectionContext());
             for (final MetaObject mo : metaObjects) {
                 final CidsBean cb = mo.getBean();
                 kundenLogins.add(cb);
@@ -937,8 +951,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

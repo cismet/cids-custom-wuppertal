@@ -63,6 +63,10 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.gui.MappingComponent;
@@ -82,7 +86,8 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements CidsBeanDropListener {
+public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements CidsBeanDropListener,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -115,6 +120,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         };
 
     private AlkisProductDescription defaultProduct = null;
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemove;
@@ -156,12 +162,16 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     /**
      * Creates new form PrintingSettingsWidget.
      *
-     * @param  modal             DOCUMENT ME!
-     * @param  mappingComponent  DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  mappingComponent   DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public AlkisPrintingSettingsWidget(final boolean modal, final MappingComponent mappingComponent) {
+    public AlkisPrintingSettingsWidget(final boolean modal,
+            final MappingComponent mappingComponent,
+            final ClientConnectionContext connectionContext) {
         super(StaticSwingTools.getParentFrame(mappingComponent), modal);
         this.alkisObjectListModel = new DefaultListModel();
+        this.connectionContext = connectionContext;
         initComponents();
         getRootPane().setDefaultButton(cmdOk);
         cbClazz.setModel(getProductClassModel());
@@ -1317,6 +1327,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                                         url.toString(),
                                         requestPerUsage,
                                         (Geometry)null,
+                                        getConnectionContext(),
                                         new ProductGroupAmount(prGroup, 1))) {
                             doDownload(new URL(BillingPopup.getInstance().getCurrentRequest()),
                                 selectedProduct.getCode(),
@@ -1435,6 +1446,11 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      */
     private void syncOkButtonWithListStatus() {
         cmdOk.setEnabled(alkisObjectListModel.size() > 0);
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -43,7 +43,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
@@ -57,7 +57,7 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class ButlerDownload extends HttpDownload implements ClientConnectionContextProvider {
+public class ButlerDownload extends HttpDownload implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -99,6 +99,8 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
     private String boxSize;
     private boolean isEtrsRahmenkarte = false;
 
+    private final ClientConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -111,6 +113,7 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
      * @param  boxSize            DOCUMENT ME!
      * @param  middleX            DOCUMENT ME!
      * @param  middleY            DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public ButlerDownload(final String directory,
             final String orderId,
@@ -118,7 +121,8 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
             final boolean isEtrsRahmenkarte,
             final String boxSize,
             final double middleX,
-            final double middleY) {
+            final double middleY,
+            final ClientConnectionContext connectionContext) {
         isButler2 = true;
         this.directory = directory;
         this.orderId = orderId;
@@ -131,6 +135,7 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
         status = State.WAITING;
         this.boxSize = boxSize;
         this.title = orderId;
+        this.connectionContext = connectionContext;
         final ButlerFormat format = product.getFormat();
         determineDestinationFile(orderId, "." + format.getKey());
     }
@@ -138,13 +143,14 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
     /**
      * Creates a new ButlerDownload object.
      *
-     * @param  directory  DOCUMENT ME!
-     * @param  orderId    DOCUMENT ME!
-     * @param  product    DOCUMENT ME!
-     * @param  minX       DOCUMENT ME!
-     * @param  minY       DOCUMENT ME!
-     * @param  maxX       DOCUMENT ME!
-     * @param  maxY       DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  orderId            DOCUMENT ME!
+     * @param  product            DOCUMENT ME!
+     * @param  minX               DOCUMENT ME!
+     * @param  minY               DOCUMENT ME!
+     * @param  maxX               DOCUMENT ME!
+     * @param  maxY               DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public ButlerDownload(final String directory,
             final String orderId,
@@ -152,7 +158,8 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
             final double minX,
             final double minY,
             final double maxX,
-            final double maxY) {
+            final double maxY,
+            final ClientConnectionContext connectionContext) {
         this.directory = directory;
         this.orderId = orderId;
         this.product = product;
@@ -162,6 +169,7 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
         this.maxY = maxY;
         status = State.WAITING;
         this.title = orderId;
+        this.connectionContext = connectionContext;
         final ButlerFormat format = product.getFormat();
         if (format.getKey().equals("shp") || format.getKey().equals("geotif")) {
             determineDestinationFile(orderId, ".zip");
@@ -174,17 +182,22 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
     /**
      * Creates a new ButlerDownload object.
      *
-     * @param  requestId    DOCUMENT ME!
-     * @param  userOrderId  DOCUMENT ME!
-     * @param  product      DOCUMENT ME!
+     * @param  requestId          DOCUMENT ME!
+     * @param  userOrderId        DOCUMENT ME!
+     * @param  product            DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    ButlerDownload(final String requestId, final String userOrderId, final ButlerProduct product) {
+    ButlerDownload(final String requestId,
+            final String userOrderId,
+            final ButlerProduct product,
+            final ClientConnectionContext connectionContext) {
         omitSendingRequest = true;
         this.orderId = userOrderId;
         this.requestId = requestId;
         this.product = product;
         status = State.WAITING;
         this.title = orderId;
+        this.connectionContext = connectionContext;
         final ButlerFormat format = product.getFormat();
         if (format.getKey().equals("shp") || format.getKey().equals("geotif")) {
             determineDestinationFile(orderId, ".zip");
@@ -408,7 +421,7 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext(),
+                                    getConnectionContext(),
                                     (Object)null,
                                     paramMethod,
                                     paramOrderId,
@@ -433,7 +446,7 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext(),
+                                    getConnectionContext(),
                                     (Object)null,
                                     paramMethod,
                                     paramOrderId,
@@ -477,7 +490,7 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
                     .executeTask(
                         SERVER_ACTION,
                         "WUNDA_BLAU",
-                        getClientConnectionContext(),
+                        getConnectionContext(),
                         (Object)null,
                         paramOrderId,
                         paramMethod);
@@ -487,8 +500,8 @@ public class ButlerDownload extends HttpDownload implements ClientConnectionCont
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -45,6 +45,10 @@ import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -55,7 +59,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
+public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -69,6 +73,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
     private List<CidsBean> currentListToAdd;
     private final boolean usedInEditor;
+    private final ClientConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApply;
     private javax.swing.JButton btnCancel;
@@ -93,16 +98,19 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
      * Creates a new FlurstueckSelectionDialoge object.
      */
     public VermessungFlurstueckSelectionDialog() {
-        this(true);
+        this(true, ClientConnectionContext.createDeprecated());
     }
 
     /**
      * Creates new form FlurstueckSelectionDialoge.
      *
-     * @param  usedInEditor  DOCUMENT ME!
+     * @param  usedInEditor       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public VermessungFlurstueckSelectionDialog(final boolean usedInEditor) {
+    public VermessungFlurstueckSelectionDialog(final boolean usedInEditor,
+            final ClientConnectionContext connectionContext) {
         this.usedInEditor = usedInEditor;
+        this.connectionContext = connectionContext;
         setTitle("Bitte Flurstück auswählen");
         initComponents();
         setSize(419, 144);
@@ -748,7 +756,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
                 if (MetaObject.NEW == flurstueckBean.getMetaObject().getStatus()) {
                     try {
-                        flurstueckBean = flurstueckBean.persist();
+                        flurstueckBean = flurstueckBean.persist(getConnectionContext());
                     } catch (Exception ex) {
                         LOG.error("Could not persist new flurstueck.", ex);
                         flurstueckBean = null;
@@ -808,6 +816,11 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
         okHook();
 
         setVisible(visible);
+    }
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

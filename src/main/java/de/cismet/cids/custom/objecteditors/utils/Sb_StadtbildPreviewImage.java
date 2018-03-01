@@ -38,6 +38,10 @@ import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
@@ -49,7 +53,7 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor.adjustS
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
+public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -67,6 +71,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
     private String bildnummer;
     private BufferedImage image;
     private CidsBean fotoCidsBean;
+    private final ClientConnectionContext connectionContext;
     private final PropertyChangeListener listRepaintListener = new PropertyChangeListener() {
 
             @Override
@@ -96,8 +101,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
 
     /**
      * Creates new form Sb_StadtbildPreviewImage.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_StadtbildPreviewImage() {
+    public Sb_StadtbildPreviewImage(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         timer = new Timer(300, new ActionListener() {
@@ -374,7 +382,8 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                                 "stadtbild_"
                                 + imageNumber,
                                 imageNumber,
-                                "1"));
+                                "1",
+                                getConnectionContext()));
             }
         } catch (Exception ex) {
             LOG.error("Error when trying to download an high res image", ex);
@@ -594,6 +603,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      */
     public void setTbtnIsPreviewImageVisible(final boolean visible) {
         tbtnIsPreviewImage.setVisible(visible);
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -26,7 +26,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -40,12 +40,16 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class ButlerStartUpHook implements StartupHook, ClientConnectionContextProvider {
+public class ButlerStartUpHook implements StartupHook, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String SERVER_ACTION = "butler1Query";
     private static final Logger log = Logger.getLogger(ButlerStartUpHook.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -69,7 +73,7 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextPr
             hasButlerAccess = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://butler1Query",
-                                getClientConnectionContext()) != null;
+                                getConnectionContext()) != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Butler!", ex);
         }
@@ -83,7 +87,7 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextPr
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext(),
+                                    getConnectionContext(),
                                     (Object)null,
                                     paramMethod);
             } catch (ConnectionException ex) {
@@ -105,7 +109,11 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextPr
             final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
             for (final String requestId : openRequestIds.keySet()) {
                 final ButlerRequestInfo info = (ButlerRequestInfo)openRequestIds.get(requestId);
-                final ButlerDownload download = new ButlerDownload(requestId, info.getUserOrderId(), info.getProduct());
+                final ButlerDownload download = new ButlerDownload(
+                        requestId,
+                        info.getUserOrderId(),
+                        info.getProduct(),
+                        getConnectionContext());
                 downloads.add(download);
             }
             DownloadManager.instance()
@@ -128,7 +136,12 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextPr
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

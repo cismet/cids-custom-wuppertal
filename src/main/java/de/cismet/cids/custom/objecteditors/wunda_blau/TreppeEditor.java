@@ -43,8 +43,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -64,7 +62,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -73,13 +70,15 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 import de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.reports.wunda_blau.TreppenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -99,7 +98,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     EditorSaveListener,
     FooterComponentProvider,
     TitleComponentProvider,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -185,7 +185,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                 "bilder",
                 "Treppe_bild",
                 "nummer",
-                "geometrie.geo_field");
+                "geometrie.geo_field",
+                getConnectionContext());
 
         final FormListener formListener = new FormListener();
 
@@ -993,6 +994,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
     //~ Instance fields --------------------------------------------------------
 
+    private final ClientConnectionContext connectionContext;
+
     private final boolean editable;
     private CidsBean cidsBean;
     private final ZustandOverview overview = new ZustandOverview();
@@ -1051,16 +1054,19 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      * Creates a new TreppeEditor object.
      */
     public TreppeEditor() {
-        this(true);
+        this(true, null);
     }
 
     /**
      * Creates new form TreppenEditor.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeEditor(final boolean editable) {
+    public TreppeEditor(final boolean editable, final ClientConnectionContext connectionContext) {
         this.editable = editable;
+        this.connectionContext = connectionContext;
+
         initComponents();
     }
 
@@ -1118,7 +1124,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      * @param  evt  DOCUMENT ME!
      */
     private void btnReportActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
-        TreppenReportGenerator.generateKatasterBlatt(Arrays.asList(new CidsBean[] { cidsBean }), TreppeEditor.this);
+        TreppenReportGenerator.generateKatasterBlatt(Arrays.asList(new CidsBean[] { cidsBean }),
+            TreppeEditor.this,
+            getConnectionContext());
     }                                                              //GEN-LAST:event_btnReportActionPerformed
 
     /**
@@ -1318,6 +1326,11 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      */
     public Map<CidsBean, CidsBean> getMauerBeans() {
         return treppeStuetzmauernPanel1.getMauerBeans();
+    }
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -97,6 +97,9 @@ import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.Crs;
@@ -133,7 +136,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     TitleComponentProvider,
     FooterComponentProvider,
     BorderProvider,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -351,6 +355,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private ImageIcon PUNKT_HTML;
     private ImageIcon PUNKT_TXT;
     private String urlOfAPMap;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrAPMapControls;
     private org.jdesktop.swingx.JXBusyLabel blWaiting;
@@ -462,9 +469,20 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alkis_pointRenderer.
+     * Creates a new AlkisPointRenderer object.
      */
     public AlkisPointRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form Alkis_pointRenderer.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public AlkisPointRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         retrieveableLabels = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
 
@@ -517,19 +535,24 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         }
         panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
 
-        final boolean billingAllowedPdf = BillingPopup.isBillingAllowed("pktlstpdf");
-        final boolean billingAllowedTxt = BillingPopup.isBillingAllowed("pktlsttxt");
+        final boolean billingAllowedPdf = BillingPopup.isBillingAllowed("pktlstpdf", getConnectionContext());
+        final boolean billingAllowedTxt = BillingPopup.isBillingAllowed("pktlsttxt", getConnectionContext());
         final boolean billingAllowedHtml = billingAllowedPdf || billingAllowedTxt;
 
         hlPunktlisteHtml.setEnabled(billingAllowedHtml
-                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext()));
         hlPunktlistePdf.setEnabled(billingAllowedPdf
-                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext()));
         hlPunktlisteTxt.setEnabled(billingAllowedTxt
-                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext()));
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -2022,7 +2045,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  productType  DOCUMENT ME!
      */
     private void downloadProduct(final String productType) {
-        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE)) {
+        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext())) {
             showNoProductPermissionWarning();
             return;
         }

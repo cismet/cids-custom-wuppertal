@@ -64,7 +64,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.RendererConnectionContext;
 
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.FeatureGroups;
@@ -256,27 +257,32 @@ public class ObjectRendererUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   tabName  DOCUMENT ME!
-     * @param   fields   DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName, final String[] fields) {
-        return getLightweightMetaObjectsForTable(tabName, fields, null);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   tabName    DOCUMENT ME!
-     * @param   fields     DOCUMENT ME!
-     * @param   formatter  DOCUMENT ME!
+     * @param   tabName            DOCUMENT ME!
+     * @param   fields             DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName,
             final String[] fields,
-            AbstractAttributeRepresentationFormater formatter) {
+            final ClientConnectionContext connectionContext) {
+        return getLightweightMetaObjectsForTable(tabName, fields, connectionContext);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   tabName            DOCUMENT ME!
+     * @param   fields             DOCUMENT ME!
+     * @param   formatter          DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName,
+            final String[] fields,
+            AbstractAttributeRepresentationFormater formatter,
+            final ClientConnectionContext connectionContext) {
         if (formatter == null) {
             formatter = new AbstractAttributeRepresentationFormater() {
 
@@ -298,7 +304,7 @@ public class ObjectRendererUtils {
                             user,
                             fields,
                             formatter,
-                            getClientConnectionContext());
+                            connectionContext);
         } catch (Exception ex) {
             log.error(ex, ex);
         }
@@ -436,15 +442,17 @@ public class ObjectRendererUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   tagToCheck  DOCUMENT ME!
+     * @param   tagToCheck         DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean checkActionTag(final String tagToCheck) {
+    public static boolean checkActionTag(final String tagToCheck,
+            final ClientConnectionContext connectionContext) {
         boolean result;
         try {
             result = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), tagToCheck, getClientConnectionContext())
+                        .getConfigAttr(SessionManager.getSession().getUser(), tagToCheck, connectionContext)
                         != null;
         } catch (ConnectionException ex) {
             log.error("Can not check ActionTag!", ex);
@@ -763,15 +771,6 @@ public class ObjectRendererUtils {
         final ImagedButtonMouseAdapter ibma = new ImagedButtonMouseAdapter(button, highlight, pressed);
         button.addMouseListener(ibma);
         return ibma;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(ObjectRendererUtils.class.getSimpleName());
     }
 }
 

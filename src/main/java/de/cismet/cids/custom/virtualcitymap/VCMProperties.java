@@ -22,7 +22,7 @@ import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -30,7 +30,7 @@ import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class VCMProperties extends Properties implements ClientConnectionContextProvider {
+public class VCMProperties extends Properties implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -40,6 +40,11 @@ public class VCMProperties extends Properties implements ClientConnectionContext
     private static final String PROP_USER = "USER";
     private static final String PROP_PASSWORD = "PASSWORD";
     private static final String PROP_TOOLBAR_CONFATTR = "TOOLBAR_CONFATTR";
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass()
+                    .getSimpleName());
 
     //~ Constructors -----------------------------------------------------------
 
@@ -106,7 +111,7 @@ public class VCMProperties extends Properties implements ClientConnectionContext
                         .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                getClientConnectionContext(),
+                                getConnectionContext(),
                                 WundaBlauServerResources.VCM_PROPERTIES.getValue());
             super.load(new StringReader(propertiesString));
         } catch (final Exception ex) {
@@ -115,8 +120,8 @@ public class VCMProperties extends Properties implements ClientConnectionContext
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

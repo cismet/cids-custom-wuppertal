@@ -22,7 +22,7 @@ import de.cismet.cids.custom.motd.MotdDialog;
 import de.cismet.cids.custom.wunda_blau.startuphooks.MotdWundaStartupHook;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 
@@ -35,11 +35,15 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class MotdStartUpHook implements StartupHook, ClientConnectionContextProvider {
+public class MotdStartUpHook implements StartupHook, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(MotdStartUpHook.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -50,7 +54,7 @@ public class MotdStartUpHook implements StartupHook, ClientConnectionContextProv
                             SessionManager.getSession().getUser(),
                             "csm://"
                             + MotdWundaStartupHook.MOTD_MESSAGE_MOTD,
-                            getClientConnectionContext())) {
+                            getConnectionContext())) {
                 CidsServerMessageNotifier.getInstance()
                         .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
             }
@@ -64,7 +68,7 @@ public class MotdStartUpHook implements StartupHook, ClientConnectionContextProv
                             SessionManager.getSession().getUser(),
                             "csm://"
                             + MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN,
-                            getClientConnectionContext())) {
+                            getConnectionContext())) {
                 CidsServerMessageNotifier.getInstance()
                         .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN);
             }
@@ -76,7 +80,12 @@ public class MotdStartUpHook implements StartupHook, ClientConnectionContextProv
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

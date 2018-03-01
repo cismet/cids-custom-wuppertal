@@ -50,7 +50,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationS
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -70,7 +70,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class PointNumberReservationPanel extends javax.swing.JPanel implements ClientConnectionContextProvider {
+public class PointNumberReservationPanel extends javax.swing.JPanel implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -89,6 +89,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
     private ArrayList<String> nbz = new ArrayList<String>();
     private int maxNbz = 4;
     private boolean anzahlWarnVisible = false;
+
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnErstellen;
@@ -119,16 +121,19 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
      * Creates a new PointNumberReservationPanel object.
      */
     public PointNumberReservationPanel() {
-        this(null);
+        this(null, ClientConnectionContext.createDeprecated());
     }
 
     /**
      * Creates new form PointNumberReservationPanel.
      *
-     * @param  pnrDialog  DOCUMENT ME!
+     * @param  pnrDialog          DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public PointNumberReservationPanel(final PointNumberDialog pnrDialog) {
+    public PointNumberReservationPanel(final PointNumberDialog pnrDialog,
+            final ClientConnectionContext connectionContext) {
         this.pnrDialog = pnrDialog;
+        this.connectionContext = connectionContext;
         final Properties props = new Properties();
         try {
             props.load(PointNumberReservationPanel.class.getResourceAsStream("pointNumberSettings.properties"));
@@ -646,7 +651,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        getClientConnectionContext(),
+                                        getConnectionContext(),
                                         (Object)null,
                                         action,
                                         prefix,
@@ -746,7 +751,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        getClientConnectionContext(),
+                                        getConnectionContext(),
                                         (Object)null,
                                         action,
                                         prefix,
@@ -916,7 +921,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

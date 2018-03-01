@@ -19,6 +19,8 @@ import java.util.Date;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -59,6 +61,7 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
      * @param  earningsWithCostsWiederver       DOCUMENT ME!
      * @param  amountWiederverkaeufe            DOCUMENT ME!
      * @param  amountWiederverkaeufeGB          DOCUMENT ME!
+     * @param  connectionContext                DOCUMENT ME!
      */
     public BillingJahresberichtReport(final int year,
             final Collection<CidsBean> billingBeans,
@@ -78,7 +81,8 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
             final double earningsWithCostsVU,
             final double earningsWithCostsWiederver,
             final int amountWiederverkaeufe,
-            final int amountWiederverkaeufeGB) {
+            final int amountWiederverkaeufeGB,
+            final ClientConnectionContext connectionContext) {
         super(
             billingBeans,
             from,
@@ -97,7 +101,8 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
             earningsWithCostsVU,
             earningsWithCostsWiederver,
             amountWiederverkaeufe,
-            amountWiederverkaeufeGB);
+            amountWiederverkaeufeGB,
+            connectionContext);
         this.year = year;
     }
 
@@ -106,7 +111,7 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
     @Override
     protected BillingStatisticsDataSourceAccumulation createDataSourceAccumulation() {
         final BillingStatisticsDataSourceAccumulation dataSourceAccumulation =
-            new BillingJahresberichtDataSourceAccumulation(billingBeans, year);
+            new BillingJahresberichtDataSourceAccumulation(billingBeans, year, getConnectionContext());
         dataSourceAccumulation.fetchSearchResults();
         return dataSourceAccumulation;
     }

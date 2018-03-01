@@ -19,6 +19,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.BufferingGeosearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
@@ -42,10 +43,12 @@ public class BaulastblattNodesSearchCreateSearchGeometryListener extends NodesSe
      *
      * @param  mc                  DOCUMENT ME!
      * @param  propChangeListener  DOCUMENT ME!
+     * @param  connectionContext   DOCUMENT ME!
      */
     public BaulastblattNodesSearchCreateSearchGeometryListener(final MappingComponent mc,
-            final PropertyChangeListener propChangeListener) {
-        super(mc, propChangeListener);
+            final PropertyChangeListener propChangeListener,
+            final ClientConnectionContext connectionContext) {
+        super(mc, propChangeListener, connectionContext);
     }
 
     //~ Methods ----------------------------------------------------------------

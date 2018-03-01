@@ -40,7 +40,7 @@ import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -52,7 +52,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsClientToolbarItem.class)
 public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel implements CidsClientToolbarItem,
-    ClientConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -71,6 +71,8 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
 
     private final BerechtigungspruefungMessageNotifierListener notifierListener =
         new BerechtigungspruefungToolbarWidget.MessageListener();
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -158,7 +160,7 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                                             SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
-                                            getClientConnectionContext(),
+                                            getConnectionContext(),
                                             BerechtigungspruefungMessageNotifier.getInstance()
                                                 .getAeltesteOffeneAnfrage(),
                                             new ServerActionParameter<String>(
@@ -246,7 +248,7 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                                 + "LIMIT 1;";
 
                     final MetaObject[] mos = SessionManager.getProxy()
-                                .getMetaObjectByQuery(pruefungQuery, 0, getClientConnectionContext());
+                                .getMetaObjectByQuery(pruefungQuery, 0, getConnectionContext());
                     final CidsBean cidsBean = mos[0].getBean();
                     return new MetaObjectNode(cidsBean);
                 }
@@ -306,8 +308,13 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

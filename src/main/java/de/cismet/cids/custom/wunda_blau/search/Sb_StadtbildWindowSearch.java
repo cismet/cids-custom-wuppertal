@@ -76,7 +76,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -101,7 +102,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -121,6 +122,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private MappingComponent mappingComponent;
     private ImageIcon icon;
     private boolean geoSearchEnabled;
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuchwort;
@@ -186,12 +189,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     public Sb_StadtbildWindowSearch() {
         try {
             initComponents();
-            if (ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+            if (ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext())) {
                 // do only if really needed because this is time consuming
                 setModelForComboBoxes();
             }
 
-            final JPanel pnlSearchCancel = new CountSearchResultsSearchControlPanel(this);
+            final JPanel pnlSearchCancel = new CountSearchResultsSearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -1284,7 +1287,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final User user = SessionManager.getSession().getUser();
             final String query = "select " + mc.getID() + "," + mc.getPrimaryKey() + " from " + mc.getTableName();
             final MetaObject[] einschraenkungenMo = SessionManager.getProxy()
-                        .getMetaObjectByQuery(user, query, "WUNDA_BLAU", getClientConnectionContext());
+                        .getMetaObjectByQuery(user, query, "WUNDA_BLAU", getConnectionContext());
             final ArrayList<CidsBean> einschraenkungen = new ArrayList<CidsBean>(einschraenkungenMo.length);
             for (final MetaObject mo : einschraenkungenMo) {
                 einschraenkungen.add(mo.getBean());
@@ -1292,7 +1295,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
             for (final CidsBean einschraenkung : einschraenkungen) {
                 final RestrictionLevel level = Sb_RestrictionLevelUtils
-                            .determineRestrictionLevelForNutzungseinschraenkung(einschraenkung);
+                            .determineRestrictionLevelForNutzungseinschraenkung(
+                                einschraenkung,
+                                getConnectionContext());
                 if (level.isInternalUsageAllowed()) {
                     if (level.isExternalUsageAllowed()) {
                         GREEN_NUTZUNGSEINSCHRAENKUNGEN.add(einschraenkung.getPrimaryKeyValue());
@@ -1591,7 +1596,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      */
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
 
     /**
@@ -1610,8 +1615,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        sb_StadtbilderTimeTabs.setConnectionContext(connectionContext);
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1640,10 +1651,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         /**
          * Creates a new CountSearchResultsSearchControlPanel object.
          *
-         * @param  listener  DOCUMENT ME!
+         * @param  listener           DOCUMENT ME!
+         * @param  connectionContext  DOCUMENT ME!
          */
-        public CountSearchResultsSearchControlPanel(final SearchControlListener listener) {
-            super(listener);
+        public CountSearchResultsSearchControlPanel(final SearchControlListener listener,
+                final ClientConnectionContext connectionContext) {
+            super(listener, connectionContext);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1658,7 +1671,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                     final Collection searchResult = SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),
                                     search,
-                                    getClientConnectionContext());
+                                    getConnectionContext());
                     if (!searchResult.isEmpty()) {
                         final Object firstResult = searchResult.toArray()[0];
                         if (firstResult instanceof Integer) {

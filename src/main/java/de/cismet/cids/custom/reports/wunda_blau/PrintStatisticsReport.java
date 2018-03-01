@@ -21,13 +21,17 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 /**
  * PrintStatisticsReport gets Billing-CidsBean and evaluates them to generate a BillingStatisticsReport.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class PrintStatisticsReport {
+public class PrintStatisticsReport implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -49,6 +53,7 @@ public class PrintStatisticsReport {
     protected final Set<String> amountVUamtlicherLageplanGBs = new HashSet<String>();
     protected final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<String>();
     protected final Set<String> amountVUsonstigeGBs = new HashSet<String>();
+    private final ClientConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -57,10 +62,14 @@ public class PrintStatisticsReport {
      *
      * @param  fromDate_tillDate  DOCUMENT ME!
      * @param  billingsBeans      DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public PrintStatisticsReport(final Date[] fromDate_tillDate, final Collection<CidsBean> billingsBeans) {
+    public PrintStatisticsReport(final Date[] fromDate_tillDate,
+            final Collection<CidsBean> billingsBeans,
+            final ClientConnectionContext connectionContext) {
         this.fromDate_tillDate = fromDate_tillDate;
         this.billingsBeans = billingsBeans;
+        this.connectionContext = connectionContext;
         for (final CidsBean billingBean : billingsBeans) {
             setCountersDependingOnVerwendungszweck(billingBean);
             addProductInformation(billingBean);
@@ -98,7 +107,8 @@ public class PrintStatisticsReport {
 
         final PrintStatisticsReport printStatisticsReport = new PrintStatisticsReport(
                 new Date[] { start, end },
-                list);
+                list,
+                ClientConnectionContext.createDeprecated());
         final BillingStatisticsReport report = printStatisticsReport.createReport();
         final Map params = report.generateParamters();
         DevelopmentTools.showReportForBeans(
@@ -141,7 +151,8 @@ public class PrintStatisticsReport {
                 earningsWithCostsVU,
                 earningsWithCostsWiederver,
                 amountWiederverkaeufe,
-                amountWiederverkaeufeGBs.size());
+                amountWiederverkaeufeGBs.size(),
+                getConnectionContext());
     }
 
     /**
@@ -219,5 +230,10 @@ public class PrintStatisticsReport {
         } else {
             productInformation.put(verwendungszweck, 1);
         }
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

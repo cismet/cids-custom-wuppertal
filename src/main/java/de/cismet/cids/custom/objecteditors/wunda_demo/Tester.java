@@ -43,7 +43,7 @@ import de.cismet.cids.editors.CidsObjectEditorFactory;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
@@ -53,7 +53,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class Tester extends javax.swing.JFrame implements ClientConnectionContextProvider {
+public class Tester extends javax.swing.JFrame implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -76,17 +76,22 @@ public class Tester extends javax.swing.JFrame implements ClientConnectionContex
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
+    private final ClientConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates new form Tester.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @throws  Exception  DOCUMENT ME!
      */
-    public Tester() throws Exception {
+    public Tester(final ClientConnectionContext connectionContext) throws Exception {
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         // rmi registry lokaliseren
 
+        this.connectionContext = connectionContext;
         // ich weiss, dass die server von callserver implementiert werden
 
         rmiRegistry = LocateRegistry.getRegistry(1099);
@@ -121,7 +126,7 @@ public class Tester extends javax.swing.JFrame implements ClientConnectionContex
 
         initComponents();
 
-        final MetaObject mo = meta.getMetaObject(u, 2, AAPERSON_CLASSID, domain, getClientConnectionContext());
+        final MetaObject mo = meta.getMetaObject(u, 2, AAPERSON_CLASSID, domain, getConnectionContext());
         final JComponent c = CidsObjectEditorFactory.getInstance().getEditor(mo);
         getContentPane().add(c, BorderLayout.CENTER);
     }
@@ -152,7 +157,7 @@ public class Tester extends javax.swing.JFrame implements ClientConnectionContex
                 @Override
                 public void run() {
                     try {
-                        new Tester().setVisible(true);
+                        new Tester(ClientConnectionContext.createDeprecated()).setVisible(true);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -161,8 +166,8 @@ public class Tester extends javax.swing.JFrame implements ClientConnectionContex
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

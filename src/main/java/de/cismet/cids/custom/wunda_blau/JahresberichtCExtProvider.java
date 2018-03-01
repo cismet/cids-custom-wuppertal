@@ -28,6 +28,9 @@ import javax.swing.AbstractAction;
 import de.cismet.cids.custom.objectrenderer.utils.BillingRestrictedReportJButton;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+
 import de.cismet.ext.CExtContext;
 import de.cismet.ext.CExtProvider;
 
@@ -37,7 +40,7 @@ import de.cismet.ext.CExtProvider;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CExtProvider.class)
-public class JahresberichtCExtProvider implements CExtProvider<AbstractAction> {
+public class JahresberichtCExtProvider implements CExtProvider<AbstractAction>, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -46,6 +49,7 @@ public class JahresberichtCExtProvider implements CExtProvider<AbstractAction> {
     //~ Instance fields --------------------------------------------------------
 
     private final String ifaceClass;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Constructors -----------------------------------------------------------
 
@@ -59,10 +63,22 @@ public class JahresberichtCExtProvider implements CExtProvider<AbstractAction> {
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
     public Collection<? extends AbstractAction> provideExtensions(final CExtContext context) {
         final List<AbstractAction> actions = new ArrayList<AbstractAction>(1);
 
-        if (ObjectRendererUtils.checkActionTag(BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT)) {
+        if (ObjectRendererUtils.checkActionTag(
+                        BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT,
+                        getConnectionContext())) {
             if (context != null) {
                 final Object ctxReference = context.getProperty(CExtContext.CTX_REFERENCE);
 

@@ -111,6 +111,9 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -135,7 +138,10 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanStore, EditorSaveListener, Disposable {
+public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanStore,
+    EditorSaveListener,
+    Disposable,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -513,6 +519,8 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
     private CidsBean fotoCidsBean;
     private BufferedImage image;
 
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnAddImg;
     JButton btnNextImg;
@@ -531,29 +539,33 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
      * Creates a new WebDavPicturePanel object.
      */
     public WebDavPicturePanel() {
-        this(true, "url", "bilder", "", "", "");
+        this(true, "url", "bilder", "", "", "", null);
     }
 
     /**
      * Creates new form WebDavPicturePanel.
      *
-     * @param  editable       DOCUMENT ME!
-     * @param  urlProp        DOCUMENT ME!
-     * @param  beanCollProp   DOCUMENT ME!
-     * @param  bildClassName  DOCUMENT ME!
-     * @param  numberProp     DOCUMENT ME!
-     * @param  geoFieldProp   DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  urlProp            DOCUMENT ME!
+     * @param  beanCollProp       DOCUMENT ME!
+     * @param  bildClassName      DOCUMENT ME!
+     * @param  numberProp         DOCUMENT ME!
+     * @param  geoFieldProp       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public WebDavPicturePanel(final boolean editable,
             final String urlProp,
             final String beanCollProp,
             final String bildClassName,
             final String numberProp,
-            final String geoFieldProp) {
+            final String geoFieldProp,
+            final ClientConnectionContext connectionContext) {
         this.beanCollProp = beanCollProp;
         this.bildClassName = bildClassName;
         this.numberProp = numberProp;
         this.geoFieldProp = geoFieldProp;
+        this.connectionContext = connectionContext;
+
         String webdavDirectory = null;
         WebDavHelper webdavHelper = null;
         try {
@@ -839,7 +851,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
      * @throws  Exception  DOCUMENT ME!
      */
     private BufferedImage downloadImageFromWebDAV(final String fileName) throws Exception {
-        final InputStream iStream = webdavHelper.getFileFromWebDAV(fileName, webdavDirectory);
+        final InputStream iStream = webdavHelper.getFileFromWebDAV(fileName, webdavDirectory, getConnectionContext());
         try {
             final ImageInputStream iiStream = ImageIO.createImageInputStream(iStream);
             final Iterator<ImageReader> itReader = ImageIO.getImageReaders(iiStream);
@@ -985,7 +997,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
                 try {
                     webdavHelper.deleteFileFromWebDAV(fileName,
-                        fileDir.toString());
+                        fileDir.toString(), getConnectionContext());
                     deleteBean.delete();
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
@@ -1000,7 +1012,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
                 fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
                 webdavHelper.deleteFileFromWebDAV(fileName,
-                    fileDir.toString());
+                    fileDir.toString(), getConnectionContext());
             }
         }
     }
@@ -1097,6 +1109,11 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
         }
     }
 
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1135,10 +1152,12 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 final String fileName = ((number == null)
                         ? "____" : new DecimalFormat("#0000").format(Integer.parseInt(number.toString()))) + "-"
                             + laufendeNummer + "_" + imageFile.getName();
-                webdavHelper.uploadFileToWebDAV(fileName,
+                webdavHelper.uploadFileToWebDAV(
+                    fileName,
                     imageFile,
                     webdavDirectory,
-                    WebDavPicturePanel.this);
+                    WebDavPicturePanel.this,
+                    getConnectionContext());
 
                 final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "url_base");
 
@@ -1163,7 +1182,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
                     urlBaseTmp.setProperty("prot_prefix", protPrefix);
                     urlBaseTmp.setProperty("server", server);
                     urlBaseTmp.setProperty("path", path);
-                    urlBase = urlBaseTmp.persist();
+                    urlBase = urlBaseTmp.persist(getConnectionContext());
                 } else {
                     urlBase = metaObjects[0].getBean();
                 }

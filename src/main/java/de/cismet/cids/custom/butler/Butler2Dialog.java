@@ -65,6 +65,10 @@ import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -85,7 +89,9 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler2Dialog extends javax.swing.JDialog implements DocumentListener, ListSelectionListener {
+public class Butler2Dialog extends javax.swing.JDialog implements DocumentListener,
+    ListSelectionListener,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -121,6 +127,8 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private PredefinedBoxes feldVergleichBox500 = null;
     private PredefinedBoxes feldVergleichBox1000 = null;
     private boolean isEtrsRahmenkarte = false;
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
@@ -156,11 +164,15 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     /**
      * Creates new form Butler2Dialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Butler2Dialog(final java.awt.Frame parent, final boolean modal) {
+    public Butler2Dialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ClientConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
         formatSymbols.setDecimalSeparator('.');
         coordFormatter.setDecimalFormatSymbols(formatSymbols);
@@ -808,7 +820,8 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                                 isEtrsRahmenkarte,
                                 box.getKey(),
                                 middleX,
-                                middleY);
+                                middleY,
+                                getConnectionContext());
                         String productKey = "";
                         if ((format != null) && format.getKey().equals("dxf")) {
                             productKey = DXF_BILLING_KEY;
@@ -819,7 +832,13 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                         final ArrayList<ProductGroupAmount> list = productPanel.getProductGroupAmounts();
                         final ProductGroupAmount[] groupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
                         try {
-                            if (BillingPopup.doBilling(productKey, "butler 2", requestNr, null, groupAmounts)) {
+                            if (BillingPopup.doBilling(
+                                            productKey,
+                                            "butler 2",
+                                            requestNr,
+                                            null,
+                                            getConnectionContext(),
+                                            groupAmounts)) {
                                 downloads.add(download);
                             }
                         } catch (Exception ex) {
@@ -1244,7 +1263,10 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
                 @Override
                 public void run() {
-                    final Butler2Dialog dialog = new Butler2Dialog(new javax.swing.JFrame(), true);
+                    final Butler2Dialog dialog = new Butler2Dialog(
+                            new javax.swing.JFrame(),
+                            true,
+                            ClientConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -1353,6 +1375,11 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             };
 
         worker.execute();
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

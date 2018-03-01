@@ -17,16 +17,13 @@ import Sirius.navigator.exception.ConnectionException;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.util.HashMap;
-import java.util.HashSet;
-
-import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.utils.nas.NasProductInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -39,7 +36,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManager;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class NasStartupHook implements StartupHook, ClientConnectionContextProvider {
+public class NasStartupHook implements StartupHook, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -48,6 +45,8 @@ public class NasStartupHook implements StartupHook, ClientConnectionContextProvi
     //~ Instance fields --------------------------------------------------------
 
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -63,7 +62,7 @@ public class NasStartupHook implements StartupHook, ClientConnectionContextProvi
                                     .getConfigAttr(
                                             SessionManager.getSession().getUser(),
                                             "csa://nasDataQuery",
-                                            getClientConnectionContext()) != null;
+                                            getConnectionContext()) != null;
                     } catch (ConnectionException ex) {
                         log.error("Could not validate action tag for NAS!", ex);
                     }
@@ -78,7 +77,7 @@ public class NasStartupHook implements StartupHook, ClientConnectionContextProvi
                                         .executeTask(
                                                 SEVER_ACTION,
                                                 "WUNDA_BLAU",
-                                                getClientConnectionContext(),
+                                                getConnectionContext(),
                                                 (Object)null,
                                                 paramMethod);
                         } catch (Exception ex) {
@@ -102,7 +101,8 @@ public class NasStartupHook implements StartupHook, ClientConnectionContextProvi
                                     orderId,
                                     pInfo.isIsSplittet(),
                                     pInfo.isDxf(),
-                                    pInfo.getRequestName());
+                                    pInfo.getRequestName(),
+                                    getConnectionContext());
                             DownloadManager.instance().add(download);
                         }
                     }
@@ -111,7 +111,12 @@ public class NasStartupHook implements StartupHook, ClientConnectionContextProvi
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

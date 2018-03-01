@@ -30,7 +30,6 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
 
 /**
@@ -39,8 +38,7 @@ import de.cismet.cids.server.search.AbstractCidsServerSearch;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSaveListener,
-    ClientConnectionContextProvider {
+public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSaveListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -62,10 +60,11 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
     /**
      * Creates a new KkKompensationEditor object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public KkKompensationEditor(final boolean editable) {
-        super(editable);
+    public KkKompensationEditor(final boolean editable, final ClientConnectionContext connectionContext) {
+        super(editable, connectionContext);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -79,7 +78,7 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
                 final List res = (List)SessionManager.getProxy()
                             .customServerSearch(SessionManager.getSession().getUser(),
                                     search,
-                                    getClientConnectionContext());
+                                    getConnectionContext());
 
                 if ((res != null) && (res.size() == 1)) {
                     setVerfahrenBean(((MetaObject)res.get(0)).getBean());
@@ -128,7 +127,7 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
             if (super.prepareForSave()) {
                 final CidsBean verfahrenBean = super.getCidsBean();
                 if (verfahrenBean != null) {
-                    super.setCidsBean(verfahrenBean.persist());
+                    super.setCidsBean(verfahrenBean.persist(getConnectionContext()));
                     return true;
                 }
             }
@@ -150,10 +149,5 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
     public void dispose() {
         setCidsBean(null);
         super.dispose();
-    }
-
-    @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
     }
 }

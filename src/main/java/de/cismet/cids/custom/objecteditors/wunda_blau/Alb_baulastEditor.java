@@ -48,6 +48,9 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -67,7 +70,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    EditorSaveListener {
+    EditorSaveListener,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -96,6 +100,9 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     private final boolean editable;
     private CidsBean cidsBean;
     private final CardLayout cardLayout;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
     private javax.swing.JButton btnBack;
@@ -131,17 +138,23 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      * Creates new form CoolThemaRenderer.
      */
     public Alb_baulastEditor() {
-        this(true);
+        this(true, null);
     }
 
     /**
      * Creates new form CoolThemaRenderer.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastEditor(final boolean editable) {
+    public Alb_baulastEditor(final boolean editable, final ClientConnectionContext connectionContext) {
         this.editable = editable;
-        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable, false);
+        this.connectionContext = connectionContext;
+
+        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(
+                !editable,
+                false,
+                connectionContext);
         alb_picturePanel.getDocTypePanel().setVisible(false);
         this.initComponents();
         initFooterElements();
@@ -154,6 +167,10 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
     /**
      * DOCUMENT ME!
      *
@@ -232,7 +249,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      * DOCUMENT ME!
      */
     private void disableSecondPageIfNoPermission() {
-        if (!ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+        if (!ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext())) {
             for (final MouseListener l : lblForw.getMouseListeners()) {
                 lblForw.removeMouseListener(l);
             }
@@ -289,7 +306,9 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         jPanel4 = alb_picturePanel.getDocTypePanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable);
+        panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(
+                editable,
+                connectionContext);
         alb_picturePanel = alb_picturePanel;
 
         panTitle.setOpaque(false);

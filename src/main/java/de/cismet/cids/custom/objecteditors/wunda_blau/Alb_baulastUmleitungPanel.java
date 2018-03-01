@@ -44,6 +44,9 @@ import javax.swing.event.DocumentListener;
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.netutil.Proxy;
 
 import de.cismet.tools.PasswordEncrypter;
@@ -59,7 +62,8 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.LF
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements DocumentListener {
+public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements DocumentListener,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -131,6 +135,9 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     private boolean firstDocumentChange = true;
     private URL lastCheckedURL;
     private String escapeText;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateDocument;
     private javax.swing.JButton btnPlatzhalter;
@@ -152,16 +159,20 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      * Creates new form Alb_baulastUmleitungPanel.
      */
     public Alb_baulastUmleitungPanel() {
-        this(MODE.TEXTBLATT, null);
+        this(MODE.TEXTBLATT, null, null);
     }
 
     /**
      * Creates a new Alb_baulastUmleitungPanel object.
      *
-     * @param  m             DOCUMENT ME!
-     * @param  picturePanel  DOCUMENT ME!
+     * @param  m                  DOCUMENT ME!
+     * @param  picturePanel       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastUmleitungPanel(final MODE m, final Alb_picturePanel picturePanel) {
+    public Alb_baulastUmleitungPanel(final MODE m,
+            final Alb_picturePanel picturePanel,
+            final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         this.mode = m;
         this.picturePan = picturePanel;
         initComponents();
@@ -172,6 +183,11 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -291,10 +307,10 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                 protected Boolean doInBackground() throws Exception {
                     final String filename = createFilename();
                     final File f = File.createTempFile(filename, ".txt");
-                    return webDavHelper.deleteFileFromWebDAV(
-                            filename
+                    return webDavHelper.deleteFileFromWebDAV(filename
                                     + ".txt",
-                            createDirName());
+                            createDirName(),
+                            getConnectionContext());
                 }
 
                 @Override
@@ -367,12 +383,12 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                     bfw.write(linkDocument, 0, linkDocument.length());
                     bfw.flush();
                     bfw.close();
-                    webDavHelper.uploadFileToWebDAV(
-                        filename
+                    webDavHelper.uploadFileToWebDAV(filename
                                 + ".txt",
                         f,
                         createDirName(),
-                        picturePan);
+                        picturePan,
+                        getConnectionContext());
                     return null;
                 }
 

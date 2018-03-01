@@ -67,6 +67,9 @@ import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -93,7 +96,7 @@ import de.cismet.tools.gui.panels.LayeredAlertPanel;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alb_picturePanel extends javax.swing.JPanel {
+public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -164,11 +167,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private boolean isErrorMessageVisible = true;
     private Alb_baulastUmleitungPanel umleitungsPanel = new Alb_baulastUmleitungPanel(
             Alb_baulastUmleitungPanel.MODE.TEXTBLATT,
-            this);
+            this,
+            getConnectionContext());
     private PictureReaderWorker pictureReaderWorker;
     private boolean umleitungChangedFlag = false;
     private boolean showUmleitung = true;
     private boolean showDocTypePanelEnabled = true;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrpDocs;
     private javax.swing.JButton btnHome;
@@ -231,7 +238,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * Creates new form Alb_picturePanel.
      */
     public Alb_picturePanel() {
-        this(false, true);
+        this(false, true, null);
     }
 
     /**
@@ -239,10 +246,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      *
      * @param  selfPersisting           DOCUMENT ME!
      * @param  showDocTypePanelEnabled  DOCUMENT ME!
+     * @param  connectionContext        DOCUMENT ME!
      */
-    public Alb_picturePanel(final boolean selfPersisting, final boolean showDocTypePanelEnabled) {
+    public Alb_picturePanel(final boolean selfPersisting,
+            final boolean showDocTypePanelEnabled,
+            final ClientConnectionContext connectionContext) {
         this.selfPersisting = selfPersisting;
         this.showDocTypePanelEnabled = showDocTypePanelEnabled;
+        this.connectionContext = connectionContext;
+
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
@@ -299,12 +311,16 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             });
 
         try {
-            final boolean billingAllowed = BillingPopup.isBillingAllowed("bla");
+            final boolean billingAllowed = BillingPopup.isBillingAllowed("bla", getConnectionContext());
 
-            jXHyperlink1.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && billingAllowed);
-            jXHyperlink2.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && billingAllowed);
-            jXHyperlink3.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && billingAllowed);
-            btnOpen.setEnabled(!ObjectRendererUtils.checkActionTag(OPEN_ACTION_TAG));
+            jXHyperlink1.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT, getConnectionContext())
+                        && billingAllowed);
+            jXHyperlink2.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN, getConnectionContext())
+                        && billingAllowed);
+            jXHyperlink3.setEnabled(
+                !ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER, getConnectionContext())
+                        && billingAllowed);
+            btnOpen.setEnabled(!ObjectRendererUtils.checkActionTag(OPEN_ACTION_TAG, getConnectionContext()));
         } catch (final Exception ex) {
             // needed for netbeans gui editor
             log.info("exception while checking action tags", ex);
@@ -312,6 +328,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -1071,7 +1092,10 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void btnPlanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPlanActionPerformed
-        umleitungsPanel = new Alb_baulastUmleitungPanel(Alb_baulastUmleitungPanel.MODE.LAGEPLAN, this);
+        umleitungsPanel = new Alb_baulastUmleitungPanel(
+                Alb_baulastUmleitungPanel.MODE.LAGEPLAN,
+                this,
+                getConnectionContext());
         showUmleitung = true;
         loadPlan();
         checkLinkInTitle();
@@ -1083,7 +1107,10 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void btnTextblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnTextblattActionPerformed
-        umleitungsPanel = new Alb_baulastUmleitungPanel(Alb_baulastUmleitungPanel.MODE.TEXTBLATT, this);
+        umleitungsPanel = new Alb_baulastUmleitungPanel(
+                Alb_baulastUmleitungPanel.MODE.TEXTBLATT,
+                this,
+                getConnectionContext());
         showUmleitung = true;
         loadTextBlatt();
         checkLinkInTitle();
@@ -1438,7 +1465,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
                     @Override
                     protected Void doInBackground() throws Exception {
-                        cidsBean.persist();
+                        cidsBean.persist(getConnectionContext());
                         return null;
                     }
 

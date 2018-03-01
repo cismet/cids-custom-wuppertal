@@ -59,6 +59,9 @@ import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.XBoundingBox;
@@ -82,7 +85,8 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @version  $Revision$, $Date$
  */
 public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -141,6 +145,9 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     private BaulastblattTableModel tableModel;
     private MultiMap featuresMM;
     private final Comparator<Integer> tableComparator;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
     private javax.swing.JComboBox cmbType;
@@ -163,9 +170,20 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new Alb_baulastblattAggregationRenderer object.
+     * Creates a new Alb_baulastAggregationRendererPanel object.
      */
     public Alb_baulastAggregationRendererPanel() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new Alb_baulastblattAggregationRenderer object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Alb_baulastAggregationRendererPanel(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
 
         scpRisse.getViewport().setOpaque(false);
@@ -175,6 +193,11 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -498,14 +521,17 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         tableSorter.setSortKeys(sortKeys);
 
         final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
-        final boolean billingAllowed = BillingPopup.isBillingAllowed("bla");
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && billingAllowed) {
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("bla", getConnectionContext());
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT);
         }
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && billingAllowed) {
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN);
         }
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && billingAllowed) {
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER);
         }
         final boolean enabled = billingAllowed && !items.isEmpty();

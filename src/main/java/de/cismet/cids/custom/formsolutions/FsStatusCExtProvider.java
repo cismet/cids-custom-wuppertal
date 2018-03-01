@@ -29,6 +29,9 @@ import javax.swing.tree.TreeNode;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+
 import de.cismet.cids.utils.interfaces.CidsBeanAction;
 
 import de.cismet.ext.CExtContext;
@@ -40,7 +43,7 @@ import de.cismet.ext.CExtProvider;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CExtProvider.class)
-public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
+public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -49,6 +52,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
     //~ Instance fields --------------------------------------------------------
 
     private final String ifaceClass;
+    private ClientConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -93,7 +97,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
                 final PureTreeNode ptn = (PureTreeNode)ctxObject;
                 final TreeNode parent = ptn.getParent();
                 if ((parent instanceof RootTreeNode) && (ptn.getID() == 281001105)) {
-                    actions.add(new FsReloadBestellungenAction(ptn));
+                    actions.add(new FsReloadBestellungenAction(ptn, getConnectionContext()));
                 }
             } else {
                 final MetaClass mc;
@@ -133,5 +137,15 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
         final String cName = c.getCanonicalName();
 
         return (cName == null) ? false : (ifaceClass.equals(cName));
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -36,7 +36,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
@@ -55,7 +56,7 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     BorderProvider,
     RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Enums ------------------------------------------------------------------
 
@@ -75,6 +76,8 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
 
     private Mode mode;
 
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastAggregationRendererPanel
         alb_baulastAggregationRendererPanel1;
@@ -84,17 +87,28 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alb_baulastAggregationRenderer.
+     * Creates a new Alb_baulastAggregationRenderer object.
      */
     public Alb_baulastAggregationRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form Alb_baulastAggregationRenderer.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Alb_baulastAggregationRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     /**
@@ -105,8 +119,10 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         alb_baulastAggregationRendererPanel1 =
-            new de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastAggregationRendererPanel();
-        alb_baulastblattRenderer1 = new de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastblattRenderer();
+            new de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastAggregationRendererPanel(
+                getConnectionContext());
+        alb_baulastblattRenderer1 = new de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastblattRenderer(
+                getConnectionContext());
 
         setLayout(new java.awt.CardLayout());
         add(alb_baulastAggregationRendererPanel1, "aggr");
@@ -231,7 +247,7 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
                             + " from "
                             + mcBaulastBlatt.getTableName() + " where blattnummer ilike '" + blattnummer + "'"; // NOI18N
                 final MetaObject[] res = SessionManager.getProxy()
-                            .getMetaObjectByQuery(query, 0, getClientConnectionContext());
+                            .getMetaObjectByQuery(query, 0, getConnectionContext());
 
                 if ((res != null) && (res.length > 0)) {
                     final CidsBean cidsBean = res[0].getBean();

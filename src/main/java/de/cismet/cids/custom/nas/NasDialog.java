@@ -67,7 +67,7 @@ import de.cismet.cids.custom.utils.nas.NasProduct;
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 //import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -96,7 +96,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  */
 public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     DocumentListener,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -137,6 +137,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     private int gebaeudeAmount = 0;
     private int flurstueckAmount = 0;
     private ArrayList<NasProduct> nasProducts;
+
+    private final ClientConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
@@ -165,30 +167,32 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new NasDialog object.
-     */
-    public NasDialog() {
-    }
-
-    /**
      * Creates new form NasDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public NasDialog(final java.awt.Frame parent, final boolean modal) {
-        this(parent, modal, null);
+    public NasDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ClientConnectionContext connectionContext) {
+        this(parent, modal, null, connectionContext);
     }
 
     /**
      * Creates a new NasDialog object.
      *
-     * @param  parent            DOCUMENT ME!
-     * @param  modal             DOCUMENT ME!
-     * @param  selectedFeatures  DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  selectedFeatures   DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public NasDialog(final java.awt.Frame parent, final boolean modal, final Collection<Feature> selectedFeatures) {
+    public NasDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final Collection<Feature> selectedFeatures,
+            final ClientConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
         loadNasProducts();
         MAP_BUFFER = Double.parseDouble(NbBundle.getMessage(NasDialog.class, "NasDialog.selectedGeomMapBuffer"));
         geomWrappers = new LinkedList<GeomWrapper>();
@@ -293,7 +297,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            getClientConnectionContext(),
+                            getConnectionContext(),
                             WundaBlauServerResources.NAS_PRODUCT_DESCRIPTION_JSON.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
@@ -328,7 +332,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 actionAttributeString,
-                                getClientConnectionContext())
+                                getConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
@@ -726,6 +730,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                                         "request",
                                         requestId,
                                         null,
+                                        getConnectionContext(),
                                         goupAmounts)) {
                             doDownload(requestId, product);
                         } else {
@@ -760,7 +765,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                             jobname,
                             requestId,
                             product,
-                            generateSearchGeomCollection()));
+                            generateSearchGeomCollection(),
+                            getConnectionContext()));
         } else {
             DownloadManager.instance()
                     .add(
@@ -770,7 +776,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                             "",
                             requestId,
                             product,
-                            generateSearchGeomCollection()));
+                            generateSearchGeomCollection(),
+                            getConnectionContext()));
         }
     }
 
@@ -1232,8 +1239,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

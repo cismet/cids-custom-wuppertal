@@ -38,7 +38,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -46,7 +46,7 @@ import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class JahresberichtDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
+public class JahresberichtDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -57,6 +57,9 @@ public class JahresberichtDialog extends javax.swing.JDialog implements ClientCo
     //~ Instance fields --------------------------------------------------------
 
     private SwingWorker worker;
+
+    private final ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass()
+                    .getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -79,8 +82,9 @@ public class JahresberichtDialog extends javax.swing.JDialog implements ClientCo
     /**
      * Creates new form Jahresbericht.
      */
-    public JahresberichtDialog() {
+    private JahresberichtDialog() {
         super((JFrame)null, false);
+
         initComponents();
     }
 
@@ -391,7 +395,8 @@ public class JahresberichtDialog extends javax.swing.JDialog implements ClientCo
                                 final PrintJahresberichtReport report = new PrintJahresberichtReport(
                                         year,
                                         fromDate_tillDate,
-                                        billings);
+                                        billings,
+                                        getConnectionContext());
                                 report.print();
                             }
                         }
@@ -416,7 +421,7 @@ public class JahresberichtDialog extends javax.swing.JDialog implements ClientCo
     } //GEN-LAST:event_btnOkActionPerformed
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

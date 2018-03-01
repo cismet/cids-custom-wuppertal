@@ -69,7 +69,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
@@ -84,7 +84,7 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class BillingKundeAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
     TitleComponentProvider,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -100,6 +100,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
     //~ Instance fields --------------------------------------------------------
 
+    private final ClientConnectionContext connectionContext;
     private SwingWorker<List<CidsBean>, Integer> worker;
     private Collection<CidsBean> cidsBeans = null;
     private Collection<Object[]> tableData;
@@ -149,16 +150,30 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form BillingKundeAggregationRenderer.
+     * Creates a new BillingKundeAggregationRenderer object.
      */
     public BillingKundeAggregationRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form BillingKundeAggregationRenderer.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public BillingKundeAggregationRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
         setFilterActionInExternalPanels();
         final AggregatedBillingTableModel tableModel = new AggregatedBillingTableModel(new Object[0][],
                 AGR_COMLUMN_NAMES);
         tblCustomers.setModel(tableModel);
 
-        if (!ObjectRendererUtils.checkActionTag(BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT)) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT,
+                        getConnectionContext())) {
             btnRechnungsanlage.setEnabled(false);
             cboHideFreeDownloadsRechnungsanlage.setEnabled(false);
 
@@ -204,9 +219,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         cboHideFreeDownloadsBuchungsbeleg = new javax.swing.JCheckBox();
         cboHideFreeDownloadsRechnungsanlage = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
-        btnRechnungsanlage = new BillingRestrictedReportJButton();
+        btnRechnungsanlage = new BillingRestrictedReportJButton(getConnectionContext());
         btnBuchungsbeleg = new javax.swing.JButton();
-        btnGeschaeftsstatistik = new BillingRestrictedReportJButton();
+        btnGeschaeftsstatistik = new BillingRestrictedReportJButton(getConnectionContext());
         jPanel7 = new javax.swing.JPanel();
         lblFilterResult = new javax.swing.JLabel();
         pnlTable = new javax.swing.JPanel();
@@ -714,7 +729,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                         public void billingDone(final boolean isDone) {
                             filterBuchungen();
                         }
-                    }).print();
+                    },
+                    getConnectionContext()).print();
             }
         }
     } //GEN-LAST:event_btnBuchungsbelegActionPerformed
@@ -776,7 +792,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                         true,
                         this,
                         retrieveShowBillingWithoutCostInReport(evt),
-                        null);
+                        null,
+                        getConnectionContext());
 
                 // refresh the table after the report was successfully created and the billings were marked
                 printBillingReportForCustomer.setDownloadFinishedObserver(printBillingReportForCustomer.new DownloadFinishedObserver() {
@@ -810,7 +827,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                     "BillingKundeAggregationRenderer.btnGeschaeftsstatistikActionPerformed().dialog.title"),
                 JOptionPane.ERROR_MESSAGE);
         } else {
-            new PrintStatisticsReport(fromDate_tillDate, billings).print();
+            new PrintStatisticsReport(fromDate_tillDate, billings, getConnectionContext()).print();
         }
     }                                                                                          //GEN-LAST:event_btnGeschaeftsstatistikActionPerformed
 
@@ -983,7 +1000,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                     final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),
                                     cidsBillingSearchStatement,
-                                    getClientConnectionContext());
+                                    getConnectionContext());
                     publish(mons.size());
 
                     final List<CidsBean> beans;
@@ -1334,8 +1351,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

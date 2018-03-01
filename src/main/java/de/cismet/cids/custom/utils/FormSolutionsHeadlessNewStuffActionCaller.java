@@ -27,7 +27,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuf
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
@@ -37,7 +37,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FormSolutionsHeadlessNewStuffActionCaller implements ClientConnectionContextProvider {
+public class FormSolutionsHeadlessNewStuffActionCaller implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -47,6 +47,11 @@ public class FormSolutionsHeadlessNewStuffActionCaller implements ClientConnecti
         "Sirius.navigator.connection.proxy.DefaultConnectionProxyHandler";
     private static final String CONNECTION_CLASS = "Sirius.navigator.connection.RESTfulConnection";
     private static final String DOMAIN = "WUNDA_BLAU";
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass()
+                    .getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -76,7 +81,7 @@ public class FormSolutionsHeadlessNewStuffActionCaller implements ClientConnecti
                     .executeTask(
                         FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                         DOMAIN,
-                        getClientConnectionContext(),
+                        getConnectionContext(),
                         (Object)null);
         } catch (ConnectionException ex) {
             System.err.println("error executing task");
@@ -120,7 +125,7 @@ public class FormSolutionsHeadlessNewStuffActionCaller implements ClientConnecti
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

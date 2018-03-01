@@ -55,7 +55,8 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -83,7 +84,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -99,6 +100,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFS;
     private javax.swing.JButton btnFromMapFS;
@@ -134,7 +137,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         try {
             mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
             icon = new ImageIcon(mc.getIconData());
-            fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
+            fsSelectionDialoge = new FlurstueckSelectionDialoge(false, getConnectionContext()) {
 
                     @Override
                     public void okHook() {
@@ -169,7 +172,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             new CidsBeanDropTarget(this);
             fsSelectionDialoge.pack();
 //        cmdAbort.setVisible(false);
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -660,7 +663,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "navigator.baulasten.search@WUNDA_BLAU",
-                                getClientConnectionContext())
+                                getConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
@@ -741,7 +744,12 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

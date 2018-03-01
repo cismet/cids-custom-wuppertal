@@ -46,7 +46,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.ALLOWED_USAGE_CONFIG_ATTR;
 
@@ -57,7 +57,7 @@ import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.AL
  * @version  $Revision$, $Date$
  */
 public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterSettingChangedTrigger,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -89,12 +89,24 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     private javax.swing.JPanel pnlVerwendungszweckCheckBoxes;
     // End of variables declaration//GEN-END:variables
 
+    private final ClientConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates new form VerwendungszweckPanel.
      */
     public VerwendungszweckPanel() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new VerwendungszweckPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public VerwendungszweckPanel(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
@@ -114,7 +126,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
         final Set<String> allowedUsages = new LinkedHashSet<String>();
 
         final String rawAllowedUsageLines = SessionManager.getConnection()
-                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR, getClientConnectionContext());
+                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR, getConnectionContext());
         if (rawAllowedUsageLines != null) {
             for (final String rawAllowedUsageLine : rawAllowedUsageLines.split("\n")) {
                 final int indexOfAllowed = rawAllowedUsageLine.indexOf(":");
@@ -289,7 +301,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

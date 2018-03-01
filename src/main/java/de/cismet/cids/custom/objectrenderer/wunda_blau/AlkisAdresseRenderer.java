@@ -44,7 +44,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -65,7 +65,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     BorderProvider,
     TitleComponentProvider,
     FooterComponentProvider,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -76,17 +76,9 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     private Buchungsblatt buchungsblatt;
     private CidsBean cidsBean;
     private String title;
-//    private final ListCellRenderer landparcelListCellRenderer = new DefaultListCellRenderer() {
-//
-//        @Override
-//        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-//            if(value instanceof CidsBean) {
-////                value = value.toString() + " "+;
-//            }
-//            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-//        }
-//
-//    };
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private javax.swing.JLabel jLabel1;
@@ -127,6 +119,17 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
      * Creates new form Alkis_pointRenderer.
      */
     public AlkisAdresseRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new AlkisAdresseRenderer object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public AlkisAdresseRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
         blWait.setVisible(false);
     }
@@ -150,7 +153,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
                     search.setRepresentationFields(new String[] { "id", "strasse", "nummer" });
                     search.setGebaudeId(gebaeudeId);
                     final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                                .customServerSearch(search, getClientConnectionContext());
+                                .customServerSearch(search, getConnectionContext());
                     for (final LightweightMetaObject lwmo : lwmos) {
                         lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -727,7 +730,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

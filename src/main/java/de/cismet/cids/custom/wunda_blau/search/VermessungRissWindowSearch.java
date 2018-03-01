@@ -64,7 +64,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -91,7 +91,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -110,6 +110,9 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private GeoSearchButton btnGeoSearch;
     private VermessungFlurstueckSelectionDialog flurstueckDialog;
     private DefaultListModel flurstuecksvermessungFilterModel = null;
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+
 //    private ImageIcon icoPluginRectangle;
 //    private ImageIcon icoPluginPolygon;
 //    private ImageIcon icoPluginEllipse;
@@ -193,7 +196,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
                 new CidsBeanDropTarget((DropAwareJList)lstFlurstuecke);
 
-                pnlSearchCancel = new SearchControlPanel(this);
+                pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
                 final Dimension max = pnlSearchCancel.getMaximumSize();
                 final Dimension min = pnlSearchCancel.getMinimumSize();
                 final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -232,7 +235,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 flurstuecksvermessungFilterModel = new DefaultListModel();
                 lstFlurstuecke.setModel(flurstuecksvermessungFilterModel);
 
-                flurstueckDialog = new VermessungFlurstueckSelectionDialog(false) {
+                flurstueckDialog = new VermessungFlurstueckSelectionDialog(false, getConnectionContext()) {
 
                         @Override
                         public void okHook() {
@@ -255,7 +258,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                                     .customServerSearch(SessionManager.getSession().getUser(),
                                             new CidsVermessungRissArtSearchStatement(
                                                 SessionManager.getSession().getUser()),
-                                            getClientConnectionContext());
+                                            getConnectionContext());
                     } catch (final ConnectionException ex) {
                         LOG.warn(
                             "Could not fetch veranederungsart entries. Editing flurstuecksvermessung will not work.",
@@ -1118,7 +1121,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
 
     @Override
@@ -1144,8 +1147,13 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

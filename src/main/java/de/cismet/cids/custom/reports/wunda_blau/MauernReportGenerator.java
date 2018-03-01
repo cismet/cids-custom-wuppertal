@@ -21,6 +21,8 @@ import java.util.LinkedList;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
 import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
@@ -41,17 +43,20 @@ public class MauernReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param  cidsBeans  DOCUMENT ME!
-     * @param  parent     DOCUMENT ME!
+     * @param  cidsBeans          DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public static void generateKatasterBlatt(final Collection<CidsBean> cidsBeans, final Component parent) {
+    public static void generateKatasterBlatt(final Collection<CidsBean> cidsBeans,
+            final Component parent,
+            final ClientConnectionContext connectionContext) {
         final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
 
                 @Override
                 public JRDataSource generateDataSource() {
                     final Collection<MauernReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBean(b));
+                        reportBeans.add(new MauernReportBean(b, connectionContext));
                     }
                     boolean ready;
                     do {
@@ -86,17 +91,20 @@ public class MauernReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param  cidsBeans  DOCUMENT ME!
-     * @param  parent     DOCUMENT ME!
+     * @param  cidsBeans          DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public static void generateMainInfo(final Collection<CidsBean> cidsBeans, final Component parent) {
+    public static void generateMainInfo(final Collection<CidsBean> cidsBeans,
+            final Component parent,
+            final ClientConnectionContext connectionContext) {
         final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
 
                 @Override
                 public JRDataSource generateDataSource() {
                     final Collection<MauernReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBean(b));
+                        reportBeans.add(new MauernReportBean(b, connectionContext));
                     }
                     boolean ready;
                     do {

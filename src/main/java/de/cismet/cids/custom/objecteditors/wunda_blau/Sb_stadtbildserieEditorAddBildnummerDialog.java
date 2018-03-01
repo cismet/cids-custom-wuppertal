@@ -37,7 +37,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -48,7 +48,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDialog
-        implements ClientConnectionContextProvider {
+        implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -68,6 +68,8 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         new BildnummerEvaluationDocumentListener();
     private ShowWarning showWarning;
 
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
@@ -86,11 +88,16 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
     /**
      * Creates new form Sb_stadtbildserieEditorAddBildnummerDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_stadtbildserieEditorAddBildnummerDialog(final java.awt.Frame parent, final boolean modal) {
+    public Sb_stadtbildserieEditorAddBildnummerDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ClientConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
+
         initComponents();
         new NextBildNummerFetcherWorker().execute();
     }
@@ -305,7 +312,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
                         .getMetaObjectByQuery(SessionManager.getSession().getUser(),
                             query,
                             DOMAIN,
-                            getClientConnectionContext());
+                            getConnectionContext());
             for (final MetaObject mo : metaObjects) {
                 final CidsBean cb = mo.getBean();
                 stadtBilderBeans.put((String)cb.getProperty("bildnummer"), cb);
@@ -392,7 +399,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
                 @Override
                 public void run() {
                     final Sb_stadtbildserieEditorAddBildnummerDialog dialog =
-                        new Sb_stadtbildserieEditorAddBildnummerDialog(new javax.swing.JFrame(), true);
+                        new Sb_stadtbildserieEditorAddBildnummerDialog(new javax.swing.JFrame(), true, null);
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -449,8 +456,8 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -675,7 +682,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
             final Collection maxBildnummerCollection = SessionManager.getConnection()
                         .customServerSearch(SessionManager.getSession().getUser(),
                             maxBildnummerFetcher,
-                            getClientConnectionContext());
+                            getConnectionContext());
             if ((maxBildnummerCollection != null) && !maxBildnummerCollection.isEmpty()) {
                 final ArrayList firstColumnObject = (ArrayList)maxBildnummerCollection.toArray(new Object[1])[0];
                 final Object firstRowObject = firstColumnObject.get(0);

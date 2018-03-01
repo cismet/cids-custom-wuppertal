@@ -31,7 +31,7 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
@@ -47,11 +47,15 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
 public class PointNumberReservationToolbarComponentProvider implements ToolbarComponentsProvider,
-    ClientConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(PointNumberReservationToolbarComponentProvider.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -68,7 +72,7 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
             final List<ToolbarComponentDescription> preparationList = new LinkedList<ToolbarComponentDescription>();
             final ToolbarComponentDescription description = new ToolbarComponentDescription(
                     "tlbMain",
-                    new PunktNummernButton(),
+                    new PunktNummernButton(getConnectionContext()),
                     ToolbarPositionHint.AFTER,
                     "cmdPrint");
             preparationList.add(description);
@@ -89,7 +93,7 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://pointNumberReservation",
-                                getClientConnectionContext())
+                                getConnectionContext())
                         != null;
         } catch (final Exception ex) {
             LOG.error("Could not validate action tag for PunktnummernReservierung!", ex);
@@ -98,8 +102,13 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -120,8 +129,10 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
 
         /**
          * Creates a new PunktNummernButton object.
+         *
+         * @param  connectionContext  DOCUMENT ME!
          */
-        public PunktNummernButton() {
+        public PunktNummernButton(final ClientConnectionContext connectionContext) {
             super(new AbstractAction() {
 
                     @Override
@@ -133,7 +144,8 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
                                     final PointNumberDialog dialog = new PointNumberDialog(
                                             StaticSwingTools.getParentFrame(
                                                 CismapBroker.getInstance().getMappingComponent()),
-                                            true);
+                                            true,
+                                            connectionContext);
                                     StaticSwingTools.showDialog(dialog);
                                 }
                             });

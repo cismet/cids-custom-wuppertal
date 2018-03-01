@@ -60,7 +60,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -92,7 +92,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -103,6 +103,9 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     private CidsBean cidsBean;
     private String title;
     private final MappingComponent map;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel6;
     private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
@@ -129,9 +132,20 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form FlurstueckRenderer.
+     * Creates a new FlurstueckRenderer object.
      */
     public FlurstueckRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form FlurstueckRenderer.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public FlurstueckRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
@@ -473,7 +487,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 
                 @Override
                 protected MetaObjectNode doInBackground() throws Exception {
-                    return searchAlkisLandparcel(cidsBean, getClientConnectionContext());
+                    return searchAlkisLandparcel(cidsBean, getConnectionContext());
                 }
 
                 @Override
@@ -687,7 +701,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

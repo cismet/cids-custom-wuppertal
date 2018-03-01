@@ -35,7 +35,7 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -43,7 +43,7 @@ import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class StichtagChooserDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
+public class StichtagChooserDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -53,6 +53,8 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Client
     //~ Instance fields --------------------------------------------------------
 
     private Date lastValidDate;
+
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -77,10 +79,12 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Client
     /**
      * Creates new form StichtagChooserDialog2.
      *
-     * @param  parent  DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public StichtagChooserDialog(final java.awt.Frame parent) {
+    public StichtagChooserDialog(final java.awt.Frame parent, final ClientConnectionContext connectionContext) {
         super(parent, true);
+        this.connectionContext = connectionContext;
         initComponents();
         this.setTitle(NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.title"));
         lblIcon.setIcon(UIManager.getIcon("OptionPane.questionIcon"));
@@ -290,7 +294,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Client
                                 .executeTask(
                                         "getDate",
                                         "WUNDA_BLAU",
-                                        getClientConnectionContext(),
+                                        getConnectionContext(),
                                         (Object)null);
                 }
 
@@ -387,7 +391,9 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Client
 
                 @Override
                 public void run() {
-                    final StichtagChooserDialog dialog = new StichtagChooserDialog(new javax.swing.JFrame());
+                    final StichtagChooserDialog dialog = new StichtagChooserDialog(
+                            new javax.swing.JFrame(),
+                            ClientConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -410,7 +416,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Client
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -47,7 +47,6 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import de.cismet.cids.custom.butler.DigitalDataExportToolbarComponentProvider;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.actions.WohnlagenKategorisierungServerAction;
 
@@ -56,7 +55,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.cismap.cidslayer.CidsLayerFeature;
 
@@ -77,42 +76,21 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @ServiceProvider(service = CommonFeatureAction.class)
 public class WohnlagenKategorisierungFeatureAction extends AbstractAction implements CommonFeatureAction,
-    FeaturesProvider {
+    FeaturesProvider,
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             WohnlagenKategorisierungFeatureAction.class);
 
-    private static final boolean IS_ACTIVE;
-    private static final MetaClass META_CLASS;
-
-    static {
-        MetaClass metaClass = null;
-        try {
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE");
-        } catch (final Exception ex) {
-            LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
-        }
-        META_CLASS = metaClass;
-
-        boolean isActive = false;
-        try {
-            isActive = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "csa://"
-                                + WohnlagenKategorisierungServerAction.TASK_NAME,
-                                getClientConnectionContext())
-                        != null;
-        } catch (final Exception ex) {
-            LOG.error("Could not validate action tag (custom.wohnlage.kategorisierung_featureaction)!", ex);
-        }
-        IS_ACTIVE = isActive;
-    }
-
     //~ Instance fields --------------------------------------------------------
 
+    private boolean isActive;
+    private final MetaClass metaClass;
+
     private List<Feature> features = null;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Constructors -----------------------------------------------------------
 
@@ -121,6 +99,27 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
      */
     public WohnlagenKategorisierungFeatureAction() {
         super("Wohnlage kategorisieren");
+
+        MetaClass metaClass = null;
+        try {
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE");
+        } catch (final Exception ex) {
+            LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
+        }
+        this.metaClass = metaClass;
+
+        boolean isActive = false;
+        try {
+            isActive = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://"
+                                + WohnlagenKategorisierungServerAction.TASK_NAME,
+                                getConnectionContext())
+                        != null;
+        } catch (final Exception ex) {
+            LOG.error("Could not validate action tag (custom.wohnlage.kategorisierung_featureaction)!", ex);
+        }
+        this.isActive = isActive;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -137,7 +136,7 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
 
     @Override
     public boolean isActive() {
-        return IS_ACTIVE;
+        return isActive;
     }
 
     @Override
@@ -161,13 +160,14 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
         final WohnlagenKategorisierungDialog dialog = new WohnlagenKategorisierungDialog(
                 frame,
                 cidsLayerFeatures,
-                allSameKategorie ? kategorie : null);
+                allSameKategorie ? kategorie : null,
+                getConnectionContext());
         StaticSwingTools.showDialog(dialog);
     }
 
     @Override
     public boolean isResponsibleFor(final Feature feature) {
-        if ((META_CLASS != null) && (feature instanceof CidsLayerFeature)) {
+        if ((metaClass != null) && (feature instanceof CidsLayerFeature)) {
             final CidsLayerFeature cidsLayerFeature = (CidsLayerFeature)feature;
             return cidsLayerFeature.getLayerProperties().getAttributeTableRuleSet() instanceof WohnlageRuleSet;
         } else {
@@ -192,12 +192,13 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
         return features;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(WohnlagenKategorisierungFeatureAction.class.getSimpleName());
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

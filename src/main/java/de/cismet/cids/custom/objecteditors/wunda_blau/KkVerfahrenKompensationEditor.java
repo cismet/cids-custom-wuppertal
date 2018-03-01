@@ -67,7 +67,7 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
@@ -99,7 +99,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     BorderProvider,
     RequestsFullSizeComponent,
     PropertyChangeListener,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -169,6 +169,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private MappingComponent previewMap;
     private CardLayout tabPaneCardLayout;
     private List<KeyListener> keyListener = new ArrayList<KeyListener>();
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddBioAus;
@@ -246,16 +247,19 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
      * Creates new form KkKompensation.
      */
     public KkVerfahrenKompensationEditor() {
-        this(true);
+        this(true, null);
     }
 
     /**
      * Creates new form KkKompensation.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public KkVerfahrenKompensationEditor(final boolean editable) {
+    public KkVerfahrenKompensationEditor(final boolean editable, final ClientConnectionContext connectionContext) {
         this.editable = editable;
+        this.connectionContext = connectionContext;
+
         initComponents();
         final KeyAdapter ka = new KeyAdapter() {
 
@@ -1622,7 +1626,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                                 final List gemeinde = (List)SessionManager.getProxy()
                                             .customServerSearch(SessionManager.getSession().getUser(),
                                                     gemeindeSearch,
-                                                    getClientConnectionContext());
+                                                    getConnectionContext());
 
                                 if ((gemeinde != null) && (gemeinde.size() > 0)) {
                                     labGem.setText(String.valueOf(gemeinde.get(0)));
@@ -1695,8 +1699,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -83,6 +83,9 @@ import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.Berechti
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -114,7 +117,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -240,6 +244,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private String title;
     private RetrieveBuchungsblaetterWorker retrieveBuchungsblaetterWorker;
     private boolean continueInBackground = false;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private javax.swing.JButton btnBack;
@@ -310,31 +317,21 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
     //~ Constructors -----------------------------------------------------------
 
-// static {
-// final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
-// BACKWARD_SELECTED = new ImageIcon(Object.class.getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
-// BACKWARD_PRESSED = new ImageIcon(Object.class.getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
-//
-// FORWARD_SELECTED = new ImageIcon(Object.class.getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
-// FORWARD_PRESSED = new ImageIcon(Object.class.getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
-// BufferedImage i1 = null, i2 = null, i3 = null, i4 = null;
-// try {
-// i1 = reflectionRenderer.appendReflection(ImageIO.read(Object.class.getResource(ALKIS_RES_PACKAGE + "buchnachweispdf.png")));
-//            i2 = reflectionRenderer.appendReflection(ImageIO.read(Object.class.getResource(ALKIS_RES_PACKAGE + "buchnachweishtml.png")));
-//            i3 = reflectionRenderer.appendReflection(ImageIO.read(Object.class.getResource(ALKIS_RES_PACKAGE + "bucheignachweispdf.png")));
-//            i4 = reflectionRenderer.appendReflection(ImageIO.read(Object.class.getResource(ALKIS_RES_PACKAGE + "bucheignachweishtml.png")));
-//        } catch (Exception ex) {
-//            log.error(ex, ex);
-//        }
-//        BUCH_PDF = new ImageIcon(i1);
-//        BUCH_HTML = new ImageIcon(i2);
-//        BUCH_EIG_PDF = new ImageIcon(i3);
-//        BUCH_EIG_HTML = new ImageIcon(i4);
-//    }
     /**
-     * Creates new form Alkis_pointRenderer.
+     * Creates a new AlkisLandparcelRenderer object.
      */
     public AlkisLandparcelRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form Alkis_pointRenderer.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public AlkisLandparcelRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess();
         buchungsblaetter = TypeSafeCollections.newConcurrentHashMap();
         productPreviewImages = TypeSafeCollections.newHashMap();
@@ -410,43 +407,60 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         }
         panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
 
-        final boolean billingAllowedFsueKom = BillingPopup.isBillingAllowed("fsuekom");
-        final boolean billingAllowedFsueNw = BillingPopup.isBillingAllowed("fsuenw");
-        final boolean billingAllowedFsNw = BillingPopup.isBillingAllowed("fsnw");
-        final boolean billingAllowedBlabBe = BillingPopup.isBillingAllowed("blab_be");
+        final boolean billingAllowedFsueKom = BillingPopup.isBillingAllowed("fsuekom", getConnectionContext());
+        final boolean billingAllowedFsueNw = BillingPopup.isBillingAllowed("fsuenw", getConnectionContext());
+        final boolean billingAllowedFsNw = BillingPopup.isBillingAllowed("fsnw", getConnectionContext());
+        final boolean billingAllowedBlabBe = BillingPopup.isBillingAllowed("blab_be", getConnectionContext());
 
-        hlKarte.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
+        hlKarte.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE, getConnectionContext()));
         hlFlurstuecksnachweisPdf.setEnabled(ObjectRendererUtils.checkActionTag(
                 AlkisUtils.getActionTag(
-                    AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF)) && billingAllowedFsNw);
+                    AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF),
+                getConnectionContext()) && billingAllowedFsNw);
         hlFlurstuecksnachweisHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 AlkisUtils.getActionTag(
-                    AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML)));
+                    AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML),
+                getConnectionContext()));
         hlFlurstuecksEigentumsnachweisKomPdf.setEnabled(ObjectRendererUtils.checkActionTag(
                 AlkisUtils.getActionTag(
-                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF)) && billingAllowedFsueKom);
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF),
+                getConnectionContext()) && billingAllowedFsueKom);
         hlFlurstuecksEigentumsnachweisKomHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 AlkisUtils.getActionTag(
-                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML)));
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML),
+                getConnectionContext()));
         hlFlurstuecksEigentumsnachweisKomInternPdf.setEnabled(ObjectRendererUtils.checkActionTag(
                 AlkisUtils.getActionTag(
-                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF)));
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF),
+                getConnectionContext()));
         hlFlurstuecksEigentumsnachweisKomInternHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 AlkisUtils.getActionTag(
-                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML)));
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML),
+                getConnectionContext()));
         hlFlurstuecksEigentumsnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
                 AlkisUtils.getActionTag(
-                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF)) && billingAllowedFsueNw);
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF),
+                getConnectionContext()) && billingAllowedFsueNw);
         hlFlurstuecksEigentumsnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
                 AlkisUtils.getActionTag(
-                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML)));
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML),
+                getConnectionContext()));
         hlBaulastbescheinigung.setEnabled(
-            ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
-                    && !ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED)
+            ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
+                getConnectionContext())
+                    && !ObjectRendererUtils.checkActionTag(
+                        PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
+                        getConnectionContext())
                     && billingAllowedBlabBe);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -706,8 +720,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * @param  berechtigungspruefung  DOCUMENT ME!
      */
     private void downloadEinzelnachweisProduct(final String product, final boolean berechtigungspruefung) {
-        if (!ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.getActionTag(product))) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product),
+                        getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
@@ -729,8 +743,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                             (berechtigungspruefung
                                 && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
                                 ? downloadInfo : null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", 1))) {
-                AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo);
+                AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo, getConnectionContext());
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -742,7 +757,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * DOCUMENT ME!
      */
     private void downloadKarteProduct() {
-        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE)) {
+        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE, getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
@@ -751,7 +766,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisProductDownloadHelper
                     .createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
-        AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo);
+        AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo, getConnectionContext());
     }
 
     /**
@@ -1535,7 +1550,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void hlKarteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlKarteActionPerformed
         if (!demoMode) {
-            if (ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE)) {
+            if (ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE, getConnectionContext())) {
                 downloadKarteProduct();
             } else {
                 AlkisProductDownloadHelper.showNoProductPermissionWarning(this);

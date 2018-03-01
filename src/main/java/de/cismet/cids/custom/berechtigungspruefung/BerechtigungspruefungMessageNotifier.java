@@ -26,7 +26,7 @@ import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.wunda_blau.search.server.BerechtigungspruefungOffeneAnfragenStatement;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
@@ -38,7 +38,7 @@ import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
  * @version  $Revision$, $Date$
  */
 public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNotifierListener,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -50,6 +50,8 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
     private final Collection<BerechtigungspruefungMessageNotifierListener> listeners =
         new ArrayList<BerechtigungspruefungMessageNotifierListener>();
     private final Collection<String> produkttypeList = new ArrayList<String>();
+    private final ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass()
+                    .getSimpleName());
 
     //~ Constructors -----------------------------------------------------------
 
@@ -61,7 +63,7 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
             final String confAttr = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                             CONFATTR_PRODUKTTYPES,
-                            getClientConnectionContext());
+                            getConnectionContext());
             if (confAttr != null) {
                 final BerechtigungspruefungKonfiguration conf = BerechtigungspruefungKonfiguration.INSTANCE;
                 final Collection<String> existingTypes = new ArrayList<String>(conf.getProdukte().size());
@@ -133,7 +135,7 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
         final List<String> offeneAnfragen = (List<String>)SessionManager.getProxy()
                     .customServerSearch(SessionManager.getSession().getUser(),
                             new BerechtigungspruefungOffeneAnfragenStatement(produkttypeList),
-                            getClientConnectionContext());
+                            getConnectionContext());
         return offeneAnfragen;
     }
 
@@ -191,8 +193,8 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

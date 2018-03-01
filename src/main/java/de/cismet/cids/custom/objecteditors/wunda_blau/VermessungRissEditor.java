@@ -99,7 +99,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -133,7 +133,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -206,6 +206,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private boolean showUmleitung = true;
     private boolean isErrorMessageVisible = true;
     private MeasuringComponent measuringComponent;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
     private javax.swing.ButtonGroup bgrDocument;
@@ -289,16 +292,19 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * Creates a new VermessungRissEditor object.
      */
     public VermessungRissEditor() {
-        this(false);
+        this(false, null);
     }
 
     /**
      * Creates new form VermessungRissEditor.
      *
-     * @param  readOnly  DOCUMENT ME!
+     * @param  readOnly           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public VermessungRissEditor(final boolean readOnly) {
+    public VermessungRissEditor(final boolean readOnly, final ClientConnectionContext connectionContext) {
         this.readOnly = readOnly;
+        this.connectionContext = connectionContext;
+
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
@@ -308,7 +314,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 true);
         umleitungsPanel = new VermessungUmleitungPanel(
                 VermessungUmleitungPanel.MODE.VERMESSUNGSRISS,
-                this);
+                this,
+                getConnectionContext());
         documentButtons[VERMESSUNGSRISS] = togBild;
         documentButtons[GRENZNIEDERSCHRIFT] = togGrenzniederschrift;
         currentSelectedButton = togBild;
@@ -357,7 +364,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 result = SessionManager.getProxy()
                             .customServerSearch(SessionManager.getSession().getUser(),
                                     new CidsVermessungRissArtSearchStatement(SessionManager.getSession().getUser()),
-                                    getClientConnectionContext());
+                                    getConnectionContext());
             } catch (final ConnectionException ex) {
                 LOG.warn("Could not fetch veranederungsart entries. Editing flurstuecksvermessung will not work.", ex);
                 // TODO: USer feedback?
@@ -1486,7 +1493,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  evt  DOCUMENT ME!
      */
     private void togBildActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togBildActionPerformed
-        umleitungsPanel = new VermessungUmleitungPanel(VermessungUmleitungPanel.MODE.VERMESSUNGSRISS, this);
+        umleitungsPanel = new VermessungUmleitungPanel(
+                VermessungUmleitungPanel.MODE.VERMESSUNGSRISS,
+                this,
+                getConnectionContext());
         showUmleitung = true;
         currentSelectedButton = togBild;
         alertPanel.setContent(rissWarnMessage);
@@ -1501,7 +1511,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  evt  DOCUMENT ME!
      */
     private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togGrenzniederschriftActionPerformed
-        umleitungsPanel = new VermessungUmleitungPanel(VermessungUmleitungPanel.MODE.GRENZNIEDERSCHRIFT, this);
+        umleitungsPanel = new VermessungUmleitungPanel(
+                VermessungUmleitungPanel.MODE.GRENZNIEDERSCHRIFT,
+                this,
+                getConnectionContext());
         showUmleitung = true;
         currentSelectedButton = togGrenzniederschrift;
         alertPanel.setContent(grenzNiederschriftWarnMessage);
@@ -1614,7 +1627,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         try {
             final CidsBean geomBean = CidsBeanSupport.createNewCidsBeanFromTableName("geom", properties);
-            geomBean.persist();
+            geomBean.persist(getConnectionContext());
             cidsBean.setProperty("geometrie", geomBean);
         } catch (Exception ex) {
             // TODO: Tell user about error.
@@ -2302,7 +2315,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             result = SessionManager.getProxy()
                         .customServerSearch(SessionManager.getSession().getUser(),
                                 search,
-                                getClientConnectionContext());
+                                getConnectionContext());
         } catch (final ConnectionException ex) {
             LOG.error("Could not check if the natural key of this measurement sketch is valid.", ex);
             JOptionPane.showMessageDialog(
@@ -2648,8 +2661,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

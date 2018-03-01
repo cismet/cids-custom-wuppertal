@@ -32,7 +32,8 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
@@ -46,8 +47,7 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class VirtualCityMapToolbarComponentProvider implements ToolbarComponentsProvider,
-    ClientConnectionContextProvider {
+public class VirtualCityMapToolbarComponentProvider implements ToolbarComponentsProvider, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -57,6 +57,10 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
             VirtualCityMapToolbarComponentProvider.class);
     private static final String HINTSEPARATOR_BEFORE = "<";
     private static final String HINTSEPARATOR_AFTER = ">";
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -99,7 +103,7 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
                 final String result = SessionManager.getConnection()
                             .getConfigAttr(SessionManager.getSession().getUser(),
                                 configAttr,
-                                getClientConnectionContext());
+                                getConnectionContext());
                 if (result != null) {
                     if (result.contains(HINTSEPARATOR_BEFORE)) {
                         final String[] split = result.split(HINTSEPARATOR_BEFORE);
@@ -121,8 +125,13 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

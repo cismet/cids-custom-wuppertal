@@ -51,7 +51,7 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -62,7 +62,7 @@ import de.cismet.tools.collections.TypeSafeCollections;
  * @version  $Revision$, $Date$
  */
 public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -72,6 +72,9 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblBauweise;
     private javax.swing.JLabel lblDescBauweise;
@@ -93,9 +96,20 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alkis_gebaeudeRendererPanel.
+     * Creates a new AlkisGebaeudeRendererPanel object.
      */
     public AlkisGebaeudeRendererPanel() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form Alkis_gebaeudeRendererPanel.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public AlkisGebaeudeRendererPanel(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
     }
 
@@ -381,7 +395,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
                     search.setRepresentationFields(new String[] { "id", "strasse", "nummer" });
                     search.setGebaudeId(gebaeudeId);
                     final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                                .customServerSearch(search, getClientConnectionContext());
+                                .customServerSearch(search, getConnectionContext());
                     for (final LightweightMetaObject lwmo : lwmos) {
                         lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -436,7 +450,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

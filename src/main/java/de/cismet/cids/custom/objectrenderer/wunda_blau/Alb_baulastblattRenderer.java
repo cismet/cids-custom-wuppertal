@@ -13,6 +13,8 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastblattEditor;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 /**
@@ -33,7 +35,16 @@ public class Alb_baulastblattRenderer extends Alb_baulastblattEditor implements 
      * Creates a new Alb_baulastblattRenderer object.
      */
     public Alb_baulastblattRenderer() {
-        super(false);
+        this(null);
+    }
+
+    /**
+     * Creates a new Alb_baulastblattRenderer object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Alb_baulastblattRenderer(final ClientConnectionContext connectionContext) {
+        super(false, connectionContext);
         this.title = "";
     }
 

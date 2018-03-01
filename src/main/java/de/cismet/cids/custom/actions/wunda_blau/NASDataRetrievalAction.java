@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
 import de.cismet.cids.custom.nas.NasDialog;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.cismap.commons.features.CommonFeatureAction;
 import de.cismet.cismap.commons.features.Feature;
@@ -41,7 +41,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @ServiceProvider(service = CommonFeatureAction.class)
 public class NASDataRetrievalAction extends AbstractAction implements CommonFeatureAction,
-    ClientConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -52,6 +52,8 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
     Feature f = null;
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private boolean hasNasAccess = false;
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Constructors -----------------------------------------------------------
 
@@ -64,7 +66,7 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
             hasNasAccess = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://nasDataQuery",
-                                getClientConnectionContext())
+                                getConnectionContext())
                         != null;
         } catch (Exception ex) {
             log.error("Could not validate nas action tag (csa://nasDataQuery)!", ex);
@@ -131,14 +133,20 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
                             StaticSwingTools.getParentFrame(
                                 CismapBroker.getInstance().getMappingComponent()),
                             false,
-                            featureToSelect);
+                            featureToSelect,
+                            getConnectionContext());
                     StaticSwingTools.showDialog(dialog);
                 }
             });
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

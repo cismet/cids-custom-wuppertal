@@ -58,7 +58,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -89,7 +89,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -124,6 +124,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private String title;
     private CidsBean cidsBean;
     private MetaObjectNode flurstueckMon;
+
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdAttachBilling;
@@ -206,9 +208,20 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Fs_BestellungRenderer.
+     * Creates a new Fs_bestellungRenderer object.
      */
     public Fs_bestellungRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form Fs_BestellungRenderer.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Fs_bestellungRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         initComponents();
@@ -1426,7 +1439,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                                     + title,
                             path,
                             pureName,
-                            ext);
+                            ext,
+                            getConnectionContext());
                     DownloadManager.instance().add(download);
                 }
             } catch (final Exception ex) {
@@ -1473,7 +1487,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      * @param  evt  DOCUMENT ME!
      */
     private void cmdReloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdReloadActionPerformed
-        StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean));
+        StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean, getConnectionContext()));
     }                                                                             //GEN-LAST:event_cmdReloadActionPerformed
 
     /**
@@ -1496,7 +1510,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      * @param  evt  DOCUMENT ME!
      */
     private void cmdAttachBillingActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAttachBillingActionPerformed
-        StaticSwingTools.showDialog(new FSAttachBillingForProduktDialog(cidsBean));
+        StaticSwingTools.showDialog(new FSAttachBillingForProduktDialog(cidsBean, getConnectionContext()));
     }                                                                                    //GEN-LAST:event_cmdAttachBillingActionPerformed
 
     /**
@@ -1526,7 +1540,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                                     + title,
                             path,
                             fileName,
-                            ".pdf");
+                            ".pdf",
+                            getConnectionContext());
                     DownloadManager.instance().add(download);
                 }
             } catch (final Exception ex) {
@@ -1632,7 +1647,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                     .customServerSearch(SessionManager.getSession().getUser(),
                                         search,
-                                        getClientConnectionContext());
+                                        getConnectionContext());
                         if (!mons.isEmpty()) {
                             return mons.iterator().next();
                         } else {
@@ -1711,8 +1726,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

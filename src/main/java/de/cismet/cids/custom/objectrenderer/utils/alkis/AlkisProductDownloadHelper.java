@@ -65,10 +65,12 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param  downloadInfo  DOCUMENT ME!
+     * @param  downloadInfo       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public static void downloadBuchungsblattnachweisStichtagProduct(
-            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo) {
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo,
+            final ClientConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
         final String actionTag = AlkisUtils.getActionTag(product);
@@ -83,7 +85,8 @@ public class AlkisProductDownloadHelper {
                     product,
                     actionTag,
                     buchungsblattCode,
-                    parent);
+                    parent,
+                    connectionContext);
             downloads.add(d);
         }
 
@@ -102,16 +105,18 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param  downloadInfo  DOCUMENT ME!
+     * @param  downloadInfo       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public static void downloadBuchungsblattnachweisProduct(
-            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo) {
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo,
+            final ClientConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
         final String actionTag = AlkisUtils.getActionTag(product);
         final String downloadTitle = AlkisUtils.getProductName(product);
 
-        if (!ObjectRendererUtils.checkActionTag(actionTag)) {
+        if (!ObjectRendererUtils.checkActionTag(actionTag, connectionContext)) {
             showNoProductPermissionWarning(parent);
             // return;
         }
@@ -229,6 +234,7 @@ public class AlkisProductDownloadHelper {
      * @param   actionTag                  DOCUMENT ME!
      * @param   completeBuchungsblattCode  DOCUMENT ME!
      * @param   parent                     DOCUMENT ME!
+     * @param   connectionContext          DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
@@ -237,9 +243,10 @@ public class AlkisProductDownloadHelper {
             final String product,
             final String actionTag,
             final String completeBuchungsblattCode,
-            final Component parent) {
+            final Component parent,
+            final ClientConnectionContext connectionContext) {
         CredentialsAwareHttpDownlaod download = null;
-        if (!ObjectRendererUtils.checkActionTag(actionTag)) {
+        if (!ObjectRendererUtils.checkActionTag(actionTag, connectionContext)) {
             showNoProductPermissionWarning(parent);
             return null;
         }
@@ -318,16 +325,18 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param  downloadInfo  DOCUMENT ME!
+     * @param  downloadInfo       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public static void downloadEinzelnachweisProduct(
-            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo) {
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo,
+            final ClientConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
         final String actionTag = AlkisUtils.getActionTag(product);
         final String downloadTitle = AlkisUtils.getProductName(product);
 
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product))) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product), connectionContext)) {
             showNoProductPermissionWarning(parent);
             return;
         }
@@ -398,13 +407,15 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param  downloadInfo  downloadTitle DOCUMENT ME!
+     * @param  downloadInfo       downloadTitle DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public static void downloadKarteProduct(final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo) {
+    public static void downloadKarteProduct(final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo,
+            final ClientConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String downloadTitle = "Karte";
 
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE)) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE, connectionContext)) {
             showNoProductPermissionWarning(parent);
             return;
         }
@@ -446,14 +457,17 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param   schluessel    DOCUMENT ME!
-     * @param   produkttyp    DOCUMENT ME!
-     * @param   downloadInfo  DOCUMENT ME!
+     * @param   schluessel         DOCUMENT ME!
+     * @param   produkttyp         DOCUMENT ME!
+     * @param   downloadInfo       DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static void download(final String schluessel, final String produkttyp, final String downloadInfo)
-            throws Exception {
+    public static void download(final String schluessel,
+            final String produkttyp,
+            final String downloadInfo,
+            final ClientConnectionContext connectionContext) throws Exception {
         if (BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
             final BerechtigungspruefungBescheinigungDownloadInfo bescheinigungDownloadInfo =
                 new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungBescheinigungDownloadInfo.class);
@@ -469,17 +483,19 @@ public class AlkisProductDownloadHelper {
                             BerechtigungspruefungAlkisEinzelnachweisDownloadInfo.class);
                     switch (einzelnachweisDownloadInfo.getAlkisObjectTyp()) {
                         case FLURSTUECKE: {
-                            AlkisProductDownloadHelper.downloadEinzelnachweisProduct(einzelnachweisDownloadInfo);
+                            downloadEinzelnachweisProduct(einzelnachweisDownloadInfo, connectionContext);
                         }
                         break;
                         case BUCHUNGSBLAETTER: {
                             if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(
                                             einzelnachweisDownloadInfo.getAlkisProdukt())) {
-                                AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(
-                                    einzelnachweisDownloadInfo);
+                                downloadBuchungsblattnachweisStichtagProduct(
+                                    einzelnachweisDownloadInfo,
+                                    connectionContext);
                             } else {
-                                AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(
-                                    einzelnachweisDownloadInfo);
+                                downloadBuchungsblattnachweisProduct(
+                                    einzelnachweisDownloadInfo,
+                                    connectionContext);
                             }
                         }
                         break;
@@ -491,7 +507,7 @@ public class AlkisProductDownloadHelper {
                         new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungAlkisKarteDownloadInfo.class);
                     switch (karteDownloadInfo.getAlkisObjectTyp()) {
                         case FLURSTUECKE: {
-                            AlkisProductDownloadHelper.downloadKarteProduct(karteDownloadInfo);
+                            downloadKarteProduct(karteDownloadInfo, connectionContext);
                         }
                         break;
                     }

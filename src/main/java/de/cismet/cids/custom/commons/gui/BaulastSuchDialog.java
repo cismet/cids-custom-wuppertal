@@ -20,6 +20,9 @@ import javax.swing.SwingWorker;
 import de.cismet.cids.custom.commons.searchgeometrylistener.BaulastblattNodesSearchCreateSearchGeometryListener;
 import de.cismet.cids.custom.wunda_blau.search.BaulastWindowSearch;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 /**
@@ -28,7 +31,7 @@ import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class BaulastSuchDialog extends javax.swing.JDialog {
+public class BaulastSuchDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -36,6 +39,7 @@ public class BaulastSuchDialog extends javax.swing.JDialog {
     private de.cismet.cids.custom.wunda_blau.search.BaulastWindowSearch baulastWindowSearch1;
     // End of variables declaration//GEN-END:variables
 
+    private final ClientConnectionContext connectionContext;
     private BaulastWindowSearch blSearch = new de.cismet.cids.custom.wunda_blau.search.BaulastWindowSearch() {
 
             @Override
@@ -65,7 +69,8 @@ public class BaulastSuchDialog extends javax.swing.JDialog {
                                         ComponentRegistry.getRegistry().getSearchResultsTree().setSelectionRow(0);
                                     }
                                 }
-                            });
+                            },
+                            getConnectionContext());
                     }
                 }
             }
@@ -76,11 +81,15 @@ public class BaulastSuchDialog extends javax.swing.JDialog {
     /**
      * Creates new form NewJDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public BaulastSuchDialog(final java.awt.Frame parent, final boolean modal) {
+    public BaulastSuchDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ClientConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
@@ -156,7 +165,8 @@ public class BaulastSuchDialog extends javax.swing.JDialog {
                 public void run() {
                     final BaulastSuchDialog dialog = new BaulastSuchDialog(
                             new javax.swing.JFrame(),
-                            true);
+                            true,
+                            ClientConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -167,5 +177,10 @@ public class BaulastSuchDialog extends javax.swing.JDialog {
                     dialog.setVisible(true);
                 }
             });
+    }
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

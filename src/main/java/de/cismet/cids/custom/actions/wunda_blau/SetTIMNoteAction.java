@@ -52,7 +52,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.cids.utils.MetaClassCacheService;
 
@@ -74,7 +74,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CommonFeatureAction.class)
-public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAction, ClientConnectionContextProvider {
+public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAction, ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -85,6 +85,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
     private Feature feature;
     private boolean isCurrentUserAllowedToSetHint;
     private MetaClass timLiegMetaClass;
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Constructors -----------------------------------------------------------
 
@@ -156,7 +158,7 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
             geometry.setProperty("geo_field", feature.getGeometry());
             hint.setProperty("georeferenz", geometry);
 
-            persistedHint = hint.persist();
+            persistedHint = hint.persist(getConnectionContext());
         } catch (Exception ex) {
             LOG.error("Could not persist new entity for table 'tim_lieg'.", ex);
             JOptionPane.showMessageDialog(
@@ -197,7 +199,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
 
         RootTreeNode rootTreeNode = null;
         try {
-            rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(getClientConnectionContext()));
+            rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(getConnectionContext()),
+                    getConnectionContext());
         } catch (ConnectionException ex) {
             LOG.error("Updating catalogue tree after successful insertion of 'tim_lieg' entity failed.", ex);
             return;
@@ -251,7 +254,12 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

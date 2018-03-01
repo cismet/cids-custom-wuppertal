@@ -13,6 +13,8 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -26,16 +28,18 @@ public class MauernReportBean extends ReportBeanWithMapAndImages {
     /**
      * Creates a new MauernReportBean object.
      *
-     * @param  mauer  DOCUMENT ME!
+     * @param  mauer              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public MauernReportBean(final CidsBean mauer) {
+    public MauernReportBean(final CidsBean mauer, final ClientConnectionContext connectionContext) {
         super(
             mauer,
             "georeferenz.geo_field",
             "bilder",
             "url",
             java.util.ResourceBundle.getBundle(
-                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"));
+                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"),
+            connectionContext);
     }
 
     //~ Methods ----------------------------------------------------------------

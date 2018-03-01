@@ -67,7 +67,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSe
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -84,7 +84,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class PointNumberDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
+public class PointNumberDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -117,6 +117,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
 
     private String protokollAnrPrefix = null;
     private String protokollAnr = null;
+
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeSelectAll;
@@ -182,11 +184,16 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
     /**
      * Creates new form PointNumberDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public PointNumberDialog(final java.awt.Frame parent, final boolean modal) {
+    public PointNumberDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ClientConnectionContext connectionContext) {
         super(parent, modal);
+
+        this.connectionContext = connectionContext;
 
         vnrComperator = new Comparator<VermessungsStellenSearchResult>() {
 
@@ -328,7 +335,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
         hasFreigabeAccess = SessionManager.getConnection()
                     .getConfigAttr(SessionManager.getSession().getUser(),
                             "custom.nas.punktNummernFreigabe",
-                            getClientConnectionContext())
+                            getConnectionContext())
                     != null;
         if (!hasFreigabeAccess) {
             tbpModus.remove(pnlFreigeben);
@@ -345,7 +352,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
         hasVerlaengernAccess = SessionManager.getConnection()
                     .getConfigAttr(SessionManager.getSession().getUser(),
                             "custom.nas.punktNummernVerlaengern",
-                            getClientConnectionContext())
+                            getConnectionContext())
                     != null;
         if (!hasVerlaengernAccess) {
             tbpModus.remove(pnlVerlaengern);
@@ -538,8 +545,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
         pnlLeft = new javax.swing.JPanel();
         lblAntragsnummer = new javax.swing.JLabel();
         tbpModus = new javax.swing.JTabbedPane();
-        pnlReservieren = new PointNumberReservationPanel(this);
-        pnlErgaenzen = new PointNumberReservationPanel(this);
+        pnlReservieren = new PointNumberReservationPanel(this, getConnectionContext());
+        pnlErgaenzen = new PointNumberReservationPanel(this, getConnectionContext());
         pnlFreigeben = new javax.swing.JPanel();
         pnlWait = new javax.swing.JPanel();
         jxFreigebenWaitLabel = new org.jdesktop.swingx.JXBusyLabel();
@@ -1372,7 +1379,10 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
 
                 @Override
                 public void run() {
-                    final PointNumberDialog dialog = new PointNumberDialog(new javax.swing.JFrame(), true);
+                    final PointNumberDialog dialog = new PointNumberDialog(
+                            new javax.swing.JFrame(),
+                            true,
+                            ClientConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -1517,15 +1527,15 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
                     .executeTask(
                             SEVER_ACTION,
                             "WUNDA_BLAU",
-                            getClientConnectionContext(),
+                            getConnectionContext(),
                             (Object)null,
                             action,
                             prefix);
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1628,7 +1638,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
                             .executeTask(
                                     SEVER_ACTION,
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext(),
+                                    getConnectionContext(),
                                     (Object)null,
                                     action,
                                     prefix,
@@ -1749,7 +1759,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
             final Collection res = SessionManager.getProxy()
                         .customServerSearch(SessionManager.getSession().getUser(),
                             search,
-                            getClientConnectionContext());
+                            getConnectionContext());
             if ((res == null) || res.isEmpty()) {
             }
             return res;
@@ -1846,7 +1856,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
                             .executeTask(
                                     SEVER_ACTION,
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext(),
+                                    getConnectionContext(),
                                     (Object)null,
                                     action,
                                     prefix,
@@ -2011,7 +2021,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements ClientConn
                         .executeTask(
                                 SEVER_ACTION,
                                 "WUNDA_BLAU",
-                                getClientConnectionContext(),
+                                getConnectionContext(),
                                 (Object)null,
                                 allSaps.toArray(new ServerActionParameter[0]));
             if ((result != null) && !result.isSuccessfull()) {

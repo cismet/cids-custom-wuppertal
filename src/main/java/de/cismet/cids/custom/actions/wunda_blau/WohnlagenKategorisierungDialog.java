@@ -53,7 +53,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.cidslayer.CidsLayerFeature;
 
@@ -65,7 +65,7 @@ import de.cismet.cismap.commons.featureservice.AbstractFeatureService;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implements ClientConnectionContextProvider {
+public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -97,6 +97,8 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
     private final Map<ButtonModel, CidsBean> buttonToBeanMap = new HashMap<ButtonModel, CidsBean>();
 
     private final Collection<CidsLayerFeature> cidsLayerFeatures;
+
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
@@ -133,12 +135,15 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
      * @param  parent             DOCUMENT ME!
      * @param  cidsLayerFeatures  DOCUMENT ME!
      * @param  kategorieToSelect  DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public WohnlagenKategorisierungDialog(final java.awt.Frame parent,
             final Collection<CidsLayerFeature> cidsLayerFeatures,
-            final CidsBean kategorieToSelect) {
+            final CidsBean kategorieToSelect,
+            final ClientConnectionContext connectionContext) {
         super(parent, true);
         this.cidsLayerFeatures = cidsLayerFeatures;
+        this.connectionContext = connectionContext;
 
         initComponents();
 
@@ -640,7 +645,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
                                 .executeTask(
                                     WohnlagenKategorisierungServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    getClientConnectionContext(),
+                                    getConnectionContext(),
                                     (Object)null,
                                     new ServerActionParameter<MetaObjectNode>(
                                         WohnlagenKategorisierungServerAction.ParameterType.KATEGORIE.toString(),
@@ -723,7 +728,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

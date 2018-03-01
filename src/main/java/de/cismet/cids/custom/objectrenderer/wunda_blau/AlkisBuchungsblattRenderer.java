@@ -105,7 +105,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -139,7 +139,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     TitleComponentProvider,
     FooterComponentProvider,
     RequestsFullSizeComponent,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -187,6 +187,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private final boolean demoMode = StaticDebuggingTools.checkHomeForFile("demoMode");
     private Collection<CidsBean> selectedFlurstuecke;
     private boolean eigentuemerPermission;
+
+    private final ClientConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private org.jdesktop.swingx.JXBusyLabel blWaitingLandparcel;
@@ -263,9 +265,20 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alkis_pointRenderer.
+     * Creates a new AlkisBuchungsblattRenderer object.
      */
     public AlkisBuchungsblattRenderer() {
+        this(ClientConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form Alkis_pointRenderer.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public AlkisBuchungsblattRenderer(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess() && !demoMode;
         map = new MappingComponent();
         map.setOpaque(false);
@@ -317,36 +330,46 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         panProdukteHTML.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
 
-        final boolean billingAllowedBeNw = BillingPopup.isBillingAllowed("benw");
-        final boolean billingAllowedBeKom = BillingPopup.isBillingAllowed("bekom");
-        final boolean billingAllowedGrNw = BillingPopup.isBillingAllowed("grnw");
+        final boolean billingAllowedBeNw = BillingPopup.isBillingAllowed("benw", getConnectionContext());
+        final boolean billingAllowedBeKom = BillingPopup.isBillingAllowed("bekom", getConnectionContext());
+        final boolean billingAllowedGrNw = BillingPopup.isBillingAllowed("grnw", getConnectionContext());
 
         hlBestandsnachweisKomPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && billingAllowedBeKom);
+                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
+                getConnectionContext()) && billingAllowedBeKom);
         hlBestandsnachweisKomHtml.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM));
+                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
+                getConnectionContext()));
         hlBestandsnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW) && billingAllowedBeNw);
+                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
+                getConnectionContext()) && billingAllowedBeNw);
         hlBestandsnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW));
+                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
+                getConnectionContext()));
         hlBestandsnachweisKomInternPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
+                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
+                getConnectionContext()));
         hlBestandsnachweisKomInternHtml.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
+                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
+                getConnectionContext()));
         hlGrundstuecksnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW)
+                AlkisUtils.PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW,
+                getConnectionContext())
                     && billingAllowedGrNw);
         hlGrundstuecksnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW));
+                AlkisUtils.PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW,
+                getConnectionContext()));
 
-        final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be");
+        final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be", getConnectionContext());
         if (!billingAllowedBlab_be) {
             hlBaulastBescheinigung.setText("Baulastbescheinigung");
         }
         hlBaulastBescheinigung.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
+                AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
+                getConnectionContext())
                     && !ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED)
+                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
+                        getConnectionContext())
                     && billingAllowedBlab_be);
 
         panEigentuemer.setVisible(eigentuemerPermission);
@@ -1257,7 +1280,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private void downloadProduct(final String product, final boolean berechtigungspruefung) {
         final String actionTag = AlkisUtils.getActionTag(product);
 
-        if (!ObjectRendererUtils.checkActionTag(actionTag)) {
+        if (!ObjectRendererUtils.checkActionTag(actionTag, getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
@@ -1288,8 +1311,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                             (berechtigungspruefung
                                 && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
                                 ? downloadInfo : null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", 1))) {
-                AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(downloadInfo);
+                AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(
+                    downloadInfo,
+                    getConnectionContext());
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -1544,13 +1570,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     private void downloadEinzelnachweisStichtagProduct(final boolean berechtigungspruefung) {
         final String product = AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF;
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product))) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product), getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
 
         final StichtagChooserDialog stichtagDialog = new StichtagChooserDialog(ComponentRegistry.getRegistry()
-                        .getMainWindow());
+                        .getMainWindow(),
+                getConnectionContext());
         StaticSwingTools.showDialog(stichtagDialog);
         final Date stichtag = stichtagDialog.getDate();
 
@@ -1572,8 +1599,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                                 (berechtigungspruefung
                                     && AlkisProductDownloadHelper.checkBerechtigungspruefung(
                                         downloadInfo.getProduktTyp())) ? downloadInfo : null,
+                                getConnectionContext(),
                                 new ProductGroupAmount("ea", 1))) {
-                    AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(downloadInfo);
+                    AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(
+                        downloadInfo,
+                        getConnectionContext());
                 }
             }
         } catch (Exception e) {
@@ -1709,7 +1739,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         if (cb != null) {
             cidsBean = cb;
 
-            final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be");
+            final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be", getConnectionContext());
             if (billingAllowedBlab_be) {
                 new SwingWorker<Collection<CidsBean>, Void>() {
 
@@ -1730,14 +1760,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                                     final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                                 .customServerSearch(SessionManager.getSession().getUser(),
                                                     search,
-                                                    getClientConnectionContext());
+                                                    getConnectionContext());
                                     if (!mons.isEmpty()) {
                                         final MetaObjectNode mon = mons.iterator().next();
                                         final CidsBean flurstueck = SessionManager.getProxy()
                                                     .getMetaObject(mon.getObjectId(),
                                                             mon.getClassId(),
                                                             "WUNDA_BLAU",
-                                                            getClientConnectionContext())
+                                                            getConnectionContext())
                                                     .getBean();
                                         selectedFlurstuecke.add(flurstueck);
                                     }
@@ -2047,8 +2077,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

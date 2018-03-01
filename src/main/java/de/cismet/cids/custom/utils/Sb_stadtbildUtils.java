@@ -379,15 +379,17 @@ public class Sb_stadtbildUtils {
      * cache. If this is the case the cached image is returned. If not the image corresponding to the number is
      * downloaded. In that case a Future&lt;Image&gt; is returned.
      *
-     * @param   statdbildserie  DOCUMENT ME!
-     * @param   bildnummer      DOCUMENT ME!
-     * @param   priority        DOCUMENT ME!
+     * @param   statdbildserie     DOCUMENT ME!
+     * @param   bildnummer         DOCUMENT ME!
+     * @param   priority           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static Object fetchImageForBildnummer(final CidsBean statdbildserie,
             final String bildnummer,
-            final int priority) {
+            final int priority,
+            final ClientConnectionContext connectionContext) {
         if (isBildnummerInCacheOrFailed(bildnummer)) {
             final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
             if (cachedImageRef != null) {
@@ -399,7 +401,8 @@ public class Sb_stadtbildUtils {
         }
         final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(
                     statdbildserie,
-                    bildnummer),
+                    bildnummer,
+                    connectionContext),
                 priority);
         return futureImage;
     }
@@ -445,14 +448,17 @@ public class Sb_stadtbildUtils {
     /**
      * Checks if the Stadtbilder are in the cache. If not they will be downloaded. Returns immediately.
      *
-     * @param  stadtbildserie  DOCUMENT ME!
-     * @param  stadtbilder     DOCUMENT ME!
+     * @param  stadtbildserie     DOCUMENT ME!
+     * @param  stadtbilder        DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie, final List<CidsBean> stadtbilder) {
+    public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie,
+            final List<CidsBean> stadtbilder,
+            final ClientConnectionContext connectionContext) {
         for (int i = 0; (i < CACHE_SIZE) && (i < stadtbilder.size()); i++) {
             final String bildnummer = (String)stadtbilder.get(i).getProperty("bildnummer");
             try {
-                fetchImageForBildnummer(stadtbildserie, bildnummer, NORMAL_PRIORITY);
+                fetchImageForBildnummer(stadtbildserie, bildnummer, NORMAL_PRIORITY, connectionContext);
             } catch (Exception ex) {
                 LOG.error("Problem while loading image " + bildnummer);
             }
@@ -613,28 +619,35 @@ public class Sb_stadtbildUtils {
 
         //~ Instance fields ----------------------------------------------------
 
-        CidsBean stadtbildserie;
-        String bildnummer;
+        final CidsBean stadtbildserie;
+        final String bildnummer;
+        final ClientConnectionContext connectionContext;
 
         //~ Constructors -------------------------------------------------------
 
         /**
          * Creates a new PriorityCallable object.
          *
-         * @param  stadtbildserie  DOCUMENT ME!
-         * @param  bildnummer      DOCUMENT ME!
+         * @param  stadtbildserie     DOCUMENT ME!
+         * @param  bildnummer         DOCUMENT ME!
+         * @param  connectionContext  DOCUMENT ME!
          */
-        public FetchImagePriorityCallable(final CidsBean stadtbildserie, final String bildnummer) {
+        public FetchImagePriorityCallable(final CidsBean stadtbildserie,
+                final String bildnummer,
+                final ClientConnectionContext connectionContext) {
             this.stadtbildserie = stadtbildserie;
             this.bildnummer = bildnummer;
+            this.connectionContext = connectionContext;
         }
 
         //~ Methods ------------------------------------------------------------
 
         @Override
         public Image call() throws Exception {
-            if (!Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie)
-                        .isPreviewAllowed()) {
+            if (
+                !Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
+                            stadtbildserie,
+                            connectionContext).isPreviewAllowed()) {
                 FAILED_IMAGES.put(bildnummer, "The user is not allowed to see the image "
                             + bildnummer);
                 return null;

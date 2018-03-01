@@ -67,6 +67,9 @@ import de.cismet.cids.editors.EditorBeanInitializerStore;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
@@ -88,7 +91,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    EditorSaveListener {
+    EditorSaveListener,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -159,6 +163,9 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 //    private Collection<CidsBean> baulastenBeansToDelete = new ArrayList<CidsBean>();
     private PropertyChangeListener strongReferenceToWeakListener = null;
     private boolean wrongBlattnummer = false;
+
+    private final ClientConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
     private javax.swing.JButton btnAddLaufendeNummer;
@@ -216,17 +223,32 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      * Creates new form CoolThemaRenderer.
      */
     public Alb_baulastblattEditor() {
-        this(true);
+        this(true, null);
+    }
+
+    /**
+     * Creates a new Alb_baulastblattEditor object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Alb_baulastblattEditor(final ClientConnectionContext connectionContext) {
+        this(true, connectionContext);
     }
 
     /**
      * Creates new form CoolThemaRenderer.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastblattEditor(final boolean editable) {
+    public Alb_baulastblattEditor(final boolean editable, final ClientConnectionContext connectionContext) {
         this.editable = editable;
-        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable, false);
+        this.connectionContext = connectionContext;
+
+        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(
+                !editable,
+                false,
+                connectionContext);
         alb_picturePanel.getDocTypePanel().setVisible(false);
         initComponents();
         initFooterElements();
@@ -243,11 +265,15 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         }
 
         try {
-            final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+            final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf", getConnectionContext());
 
-            jXHyperlink1.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && billingAllowed);
-            jXHyperlink2.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && billingAllowed);
-            jXHyperlink3.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && billingAllowed);
+            jXHyperlink1.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT, getConnectionContext())
+                        && billingAllowed);
+            jXHyperlink2.setEnabled(!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN, getConnectionContext())
+                        && billingAllowed);
+            jXHyperlink3.setEnabled(
+                !ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER, getConnectionContext())
+                        && billingAllowed);
         } catch (final Exception ex) {
             // needed for netbeans gui editor
             log.info("exception while checking action tags", ex);
@@ -255,6 +281,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -315,7 +346,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      * DOCUMENT ME!
      */
     private void disableSecondPageIfNoPermission() {
-        if (!ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+        if (!ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext())) {
             for (final MouseListener l : lblForw.getMouseListeners()) {
                 lblForw.removeMouseListener(l);
             }
@@ -462,7 +493,9 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         panMain = new javax.swing.JPanel();
-        panBaulastEditor = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable);
+        panBaulastEditor = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(
+                editable,
+                connectionContext);
         rpLaufendeNummern = new de.cismet.tools.gui.RoundedPanel();
         scpLaufendeNummern = new javax.swing.JScrollPane();
         lstLaufendeNummern = new javax.swing.JList();

@@ -75,7 +75,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextProvider;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
 import de.cismet.cids.server.search.CidsServerSearch;
 
@@ -105,7 +105,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     PropertyChangeListener,
     EditorSaveListener,
     CidsBeanDropListener,
-    ClientConnectionContextProvider {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -134,6 +134,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private CidsBean cidsBean = null;
     private final CardLayout cardLayout;
     private List<CidsBean> beansToRemoveFromOtherVerfahren = new ArrayList<CidsBean>();
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddLaufendeNummer;
@@ -226,16 +227,19 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      * Creates new form KkVerfahrenEditor.
      */
     public KkVerfahrenEditor() {
-        this(true);
+        this(true, null);
     }
 
     /**
      * Creates a new KkVerfahrenEditor object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public KkVerfahrenEditor(final boolean editable) {
+    public KkVerfahrenEditor(final boolean editable, final ClientConnectionContext connectionContext) {
         this.editable = editable;
+        this.connectionContext = connectionContext;
+
         initComponents();
         edFlaeche.addNameChangedListener(new KeyAdapter() {
 
@@ -408,7 +412,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         jPanel9 = new javax.swing.JPanel();
         labBPlan = new javax.swing.JLabel();
         panFlaechenMain = new javax.swing.JPanel();
-        edFlaeche = new de.cismet.cids.custom.objecteditors.wunda_blau.KkVerfahrenKompensationEditor(editable);
+        edFlaeche = new de.cismet.cids.custom.objecteditors.wunda_blau.KkVerfahrenKompensationEditor(
+                editable,
+                getConnectionContext());
         panCostsAndDocs = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -1535,7 +1541,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             final List res = (List)SessionManager.getProxy()
                         .customServerSearch(SessionManager.getSession().getUser(),
                                 search,
-                                getClientConnectionContext());
+                                getConnectionContext());
 
             if ((res != null) && (res.size() == 1) && (res.get(0) != null)) {
                 return res.get(0).toString();
@@ -1656,7 +1662,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                             final List bplan = (List)SessionManager.getProxy()
                                         .customServerSearch(SessionManager.getSession().getUser(),
                                                 bPlanSearch,
-                                                getClientConnectionContext());
+                                                getConnectionContext());
 
                             if ((bplan != null) && (bplan.size() > 0)) {
                                 labBPlan.setText("BPlan: " + String.valueOf(bplan.get(0)));
@@ -1863,10 +1869,10 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                                                             kompBean.getMetaObject().getId(),
                                                             kompBean.getMetaObject().getClassID(),
                                                             kompBean.getMetaObject().getDomain(),
-                                                            getClientConnectionContext());
+                                                            getConnectionContext());
                                             kompMo.setStatus(MetaObject.MODIFIED);
                                             kompMo.getAttribute("name").setChanged(true);
-                                            kompMo.getBean().persist();
+                                            kompMo.getBean().persist(getConnectionContext());
                                         } catch (Exception e) {
                                             LOG.error("Error while saving kompensation object", e);
                                         }
@@ -1909,8 +1915,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     }
 
     @Override
-    public ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(getClass().getSimpleName());
+    public final ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

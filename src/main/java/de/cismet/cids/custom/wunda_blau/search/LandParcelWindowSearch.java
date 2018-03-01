@@ -33,6 +33,8 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsLandParcelSearchStatem
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -53,7 +55,8 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -67,6 +70,7 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNewSearch;
     private javax.swing.JCheckBox chkActual;
@@ -100,7 +104,7 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
 
             initDateChoosers();
 
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -475,5 +479,15 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }
