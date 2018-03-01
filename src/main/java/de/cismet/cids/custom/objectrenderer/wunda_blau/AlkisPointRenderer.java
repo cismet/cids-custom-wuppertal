@@ -486,7 +486,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         retrieveableLabels = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
 
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             try {
                 soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
                 infoService = soapProvider.getAlkisInfoService();
@@ -528,12 +528,12 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         retrieveableLabels.add(lblTxtLand);
         retrieveableLabels.add(lblTxtDienststelle);
         retrieveableLabels.add(lblTxtAnlass);
-        if (!AlkisUtils.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtils.validateUserHasAlkisProductAccess(getConnectionContext())) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
-        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
+        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext()));
 
         final boolean billingAllowedPdf = BillingPopup.isBillingAllowed("pktlstpdf", getConnectionContext());
         final boolean billingAllowedTxt = BillingPopup.isBillingAllowed("pktlsttxt", getConnectionContext());
@@ -2500,7 +2500,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             if (infoService != null) {
                 return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
             } else {
-                return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode);
+                return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode, getConnectionContext());
             }
         }
 

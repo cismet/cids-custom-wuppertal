@@ -1078,7 +1078,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     taAdditionalText.getText(),
                     txtAuftragsnummer.getText().replaceAll("\\?", ""),
                     false,
-                    AlkisUtils.getFertigungsVermerk(null));
+                    AlkisUtils.getFertigungsVermerk(null, getConnectionContext()));
             final Map<String, String> requestPerUsage = new HashMap<String, String>();
             requestPerUsage.put("WV ein", (urlFertigungsvermerk != null) ? urlFertigungsvermerk.toString() : null);
 

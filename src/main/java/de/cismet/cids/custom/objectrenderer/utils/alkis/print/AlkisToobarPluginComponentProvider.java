@@ -36,8 +36,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
-import de.cismet.cids.server.connectioncontext.ConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
@@ -82,7 +80,7 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
 
     @Override
     public List<ToolbarComponentDescription> getToolbarComponents() {
-        if (AlkisUtils.validateUserHasAlkisPrintAccess()) {
+        if (AlkisUtils.validateUserHasAlkisPrintAccess(getConnectionContext())) {
             return toolbarComponents;
         } else {
             return Collections.emptyList();

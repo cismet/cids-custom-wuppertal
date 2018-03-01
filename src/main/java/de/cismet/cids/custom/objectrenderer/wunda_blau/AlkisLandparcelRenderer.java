@@ -332,12 +332,12 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     public AlkisLandparcelRenderer(final ClientConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
 
-        eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess();
+        eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess(getConnectionContext());
         buchungsblaetter = TypeSafeCollections.newConcurrentHashMap();
         productPreviewImages = TypeSafeCollections.newHashMap();
         gotoBeanMap = TypeSafeCollections.newHashMap();
         initIcons();
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             initSoapServiceAccess();
         }
         initComponents();
@@ -397,7 +397,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
         initEditorPanes();
-        if (!AlkisUtils.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtils.validateUserHasAlkisProductAccess(getConnectionContext())) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
@@ -405,7 +405,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (!eigentuemerPermission) {
             panBuchungEigentum.setVisible(false);
         }
-        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
+        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext()));
 
         final boolean billingAllowedFsueKom = BillingPopup.isBillingAllowed("fsuekom", getConnectionContext());
         final boolean billingAllowedFsueNw = BillingPopup.isBillingAllowed("fsuenw", getConnectionContext());
@@ -638,7 +638,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                                     true);
                         } else {
                             buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                                    AlkisUtils.fixBuchungslattCode(buchungsblattcode));
+                                    AlkisUtils.fixBuchungslattCode(buchungsblattcode),
+                                    getConnectionContext());
                         }
                     } else {
                         final Owner o = new Owner();

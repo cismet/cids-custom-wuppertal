@@ -684,7 +684,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
             final ArrayList<String> comboBoxContent = new ArrayList<String>();
             comboBoxContent.add(PDF);
-            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess()) {
+            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext())) {
                 comboBoxContent.add(HTML);
             }
             comboBoxContent.add(TEXT);

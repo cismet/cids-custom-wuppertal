@@ -156,7 +156,7 @@ public class AlkisProductDownloadHelper {
                         queryID,
                         product,
                         SessionManager.getSession().getUser(),
-                        AlkisUtils.getFertigungsVermerk("WV ein"));
+                        AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
                 final Map<String, String> requestPerUsage = new HashMap<String, String>();
                 requestPerUsage.put("WV ein", (urlFertigungsvermerk != null) ? urlFertigungsvermerk.toString() : null);
 
@@ -364,7 +364,7 @@ public class AlkisProductDownloadHelper {
                             parcelCode,
                             product,
                             SessionManager.getSession().getUser(),
-                            AlkisUtils.getFertigungsVermerk("WV ein"));
+                            AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
 
                     if (url != null) {
                         final String filename = product + "." + parcelCode.replace("/", "--");
@@ -431,7 +431,9 @@ public class AlkisProductDownloadHelper {
 
             if (parcelCode.length() > 0) {
                 try {
-                    url = AlkisUtils.PRODUCTS.productKarteUrl(parcelCode, AlkisUtils.getFertigungsVermerk("WV ein"));
+                    url = AlkisUtils.PRODUCTS.productKarteUrl(
+                            parcelCode,
+                            AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
                 } catch (final Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: Kartenprodukt",

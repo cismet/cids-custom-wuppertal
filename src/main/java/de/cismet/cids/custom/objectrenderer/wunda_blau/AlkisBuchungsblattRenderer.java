@@ -279,13 +279,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     public AlkisBuchungsblattRenderer(final ClientConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
 
-        eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess() && !demoMode;
+        eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess(getConnectionContext()) && !demoMode;
         map = new MappingComponent();
         map.setOpaque(false);
         landParcel3AList = new ArrayList<LightweightLandParcel3A>();
         productPreviewImages = new HashMap<Object, ImageIcon>();
 
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             try {
                 soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
                 infoService = soapProvider.getAlkisInfoService();
@@ -322,13 +322,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         landparcel3AListBinding.setSourceNullValue(null);
         landparcel3AListBinding.setSourceUnreadableValue(null);
 
-        if (!AlkisUtils.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtils.validateUserHasAlkisProductAccess(getConnectionContext())) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
 
-        panProdukteHTML.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
+        panProdukteHTML.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext()));
 
         final boolean billingAllowedBeNw = BillingPopup.isBillingAllowed("benw", getConnectionContext());
         final boolean billingAllowedBeKom = BillingPopup.isBillingAllowed("bekom", getConnectionContext());
@@ -2141,7 +2141,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         true);
             } else {
                 buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisUtils.fixBuchungslattCode(
-                            String.valueOf(bean.getProperty("buchungsblattcode"))));
+                            String.valueOf(bean.getProperty("buchungsblattcode"))),
+                        getConnectionContext());
             }
             if (buchungsblatt != null) {
                 generateLightweightLandParcel3A(buchungsblatt);
