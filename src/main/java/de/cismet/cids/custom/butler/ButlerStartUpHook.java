@@ -54,6 +54,10 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextSt
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public void applicationStarted() {
         new Thread(new Runnable() {
 

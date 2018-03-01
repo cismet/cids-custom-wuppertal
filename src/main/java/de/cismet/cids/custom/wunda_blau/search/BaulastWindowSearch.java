@@ -134,6 +134,12 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      * Creates new form BaulastWindowSearch.
      */
     public BaulastWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
             icon = new ImageIcon(mc.getIconData());
@@ -208,8 +214,6 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             log.warn("Error in Constructor of BaulastWindowSearch", exception);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

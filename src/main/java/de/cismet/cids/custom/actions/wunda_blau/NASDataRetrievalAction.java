@@ -62,6 +62,12 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
      */
     public NASDataRetrievalAction() {
         super("NAS Daten abfragen");
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             hasNasAccess = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -73,8 +79,6 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
             hasNasAccess = false;
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!

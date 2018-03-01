@@ -60,6 +60,10 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public String getPluginName() {
         return "Punktnummernreservierung";
     }

@@ -50,6 +50,10 @@ public class TotdStartUpHook implements StartupHook, ClientConnectionContextStor
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public void applicationStarted() {
         if (ComponentRegistry.getRegistry().getNavigator() != null) {
             try {

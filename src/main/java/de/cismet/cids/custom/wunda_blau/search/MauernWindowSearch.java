@@ -198,6 +198,12 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      * Creates new form MauernWindowSearch.
      */
     public MauernWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             initComponents();
             // todo just for debug
@@ -301,8 +307,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             LOG.warn("Error in Constructor of MauernWindowSearch. Search will not work properly.", e);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

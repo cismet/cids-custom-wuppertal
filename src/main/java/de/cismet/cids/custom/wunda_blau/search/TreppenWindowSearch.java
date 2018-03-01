@@ -147,6 +147,12 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
      * Creates new form TreppenWindowSearch.
      */
     public TreppenWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             initComponents();
             // todo just for debug
@@ -209,8 +215,6 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
             LOG.warn("Error in Constructor of TreppenWindowSearch. Search will not work properly.", e);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public final ClientConnectionContext getConnectionContext() {

@@ -110,6 +110,12 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * Creates new form BillingWindowSearch.
      */
     public BillingWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             initComponents();
             if (ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext())) {
@@ -147,8 +153,6 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             LOG.warn("Error in Constructor of BillingWindowSearch. Search will not work properly.", e);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

@@ -79,6 +79,10 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public List<ToolbarComponentDescription> getToolbarComponents() {
         if (AlkisUtils.validateUserHasAlkisPrintAccess(getConnectionContext())) {
             return toolbarComponents;

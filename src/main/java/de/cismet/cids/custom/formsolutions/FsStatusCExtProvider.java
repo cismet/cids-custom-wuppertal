@@ -66,6 +66,10 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, Clien
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public Collection<? extends CidsBeanAction> provideExtensions(final CExtContext context) {
         final List<CidsBeanAction> actions = new ArrayList<CidsBeanAction>(1);
 

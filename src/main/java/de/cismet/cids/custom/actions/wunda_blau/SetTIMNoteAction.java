@@ -97,7 +97,12 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
         super(NbBundle.getMessage(SetTIMNoteAction.class, "SetTIMNoteAction.name"),
             new javax.swing.ImageIcon(
                 SetTIMNoteAction.class.getResource("/de/cismet/cids/custom/actions/wunda_blau/tag_blue_add.png")));
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             final MetaClassCacheService classcache = Lookup.getDefault().lookup(MetaClassCacheService.class);
             timLiegMetaClass = classcache.getMetaClass("WUNDA_BLAU", "tim_lieg");
@@ -110,8 +115,6 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
             setEnabled(false);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public void actionPerformed(final ActionEvent e) {

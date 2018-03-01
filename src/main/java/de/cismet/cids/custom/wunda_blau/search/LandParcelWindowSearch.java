@@ -95,6 +95,12 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
      * Creates new form LandParcelWindowSearch.
      */
     public LandParcelWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "FLURSTUECK"); // TODO ask for correct
             // Name
@@ -138,8 +144,6 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
             log.warn("Error in Constructor of LandParcelWindowSearch", exception);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!

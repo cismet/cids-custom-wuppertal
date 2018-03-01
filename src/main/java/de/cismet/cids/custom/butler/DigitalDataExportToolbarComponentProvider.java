@@ -56,11 +56,11 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger log = Logger.getLogger(DigitalDataExportToolbarComponentProvider.class);
+    private static final Logger LOG = Logger.getLogger(DigitalDataExportToolbarComponentProvider.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    private final List<ToolbarComponentDescription> toolbarComponents;
+    private List<ToolbarComponentDescription> toolbarComponents;
     private ClientConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
@@ -69,7 +69,13 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
      * Creates a new DigitalDataExportToolbarComponentProvider object.
      */
     public DigitalDataExportToolbarComponentProvider() {
-        final List<ToolbarComponentDescription> preparationList = new LinkedList<ToolbarComponentDescription>();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        final List<ToolbarComponentDescription> preparationList = new LinkedList<>();
         final ToolbarComponentDescription description = new ToolbarComponentDescription(
                 "tlbMain",
                 new DataExportButton(),
@@ -78,8 +84,6 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
         preparationList.add(description);
         this.toolbarComponents = Collections.unmodifiableList(preparationList);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public String getPluginName() {
@@ -110,7 +114,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
                                 connectionCon1text)
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Butler!", ex);
+            LOG.error("Could not validate action tag for Butler!", ex);
         }
         return false;
     }
@@ -132,7 +136,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
                                 connectionContext)
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Butler!", ex);
+            LOG.error("Could not validate action tag for Butler!", ex);
         }
         return false;
     }

@@ -74,20 +74,19 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
     //~ Static fields/initializers ---------------------------------------------
 
-    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisWindowSearch.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisWindowSearch.class);
     private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     //~ Instance fields --------------------------------------------------------
 
-    private ObjectMapper mapper = new ObjectMapper();
     private MetaClass mc = null;
     private ImageIcon icon = null;
     private SearchControlPanel pnlSearchCancel = null;
-    private ParcelInputFieldConfig parcelInputFieldConfig;
+    private final ParcelInputFieldConfig parcelInputFieldConfig;
     private GrundbuchblattInputFieldConfig grundbuchblattInputFieldConfig;
     private boolean fallbackConfigParcel = false;
     private boolean fallbackConfigGrundbuchblatt = false;
-    private final String PROP_FALLBACK_CONFIG = "fallbackConfig";
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
@@ -145,16 +144,23 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      * Creates new form BaulastWindowSearch.
      */
     public AlkisWindowSearch() {
+        ParcelInputFieldConfig parcelInputFieldConfig = null;
         try {
-            parcelInputFieldConfig = mapper.readValue(AlkisWindowSearch.class.getResourceAsStream(
+            parcelInputFieldConfig = MAPPER.readValue(AlkisWindowSearch.class.getResourceAsStream(
                         "/de/cismet/cids/custom/wunda_blau/res/alkis/ParcelInputFieldConfig.json"),
                     ParcelInputFieldConfig.class);
         } catch (IOException ex) {
-            log.warn("ParcelInputFieldConfig could not be loaded, use fallback configuration.", ex);
+            LOG.warn("ParcelInputFieldConfig could not be loaded, use fallback configuration.", ex);
             parcelInputFieldConfig = ParcelInputFieldConfig.FallbackConfig;
             fallbackConfigParcel = true;
         }
+        this.parcelInputFieldConfig = parcelInputFieldConfig;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             grundbuchblattInputFieldConfig =
                 new ObjectMapper().readValue(GrundbuchblattInputWindow.class.getResourceAsStream(
@@ -162,7 +168,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                     GrundbuchblattInputFieldConfig.class);
             System.out.println(grundbuchblattInputFieldConfig.getDelimiter1AsString());
         } catch (IOException ex) {
-            log.warn("GrundbuchblattInputFieldConfig could not be loaded, use fallback configuration.", ex);
+            LOG.warn("GrundbuchblattInputFieldConfig could not be loaded, use fallback configuration.", ex);
             grundbuchblattInputFieldConfig = GrundbuchblattInputFieldConfig.FallbackConfig;
             fallbackConfigGrundbuchblatt = true;
         }
@@ -213,11 +219,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 lblFallbackGrundbuchblatt.setVisible(false);
             }
         } catch (Exception e) {
-            log.warn("Error in Constructor of AlkisWindowSearch", e);
+            LOG.warn("Error in Constructor of AlkisWindowSearch", e);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public final ClientConnectionContext getConnectionContext() {

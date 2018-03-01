@@ -44,6 +44,10 @@ public class FeatureStylingKeyStartUpHook implements StartupHook, ClientConnecti
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public void applicationStarted() {
         try {
             final String stylingKey = SessionManager.getConnection()

@@ -85,6 +85,12 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
      * Creates new form BerechtigungspruefungToolbarWidget.
      */
     public BerechtigungspruefungToolbarWidget() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         if (isVisible()) {
             initComponents();
             updateAnfragen();
@@ -92,8 +98,6 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
             BerechtigungspruefungMessageNotifier.getInstance().addListener(notifierListener);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

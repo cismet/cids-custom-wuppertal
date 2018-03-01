@@ -26,7 +26,7 @@ import javax.swing.SwingWorker;
 import de.cismet.cids.custom.wunda_blau.search.server.Sb_minAufnahmedatumYearFetcherServerSearch;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -34,7 +34,7 @@ import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientConnectionContextStore {
+public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -43,7 +43,7 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientCo
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboYear;
@@ -75,8 +75,11 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientCo
 
     /**
      * Creates new form Sb_StadtbildTimeTabs.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_StadtbildTimeTabs() {
+    public Sb_StadtbildTimeTabs(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         new MinYearFetcherWorker().execute();
 
@@ -348,11 +351,6 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements ClientCo
     @Override
     public ClientConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

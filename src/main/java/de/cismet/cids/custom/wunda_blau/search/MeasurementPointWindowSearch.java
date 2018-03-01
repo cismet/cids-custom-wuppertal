@@ -130,6 +130,12 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      * Creates new form AlkisPointWindowSearch.
      */
     public MeasurementPointWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             mappingComponent = CismapBroker.getInstance().getMappingComponent();
             geoSearchEnabled = mappingComponent != null;
@@ -194,8 +200,6 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
             metaClass = null;
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public final ClientConnectionContext getConnectionContext() {

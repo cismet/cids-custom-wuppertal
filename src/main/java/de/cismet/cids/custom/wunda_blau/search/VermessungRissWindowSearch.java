@@ -161,6 +161,12 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      * Creates new form VermessungRissWindowSearch.
      */
     public VermessungRissWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         try {
             mappingComponent = CismapBroker.getInstance().getMappingComponent();
             geoSearchEnabled = mappingComponent != null;
@@ -298,8 +304,6 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
             mappingComponent = null;
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

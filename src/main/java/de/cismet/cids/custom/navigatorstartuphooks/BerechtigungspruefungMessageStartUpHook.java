@@ -64,6 +64,10 @@ public class BerechtigungspruefungMessageStartUpHook implements StartupHook,
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public void applicationStarted() {
         if ("WUNDA_BLAU".equals(SessionManager.getSession().getConnectionInfo().getUserDomain())) {
             new Thread(new Runnable() {

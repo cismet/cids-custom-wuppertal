@@ -107,7 +107,12 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
             LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
         }
         this.metaClass = metaClass;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         boolean isActive = false;
         try {
             isActive = SessionManager.getConnection()
@@ -121,8 +126,6 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
         }
         this.isActive = isActive;
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public int getSorter() {

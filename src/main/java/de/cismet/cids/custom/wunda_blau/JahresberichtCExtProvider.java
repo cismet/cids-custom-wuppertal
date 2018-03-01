@@ -63,6 +63,10 @@ public class JahresberichtCExtProvider implements CExtProvider<AbstractAction>, 
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public ClientConnectionContext getConnectionContext() {
         return connectionContext;
     }

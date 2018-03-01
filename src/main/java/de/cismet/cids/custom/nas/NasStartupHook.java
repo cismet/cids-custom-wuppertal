@@ -51,6 +51,10 @@ public class NasStartupHook implements StartupHook, ClientConnectionContextStore
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public void applicationStarted() {
         new Thread(new Runnable() {
 

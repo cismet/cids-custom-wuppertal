@@ -33,7 +33,6 @@ import javax.swing.SwingUtilities;
 
 import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
@@ -63,6 +62,10 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
     private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+    }
 
     @Override
     public String getPluginName() {

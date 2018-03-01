@@ -48,6 +48,10 @@ public class MotdStartUpHook implements StartupHook, ClientConnectionContextStor
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public void applicationStarted() {
         try {
             if (SessionManager.getConnection().hasConfigAttr(

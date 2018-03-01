@@ -55,6 +55,10 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initAfterConnectionContext() {
+    }
+
+    @Override
     public String getSorterString() {
         return "100";
     }
