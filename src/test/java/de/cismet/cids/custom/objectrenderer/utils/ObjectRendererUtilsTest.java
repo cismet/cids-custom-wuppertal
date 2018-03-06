@@ -1,7 +1,7 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.commons.concurrency.CismetExecutors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;

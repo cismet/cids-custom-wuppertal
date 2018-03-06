@@ -77,10 +77,10 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
@@ -99,7 +99,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     FooterComponentProvider,
     TitleComponentProvider,
     RequestsFullSizeComponent,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -166,19 +166,21 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         roundedPanel5 = new FullyRoundedPanel();
         roundedPanel6 = new FullyRoundedPanel();
         roundedPanel7 = new FullyRoundedPanel();
-        final TreppeBeschreibungPanel treppeBeschreibungPanel1 = new TreppeBeschreibungPanel(editable);
+        final TreppeBeschreibungPanel treppeBeschreibungPanel1 = new TreppeBeschreibungPanel(
+                editable,
+                getConnectionContext());
         final JPanel jPanel2 = new JPanel();
-        treppeLaeufePanel1 = new TreppeLaeufePanel(editable);
+        treppeLaeufePanel1 = new TreppeLaeufePanel(editable, getConnectionContext());
         final JPanel jPanel3 = new JPanel();
-        treppePodestePanel1 = new TreppePodestePanel(editable);
+        treppePodestePanel1 = new TreppePodestePanel(editable, getConnectionContext());
         final JPanel jPanel4 = new JPanel();
-        treppeLeitelementePanel1 = new TreppeLeitelementePanel(editable);
+        treppeLeitelementePanel1 = new TreppeLeitelementePanel(editable, getConnectionContext());
         final JPanel jPanel5 = new JPanel();
-        treppeHandlaeufePanel2 = new TreppeHandlaeufePanel(editable);
+        treppeHandlaeufePanel2 = new TreppeHandlaeufePanel(editable, getConnectionContext());
         final JPanel jPanel6 = new JPanel();
-        treppeEntwaesserung1 = new TreppeEntwaesserungPanel(editable);
+        treppeEntwaesserung1 = new TreppeEntwaesserungPanel(editable, getConnectionContext());
         final JPanel jPanel7 = new JPanel();
-        treppeStuetzmauernPanel1 = new TreppeStuetzmauernPanel(editable);
+        treppeStuetzmauernPanel1 = new TreppeStuetzmauernPanel(editable, getConnectionContext());
         treppePicturePanel1 = new WebDavPicturePanel(
                 editable,
                 "url_treppen",
@@ -994,7 +996,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     private final boolean editable;
     private CidsBean cidsBean;
@@ -1054,23 +1056,24 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      * Creates a new TreppeEditor object.
      */
     public TreppeEditor() {
-        this(true, null);
+        this(true);
     }
 
     /**
      * Creates new form TreppenEditor.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public TreppeEditor(final boolean editable, final ClientConnectionContext connectionContext) {
+    public TreppeEditor(final boolean editable) {
         this.editable = editable;
-        this.connectionContext = connectionContext;
-
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        initComponents();
+    }
 
     /**
      * DOCUMENT ME!
@@ -1331,6 +1334,11 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

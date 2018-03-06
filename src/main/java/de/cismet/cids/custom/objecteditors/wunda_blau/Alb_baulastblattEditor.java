@@ -67,8 +67,8 @@ import de.cismet.cids.editors.EditorBeanInitializerStore;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -92,13 +92,13 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final int BLATT_NUMMER_ANZAHL_ZIFFERN = 6;
     private static final Color WRONG_BLATTNUMMER_COLOR = new Color(242, 222, 222);
-    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
+    static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
     private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
 
             @Override
@@ -158,13 +158,13 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 
     private final boolean editable;
     private CidsBean cidsBean;
-    private final CardLayout cardLayout;
+    private CardLayout cardLayout;
     private Collection<CidsBean> baulastenBeans = null;
 //    private Collection<CidsBean> baulastenBeansToDelete = new ArrayList<CidsBean>();
     private PropertyChangeListener strongReferenceToWeakListener = null;
     private boolean wrongBlattnummer = false;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
@@ -223,32 +223,25 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      * Creates new form CoolThemaRenderer.
      */
     public Alb_baulastblattEditor() {
-        this(true, null);
-    }
-
-    /**
-     * Creates a new Alb_baulastblattEditor object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public Alb_baulastblattEditor(final ClientConnectionContext connectionContext) {
-        this(true, connectionContext);
+        this(true);
     }
 
     /**
      * Creates new form CoolThemaRenderer.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public Alb_baulastblattEditor(final boolean editable, final ClientConnectionContext connectionContext) {
+    public Alb_baulastblattEditor(final boolean editable) {
         this.editable = editable;
-        this.connectionContext = connectionContext;
+    }
 
-        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(
-                !editable,
-                false,
-                connectionContext);
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable,
+                false);
+        alb_picturePanel.initAfterConnectionContext();
         alb_picturePanel.getDocTypePanel().setVisible(false);
         initComponents();
         initFooterElements();
@@ -276,11 +269,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         && billingAllowed);
         } catch (final Exception ex) {
             // needed for netbeans gui editor
-            log.info("exception while checking action tags", ex);
+            LOG.info("exception while checking action tags", ex);
         }
-    }
 
-    //~ Methods ----------------------------------------------------------------
+        panBaulastEditor.initAfterConnectionContext();
+    }
 
     @Override
     public final ClientConnectionContext getConnectionContext() {
@@ -384,7 +377,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         lstLaufendeNummern.setSelectedIndex(nrIdx);
                     } catch (Exception x) {
                         lstLaufendeNummern.setSelectedIndex(0);
-                        log.error(x, x);
+                        LOG.error(x, x);
                     }
                 }
                 final Object laufendeNr = ((CidsBean)lstLaufendeNummern.getSelectedValue()).getProperty(
@@ -401,7 +394,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                                     try {
                                         bean.setProperty("blattnummer", evt.getNewValue());
                                     } catch (Exception ex) {
-                                        log.warn(ex, ex);
+                                        LOG.warn(ex, ex);
                                     }
                                 }
                             }
@@ -413,7 +406,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             }
             disableSecondPageIfNoPermission();
         } catch (Exception x) {
-            log.error(x, x);
+            LOG.error(x, x);
         }
     }
 
@@ -493,9 +486,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         panMain = new javax.swing.JPanel();
-        panBaulastEditor = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(
-                editable,
-                connectionContext);
+        panBaulastEditor = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable);
         rpLaufendeNummern = new de.cismet.tools.gui.RoundedPanel();
         scpLaufendeNummern = new javax.swing.JScrollPane();
         lstLaufendeNummern = new javax.swing.JList();
@@ -1086,7 +1077,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             }
             checkLaufendeNummern();
         } catch (Exception ex) {
-            log.error(ex, ex);
+            LOG.error(ex, ex);
             ObjectRendererUtils.showExceptionWindowToUser(
                 "Fehler beim Hinzufügen einer neuen Laufenden Nummer",
                 ex,
@@ -1206,7 +1197,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 }
                 checkLaufendeNummern();
             } catch (Exception e) {
-                log.error(e, e);
+                LOG.error(e, e);
                 ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Löschen", e, this);
             }
         }
@@ -1279,7 +1270,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         try {
             EditorBeanInitializerStore.getInstance().initialize(currentBaulastBean);
         } catch (Exception ex) {
-            log.error(ex, ex);
+            LOG.error(ex, ex);
         }
     }                                                                                   //GEN-LAST:event_btnPasteBaulastActionPerformed
 
@@ -1592,5 +1583,10 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             // "Title",
             1024,
             800);
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

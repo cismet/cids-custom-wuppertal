@@ -19,10 +19,11 @@ import de.cismet.cids.custom.wunda_blau.search.server.BufferingGeosearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!

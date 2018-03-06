@@ -83,9 +83,6 @@ import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.Berechti
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -96,6 +93,10 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.StaticDebuggingTools;
@@ -118,7 +119,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     TitleComponentProvider,
     FooterComponentProvider,
     RequestsFullSizeComponent,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -210,7 +211,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
     //~ Instance fields --------------------------------------------------------
 
-    private final boolean eigentuemerPermission;
+    private boolean eigentuemerPermission;
     private final boolean demoMode = StaticDebuggingTools.checkHomeForFile("demoMode");
 // private ImageIcon FORWARD_PRESSED;
 // private ImageIcon FORWARD_SELECTED;
@@ -235,8 +236,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private final Map<CidsBean, Buchungsblatt> buchungsblaetter;
     private final Map<Object, ImageIcon> productPreviewImages;
     private final Map<String, CidsBean> gotoBeanMap;
-    private final CardLayout cardLayout;
-    private final MappingComponent map;
+    private CardLayout cardLayout;
+    private MappingComponent map;
     private SOAPAccessProvider soapProvider;
     private ALKISInfoServices infoService;
     private LandParcel landparcel;
@@ -245,7 +246,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private RetrieveBuchungsblaetterWorker retrieveBuchungsblaetterWorker;
     private boolean continueInBackground = false;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
@@ -321,21 +322,17 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * Creates a new AlkisLandparcelRenderer object.
      */
     public AlkisLandparcelRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates new form Alkis_pointRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public AlkisLandparcelRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-
-        eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess(getConnectionContext());
         buchungsblaetter = TypeSafeCollections.newConcurrentHashMap();
         productPreviewImages = TypeSafeCollections.newHashMap();
         gotoBeanMap = TypeSafeCollections.newHashMap();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess(getConnectionContext());
+
         initIcons();
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             initSoapServiceAccess();
@@ -454,8 +451,6 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                         getConnectionContext())
                     && billingAllowedBlabBe);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public final ClientConnectionContext getConnectionContext() {
@@ -2033,6 +2028,11 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         }
         this.title = title;
         lblTitle.setText(this.title);
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -13,8 +13,8 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import javax.swing.JButton;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
  * The ActionTag 'BILLING_ACTION_TAG_REPORT' need to be present to activate this button. <code>

@@ -21,7 +21,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportSer
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.joinCidsBeanIds;
 

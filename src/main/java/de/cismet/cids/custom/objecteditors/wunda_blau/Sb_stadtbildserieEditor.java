@@ -98,8 +98,6 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -116,6 +114,9 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -135,7 +136,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     BeanInitializerProvider,
     Sb_StadtbildserieProvider,
     EditorSaveListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -231,7 +232,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private MappingComponent previewMap;
     private boolean editable;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.FastBindableReferenceCombo bcbStrasse;
@@ -338,19 +339,22 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * Creates a new Sb_stadtbildserieEditor object.
      */
     public Sb_stadtbildserieEditor() {
-        this(true, null);
+        this(true);
     }
 
     /**
      * Creates new form Arc_stadtbildRenderer.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public Sb_stadtbildserieEditor(final boolean editable, final ClientConnectionContext connectionContext) {
+    public Sb_stadtbildserieEditor(final boolean editable) {
         this.editable = editable;
-        this.connectionContext = connectionContext;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
 
         makeEditable();
@@ -396,8 +400,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 }
             });
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -741,7 +743,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveSuchwort.setText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieEditor.class,
-                "WebDavPicturePanel.btnRemoveImg.text"));                                                         // NOI18N
+                "MauerEditor.btnRemoveImg.text"));                                                                // NOI18N
         btnRemoveSuchwort.setPreferredSize(new java.awt.Dimension(46, 21));
         btnRemoveSuchwort.addActionListener(new java.awt.event.ActionListener() {
 
@@ -787,7 +789,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveImageNumber.setText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieEditor.class,
-                "WebDavPicturePanel.btnRemoveImg.text"));                                                         // NOI18N
+                "MauerEditor.btnRemoveImg.text"));                                                                // NOI18N
         btnRemoveImageNumber.setPreferredSize(new java.awt.Dimension(46, 21));
         btnRemoveImageNumber.addActionListener(new java.awt.event.ActionListener() {
 
@@ -1804,7 +1806,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private void dbcOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_dbcOrtItemStateChanged
         final Object selectedItem = dbcOrt.getSelectedItem();
         if (editable) {
-            if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
+            if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWuppertal(getConnectionContext()))) {
                 // inside of Wuppertal
                 bcbStrasse.setEnabled(true);
                 lblDescStrasse.setEnabled(true);
@@ -2044,11 +2046,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         bindingGroup.unbind();
         try {
             geomFromAdresse =
-                MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_ADRESSE_QUERY, "WUNDA_BLAU")[0].getBean();
+                MetaObjectCache.getInstance()
+                        .getMetaObjectsByQuery(GEOM_AUS_ADRESSE_QUERY, "WUNDA_BLAU", getConnectionContext())[0]
+                        .getBean();
             geomFromStrasse =
-                MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_STRASSE_QUERY, "WUNDA_BLAU")[0].getBean();
+                MetaObjectCache.getInstance()
+                        .getMetaObjectsByQuery(GEOM_AUS_STRASSE_QUERY, "WUNDA_BLAU", getConnectionContext())[0]
+                        .getBean();
             geomFromDigitizedAction =
-                MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_DIGI_QUERY, "WUNDA_BLAU")[0].getBean();
+                MetaObjectCache.getInstance()
+                        .getMetaObjectsByQuery(GEOM_AUS_DIGI_QUERY, "WUNDA_BLAU", getConnectionContext())[0].getBean();
         } catch (CacheException ex) {
             throw new RuntimeException("Geometry origin state could not be loaded. That should not happen.", ex);
         }
@@ -2397,12 +2404,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     private void setDefaultValuesForNewCidsBean() {
         try {
-            cidsBean.setProperty("ort", Sb_stadtbildUtils.getWUPPERTAL());
+            cidsBean.setProperty("ort", Sb_stadtbildUtils.getWuppertal(getConnectionContext()));
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
         try {
-            cidsBean.setProperty("lager", Sb_stadtbildUtils.getR102());
+            cidsBean.setProperty("lager", Sb_stadtbildUtils.getR102(getConnectionContext()));
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
@@ -2498,6 +2505,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

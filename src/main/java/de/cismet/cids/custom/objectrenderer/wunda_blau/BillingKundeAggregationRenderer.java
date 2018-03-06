@@ -68,10 +68,10 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.TitleComponentProvider;
 
@@ -84,7 +84,7 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class BillingKundeAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
     TitleComponentProvider,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -100,12 +100,13 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ClientConnectionContext connectionContext;
     private SwingWorker<List<CidsBean>, Integer> worker;
     private Collection<CidsBean> cidsBeans = null;
     private Collection<Object[]> tableData;
     private List<CidsBean> filteredBillingBeans;
     private Date[] fromDate_tillDate;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnBuchungsbeleg;
@@ -153,17 +154,12 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      * Creates a new BillingKundeAggregationRenderer object.
      */
     public BillingKundeAggregationRenderer() {
-        this(ClientConnectionContext.createDeprecated());
     }
 
-    /**
-     * Creates new form BillingKundeAggregationRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public BillingKundeAggregationRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         setFilterActionInExternalPanels();
         final AggregatedBillingTableModel tableModel = new AggregatedBillingTableModel(new Object[0][],
@@ -183,7 +179,10 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

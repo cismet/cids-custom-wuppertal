@@ -71,10 +71,11 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -94,7 +95,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -120,7 +121,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private final Map<String, String> freigabegruendeMap = new HashMap<String, String>();
     private final Map<String, String> ablehnungsgruendeMap = new HashMap<String, String>();
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFreigeben;
@@ -226,18 +227,13 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      * Creates a new BerechtigungspruefungRenderer object.
      */
     public BerechtigungspruefungRenderer() {
-        this(ClientConnectionContext.createDeprecated());
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    /**
-     * Creates new form Fs_BestellungRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public BerechtigungspruefungRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    //~ Methods ----------------------------------------------------------------
 
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
 
         final DefaultComboBoxModel<String> freigabegruendeModel = new DefaultComboBoxModel<String>();
@@ -259,7 +255,10 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         jComboBox2.setModel(ablehnungsgruendeModel);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

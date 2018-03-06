@@ -66,13 +66,14 @@ import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationS
 import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSearch;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;

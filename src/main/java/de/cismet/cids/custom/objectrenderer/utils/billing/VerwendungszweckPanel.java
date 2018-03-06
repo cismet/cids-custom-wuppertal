@@ -45,8 +45,8 @@ import javax.swing.Action;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.ALLOWED_USAGE_CONFIG_ATTR;
 

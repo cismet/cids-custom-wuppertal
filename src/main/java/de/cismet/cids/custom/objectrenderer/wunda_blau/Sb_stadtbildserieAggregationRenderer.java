@@ -69,15 +69,16 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
 
 import de.cismet.commons.concurrency.CismetExecutors;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -98,7 +99,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     TitleComponentProvider,
     ListDataListener,
     Sb_stadtbildserieGridObjectListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -134,11 +135,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private boolean wasInfoPanelVisibleBeforeSwitch = true;
 
     private Collection<CidsBean> cidsBeans = null;
-    private HashSet<String> highResStadtbilder = new HashSet<String>();
-    private HashSet<String> selectedStadtbilder = new HashSet<String>();
-    private HashSet<String> vorschauStadtbilder = new HashSet<String>();
+    private HashSet<String> highResStadtbilder = new HashSet<>();
+    private HashSet<String> selectedStadtbilder = new HashSet<>();
+    private HashSet<String> vorschauStadtbilder = new HashSet<>();
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBin;
@@ -183,17 +184,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      * Creates a new Sb_stadtbildserieAggregationRenderer object.
      */
     public Sb_stadtbildserieAggregationRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates new form Sb_stadtbildserieAggregationRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public Sb_stadtbildserieAggregationRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-
         vorauswahlReportAction = new AbstractAction(
                 null,
                 new javax.swing.ImageIcon(
@@ -204,13 +194,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     reportVorauswahl();
                 }
             };
-        vorauswahlReportAction.putValue(
-            Action.SHORT_DESCRIPTION,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.actionVorauswahlReport.toolTipText"));
-        vorauswahlReportAction.setEnabled(true);
-
         vorauswahlDownloadAction = new AbstractAction(
                 null,
                 new javax.swing.ImageIcon(
@@ -231,13 +214,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     reportWarenkorb();
                 }
             };
-        warenkorbReportAction.putValue(
-            Action.SHORT_DESCRIPTION,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.actionWarenkorbReport.toolTipText"));
-        warenkorbReportAction.setEnabled(false);
-
         warenkorbDownloadAction = new AbstractAction(
                 null,
                 new javax.swing.ImageIcon(
@@ -248,6 +224,25 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     downladWarenkorb();
                 }
             };
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        vorauswahlReportAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.actionVorauswahlReport.toolTipText"));
+        vorauswahlReportAction.setEnabled(true);
+
+        warenkorbReportAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.actionWarenkorbReport.toolTipText"));
+        warenkorbReportAction.setEnabled(false);
 
         initComponents();
 
@@ -264,8 +259,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         sldSize.setValue(grdStadtbildserien.getFixedCellDimension());
         switchToSerie();
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1606,6 +1599,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

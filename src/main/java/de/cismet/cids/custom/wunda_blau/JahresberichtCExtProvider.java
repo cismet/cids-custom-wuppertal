@@ -28,8 +28,8 @@ import javax.swing.AbstractAction;
 import de.cismet.cids.custom.objectrenderer.utils.BillingRestrictedReportJButton;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.ext.CExtContext;
 import de.cismet.ext.CExtProvider;

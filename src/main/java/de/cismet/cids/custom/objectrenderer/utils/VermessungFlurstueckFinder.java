@@ -25,7 +25,7 @@ import java.util.Comparator;
 import de.cismet.cids.custom.wunda_blau.search.server.VeraenderungsartLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.VermessungFlurstueckKickerLightweightSearch;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!

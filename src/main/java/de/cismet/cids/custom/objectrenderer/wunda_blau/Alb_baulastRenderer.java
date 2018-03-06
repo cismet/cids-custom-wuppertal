@@ -13,8 +13,6 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditor;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 /**
@@ -35,16 +33,7 @@ public class Alb_baulastRenderer extends Alb_baulastEditor implements CidsBeanRe
      * Creates a new Alb_baulastRenderer object.
      */
     public Alb_baulastRenderer() {
-        this(null);
-    }
-
-    /**
-     * Creates a new Alb_baulastRenderer object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public Alb_baulastRenderer(final ClientConnectionContext connectionContext) {
-        super(false, connectionContext);
+        super(false);
         this.title = "";
     }
 

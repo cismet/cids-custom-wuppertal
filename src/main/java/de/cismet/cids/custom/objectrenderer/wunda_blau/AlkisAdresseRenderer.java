@@ -43,10 +43,10 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -65,7 +65,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     BorderProvider,
     TitleComponentProvider,
     FooterComponentProvider,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -77,7 +77,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     private CidsBean cidsBean;
     private String title;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
@@ -119,22 +119,15 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
      * Creates new form Alkis_pointRenderer.
      */
     public AlkisAdresseRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates a new AlkisAdresseRenderer object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public AlkisAdresseRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-
-        initComponents();
-        blWait.setVisible(false);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        initComponents();
+        blWait.setVisible(false);
+    }
 
     /**
      * DOCUMENT ME!
@@ -732,5 +725,10 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     @Override
     public ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

@@ -57,15 +57,14 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.editors.converters.DoubleToStringConverter;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.security.WebAccessManager;
 
@@ -96,7 +95,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -127,7 +126,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     protected String oldLaufendeNummer;
     protected String urlOfDocument;
     protected RefreshDocumentWorker currentRefreshDocumentWorker;
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
@@ -188,19 +187,22 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * Creates a new NivellementPunktEditor object.
      */
     public NivellementPunktEditor() {
-        this(false, ClientConnectionContext.createDeprecated());
+        this(false);
     }
 
     /**
      * Creates new form NivellementPunktEditor.
      *
-     * @param  readOnly           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  readOnly  DOCUMENT ME!
      */
-    public NivellementPunktEditor(final boolean readOnly, final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    public NivellementPunktEditor(final boolean readOnly) {
         this.readOnly = readOnly;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         setOpaque(false);
 
@@ -224,8 +226,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             chkHistorisch.setEnabled(false);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1374,6 +1374,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -52,6 +52,9 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -62,7 +65,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
-    BindingGroupStore {
+    BindingGroupStore,
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -73,6 +77,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     protected Object hausnr;
     private CidsBean cidsBean = null;
     private boolean isEditor = true;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbAntragsteller;
@@ -126,22 +131,29 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
      * Creates new form.
      */
     public StrAdrGeplanteAdresseEditor() {
-        initComponents();
-        ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString("georeferenz");
+        this(true);
     }
 
     /**
      * Creates a new StrAdrGeplanteAdresseEditor object.
      *
-     * @param  boolEditor  DOCUMENT ME!
+     * @param  isEditor  DOCUMENT ME!
      */
-    public StrAdrGeplanteAdresseEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
-        initComponents();
-        noEdit();
+    public StrAdrGeplanteAdresseEditor(final boolean isEditor) {
+        this.isEditor = isEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        initComponents();
+        if (!isEditor) {
+            noEdit();
+        } else {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString("georeferenz");
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1540,5 +1552,15 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

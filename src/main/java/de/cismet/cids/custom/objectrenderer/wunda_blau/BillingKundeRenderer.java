@@ -82,10 +82,10 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -101,7 +101,7 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
 public class BillingKundeRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanRenderer,
     TitleComponentProvider,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -141,7 +141,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private BigDecimal totalSum;
     private boolean itsMe = false;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnBuchungsbeleg;
@@ -192,18 +193,21 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * Creates new form KundenRenderer.
      */
     public BillingKundeRenderer() {
-        this(true, ClientConnectionContext.createDeprecated());
+        this(true);
     }
 
     /**
      * Creates a new KundeRenderer object.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public BillingKundeRenderer(final boolean editable, final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    public BillingKundeRenderer(final boolean editable) {
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         tableModel = new BillingTableModel(new Object[0][], AGR_COMLUMN_NAMES);
         tblBillings.setModel(tableModel);
@@ -220,7 +224,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         tblBillings.getRowSorter().toggleSortOrder(6);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * DOCUMENT ME!

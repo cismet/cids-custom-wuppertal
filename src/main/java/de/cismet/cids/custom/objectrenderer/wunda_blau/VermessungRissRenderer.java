@@ -9,9 +9,9 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -31,15 +31,7 @@ public class VermessungRissRenderer extends VermessungRissEditor implements Cids
      * Creates a new VermessungRissRenderer object.
      */
     public VermessungRissRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-    /**
-     * Creates a new VermessungRissRenderer object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public VermessungRissRenderer(final ClientConnectionContext connectionContext) {
-        super(true, connectionContext);
+        super(true);
 
         title = "";
     }

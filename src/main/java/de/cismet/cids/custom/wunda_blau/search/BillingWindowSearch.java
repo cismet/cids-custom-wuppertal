@@ -41,11 +41,12 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 /**
  * DOCUMENT ME!

@@ -59,9 +59,6 @@ import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.XBoundingBox;
@@ -71,6 +68,10 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -168,13 +169,6 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new Alb_baulastAggregationRendererPanel object.
-     */
-    public Alb_baulastAggregationRendererPanel() {
-        this(ClientConnectionContext.createDeprecated());
-    }
 
     /**
      * Creates a new Alb_baulastblattAggregationRenderer object.

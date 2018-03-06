@@ -25,8 +25,8 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.wunda_blau.search.server.Sb_minAufnahmedatumYearFetcherServerSearch;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!

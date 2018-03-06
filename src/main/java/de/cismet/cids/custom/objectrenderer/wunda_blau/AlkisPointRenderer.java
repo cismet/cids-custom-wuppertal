@@ -97,14 +97,15 @@ import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.security.WebAccessManager;
 
@@ -137,7 +138,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -346,8 +347,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private Point point;
     private CidsBean cidsBean;
     private String title;
-    private final CardLayout cardLayout;
-    private final CardLayout cardLayoutForContent;
+    private CardLayout cardLayout;
+    private CardLayout cardLayoutForContent;
 //    private BindingGroup punktOrtBindingGroup;
     private List<PointLocation> pointLocations;
     // should be static!
@@ -356,7 +357,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private ImageIcon PUNKT_TXT;
     private String urlOfAPMap;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrAPMapControls;
@@ -472,20 +473,14 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * Creates a new AlkisPointRenderer object.
      */
     public AlkisPointRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates new form Alkis_pointRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public AlkisPointRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-
         retrieveableLabels = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             try {
                 soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
@@ -546,8 +541,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         hlPunktlisteTxt.setEnabled(billingAllowedTxt
                     && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext()));
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public final ClientConnectionContext getConnectionContext() {
@@ -2458,6 +2451,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

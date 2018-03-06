@@ -38,6 +38,9 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+
 import de.cismet.tools.gui.RoundedPanel;
 
 /**
@@ -48,7 +51,8 @@ import de.cismet.tools.gui.RoundedPanel;
  */
 public class BillingBillingEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     EditorSaveListener,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -61,6 +65,8 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     String originalProjektbezeichnung;
     private final boolean editable;
     private CidsBean cidsBean;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnStornoBuchung;
     private de.cismet.cids.editors.DefaultBindableJCheckBox cboAbgerechnet;
@@ -122,26 +128,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
      */
     public BillingBillingEditor(final boolean editable) {
         this.editable = editable;
-        initComponents();
-        if (!editable) {
-            RendererTools.makeReadOnly(txtGeschaeftsbuchnummer);
-            RendererTools.makeReadOnly(txtProjektbezeichnung);
-            RendererTools.makeReadOnly(coboStornogrund);
-            RendererTools.makeReadOnly(btnStornoBuchung);
-        }
-
-        RendererTools.makeReadOnly(cboStorno);
-        RendererTools.makeReadOnly(cboAbgerechnet);
-        RendererTools.makeReadOnly(defaultBindableJTextField5);
-        RendererTools.makeReadOnly(defaultBindableJTextField7);
-        RendererTools.makeReadOnly(defaultBindableJTextField8);
-        RendererTools.makeReadOnly(txtAngelegt_am);
-        RendererTools.makeReadOnly(txtAngelegt_durch);
-        RendererTools.makeReadOnly(txtModus);
-        RendererTools.makeReadOnly(txtVerwendungszweck);
-        RendererTools.makeReadOnly(txtaAenderung);
-        RendererTools.makeReadOnly(txtaBerechnung);
-        scpMain.getViewport().setOpaque(false);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -887,5 +873,39 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
                         + ")";
         }
         cboStorno.setText(text);
+    }
+
+    @Override
+    public void initAfterConnectionContext() {
+        initComponents();
+        if (!editable) {
+            RendererTools.makeReadOnly(txtGeschaeftsbuchnummer);
+            RendererTools.makeReadOnly(txtProjektbezeichnung);
+            RendererTools.makeReadOnly(coboStornogrund);
+            RendererTools.makeReadOnly(btnStornoBuchung);
+        }
+
+        RendererTools.makeReadOnly(cboStorno);
+        RendererTools.makeReadOnly(cboAbgerechnet);
+        RendererTools.makeReadOnly(defaultBindableJTextField5);
+        RendererTools.makeReadOnly(defaultBindableJTextField7);
+        RendererTools.makeReadOnly(defaultBindableJTextField8);
+        RendererTools.makeReadOnly(txtAngelegt_am);
+        RendererTools.makeReadOnly(txtAngelegt_durch);
+        RendererTools.makeReadOnly(txtModus);
+        RendererTools.makeReadOnly(txtVerwendungszweck);
+        RendererTools.makeReadOnly(txtaAenderung);
+        RendererTools.makeReadOnly(txtaBerechnung);
+        scpMain.getViewport().setOpaque(false);
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

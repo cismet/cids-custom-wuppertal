@@ -80,8 +80,6 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.BooleanToStringConverter;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -94,6 +92,10 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -110,7 +112,7 @@ import de.cismet.tools.gui.downloadmanager.HttpOrFtpDownload;
  */
 public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -128,15 +130,15 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private CidsBean cidsBean;
     private String title;
 
-    private final MappingComponent mappingComponent;
+    private MappingComponent mappingComponent;
     private StyledFeature geometrieFeature;
     private StyledFeature geometrieSaumFeature;
     private StyledFeature flurstueckeFeature;
     private String vermStelle;
 
-    private final Map<String, CidsBean> fsMap = new HashMap<String, CidsBean>();
+    private final Map<String, CidsBean> fsMap = new HashMap<>();
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -217,17 +219,12 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      * Creates a new VermessungsunterlagenauftragRenderer object.
      */
     public VermessungsunterlagenauftragRenderer() {
-        this(ClientConnectionContext.createDeprecated());
     }
 
-    /**
-     * Creates a new Sb_stadtbildserieEditor object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public VermessungsunterlagenauftragRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
 
         title = "";
@@ -246,8 +243,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         objectMapper.registerModule(module);
         exceptionDialog.pack();
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1755,6 +1750,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

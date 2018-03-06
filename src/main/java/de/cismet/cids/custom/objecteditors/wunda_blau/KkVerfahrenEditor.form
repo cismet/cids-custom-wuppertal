@@ -774,7 +774,7 @@
                     <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.status}" target="cbStatus" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                   </BindingProperties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox(getConnectionContext())"/>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
                   <Constraints>
@@ -788,7 +788,7 @@
                     <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.grundlage}" target="cbGrundlage" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                   </BindingProperties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox(getConnectionContext())"/>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
                   <Constraints>
@@ -1177,7 +1177,7 @@
                   <SubComponents>
                     <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.KkVerfahrenKompensationEditor" name="edFlaeche">
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.KkVerfahrenKompensationEditor(editable, getClientConnectionContext())"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.KkVerfahrenKompensationEditor(editable)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

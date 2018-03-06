@@ -54,10 +54,10 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -69,7 +69,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     EditorSaveListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -86,7 +86,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     private CidsBean cidsBean;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemKundenLogin;
@@ -132,17 +132,12 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
      * Creates a new BillingKundeEditor object.
      */
     public BillingKundeEditor() {
-        this(null);
     }
 
-    /**
-     * Creates a new BillingKundeEditor object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public BillingKundeEditor(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         try {
             new CidsBeanDropTarget(lstKundenLogins);
@@ -152,8 +147,6 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -953,6 +946,11 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

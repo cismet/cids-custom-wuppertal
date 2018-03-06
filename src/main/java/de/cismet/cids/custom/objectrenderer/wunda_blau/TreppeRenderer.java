@@ -14,7 +14,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -30,15 +30,6 @@ public class TreppeRenderer extends TreppeEditor {
      * Creates a new TreppeRenderer object.
      */
     public TreppeRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates a new TreppeRenderer object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public TreppeRenderer(final ClientConnectionContext connectionContext) {
-        super(false, connectionContext);
+        super(false);
     }
 }

@@ -52,9 +52,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;

@@ -36,8 +36,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -47,7 +47,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialog implements ConnectionContextProvider {
+public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialog
+        implements ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -58,12 +59,12 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Collection<CidsBean> beansToReturn = new ArrayList<CidsBean>();
+    private final Collection<CidsBean> beansToReturn = new ArrayList<>();
 
     private TableRowSorter<TableModel> sorter;
     private MetaObject[] mos;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -83,17 +84,17 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
     /**
      * Creates new form Sb_stadtbildserieEditorAddSuchwortDialog.
      *
-     * @param  parent             DOCUMENT ME!
-     * @param  modal              DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  parent  DOCUMENT ME!
+     * @param  modal   DOCUMENT ME!
      */
-    private Sb_stadtbildserieEditorAddSuchwortDialog(final java.awt.Frame parent,
-            final boolean modal,
-            final ClientConnectionContext connectionContext) {
+    private Sb_stadtbildserieEditorAddSuchwortDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
+    }
 
-        this.connectionContext = connectionContext;
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void initAfterConnectionContext() {
         try {
             loadListItems();
         } catch (final ConnectionException exception) {
@@ -131,8 +132,6 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
             });
     }
 
-    //~ Methods ----------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -142,8 +141,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
         if (INSTANCE == null) {
             INSTANCE = new Sb_stadtbildserieEditorAddSuchwortDialog(
                     null,
-                    true,
-                    ClientConnectionContext.createDeprecated());
+                    true);
         }
         return INSTANCE;
     }
@@ -524,7 +522,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                 @Override
                 public void run() {
                     final Sb_stadtbildserieEditorAddSuchwortDialog dialog =
-                        new Sb_stadtbildserieEditorAddSuchwortDialog(new javax.swing.JFrame(), true, null);
+                        new Sb_stadtbildserieEditorAddSuchwortDialog(new javax.swing.JFrame(), true);
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -541,5 +539,10 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

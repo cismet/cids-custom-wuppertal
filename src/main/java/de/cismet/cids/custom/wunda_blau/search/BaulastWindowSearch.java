@@ -54,9 +54,6 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -69,6 +66,10 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -143,7 +144,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         try {
             mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
             icon = new ImageIcon(mc.getIconData());
-            fsSelectionDialoge = new FlurstueckSelectionDialoge(false, getConnectionContext()) {
+            fsSelectionDialoge.initAfterConnectionContext();
+            fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
 
                     @Override
                     public void okHook() {
@@ -158,7 +160,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             final MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
             final DefaultComboBoxModel cbArtModel;
             try {
-                cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true);
+                cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true, getConnectionContext());
                 cbArt.setModel(cbArtModel);
             } catch (Exception ex) {
                 log.error(ex, ex);

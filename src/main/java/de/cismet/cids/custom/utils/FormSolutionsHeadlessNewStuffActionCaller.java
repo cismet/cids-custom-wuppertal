@@ -26,8 +26,8 @@ import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuf
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 

@@ -21,7 +21,6 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.Cursor;
@@ -49,6 +48,9 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.RoundedPanel;
@@ -60,7 +62,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
+public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -86,6 +88,8 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
                 }
             }
         };
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox bcbAuftraggeber;
@@ -143,6 +147,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
      * Creates new form Arc_stadtbildEditor.
      */
     public Arc_stadtbildEditor() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
 //        final MetaClass swClass = ClassCacheMultiple.getMetaClass(domain, "ARC_S");
         suchwortModelProvider.setSorted(true);
@@ -178,8 +188,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 //        filter.setStrict(false);
         dlgAddSuchwort.pack();
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -227,7 +235,9 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
                 "select s.id,s.name,o.stadtteil from arc_strasse s left outer join arc_stadtteil o on s.stadtteil = o.id",
                 strasseFormater,
                 new String[] { "NAME", "STADTTEIL" });
-        bcbAuftraggeber = new FastBindableReferenceCombo("%1$2s", new String[] { "AUFTRAGGEBER" });
+        bcbAuftraggeber = new FastBindableReferenceCombo(
+                "%1$2s",
+                new String[] { "AUFTRAGGEBER" });
         lblSuchworte = new javax.swing.JLabel();
         lblHauptsuchwort = new javax.swing.JLabel();
         lblContentStadtteil = new javax.swing.JLabel();
@@ -487,7 +497,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(lblStrasse, gridBagConstraints);
 
         txtAInfo.setColumns(7);
-        txtAInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtAInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtAInfo.setRows(5);
         txtAInfo.setMaximumSize(new java.awt.Dimension(150, 20));
         txtAInfo.setMinimumSize(new java.awt.Dimension(150, 20));
@@ -621,7 +631,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(lblAufnahmeDatum, gridBagConstraints);
 
         chkAuswahl.setText("Auswahl");
-        chkAuswahl.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -643,7 +652,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(chkAuswahl, gridBagConstraints);
 
         chkLager.setText("Lager");
-        chkLager.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -665,7 +673,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(chkLager, gridBagConstraints);
 
         chkPruefen.setText("Prüfen");
-        chkPruefen.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1138,6 +1145,16 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         final MetaObject[] mos = suchwortModelProvider.receiveLightweightMetaObjects();
         final DefaultComboBoxModel model = new DefaultComboBoxModel(mos);
         return model;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

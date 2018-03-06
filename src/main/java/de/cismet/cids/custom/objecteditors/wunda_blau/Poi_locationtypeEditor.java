@@ -34,10 +34,10 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -48,7 +48,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled, ConnectionContextProvider {
+public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled, ClientConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -56,7 +56,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     private String latestIconUrl = null;
     private String title = "";
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -97,23 +97,16 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
      * Creates a new Poi_locationtypeEditor object.
      */
     public Poi_locationtypeEditor() {
-        this(null);
     }
 
-    /**
-     * Creates new form LocationinstanceEditor.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public Poi_locationtypeEditor(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         dlgAddLocationType.pack();
         dlgAddLocationType.getRootPane().setDefaultButton(btnMenOk);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public final ClientConnectionContext getConnectionContext() {
@@ -175,7 +168,9 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             panContent2 = new RoundedPanel();
             lblSignatur = new javax.swing.JLabel();
             lblLocationTypes = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[] { "definition", "filename" });
+            cbSignatur = new FastBindableReferenceCombo(
+                    "%1$2s",
+                    new String[] { "definition", "filename" });
             scpLocationtypeList = new javax.swing.JScrollPane();
             lstLocationTypes = new javax.swing.JList();
             panButtons = new javax.swing.JPanel();
@@ -635,5 +630,10 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             return bean.getMetaObject().getMetaClass().getName();
         }
         return "POI-Thema";
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

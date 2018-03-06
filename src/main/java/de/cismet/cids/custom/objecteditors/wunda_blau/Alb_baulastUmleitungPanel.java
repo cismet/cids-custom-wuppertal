@@ -44,8 +44,8 @@ import javax.swing.event.DocumentListener;
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.netutil.Proxy;
 
@@ -63,7 +63,7 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.LF
  * @version  $Revision$, $Date$
  */
 public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements DocumentListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -131,12 +131,15 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                 }
             });
     private long lastChange = 0;
-    private WebDavHelper webDavHelper;
+    private final WebDavHelper webDavHelper = new WebDavHelper(Proxy.fromPreferences(),
+            WEB_DAV_USER,
+            WEB_DAV_PASSWORD,
+            false);
     private boolean firstDocumentChange = true;
     private URL lastCheckedURL;
     private String escapeText;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateDocument;
@@ -159,30 +162,35 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      * Creates new form Alb_baulastUmleitungPanel.
      */
     public Alb_baulastUmleitungPanel() {
-        this(MODE.TEXTBLATT, null, null);
+        this(MODE.TEXTBLATT, null);
     }
 
     /**
      * Creates a new Alb_baulastUmleitungPanel object.
      *
-     * @param  m                  DOCUMENT ME!
-     * @param  picturePanel       DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  m             DOCUMENT ME!
+     * @param  picturePanel  DOCUMENT ME!
      */
     public Alb_baulastUmleitungPanel(final MODE m,
-            final Alb_picturePanel picturePanel,
-            final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+            final Alb_picturePanel picturePanel) {
         this.mode = m;
         this.picturePan = picturePanel;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         jXBusyLabel1.setSize(16, 16);
         setModeLabeltext();
         tfName.getDocument().addDocumentListener(this);
-        webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     @Override
     public final ClientConnectionContext getConnectionContext() {

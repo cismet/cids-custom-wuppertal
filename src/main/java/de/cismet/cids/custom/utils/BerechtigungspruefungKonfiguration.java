@@ -26,7 +26,8 @@ import java.util.Collection;
 import java.util.List;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
 

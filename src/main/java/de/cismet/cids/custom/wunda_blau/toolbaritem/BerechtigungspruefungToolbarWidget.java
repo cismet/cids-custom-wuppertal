@@ -39,8 +39,9 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 

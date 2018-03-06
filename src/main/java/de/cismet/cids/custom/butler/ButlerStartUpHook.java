@@ -25,8 +25,9 @@ import de.cismet.cids.custom.utils.butler.ButlerRequestInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 

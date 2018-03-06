@@ -66,8 +66,6 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
@@ -86,6 +84,9 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.SemiRoundedPanel;
 
@@ -99,7 +100,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     BorderProvider,
     RequestsFullSizeComponent,
     PropertyChangeListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -168,8 +169,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private final boolean editable;
     private MappingComponent previewMap;
     private CardLayout tabPaneCardLayout;
-    private List<KeyListener> keyListener = new ArrayList<KeyListener>();
-    private final ClientConnectionContext connectionContext;
+    private final List<KeyListener> keyListener = new ArrayList<>();
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddBioAus;
@@ -247,19 +248,22 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
      * Creates new form KkKompensation.
      */
     public KkVerfahrenKompensationEditor() {
-        this(true, null);
+        this(true);
     }
 
     /**
      * Creates new form KkKompensation.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public KkVerfahrenKompensationEditor(final boolean editable, final ClientConnectionContext connectionContext) {
+    public KkVerfahrenKompensationEditor(final boolean editable) {
         this.editable = editable;
-        this.connectionContext = connectionContext;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         final KeyAdapter ka = new KeyAdapter() {
 
@@ -318,8 +322,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             RendererTools.makeReadOnly(btnRemMass);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * Does not remove the border in difference to the RendererTools.
@@ -1701,6 +1703,11 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

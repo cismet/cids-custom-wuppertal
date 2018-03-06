@@ -29,8 +29,9 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -52,19 +53,11 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
 
     /**
      * Creates a new KkKompensationEditor object.
-     */
-    public KkKompensationEditor() {
-        super();
-    }
-
-    /**
-     * Creates a new KkKompensationEditor object.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public KkKompensationEditor(final boolean editable, final ClientConnectionContext connectionContext) {
-        super(editable, connectionContext);
+    public KkKompensationEditor(final boolean editable) {
+        super(editable);
     }
 
     //~ Methods ----------------------------------------------------------------

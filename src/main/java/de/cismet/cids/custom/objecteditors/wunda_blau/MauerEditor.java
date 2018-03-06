@@ -61,13 +61,14 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -86,7 +87,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     FooterComponentProvider,
     TitleComponentProvider,
     BorderProvider,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -95,7 +96,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private final Logger log = Logger.getLogger(MauerEditor.class);
     private boolean editable;
     private CardLayout cardLayout;
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImages;
@@ -305,19 +306,22 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * Creates new form MauerEditor.
      */
     public MauerEditor() {
-        this(true, null);
+        this(true);
     }
 
     /**
      * Creates a new MauerEditor object.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public MauerEditor(final boolean editable, final ClientConnectionContext connectionContext) {
+    public MauerEditor(final boolean editable) {
         this.editable = editable;
-        this.connectionContext = connectionContext;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         if (editable) {
             pnlLeft.setPreferredSize(new Dimension(500, 900));
@@ -424,8 +428,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         setLimitDocumentFilter(taSanMassnahmeGruendung2, 500);
         setLimitDocumentFilter(taSanMassnahmeKopf, 500);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -3003,13 +3005,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
-
         cardLayout.show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    } //GEN-LAST:event_btnImagesActionPerformed
+    }                                                                             //GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3248,6 +3249,11 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

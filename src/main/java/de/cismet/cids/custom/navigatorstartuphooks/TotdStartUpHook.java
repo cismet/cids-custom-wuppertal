@@ -21,12 +21,12 @@ import org.openide.util.lookup.ServiceProvider;
 
 import de.cismet.cids.custom.wunda_blau.startuphooks.MotdWundaStartupHook;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
-
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 

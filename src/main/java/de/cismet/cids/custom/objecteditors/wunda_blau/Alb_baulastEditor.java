@@ -48,8 +48,8 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -71,7 +71,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -99,9 +99,9 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
 
     private final boolean editable;
     private CidsBean cidsBean;
-    private final CardLayout cardLayout;
+    private CardLayout cardLayout;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
@@ -138,23 +138,25 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      * Creates new form CoolThemaRenderer.
      */
     public Alb_baulastEditor() {
-        this(true, null);
+        this(true);
     }
 
     /**
      * Creates new form CoolThemaRenderer.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public Alb_baulastEditor(final boolean editable, final ClientConnectionContext connectionContext) {
+    public Alb_baulastEditor(final boolean editable) {
         this.editable = editable;
-        this.connectionContext = connectionContext;
+    }
 
-        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(
-                !editable,
-                false,
-                connectionContext);
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable,
+                false);
+        alb_picturePanel.initAfterConnectionContext();
         alb_picturePanel.getDocTypePanel().setVisible(false);
         this.initComponents();
         initFooterElements();
@@ -163,9 +165,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         lblLetzteBearbeitung.setVisible(editable);
         lblDurch.setVisible(editable);
         lblBearbeitetAm.setVisible(editable);
+        panMain.initAfterConnectionContext();
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public final ClientConnectionContext getConnectionContext() {
@@ -306,9 +307,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         jPanel4 = alb_picturePanel.getDocTypePanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(
-                editable,
-                connectionContext);
+        panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable);
         alb_picturePanel = alb_picturePanel;
 
         panTitle.setOpaque(false);
@@ -702,5 +701,10 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

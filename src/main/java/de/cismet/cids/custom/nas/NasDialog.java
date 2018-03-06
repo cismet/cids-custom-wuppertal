@@ -65,9 +65,6 @@ import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.nas.NasProduct;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
-//import de.cismet.cids.custom.utils.nas.NasProductTemplate;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -83,6 +80,10 @@ import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+//import de.cismet.cids.custom.utils.nas.NasProductTemplate;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;

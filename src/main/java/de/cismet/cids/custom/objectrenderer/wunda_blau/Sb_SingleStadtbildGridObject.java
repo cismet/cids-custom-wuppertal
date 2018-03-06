@@ -26,9 +26,9 @@ import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.commons.concurrency.CismetExecutors;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!

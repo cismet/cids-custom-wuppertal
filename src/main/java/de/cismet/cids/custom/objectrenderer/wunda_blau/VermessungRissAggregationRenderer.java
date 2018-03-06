@@ -63,9 +63,6 @@ import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsrissReportServ
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
@@ -76,6 +73,11 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.security.WebAccessManager;
 
@@ -96,7 +98,7 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  */
 public class VermessungRissAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     RequestsFullSizeComponent,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -131,7 +133,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
     private PrintingWaitDialog printingWaitDialog;
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
     private javax.swing.JComboBox cmbType;
@@ -154,15 +157,12 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      * Creates a new VermessungRissAggregationRenderer object.
      */
     public VermessungRissAggregationRenderer() {
-        this(ClientConnectionContext.createDeprecated());
     }
-    /**
-     * Creates new form NivellementPunktAggregationRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public VermessungRissAggregationRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
 
         scpRisse.getViewport().setOpaque(false);
@@ -172,8 +172,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -1022,6 +1020,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

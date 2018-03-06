@@ -17,10 +17,10 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.lookup.ServiceProvider;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
-
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 

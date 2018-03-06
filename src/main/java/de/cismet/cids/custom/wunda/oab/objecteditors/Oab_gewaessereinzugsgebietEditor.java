@@ -18,6 +18,9 @@ import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -27,7 +30,12 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @version  1.0
  */
 public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ClientConnectionContextStore {
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserFrom;
@@ -49,7 +57,6 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
      * Creates new form Oab_BerechnungEditor.
      */
     public Oab_gewaessereinzugsgebietEditor() {
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -213,5 +220,20 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
     @Override
     public String getTitle() {
         return lblTitle.getText();
+    }
+
+    @Override
+    public void initAfterConnectionContext() {
+        initComponents();
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

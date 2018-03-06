@@ -62,8 +62,6 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.RetrievalServiceLayer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -75,6 +73,8 @@ import de.cismet.cismap.commons.raster.wms.WMSServiceLayer;
 import de.cismet.cismap.commons.wms.capabilities.Layer;
 import de.cismet.cismap.commons.wms.capabilities.WMSCapabilities;
 import de.cismet.cismap.commons.wms.capabilities.WMSCapabilitiesFactory;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!

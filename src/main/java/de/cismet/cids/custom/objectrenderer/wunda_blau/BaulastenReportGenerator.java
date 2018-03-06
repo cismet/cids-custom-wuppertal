@@ -54,9 +54,9 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 import de.cismet.tools.gui.WebAccessMultiPagePictureReader;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;

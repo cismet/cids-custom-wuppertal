@@ -57,8 +57,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -70,6 +68,9 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -89,7 +90,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -125,7 +126,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private CidsBean cidsBean;
     private MetaObjectNode flurstueckMon;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdAttachBilling;
@@ -211,23 +212,20 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      * Creates a new Fs_bestellungRenderer object.
      */
     public Fs_bestellungRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates new form Fs_BestellungRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public Fs_bestellungRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        initComponents();
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * DOCUMENT ME!

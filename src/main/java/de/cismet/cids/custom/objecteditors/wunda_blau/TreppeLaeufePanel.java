@@ -40,13 +40,17 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable {
+public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -64,7 +68,7 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable 
         final JScrollPane jScrollPane1 = new JScrollPane();
         jPanel1 = new JPanel();
         if (netbeansDesignDummy) {
-            treppeLaufPanel1 = new TreppeLaufPanel();
+            treppeLaufPanel1 = new TreppeLaufPanel(getConnectionContext());
         }
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         btnAddArt1 = new JButton();
@@ -150,6 +154,7 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable 
     private final boolean netbeansDesignDummy;
     private List<CidsBean> cidsBeans;
     private final boolean editable;
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnAddArt1;
@@ -162,18 +167,21 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable 
 
     /**
      * Creates a new TreppeLaeufePanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaeufePanel() {
-        this(true, true);
+    public TreppeLaeufePanel(final ClientConnectionContext connectionContext) {
+        this(true, true, connectionContext);
     }
 
     /**
      * Creates a new TreppeLaeufePanel object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaeufePanel(final boolean editable) {
-        this(editable, false);
+    public TreppeLaeufePanel(final boolean editable, final ClientConnectionContext connectionContext) {
+        this(editable, false, connectionContext);
     }
 
     /**
@@ -181,10 +189,14 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable 
      *
      * @param  editable             DOCUMENT ME!
      * @param  netbeansDesignDummy  DOCUMENT ME!
+     * @param  connectionContext    DOCUMENT ME!
      */
-    public TreppeLaeufePanel(final boolean editable, final boolean netbeansDesignDummy) {
+    public TreppeLaeufePanel(final boolean editable,
+            final boolean netbeansDesignDummy,
+            final ClientConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
+        this.connectionContext = connectionContext;
         initComponents();
         btnAddArt1.setVisible(editable);
     }
@@ -227,7 +239,7 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable 
 
                 @Override
                 protected JPanel doInBackground() throws Exception {
-                    final TreppeLaufPanel panel = new TreppeLaufPanel(editable);
+                    final TreppeLaufPanel panel = new TreppeLaufPanel(editable, getConnectionContext());
                     panel.setCidsBean(cidsBean);
                     panel.setParent(TreppeLaeufePanel.this);
                     return panel;
@@ -305,5 +317,10 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable 
                 jPanel1.remove(panel);
             }
         }
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

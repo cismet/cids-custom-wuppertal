@@ -81,8 +81,8 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.NavigatorAttributeEditorGui;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -96,7 +96,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -130,17 +130,17 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private CidsBean cidsBean;
     private Collection<MetaObject> allSelectedObjects;
     private final boolean editable;
-    private final Collection<JComponent> editableComponents;
+    private final Collection<JComponent> editableComponents = new ArrayList<>();
 //    private boolean landParcelListInitialized = false;
     private boolean baulastArtenListInitialized = false;
-    private final FlurstueckSelectionDialoge fsDialoge;
+    private FlurstueckSelectionDialoge fsDialoge;
     private boolean writePruefkommentar = false;
     private Object oldGeprueft_Von;
     private Object oldPruefdatum;
     private Object oldPruefkommentar;
-    private final WeakHashMap<CidsBean, String> propStringMap = new WeakHashMap<CidsBean, String>();
+    private final WeakHashMap<CidsBean, String> propStringMap = new WeakHashMap<>();
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser bdcBefristungsdatum;
@@ -201,20 +201,22 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      * Creates new form Alb_baulastEditorPanel.
      */
     public Alb_baulastEditorPanel() {
-        this(true, null);
+        this(true);
     }
 
     /**
      * Creates new form Alb_baulastEditorPanel.
      *
-     * @param  editable           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    public Alb_baulastEditorPanel(final boolean editable, final ClientConnectionContext connectionContext) {
+    public Alb_baulastEditorPanel(final boolean editable) {
         this.editable = editable;
-        this.connectionContext = connectionContext;
+    }
 
-        this.editableComponents = new ArrayList<JComponent>();
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         initEditableComponents();
 //        final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
@@ -255,8 +257,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         bdcLoeschungsdatum.getMonthView().setUpperBound(new java.util.Date());
         bdcBefristungsdatum.getMonthView().setUpperBound(new GregorianCalendar(9999, 11, 31).getTime());
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -1376,6 +1376,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

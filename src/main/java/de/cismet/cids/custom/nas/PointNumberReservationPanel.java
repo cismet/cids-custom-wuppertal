@@ -49,8 +49,6 @@ import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation
 import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -61,6 +59,9 @@ import de.cismet.cismap.commons.interaction.events.StatusEvent;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 import de.cismet.commons.gui.progress.BusyLoggingTextPane.Styles;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 

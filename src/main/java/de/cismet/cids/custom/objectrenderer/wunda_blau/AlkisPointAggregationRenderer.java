@@ -80,8 +80,6 @@ import de.cismet.cids.custom.wunda_blau.search.actions.AlkisPointReportServerAct
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
@@ -92,6 +90,10 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -110,7 +112,7 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  */
 public final class AlkisPointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     RequestsFullSizeComponent,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -148,7 +150,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
@@ -169,17 +171,12 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * Creates a new AlkisPointAggregationRenderer object.
      */
     public AlkisPointAggregationRenderer() {
-        this(ClientConnectionContext.createDeprecated());
     }
 
-    /**
-     * Creates new form Alkis_pointAggregationRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public AlkisPointAggregationRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         scpAggregationTable.getViewport().setOpaque(false);
         tblAggregation.getSelectionModel().addListSelectionListener(new TableSelectionListener());
@@ -196,8 +193,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                         AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE,
                         getConnectionContext()));
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public ClientConnectionContext getConnectionContext() {
@@ -878,6 +873,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                             ".pdf",
                             getConnectionContext()));
         }
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

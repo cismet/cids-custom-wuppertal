@@ -52,9 +52,6 @@ import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -68,6 +65,9 @@ import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
@@ -76,7 +76,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
  */
 public class MauerAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     RequestsFullSizeComponent,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -97,7 +97,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     private MauerTableModel tableModel;
     private MappingComponent map;
     private final Collection<Feature> pointFeatures = new LinkedList<Feature>();
-    private final ClientConnectionContext connctionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane jLayeredPane1;
@@ -120,17 +120,13 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
      * Creates new form MauerAggregationRenderer.
      */
     public MauerAggregationRenderer() {
-        this(ClientConnectionContext.createDeprecated());
     }
 
-    /**
-     * Creates a new MauerAggregationRenderer object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public MauerAggregationRenderer(final ClientConnectionContext connectionContext) {
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         tableModel = new MauerTableModel();
-        this.connctionContext = connectionContext;
         initComponents();
         map = new MappingComponent();
         pnlMap.setLayout(new BorderLayout());
@@ -152,7 +148,10 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
             });
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -606,7 +605,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
 
     @Override
     public ClientConnectionContext getConnectionContext() {
-        return connctionContext;
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

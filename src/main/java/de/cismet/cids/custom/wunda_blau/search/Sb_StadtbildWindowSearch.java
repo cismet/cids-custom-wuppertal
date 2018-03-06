@@ -75,9 +75,6 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContextStore;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -88,6 +85,10 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -264,7 +265,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 pnlButtons.add(btnGeoSearch, gridBagConstraints);
             }
 
-            cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
+            cboOrt.setSelectedItem(Sb_stadtbildUtils.getWuppertal(getConnectionContext()));
 
             fetchAndClassifyNutzungseinschraenkungen();
         } catch (Throwable e) {
@@ -1036,7 +1037,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         dlm.clear();
         sb_StadtbilderTimeTabs.clear();
         cboStreet.setSelectedItem(null);
-        cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
+        cboOrt.setSelectedItem(Sb_stadtbildUtils.getWuppertal(getConnectionContext()));
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
         chbInternalAndExternal.setSelected(true);
@@ -1091,7 +1092,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      * @param  place  DOCUMENT ME!
      */
     private void checkIfPlaceInsideWuppertal(final CidsBean place) {
-        if ((place != null) && place.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
+        if ((place != null) && place.equals(Sb_stadtbildUtils.getWuppertal(getConnectionContext()))) {
             // inside of Wuppertal
             cboStreet.setEnabled(true);
             lblStrasse.setEnabled(true);
@@ -1130,8 +1131,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void setModelForComboBoxes() {
-        Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboStreet, "STRASSE");
-        Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboOrt, "SB_ORT");
+        Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboStreet, "STRASSE", getConnectionContext());
+        Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboOrt, "SB_ORT", getConnectionContext());
     }
 
     /**

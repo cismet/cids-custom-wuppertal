@@ -25,11 +25,11 @@ import java.util.List;
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.wunda_blau.search.server.BerechtigungspruefungOffeneAnfragenStatement;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!

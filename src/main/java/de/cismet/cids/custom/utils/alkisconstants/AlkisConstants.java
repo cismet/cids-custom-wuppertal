@@ -21,7 +21,8 @@ import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisConf;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!

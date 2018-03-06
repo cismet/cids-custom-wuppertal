@@ -52,12 +52,13 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.cismap.cidslayer.CidsLayerFeature;
 
 import de.cismet.cismap.commons.featureservice.AbstractFeatureService;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -152,7 +153,8 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
             final String query = "SELECT " + MC_WOHNLAGE_KATEGORIE.getID() + "," + MC_WOHNLAGE_KATEGORIE.getPrimaryKey()
                         + " FROM " + MC_WOHNLAGE_KATEGORIE.getTableName()
                         + " WHERE schluessel != 'keine' ORDER BY reihenfolge";
-            metaObjects = MetaObjectCache.getInstance().getMetaObjectsByQuery(query, MC_WOHNLAGE_KATEGORIE.getDomain());
+            metaObjects = MetaObjectCache.getInstance()
+                        .getMetaObjectsByQuery(query, MC_WOHNLAGE_KATEGORIE.getDomain(), getConnectionContext());
         } catch (final CacheException ex) {
             metaObjects = new MetaObject[0];
         }

@@ -98,15 +98,15 @@ import de.cismet.cids.editors.converters.SqlDateToStringConverter;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -133,7 +133,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -200,14 +200,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     protected VermessungFlurstueckSelectionDialog flurstueckDialog;
     protected volatile int currentDocument = NO_SELECTION;
     protected volatile int currentPage = NO_SELECTION;
-    private final AlertPanel alertPanel;
+    private AlertPanel alertPanel;
     private VermessungUmleitungPanel umleitungsPanel;
     private boolean umleitungChangedFlag = false;
     private boolean showUmleitung = true;
     private boolean isErrorMessageVisible = true;
     private MeasuringComponent measuringComponent;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
@@ -292,19 +292,22 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * Creates a new VermessungRissEditor object.
      */
     public VermessungRissEditor() {
-        this(false, null);
+        this(false);
     }
 
     /**
      * Creates new form VermessungRissEditor.
      *
-     * @param  readOnly           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param  readOnly  DOCUMENT ME!
      */
-    public VermessungRissEditor(final boolean readOnly, final ClientConnectionContext connectionContext) {
+    public VermessungRissEditor(final boolean readOnly) {
         this.readOnly = readOnly;
-        this.connectionContext = connectionContext;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
@@ -381,7 +384,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

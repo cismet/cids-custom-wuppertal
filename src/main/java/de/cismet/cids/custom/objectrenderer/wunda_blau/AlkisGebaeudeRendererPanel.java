@@ -50,8 +50,9 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -62,7 +63,7 @@ import de.cismet.tools.collections.TypeSafeCollections;
  * @version  $Revision$, $Date$
  */
 public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -73,7 +74,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
 
     private CidsBean cidsBean;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblBauweise;
@@ -99,21 +100,14 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
      * Creates a new AlkisGebaeudeRendererPanel object.
      */
     public AlkisGebaeudeRendererPanel() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates new form Alkis_gebaeudeRendererPanel.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public AlkisGebaeudeRendererPanel(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -452,5 +446,10 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     @Override
     public final ClientConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 }

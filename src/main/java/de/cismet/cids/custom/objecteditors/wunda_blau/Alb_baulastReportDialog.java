@@ -33,7 +33,7 @@ import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
-import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastblattEditor.log;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastblattEditor.LOG;
 
 /**
  * DOCUMENT ME!
@@ -281,7 +281,7 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog {
                 }
             }
         } catch (Exception e) {
-            log.error("Error when trying to produce a alkis product", e);
+            LOG.error("Error when trying to produce a alkis product", e);
         }
         return false;
     }

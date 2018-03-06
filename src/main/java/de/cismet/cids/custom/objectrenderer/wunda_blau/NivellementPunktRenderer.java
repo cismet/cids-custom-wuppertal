@@ -9,9 +9,9 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.NivellementPunktEditor;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -31,16 +31,7 @@ public class NivellementPunktRenderer extends NivellementPunktEditor implements 
      * Creates a new NivellementPunktRenderer object.
      */
     public NivellementPunktRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates a new NivellementPunktRenderer object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public NivellementPunktRenderer(final ClientConnectionContext connectionContext) {
-        super(true, connectionContext);
+        super(true);
 
         title = "";
     }

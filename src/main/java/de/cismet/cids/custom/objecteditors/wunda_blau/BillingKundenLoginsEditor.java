@@ -33,6 +33,9 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
+
 import de.cismet.tools.CismetThreadPool;
 
 import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMetaClass;
@@ -43,7 +46,9 @@ import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMet
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingKundenLoginsEditor extends javax.swing.JPanel implements CidsBeanRenderer, EditorSaveListener {
+public class BillingKundenLoginsEditor extends javax.swing.JPanel implements CidsBeanRenderer,
+    EditorSaveListener,
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -53,6 +58,8 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
 
     private CidsBean cidsBean;
     private boolean editable;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboCustomer;
     private javax.swing.Box.Filler filler1;
@@ -82,8 +89,14 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
      * @param  editable  DOCUMENT ME!
      */
     public BillingKundenLoginsEditor(final boolean editable) {
-        initComponents();
         this.editable = editable;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initAfterConnectionContext() {
+        initComponents();
         if (!editable) {
             RendererTools.makeReadOnly(txtKontakt);
             RendererTools.makeReadOnly(txtName);
@@ -91,8 +104,6 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
             RendererTools.makeReadOnly(txtTelNummer);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -289,6 +300,16 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
         return true;
     }
 
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -305,7 +326,13 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
             if (!isFakeModel() && (mc != null)) {
                 DefaultComboBoxModel tmpModel = null;
                 if (!SwingUtilities.isEventDispatchThread()) {
-                    tmpModel = getModelByMetaClass(mc, isNullable(), isOnlyUsed(), getComparator(), true);
+                    tmpModel = getModelByMetaClass(
+                            mc,
+                            isNullable(),
+                            isOnlyUsed(),
+                            getComparator(),
+                            true,
+                            getConnectionContext());
                 }
                 final DefaultComboBoxModel model = tmpModel;
 
@@ -321,7 +348,8 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
                                         isNullable(),
                                         isOnlyUsed(),
                                         getComparator(),
-                                        forceReload);
+                                        forceReload,
+                                        getConnectionContext());
                             }
                         }
 

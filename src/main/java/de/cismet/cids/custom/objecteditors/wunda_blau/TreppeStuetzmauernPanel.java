@@ -30,7 +30,6 @@ import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,13 +51,16 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Disposable {
+public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Disposable, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -70,6 +72,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     private List<CidsBean> cidsBeans;
     private final boolean editable;
     private final HashMap<CidsBean, CidsBean> zustandBeanMap = new HashMap<>();
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     Box.Filler filler1;
@@ -81,18 +84,21 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
     /**
      * Creates a new TreppeStuetzmauernPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel() {
-        this(true, true);
+    public TreppeStuetzmauernPanel(final ClientConnectionContext connectionContext) {
+        this(true, true, connectionContext);
     }
 
     /**
      * Creates a new TreppeStuetzmauernPanel object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel(final boolean editable) {
-        this(editable, false);
+    public TreppeStuetzmauernPanel(final boolean editable, final ClientConnectionContext connectionContext) {
+        this(editable, false, connectionContext);
     }
 
     /**
@@ -100,10 +106,14 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      *
      * @param  editable             DOCUMENT ME!
      * @param  netbeansDesignDummy  DOCUMENT ME!
+     * @param  connectionContext    DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel(final boolean editable, final boolean netbeansDesignDummy) {
+    public TreppeStuetzmauernPanel(final boolean editable,
+            final boolean netbeansDesignDummy,
+            final ClientConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
@@ -387,6 +397,11 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
             }
         }
         zustandBeanMap.clear();
+    }
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

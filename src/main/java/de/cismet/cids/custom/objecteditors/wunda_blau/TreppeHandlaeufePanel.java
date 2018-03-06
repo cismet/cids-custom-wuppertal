@@ -37,13 +37,16 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
 
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposable {
+public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposable, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -147,6 +150,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
     private final boolean netbeansDesignDummy;
     private List<CidsBean> cidsBeans;
     private final boolean editable;
+    private final ClientConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnAddArt1;
@@ -159,18 +163,21 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
 
     /**
      * Creates a new TreppeHandlaeufePanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeHandlaeufePanel() {
-        this(true, true);
+    public TreppeHandlaeufePanel(final ClientConnectionContext connectionContext) {
+        this(true, true, connectionContext);
     }
 
     /**
      * Creates a new TreppeHandlaeufePanel object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeHandlaeufePanel(final boolean editable) {
-        this(editable, false);
+    public TreppeHandlaeufePanel(final boolean editable, final ClientConnectionContext connectionContext) {
+        this(editable, false, connectionContext);
     }
 
     /**
@@ -178,15 +185,24 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
      *
      * @param  editable             DOCUMENT ME!
      * @param  netbeansDesignDummy  DOCUMENT ME!
+     * @param  connectionContext    DOCUMENT ME!
      */
-    public TreppeHandlaeufePanel(final boolean editable, final boolean netbeansDesignDummy) {
+    public TreppeHandlaeufePanel(final boolean editable,
+            final boolean netbeansDesignDummy,
+            final ClientConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
+        this.connectionContext = connectionContext;
         initComponents();
         btnAddArt1.setVisible(editable);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public ClientConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!

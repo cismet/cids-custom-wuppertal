@@ -55,9 +55,9 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.commons.concurrency.CismetConcurrency;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 import de.cismet.security.WebAccessManager;
 
@@ -81,8 +81,8 @@ public class Sb_stadtbildUtils {
     public static BufferedImage ERROR_IMAGE;
     public static BufferedImage PLACEHOLDER_IMAGE;
 
-    private static final CidsBean WUPPERTAL;
-    private static final CidsBean R102;
+    private static CidsBean WUPPERTAL;
+    private static CidsBean R102;
 
     private static final int CACHE_SIZE = 100;
 
@@ -98,9 +98,6 @@ public class Sb_stadtbildUtils {
     public static final int LOW_PRIORITY = -1;
 
     static {
-        WUPPERTAL = getOrtWupertal();
-        R102 = getLagerR102();
-
         try {
             ERROR_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResourceAsStream(
                         "/de/cismet/cids/custom/objecteditors/wunda_blau/no_image.png"));
@@ -141,9 +138,14 @@ public class Sb_stadtbildUtils {
     /**
      * Get the CidsBean of the Sb_Ort with the name 'Wuppertal'. Might be null.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean getWUPPERTAL() {
+    public static CidsBean getWuppertal(final ClientConnectionContext connectionContext) {
+        if (WUPPERTAL == null) {
+            WUPPERTAL = getOrtWuppertal(connectionContext);
+        }
         return WUPPERTAL;
     }
 
@@ -160,18 +162,25 @@ public class Sb_stadtbildUtils {
     /**
      * Get the CidsBean of the Sb_Lager with the name 'R102'. Might be null.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean getR102() {
+    public static CidsBean getR102(final ClientConnectionContext connectionContext) {
+        if (R102 == null) {
+            R102 = getLagerR102(connectionContext);
+        }
         return R102;
     }
 
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    private static CidsBean getOrtWupertal() {
+    private static CidsBean getOrtWuppertal(final ClientConnectionContext connectionContext) {
         try {
             final MetaClass ortClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
@@ -189,7 +198,7 @@ public class Sb_stadtbildUtils {
                 final MetaObject[] wuppertal;
                 try {
                     wuppertal = SessionManager.getProxy()
-                                .getMetaObjectByQuery(wuppertalQuery.toString(), 0, getClientConnectionContext());
+                                .getMetaObjectByQuery(wuppertalQuery.toString(), 0, connectionContext);
                     if (wuppertal.length > 0) {
                         return wuppertal[0].getBean();
                     }
@@ -206,9 +215,11 @@ public class Sb_stadtbildUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    private static CidsBean getLagerR102() {
+    private static CidsBean getLagerR102(final ClientConnectionContext connectionContext) {
         try {
             final MetaClass lagerClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
@@ -225,8 +236,7 @@ public class Sb_stadtbildUtils {
                 }
                 final MetaObject[] r102;
                 try {
-                    r102 = SessionManager.getProxy()
-                                .getMetaObjectByQuery(r102Query.toString(), 0, getClientConnectionContext());
+                    r102 = SessionManager.getProxy().getMetaObjectByQuery(r102Query.toString(), 0, connectionContext);
                     if (r102.length > 0) {
                         return r102[0].getBean();
                     }
@@ -246,10 +256,13 @@ public class Sb_stadtbildUtils {
      * model of the FastBindableReferenceCombo is set as the model of the combobox. Finally the combobox is decorated
      * with the AutoCompleteDecorator.
      *
-     * @param  combobox   The model of that combobox will be replaced
-     * @param  className  the cids class name. The elements of this class will be fetched.
+     * @param  combobox           The model of that combobox will be replaced
+     * @param  className          the cids class name. The elements of this class will be fetched.
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox, final String className) {
+    public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox,
+            final String className,
+            final ClientConnectionContext connectionContext) {
         final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className);
         if (metaClass != null) {
             final DefaultComboBoxModel comboBoxModel;
@@ -553,15 +566,6 @@ public class Sb_stadtbildUtils {
             }
         }
         return GraphicsUtilities.convertToBufferedImage(toReturn);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(Sb_stadtbildUtils.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

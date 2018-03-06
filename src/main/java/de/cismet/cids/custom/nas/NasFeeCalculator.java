@@ -29,7 +29,8 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearch
 import de.cismet.cids.custom.wunda_blau.search.server.NasPointSearch;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!

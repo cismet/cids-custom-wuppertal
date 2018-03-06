@@ -14,9 +14,9 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.KkKompensationEditor;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -36,16 +36,7 @@ public class KkKompensationRenderer extends KkKompensationEditor implements Cids
      * Creates a new KkKompensationRenderer object.
      */
     public KkKompensationRenderer() {
-        this(ClientConnectionContext.createDeprecated());
-    }
-
-    /**
-     * Creates a new KkKompensationRenderer object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public KkKompensationRenderer(final ClientConnectionContext connectionContext) {
-        super(false, connectionContext);
+        super(false);
     }
 
     //~ Methods ----------------------------------------------------------------

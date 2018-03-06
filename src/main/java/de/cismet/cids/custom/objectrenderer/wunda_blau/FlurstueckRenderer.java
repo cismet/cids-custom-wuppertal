@@ -59,9 +59,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.connectioncontext.ClientConnectionContext;
-import de.cismet.cids.server.connectioncontext.ConnectionContextProvider;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.BoundingBox;
@@ -73,6 +70,9 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ClientConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.CismetThreadPool;
@@ -92,7 +92,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ConnectionContextProvider {
+    ClientConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -102,9 +102,9 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 
     private CidsBean cidsBean;
     private String title;
-    private final MappingComponent map;
+    private MappingComponent map;
 
-    private final ClientConnectionContext connectionContext;
+    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel6;
@@ -135,24 +135,22 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
      * Creates a new FlurstueckRenderer object.
      */
     public FlurstueckRenderer() {
-        this(ClientConnectionContext.createDeprecated());
     }
 
-    /**
-     * Creates new form FlurstueckRenderer.
-     *
-     * @param  connectionContext  DOCUMENT ME!
-     */
-    public FlurstueckRenderer(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void initAfterConnectionContext() {
         initComponents();
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
         jXHyperlink1.setVisible(false);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
