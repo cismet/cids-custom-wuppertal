@@ -178,8 +178,8 @@ public abstract class NasFeeCalculator {
                     .executeTask(
                             NasZaehlObjekteServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            connectionContext,
                             (Object)null,
+                            connectionContext,
                             sapType,
                             sapGeom);
         return c.get(0);

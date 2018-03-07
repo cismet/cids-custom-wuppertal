@@ -86,8 +86,8 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
             ret = SessionManager.getProxy().executeTask(
                     taskname,
                     "WUNDA_BLAU",
-                    getConnectionContext(),
                     body,
+                    getConnectionContext(),
                     params);
 
             if (ret instanceof Exception) {

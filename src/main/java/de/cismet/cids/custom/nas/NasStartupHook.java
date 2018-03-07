@@ -83,8 +83,8 @@ public class NasStartupHook implements StartupHook, ConnectionContextStore {
                                         .executeTask(
                                                 SEVER_ACTION,
                                                 "WUNDA_BLAU",
-                                                getConnectionContext(),
                                                 (Object)null,
+                                                getConnectionContext(),
                                                 paramMethod);
                         } catch (Exception ex) {
                             log.error("error while getting the list of undelivered nas orders from server", ex);

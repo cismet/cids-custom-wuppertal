@@ -107,8 +107,8 @@ public class VCMProperties extends Properties {
                         .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                connectionContext,
-                                WundaBlauServerResources.VCM_PROPERTIES.getValue());
+                                WundaBlauServerResources.VCM_PROPERTIES.getValue(),
+                                connectionContext);
             super.load(new StringReader(propertiesString));
         } catch (final Exception ex) {
             LOG.warn("could not load properties.", ex);

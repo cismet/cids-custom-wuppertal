@@ -116,8 +116,8 @@ public class AlkisUtils {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            connectionContext,
-                            WundaBlauServerResources.ALKIS_BUCHUNTSBLATTBEZIRKE_JSON.getValue());
+                            WundaBlauServerResources.ALKIS_BUCHUNTSBLATTBEZIRKE_JSON.getValue(),
+                            connectionContext);
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }
@@ -137,8 +137,8 @@ public class AlkisUtils {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            connectionContext,
-                            WundaBlauServerResources.ALKIS_PRODUCTS_PROPERTIES.getValue());
+                            WundaBlauServerResources.ALKIS_PRODUCTS_PROPERTIES.getValue(),
+                            connectionContext);
             if (productsRet instanceof Exception) {
                 throw new Exception("error while loading server resource "
                             + WundaBlauServerResources.ALKIS_PRODUCTS_PROPERTIES,
@@ -152,8 +152,8 @@ public class AlkisUtils {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            connectionContext,
-                            WundaBlauServerResources.ALKIS_FORMATS_PROPERTIES.getValue());
+                            WundaBlauServerResources.ALKIS_FORMATS_PROPERTIES.getValue(),
+                            connectionContext);
             if (formatsRet instanceof Exception) {
                 throw new Exception("error while loading server resource "
                             + WundaBlauServerResources.ALKIS_FORMATS_PROPERTIES,
@@ -166,8 +166,8 @@ public class AlkisUtils {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            connectionContext,
-                            WundaBlauServerResources.ALKIS_PRODUKTBESCHREIBUNG_XML.getValue());
+                            WundaBlauServerResources.ALKIS_PRODUKTBESCHREIBUNG_XML.getValue(),
+                            connectionContext);
             if (beschreibungRet instanceof Exception) {
                 throw new Exception("error while loading server resource "
                             + WundaBlauServerResources.ALKIS_PRODUKTBESCHREIBUNG_XML.getValue(),
@@ -937,8 +937,8 @@ public class AlkisUtils {
                     .executeTask(
                             ALKIS_SOAP_OVER_CSA,
                             "WUNDA_BLAU",
-                            connectionContext,
                             body,
+                            connectionContext,
                             pointCodeSAP);
         return result;
     }
@@ -964,8 +964,8 @@ public class AlkisUtils {
                     .executeTask(
                             ALKIS_SOAP_OVER_CSA,
                             "WUNDA_BLAU",
-                            connectionContext,
                             body,
+                            connectionContext,
                             buchungsblattCodeSAP);
         return result;
     }

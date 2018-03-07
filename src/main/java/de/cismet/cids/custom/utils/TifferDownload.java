@@ -123,8 +123,8 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
                         .executeTask(
                                 TifferAction.ACTION_NAME,
                                 "WUNDA_BLAU",
-                                getConnectionContext(),
                                 (Object)null,
+                                getConnectionContext(),
                                 paramNummer,
                                 paramScale,
                                 paramFormat,

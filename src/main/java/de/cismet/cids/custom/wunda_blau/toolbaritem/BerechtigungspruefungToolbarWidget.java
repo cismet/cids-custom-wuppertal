@@ -167,9 +167,9 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                                             SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
-                                            getConnectionContext(),
                                             BerechtigungspruefungMessageNotifier.getInstance().getAeltesteOffeneAnfrage(
                                                 getConnectionContext()),
+                                            getConnectionContext(),
                                             new ServerActionParameter<>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.MODUS
                                                     .toString(),

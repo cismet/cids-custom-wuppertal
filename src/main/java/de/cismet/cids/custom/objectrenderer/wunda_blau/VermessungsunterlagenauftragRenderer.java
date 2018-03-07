@@ -1194,8 +1194,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                                 .executeTask(SessionManager.getSession().getUser(),
                                     GetServerResourceServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    getConnectionContext(),
-                                    WundaBlauServerResources.VERMESSUNGSUNTERLAGENPORTAL_PROPERTIES.getValue());
+                                    WundaBlauServerResources.VERMESSUNGSUNTERLAGENPORTAL_PROPERTIES.getValue(),
+                                    getConnectionContext());
                     if (ret instanceof Exception) {
                         throw (Exception)ret;
                     }

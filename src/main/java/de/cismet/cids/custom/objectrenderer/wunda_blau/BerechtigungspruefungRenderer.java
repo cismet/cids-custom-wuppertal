@@ -1702,8 +1702,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                                     .executeTask(SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
-                                            getConnectionContext(),
                                             schluessel,
+                                            getConnectionContext(),
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.KOMMENTAR
                                                     .toString(),

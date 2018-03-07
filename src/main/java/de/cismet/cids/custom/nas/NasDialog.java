@@ -300,8 +300,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            getConnectionContext(),
-                            WundaBlauServerResources.NAS_PRODUCT_DESCRIPTION_JSON.getValue());
+                            WundaBlauServerResources.NAS_PRODUCT_DESCRIPTION_JSON.getValue(),
+                            getConnectionContext());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }

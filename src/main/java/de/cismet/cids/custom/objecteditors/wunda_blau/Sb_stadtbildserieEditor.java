@@ -2727,8 +2727,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     .executeTask(
                         Sb_stadtbildserieUpdatePruefhinweisAction.TASK_NAME,
                         "WUNDA_BLAU",
-                        getConnectionContext(),
                         (Object)null,
+                        getConnectionContext(),
                         paramComment,
                         paramSBSid);
             return null;

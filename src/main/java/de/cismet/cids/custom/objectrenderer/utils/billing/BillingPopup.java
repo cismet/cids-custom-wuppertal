@@ -1479,8 +1479,8 @@ public class BillingPopup extends javax.swing.JDialog {
                         .executeTask(SessionManager.getSession().getUser(),
                             BerechtigungspruefungAnfrageServerAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
-                            connectionContext,
                             fileData,
+                            connectionContext,
                             params.toArray(new ServerActionParameter[0]));
             return (String)ret;
         } catch (final Exception ex) {

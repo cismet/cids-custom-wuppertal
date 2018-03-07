@@ -52,8 +52,8 @@ public final class AlkisConstants {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            connectionContext,
-                            WundaBlauServerResources.ALKIS_CONF.getValue());
+                            WundaBlauServerResources.ALKIS_CONF.getValue(),
+                            connectionContext);
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }

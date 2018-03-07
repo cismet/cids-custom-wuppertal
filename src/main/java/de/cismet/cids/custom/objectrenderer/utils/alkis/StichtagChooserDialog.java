@@ -294,8 +294,8 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Connec
                                 .executeTask(
                                         "getDate",
                                         "WUNDA_BLAU",
-                                        getConnectionContext(),
-                                        (Object)null);
+                                        (Object)null,
+                                        getConnectionContext());
                 }
 
                 @Override

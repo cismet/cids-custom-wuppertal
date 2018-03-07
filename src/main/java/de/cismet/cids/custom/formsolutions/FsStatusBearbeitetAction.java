@@ -75,8 +75,8 @@ public class FsStatusBearbeitetAction extends AbstractCidsBeanAction implements 
                     .executeTask(SessionManager.getSession().getUser(),
                         FormSolutionBestellungChangeStatusServerAction.TASK_NAME,
                         "WUNDA_BLAU",
-                        getConnectionContext(),
                         mon,
+                        getConnectionContext(),
                         paramErledigt);
         } catch (final Exception ex) {
             LOG.error(ex, ex);

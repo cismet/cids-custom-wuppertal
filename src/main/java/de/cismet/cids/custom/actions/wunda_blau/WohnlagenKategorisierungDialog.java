@@ -653,8 +653,8 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
                                 .executeTask(
                                     WohnlagenKategorisierungServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    getConnectionContext(),
                                     (Object)null,
+                                    getConnectionContext(),
                                     new ServerActionParameter<MetaObjectNode>(
                                         WohnlagenKategorisierungServerAction.ParameterType.KATEGORIE.toString(),
                                         kategorieNode),

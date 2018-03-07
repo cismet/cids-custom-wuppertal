@@ -60,10 +60,10 @@ public class BerechtigungspruefungKonfiguration {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
+                            WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON.getValue(),
                             ConnectionContext.create(
                                 Category.STATIC,
-                                BerechtigungspruefungKonfiguration.class.getSimpleName()),
-                            WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON.getValue());
+                                BerechtigungspruefungKonfiguration.class.getSimpleName()));
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }

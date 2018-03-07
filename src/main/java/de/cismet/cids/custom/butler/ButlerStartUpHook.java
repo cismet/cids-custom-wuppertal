@@ -93,8 +93,8 @@ public class ButlerStartUpHook implements StartupHook, ConnectionContextStore {
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    getConnectionContext(),
                                     (Object)null,
+                                    getConnectionContext(),
                                     paramMethod);
             } catch (ConnectionException ex) {
                 LOG.error("error while getting the list of undelivered butler 1 requests from server", ex);

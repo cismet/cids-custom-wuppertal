@@ -1528,8 +1528,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                     .executeTask(
                             SEVER_ACTION,
                             "WUNDA_BLAU",
-                            getConnectionContext(),
                             (Object)null,
+                            getConnectionContext(),
                             action,
                             prefix);
     }
@@ -1639,8 +1639,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                             .executeTask(
                                     SEVER_ACTION,
                                     "WUNDA_BLAU",
-                                    getConnectionContext(),
                                     (Object)null,
+                                    getConnectionContext(),
                                     action,
                                     prefix,
                                     aNummer);
@@ -1857,8 +1857,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                             .executeTask(
                                     SEVER_ACTION,
                                     "WUNDA_BLAU",
-                                    getConnectionContext(),
                                     (Object)null,
+                                    getConnectionContext(),
                                     action,
                                     prefix,
                                     aNummer,
@@ -2022,8 +2022,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                         .executeTask(
                                 SEVER_ACTION,
                                 "WUNDA_BLAU",
-                                getConnectionContext(),
                                 (Object)null,
+                                getConnectionContext(),
                                 allSaps.toArray(new ServerActionParameter[0]));
             if ((result != null) && !result.isSuccessfull()) {
                 res.setSuccessful(false);

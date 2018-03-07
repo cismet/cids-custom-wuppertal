@@ -91,9 +91,9 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                             SessionManager.getSession().getUser(),
                             PublishCidsServerMessageAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
-                            getConnectionContext(),
                             message,
-                            new ServerActionParameter<String>(
+                            getConnectionContext(),
+                            new ServerActionParameter<>(
                                 PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
                                 MotdWundaStartupHook.MOTD_MESSAGE_MOTD));
                 SessionManager.getSession()
@@ -102,9 +102,9 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
                             SessionManager.getSession().getUser(),
                             PublishCidsServerMessageAction.TASK_NAME,
                             SessionManager.getSession().getUser().getDomain(),
-                            getConnectionContext(),
                             message.substring(0, Math.min(40, message.length())),
-                            new ServerActionParameter<String>(
+                            getConnectionContext(),
+                            new ServerActionParameter<>(
                                 PublishCidsServerMessageAction.ParameterType.CATEGORY.toString(),
                                 MotdWundaStartupHook.MOTD_MESSAGE_TOTD));
             } catch (final ConnectionException ex) {

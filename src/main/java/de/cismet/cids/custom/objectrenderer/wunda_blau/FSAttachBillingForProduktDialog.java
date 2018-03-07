@@ -196,8 +196,8 @@ public class FSAttachBillingForProduktDialog extends javax.swing.JDialog impleme
                                 .executeTask(SessionManager.getSession().getUser(),
                                     FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    getConnectionContext(),
                                     (Object)null,
+                                    getConnectionContext(),
                                     paramMon,
                                     paramStep,
                                     singleStep);

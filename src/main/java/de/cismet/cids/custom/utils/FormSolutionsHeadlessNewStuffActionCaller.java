@@ -85,8 +85,8 @@ public class FormSolutionsHeadlessNewStuffActionCaller implements ConnectionCont
                     .executeTask(
                         FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                         DOMAIN,
-                        getConnectionContext(),
-                        (Object)null);
+                        (Object)null,
+                        getConnectionContext());
         } catch (ConnectionException ex) {
             System.err.println("error executing task");
             ex.printStackTrace();

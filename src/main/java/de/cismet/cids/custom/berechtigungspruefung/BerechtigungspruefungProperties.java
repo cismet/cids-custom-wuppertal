@@ -84,10 +84,10 @@ public class BerechtigungspruefungProperties
                             .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
+                                WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_PROPERTIES.getValue(),
                                 ConnectionContext.create(
                                     Category.STATIC,
-                                    BerechtigungspruefungProperties.class.getSimpleName()),
-                                WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_PROPERTIES.getValue());
+                                    BerechtigungspruefungProperties.class.getSimpleName()));
                 if (ret instanceof Exception) {
                     throw (Exception)ret;
                 }

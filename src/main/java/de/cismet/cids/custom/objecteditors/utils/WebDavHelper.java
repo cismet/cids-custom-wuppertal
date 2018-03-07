@@ -137,8 +137,8 @@ public class WebDavHelper {
                     .executeTask(
                         WEBDAV_OVER_TUNNEL,
                         "WUNDA_BLAU",
-                        connectionContext,
                         bytes,
+                        connectionContext,
                         putSAP,
                         proxySAP,
                         usernameSAP,
@@ -184,8 +184,8 @@ public class WebDavHelper {
                         .executeTask(
                             WEBDAV_OVER_TUNNEL,
                             "WUNDA_BLAU",
-                            connectionContext,
                             (Object)null,
+                            connectionContext,
                             deleteSAP,
                             proxySAP,
                             usernameSAP,
@@ -235,8 +235,8 @@ public class WebDavHelper {
                     .executeTask(
                             WebDavHelper.WEBDAV_OVER_TUNNEL,
                             "WUNDA_BLAU",
-                            connectionContext,
                             (Object)null,
+                            connectionContext,
                             getSAP,
                             proxySAP,
                             usernameSAP,

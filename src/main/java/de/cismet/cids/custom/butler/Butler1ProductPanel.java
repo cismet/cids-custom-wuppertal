@@ -691,8 +691,8 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
                             .executeTask(
                                     NasZaehlObjekteServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    getConnectionContext(),
                                     (Object)null,
+                                    getConnectionContext(),
                                     sapType,
                                     sapGeom);
                 return "" + c.get(0);

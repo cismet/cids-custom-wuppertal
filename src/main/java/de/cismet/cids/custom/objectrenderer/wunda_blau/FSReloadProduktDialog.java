@@ -187,8 +187,8 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
                                 .executeTask(SessionManager.getSession().getUser(),
                                     FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    getConnectionContext(),
                                     (Object)null,
+                                    getConnectionContext(),
                                     paramMon,
                                     paramStep);
                     } catch (final ConnectionException ex3) {

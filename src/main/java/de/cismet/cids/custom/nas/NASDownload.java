@@ -477,8 +477,8 @@ public class NASDownload extends AbstractCancellableDownload implements Connecti
                         .executeTask(
                                 SEVER_ACTION,
                                 "WUNDA_BLAU",
-                                getConnectionContext(),
                                 (Object)null,
+                                getConnectionContext(),
                                 paramTemplate,
                                 paramGeom,
                                 paramRequest,
@@ -505,8 +505,8 @@ public class NASDownload extends AbstractCancellableDownload implements Connecti
                     .executeTask(
                         SEVER_ACTION,
                         "WUNDA_BLAU",
-                        getConnectionContext(),
                         (Object)null,
+                        getConnectionContext(),
                         paramOrderId,
                         paramMethod);
         } catch (Exception ex) {
@@ -554,8 +554,8 @@ public class NASDownload extends AbstractCancellableDownload implements Connecti
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        getConnectionContext(),
                                         (Object)null,
+                                        getConnectionContext(),
                                         paramOrderId,
                                         paramMethod);
                 } catch (ConnectionException ex) {
