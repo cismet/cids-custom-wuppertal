@@ -33,8 +33,8 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -48,7 +48,7 @@ import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMet
  */
 public class BillingKundenLoginsEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     EditorSaveListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -58,7 +58,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
 
     private CidsBean cidsBean;
     private boolean editable;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboCustomer;
@@ -95,7 +95,8 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         if (!editable) {
             RendererTools.makeReadOnly(txtKontakt);
@@ -265,7 +266,8 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             this.cidsBean = cidsBean;
             bindingGroup.bind();
         }
@@ -301,12 +303,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

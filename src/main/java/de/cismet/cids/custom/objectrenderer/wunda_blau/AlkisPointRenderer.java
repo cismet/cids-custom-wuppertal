@@ -61,13 +61,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -90,7 +88,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
-import de.cismet.cids.custom.utils.alkis.AlkisPunktReportScriptlet;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
@@ -103,9 +100,8 @@ import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.security.WebAccessManager;
 
@@ -138,7 +134,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -357,7 +353,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private ImageIcon PUNKT_TXT;
     private String urlOfAPMap;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrAPMapControls;
@@ -480,7 +476,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             try {
                 soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
@@ -543,7 +540,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -2451,11 +2448,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

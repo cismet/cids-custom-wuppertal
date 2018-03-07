@@ -22,7 +22,9 @@ import de.cismet.cids.custom.utils.alkis.AlkisConf;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -34,21 +36,23 @@ public final class AlkisConstants {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final AlkisConf COMMONS;
-
-    //
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisConstants.class);
+
+    public static final AlkisConf COMMONS;
     public static final String NEWLINE = "<br>";
     public static final String LINK_SEPARATOR_TOKEN = "::";
 
     static {
         try {
+            final ConnectionContext connectionContext = ConnectionContext.create(
+                    Category.STATIC,
+                    AlkisConstants.class.getSimpleName());
             final Object ret = SessionManager.getSession()
                         .getConnection()
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            getClientConnectionContext(),
+                            connectionContext,
                             WundaBlauServerResources.ALKIS_CONF.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
@@ -71,16 +75,5 @@ public final class AlkisConstants {
      * Creates a new AlkisConstants object.
      */
     private AlkisConstants() {
-    }
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(AlkisConstants.class.getSimpleName());
     }
 }

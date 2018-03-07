@@ -22,7 +22,8 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.utils.abstracts.AbstractCidsBeanAction;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import static javax.swing.Action.NAME;
 
@@ -32,19 +33,27 @@ import static javax.swing.Action.NAME;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FsStatusBearbeitetAction extends AbstractCidsBeanAction {
+public class FsStatusBearbeitetAction extends AbstractCidsBeanAction implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             FsStatusBearbeitetAction.class);
 
+    //~ Instance fields --------------------------------------------------------
+
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new FsStatusBearbeitetAction object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FsStatusBearbeitetAction() {
+    public FsStatusBearbeitetAction(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         putValue(NAME, "Als abgearbeitet markieren.");
         final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
                     "/res/16/FsBestellung.png"));
@@ -66,7 +75,7 @@ public class FsStatusBearbeitetAction extends AbstractCidsBeanAction {
                     .executeTask(SessionManager.getSession().getUser(),
                         FormSolutionBestellungChangeStatusServerAction.TASK_NAME,
                         "WUNDA_BLAU",
-                        getClientConnectionContext(),
+                        getConnectionContext(),
                         mon,
                         paramErledigt);
         } catch (final Exception ex) {
@@ -74,12 +83,8 @@ public class FsStatusBearbeitetAction extends AbstractCidsBeanAction {
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(FsStatusBearbeitetAction.class.getSimpleName());
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

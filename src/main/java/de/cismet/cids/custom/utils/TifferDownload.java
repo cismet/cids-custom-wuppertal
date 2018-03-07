@@ -26,7 +26,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.TifferAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
@@ -53,7 +53,7 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
     private final String scale;
     private final String format;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -72,7 +72,7 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
             final String filename,
             final String imageNumber,
             final String scale,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.imageNumber = imageNumber;
         this.directory = directory;
         this.title = title;
@@ -170,7 +170,7 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

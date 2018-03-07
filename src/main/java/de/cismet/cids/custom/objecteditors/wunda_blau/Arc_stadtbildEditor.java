@@ -48,8 +48,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -62,7 +62,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements ClientConnectionContextStore {
+public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -89,7 +89,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements Cl
             }
         };
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox bcbAuftraggeber;
@@ -152,7 +152,8 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements Cl
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 //        final MetaClass swClass = ClassCacheMultiple.getMetaClass(domain, "ARC_S");
         suchwortModelProvider.setSorted(true);
@@ -920,7 +921,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements Cl
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
-        ClassCacheMultiple.addInstance(CidsBeanSupport.DOMAIN_NAME);
+        ClassCacheMultiple.addInstance(CidsBeanSupport.DOMAIN_NAME, getConnectionContext());
         suchwortModelProvider.setMetaClassFromTableName(CidsBeanSupport.DOMAIN_NAME, SUCHWORT_TABNAME);
         setNewPicture();
     }
@@ -1083,7 +1084,10 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements Cl
         if ((suchwort != null) && (suchwort.trim().length() > 0)) {
             MetaClass suchwortMC = suchwortModelProvider.getMetaClass();
             if (suchwortMC == null) {
-                suchwortMC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, SUCHWORT_TABNAME);
+                suchwortMC = ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        SUCHWORT_TABNAME,
+                        getConnectionContext());
             }
             if (suchwortMC != null) {
                 final CidsBean newSuchwortBean = suchwortMC.getEmptyInstance().getBean();
@@ -1148,12 +1152,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements Cl
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

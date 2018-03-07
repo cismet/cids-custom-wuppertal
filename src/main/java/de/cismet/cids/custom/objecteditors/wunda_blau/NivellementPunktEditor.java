@@ -63,8 +63,8 @@ import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.security.WebAccessManager;
 
@@ -95,7 +95,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -126,7 +126,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     protected String oldLaufendeNummer;
     protected String urlOfDocument;
     protected RefreshDocumentWorker currentRefreshDocumentWorker;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
@@ -202,7 +202,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         setOpaque(false);
 
@@ -1181,7 +1182,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
 
             final String dgkBlattnummer = (String)cidsBean.getProperty("dgk_blattnummer");
@@ -1372,13 +1374,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

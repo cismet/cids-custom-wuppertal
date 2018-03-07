@@ -72,7 +72,7 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -119,7 +119,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
     private String protokollAnrPrefix = null;
     private String protokollAnr = null;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeSelectAll;
@@ -191,7 +191,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
      */
     public PointNumberDialog(final java.awt.Frame parent,
             final boolean modal,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, modal);
 
         this.connectionContext = connectionContext;
@@ -1383,7 +1383,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                     final PointNumberDialog dialog = new PointNumberDialog(
                             new javax.swing.JFrame(),
                             true,
-                            ClientConnectionContext.createDeprecated());
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -1535,7 +1535,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

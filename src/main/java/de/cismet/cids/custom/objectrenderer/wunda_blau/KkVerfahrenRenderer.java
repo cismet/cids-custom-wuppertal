@@ -17,7 +17,7 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.KkVerfahrenEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!

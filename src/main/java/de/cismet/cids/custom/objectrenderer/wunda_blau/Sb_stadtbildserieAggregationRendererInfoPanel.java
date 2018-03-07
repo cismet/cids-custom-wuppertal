@@ -43,7 +43,7 @@ import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -72,7 +72,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private RestrictionLevel restrictedLevel = new Sb_RestrictionLevelUtils.RestrictionLevel();
     private Sb_stadtbildserieGridObject gridObject;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInvertSelection;
@@ -102,7 +102,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      * Creates a new Sb_stadtbildserieAggregationRendererInfoPanel object.
      */
     public Sb_stadtbildserieAggregationRendererInfoPanel() {
-        this(ClientConnectionContext.createDeprecated());
+        this(ConnectionContext.createDeprecated());
     }
 
     /**
@@ -110,7 +110,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_stadtbildserieAggregationRendererInfoPanel(final ClientConnectionContext connectionContext) {
+    public Sb_stadtbildserieAggregationRendererInfoPanel(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
 
         initComponents();
@@ -119,7 +119,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

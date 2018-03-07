@@ -27,7 +27,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -42,7 +42,7 @@ public class Sb_RestrictionLevelUtils {
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_RestrictionLevelUtils.class);
 
-    private static final CidsBean NO_RESTRICTION;
+    private static CidsBean NO_RESTRICTION;
 
     private static Image FULL_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
     private static Image NO_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
@@ -52,8 +52,6 @@ public class Sb_RestrictionLevelUtils {
     private static String MIDDLE_RESTRICTION_TOOLTIP = "";
 
     static {
-        NO_RESTRICTION = getNutzungseinschraenkungNoRestriction();
-
         try {
             FULL_RESTRICTION_IMAGE = ImageIO.read(Sb_RestrictionLevelUtils.class.getResource(
                         "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
@@ -82,22 +80,30 @@ public class Sb_RestrictionLevelUtils {
     /**
      * Get the CidsBean of the table SB_nutzungseinschraenkung with the key 'noRestriction'. Might be null.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean getNoRestriction() {
+    public static CidsBean getNoRestriction(final ConnectionContext connectionContext) {
+        if (NO_RESTRICTION == null) {
+            NO_RESTRICTION = getNutzungseinschraenkungNoRestriction(connectionContext);
+        }
         return NO_RESTRICTION;
     }
 
     /**
      * Fetches the Sb_Nutzungseinschraenkung with the key "noRestriction" from the database.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  the Sb_Nutzungseinschraenkung "noRestriction" or null, in case of error.
      */
-    private static CidsBean getNutzungseinschraenkungNoRestriction() {
+    private static CidsBean getNutzungseinschraenkungNoRestriction(final ConnectionContext connectionContext) {
         try {
             final MetaClass nutzungsClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
-                    "sb_nutzungseinschraenkung");
+                    "sb_nutzungseinschraenkung",
+                    connectionContext);
             if (nutzungsClass != null) {
                 final StringBuffer noRestrictionQuery = new StringBuffer("select ").append(nutzungsClass.getId())
                             .append(", ")
@@ -111,7 +117,7 @@ public class Sb_RestrictionLevelUtils {
                 final MetaObject[] noRestriction;
                 try {
                     noRestriction = SessionManager.getProxy()
-                                .getMetaObjectByQuery(noRestrictionQuery.toString(), 0, getClientConnectionContext());
+                                .getMetaObjectByQuery(noRestrictionQuery.toString(), 0, connectionContext);
                     if (noRestriction.length > 0) {
                         return noRestriction[0].getBean();
                     }
@@ -138,7 +144,7 @@ public class Sb_RestrictionLevelUtils {
      * @return  DOCUMENT ME!
      */
     public static RestrictionLevel determineRestrictionLevelForStadtbildserie(final CidsBean stadtbildserie,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         RestrictionLevel determinedLevel = new RestrictionLevel();
         if (stadtbildserie != null) {
             synchronized (stadtbildserie) {
@@ -175,7 +181,7 @@ public class Sb_RestrictionLevelUtils {
      */
     public static synchronized RestrictionLevel determineRestrictionLevelForNutzungseinschraenkung(
             final CidsBean nutzungseinschraenkung,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         if (nutzungseinschraenkung != null) {
             final RestrictionLevel level = new RestrictionLevel();
             final String key = (String)nutzungseinschraenkung.getProperty("key");
@@ -226,7 +232,7 @@ public class Sb_RestrictionLevelUtils {
      * @return  DOCUMENT ME!
      */
     public static BulletPointSettings determineBulletPointAndInfoText(final CidsBean stadtbildserie,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         final RestrictionLevel level = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
                 stadtbildserie,
                 connectionContext);
@@ -245,15 +251,6 @@ public class Sb_RestrictionLevelUtils {
         }
 
         return new BulletPointSettings(colorImage, tooltipText);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(Sb_RestrictionLevelUtils.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -19,7 +19,7 @@ import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -37,7 +37,7 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
     private LastShownImage lastShownImage;
     private boolean preview;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -46,14 +46,14 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_AbstractPictureGridObject(final ClientConnectionContext connectionContext) {
+    public Sb_AbstractPictureGridObject(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

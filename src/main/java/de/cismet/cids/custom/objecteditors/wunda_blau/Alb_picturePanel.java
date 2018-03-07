@@ -76,8 +76,8 @@ import de.cismet.cismap.commons.features.PureNewFeature;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.MessenGeometryListener;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.StaticDecimalTools;
@@ -96,7 +96,7 @@ import de.cismet.tools.gui.panels.LayeredAlertPanel;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnectionContextStore {
+public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -164,15 +164,13 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnec
     private String collisionWarning = "";
     private final boolean selfPersisting;
     private boolean isErrorMessageVisible = true;
-    private Alb_baulastUmleitungPanel umleitungsPanel = new Alb_baulastUmleitungPanel(
-            Alb_baulastUmleitungPanel.MODE.TEXTBLATT,
-            this);
+    private Alb_baulastUmleitungPanel umleitungsPanel;
     private PictureReaderWorker pictureReaderWorker;
     private boolean umleitungChangedFlag = false;
     private boolean showUmleitung = true;
     private boolean showDocTypePanelEnabled = true;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrpDocs;
@@ -234,9 +232,11 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnec
 
     /**
      * Creates new form Alb_picturePanel.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_picturePanel() {
-        this(false, true);
+    public Alb_picturePanel(final ConnectionContext connectionContext) {
+        this(false, true, connectionContext);
     }
 
     /**
@@ -244,17 +244,19 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnec
      *
      * @param  selfPersisting           DOCUMENT ME!
      * @param  showDocTypePanelEnabled  DOCUMENT ME!
+     * @param  connectionContext        DOCUMENT ME!
      */
     public Alb_picturePanel(final boolean selfPersisting,
-            final boolean showDocTypePanelEnabled) {
+            final boolean showDocTypePanelEnabled,
+            final ConnectionContext connectionContext) {
         this.selfPersisting = selfPersisting;
         this.showDocTypePanelEnabled = showDocTypePanelEnabled;
-    }
+        this.connectionContext = connectionContext;
 
-    //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public void initAfterConnectionContext() {
+        this.umleitungsPanel = new Alb_baulastUmleitungPanel(
+                Alb_baulastUmleitungPanel.MODE.TEXTBLATT,
+                this,
+                getConnectionContext());
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
@@ -324,12 +326,12 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnec
             // needed for netbeans gui editor
             LOG.info("exception while checking action tags", ex);
         }
-
-        umleitungsPanel.initAfterConnectionContext();
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -1093,8 +1095,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnec
     private void btnPlanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPlanActionPerformed
         umleitungsPanel = new Alb_baulastUmleitungPanel(
                 Alb_baulastUmleitungPanel.MODE.LAGEPLAN,
-                this);
-        umleitungsPanel.initAfterConnectionContext();
+                this,
+                getConnectionContext());
         showUmleitung = true;
         loadPlan();
         checkLinkInTitle();
@@ -1108,7 +1110,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnec
     private void btnTextblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnTextblattActionPerformed
         umleitungsPanel = new Alb_baulastUmleitungPanel(
                 Alb_baulastUmleitungPanel.MODE.TEXTBLATT,
-                this);
+                this,
+                getConnectionContext());
         showUmleitung = true;
         loadTextBlatt();
         checkLinkInTitle();
@@ -1250,7 +1253,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnec
                     }
                     if (!pageFound) {
                         final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName(
-                                "ALB_GEO_DOCUMENT_PAGE");
+                                "ALB_GEO_DOCUMENT_PAGE",
+                                getConnectionContext());
                         newBean.setProperty("page_number", pageNo);
                         newBean.setProperty("geometry", geometry);
                         pageGeoCollection.add(newBean);
@@ -1739,11 +1743,6 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ClientConnec
     public void handleEscapePressed() {
         cancelPictureWorkers();
         measureComponent.removeAllFeatures();
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

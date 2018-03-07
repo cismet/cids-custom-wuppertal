@@ -22,8 +22,8 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -31,7 +31,7 @@ import de.cismet.connectioncontext.ClientConnectionContextStore;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingProduktEditor extends javax.swing.JPanel implements CidsBeanRenderer, ClientConnectionContextStore {
+public class BillingProduktEditor extends javax.swing.JPanel implements CidsBeanRenderer, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -41,7 +41,7 @@ public class BillingProduktEditor extends javax.swing.JPanel implements CidsBean
 
     private CidsBean cidsBean;
     private boolean editable;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cmbClient;
@@ -74,7 +74,8 @@ public class BillingProduktEditor extends javax.swing.JPanel implements CidsBean
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         if (!editable) {
             RendererTools.makeReadOnly(txtDescription);
@@ -192,7 +193,8 @@ public class BillingProduktEditor extends javax.swing.JPanel implements CidsBean
             this.cidsBean = cidsBean;
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
         }
     }
@@ -217,12 +219,7 @@ public class BillingProduktEditor extends javax.swing.JPanel implements CidsBean
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

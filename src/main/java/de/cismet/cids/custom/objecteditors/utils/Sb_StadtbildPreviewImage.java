@@ -38,7 +38,6 @@ import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -71,7 +70,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
     private String bildnummer;
     private BufferedImage image;
     private CidsBean fotoCidsBean;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
     private final PropertyChangeListener listRepaintListener = new PropertyChangeListener() {
 
             @Override
@@ -104,7 +103,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_StadtbildPreviewImage(final ClientConnectionContext connectionContext) {
+    public Sb_StadtbildPreviewImage(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
 
@@ -606,7 +605,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

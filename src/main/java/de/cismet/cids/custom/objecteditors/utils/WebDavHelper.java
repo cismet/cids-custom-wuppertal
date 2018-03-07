@@ -33,7 +33,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.WebDavTunnelAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.netutil.Proxy;
 
@@ -109,7 +109,7 @@ public class WebDavHelper {
             final File toUpload,
             final String webDavDirectory,
             final Component parent,
-            final ClientConnectionContext connectionContext) throws Exception {
+            final ConnectionContext connectionContext) throws Exception {
         final BufferedInputStream bfis = new BufferedInputStream(new ProgressMonitorInputStream(
                     parent,
                     "Bild wird übertragen...",
@@ -160,7 +160,7 @@ public class WebDavHelper {
      */
     public boolean deleteFileFromWebDAV(final String fileName,
             final String webDavDirectory,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         if ((fileName != null) && (fileName.length() > 0)) {
             try {
                 final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(
@@ -212,7 +212,7 @@ public class WebDavHelper {
      */
     public InputStream getFileFromWebDAV(final String fileName,
             final String webDavDirectory,
-            final ClientConnectionContext connectionContext) throws Exception {
+            final ConnectionContext connectionContext) throws Exception {
         final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY
                         .toString(),
                 proxy);

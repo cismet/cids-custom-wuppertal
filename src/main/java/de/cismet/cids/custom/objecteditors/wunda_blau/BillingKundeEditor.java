@@ -56,8 +56,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -69,7 +69,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     EditorSaveListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -86,7 +86,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     private CidsBean cidsBean;
 
-    private ClientConnectionContext connectionContext;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemKundenLogin;
@@ -137,7 +137,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         try {
             new CidsBeanDropTarget(lstKundenLogins);
@@ -718,7 +719,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             this.cidsBean = cidsBean;
             initKundengruppe();
             initKundenLogins();
@@ -849,7 +851,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
      * DOCUMENT ME!
      */
     private void initKundengruppe() {
-        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, KUNDENGRUPPE_TABLE);
+        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, KUNDENGRUPPE_TABLE, getConnectionContext());
         kundengruppen.clear();
         final String query = "SELECT "
                     + mc.getID()
@@ -882,7 +884,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
      * DOCUMENT ME!
      */
     private void initKundenLogins() {
-        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, "billing_kunden_logins");
+        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, "billing_kunden_logins", getConnectionContext());
         kundenLogins.clear();
         final String query = "SELECT "
                     + mc.getID()
@@ -944,13 +946,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

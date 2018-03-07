@@ -71,8 +71,8 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.CismetThreadPool;
@@ -92,7 +92,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -104,7 +104,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     private String title;
     private MappingComponent map;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel6;
@@ -140,16 +140,12 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
         jXHyperlink1.setVisible(false);
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**
@@ -519,7 +515,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static MetaObjectNode searchAlkisLandparcel(final CidsBean fsBean, final ClientConnectionContext context)
+    public static MetaObjectNode searchAlkisLandparcel(final CidsBean fsBean, final ConnectionContext context)
             throws Exception {
         final String z = String.valueOf(fsBean.getProperty("fstnr_z"));
         final String n = String.valueOf(fsBean.getProperty("fstnr_n"));
@@ -699,7 +695,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

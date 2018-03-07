@@ -36,8 +36,8 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -48,7 +48,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled, ClientConnectionContextStore {
+public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled, ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -56,7 +56,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     private String latestIconUrl = null;
     private String title = "";
 
-    private ClientConnectionContext connectionContext;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -102,14 +102,15 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         dlgAddLocationType.pack();
         dlgAddLocationType.getRootPane().setDefaultButton(btnMenOk);
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -630,10 +631,5 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             return bean.getMetaObject().getMetaClass().getName();
         }
         return "POI-Thema";
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

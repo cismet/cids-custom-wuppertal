@@ -45,7 +45,7 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.security.WebAccessManager;
@@ -100,7 +100,7 @@ public class ButlerDownload extends HttpDownload implements ConnectionContextPro
     private String boxSize;
     private boolean isEtrsRahmenkarte = false;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -123,7 +123,7 @@ public class ButlerDownload extends HttpDownload implements ConnectionContextPro
             final String boxSize,
             final double middleX,
             final double middleY,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         isButler2 = true;
         this.directory = directory;
         this.orderId = orderId;
@@ -160,7 +160,7 @@ public class ButlerDownload extends HttpDownload implements ConnectionContextPro
             final double minY,
             final double maxX,
             final double maxY,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.directory = directory;
         this.orderId = orderId;
         this.product = product;
@@ -191,7 +191,7 @@ public class ButlerDownload extends HttpDownload implements ConnectionContextPro
     ButlerDownload(final String requestId,
             final String userOrderId,
             final ButlerProduct product,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         omitSendingRequest = true;
         this.orderId = userOrderId;
         this.requestId = requestId;
@@ -501,7 +501,7 @@ public class ButlerDownload extends HttpDownload implements ConnectionContextPro
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

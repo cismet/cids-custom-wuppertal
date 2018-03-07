@@ -54,6 +54,9 @@ import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedFixedPImage;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.DerivedFixedPImageCommandArea;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.Static2DTools;
 
 /**
@@ -69,7 +72,8 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     RequestForUnremovableHandles,
     RequestForRotatingPivotLock,
     RequestForNonreflectingFeature,
-    RequestForHidingHandles {
+    RequestForHidingHandles,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -87,9 +91,10 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
 
     //~ Instance fields --------------------------------------------------------
 
-    ArrayList<PNode> children = new ArrayList<PNode>();
+    ArrayList<PNode> children = new ArrayList<>();
     private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
     private final VCMProperties properties = VCMProperties.getInstance();
+    private final ConnectionContext connectionContext;
 
     private int rotationIndex = 0;
 
@@ -106,8 +111,11 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
 
     /**
      * Creates a new VCMControlFeature object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public VCMControlFeature() {
+    public VCMControlFeature(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         setEditable(true);
         setCanBeSelected(true);
         setLinePaint(new Color(0, 0, 0, 0));
@@ -321,7 +329,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
             LOG.warn("openVCM openVCM(). properties are empty. you should check this server_resource: "
                         + WundaBlauServerResources.VCM_PROPERTIES.getValue());
             LOG.info("trying to load the properties from server_resource");
-            properties.load();
+            properties.load(getConnectionContext());
         }
 
         final Point point = getGeometry().getCentroid();
@@ -380,6 +388,11 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         arrow.setImage(rotated.getImage());
         arrow.setSweetSpotX(sweetSpots[rotationIndex][0]);
         arrow.setSweetSpotY(sweetSpots[rotationIndex][1]);
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

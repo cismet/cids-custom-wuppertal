@@ -86,9 +86,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -103,7 +103,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -124,7 +124,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private ImageIcon icon;
     private boolean geoSearchEnabled;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuchwort;
@@ -193,7 +193,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             initComponents();
             if (ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext())) {
@@ -220,7 +221,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             gridBagConstraints.gridy = 0;
             pnlButtons.add(pnlSearchCancel, gridBagConstraints);
 
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "sb_stadtbildserie"); // NOI18N
+            metaClass = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "sb_stadtbildserie",
+                    getConnectionContext()); // NOI18N
 
             byte[] iconDataFromMetaclass = new byte[] {};
 
@@ -1289,7 +1293,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      */
     private void fetchAndClassifyNutzungseinschraenkungen() {
         try {
-            final MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_NUTZUNGSEINSCHRAENKUNG");
+            final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "SB_NUTZUNGSEINSCHRAENKUNG",
+                    getConnectionContext());
             final User user = SessionManager.getSession().getUser();
             final String query = "select " + mc.getID() + "," + mc.getPrimaryKey() + " from " + mc.getTableName();
             final MetaObject[] einschraenkungenMo = SessionManager.getProxy()
@@ -1621,13 +1628,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1660,7 +1662,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
          * @param  connectionContext  DOCUMENT ME!
          */
         public CountSearchResultsSearchControlPanel(final SearchControlListener listener,
-                final ClientConnectionContext connectionContext) {
+                final ConnectionContext connectionContext) {
             super(listener, connectionContext);
         }
 

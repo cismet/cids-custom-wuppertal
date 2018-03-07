@@ -38,8 +38,8 @@ import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.JPopupMenuButton;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -51,8 +51,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class DigitalDataExportToolbarComponentProvider implements ToolbarComponentsProvider,
-    ClientConnectionContextStore {
+public class DigitalDataExportToolbarComponentProvider implements ToolbarComponentsProvider, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -61,7 +60,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     //~ Instance fields --------------------------------------------------------
 
     private List<ToolbarComponentDescription> toolbarComponents;
-    private ClientConnectionContext connectionContext;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -74,7 +73,9 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         final List<ToolbarComponentDescription> preparationList = new LinkedList<>();
         final ToolbarComponentDescription description = new ToolbarComponentDescription(
                 "tlbMain",
@@ -106,7 +107,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasButler1Access(final ClientConnectionContext connectionCon1text) {
+    public static boolean validateUserHasButler1Access(final ConnectionContext connectionCon1text) {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -128,7 +129,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasNasAccess(final ClientConnectionContext connectionContext) {
+    public static boolean validateUserHasNasAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -142,12 +143,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

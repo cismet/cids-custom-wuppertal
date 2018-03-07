@@ -26,8 +26,8 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -41,21 +41,22 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class ButlerStartUpHook implements StartupHook, ClientConnectionContextStore {
+public class ButlerStartUpHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String SERVER_ACTION = "butler1Query";
-    private static final Logger log = Logger.getLogger(ButlerStartUpHook.class);
+    private static final Logger LOG = Logger.getLogger(ButlerStartUpHook.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -80,7 +81,7 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextSt
                                 "csa://butler1Query",
                                 getConnectionContext()) != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Butler!", ex);
+            LOG.error("Could not validate action tag for Butler!", ex);
         }
         if (hasButlerAccess) {
             final ServerActionParameter paramMethod = new ServerActionParameter(
@@ -96,11 +97,11 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextSt
                                     (Object)null,
                                     paramMethod);
             } catch (ConnectionException ex) {
-                log.error("error while getting the list of undelivered butler 1 requests from server", ex);
+                LOG.error("error while getting the list of undelivered butler 1 requests from server", ex);
                 return;
             }
             if ((openRequestIds == null) || openRequestIds.isEmpty()) {
-                log.info("no pending butler orders found for the logged in user");
+                LOG.info("no pending butler orders found for the logged in user");
                 return;
             }
 
@@ -109,7 +110,7 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextSt
                 logMessageBuilder.append(s);
                 logMessageBuilder.append(",");
             }
-            log.fatal("pending nas orders found: " + logMessageBuilder.toString());
+            LOG.fatal("pending nas orders found: " + logMessageBuilder.toString());
             // generate a new NasDownload object for pending orders
             final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
             for (final String requestId : openRequestIds.keySet()) {
@@ -141,12 +142,7 @@ public class ButlerStartUpHook implements StartupHook, ClientConnectionContextSt
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

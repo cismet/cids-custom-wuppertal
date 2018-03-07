@@ -27,7 +27,7 @@ import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
 import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -51,7 +51,7 @@ public class TreppenReportGenerator {
      */
     public static void generateKatasterBlatt(final Collection<CidsBean> cidsBeans,
             final Component parent,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
 
                 @Override
@@ -99,7 +99,7 @@ public class TreppenReportGenerator {
      */
     public static void generateMainInfo(final Collection<CidsBean> cidsBeans,
             final Component parent,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
 
                 @Override

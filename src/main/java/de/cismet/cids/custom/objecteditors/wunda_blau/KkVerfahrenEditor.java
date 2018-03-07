@@ -85,8 +85,8 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -106,7 +106,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     PropertyChangeListener,
     EditorSaveListener,
     CidsBeanDropListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -135,7 +135,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private CidsBean cidsBean = null;
     private CardLayout cardLayout;
     private final List<CidsBean> beansToRemoveFromOtherVerfahren = new ArrayList<>();
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddLaufendeNummer;
@@ -1440,7 +1440,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      */
     private void btnAddLaufendeNummer1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummer1ActionPerformed
         try {
-            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_kompensation");
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(
+                    "kk_kompensation",
+                    getConnectionContext());
             final String schluessel = getSchluessel();
 
             if (schluessel == null) {
@@ -1521,7 +1523,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      */
     private void btnAddLaufendeNummer2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummer2ActionPerformed
         try {
-            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_v_kosten");
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_v_kosten", getConnectionContext());
 
             ((KompensationskatasterBeanTable)xtKosten.getModel()).addBean(bean);
         } catch (Exception e) {
@@ -1632,7 +1634,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
             lblTitle.setText("Verfahren " + String.valueOf(cidsBean.getProperty("bezeichnung")));
 
@@ -1854,14 +1857,16 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
-        edFlaeche.initAfterConnectionContext();
+        edFlaeche.initWithConnectionContext(getConnectionContext());
         edFlaeche.addNameChangedListener(new KeyAdapter() {
 
                 @Override
@@ -1918,11 +1923,6 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         } else {
             new CidsBeanDropTarget(this);
         }
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

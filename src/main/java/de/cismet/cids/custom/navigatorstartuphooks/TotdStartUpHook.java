@@ -25,8 +25,8 @@ import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -37,7 +37,7 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class TotdStartUpHook implements StartupHook, ClientConnectionContextStore {
+public class TotdStartUpHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -45,12 +45,13 @@ public class TotdStartUpHook implements StartupHook, ClientConnectionContextStor
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -86,12 +87,7 @@ public class TotdStartUpHook implements StartupHook, ClientConnectionContextStor
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

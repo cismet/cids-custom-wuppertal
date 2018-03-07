@@ -63,8 +63,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.custom.attributerule.WohnlageRuleSet;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -77,7 +77,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 @ServiceProvider(service = CommonFeatureAction.class)
 public class WohnlagenKategorisierungFeatureAction extends AbstractAction implements CommonFeatureAction,
     FeaturesProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -87,10 +87,10 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
     //~ Instance fields --------------------------------------------------------
 
     private boolean isActive;
-    private final MetaClass metaClass;
+    private MetaClass metaClass;
 
     private List<Feature> features = null;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -99,20 +99,25 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
      */
     public WohnlagenKategorisierungFeatureAction() {
         super("Wohnlage kategorisieren");
-
-        MetaClass metaClass = null;
-        try {
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE");
-        } catch (final Exception ex) {
-            LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
-        }
-        this.metaClass = metaClass;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
+        MetaClass metaClass = null;
+        try {
+            metaClass = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "WOHNLAGE",
+                    getConnectionContext());
+        } catch (final Exception ex) {
+            LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
+        }
+        this.metaClass = metaClass;
+
         boolean isActive = false;
         try {
             isActive = SessionManager.getConnection()
@@ -196,12 +201,7 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

@@ -25,7 +25,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportSer
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.joinCidsBeanIds;
@@ -51,7 +51,7 @@ public class BillingStatisticsDataSourceAccumulation implements ConnectionContex
 
     private HashMap<String, Collection> searchResults;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -62,7 +62,7 @@ public class BillingStatisticsDataSourceAccumulation implements ConnectionContex
      * @param  connectionContext  DOCUMENT ME!
      */
     public BillingStatisticsDataSourceAccumulation(final Collection<CidsBean> billingBeans,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.billingBeans = billingBeans;
         this.connectionContext = connectionContext;
     }
@@ -180,7 +180,7 @@ public class BillingStatisticsDataSourceAccumulation implements ConnectionContex
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

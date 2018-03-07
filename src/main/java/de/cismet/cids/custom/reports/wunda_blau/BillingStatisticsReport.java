@@ -24,7 +24,6 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -68,7 +67,7 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
 
     SwingWorker<JasperPrint, Void> downloadWorker;
     Collection<CidsBean> billingBeans;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -113,7 +112,7 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
             final double earningsWithCostsWiederver,
             final int amountWiederverkaeufe,
             final int amountWiederverkaeufeGB,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.billingBeans = billingBeans;
         this.from = from;
         this.till = till;
@@ -277,7 +276,7 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

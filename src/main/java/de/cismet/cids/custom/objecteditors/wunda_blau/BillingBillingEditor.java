@@ -38,8 +38,8 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 
@@ -52,7 +52,7 @@ import de.cismet.tools.gui.RoundedPanel;
 public class BillingBillingEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     EditorSaveListener,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -65,7 +65,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     String originalProjektbezeichnung;
     private final boolean editable;
     private CidsBean cidsBean;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnStornoBuchung;
@@ -751,7 +751,8 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
             this.cidsBean = cidsBean;
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
             fillTextFields();
 
@@ -876,7 +877,8 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     }
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         if (!editable) {
             RendererTools.makeReadOnly(txtGeschaeftsbuchnummer);
@@ -900,12 +902,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

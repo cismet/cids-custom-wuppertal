@@ -22,7 +22,6 @@ import de.cismet.cids.custom.wunda_blau.search.VermessungRissWindowSearch;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -40,7 +39,7 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog implements Co
     private de.cismet.cids.custom.wunda_blau.search.VermessungRissWindowSearch vermessungRissWindowSearch1;
     // End of variables declaration//GEN-END:variables
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
     private VermessungRissWindowSearch vermSearch =
         new de.cismet.cids.custom.wunda_blau.search.VermessungRissWindowSearch() {
 
@@ -88,7 +87,7 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog implements Co
      */
     public VermessungsrissSuchDialog(final java.awt.Frame parent,
             final boolean modal,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
         initComponents();
@@ -165,7 +164,7 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog implements Co
                     final VermessungsrissSuchDialog dialog = new VermessungsrissSuchDialog(
                             new javax.swing.JFrame(),
                             true,
-                            ClientConnectionContext.createDeprecated());
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -179,7 +178,7 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog implements Co
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

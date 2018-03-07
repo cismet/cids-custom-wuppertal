@@ -105,8 +105,8 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -133,7 +133,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -207,7 +207,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private boolean isErrorMessageVisible = true;
     private MeasuringComponent measuringComponent;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
@@ -307,7 +307,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
@@ -382,11 +383,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         for (final CidsBean veraenderungsart : veraenderungsarts) {
             popChangeVeraenderungsart.add(new ChangeVeraenderungsartAction(veraenderungsart));
         }
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**
@@ -1632,7 +1628,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         properties.put("geo_field", unionGeometry);
 
         try {
-            final CidsBean geomBean = CidsBeanSupport.createNewCidsBeanFromTableName("geom", properties);
+            final CidsBean geomBean = CidsBeanSupport.createNewCidsBeanFromTableName(
+                    "geom",
+                    properties,
+                    getConnectionContext());
             geomBean.persist(getConnectionContext());
             cidsBean.setProperty("geometrie", geomBean);
         } catch (Exception ex) {
@@ -2139,7 +2138,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
 
             lblTitle.setText(generateTitle());
@@ -2379,7 +2379,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
             // 2. Iterate
             for (final CidsBean entry : vermessungen) {
-                VermessungRissUtils.setFluerstueckKickerInVermessung(entry);
+                VermessungRissUtils.setFluerstueckKickerInVermessung(entry, getConnectionContext());
             }
         } catch (Exception e) {
             LOG.error("Problem when working on dropped landparcels", e);
@@ -2667,7 +2667,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -3224,7 +3224,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             CidsBean veraenderungsart = null;
             // veraenderungsart aus Dialog abfragen
 
-            final MetaObject[] arten = VermessungFlurstueckFinder.getVeraenderungsarten();
+            final MetaObject[] arten = VermessungFlurstueckFinder.getVeraenderungsarten(getConnectionContext());
             veraenderungsartMO = (MetaObject)JOptionPane.showInputDialog(
                     StaticSwingTools.getParentFrame(this),
                     "Bitte Veränderungsart auswählen?",

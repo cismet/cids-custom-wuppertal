@@ -23,8 +23,8 @@ import de.cismet.cids.custom.wunda_blau.startuphooks.MotdWundaStartupHook;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -35,7 +35,7 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class MotdStartUpHook implements StartupHook, ClientConnectionContextStore {
+public class MotdStartUpHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -43,12 +43,13 @@ public class MotdStartUpHook implements StartupHook, ClientConnectionContextStor
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -84,12 +85,7 @@ public class MotdStartUpHook implements StartupHook, ClientConnectionContextStor
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

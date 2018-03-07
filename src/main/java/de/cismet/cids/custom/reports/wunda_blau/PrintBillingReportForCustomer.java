@@ -43,7 +43,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -89,7 +88,7 @@ public class PrintBillingReportForCustomer implements ConnectionContextProvider 
     private final boolean showBillingWithoutCostInReport;
     private DownloadFinishedObserver downloadFinishedObserver = new DownloadFinishedObserver();
     private final BillingDoneListener billingDoneListener;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -112,7 +111,7 @@ public class PrintBillingReportForCustomer implements ConnectionContextProvider 
             final JPanel panel,
             final boolean showBillingWithoutCostInReport,
             final BillingDoneListener billingDoneListener,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.kundeBean = kundeBean;
         this.fromDate_tillDate = fromDate_tillDate;
         this.isRechnungsanlage = isRechnungsanlage;
@@ -414,7 +413,7 @@ public class PrintBillingReportForCustomer implements ConnectionContextProvider 
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

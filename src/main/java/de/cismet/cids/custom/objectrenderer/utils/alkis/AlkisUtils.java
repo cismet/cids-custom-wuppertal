@@ -58,7 +58,9 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -103,8 +105,10 @@ public class AlkisUtils {
     static final Buchungsblattbezirke BUCHUNGSBLATTBEZIRKE;
 
     static {
-        final ClientConnectionContext connectionContext = ClientConnectionContext.create(AlkisUtils.class
-                        .getSimpleName());
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                Category.STATIC,
+                AlkisUtils.class.getSimpleName());
+
         Buchungsblattbezirke buchungsblattbezirke = null;
         try {
             final Object ret = SessionManager.getSession()
@@ -334,7 +338,7 @@ public class AlkisUtils {
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static String getFertigungsVermerk(final String usageKey, final ClientConnectionContext connectionContext)
+    public static String getFertigungsVermerk(final String usageKey, final ConnectionContext connectionContext)
             throws ConnectionException {
         final String fertigungsVermerk;
         final String currentUsageKey = (BillingPopup.getInstance().getCurrentUsage() != null)
@@ -818,7 +822,7 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasAlkisPrintAccess(final ClientConnectionContext connectionContext) {
+    public static boolean validateUserHasAlkisPrintAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -838,7 +842,7 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasAlkisProductAccess(final ClientConnectionContext connectionContext) {
+    public static boolean validateUserHasAlkisProductAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -858,7 +862,7 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasEigentuemerAccess(final ClientConnectionContext connectionContext) {
+    public static boolean validateUserHasEigentuemerAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -878,7 +882,7 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasAlkisHTMLProductAccess(final ClientConnectionContext connectionContext) {
+    public static boolean validateUserHasAlkisHTMLProductAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -898,7 +902,7 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserShouldUseAlkisSOAPServerActions(final ClientConnectionContext connectionContext) {
+    public static boolean validateUserShouldUseAlkisSOAPServerActions(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -923,7 +927,7 @@ public class AlkisUtils {
      * @throws  Exception  DOCUMENT ME!
      */
     public static Point getPointFromAlkisSOAPServerAction(final String pointCode,
-            final ClientConnectionContext connectionContext) throws Exception {
+            final ConnectionContext connectionContext) throws Exception {
         final ServerActionParameter pointCodeSAP = new ServerActionParameter<String>(
                 ServerAlkisSoapAction.RETURN_VALUE.POINT.toString(),
                 pointCode);
@@ -950,7 +954,7 @@ public class AlkisUtils {
      * @throws  Exception  DOCUMENT ME!
      */
     public static Buchungsblatt getBuchungsblattFromAlkisSOAPServerAction(final String buchungsblattCode,
-            final ClientConnectionContext connectionContext) throws Exception {
+            final ConnectionContext connectionContext) throws Exception {
         final ServerActionParameter buchungsblattCodeSAP = new ServerActionParameter<String>(
                 ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT.toString(),
                 buchungsblattCode);

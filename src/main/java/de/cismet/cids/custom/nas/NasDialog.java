@@ -81,8 +81,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+
 //import de.cismet.cids.custom.utils.nas.NasProductTemplate;
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -126,12 +127,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     GeomWrapper totalMapWrapper;
     private MappingComponent map;
     private LinkedList<GeomWrapper> geomWrappers;
-    private HashMap<GeomWrapper, Feature> bufferedFeatures = new HashMap<GeomWrapper, Feature>();
+    private HashMap<GeomWrapper, Feature> bufferedFeatures = new HashMap<>();
     private NasTableModel tableModel;
-    private ArrayList<GeomWrapper> selectedGeomWrappers = new ArrayList<GeomWrapper>();
-    private HashMap<GeomWrapper, Feature> bufferFeatureMap = new HashMap<GeomWrapper, Feature>();
-    private NasFeePreviewPanel feePreview = new NasFeePreviewPanel();
-    private ArrayList<DefaultStyledFeature> pointFeatures = new ArrayList<DefaultStyledFeature>();
+    private ArrayList<GeomWrapper> selectedGeomWrappers = new ArrayList<>();
+    private HashMap<GeomWrapper, Feature> bufferFeatureMap = new HashMap<>();
+    private NasFeePreviewPanel feePreview;
+    private ArrayList<DefaultStyledFeature> pointFeatures = new ArrayList<>();
     private boolean firstBufferCall = true;
     private boolean isInitialized = false;
     private int pointAmount = 0;
@@ -139,7 +140,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     private int flurstueckAmount = 0;
     private ArrayList<NasProduct> nasProducts;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
@@ -176,7 +177,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
      */
     public NasDialog(final java.awt.Frame parent,
             final boolean modal,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this(parent, modal, null, connectionContext);
     }
 
@@ -191,9 +192,10 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     public NasDialog(final java.awt.Frame parent,
             final boolean modal,
             final Collection<Feature> selectedFeatures,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
+        feePreview = new NasFeePreviewPanel(getConnectionContext());
         loadNasProducts();
         MAP_BUFFER = Double.parseDouble(NbBundle.getMessage(NasDialog.class, "NasDialog.selectedGeomMapBuffer"));
         geomWrappers = new LinkedList<GeomWrapper>();
@@ -363,7 +365,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
         lblAuftragsnummer = new javax.swing.JLabel();
         tfAuftragsnummer = new javax.swing.JTextField();
         pnlFee = new javax.swing.JPanel();
-        nasFeePreviewPanel1 = new de.cismet.cids.custom.nas.NasFeePreviewPanel();
+        nasFeePreviewPanel1 = new de.cismet.cids.custom.nas.NasFeePreviewPanel(getConnectionContext());
         jPanel2 = new javax.swing.JPanel();
         lblGeomBuffer = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -1050,7 +1052,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
         final NasProduct selectedTemplate = (NasProduct)cbType.getSelectedItem();
         final Geometry geom = generateSearchGeom();
         pnlFee.removeAll();
-        feePreview = new NasFeePreviewPanel(selectedTemplate);
+        feePreview = new NasFeePreviewPanel(selectedTemplate, getConnectionContext());
         feePreview.setGeom(geom);
         pnlFee.add(feePreview);
         pnlFee.revalidate();
@@ -1240,7 +1242,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

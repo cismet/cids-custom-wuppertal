@@ -15,7 +15,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!

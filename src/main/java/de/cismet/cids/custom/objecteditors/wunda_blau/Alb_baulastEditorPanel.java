@@ -81,8 +81,8 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.NavigatorAttributeEditorGui;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -96,7 +96,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
-    ClientConnectionContextStore {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -140,7 +140,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private Object oldPruefkommentar;
     private final WeakHashMap<CidsBean, String> propStringMap = new WeakHashMap<>();
 
-    private ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser bdcBefristungsdatum;
@@ -199,24 +199,22 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
     /**
      * Creates new form Alb_baulastEditorPanel.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastEditorPanel() {
-        this(true);
+    public Alb_baulastEditorPanel(final ConnectionContext connectionContext) {
+        this(true, connectionContext);
     }
 
     /**
      * Creates new form Alb_baulastEditorPanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastEditorPanel(final boolean editable) {
+    public Alb_baulastEditorPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
-    }
-
-    //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public void initAfterConnectionContext() {
+        this.connectionContext = connectionContext;
         initComponents();
         initEditableComponents();
 //        final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
@@ -228,7 +226,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 //        cmbType.setModel(new DefaultComboBoxModel(items.toArray(new BaulastenReportGenerator.Type[0])));
 //        cmbType.setEnabled(enabled);
 
-        fsDialoge = new FlurstueckSelectionDialoge() {
+        fsDialoge = new FlurstueckSelectionDialoge(getConnectionContext()) {
 
                 @Override
                 public void okHook() {
@@ -257,6 +255,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         bdcLoeschungsdatum.getMonthView().setUpperBound(new java.util.Date());
         bdcBefristungsdatum.getMonthView().setUpperBound(new GregorianCalendar(9999, 11, 31).getTime());
     }
+
+    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -1374,13 +1374,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -70,8 +70,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.TitleComponentProvider;
 
@@ -84,7 +84,7 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class BillingKundeAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
     TitleComponentProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -105,7 +105,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private Collection<Object[]> tableData;
     private List<CidsBean> filteredBillingBeans;
     private Date[] fromDate_tillDate;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
@@ -159,7 +159,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         setFilterActionInExternalPanels();
         final AggregatedBillingTableModel tableModel = new AggregatedBillingTableModel(new Object[0][],
@@ -177,11 +178,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
             cboAbgerechnet.setVisible(false);
         }
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**
@@ -1350,7 +1346,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

@@ -66,7 +66,7 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.RoundedPanel;
@@ -85,9 +85,17 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TreppeLaufPanel.class);
-    private static final MetaClass MC__TREPPENLAUF_MATERIAL = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_TREPPENLAUF_MATERIAL");
+    private static final MetaClass MC__TREPPENLAUF_MATERIAL;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
+                TreppeLaufPanel.class.getSimpleName());
+        MC__TREPPENLAUF_MATERIAL = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "TREPPE_TREPPENLAUF_MATERIAL",
+                connectionContext);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -760,7 +768,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
     private final boolean editable;
     private final TreppeMaterialArtLightweightSearch materialArtSearch1;
     private final TreppeMaterialArtLightweightSearch materialArtSearch2;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnRemoveArt1;
@@ -786,7 +794,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaufPanel(final ClientConnectionContext connectionContext) {
+    public TreppeLaufPanel(final ConnectionContext connectionContext) {
         this(true, connectionContext);
     }
 
@@ -796,7 +804,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaufPanel(final boolean editable, final ClientConnectionContext connectionContext) {
+    public TreppeLaufPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
         this.connectionContext = connectionContext;
         this.materialArtSearch1 = new TreppeMaterialArtLightweightSearch(
@@ -910,7 +918,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

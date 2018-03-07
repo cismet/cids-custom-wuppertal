@@ -37,7 +37,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -58,7 +58,7 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
     private final CidsBean cidsBean;
     private boolean autoRefreshEnabled = false;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -75,7 +75,7 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
      * @param  cidsBean           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public FSReloadProduktDialog(final CidsBean cidsBean, final ClientConnectionContext connectionContext) {
+    public FSReloadProduktDialog(final CidsBean cidsBean, final ConnectionContext connectionContext) {
         super((Frame)null, true);
 
         this.connectionContext = connectionContext;
@@ -241,7 +241,7 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

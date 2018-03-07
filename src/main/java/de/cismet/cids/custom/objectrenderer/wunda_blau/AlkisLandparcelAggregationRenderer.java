@@ -63,8 +63,8 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 
@@ -76,7 +76,7 @@ import de.cismet.tools.gui.RoundedPanel;
  */
 public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -100,7 +100,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private CidsBeanWrapper selectedCidsBeanWrapper;
     private Thread mapThread;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink jxlBaulastBescheinigung;
@@ -132,7 +132,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         map = new MappingComponent();
@@ -155,7 +156,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -654,8 +655,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                             "no.yet",
                             (Geometry)null,
                             (berechtigungspruefung
-                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
-                                ? downloadInfo : null,
+                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(
+                                    downloadInfo.getProduktTyp(),
+                                    getConnectionContext())) ? downloadInfo : null,
                             getConnectionContext(),
                             new ProductGroupAmount("ea", stueck))) {
                 AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo, getConnectionContext());
@@ -686,11 +688,6 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisProductDownloadHelper
                     .createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
         AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo, getConnectionContext());
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

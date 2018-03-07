@@ -37,7 +37,7 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -150,7 +150,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
     private final boolean netbeansDesignDummy;
     private List<CidsBean> cidsBeans;
     private final boolean editable;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnAddArt1;
@@ -166,7 +166,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeHandlaeufePanel(final ClientConnectionContext connectionContext) {
+    public TreppeHandlaeufePanel(final ConnectionContext connectionContext) {
         this(true, true, connectionContext);
     }
 
@@ -176,7 +176,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeHandlaeufePanel(final boolean editable, final ClientConnectionContext connectionContext) {
+    public TreppeHandlaeufePanel(final boolean editable, final ConnectionContext connectionContext) {
         this(editable, false, connectionContext);
     }
 
@@ -189,7 +189,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
      */
     public TreppeHandlaeufePanel(final boolean editable,
             final boolean netbeansDesignDummy,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
         this.connectionContext = connectionContext;
@@ -200,7 +200,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

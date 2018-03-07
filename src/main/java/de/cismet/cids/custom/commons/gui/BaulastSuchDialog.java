@@ -22,7 +22,6 @@ import de.cismet.cids.custom.wunda_blau.search.BaulastWindowSearch;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -40,7 +39,7 @@ public class BaulastSuchDialog extends javax.swing.JDialog implements Connection
     private de.cismet.cids.custom.wunda_blau.search.BaulastWindowSearch baulastWindowSearch1;
     // End of variables declaration//GEN-END:variables
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
     private BaulastWindowSearch blSearch = new de.cismet.cids.custom.wunda_blau.search.BaulastWindowSearch() {
 
             @Override
@@ -88,7 +87,7 @@ public class BaulastSuchDialog extends javax.swing.JDialog implements Connection
      */
     public BaulastSuchDialog(final java.awt.Frame parent,
             final boolean modal,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
         initComponents();
@@ -167,7 +166,7 @@ public class BaulastSuchDialog extends javax.swing.JDialog implements Connection
                     final BaulastSuchDialog dialog = new BaulastSuchDialog(
                             new javax.swing.JFrame(),
                             true,
-                            ClientConnectionContext.createDeprecated());
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -181,7 +180,7 @@ public class BaulastSuchDialog extends javax.swing.JDialog implements Connection
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

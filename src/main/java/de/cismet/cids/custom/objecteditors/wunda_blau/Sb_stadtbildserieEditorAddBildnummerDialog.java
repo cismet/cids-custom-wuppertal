@@ -36,7 +36,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -68,7 +68,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         new BildnummerEvaluationDocumentListener();
     private ShowWarning showWarning;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -94,7 +94,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
      */
     public Sb_stadtbildserieEditorAddBildnummerDialog(final java.awt.Frame parent,
             final boolean modal,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
 
@@ -297,7 +297,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
             bildnummern.append(",");
             bildnummern.append("'").append(bildnummernToAdd.get(i)).append("'");
         }
-        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, STADTBILDER_TABLE);
+        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, STADTBILDER_TABLE, getConnectionContext());
         final String query = "SELECT "
                     + mc.getID()
                     + ", "
@@ -456,7 +456,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

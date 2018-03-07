@@ -51,7 +51,9 @@ import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.RoundedPanel;
@@ -70,18 +72,28 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TreppeEntwaesserungPanel.class);
-    private static final MetaClass MC__ENTWAESSERUNG_ART = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_ENTWAESSERUNG_ART");
-    private static final MetaClass MC__ENTWAESSERUNG_ABLEITUNG = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_ENTWAESSERUNG_ABLEITUNG");
+    private static final MetaClass MC__ENTWAESSERUNG_ART;
+    private static final MetaClass MC__ENTWAESSERUNG_ABLEITUNG;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                Category.STATIC,
+                TreppeEntwaesserungPanel.class.getSimpleName());
+        MC__ENTWAESSERUNG_ART = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "TREPPE_ENTWAESSERUNG_ART",
+                connectionContext);
+        MC__ENTWAESSERUNG_ABLEITUNG = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "TREPPE_ENTWAESSERUNG_ABLEITUNG",
+                connectionContext);
+    }
 
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
     private final boolean editable;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     DefaultBindableReferenceCombo defaultBindableReferenceCombo4;
@@ -98,7 +110,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeEntwaesserungPanel(final ClientConnectionContext connectionContext) {
+    public TreppeEntwaesserungPanel(final ConnectionContext connectionContext) {
         this(true, connectionContext);
     }
 
@@ -108,7 +120,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeEntwaesserungPanel(final boolean editable, final ClientConnectionContext connectionContext) {
+    public TreppeEntwaesserungPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
         this.connectionContext = connectionContext;
 
@@ -413,7 +425,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

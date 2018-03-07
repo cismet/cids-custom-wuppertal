@@ -33,7 +33,7 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListenerInterface;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -57,7 +57,7 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -70,7 +70,7 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
      */
     public NodesSearchCreateSearchGeometryListener(final MappingComponent mc,
             final PropertyChangeListener propChangeListener,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(mc, INPUT_LISTENER_NAME);
 
         this.connectionContext = connectionContext;
@@ -166,7 +166,7 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

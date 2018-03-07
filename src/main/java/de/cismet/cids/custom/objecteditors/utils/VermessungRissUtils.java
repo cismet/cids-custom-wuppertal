@@ -24,7 +24,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -48,13 +48,14 @@ public class VermessungRissUtils {
      * This will not be the case if the property 'tmp_lp_orig' is not a a Flurstueck-CidsBean or an
      * Alkis_landparce-CidsBean, or if an Exception was thrown.
      *
-     * @param   vermessung  a 'vermessung_flurstuecksvermessung'-CidsBean
+     * @param   vermessung         a 'vermessung_flurstuecksvermessung'-CidsBean
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      * @throws  Exception            DOCUMENT ME!
      */
-    public static void setFluerstueckKickerInVermessung(final CidsBean vermessung) throws ConnectionException,
-        Exception {
+    public static void setFluerstueckKickerInVermessung(final CidsBean vermessung,
+            final ConnectionContext connectionContext) throws ConnectionException, Exception {
         final Object tmp = vermessung.getProperty("tmp_lp_orig");
         if (tmp instanceof CidsBean) {
             // For each object find the corresponding kicker
@@ -93,7 +94,8 @@ public class VermessungRissUtils {
             // get the kicker
             final MetaClass kickerClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
-                    "vermessung_flurstueck_kicker");
+                    "vermessung_flurstueck_kicker",
+                    connectionContext);
             final StringBuffer kickerQuery = new StringBuffer("select ").append(kickerClass.getId())
                         .append(", ")
                         .append(kickerClass.getPrimaryKey())
@@ -114,7 +116,7 @@ public class VermessungRissUtils {
                 LOG.debug("SQL: kickerQuery:" + kickerQuery.toString());
             }
             final MetaObject[] kickers = SessionManager.getProxy()
-                        .getMetaObjectByQuery(kickerQuery.toString(), 0, getClientConnectionContext());
+                        .getMetaObjectByQuery(kickerQuery.toString(), 0, connectionContext);
             if (kickers.length > 0) {
                 kicker = kickers[0].getBean();
             }
@@ -126,12 +128,13 @@ public class VermessungRissUtils {
                 // retrieve the vermessung_gemarkung by id
                 final MetaClass vermessungGemarkungClass = ClassCacheMultiple.getMetaClass(
                         "WUNDA_BLAU",
-                        "vermessung_gemarkung");
+                        "vermessung_gemarkung",
+                        connectionContext);
                 final MetaObject gemarkungObject = SessionManager.getProxy()
                             .getMetaObject(new Integer(gemarkung),
                                 vermessungGemarkungClass.getId(),
                                 "WUNDA_BLAU",
-                                getClientConnectionContext());
+                                connectionContext);
                 final CidsBean vGemarkungBean = gemarkungObject.getBean();
 
                 kicker.setProperty("gemarkung", vGemarkungBean);
@@ -140,7 +143,10 @@ public class VermessungRissUtils {
                 kicker.setProperty("nenner", nenner);
 
                 // Check for a real flurstueck that matches
-                final MetaClass flurstueckClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "flurstueck");
+                final MetaClass flurstueckClass = ClassCacheMultiple.getMetaClass(
+                        "WUNDA_BLAU",
+                        "flurstueck",
+                        connectionContext);
                 final StringBuffer fQuery = new StringBuffer("select ").append(flurstueckClass.getId())
                             .append(", ")
                             .append(flurstueckClass.getPrimaryKey())
@@ -161,7 +167,7 @@ public class VermessungRissUtils {
                     LOG.debug("SQL: flurstueckQuery:" + fQuery.toString());
                 }
                 final MetaObject[] matchedLandparcels = SessionManager.getProxy()
-                            .getMetaObjectByQuery(fQuery.toString(), 0, getClientConnectionContext());
+                            .getMetaObjectByQuery(fQuery.toString(), 0, connectionContext);
                 if (matchedLandparcels.length > 0) {
                     kicker.setProperty("flurstueck", matchedLandparcels[0].getBean());
                 }
@@ -172,14 +178,5 @@ public class VermessungRissUtils {
             // delete the "tmp_lp_orig" property
             vermessung.setProperty("tmp_lp_orig", null);
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(VermessungRissUtils.class.getSimpleName());
     }
 }

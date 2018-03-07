@@ -70,8 +70,8 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -84,7 +84,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Titled,
     BindingGroupStore,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -104,7 +104,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     private boolean editable;
     private String title = "";
     private final List<PropertyChangeListener> strongReferencesToWeakListeners = new ArrayList<>();
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbEinkommensgruppe;
@@ -191,7 +191,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         panVorgangX.setOpaque(false);
@@ -444,12 +445,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -1308,7 +1304,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
      * @param  evt  DOCUMENT ME!
      */
     private void cmdAddVorgangActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddVorgangActionPerformed
-        final MetaClass vorgangMC = ClassCacheMultiple.getMetaClass(domain, "WBF_VORGANG");
+        final MetaClass vorgangMC = ClassCacheMultiple.getMetaClass(domain, "WBF_VORGANG", getConnectionContext());
         if (vorgangMC != null) {
             final MetaObject mo = vorgangMC.getEmptyInstance();
             final CidsBean vorgangBean = mo.getBean();
@@ -1403,9 +1399,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
             vorgBean.addPropertyChangeListener(WeakListeners.propertyChange(pcl, vorgBean));
         }
 
-        ClassCacheMultiple.addInstance(domain);
+        ClassCacheMultiple.addInstance(domain, getConnectionContext());
         try {
-            final MetaClass massnahmenClass = ClassCacheMultiple.getMetaClass(domain, "wbf_massnahme");
+            final MetaClass massnahmenClass = ClassCacheMultiple.getMetaClass(
+                    domain,
+                    "wbf_massnahme",
+                    getConnectionContext());
             final DefaultComboBoxModel result = DefaultBindableReferenceCombo.getModelByMetaClass(
                     massnahmenClass,
                     true,

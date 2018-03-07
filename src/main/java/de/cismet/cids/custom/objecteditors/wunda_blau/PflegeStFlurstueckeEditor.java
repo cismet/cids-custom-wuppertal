@@ -35,8 +35,8 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.CrsTransformer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.StaticDecimalTools;
 //import javax.swing.JOptionPane;
@@ -50,7 +50,7 @@ import de.cismet.tools.StaticDecimalTools;
  */
 public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     BindingGroupStore,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -63,7 +63,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private CidsBean cidsBean = null;
     private boolean isEditor = true;
     private Geometry geom;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbGeom;
@@ -203,7 +203,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         if (!isEditor) {
             txtStadtbezirk.setEditable(false);
@@ -2217,7 +2218,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
             // werden evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cb);
+                cb,
+                getConnectionContext());
             panPreviewMap.initMap(cb, "georeferenz.geo_field");
 
             bindingGroup.bind();
@@ -2256,12 +2258,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

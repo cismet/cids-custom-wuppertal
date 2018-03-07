@@ -21,7 +21,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportSer
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.joinCidsBeanIds;
 
@@ -48,7 +48,7 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
      */
     public BillingJahresberichtDataSourceAccumulation(final Collection<CidsBean> billingBeans,
             final int year,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(billingBeans, connectionContext);
 
         this.year = year;

@@ -40,7 +40,6 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -154,7 +153,7 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable,
     private final boolean netbeansDesignDummy;
     private List<CidsBean> cidsBeans;
     private final boolean editable;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnAddArt1;
@@ -170,7 +169,7 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable,
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaeufePanel(final ClientConnectionContext connectionContext) {
+    public TreppeLaeufePanel(final ConnectionContext connectionContext) {
         this(true, true, connectionContext);
     }
 
@@ -180,7 +179,7 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable,
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaeufePanel(final boolean editable, final ClientConnectionContext connectionContext) {
+    public TreppeLaeufePanel(final boolean editable, final ConnectionContext connectionContext) {
         this(editable, false, connectionContext);
     }
 
@@ -193,7 +192,7 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable,
      */
     public TreppeLaeufePanel(final boolean editable,
             final boolean netbeansDesignDummy,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
         this.connectionContext = connectionContext;
@@ -320,7 +319,7 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable,
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

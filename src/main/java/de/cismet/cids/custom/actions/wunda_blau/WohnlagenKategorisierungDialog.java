@@ -57,7 +57,7 @@ import de.cismet.cismap.cidslayer.CidsLayerFeature;
 
 import de.cismet.cismap.commons.featureservice.AbstractFeatureService;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -76,9 +76,12 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
     private static final MetaClass MC_WOHNLAGE_KATEGORIE;
 
     static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
+                WohnlagenKategorisierungDialog.class.getSimpleName());
         MetaClass mcWohnlage = null;
         try {
-            mcWohnlage = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE");
+            mcWohnlage = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE", connectionContext);
         } catch (final Exception ex) {
             LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
         }
@@ -86,7 +89,10 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
 
         MetaClass mcWohnlageKategorie = null;
         try {
-            mcWohnlageKategorie = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE_KATEGORIE");
+            mcWohnlageKategorie = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "WOHNLAGE_KATEGORIE",
+                    connectionContext);
         } catch (final Exception ex) {
             LOG.error("Could get MetaClass (WOHNLAGE_KATEGORIE)!", ex);
         }
@@ -95,11 +101,11 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Map<ButtonModel, CidsBean> buttonToBeanMap = new HashMap<ButtonModel, CidsBean>();
+    private final Map<ButtonModel, CidsBean> buttonToBeanMap = new HashMap<>();
 
     private final Collection<CidsLayerFeature> cidsLayerFeatures;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
@@ -141,7 +147,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
     public WohnlagenKategorisierungDialog(final java.awt.Frame parent,
             final Collection<CidsLayerFeature> cidsLayerFeatures,
             final CidsBean kategorieToSelect,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, true);
         this.cidsLayerFeatures = cidsLayerFeatures;
         this.connectionContext = connectionContext;
@@ -730,7 +736,7 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implemen
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

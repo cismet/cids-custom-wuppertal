@@ -37,9 +37,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -56,7 +55,7 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     BorderProvider,
     RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Enums ------------------------------------------------------------------
 
@@ -76,7 +75,7 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
 
     private Mode mode;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastAggregationRendererPanel
@@ -95,18 +94,14 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
-        initComponents();
-        alb_baulastblattRenderer1.initAfterConnectionContext();
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
+        initComponents();
+        alb_baulastblattRenderer1.initWithConnectionContext(getConnectionContext());
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -239,7 +234,10 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
             try {
                 final BaulastSearchInfo bsi = new BaulastSearchInfo();
                 bsi.setBlattnummer(blattnummer);
-                final MetaClass mcBaulastBlatt = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULASTBLATT");
+                final MetaClass mcBaulastBlatt = ClassCacheMultiple.getMetaClass(
+                        "WUNDA_BLAU",
+                        "ALB_BAULASTBLATT",
+                        getConnectionContext());
 
                 final String query = "select " + mcBaulastBlatt.getID() + ", " + mcBaulastBlatt.getPrimaryKey()
                             + " from "

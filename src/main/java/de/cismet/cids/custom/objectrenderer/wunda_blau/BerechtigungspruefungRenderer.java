@@ -74,8 +74,8 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -95,7 +95,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -121,7 +121,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private final Map<String, String> freigabegruendeMap = new HashMap<String, String>();
     private final Map<String, String> ablehnungsgruendeMap = new HashMap<String, String>();
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFreigeben;
@@ -233,7 +233,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         final DefaultComboBoxModel<String> freigabegruendeModel = new DefaultComboBoxModel<String>();
@@ -253,11 +254,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             ablehnungsgruendeModel.addElement(ablehnungsgrund.getVorlage());
         }
         jComboBox2.setModel(ablehnungsgruendeModel);
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**
@@ -1931,7 +1927,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
                                     @Override
                                     protected CidsBean doInBackground() throws Exception {
-                                        final CidsBean selBean = BaulastBescheinigungUtils.loadBaulast(baulastInfo);
+                                        final CidsBean selBean = BaulastBescheinigungUtils.loadBaulast(
+                                                baulastInfo,
+                                                getConnectionContext());
                                         return selBean;
                                     }
 
@@ -2086,7 +2084,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

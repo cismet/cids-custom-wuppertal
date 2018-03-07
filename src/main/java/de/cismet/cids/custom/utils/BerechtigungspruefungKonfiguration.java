@@ -27,7 +27,9 @@ import java.util.List;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
 
@@ -58,7 +60,9 @@ public class BerechtigungspruefungKonfiguration {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            getClientConnectionContext(),
+                            ConnectionContext.create(
+                                Category.STATIC,
+                                BerechtigungspruefungKonfiguration.class.getSimpleName()),
                             WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON.getValue());
             if (ret instanceof Exception) {
                 throw (Exception)ret;
@@ -93,17 +97,6 @@ public class BerechtigungspruefungKonfiguration {
         this.produkte = produkte;
         this.freigabegruende = freigabegruende;
         this.ablehnungsgruende = ablehnungsgruende;
-    }
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(BerechtigungspruefungKonfiguration.class.getSimpleName());
     }
 
     //~ Inner Classes ----------------------------------------------------------

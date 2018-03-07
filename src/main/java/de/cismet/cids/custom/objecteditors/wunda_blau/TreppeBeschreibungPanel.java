@@ -72,7 +72,9 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -91,21 +93,26 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
     private static final Logger LOG = Logger.getLogger(TreppeBeschreibungPanel.class);
     private static final TreppeEditor.IntegerToLongConverter CONVERTER_INT = new TreppeEditor.IntegerToLongConverter();
-    private static final MetaClass MC__GEOM = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "GEOM");
-    private static final MetaClass MC__PRUEFUNGSART = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_PRUEFUNGSART");
-    private static final MetaClass MC__BEURTEILUNG = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_BEURTEILUNG");
-    private static final MetaClass MC__EINSATZ = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_EINSATZ");
+
+    private static final MetaClass MC__GEOM;
+    private static final MetaClass MC__PRUEFUNGSART;
+    private static final MetaClass MC__BEURTEILUNG;
+    private static final MetaClass MC__EINSATZ;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                Category.STATIC,
+                TreppeBeschreibungPanel.class.getSimpleName());
+        MC__GEOM = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "GEOM", connectionContext);
+        MC__PRUEFUNGSART = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_PRUEFUNGSART", connectionContext);
+        MC__BEURTEILUNG = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_BEURTEILUNG", connectionContext);
+        MC__EINSATZ = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_EINSATZ", connectionContext);
+    }
 
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     private final boolean editable;
 
@@ -175,7 +182,7 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeBeschreibungPanel(final ClientConnectionContext connectionContext) {
+    public TreppeBeschreibungPanel(final ConnectionContext connectionContext) {
         this(true, connectionContext);
     }
 
@@ -185,7 +192,7 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeBeschreibungPanel(final boolean editable, final ClientConnectionContext connectionContext) {
+    public TreppeBeschreibungPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
         this.connectionContext = connectionContext;
         initComponents();
@@ -1890,7 +1897,7 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

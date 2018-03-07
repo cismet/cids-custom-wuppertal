@@ -79,8 +79,8 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
@@ -99,7 +99,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     FooterComponentProvider,
     TitleComponentProvider,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -996,7 +996,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     private final boolean editable;
     private CidsBean cidsBean;
@@ -1071,7 +1071,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
@@ -1332,13 +1333,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

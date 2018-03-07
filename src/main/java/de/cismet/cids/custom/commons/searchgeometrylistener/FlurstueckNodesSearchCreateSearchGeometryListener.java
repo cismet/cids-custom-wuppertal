@@ -23,7 +23,7 @@ import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -48,7 +48,7 @@ public class FlurstueckNodesSearchCreateSearchGeometryListener extends NodesSear
      */
     public FlurstueckNodesSearchCreateSearchGeometryListener(final MappingComponent mc,
             final PropertyChangeListener propChangeListener,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(mc, propChangeListener, connectionContext);
     }
 

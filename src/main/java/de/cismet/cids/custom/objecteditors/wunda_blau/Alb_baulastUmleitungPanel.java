@@ -44,8 +44,8 @@ import javax.swing.event.DocumentListener;
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
 
@@ -63,7 +63,7 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.LF
  * @version  $Revision$, $Date$
  */
 public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements DocumentListener,
-    ClientConnectionContextStore {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -139,7 +139,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     private URL lastCheckedURL;
     private String escapeText;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateDocument;
@@ -160,40 +160,36 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
 
     /**
      * Creates new form Alb_baulastUmleitungPanel.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastUmleitungPanel() {
-        this(MODE.TEXTBLATT, null);
+    public Alb_baulastUmleitungPanel(final ConnectionContext connectionContext) {
+        this(MODE.TEXTBLATT, null, connectionContext);
     }
 
     /**
      * Creates a new Alb_baulastUmleitungPanel object.
      *
-     * @param  m             DOCUMENT ME!
-     * @param  picturePanel  DOCUMENT ME!
+     * @param  m                  DOCUMENT ME!
+     * @param  picturePanel       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public Alb_baulastUmleitungPanel(final MODE m,
-            final Alb_picturePanel picturePanel) {
+            final Alb_picturePanel picturePanel,
+            final ConnectionContext connectionContext) {
         this.mode = m;
         this.picturePan = picturePanel;
-    }
-
-    //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public void initAfterConnectionContext() {
+        this.connectionContext = connectionContext;
         initComponents();
         jXBusyLabel1.setSize(16, 16);
         setModeLabeltext();
         tfName.getDocument().addDocumentListener(this);
     }
 
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
+    //~ Methods ----------------------------------------------------------------
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

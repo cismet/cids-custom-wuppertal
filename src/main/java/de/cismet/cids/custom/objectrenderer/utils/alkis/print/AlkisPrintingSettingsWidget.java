@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 
@@ -69,7 +68,6 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -120,7 +118,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         };
 
     private AlkisProductDescription defaultProduct = null;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemove;
@@ -168,7 +166,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      */
     public AlkisPrintingSettingsWidget(final boolean modal,
             final MappingComponent mappingComponent,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(StaticSwingTools.getParentFrame(mappingComponent), modal);
         this.alkisObjectListModel = new DefaultListModel();
         this.connectionContext = connectionContext;
@@ -1449,7 +1447,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

@@ -31,13 +31,15 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
+
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -46,7 +48,7 @@ import de.cismet.connectioncontext.ClientConnectionContextStore;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class VirtualCityMapToolbarComponentProvider implements ToolbarComponentsProvider, ClientConnectionContextStore {
+public class VirtualCityMapToolbarComponentProvider implements ToolbarComponentsProvider, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -59,12 +61,13 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -80,10 +83,10 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
             final ToolbarPositionHint toolbarPositionHint = (ToolbarPositionHint)toolbarConfig[1];
             final String toolbarHintTarget = (String)toolbarConfig[2];
 
-            final List<ToolbarComponentDescription> preparationList = new LinkedList<ToolbarComponentDescription>();
+            final List<ToolbarComponentDescription> preparationList = new LinkedList<>();
             final ToolbarComponentDescription description = new ToolbarComponentDescription(
                     toolbarId,
-                    new VirtualCityMapToolbarComponentProvider.VirtualCityMapButton(),
+                    new VirtualCityMapToolbarComponentProvider.VirtualCityMapButton(getConnectionContext()),
                     toolbarPositionHint,
                     toolbarHintTarget);
             preparationList.add(description);
@@ -100,7 +103,15 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
      * @return  DOCUMENT ME!
      */
     public Object[] getToolbarConfig() {
-        final String configAttr = VCMProperties.getInstance().getToolbarConfAttr();
+        final VCMProperties properties = VCMProperties.getInstance();
+        if (properties.isEmpty()) {
+            LOG.warn("openVCM openVCM(). properties are empty. you should check this server_resource: "
+                        + WundaBlauServerResources.VCM_PROPERTIES.getValue());
+            LOG.info("trying to load the properties from server_resource");
+            properties.load(getConnectionContext());
+        }
+
+        final String configAttr = properties.getToolbarConfAttr();
         if (configAttr != null) {
             try {
                 final String result = SessionManager.getConnection()
@@ -128,13 +139,8 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -155,8 +161,10 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
 
         /**
          * Creates a new PunktNummernButton object.
+         *
+         * @param  connectionContext  DOCUMENT ME!
          */
-        public VirtualCityMapButton() {
+        public VirtualCityMapButton(final ConnectionContext connectionContext) {
             super(new AbstractAction() {
 
                     @Override
@@ -165,7 +173,7 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
 
                                 @Override
                                 public void run() {
-                                    final VCMControlFeature vcmf = new VCMControlFeature();
+                                    final VCMControlFeature vcmf = new VCMControlFeature(connectionContext);
 
                                     final Geometry bb = CismapBroker.getInstance()
                                                 .getMappingComponent()

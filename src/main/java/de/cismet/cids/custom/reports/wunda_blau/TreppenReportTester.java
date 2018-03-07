@@ -38,7 +38,7 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
@@ -127,7 +127,11 @@ public class TreppenReportTester {
      * @param  compressionEnabled  DOCUMENT ME!
      */
     private void login(final String callServerURL, final String domain, final boolean compressionEnabled) {
-        final CidsAuthentification cidsAuth = new CidsAuthentification(callServerURL, domain, compressionEnabled);
+        final CidsAuthentification cidsAuth = new CidsAuthentification(
+                callServerURL,
+                domain,
+                compressionEnabled,
+                ConnectionContext.createDeprecated());
         final JXLoginPane login = new JXLoginPane(cidsAuth);
 
         final JXLoginPane.JXLoginDialog loginDialog = new JXLoginPane.JXLoginDialog((Frame)null, login);
@@ -211,7 +215,7 @@ public class TreppenReportTester {
         final TreppenReportBean reportBean = new TreppenReportBean(
                 bean,
                 null,
-                ClientConnectionContext.createDeprecated());
+                ConnectionContext.createDeprecated());
 
         LOG.fatal("report bean created");
 

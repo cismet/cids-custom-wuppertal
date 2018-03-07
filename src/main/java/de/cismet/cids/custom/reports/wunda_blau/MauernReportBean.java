@@ -13,7 +13,7 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -31,7 +31,7 @@ public class MauernReportBean extends ReportBeanWithMapAndImages {
      * @param  mauer              DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public MauernReportBean(final CidsBean mauer, final ClientConnectionContext connectionContext) {
+    public MauernReportBean(final CidsBean mauer, final ConnectionContext connectionContext) {
         super(
             mauer,
             "georeferenz.geo_field",

@@ -28,8 +28,8 @@ import javax.swing.AbstractAction;
 import de.cismet.cids.custom.objectrenderer.utils.BillingRestrictedReportJButton;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.ext.CExtContext;
 import de.cismet.ext.CExtProvider;
@@ -40,7 +40,7 @@ import de.cismet.ext.CExtProvider;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CExtProvider.class)
-public class JahresberichtCExtProvider implements CExtProvider<AbstractAction>, ClientConnectionContextStore {
+public class JahresberichtCExtProvider implements CExtProvider<AbstractAction>, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -49,7 +49,7 @@ public class JahresberichtCExtProvider implements CExtProvider<AbstractAction>, 
     //~ Instance fields --------------------------------------------------------
 
     private final String ifaceClass;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -63,17 +63,13 @@ public class JahresberichtCExtProvider implements CExtProvider<AbstractAction>, 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
-        return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     @Override

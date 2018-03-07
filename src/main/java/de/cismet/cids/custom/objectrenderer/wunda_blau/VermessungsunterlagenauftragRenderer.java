@@ -93,9 +93,8 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -112,7 +111,7 @@ import de.cismet.tools.gui.downloadmanager.HttpOrFtpDownload;
  */
 public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -138,7 +137,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
     private final Map<String, CidsBean> fsMap = new HashMap<>();
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -224,7 +223,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         title = "";
@@ -1448,7 +1448,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             this.cidsBean = cidsBean;
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             initFeatures();
             initMap();
 
@@ -1543,7 +1544,12 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             final String flur,
             final String zaehler,
             final String nenner) throws Exception {
-        final MetaObject[] mos = FlurstueckFinder.getLWLandparcel(gemarkung, flur, zaehler, nenner);
+        final MetaObject[] mos = FlurstueckFinder.getLWLandparcel(
+                gemarkung,
+                flur,
+                zaehler,
+                nenner,
+                getConnectionContext());
 
         if ((mos != null) && (mos.length > 0)) {
             final MetaObject mo = mos[0];
@@ -1748,13 +1754,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

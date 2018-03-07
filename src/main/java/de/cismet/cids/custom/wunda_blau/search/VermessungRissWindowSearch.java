@@ -74,8 +74,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -92,7 +92,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -112,7 +112,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private VermessungFlurstueckSelectionDialog flurstueckDialog;
     private DefaultListModel flurstuecksvermessungFilterModel = null;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
 //    private ImageIcon icoPluginRectangle;
 //    private ImageIcon icoPluginPolygon;
@@ -167,11 +167,15 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             mappingComponent = CismapBroker.getInstance().getMappingComponent();
             geoSearchEnabled = mappingComponent != null;
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "vermessung_riss");
+            metaClass = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "vermessung_riss",
+                    getConnectionContext());
 
             if (metaClass != null) {
                 byte[] iconDataFromMetaclass = new byte[] {};
@@ -1152,13 +1156,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1279,7 +1278,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                             "vermessung_flurstuecksvermessung");
                     newEntry.setProperty("veraenderungsart", null);
                     newEntry.setProperty("tmp_lp_orig", dropped);
-                    VermessungRissUtils.setFluerstueckKickerInVermessung(newEntry);
+                    VermessungRissUtils.setFluerstueckKickerInVermessung(newEntry, getConnectionContext());
                     flurstuecksvermessungFilterModel.addElement(newEntry);
                 }
             } catch (Exception ex) {

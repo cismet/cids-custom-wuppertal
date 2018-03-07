@@ -22,7 +22,7 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -50,7 +50,7 @@ public class TreppenReportBean extends ReportBeanWithMapAndImages {
      */
     public TreppenReportBean(final CidsBean treppe,
             final TreppeEditor editor,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(
             treppe,
             "geometrie.geo_field",

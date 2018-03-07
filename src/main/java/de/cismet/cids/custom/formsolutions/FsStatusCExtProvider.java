@@ -31,8 +31,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.utils.interfaces.CidsBeanAction;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.ext.CExtContext;
 import de.cismet.ext.CExtProvider;
@@ -43,7 +43,7 @@ import de.cismet.ext.CExtProvider;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CExtProvider.class)
-public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, ClientConnectionContextStore {
+public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -52,7 +52,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, Clien
     //~ Instance fields --------------------------------------------------------
 
     private final String ifaceClass;
-    private ClientConnectionContext connectionContext;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -66,7 +66,8 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, Clien
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -122,7 +123,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, Clien
                             && (ctxBean.getProperty("fehler") == null)
                             && ((Boolean)ctxBean.getProperty("postweg"))
                             && !((Boolean)ctxBean.getProperty("erledigt"))) {
-                    final CidsBeanAction action1 = new FsStatusBearbeitetAction();
+                    final CidsBeanAction action1 = new FsStatusBearbeitetAction(getConnectionContext());
                     action1.setCidsBean(ctxBean);
                     actions.add(action1);
                 }
@@ -144,12 +145,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, Clien
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

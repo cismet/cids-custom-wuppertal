@@ -45,8 +45,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -65,7 +65,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     BorderProvider,
     TitleComponentProvider,
     FooterComponentProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -77,7 +77,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     private CidsBean cidsBean;
     private String title;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
@@ -124,7 +124,8 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         blWait.setVisible(false);
     }
@@ -512,7 +513,10 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
                 final Object jumpID = selBean.getProperty("fullobjectid");
                 if (jumpID instanceof Integer) {
                     final String tabname = "alkis_landparcel";
-                    final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabname);
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                            CidsBeanSupport.DOMAIN_NAME,
+                            tabname,
+                            getConnectionContext());
                     if (mc != null) {
                         ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer)jumpID, "");
                     } else {
@@ -723,12 +727,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

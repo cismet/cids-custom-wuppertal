@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
@@ -34,7 +34,7 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
     private final Object body;
     private final ServerActionParameter[] params;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -57,7 +57,7 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
             final String directory,
             final String filename,
             final String extension,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.taskname = taskname;
         this.body = body;
         this.params = params;
@@ -137,7 +137,7 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

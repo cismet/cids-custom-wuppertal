@@ -65,8 +65,8 @@ import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -76,7 +76,7 @@ import de.cismet.connectioncontext.ClientConnectionContextStore;
  */
 public class MauerAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -97,7 +97,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     private MauerTableModel tableModel;
     private MappingComponent map;
     private final Collection<Feature> pointFeatures = new LinkedList<Feature>();
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane jLayeredPane1;
@@ -125,7 +125,8 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         tableModel = new MauerTableModel();
         initComponents();
         map = new MappingComponent();
@@ -146,11 +147,6 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                     changeMap();
                 }
             });
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**
@@ -604,7 +600,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

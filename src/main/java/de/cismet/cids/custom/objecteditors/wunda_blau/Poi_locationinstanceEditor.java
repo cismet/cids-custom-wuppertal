@@ -58,8 +58,8 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -72,8 +72,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled,
-    ClientConnectionContextStore {
+public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -91,7 +90,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(this.getClass());
     private String title = "";
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddThema;
@@ -184,7 +183,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         dlgAddLocationType.pack();
         dlgAddZusNamen.pack();
@@ -232,7 +232,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -1485,7 +1485,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             if (addName.length() > 0) {
                 final MetaClass alternativeGeoIdentifierMC = ClassCacheMultiple.getMetaClass(SessionManager.getSession()
                                 .getUser().getDomain(),
-                        "poi_alternativegeographicidentifier");
+                        "poi_alternativegeographicidentifier",
+                        getConnectionContext());
                 final MetaObject newAGI = alternativeGeoIdentifierMC.getEmptyInstance();
                 final CidsBean newAGIBean = newAGI.getBean();
                 newAGIBean.setProperty("alternativegeographicidentifier", addName);
@@ -1545,7 +1546,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 final Geometry pos_geometry = ((Geometry)geom_pos.getProperty("geo_field")).buffer(250).getEnvelope();
                 final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
                         CidsBeanSupport.DOMAIN_NAME,
-                        "geom");
+                        "geom",
+                        getConnectionContext());
                 final CidsBean newGeom = geomMetaClass.getEmptyInstance().getBean();
                 newGeom.setProperty("geo_field", pos_geometry);
                 cidsBean.setProperty("geom_area", newGeom);
@@ -1657,10 +1659,5 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             return bean.getMetaObject().getMetaClass().getName();
         }
         return "Point of Interest (POI)";
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

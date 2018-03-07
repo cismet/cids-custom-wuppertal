@@ -22,8 +22,7 @@ import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -31,7 +30,7 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class VCMProperties extends Properties implements ConnectionContextProvider {
+public class VCMProperties extends Properties {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -42,18 +41,12 @@ public class VCMProperties extends Properties implements ConnectionContextProvid
     private static final String PROP_PASSWORD = "PASSWORD";
     private static final String PROP_TOOLBAR_CONFATTR = "TOOLBAR_CONFATTR";
 
-    //~ Instance fields --------------------------------------------------------
-
-    private final ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass()
-                    .getSimpleName());
-
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new VCMProperties object.
      */
     private VCMProperties() {
-        load();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -105,24 +98,21 @@ public class VCMProperties extends Properties implements ConnectionContextProvid
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public final void load() {
+    public final void load(final ConnectionContext connectionContext) {
         try {
             final String propertiesString = (String)SessionManager.getSession().getConnection()
                         .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                getConnectionContext(),
+                                connectionContext,
                                 WundaBlauServerResources.VCM_PROPERTIES.getValue());
             super.load(new StringReader(propertiesString));
         } catch (final Exception ex) {
             LOG.warn("could not load properties.", ex);
         }
-    }
-
-    @Override
-    public final ClientConnectionContext getConnectionContext() {
-        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

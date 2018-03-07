@@ -70,7 +70,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -103,8 +103,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
     private SwingWorker worker;
 
-    private final ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass()
-                    .getSimpleName());
+    private final ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.commons.gui.progress.BusyStatusPanel busyStatusPanel1;
@@ -438,8 +437,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             "no.yet",
                             (Geometry)null,
                             (berechtigungspruefung
-                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
-                                ? downloadInfo : null,
+                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(
+                                    downloadInfo.getProduktTyp(),
+                                    getConnectionContext())) ? downloadInfo : null,
                             getConnectionContext(),
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
                 final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
@@ -448,7 +448,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                     addMessage(berechnung);
                 }
 
-                BaulastBescheinigungUtils.doDownload(downloadInfo, "");
+                BaulastBescheinigungUtils.doDownload(downloadInfo, "", getConnectionContext());
             }
         } catch (final Exception ex) {
             LOG.error(ex, ex);
@@ -717,7 +717,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
         final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
-                "alb_baulast");
+                "alb_baulast",
+                getConnectionContext());
 
         final String query = belastet ? queryBelastet : queryBeguenstigt;
 
@@ -1180,7 +1181,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

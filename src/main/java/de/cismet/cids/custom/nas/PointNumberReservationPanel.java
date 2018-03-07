@@ -60,7 +60,7 @@ import de.cismet.cismap.commons.interaction.events.StatusEvent;
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 import de.cismet.commons.gui.progress.BusyLoggingTextPane.Styles;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -91,7 +91,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
     private int maxNbz = 4;
     private boolean anzahlWarnVisible = false;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnErstellen;
@@ -122,7 +122,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
      * Creates a new PointNumberReservationPanel object.
      */
     public PointNumberReservationPanel() {
-        this(null, ClientConnectionContext.createDeprecated());
+        this(null, ConnectionContext.createDeprecated());
     }
 
     /**
@@ -132,7 +132,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
      * @param  connectionContext  DOCUMENT ME!
      */
     public PointNumberReservationPanel(final PointNumberDialog pnrDialog,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.pnrDialog = pnrDialog;
         this.connectionContext = connectionContext;
         final Properties props = new Properties();
@@ -922,7 +922,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

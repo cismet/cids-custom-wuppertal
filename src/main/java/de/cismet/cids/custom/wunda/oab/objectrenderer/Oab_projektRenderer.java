@@ -24,18 +24,23 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.RetrievalServiceLayer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
+public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
     // only to hold strong reference to listeners
     private EventListenerList refHolderList;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGotoCatchment;
@@ -80,16 +85,21 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
      * Creates new form OABProjectEditor.
      */
     public Oab_projektRenderer() {
-        initComponents();
-
-        txaDescription.setBackground(new Color(0, 0, 0, 0));
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+
+        txaDescription.setBackground(new Color(0, 0, 0, 0));
+    }
+
+    @Override
     protected void init() {
-        cidsBean = OabUtilities.getBean(cidsBean, "gewaessereinzugsgebiet");
+        cidsBean = OabUtilities.getBean(cidsBean, "gewaessereinzugsgebiet", getConnectionContext());
 
         final Runnable r = new Runnable() {
 
@@ -583,4 +593,9 @@ public class Oab_projektRenderer extends AbstractCidsBeanRenderer implements Req
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 }

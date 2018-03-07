@@ -116,9 +116,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.StaticDebuggingTools;
@@ -140,7 +139,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     TitleComponentProvider,
     FooterComponentProvider,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -189,7 +188,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private Collection<CidsBean> selectedFlurstuecke;
     private boolean eigentuemerPermission;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
@@ -1211,8 +1210,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                             "no.yet",
                             (Geometry)null,
                             (berechtigungspruefung
-                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
-                                ? downloadInfo : null,
+                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(
+                                    downloadInfo.getProduktTyp(),
+                                    getConnectionContext())) ? downloadInfo : null,
                             getConnectionContext(),
                             new ProductGroupAmount("ea", 1))) {
                 AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(
@@ -1384,7 +1384,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     final LightweightLandParcel3A lwParcel = (LightweightLandParcel3A)selection;
                     final MetaClass mc = ClassCacheMultiple.getMetaClass(
                             CidsBeanSupport.DOMAIN_NAME,
-                            "ALKIS_LANDPARCEL");
+                            "ALKIS_LANDPARCEL",
+                            getConnectionContext());
                     continueInBackground = true;
                     ComponentRegistry.getRegistry()
                             .getDescriptionPane()
@@ -1500,7 +1501,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                                 (Geometry)null,
                                 (berechtigungspruefung
                                     && AlkisProductDownloadHelper.checkBerechtigungspruefung(
-                                        downloadInfo.getProduktTyp())) ? downloadInfo : null,
+                                        downloadInfo.getProduktTyp(),
+                                        getConnectionContext())) ? downloadInfo : null,
                                 getConnectionContext(),
                                 new ProductGroupAmount("ea", 1))) {
                     AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(
@@ -1979,12 +1981,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             try {
                 soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
@@ -2073,11 +2076,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     && billingAllowedBlab_be);
 
         panEigentuemer.setVisible(eigentuemerPermission);
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

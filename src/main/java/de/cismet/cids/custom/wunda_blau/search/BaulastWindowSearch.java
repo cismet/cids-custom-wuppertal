@@ -67,9 +67,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -85,7 +85,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -102,7 +102,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFS;
     private javax.swing.JButton btnFromMapFS;
@@ -140,12 +140,12 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
-            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
+            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST", getConnectionContext());
             icon = new ImageIcon(mc.getIconData());
-            fsSelectionDialoge.initAfterConnectionContext();
-            fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
+            fsSelectionDialoge = new FlurstueckSelectionDialoge(false, getConnectionContext()) {
 
                     @Override
                     public void okHook() {
@@ -157,7 +157,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 };
 
             initComponents();
-            final MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
+            final MetaClass artMC = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "ALB_BAULAST_ART",
+                    getConnectionContext());
             final DefaultComboBoxModel cbArtModel;
             try {
                 cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true, getConnectionContext());
@@ -635,9 +638,9 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 log.error("Can not parse information from Flurstueck bean: " + fsBean, ex);
             }
         }
-        MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST");
+        MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST", getConnectionContext());
         final int baulastClassID = mc.getID();
-        mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULASTBLATT");
+        mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULASTBLATT", getConnectionContext());
         final int baulastblattClassID = mc.getID();
         return new CidsBaulastSearchStatement(bsi, baulastClassID, baulastblattClassID);
     }
@@ -750,12 +753,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

@@ -17,7 +17,7 @@ import java.util.Date;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -44,7 +44,7 @@ public class PrintJahresberichtReport extends PrintStatisticsReport {
     public PrintJahresberichtReport(final int year,
             final Date[] fromDate_tillDate,
             final Collection<CidsBean> billingsBeans,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(fromDate_tillDate, billingsBeans, connectionContext);
         this.year = year;
     }

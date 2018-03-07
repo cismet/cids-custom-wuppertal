@@ -28,7 +28,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -68,7 +68,7 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
     public Sb_SingleStadtbildGridObject(final CidsBean stadtbild,
             final Sb_stadtbildserieGridObject locationOfStadtbild,
             final DefaultListModel gridModel,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(connectionContext);
 
         this.stadtbild = stadtbild;

@@ -57,8 +57,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -71,7 +71,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -92,7 +92,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
@@ -161,7 +161,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             grundbuchblattInputFieldConfig =
                 new ObjectMapper().readValue(GrundbuchblattInputWindow.class.getResourceAsStream(
@@ -175,7 +176,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         }
 
         try {
-            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
+            mc = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "ALKIS_LANDPARCEL",
+                    getConnectionContext());
             icon = new ImageIcon(mc.getIconData());
             initComponents();
             ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
@@ -225,13 +229,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**

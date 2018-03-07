@@ -21,7 +21,6 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -53,7 +52,7 @@ public class PrintStatisticsReport implements ConnectionContextProvider {
     protected final Set<String> amountVUamtlicherLageplanGBs = new HashSet<String>();
     protected final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<String>();
     protected final Set<String> amountVUsonstigeGBs = new HashSet<String>();
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -66,7 +65,7 @@ public class PrintStatisticsReport implements ConnectionContextProvider {
      */
     public PrintStatisticsReport(final Date[] fromDate_tillDate,
             final Collection<CidsBean> billingsBeans,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.fromDate_tillDate = fromDate_tillDate;
         this.billingsBeans = billingsBeans;
         this.connectionContext = connectionContext;
@@ -108,7 +107,7 @@ public class PrintStatisticsReport implements ConnectionContextProvider {
         final PrintStatisticsReport printStatisticsReport = new PrintStatisticsReport(
                 new Date[] { start, end },
                 list,
-                ClientConnectionContext.createDeprecated());
+                ConnectionContext.createDeprecated());
         final BillingStatisticsReport report = printStatisticsReport.createReport();
         final Map params = report.generateParamters();
         DevelopmentTools.showReportForBeans(
@@ -233,7 +232,7 @@ public class PrintStatisticsReport implements ConnectionContextProvider {
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

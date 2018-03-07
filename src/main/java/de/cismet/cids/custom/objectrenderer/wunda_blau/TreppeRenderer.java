@@ -14,7 +14,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!

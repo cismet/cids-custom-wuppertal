@@ -50,8 +50,7 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -63,7 +62,7 @@ import de.cismet.tools.collections.TypeSafeCollections;
  * @version  $Revision$, $Date$
  */
 public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
-    ClientConnectionContextStore {
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -74,7 +73,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
 
     private CidsBean cidsBean;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblBauweise;
@@ -98,16 +97,15 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
 
     /**
      * Creates a new AlkisGebaeudeRendererPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public AlkisGebaeudeRendererPanel() {
+    public AlkisGebaeudeRendererPanel(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public void initAfterConnectionContext() {
-        initComponents();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -424,7 +422,10 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
                 final Object jumpID = selBean.getProperty("fullobjectid");
                 if (jumpID instanceof Integer) {
                     final String tabname = "alkis_landparcel";
-                    final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabname);
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                            CidsBeanSupport.DOMAIN_NAME,
+                            tabname,
+                            getConnectionContext());
                     if (mc != null) {
                         ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer)jumpID, "");
                     } else {
@@ -444,12 +445,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

@@ -91,9 +91,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -112,7 +111,7 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  */
 public final class AlkisPointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -150,7 +149,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
@@ -176,7 +175,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         scpAggregationTable.getViewport().setOpaque(false);
         tblAggregation.getSelectionModel().addListSelectionListener(new TableSelectionListener());
@@ -195,7 +195,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -873,11 +873,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                             ".pdf",
                             getConnectionContext()));
         }
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

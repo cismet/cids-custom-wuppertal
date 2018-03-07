@@ -19,8 +19,8 @@ import org.openide.util.lookup.ServiceProvider;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -31,20 +31,21 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class FeatureStylingKeyStartUpHook implements StartupHook, ClientConnectionContextStore {
+public class FeatureStylingKeyStartUpHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger log = Logger.getLogger(FeatureStylingKeyStartUpHook.class);
+    private static final Logger LOG = Logger.getLogger(FeatureStylingKeyStartUpHook.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -58,17 +59,12 @@ public class FeatureStylingKeyStartUpHook implements StartupHook, ClientConnecti
                 CismapBroker.getInstance().setFeatureStylingComponentKey(stylingKey);
             }
         } catch (Exception e) {
-            log.warn("Exception during retrievel of configuration attribute feature.styling", e);
+            LOG.warn("Exception during retrievel of configuration attribute feature.styling", e);
         }
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

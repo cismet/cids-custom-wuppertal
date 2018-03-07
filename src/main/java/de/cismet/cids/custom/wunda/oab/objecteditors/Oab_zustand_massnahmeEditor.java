@@ -34,8 +34,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -44,7 +44,7 @@ import de.cismet.connectioncontext.ClientConnectionContextStore;
  * @version  1.0
  */
 public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -61,7 +61,7 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
     private final ListSelectionListener calcSelL = new CalculationSelectionL();
     private final ItemListener importChkL = new ImportCheckL();
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditBe;
@@ -118,7 +118,8 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
 
             bindingGroup.bind();
 
@@ -604,7 +605,8 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         btnEditTin.addActionListener(WeakListeners.create(ActionListener.class, editTinL, btnEditTin));
@@ -617,12 +619,7 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

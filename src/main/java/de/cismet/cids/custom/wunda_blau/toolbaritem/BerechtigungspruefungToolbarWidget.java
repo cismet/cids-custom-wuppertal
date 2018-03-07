@@ -40,8 +40,8 @@ import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -53,7 +53,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsClientToolbarItem.class)
 public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel implements CidsClientToolbarItem,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -73,7 +73,7 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
     private final BerechtigungspruefungMessageNotifierListener notifierListener =
         new BerechtigungspruefungToolbarWidget.MessageListener();
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -91,7 +91,9 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         if (isVisible()) {
             initComponents();
             updateAnfragen();
@@ -166,9 +168,9 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
                                             getConnectionContext(),
-                                            BerechtigungspruefungMessageNotifier.getInstance()
-                                                .getAeltesteOffeneAnfrage(),
-                                            new ServerActionParameter<String>(
+                                            BerechtigungspruefungMessageNotifier.getInstance().getAeltesteOffeneAnfrage(
+                                                getConnectionContext()),
+                                            new ServerActionParameter<>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.MODUS
                                                     .toString(),
                                                 BerechtigungspruefungFreigabeServerAction.MODUS_PRUEFUNG));
@@ -185,7 +187,8 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                         ret = get();
                         if (ret.equals(
                                         BerechtigungspruefungFreigabeServerAction.ReturnType.OK)) {
-                            gotoPruefung(BerechtigungspruefungMessageNotifier.getInstance().getAeltesteOffeneAnfrage());
+                            gotoPruefung(BerechtigungspruefungMessageNotifier.getInstance().getAeltesteOffeneAnfrage(
+                                    getConnectionContext()));
                         } else {
                             final String title = "Fehler beim Sperren.";
                             final String message =
@@ -277,7 +280,9 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
         int anzahlAnfragen;
 
         try {
-            anzahlAnfragen = BerechtigungspruefungMessageNotifier.getInstance().getOffeneAnfragen().size();
+            anzahlAnfragen = BerechtigungspruefungMessageNotifier.getInstance()
+                        .getOffeneAnfragen(getConnectionContext())
+                        .size();
         } catch (final Exception ex) {
             LOG.error("Fehler bei der Abfrage der offenen Anfragen", ex);
             anzahlAnfragen = -1;
@@ -313,13 +318,8 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

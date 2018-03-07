@@ -19,7 +19,7 @@ import java.util.Date;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -82,7 +82,7 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
             final double earningsWithCostsWiederver,
             final int amountWiederverkaeufe,
             final int amountWiederverkaeufeGB,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(
             billingBeans,
             from,

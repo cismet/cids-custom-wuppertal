@@ -67,7 +67,6 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -105,7 +104,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private final GeometryFactory factory = new GeometryFactory(new PrecisionModel(),
             CrsTransformer.extractSridFromCrs(AlkisConstants.COMMONS.SRS_SERVICE));
     private boolean documentListenersRemoved = false;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
@@ -146,7 +145,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      */
     public Butler1Dialog(final java.awt.Frame parent,
             final boolean modal,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
         pointFeature = createPointFeature();
@@ -1371,7 +1370,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

@@ -39,8 +39,8 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.DoNotWrap;
 import de.cismet.tools.gui.PureCoolPanel;
@@ -55,9 +55,7 @@ import de.cismet.tools.gui.RoundedPanel;
  * @version  $Revision$, $Date$
  */
 @AggregationRenderer
-public class ThemaEditor extends PureCoolPanel implements DoNotWrap,
-    DisposableCidsBeanStore,
-    ClientConnectionContextStore {
+public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableCidsBeanStore, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -81,7 +79,7 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap,
     private CidsBean cidsBean;
     private JXLayer<JComponent> layer1;
     private JXLayer<JComponent> layer2;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
@@ -251,7 +249,8 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap,
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         final Runnable layerLockRunnable = new Runnable() {
 
                 @Override
@@ -286,12 +285,7 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap,
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -329,7 +323,8 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap,
                     try {
                         DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                             bindingGroup,
-                            cidsBean);
+                            cidsBean,
+                            getConnectionContext());
 
                         bindingGroup.bind();
                     } catch (Exception e) {

@@ -18,8 +18,8 @@ package de.cismet.cids.custom.objecteditors.wunda_demo;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -27,11 +27,11 @@ import de.cismet.connectioncontext.ClientConnectionContextStore;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class AapersonEditor_ extends DefaultCustomObjectEditor implements ClientConnectionContextStore {
+public class AapersonEditor_ extends DefaultCustomObjectEditor implements ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo2;
@@ -156,17 +156,13 @@ public class AapersonEditor_ extends DefaultCustomObjectEditor implements Client
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

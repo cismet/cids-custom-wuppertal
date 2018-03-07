@@ -34,7 +34,7 @@ import java.util.logging.Level;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -54,7 +54,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Connec
 
     private Date lastValidDate;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -82,7 +82,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Connec
      * @param  parent             DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public StichtagChooserDialog(final java.awt.Frame parent, final ClientConnectionContext connectionContext) {
+    public StichtagChooserDialog(final java.awt.Frame parent, final ConnectionContext connectionContext) {
         super(parent, true);
         this.connectionContext = connectionContext;
         initComponents();
@@ -393,7 +393,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Connec
                 public void run() {
                     final StichtagChooserDialog dialog = new StichtagChooserDialog(
                             new javax.swing.JFrame(),
-                            ClientConnectionContext.createDeprecated());
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -416,7 +416,7 @@ public class StichtagChooserDialog extends javax.swing.JDialog implements Connec
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

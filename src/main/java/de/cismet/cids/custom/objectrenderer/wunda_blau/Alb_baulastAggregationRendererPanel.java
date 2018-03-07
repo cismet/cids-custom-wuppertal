@@ -69,8 +69,7 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -147,7 +146,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     private MultiMap featuresMM;
     private final Comparator<Integer> tableComparator;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
@@ -175,7 +174,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastAggregationRendererPanel(final ClientConnectionContext connectionContext) {
+    public Alb_baulastAggregationRendererPanel(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
 
         initComponents();
@@ -189,7 +188,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -429,7 +428,8 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                             type,
                                             selectedBaulasten,
                                             txtJobnumber.getText(),
-                                            projectname);
+                                            projectname,
+                                            getConnectionContext());
                                     DownloadManager.instance().add(download);
                                 }
                             }

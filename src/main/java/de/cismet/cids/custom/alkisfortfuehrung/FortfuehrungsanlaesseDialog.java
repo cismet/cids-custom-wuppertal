@@ -47,7 +47,7 @@ import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.BrowserLauncher;
@@ -72,7 +72,7 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog im
     private final WKTReader wktreader = new WKTReader();
     private final MultiMap geomsMap = new MultiMap();
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCloseDialog;
@@ -115,7 +115,7 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog im
      */
     protected FortfuehrungsanlaesseDialog(final Frame parent,
             final boolean modal,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
 
@@ -971,7 +971,7 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog im
     protected abstract void setDetailEnabled(final boolean enabled);
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

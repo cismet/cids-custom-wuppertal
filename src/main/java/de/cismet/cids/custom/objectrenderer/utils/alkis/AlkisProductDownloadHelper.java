@@ -38,7 +38,7 @@ import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.Berechti
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.CredentialsAwareHttpDownlaod;
@@ -70,7 +70,7 @@ public class AlkisProductDownloadHelper {
      */
     public static void downloadBuchungsblattnachweisStichtagProduct(
             final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
         final String actionTag = AlkisUtils.getActionTag(product);
@@ -110,7 +110,7 @@ public class AlkisProductDownloadHelper {
      */
     public static void downloadBuchungsblattnachweisProduct(
             final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
         final String actionTag = AlkisUtils.getActionTag(product);
@@ -244,7 +244,7 @@ public class AlkisProductDownloadHelper {
             final String actionTag,
             final String completeBuchungsblattCode,
             final Component parent,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         CredentialsAwareHttpDownlaod download = null;
         if (!ObjectRendererUtils.checkActionTag(actionTag, connectionContext)) {
             showNoProductPermissionWarning(parent);
@@ -330,7 +330,7 @@ public class AlkisProductDownloadHelper {
      */
     public static void downloadEinzelnachweisProduct(
             final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
         final String actionTag = AlkisUtils.getActionTag(product);
@@ -411,7 +411,7 @@ public class AlkisProductDownloadHelper {
      * @param  connectionContext  DOCUMENT ME!
      */
     public static void downloadKarteProduct(final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String downloadTitle = "Karte";
 
@@ -469,11 +469,11 @@ public class AlkisProductDownloadHelper {
     public static void download(final String schluessel,
             final String produkttyp,
             final String downloadInfo,
-            final ClientConnectionContext connectionContext) throws Exception {
+            final ConnectionContext connectionContext) throws Exception {
         if (BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
             final BerechtigungspruefungBescheinigungDownloadInfo bescheinigungDownloadInfo =
                 new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungBescheinigungDownloadInfo.class);
-            BaulastBescheinigungUtils.doDownload(bescheinigungDownloadInfo, schluessel);
+            BaulastBescheinigungUtils.doDownload(bescheinigungDownloadInfo, schluessel, connectionContext);
         } else if (BerechtigungspruefungAlkisDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
             final BerechtigungspruefungAlkisDownloadInfo alkisDownloadInfo =
                 new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungAlkisDownloadInfo.class);
@@ -532,29 +532,22 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param   downloadType  DOCUMENT ME!
+     * @param   downloadType       DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean checkBerechtigungspruefung(final String downloadType) {
+    public static boolean checkBerechtigungspruefung(final String downloadType,
+            final ConnectionContext connectionContext) {
         try {
             return (SessionManager.getConnection().hasConfigAttr(
                         SessionManager.getSession().getUser(),
                         "berechtigungspruefung_"
                                 + downloadType,
-                        getClientConnectionContext()));
+                        connectionContext));
         } catch (final Exception ex) {
             LOG.info("could now check Berechtigungspruefung confattr", ex);
             return false;
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(AlkisProductDownloadHelper.class.getSimpleName());
     }
 }

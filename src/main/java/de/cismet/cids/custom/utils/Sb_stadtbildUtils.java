@@ -48,6 +48,7 @@ import javax.imageio.ImageIO;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -57,7 +58,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.commons.concurrency.CismetConcurrency;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.security.WebAccessManager;
 
@@ -142,7 +144,7 @@ public class Sb_stadtbildUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean getWuppertal(final ClientConnectionContext connectionContext) {
+    public static CidsBean getWuppertal(final ConnectionContext connectionContext) {
         if (WUPPERTAL == null) {
             WUPPERTAL = getOrtWuppertal(connectionContext);
         }
@@ -166,7 +168,7 @@ public class Sb_stadtbildUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean getR102(final ClientConnectionContext connectionContext) {
+    public static CidsBean getR102(final ConnectionContext connectionContext) {
         if (R102 == null) {
             R102 = getLagerR102(connectionContext);
         }
@@ -180,11 +182,12 @@ public class Sb_stadtbildUtils {
      *
      * @return  DOCUMENT ME!
      */
-    private static CidsBean getOrtWuppertal(final ClientConnectionContext connectionContext) {
+    private static CidsBean getOrtWuppertal(final ConnectionContext connectionContext) {
         try {
             final MetaClass ortClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
-                    "sb_ort");
+                    "sb_ort",
+                    connectionContext);
             if (ortClass != null) {
                 final StringBuffer wuppertalQuery = new StringBuffer("select ").append(ortClass.getId())
                             .append(", ")
@@ -219,11 +222,12 @@ public class Sb_stadtbildUtils {
      *
      * @return  DOCUMENT ME!
      */
-    private static CidsBean getLagerR102(final ClientConnectionContext connectionContext) {
+    private static CidsBean getLagerR102(final ConnectionContext connectionContext) {
         try {
             final MetaClass lagerClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
-                    "sb_lager");
+                    "sb_lager",
+                    connectionContext);
             if (lagerClass != null) {
                 final StringBuffer r102Query = new StringBuffer("select ").append(lagerClass.getId())
                             .append(", ")
@@ -262,12 +266,13 @@ public class Sb_stadtbildUtils {
      */
     public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox,
             final String className,
-            final ClientConnectionContext connectionContext) {
-        final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className);
+            final ConnectionContext connectionContext) {
+        final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className, connectionContext);
         if (metaClass != null) {
             final DefaultComboBoxModel comboBoxModel;
             try {
                 final FastBindableReferenceCombo tempFastBindableCombo = new FastBindableReferenceCombo();
+                new DummyContextPanel(connectionContext).add(tempFastBindableCombo);
                 tempFastBindableCombo.setSorted(true);
                 tempFastBindableCombo.setNullable(true);
                 tempFastBindableCombo.setMetaClass(metaClass);
@@ -402,7 +407,7 @@ public class Sb_stadtbildUtils {
     public static Object fetchImageForBildnummer(final CidsBean statdbildserie,
             final String bildnummer,
             final int priority,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         if (isBildnummerInCacheOrFailed(bildnummer)) {
             final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
             if (cachedImageRef != null) {
@@ -467,7 +472,7 @@ public class Sb_stadtbildUtils {
      */
     public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie,
             final List<CidsBean> stadtbilder,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         for (int i = 0; (i < CACHE_SIZE) && (i < stadtbilder.size()); i++) {
             final String bildnummer = (String)stadtbilder.get(i).getProperty("bildnummer");
             try {
@@ -625,7 +630,7 @@ public class Sb_stadtbildUtils {
 
         final CidsBean stadtbildserie;
         final String bildnummer;
-        final ClientConnectionContext connectionContext;
+        final ConnectionContext connectionContext;
 
         //~ Constructors -------------------------------------------------------
 
@@ -638,7 +643,7 @@ public class Sb_stadtbildUtils {
          */
         public FetchImagePriorityCallable(final CidsBean stadtbildserie,
                 final String bildnummer,
-                final ClientConnectionContext connectionContext) {
+                final ConnectionContext connectionContext) {
             this.stadtbildserie = stadtbildserie;
             this.bildnummer = bildnummer;
             this.connectionContext = connectionContext;
@@ -919,6 +924,36 @@ public class Sb_stadtbildUtils {
         private void remove(final Key key) {
             queue.remove(key);
             map.get(key);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class DummyContextPanel extends JPanel implements ConnectionContextProvider {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final ConnectionContext connectionContext;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DummyContextPanel object.
+         *
+         * @param  connectionContext  DOCUMENT ME!
+         */
+        DummyContextPanel(final ConnectionContext connectionContext) {
+            this.connectionContext = connectionContext;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public ConnectionContext getConnectionContext() {
+            return connectionContext;
         }
     }
 }

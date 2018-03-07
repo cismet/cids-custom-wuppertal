@@ -84,8 +84,10 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -100,24 +102,38 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     BorderProvider,
     RequestsFullSizeComponent,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(KkVerfahrenKompensationEditor.class);
-    private static final MetaClass MASSNAHMEN_MC = ClassCacheMultiple.getMetaClass(
-            CidsBeanSupport.DOMAIN_NAME,
-            "kk_massnahme");
-    private static final MetaClass BIOTOP_MC = ClassCacheMultiple.getMetaClass(
-            CidsBeanSupport.DOMAIN_NAME,
-            "kk_biotop");
-    private static final MetaClass AUSGANGS_BIOTOP_MC = ClassCacheMultiple.getMetaClass(
-            CidsBeanSupport.DOMAIN_NAME,
-            "kk_ausgangsbiotop");
+    private static final MetaClass MASSNAHMEN_MC;
+    private static final MetaClass BIOTOP_MC;
+    private static final MetaClass AUSGANGS_BIOTOP_MC;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                Category.STATIC,
+                KkVerfahrenKompensationEditor.class.getSimpleName());
+
+        MASSNAHMEN_MC = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                "kk_massnahme",
+                connectionContext);
+        BIOTOP_MC = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                "kk_biotop",
+                connectionContext);
+        AUSGANGS_BIOTOP_MC = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                "kk_ausgangsbiotop",
+                connectionContext);
+    }
+
     private static final String[] MASSNAHMEN_COL_NAMES = new String[] {
             "Kompensationsmaßnahme",
             "Möglich",
-            "Festgesetzt"
+            "Festgesetzt",
         };
     private static final String[] MASSNAHMEN_PROP_NAMES = new String[] { "massnahme", "moeglich", "festgesetzt" };
     private static final Class[] MASSNAHMEN_PROP_TYPES = new Class[] { CidsBean.class, Boolean.class, Boolean.class };
@@ -170,7 +186,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private MappingComponent previewMap;
     private CardLayout tabPaneCardLayout;
     private final List<KeyListener> keyListener = new ArrayList<>();
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddBioAus;
@@ -263,7 +279,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         final KeyAdapter ka = new KeyAdapter() {
 
@@ -1398,7 +1415,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
      */
     private void addObjectToTable(final JXTable table, final String tableClass) {
         try {
-            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(tableClass);
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(tableClass, getConnectionContext());
 
             ((KompensationskatasterBeanTable)table.getModel()).addBean(bean);
         } catch (Exception e) {
@@ -1435,7 +1452,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             }
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
         } else {
             if (editable) {
@@ -1701,13 +1719,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

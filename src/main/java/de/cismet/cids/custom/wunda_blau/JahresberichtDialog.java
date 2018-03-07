@@ -37,7 +37,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -58,8 +58,7 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
 
     private SwingWorker worker;
 
-    private final ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass()
-                    .getSimpleName());
+    private final ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -421,7 +420,7 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
     } //GEN-LAST:event_btnOkActionPerformed
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

@@ -76,9 +76,8 @@ import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -99,7 +98,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     TitleComponentProvider,
     ListDataListener,
     Sb_stadtbildserieGridObjectListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -139,7 +138,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private HashSet<String> selectedStadtbilder = new HashSet<>();
     private HashSet<String> vorschauStadtbilder = new HashSet<>();
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBin;
@@ -229,7 +228,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         vorauswahlReportAction.putValue(
             Action.SHORT_DESCRIPTION,
             org.openide.util.NbBundle.getMessage(
@@ -1597,13 +1597,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1641,7 +1636,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
             final String imageNumber = (String)stadtbild.getProperty("bildnummer");
             if (stadtbildSerie == null) {
-                final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, "sb_serie_bild_array");
+                final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                        DOMAIN,
+                        "sb_serie_bild_array",
+                        getConnectionContext());
                 String query = "SELECT "
                             + mc.getID()
                             + ", sb_serie_bild_array."
@@ -1656,7 +1654,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                     query,
                                     getConnectionContext());
                     final CidsBean array = metaObjects[0].getBean();
-                    final MetaClass mcSerie = ClassCacheMultiple.getMetaClass(DOMAIN, "sb_stadtbildserie");
+                    final MetaClass mcSerie = ClassCacheMultiple.getMetaClass(
+                            DOMAIN,
+                            "sb_stadtbildserie",
+                            getConnectionContext());
                     query = "SELECT "
                                 + mcSerie.getID()
                                 + ",sb_stadtbildserie."

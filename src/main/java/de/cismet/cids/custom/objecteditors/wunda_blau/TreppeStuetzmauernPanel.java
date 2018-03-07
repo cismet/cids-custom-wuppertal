@@ -51,7 +51,7 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -72,7 +72,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     private List<CidsBean> cidsBeans;
     private final boolean editable;
     private final HashMap<CidsBean, CidsBean> zustandBeanMap = new HashMap<>();
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     Box.Filler filler1;
@@ -87,7 +87,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel(final ClientConnectionContext connectionContext) {
+    public TreppeStuetzmauernPanel(final ConnectionContext connectionContext) {
         this(true, true, connectionContext);
     }
 
@@ -97,7 +97,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel(final boolean editable, final ClientConnectionContext connectionContext) {
+    public TreppeStuetzmauernPanel(final boolean editable, final ConnectionContext connectionContext) {
         this(editable, false, connectionContext);
     }
 
@@ -110,7 +110,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      */
     public TreppeStuetzmauernPanel(final boolean editable,
             final boolean netbeansDesignDummy,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
         this.connectionContext = connectionContext;
@@ -400,7 +400,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

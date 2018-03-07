@@ -17,7 +17,7 @@ import javax.swing.DefaultListModel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -33,7 +33,7 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
 
     /** Is used to avoid that a Stadtbild is shown twice in the grid. */
     private final HashSet<Sb_SingleStadtbildGridObject> modelProxy = new HashSet<>();
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -42,7 +42,7 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_SingleStadtbildJGrid(final ClientConnectionContext connectionContext) {
+    public Sb_SingleStadtbildJGrid(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         this.setModel(new DefaultListModel<>());
         this.getCellRendererManager().setDefaultRenderer(new Sb_SingleStadtbildGridRenderer());
@@ -140,7 +140,7 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

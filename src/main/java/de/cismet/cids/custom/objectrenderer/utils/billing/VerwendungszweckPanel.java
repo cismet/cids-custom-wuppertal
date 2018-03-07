@@ -45,7 +45,7 @@ import javax.swing.Action;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.ALLOWED_USAGE_CONFIG_ATTR;
@@ -89,7 +89,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     private javax.swing.JPanel pnlVerwendungszweckCheckBoxes;
     // End of variables declaration//GEN-END:variables
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -97,7 +97,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
      * Creates new form VerwendungszweckPanel.
      */
     public VerwendungszweckPanel() {
-        this(ClientConnectionContext.createDeprecated());
+        this(ConnectionContext.createDeprecated());
     }
 
     /**
@@ -105,7 +105,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public VerwendungszweckPanel(final ClientConnectionContext connectionContext) {
+    public VerwendungszweckPanel(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
     }
@@ -301,7 +301,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

@@ -42,7 +42,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerActi
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.StaticDecimalTools;
@@ -69,7 +69,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     ArrayList<ButlerFormat> formats;
     private Geometry geom;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
     private javax.swing.JComboBox cbProduktGruppe;
@@ -102,7 +102,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Butler1ProductPanel(final ClientConnectionContext connectionContext) {
+    public Butler1ProductPanel(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         loadPrductDescriptions();
         initComponents();
@@ -505,7 +505,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     public static void main(final String[] args) {
         final JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.getContentPane().add(new Butler1ProductPanel(ClientConnectionContext.createDeprecated()));
+        f.getContentPane().add(new Butler1ProductPanel(ConnectionContext.createDeprecated()));
         f.pack();
         f.setVisible(true);
     }
@@ -608,7 +608,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
         if (geom != null) {
             final int dachPunkteCount;
             try {
-                dachPunkteCount = NasFeeCalculator.getDachPunkteAmount(geom);
+                dachPunkteCount = NasFeeCalculator.getDachPunkteAmount(geom, getConnectionContext());
                 return "" + dachPunkteCount;
             } catch (ConnectionException ex) {
                 LOG.error("Error during Dachpunkte search in butler 1 prduct panel", ex);
@@ -626,7 +626,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
         if (geom != null) {
             final int bodenPuntkeCount;
             try {
-                bodenPuntkeCount = NasFeeCalculator.getBodenPunkteAmount(geom);
+                bodenPuntkeCount = NasFeeCalculator.getBodenPunkteAmount(geom, getConnectionContext());
                 return "" + bodenPuntkeCount;
             } catch (ConnectionException ex) {
                 LOG.error("Error during Dachpunkte search in butler 1 prduct panel", ex);
@@ -644,7 +644,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
         if (geom != null) {
             final int gebaeudeCount;
             try {
-                gebaeudeCount = NasFeeCalculator.getGebaeudeAmount(geom);
+                gebaeudeCount = NasFeeCalculator.getGebaeudeAmount(geom, getConnectionContext());
                 return "" + gebaeudeCount;
             } catch (ConnectionException ex) {
                 LOG.error("Error during Gebaeude search in butler 1 prduct panel", ex);
@@ -662,7 +662,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
         if (geom != null) {
             final int flurstueckCount;
             try {
-                flurstueckCount = NasFeeCalculator.getFlurstueckAmount(geom);
+                flurstueckCount = NasFeeCalculator.getFlurstueckAmount(geom, getConnectionContext());
                 return "" + flurstueckCount;
             } catch (ConnectionException ex) {
                 LOG.error("Error during Flurstuecksearch in butler 1 prduct panel");
@@ -718,7 +718,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

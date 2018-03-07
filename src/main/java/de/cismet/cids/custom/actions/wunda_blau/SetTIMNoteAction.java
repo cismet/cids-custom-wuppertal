@@ -62,8 +62,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -74,7 +74,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CommonFeatureAction.class)
-public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAction, ClientConnectionContextStore {
+public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAction, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -86,7 +86,7 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
     private boolean isCurrentUserAllowedToSetHint;
     private MetaClass timLiegMetaClass;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -102,7 +102,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             final MetaClassCacheService classcache = Lookup.getDefault().lookup(MetaClassCacheService.class);
             timLiegMetaClass = classcache.getMetaClass("WUNDA_BLAU", "tim_lieg");
@@ -150,8 +151,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
         CidsBean persistedHint = null;
         CidsBean geometry = null;
         try {
-            hint = CidsBeanSupport.createNewCidsBeanFromTableName("tim_lieg");
-            geometry = CidsBeanSupport.createNewCidsBeanFromTableName("geom");
+            hint = CidsBeanSupport.createNewCidsBeanFromTableName("tim_lieg", getConnectionContext());
+            geometry = CidsBeanSupport.createNewCidsBeanFromTableName("geom", getConnectionContext());
 
             hint.setProperty("ein_beab", usr.getName());
             hint.setProperty("ein_dat", new java.sql.Timestamp(System.currentTimeMillis()));
@@ -257,12 +258,7 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

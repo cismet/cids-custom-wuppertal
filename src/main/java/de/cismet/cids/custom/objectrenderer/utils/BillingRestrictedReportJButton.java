@@ -13,7 +13,7 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import javax.swing.JButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -31,7 +31,7 @@ public class BillingRestrictedReportJButton extends JButton implements Connectio
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -40,7 +40,7 @@ public class BillingRestrictedReportJButton extends JButton implements Connectio
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public BillingRestrictedReportJButton(final ClientConnectionContext connectionContext) {
+    public BillingRestrictedReportJButton(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
     }
 
@@ -56,7 +56,7 @@ public class BillingRestrictedReportJButton extends JButton implements Connectio
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

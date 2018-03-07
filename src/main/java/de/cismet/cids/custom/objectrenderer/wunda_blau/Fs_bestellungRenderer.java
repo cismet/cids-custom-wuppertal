@@ -69,8 +69,8 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -90,7 +90,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -126,7 +126,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private CidsBean cidsBean;
     private MetaObjectNode flurstueckMon;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdAttachBilling;
@@ -218,13 +218,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
-        initComponents();
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
+        initComponents();
     }
 
     /**
@@ -1724,7 +1720,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

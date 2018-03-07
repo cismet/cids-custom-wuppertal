@@ -36,7 +36,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
@@ -92,7 +92,7 @@ public class NASDownload extends AbstractCancellableDownload implements Connecti
     private boolean omitSendingRequest = false;
     private String requestId;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -109,7 +109,7 @@ public class NASDownload extends AbstractCancellableDownload implements Connecti
             final boolean isSplitted,
             final boolean isDxf,
             final String requestId,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         omitSendingRequest = true;
         this.orderId = orderId;
@@ -179,7 +179,7 @@ public class NASDownload extends AbstractCancellableDownload implements Connecti
             final String requestId,
             final NasProduct product,
             final GeometryCollection g,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.product = product;
         this.connectionContext = connectionContext;
         geometries = g;
@@ -211,7 +211,7 @@ public class NASDownload extends AbstractCancellableDownload implements Connecti
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    private NASDownload(final ClientConnectionContext connectionContext) {
+    private NASDownload(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         fileToSaveTo = new File("" + System.currentTimeMillis());
     }
@@ -219,7 +219,7 @@ public class NASDownload extends AbstractCancellableDownload implements Connecti
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

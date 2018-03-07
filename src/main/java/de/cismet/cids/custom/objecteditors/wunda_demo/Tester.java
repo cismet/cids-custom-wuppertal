@@ -42,7 +42,7 @@ import de.cismet.cids.editors.CidsObjectEditorFactory;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
@@ -76,7 +76,7 @@ public class Tester extends javax.swing.JFrame implements ConnectionContextProvi
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -87,7 +87,7 @@ public class Tester extends javax.swing.JFrame implements ConnectionContextProvi
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public Tester(final ClientConnectionContext connectionContext) throws Exception {
+    public Tester(final ConnectionContext connectionContext) throws Exception {
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         // rmi registry lokaliseren
 
@@ -115,14 +115,22 @@ public class Tester extends javax.swing.JFrame implements ConnectionContextProvi
         connectionInfo.setUsername("demo");
 
         final Connection connection = ConnectionFactory.getFactory()
-                    .createConnection("Sirius.navigator.connection.RMIConnection", connectionInfo.getCallserverURL());
+                    .createConnection(
+                        "Sirius.navigator.connection.RMIConnection",
+                        connectionInfo.getCallserverURL(),
+                        false,
+                        getConnectionContext());
 
-        session = ConnectionFactory.getFactory().createSession(connection, connectionInfo, true);
+        session = ConnectionFactory.getFactory()
+                    .createSession(connection, connectionInfo, true, getConnectionContext());
         proxy = ConnectionFactory.getFactory()
-                    .createProxy("Sirius.navigator.connection.proxy.DefaultConnectionProxyHandler", session);
+                    .createProxy(
+                            "Sirius.navigator.connection.proxy.DefaultConnectionProxyHandler",
+                            session,
+                            getConnectionContext());
         SessionManager.init(proxy);
 
-        ClassCacheMultiple.setInstance(domain); // , meta, u);
+        ClassCacheMultiple.setInstance(domain, getConnectionContext()); // , meta, u);
 
         initComponents();
 
@@ -157,7 +165,7 @@ public class Tester extends javax.swing.JFrame implements ConnectionContextProvi
                 @Override
                 public void run() {
                     try {
-                        new Tester(ClientConnectionContext.createDeprecated()).setVisible(true);
+                        new Tester(ConnectionContext.createDeprecated()).setVisible(true);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -166,7 +174,7 @@ public class Tester extends javax.swing.JFrame implements ConnectionContextProvi
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

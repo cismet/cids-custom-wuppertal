@@ -60,7 +60,7 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.RoundedPanel;
@@ -80,15 +80,24 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
 
     private static final Logger LOG = Logger.getLogger(TreppePodestPanel.class);
 
-    private static final MetaClass MC__PODEST_MATERIAL = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_PODEST_MATERIAL");
-    private static final MetaClass MC__PODEST_FUGEN = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_PODEST_FUGEN");
-    private static final MetaClass MC__ENTWAESSERUNG_ART = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_ENTWAESSERUNG_ART");
+    private static final MetaClass MC__PODEST_MATERIAL;
+    private static final MetaClass MC__PODEST_FUGEN;
+    private static final MetaClass MC__ENTWAESSERUNG_ART;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
+                TreppePodestPanel.class.getSimpleName());
+        MC__PODEST_MATERIAL = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "TREPPE_PODEST_MATERIAL",
+                connectionContext);
+        MC__PODEST_FUGEN = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_PODEST_FUGEN", connectionContext);
+        MC__ENTWAESSERUNG_ART = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "TREPPE_ENTWAESSERUNG_ART",
+                connectionContext);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -638,7 +647,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
     private final boolean editable;
     private final TreppeMaterialArtLightweightSearch materialArtSearch1;
     private final TreppeMaterialArtLightweightSearch materialArtSearch2;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnRemoveArt1;
@@ -662,7 +671,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppePodestPanel(final ClientConnectionContext connectionContext) {
+    public TreppePodestPanel(final ConnectionContext connectionContext) {
         this(true, connectionContext);
     }
 
@@ -672,7 +681,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppePodestPanel(final boolean editable, final ClientConnectionContext connectionContext) {
+    public TreppePodestPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
         this.connectionContext = connectionContext;
         this.materialArtSearch1 = new TreppeMaterialArtLightweightSearch(
@@ -780,7 +789,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

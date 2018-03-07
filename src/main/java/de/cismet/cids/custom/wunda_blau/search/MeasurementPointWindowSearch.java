@@ -53,8 +53,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -67,7 +67,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -88,7 +88,8 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     private SearchControlPanel pnlSearchCancel;
     private GeoSearchButton btnGeoSearch;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrFilterGST;
     private javax.swing.JButton btnAllePunkte;
@@ -136,11 +137,15 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             mappingComponent = CismapBroker.getInstance().getMappingComponent();
             geoSearchEnabled = mappingComponent != null;
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_POINT");
+            metaClass = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "ALKIS_POINT",
+                    getConnectionContext());
             final byte[] iconDataFromMetaclass = metaClass.getIconData();
 
             if (iconDataFromMetaclass.length > 0) {
@@ -203,13 +208,8 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**

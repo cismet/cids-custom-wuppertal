@@ -15,7 +15,6 @@ import javax.swing.ImageIcon;
 
 import de.cismet.cids.utils.abstracts.AbstractCidsBeanAction;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -39,7 +38,7 @@ public class FsReloadBestellungenAction extends AbstractCidsBeanAction implement
     //~ Instance fields --------------------------------------------------------
 
     private final PureTreeNode ptn;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -49,7 +48,7 @@ public class FsReloadBestellungenAction extends AbstractCidsBeanAction implement
      * @param  ptn                DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public FsReloadBestellungenAction(final PureTreeNode ptn, final ClientConnectionContext connectionContext) {
+    public FsReloadBestellungenAction(final PureTreeNode ptn, final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         putValue(NAME, "Offene Bestellungen vom Formularserver abholen");
         final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
@@ -71,7 +70,7 @@ public class FsReloadBestellungenAction extends AbstractCidsBeanAction implement
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

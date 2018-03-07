@@ -38,8 +38,8 @@ import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -52,13 +52,13 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProvider, ClientConnectionContextStore {
+public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProvider, ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
     private final List<ToolbarComponentDescription> toolbarComponents;
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -79,7 +79,8 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -97,13 +98,8 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }
 
@@ -132,7 +128,7 @@ final class AlkisPrintJButton extends JButton {
      *
      * @throws  RuntimeException  DOCUMENT ME!
      */
-    public AlkisPrintJButton(final ClientConnectionContext connectionContext) {
+    public AlkisPrintJButton(final ConnectionContext connectionContext) {
         try {
             this.printWidget = new AlkisPrintingSettingsWidget(
                     false,

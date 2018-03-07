@@ -28,6 +28,11 @@ import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -41,7 +46,7 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastblattEdi
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class Alb_baulastReportDialog extends javax.swing.JDialog {
+public class Alb_baulastReportDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -50,6 +55,7 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog {
     //~ Instance fields --------------------------------------------------------
 
     private boolean createReport = false;
+    private final ConnectionContext connnectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -66,9 +72,12 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form Alb_baulastReportDialog.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    private Alb_baulastReportDialog() {
+    private Alb_baulastReportDialog(final ConnectionContext connectionContext) {
         super((Frame)null, true);
+        this.connnectionContext = connectionContext;
         initComponents();
     }
 
@@ -215,7 +224,9 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog {
      */
     public static Alb_baulastReportDialog getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new Alb_baulastReportDialog();
+            INSTANCE = new Alb_baulastReportDialog(ConnectionContext.create(
+                        Category.INSTANCE,
+                        Alb_baulastReportDialog.class.getName()));
         }
         return INSTANCE;
     }
@@ -275,7 +286,8 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog {
                             type,
                             beans,
                             auftragsnummer,
-                            projectname);
+                            projectname,
+                            getConnectionContext());
                     DownloadManager.instance().add(download);
                     return true;
                 }
@@ -284,5 +296,10 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog {
             LOG.error("Error when trying to produce a alkis product", e);
         }
         return false;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connnectionContext;
     }
 }

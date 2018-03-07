@@ -67,8 +67,8 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -87,7 +87,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     FooterComponentProvider,
     TitleComponentProvider,
     BorderProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -96,7 +96,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private final Logger log = Logger.getLogger(MauerEditor.class);
     private boolean editable;
     private CardLayout cardLayout;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImages;
@@ -321,7 +321,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         if (editable) {
             pnlLeft.setPreferredSize(new Dimension(500, 900));
@@ -3074,7 +3075,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             this.cidsBean = cidsBean;
             final String lagebez = (String)cidsBean.getProperty("lagebezeichnung");
             this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix")
@@ -3247,13 +3249,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -44,8 +44,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -57,7 +57,7 @@ import de.cismet.connectioncontext.ClientConnectionContextStore;
 public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -71,7 +71,7 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNewSearch;
     private javax.swing.JCheckBox chkActual;
@@ -101,9 +101,10 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
-            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "FLURSTUECK"); // TODO ask for correct
+            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "FLURSTUECK", getConnectionContext()); // TODO ask for correct
             // Name
             icon = new ImageIcon(mc.getIconData());
 
@@ -487,12 +488,7 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

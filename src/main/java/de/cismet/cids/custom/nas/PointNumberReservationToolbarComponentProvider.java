@@ -34,8 +34,8 @@ import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -47,7 +47,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
 public class PointNumberReservationToolbarComponentProvider implements ToolbarComponentsProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -55,12 +55,13 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
 
     //~ Instance fields --------------------------------------------------------
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -106,13 +107,8 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -136,7 +132,7 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
          *
          * @param  connectionContext  DOCUMENT ME!
          */
-        public PunktNummernButton(final ClientConnectionContext connectionContext) {
+        public PunktNummernButton(final ConnectionContext connectionContext) {
             super(new AbstractAction() {
 
                     @Override

@@ -74,7 +74,6 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -127,7 +126,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private PredefinedBoxes feldVergleichBox500 = null;
     private PredefinedBoxes feldVergleichBox1000 = null;
     private boolean isEtrsRahmenkarte = false;
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -170,7 +169,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      */
     public Butler2Dialog(final java.awt.Frame parent,
             final boolean modal,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
@@ -333,7 +332,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
         pnlProductSettings = new javax.swing.JPanel();
         tbpProducts = new javax.swing.JTabbedPane();
-        butler2ProductPanel1 = new de.cismet.cids.custom.butler.Butler2ProductPanel();
+        butler2ProductPanel1 = new de.cismet.cids.custom.butler.Butler2ProductPanel(getConnectionContext());
         pnlMapSettings = new javax.swing.JPanel();
         lblLowerPosition = new javax.swing.JLabel();
         lblSize = new javax.swing.JLabel();
@@ -1076,7 +1075,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         final int number = tbpProducts.getTabCount();
         final String title = "Produkt " + number;
         final int tabPos = tbpProducts.getTabCount() - 1;
-        final Butler2ProductPanel productPan = new Butler2ProductPanel();
+        final Butler2ProductPanel productPan = new Butler2ProductPanel(getConnectionContext());
         productPan.addProductListSelectionListener(this);
         if ((rectangleFeature != null) && (rectangleFeature.getGeometry() != null)) {
 //            productPan.setGeometry(rectangleFeature.getGeometry());
@@ -1266,7 +1265,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     final Butler2Dialog dialog = new Butler2Dialog(
                             new javax.swing.JFrame(),
                             true,
-                            ClientConnectionContext.createDeprecated());
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -1378,7 +1377,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

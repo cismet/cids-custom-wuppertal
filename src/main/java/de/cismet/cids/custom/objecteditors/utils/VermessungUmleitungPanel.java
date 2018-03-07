@@ -59,7 +59,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
@@ -174,7 +174,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     private URL lastCheckedURL;
     private String escapeText;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateDocument;
@@ -211,7 +211,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
      */
     public VermessungUmleitungPanel(final MODE m,
             final VermessungRissEditor editor,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.mode = m;
         this.editor = editor;
         this.connectionContext = connectionContext;
@@ -294,7 +294,10 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                 return true;
             }
             final String[] props = parsePropertiesFromLink(rissNummer);
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "vermessung_riss");
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "vermessung_riss",
+                    getConnectionContext());
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
             query += "FROM " + MB_MC.getTableName();
             query += " WHERE schluessel ilike '" + props[0]
@@ -944,7 +947,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

@@ -23,8 +23,8 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -37,22 +37,23 @@ import de.cismet.tools.gui.downloadmanager.DownloadManager;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class NasStartupHook implements StartupHook, ClientConnectionContextStore {
+public class NasStartupHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static String SEVER_ACTION = "nasDataQuery";
+    private static final String SEVER_ACTION = "nasDataQuery";
 
     //~ Instance fields --------------------------------------------------------
 
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -116,12 +117,7 @@ public class NasStartupHook implements StartupHook, ClientConnectionContextStore
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

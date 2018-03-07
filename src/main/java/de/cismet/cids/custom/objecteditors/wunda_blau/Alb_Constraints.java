@@ -23,7 +23,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.search.CidsServerSearch;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -95,18 +95,21 @@ public class Alb_Constraints {
     /**
      * DOCUMENT ME!
      *
-     * @param   blattnummer  DOCUMENT ME!
-     * @param   id           DOCUMENT ME!
+     * @param   blattnummer        DOCUMENT ME!
+     * @param   id                 DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      * @throws  RuntimeException     DOCUMENT ME!
      */
-    public static boolean checkUniqueBlattNummer(final String blattnummer, final int id) throws ConnectionException {
+    public static boolean checkUniqueBlattNummer(final String blattnummer,
+            final int id,
+            final ConnectionContext connectionContext) throws ConnectionException {
         final CidsServerSearch search = new Alb_BaulastblattChecker(blattnummer, id);
         final Collection result = SessionManager.getConnection()
-                    .customServerSearch(SessionManager.getSession().getUser(), search, getClientConnectionContext());
+                    .customServerSearch(SessionManager.getSession().getUser(), search, connectionContext);
         if ((result != null) && (result.size() > 0)) {
             final Object o = result.iterator().next();
             if (o instanceof List) {
@@ -133,20 +136,23 @@ public class Alb_Constraints {
     /**
      * DOCUMENT ME!
      *
-     * @param   blattnummer  DOCUMENT ME!
-     * @param   laufendeNr   DOCUMENT ME!
-     * @param   id           DOCUMENT ME!
+     * @param   blattnummer        DOCUMENT ME!
+     * @param   laufendeNr         DOCUMENT ME!
+     * @param   id                 DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      * @throws  RuntimeException     DOCUMENT ME!
      */
-    public static boolean checkUniqueBaulastNummer(final String blattnummer, final String laufendeNr, final int id)
-            throws ConnectionException {
+    public static boolean checkUniqueBaulastNummer(final String blattnummer,
+            final String laufendeNr,
+            final int id,
+            final ConnectionContext connectionContext) throws ConnectionException {
         final CidsServerSearch search = new Alb_BaulastChecker(blattnummer, laufendeNr, id);
         final Collection result = SessionManager.getConnection()
-                    .customServerSearch(SessionManager.getSession().getUser(), search, getClientConnectionContext());
+                    .customServerSearch(SessionManager.getSession().getUser(), search, connectionContext);
         if ((result != null) && (result.size() > 0)) {
             final Object o = result.iterator().next();
             if (o instanceof List) {
@@ -221,14 +227,5 @@ public class Alb_Constraints {
         final Object eintragungsDatumObj = baulastBean.getProperty("eintragungsdatum");
 
         return (eintragungsDatumObj != null) && (eintragungsDatumObj instanceof Date);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(Alb_Constraints.class.getSimpleName());
     }
 }

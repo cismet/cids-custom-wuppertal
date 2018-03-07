@@ -41,8 +41,9 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -56,7 +57,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements ClientConnectionContextStore {
+public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -69,7 +70,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements C
 
     private List<CidsBean> currentListToAdd;
     private final boolean createEnabled;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFlurstueckAddMenCancel;
@@ -90,18 +91,69 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements C
 
     /**
      * Creates a new FlurstueckSelectionDialoge object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FlurstueckSelectionDialoge() {
-        this(true);
+    public FlurstueckSelectionDialoge(final ConnectionContext connectionContext) {
+        this(true, connectionContext);
     }
 
     /**
      * Creates new form FlurstueckSelectionDialoge.
      *
-     * @param  createEnabled  DOCUMENT ME!
+     * @param  createEnabled      DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FlurstueckSelectionDialoge(final boolean createEnabled) {
+    public FlurstueckSelectionDialoge(final boolean createEnabled, final ConnectionContext connectionContext) {
         this.createEnabled = createEnabled;
+        this.connectionContext = connectionContext;
+        setTitle("Bitte Flurstück auswählen");
+        initComponents();
+        setSize(419, 144);
+
+        final ListCellRenderer lcr = new ListCellRenderer() {
+
+                DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
+
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    final JLabel ret = (JLabel)dlcr.getListCellRendererComponent(
+                            list,
+                            value,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    if (value instanceof LightweightMetaObject) {
+                        final LightweightMetaObject mo = (LightweightMetaObject)value;
+                        ret.setText(String.valueOf(mo.getLWAttribute(FlurstueckFinder.FLURSTUECK_GEMARKUNG)) + " - "
+                                    + String.valueOf(mo.getLWAttribute(FlurstueckFinder.GEMARKUNG_NAME)));
+                    }
+                    return ret;
+                }
+            };
+        cboGemarkung.setRenderer(lcr);
+
+        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cboGemarkung, true) {
+
+                @Override
+                protected ComboBoxModel doInBackground() throws Exception {
+                    return new DefaultComboBoxModel(FlurstueckFinder.getLWGemarkungen(getConnectionContext()));
+                }
+
+                @Override
+                protected void done() {
+                    super.done();
+//                cbParcels1.actionPerformed(null);
+                    cboGemarkung.setSelectedIndex(0);
+
+                    cboGemarkung.requestFocusInWindow();
+                    ObjectRendererUtils.selectAllTextInEditableCombobox(cboGemarkung);
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -326,7 +378,8 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements C
 
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
-                        return new DefaultComboBoxModel(FlurstueckFinder.getLWFlure(selGemarkungsNr));
+                        return new DefaultComboBoxModel(
+                                FlurstueckFinder.getLWFlure(selGemarkungsNr, getConnectionContext()));
                     }
                 });
 
@@ -468,7 +521,10 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements C
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
                         return new DefaultComboBoxModel(
-                                FlurstueckFinder.getLWFurstuecksZaehlerNenner(selGem, selFlurNr.toString()));
+                                FlurstueckFinder.getLWFurstuecksZaehlerNenner(
+                                    selGem,
+                                    selFlurNr.toString(),
+                                    getConnectionContext()));
                     }
                 });
         } else {
@@ -589,7 +645,12 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements C
                 // the following code tries to avoid the creation of multiple entries for the same landparcel. however,
                 // there *might* be a chance that a historic landparcel is created multiple times when more then one
                 // client creates the same parcel at the "same time".
-                final MetaObject[] searchResult = FlurstueckFinder.getLWLandparcel(gemarkung, flur, zaehler, nenner);
+                final MetaObject[] searchResult = FlurstueckFinder.getLWLandparcel(
+                        gemarkung,
+                        flur,
+                        zaehler,
+                        nenner,
+                        getConnectionContext());
                 if ((searchResult != null) && (searchResult.length > 0)) {
                     return searchResult[0].getBean();
                 } else {
@@ -598,7 +659,8 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements C
 //                    if (newBean == null) {
                     final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName(
                             FlurstueckFinder.FLURSTUECK_KICKER_TABLE_NAME,
-                            newLandParcelProperties);
+                            newLandParcelProperties,
+                            getConnectionContext());
 //                        unpersistedHistoricLandparcels.put(compountParcelData, newBean);
 //                    }
                     return newBean;
@@ -611,64 +673,8 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements C
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void initAfterConnectionContext() {
-        setTitle("Bitte Flurstück auswählen");
-        initComponents();
-        setSize(419, 144);
-
-        final ListCellRenderer lcr = new ListCellRenderer() {
-
-                DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
-
-                @Override
-                public Component getListCellRendererComponent(final JList list,
-                        final Object value,
-                        final int index,
-                        final boolean isSelected,
-                        final boolean cellHasFocus) {
-                    final JLabel ret = (JLabel)dlcr.getListCellRendererComponent(
-                            list,
-                            value,
-                            index,
-                            isSelected,
-                            cellHasFocus);
-                    if (value instanceof LightweightMetaObject) {
-                        final LightweightMetaObject mo = (LightweightMetaObject)value;
-                        ret.setText(String.valueOf(mo.getLWAttribute(FlurstueckFinder.FLURSTUECK_GEMARKUNG)) + " - "
-                                    + String.valueOf(mo.getLWAttribute(FlurstueckFinder.GEMARKUNG_NAME)));
-                    }
-                    return ret;
-                }
-            };
-        cboGemarkung.setRenderer(lcr);
-
-        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cboGemarkung, true) {
-
-                @Override
-                protected ComboBoxModel doInBackground() throws Exception {
-                    return new DefaultComboBoxModel(FlurstueckFinder.getLWGemarkungen());
-                }
-
-                @Override
-                protected void done() {
-                    super.done();
-//                cbParcels1.actionPerformed(null);
-                    cboGemarkung.setSelectedIndex(0);
-
-                    cboGemarkung.requestFocusInWindow();
-                    ObjectRendererUtils.selectAllTextInEditableCombobox(cboGemarkung);
-                }
-            });
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

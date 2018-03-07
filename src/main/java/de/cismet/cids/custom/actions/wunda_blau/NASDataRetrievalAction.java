@@ -28,8 +28,8 @@ import de.cismet.cismap.commons.features.CommonFeatureAction;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -40,8 +40,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CommonFeatureAction.class)
-public class NASDataRetrievalAction extends AbstractAction implements CommonFeatureAction,
-    ClientConnectionContextStore {
+public class NASDataRetrievalAction extends AbstractAction implements CommonFeatureAction, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -53,7 +52,7 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private boolean hasNasAccess = false;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -67,7 +66,8 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             hasNasAccess = SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
@@ -145,12 +145,7 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

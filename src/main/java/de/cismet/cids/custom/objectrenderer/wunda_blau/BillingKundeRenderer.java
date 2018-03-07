@@ -84,8 +84,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -101,7 +101,7 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
 public class BillingKundeRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanRenderer,
     TitleComponentProvider,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -141,7 +141,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private BigDecimal totalSum;
     private boolean itsMe = false;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
@@ -207,7 +207,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         tableModel = new BillingTableModel(new Object[0][], AGR_COMLUMN_NAMES);
         tblBillings.setModel(tableModel);
@@ -222,11 +223,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         }
 
         tblBillings.getRowSorter().toggleSortOrder(6);
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**
@@ -1462,7 +1458,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

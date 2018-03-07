@@ -79,8 +79,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -93,7 +93,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -112,7 +112,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbMapSearch;
@@ -204,7 +204,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             initComponents();
             // todo just for debug
@@ -223,7 +224,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                     new Double(pre.getHeight() + 5).intValue()));
             pnlButtons.add(pnlSearchCancel);
 
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer");
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer", getConnectionContext());
 
             byte[] iconDataFromMetaclass = new byte[] {};
 
@@ -1389,7 +1390,10 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      */
     private void fillEigentuemerListModel() {
         try {
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer_eigentuemer");
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "mauer_eigentuemer",
+                    getConnectionContext());
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
             query += "FROM " + MB_MC.getTableName() + ";";
             final MetaObject[] metaObjects = SessionManager.getProxy()
@@ -1427,7 +1431,10 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      */
     private void fillLastKlasseListModel() {
         try {
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer_lastklasse");
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "mauer_lastklasse",
+                    getConnectionContext());
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
             query += "FROM " + MB_MC.getTableName() + ";";
             final MetaObject[] metaObjects = SessionManager.getProxy()
@@ -1502,13 +1509,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

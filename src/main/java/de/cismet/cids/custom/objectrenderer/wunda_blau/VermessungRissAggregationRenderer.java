@@ -74,10 +74,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.security.WebAccessManager;
 
@@ -98,7 +96,7 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  */
 public class VermessungRissAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -133,7 +131,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
     private PrintingWaitDialog printingWaitDialog;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
@@ -162,7 +160,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         scpRisse.getViewport().setOpaque(false);
@@ -1018,13 +1017,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

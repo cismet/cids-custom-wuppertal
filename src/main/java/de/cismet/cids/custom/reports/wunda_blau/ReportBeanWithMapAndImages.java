@@ -42,7 +42,6 @@ import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -77,7 +76,7 @@ public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
     private final CidsBean cidsBean;
     private final ImageState imgState0 = new ImageState();
     private final ImageState imgState1 = new ImageState();
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -96,7 +95,7 @@ public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
             final String imgsProp,
             final String davUrlProp,
             final String mapUrl,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.cidsBean = cidsBean;
         this.connectionContext = connectionContext;
         final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
@@ -301,7 +300,7 @@ public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

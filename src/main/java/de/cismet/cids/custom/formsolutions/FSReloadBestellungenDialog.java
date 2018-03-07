@@ -27,7 +27,7 @@ import javax.swing.tree.TreePath;
 
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -42,7 +42,7 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog implements C
 
     private boolean autoRefreshEnabled = false;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -58,7 +58,7 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog implements C
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public FSReloadBestellungenDialog(final ClientConnectionContext connectionContext) {
+    public FSReloadBestellungenDialog(final ConnectionContext connectionContext) {
         super((Frame)null, true);
         this.connectionContext = connectionContext;
         initComponents();
@@ -210,7 +210,7 @@ public class FSReloadBestellungenDialog extends javax.swing.JDialog implements C
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 }

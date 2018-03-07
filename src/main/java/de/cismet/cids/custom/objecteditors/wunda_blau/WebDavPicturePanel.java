@@ -120,7 +120,7 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
@@ -519,7 +519,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
     private CidsBean fotoCidsBean;
     private BufferedImage image;
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnAddImg;
@@ -559,7 +559,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
             final String bildClassName,
             final String numberProp,
             final String geoFieldProp,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         this.beanCollProp = beanCollProp;
         this.bildClassName = bildClassName;
         this.numberProp = numberProp;
@@ -1110,7 +1110,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
@@ -1159,7 +1159,10 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
                     WebDavPicturePanel.this,
                     getConnectionContext());
 
-                final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "url_base");
+                final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                        "WUNDA_BLAU",
+                        "url_base",
+                        getConnectionContext());
 
                 final String protPrefix = webdavDirectory.substring(0, webdavDirectory.indexOf("://")) + "://";
                 final String server = webdavDirectory.substring(protPrefix.length(),

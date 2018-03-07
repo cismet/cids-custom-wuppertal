@@ -25,7 +25,7 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.wunda_blau.search.server.Sb_minAufnahmedatumYearFetcherServerSearch;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
@@ -43,7 +43,7 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements Connecti
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ClientConnectionContext connectionContext;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboYear;
@@ -78,7 +78,7 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements Connecti
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_StadtbildTimeTabs(final ClientConnectionContext connectionContext) {
+    public Sb_StadtbildTimeTabs(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
         new MinYearFetcherWorker().execute();
@@ -349,7 +349,7 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements Connecti
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

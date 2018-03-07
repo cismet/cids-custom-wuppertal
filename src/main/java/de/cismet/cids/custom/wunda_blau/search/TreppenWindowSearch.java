@@ -58,8 +58,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -72,7 +72,7 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -89,7 +89,7 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbMapSearch;
@@ -153,7 +153,8 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             initComponents();
             // todo just for debug
@@ -172,7 +173,7 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
                     new Double(pre.getHeight() + 5).intValue()));
             pnlButtons.add(pnlSearchCancel);
 
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "treppe");
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "treppe", getConnectionContext());
 
             byte[] iconDataFromMetaclass = new byte[] {};
 
@@ -218,13 +219,8 @@ public class TreppenWindowSearch extends javax.swing.JPanel implements CidsWindo
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**

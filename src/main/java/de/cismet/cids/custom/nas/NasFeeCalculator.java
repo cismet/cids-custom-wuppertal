@@ -30,7 +30,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.NasPointSearch;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -113,14 +113,16 @@ public abstract class NasFeeCalculator {
     /**
      * DOCUMENT ME!
      *
-     * @param   g  DOCUMENT ME!
+     * @param   g                  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static int getPointAmount(final Geometry g) throws ConnectionException {
-        final ArrayList<Pointtype> pointtypes = new ArrayList<Pointtype>();
+    public static int getPointAmount(final Geometry g, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        final ArrayList<Pointtype> pointtypes = new ArrayList<>();
         pointtypes.add(Pointtype.AUFNAHMEPUNKTE);
         pointtypes.add(Pointtype.SONSTIGE_VERMESSUNGSPUNKTE);
         pointtypes.add(Pointtype.GRENZPUNKTE);
@@ -133,46 +135,50 @@ public abstract class NasFeeCalculator {
                 null,
                 g);
         final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), search, getClientConnectionContext());
+                    .customServerSearch(SessionManager.getSession().getUser(), search, connectionContext);
         return c.get(0);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   g  DOCUMENT ME!
+     * @param   g                  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static int getFlurstueckAmount(final Geometry g) throws ConnectionException {
-        return getAmount(NasZaehlObjekteServerAction.NasSearchType.FLURSTUECKE, g);
+    public static int getFlurstueckAmount(final Geometry g, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        return getAmount(NasZaehlObjekteServerAction.NasSearchType.FLURSTUECKE, g, connectionContext);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   searchType  DOCUMENT ME!
-     * @param   geom        DOCUMENT ME!
+     * @param   searchType         DOCUMENT ME!
+     * @param   geom               DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static int getAmount(final NasZaehlObjekteServerAction.NasSearchType searchType, final Geometry geom)
-            throws ConnectionException {
-        final ServerActionParameter sapType = new ServerActionParameter<NasZaehlObjekteServerAction.NasSearchType>(
+    public static int getAmount(final NasZaehlObjekteServerAction.NasSearchType searchType,
+            final Geometry geom,
+            final ConnectionContext connectionContext) throws ConnectionException {
+        final ServerActionParameter sapType = new ServerActionParameter<>(
                 NasZaehlObjekteServerAction.Parameter.SEARCH_TYPE.toString(),
                 searchType);
-        final ServerActionParameter sapGeom = new ServerActionParameter<Geometry>(
+        final ServerActionParameter sapGeom = new ServerActionParameter<>(
                 NasZaehlObjekteServerAction.Parameter.GEOMETRY.toString(),
                 geom);
         final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
                     .executeTask(
                             NasZaehlObjekteServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            getClientConnectionContext(),
+                            connectionContext,
                             (Object)null,
                             sapType,
                             sapGeom);
@@ -182,40 +188,46 @@ public abstract class NasFeeCalculator {
     /**
      * DOCUMENT ME!
      *
-     * @param   g  DOCUMENT ME!
+     * @param   g                  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static int getGebaeudeAmount(final Geometry g) throws ConnectionException {
-        return getAmount(NasZaehlObjekteServerAction.NasSearchType.GEBAEUDE, g);
+    public static int getGebaeudeAmount(final Geometry g, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        return getAmount(NasZaehlObjekteServerAction.NasSearchType.GEBAEUDE, g, connectionContext);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   g  DOCUMENT ME!
+     * @param   g                  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static int getDachPunkteAmount(final Geometry g) throws ConnectionException {
-        return getAmount(NasZaehlObjekteServerAction.NasSearchType.DACHPUNKTE, g);
+    public static int getDachPunkteAmount(final Geometry g, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        return getAmount(NasZaehlObjekteServerAction.NasSearchType.DACHPUNKTE, g, connectionContext);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   g  DOCUMENT ME!
+     * @param   g                  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static int getBodenPunkteAmount(final Geometry g) throws ConnectionException {
-        return getAmount(NasZaehlObjekteServerAction.NasSearchType.BODENPUNKTE, g);
+    public static int getBodenPunkteAmount(final Geometry g, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        return getAmount(NasZaehlObjekteServerAction.NasSearchType.BODENPUNKTE, g, connectionContext);
     }
 
     /**
@@ -282,14 +294,5 @@ public abstract class NasFeeCalculator {
         }
         fee += amount * basePrice;
         return fee;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientConnectionContext getClientConnectionContext() {
-        return ClientConnectionContext.create(DigitalDataExportToolbarComponentProvider.class.getSimpleName());
     }
 }

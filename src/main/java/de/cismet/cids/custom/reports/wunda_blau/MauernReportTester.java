@@ -20,7 +20,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -57,7 +57,7 @@ public class MauernReportTester {
         final MauernReportBean[] mauern = new MauernReportBean[beans.length];
         int i = 0;
         for (final CidsBean b : beans) {
-            final MauernReportBean x = new MauernReportBean(b, ClientConnectionContext.createDeprecated());
+            final MauernReportBean x = new MauernReportBean(b, ConnectionContext.createDeprecated());
             mauern[i++] = x;
             LOG.fatal(b.getMOString());
         }

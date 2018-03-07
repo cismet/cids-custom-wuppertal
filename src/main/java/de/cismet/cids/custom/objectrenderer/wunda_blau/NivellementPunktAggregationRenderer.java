@@ -60,8 +60,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -79,7 +79,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  */
 public class NivellementPunktAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -114,7 +114,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
@@ -141,7 +141,8 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         scpPunkte.getViewport().setOpaque(false);
@@ -151,11 +152,6 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf", getConnectionContext());
 
         btnGenerateReport.setEnabled(billingAllowed);
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     /**
@@ -390,7 +386,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     public static void downloadReport(final Collection<CidsBean> nivPoints,
             final String jobnumber,
             final String projectname,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         ComponentRegistry.getRegistry().getDescriptionPane())) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -635,7 +631,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     }
 
     @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

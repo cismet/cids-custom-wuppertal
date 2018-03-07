@@ -58,7 +58,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -119,7 +119,7 @@ public class BillingPopup extends javax.swing.JDialog {
     private BerechtigungspruefungBillingDownloadInfo downloadInfo = null;
 
     private File file = null;
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboUsage;
@@ -242,7 +242,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String request,
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, (Map)null, geom, downloadInfo, connectionContext, amounts);
     }
@@ -266,7 +266,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String defaultRequest,
             final Map<String, String> requestPerUsage,
             final Geometry geom,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         return doBilling(product, defaultRequest, requestPerUsage, geom, null, connectionContext, amounts);
     }
@@ -292,7 +292,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final Map<String, String> requestPerUsage,
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         final User user = SessionManager.getSession().getUser();
@@ -326,7 +326,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String request,
             final String gBuchNr,
             final Geometry geom,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, gBuchNr, null, geom, connectionContext, amounts);
     }
@@ -352,7 +352,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String gBuchNr,
             final String projektbez,
             final Geometry geom,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, null, gBuchNr, projektbez, geom, null, connectionContext, amounts);
     }
@@ -380,7 +380,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String projektbez,
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, null, gBuchNr, projektbez, geom, downloadInfo, connectionContext, amounts);
     }
@@ -406,7 +406,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final Map<String, String> requestPerUsage,
             final String gBuchNr,
             final Geometry geom,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         return doBilling(product, defaultRequest, requestPerUsage, gBuchNr, null, geom, connectionContext, amounts);
     }
@@ -434,7 +434,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String gBuchNr,
             final String projektbez,
             final Geometry geom,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         return doBilling(
                 product,
@@ -473,7 +473,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String projektbez,
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext,
+            final ConnectionContext connectionContext,
             final ProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         instance.txtGBuchNr.setText(gBuchNr);
@@ -496,7 +496,7 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static boolean hasUserBillingMode(final ClientConnectionContext connectionContext) throws Exception {
+    public static boolean hasUserBillingMode(final ConnectionContext connectionContext) throws Exception {
         return SessionManager.getConnection()
                     .getConfigAttr(SessionManager.getSession().getUser(),
                             MODE_CONFIG_ATTR,
@@ -1023,7 +1023,10 @@ public class BillingPopup extends javax.swing.JDialog {
      * @return  DOCUMENT ME!
      */
     public CidsBean getExternalUser(final String loginName) {
-        final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
+        final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "billing_kunden_logins",
+                getConnectionContext());
         if (MB_MC == null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
@@ -1150,7 +1153,7 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean isBillingAllowed(final String product, final ClientConnectionContext connectionContext) {
+    public static boolean isBillingAllowed(final String product, final ConnectionContext connectionContext) {
         try {
             final User user = SessionManager.getSession().getUser();
             return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR, connectionContext)
@@ -1179,7 +1182,7 @@ public class BillingPopup extends javax.swing.JDialog {
      */
     private static String[] getAllowedUsages(final User user,
             final String product,
-            final ClientConnectionContext connectionContext) throws ConnectionException {
+            final ConnectionContext connectionContext) throws ConnectionException {
         final Set<String> allowedUsages = new LinkedHashSet<String>();
 
         final String rawAllowedUsageLines = SessionManager.getConnection()
@@ -1451,7 +1454,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String berechtigungsgrund,
             final String begruendung,
             final BerechtigungspruefungDownloadInfo downloadInfo,
-            final ClientConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) {
         final Collection<ServerActionParameter> params = new ArrayList<ServerActionParameter>();
         try {
             params.add(new ServerActionParameter<String>(
@@ -1529,7 +1532,7 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @return  DOCUMENT ME!
      */
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

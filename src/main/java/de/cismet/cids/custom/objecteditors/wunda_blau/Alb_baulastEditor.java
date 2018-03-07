@@ -48,8 +48,8 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -71,7 +71,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -101,7 +101,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     private CidsBean cidsBean;
     private CardLayout cardLayout;
 
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
@@ -153,10 +153,12 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initAfterConnectionContext() {
-        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable,
-                false);
-        alb_picturePanel.initAfterConnectionContext();
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(
+                !editable,
+                false,
+                getConnectionContext());
         alb_picturePanel.getDocTypePanel().setVisible(false);
         this.initComponents();
         initFooterElements();
@@ -165,11 +167,10 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         lblLetzteBearbeitung.setVisible(editable);
         lblDurch.setVisible(editable);
         lblBearbeitetAm.setVisible(editable);
-        panMain.initAfterConnectionContext();
     }
 
     @Override
-    public final ClientConnectionContext getConnectionContext() {
+    public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
     /**
@@ -307,7 +308,9 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         jPanel4 = alb_picturePanel.getDocTypePanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable);
+        panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(
+                editable,
+                getConnectionContext());
         alb_picturePanel = alb_picturePanel;
 
         panTitle.setOpaque(false);
@@ -652,7 +655,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
             final Object blattNrObj = cidsBean.getProperty("blattnummer");
             final boolean unique = Alb_Constraints.checkUniqueBaulastNummer(String.valueOf(blattNrObj),
                     String.valueOf(laufendeNrObj),
-                    cidsBean.getMetaObject().getID());
+                    cidsBean.getMetaObject().getID(),
+                    getConnectionContext());
             if (!unique) {
                 errors.add(
                     "Die Laufende Nummer "
@@ -701,10 +705,5 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
             throw new RuntimeException(ex);
         }
-    }
-
-    @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 }

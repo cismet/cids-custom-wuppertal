@@ -27,8 +27,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
-import de.cismet.connectioncontext.ClientConnectionContextStore;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -37,12 +37,12 @@ import de.cismet.connectioncontext.ClientConnectionContextStore;
  * @version  1.0
  */
 public class Oab_projektEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
-    ClientConnectionContextStore {
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
     private final ListSelectionListener condMeasSelL = new ConditionMeasureSelectionL();
-    private ClientConnectionContext connectionContext = ClientConnectionContext.create(getClass().getSimpleName());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserAlkis;
@@ -97,7 +97,8 @@ public class Oab_projektEditor extends AbstractCidsBeanRenderer implements Reque
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
 
             bindingGroup.bind();
 
@@ -584,7 +585,8 @@ public class Oab_projektEditor extends AbstractCidsBeanRenderer implements Reque
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
-    public void initAfterConnectionContext() {
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         lstConditionsMeasures.addListSelectionListener(WeakListeners.create(
                 ListSelectionListener.class,
@@ -593,12 +595,7 @@ public class Oab_projektEditor extends AbstractCidsBeanRenderer implements Reque
     }
 
     @Override
-    public void setConnectionContext(final ClientConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ClientConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
