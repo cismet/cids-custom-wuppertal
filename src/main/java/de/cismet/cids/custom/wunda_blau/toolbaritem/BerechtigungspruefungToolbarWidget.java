@@ -245,7 +245,8 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                 protected MetaObjectNode doInBackground() throws Exception {
                     final MetaClass mcBerechtigungspruefung = CidsBean.getMetaClassFromTableName(
                             "WUNDA_BLAU",
-                            "berechtigungspruefung");
+                            "berechtigungspruefung",
+                            getConnectionContext());
 
                     final String pruefungQuery = "SELECT DISTINCT " + mcBerechtigungspruefung.getID() + ", "
                                 + mcBerechtigungspruefung.getTableName() + "." + mcBerechtigungspruefung.getPrimaryKey()

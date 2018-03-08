@@ -547,7 +547,8 @@ public class BaulastBescheinigungUtils {
         try {
             final MetaClass mcBerechtigungspruefung = CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
-                    "berechtigungspruefung");
+                    "berechtigungspruefung",
+                    connectionContext);
 
             final String pruefungQuery = "SELECT DISTINCT %d, id "
                         + "FROM berechtigungspruefung "
@@ -587,7 +588,8 @@ public class BaulastBescheinigungUtils {
         try {
             final MetaClass mcBerechtigungspruefung = CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
-                    "berechtigungspruefung");
+                    "berechtigungspruefung",
+                    connectionContext);
 
             final String pruefungQuery = "SELECT DISTINCT %d, id "
                         + "FROM berechtigungspruefung "

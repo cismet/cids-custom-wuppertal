@@ -959,30 +959,30 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMapSearchActionPerformed
+    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMapSearchActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cbMapSearchActionPerformed
+    }//GEN-LAST:event_cbMapSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
         for (final CidsBean newSuchwort : Sb_stadtbildserieEditorAddSuchwortDialog.getInstance().showDialog()) {
             if (newSuchwort != null) {
                 dlm.addElement(newSuchwort);
             }
         }
-    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
+    }//GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
 
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
@@ -1001,14 +1001,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
+    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboOrtItemStateChanged
         Object selectedItem = cboOrt.getSelectedItem();
         if (selectedItem instanceof LightweightMetaObject) {
             selectedItem = ((LightweightMetaObject)selectedItem).getBean();
@@ -1024,14 +1024,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             checkIfPlaceInsideWuppertal(null);
             RendererTools.showErrorState(cboOrt);
         }
-    }                                                                         //GEN-LAST:event_cboOrtItemStateChanged
+    }//GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
         chboBodennaheAufnahme.setSelected(true);
         chboLuftbildschraegaufnahme.setSelected(true);
         chboLuftbildsenkrechtaufnahme.setSelected(true);
@@ -1047,48 +1047,48 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         chbInternalAndExternal.setSelected(true);
         chbInternal.setSelected(false);
         chbNeitherInternalNorExternal.setSelected(false);
-    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
+    }//GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboStreetItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboStreetItemStateChanged
+    private void cboStreetItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboStreetItemStateChanged
         final Object selectedItem = cboStreet.getSelectedItem();
         if ((selectedItem == null) || (selectedItem instanceof CidsBean) || (selectedItem instanceof MetaObject)) {
             RendererTools.showNormalState(cboStreet);
         } else {
             RendererTools.showErrorState(cboStreet);
         }
-    }                                                                            //GEN-LAST:event_cboStreetItemStateChanged
+    }//GEN-LAST:event_cboStreetItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblInternalExternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblInternalExternalMouseClicked
+    private void lblInternalExternalMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblInternalExternalMouseClicked
         chbInternalAndExternal.setSelected(!chbInternalAndExternal.isSelected());
-    }                                                                                   //GEN-LAST:event_lblInternalExternalMouseClicked
+    }//GEN-LAST:event_lblInternalExternalMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblInternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblInternalMouseClicked
+    private void lblInternalMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblInternalMouseClicked
         chbInternal.setSelected(!chbInternal.isSelected());
-    }                                                                           //GEN-LAST:event_lblInternalMouseClicked
+    }//GEN-LAST:event_lblInternalMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblNeitherInternalNorExternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblNeitherInternalNorExternalMouseClicked
+    private void lblNeitherInternalNorExternalMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNeitherInternalNorExternalMouseClicked
         chbNeitherInternalNorExternal.setSelected(!chbNeitherInternalNorExternal.isSelected());
-    }                                                                                             //GEN-LAST:event_lblNeitherInternalNorExternalMouseClicked
+    }//GEN-LAST:event_lblNeitherInternalNorExternalMouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1622,7 +1622,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         if (Sb_StadtbildserieCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
     }

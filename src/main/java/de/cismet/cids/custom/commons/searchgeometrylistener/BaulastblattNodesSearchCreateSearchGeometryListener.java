@@ -63,7 +63,10 @@ public class BaulastblattNodesSearchCreateSearchGeometryListener extends NodesSe
     public CidsServerSearch getCidsServerSearch(final Geometry geometry) {
         final BufferingGeosearch search = new BufferingGeosearch();
         try {
-            final MetaClass mc = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "alb_baulastblatt");
+            final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "alb_baulastblatt",
+                    getConnectionContext());
             search.setValidClasses(Arrays.asList(mc));
             search.setGeometry(geometry);
             return search;

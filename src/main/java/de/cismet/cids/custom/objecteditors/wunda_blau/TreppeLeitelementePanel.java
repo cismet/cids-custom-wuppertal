@@ -298,8 +298,13 @@ public class TreppeLeitelementePanel extends javax.swing.JPanel implements Dispo
      */
     private void btnAddArt1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddArt1ActionPerformed
         try {
-            final CidsBean cidsBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ABSTURZSICHERUNG");
-            cidsBean.setProperty("zustand", CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND"));
+            final CidsBean cidsBean = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    "TREPPE_ABSTURZSICHERUNG",
+                    getConnectionContext());
+            cidsBean.setProperty(
+                "zustand",
+                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND", getConnectionContext()));
             addLeitelementPanel(cidsBean);
             cidsBeans.add(cidsBean);
         } catch (final Exception ex) {

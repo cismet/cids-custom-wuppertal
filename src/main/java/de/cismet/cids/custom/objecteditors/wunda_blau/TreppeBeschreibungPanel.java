@@ -1834,7 +1834,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                             final MetaObjectNode mon = mons.toArray(new MetaObjectNode[0])[0];
 
                             final MetaObject mo = SessionManager.getProxy()
-                                        .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                        .getMetaObject(mon.getObjectId(),
+                                            mon.getClassId(),
+                                            mon.getDomain(),
+                                            getConnectionContext());
                             final CidsBean strasseBean = mo.getBean();
                             return strasseBean;
                         } else {

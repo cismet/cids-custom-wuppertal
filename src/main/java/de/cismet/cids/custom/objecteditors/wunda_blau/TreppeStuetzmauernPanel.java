@@ -149,9 +149,10 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
                             protected CidsBean doInBackground() throws Exception {
                                 final MetaClass mc = CidsBean.getMetaClassFromTableName(
                                         "WUNDA_BLAU",
-                                        "mauer");
+                                        "mauer",
+                                        getConnectionContext());
                                 final MetaObject mo = SessionManager.getProxy()
-                                            .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU");
+                                            .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU", getConnectionContext());
                                 final CidsBean mauerBean = mo.getBean();
                                 return mauerBean;
                             }
@@ -216,7 +217,8 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
                     final CidsBean zustandBean = CidsBean.createNewCidsBeanFromTableName(
                             "WUNDA_BLAU",
-                            "TREPPE_ZUSTAND");
+                            "TREPPE_ZUSTAND",
+                            getConnectionContext());
                     zustandBean.setProperty("verkehrssicherheit", null);
                     zustandBean.setProperty("dauerhaftigkeit", null);
                     zustandBean.setProperty("standsicherheit", null);
@@ -426,7 +428,8 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
                         try {
                             final CidsBean treppeMauerBean = CidsBean.createNewCidsBeanFromTableName(
                                     "WUNDA_BLAU",
-                                    "TREPPE_STUETZMAUER");
+                                    "TREPPE_STUETZMAUER",
+                                    getConnectionContext());
 
                             addMauerPanel(treppeMauerBean, droppedBean);
                             cidsBeans.add(treppeMauerBean);

@@ -1181,7 +1181,10 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
                 final CidsBean urlBase;
                 if (metaObjects.length <= 0) {
-                    final CidsBean urlBaseTmp = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "url_base");
+                    final CidsBean urlBaseTmp = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            "url_base",
+                            getConnectionContext());
                     urlBaseTmp.setProperty("prot_prefix", protPrefix);
                     urlBaseTmp.setProperty("server", server);
                     urlBaseTmp.setProperty("path", path);
@@ -1190,11 +1193,17 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
                     urlBase = metaObjects[0].getBean();
                 }
 
-                final CidsBean url = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "url");
+                final CidsBean url = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        "url",
+                        getConnectionContext());
                 url.setProperty("url_base_id", urlBase);
                 url.setProperty("object_name", fileName);
 
-                final CidsBean newFotoBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", bildClassName);
+                final CidsBean newFotoBean = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        bildClassName,
+                        getConnectionContext());
                 newFotoBean.setProperty("laufende_nummer", laufendeNummer);
                 newFotoBean.setProperty("name", imageFile.getName());
                 newFotoBean.setProperty("url", url);

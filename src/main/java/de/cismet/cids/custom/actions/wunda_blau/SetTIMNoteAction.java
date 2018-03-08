@@ -106,7 +106,7 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
         this.connectionContext = connectionContext;
         try {
             final MetaClassCacheService classcache = Lookup.getDefault().lookup(MetaClassCacheService.class);
-            timLiegMetaClass = classcache.getMetaClass("WUNDA_BLAU", "tim_lieg");
+            timLiegMetaClass = classcache.getMetaClass("WUNDA_BLAU", "tim_lieg", getConnectionContext());
             isCurrentUserAllowedToSetHint = timLiegMetaClass.getPermissions()
                         .hasWritePermission(SessionManager.getSession().getUser());
         } catch (Exception e) {

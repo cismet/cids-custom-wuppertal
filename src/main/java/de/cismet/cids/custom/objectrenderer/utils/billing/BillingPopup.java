@@ -923,7 +923,10 @@ public class BillingPopup extends javax.swing.JDialog {
 
         // save the log entry
         try {
-            final CidsBean cb = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "Billing_Billing");
+            final CidsBean cb = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    "Billing_Billing",
+                    getConnectionContext());
             cb.setProperty("username", SessionManager.getSession().getUser().toString());
             cb.setProperty("angelegt_durch", getExternalUser());
             cb.setProperty("ts", new java.sql.Timestamp(System.currentTimeMillis()));

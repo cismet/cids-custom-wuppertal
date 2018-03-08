@@ -63,7 +63,10 @@ public class FlurstueckNodesSearchCreateSearchGeometryListener extends NodesSear
     public CidsServerSearch getCidsServerSearch(final Geometry geometry) {
         final BufferingGeosearch search = new BufferingGeosearch();
         try {
-            final MetaClass mc = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "alkis_landparcel");
+            final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "alkis_landparcel",
+                    getConnectionContext());
             search.setValidClasses(Arrays.asList(mc));
             search.setGeometry(geometry);
             return search;

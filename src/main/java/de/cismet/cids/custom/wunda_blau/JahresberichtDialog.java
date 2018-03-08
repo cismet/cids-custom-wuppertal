@@ -329,7 +329,8 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
                     try {
                         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                     .customServerSearch(SessionManager.getSession().getUser(),
-                                        cidsBillingSearchStatement);
+                                        cidsBillingSearchStatement,
+                                        getConnectionContext());
 
                         if (mons == null) {
                             LOG.error("Billing metaobjects was null.");
@@ -344,7 +345,10 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
                                 if (mon != null) {
                                     publish(billingBeans.size() + 1);
                                     final MetaObject mo = SessionManager.getProxy()
-                                                .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                                .getMetaObject(mon.getObjectId(),
+                                                    mon.getClassId(),
+                                                    mon.getDomain(),
+                                                    getConnectionContext());
                                     final CidsBean bean = (mo != null) ? mo.getBean() : null;
                                     billingBeans.add(bean);
                                 }

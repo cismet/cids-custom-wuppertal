@@ -982,7 +982,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             final String buchungsblattnummer = bbc[1].trim();
                             final MetaClass mcGemarkung = CidsBean.getMetaClassFromTableName(
                                     "WUNDA_BLAU",
-                                    "gemarkung");
+                                    "gemarkung",
+                                    getConnectionContext());
 
                             final String pruefungQuery = "SELECT " + mcGemarkung.getID()
                                         + ", " + mcGemarkung.getTableName() + "." + mcGemarkung.getPrimaryKey() + " "

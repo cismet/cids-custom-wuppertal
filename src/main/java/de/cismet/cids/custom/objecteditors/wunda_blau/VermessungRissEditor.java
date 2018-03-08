@@ -3239,7 +3239,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 for (final CidsBean dropped : beans) {
                     final CidsBean newEntry = CidsBean.createNewCidsBeanFromTableName(
                             "WUNDA_BLAU",
-                            "vermessung_flurstuecksvermessung");
+                            "vermessung_flurstuecksvermessung",
+                            getConnectionContext());
                     newEntry.setProperty("veraenderungsart", veraenderungsart);
                     newEntry.setProperty("tmp_lp_orig", dropped);
                     landparcels.add(newEntry);

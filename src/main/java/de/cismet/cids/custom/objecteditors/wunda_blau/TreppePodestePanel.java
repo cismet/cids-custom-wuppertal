@@ -292,8 +292,13 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
      */
     private void btnAddArt1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddArt1ActionPerformed
         try {
-            final CidsBean cidsBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_PODEST");
-            cidsBean.setProperty("zustand", CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND"));
+            final CidsBean cidsBean = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    "TREPPE_PODEST",
+                    getConnectionContext());
+            cidsBean.setProperty(
+                "zustand",
+                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND", getConnectionContext()));
             addPodestPanel(cidsBean);
             cidsBeans.add(cidsBean);
         } catch (final Exception ex) {

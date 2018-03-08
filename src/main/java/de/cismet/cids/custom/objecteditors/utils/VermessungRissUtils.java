@@ -123,7 +123,10 @@ public class VermessungRissUtils {
             // if there is no kicker
             // create a new kicker
             if (kicker == null) {
-                kicker = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "vermessung_flurstueck_kicker");
+                kicker = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        "vermessung_flurstueck_kicker",
+                        connectionContext);
 
                 // retrieve the vermessung_gemarkung by id
                 final MetaClass vermessungGemarkungClass = ClassCacheMultiple.getMetaClass(

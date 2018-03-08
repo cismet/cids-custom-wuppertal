@@ -298,8 +298,13 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
      */
     private void btnAddArt1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddArt1ActionPerformed
         try {
-            final CidsBean cidsBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_HANDLAUF");
-            cidsBean.setProperty("zustand", CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND"));
+            final CidsBean cidsBean = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    "TREPPE_HANDLAUF",
+                    getConnectionContext());
+            cidsBean.setProperty(
+                "zustand",
+                CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND", getConnectionContext()));
             addHandlaufPanel(cidsBean);
             cidsBeans.add(cidsBean);
         } catch (final Exception ex) {

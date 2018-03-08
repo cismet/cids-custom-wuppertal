@@ -63,7 +63,10 @@ public class RissNodesSearchCreateSearchGeometryListener extends NodesSearchCrea
     public CidsServerSearch getCidsServerSearch(final Geometry geometry) {
         final BufferingGeosearch search = new BufferingGeosearch();
         try {
-            final MetaClass mc = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "vermessung_riss");
+            final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "vermessung_riss",
+                    getConnectionContext());
             search.setValidClasses(Arrays.asList(mc));
             search.setGeometry(geometry);
             return search;

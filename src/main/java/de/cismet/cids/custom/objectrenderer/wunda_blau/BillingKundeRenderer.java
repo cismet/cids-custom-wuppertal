@@ -1371,7 +1371,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                             if (mon != null) {
                                 publish(beans.size() + 1);
                                 final MetaObject mo = SessionManager.getProxy()
-                                            .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                            .getMetaObject(mon.getObjectId(),
+                                                mon.getClassId(),
+                                                mon.getDomain(),
+                                                getConnectionContext());
                                 final CidsBean bean = (mo != null) ? mo.getBean() : null;
                                 beans.add(bean);
                             }

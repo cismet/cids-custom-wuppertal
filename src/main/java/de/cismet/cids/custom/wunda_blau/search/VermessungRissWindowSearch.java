@@ -287,7 +287,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 // for the search.
                 final CidsBean veraenderungsartAll = CidsBean.createNewCidsBeanFromTableName(
                         "WUNDA_BLAU",
-                        VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_TABLE_NAME);
+                        VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_TABLE_NAME,
+                        getConnectionContext());
                 veraenderungsartAll.setProperty(
                     VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_CODE,
                     VERAENDERUNGSART_ALL_CODE);
@@ -812,7 +813,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFilterSchluesselAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFilterSchluesselAllActionPerformed
+    private void btnFilterSchluesselAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterSchluesselAllActionPerformed
         chkFilterSchluessel501.setSelected(true);
         chkFilterSchluessel502.setSelected(true);
         chkFilterSchluessel503.setSelected(true);
@@ -822,25 +823,25 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkFilterSchluessel507.setSelected(true);
         chkFilterSchluessel508.setSelected(true);
         chkFilterSchluessel600.setSelected(true);
-    }                                                                                          //GEN-LAST:event_btnFilterSchluesselAllActionPerformed
+    }//GEN-LAST:event_btnFilterSchluesselAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFlurstueckeValueChanged
+    private void lstFlurstueckeValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFlurstueckeValueChanged
         if (!evt.getValueIsAdjusting()) {
             btnRemoveFlurstueck.setEnabled(lstFlurstuecke.getSelectedIndex() > -1);
         }
-    }                                                                                         //GEN-LAST:event_lstFlurstueckeValueChanged
+    }//GEN-LAST:event_lstFlurstueckeValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFlurstueckActionPerformed
+    private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlurstueckActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
 
         for (final Object flurstuecksvermessung : flurstuecksvermessungFilterModel.toArray()) {
@@ -854,26 +855,26 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
             flurstueckDialog,
             true);
-    } //GEN-LAST:event_btnAddFlurstueckActionPerformed
+    }//GEN-LAST:event_btnAddFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
+    private void btnRemoveFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
         final Object[] selection = lstFlurstuecke.getSelectedValues();
         for (final Object flurstueck : selection) {
             flurstuecksvermessungFilterModel.removeElement(flurstueck);
         }
-    }                                                                                       //GEN-LAST:event_btnRemoveFlurstueckActionPerformed
+    }//GEN-LAST:event_btnRemoveFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFilterSchluessel505To508ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFilterSchluessel505To508ActionPerformed
+    private void btnFilterSchluessel505To508ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterSchluessel505To508ActionPerformed
         chkFilterSchluessel501.setSelected(false);
         chkFilterSchluessel502.setSelected(false);
         chkFilterSchluessel503.setSelected(false);
@@ -883,22 +884,22 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkFilterSchluessel507.setSelected(true);
         chkFilterSchluessel508.setSelected(true);
         chkFilterSchluessel600.setSelected(false);
-    }                                                                                               //GEN-LAST:event_btnFilterSchluessel505To508ActionPerformed
+    }//GEN-LAST:event_btnFilterSchluessel505To508ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseClicked
-    }                                                                              //GEN-LAST:event_lstFlurstueckeMouseClicked
+    private void lstFlurstueckeMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeMouseClicked
+    }//GEN-LAST:event_lstFlurstueckeMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeMousePressed(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMousePressed
+    private void lstFlurstueckeMousePressed(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeMousePressed
         if (popChangeVeraenderungsart.isPopupTrigger(evt)) {
             final int indexUnderMouse = lstFlurstuecke.locationToIndex(evt.getPoint());
 
@@ -922,24 +923,24 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 popChangeVeraenderungsart.show(evt.getComponent(), evt.getX(), evt.getY());
             }
         }
-    } //GEN-LAST:event_lstFlurstueckeMousePressed
+    }//GEN-LAST:event_lstFlurstueckeMousePressed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeMouseReleased(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseReleased
+    private void lstFlurstueckeMouseReleased(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeMouseReleased
         // Hock for popup menu. The return value of JPopupMenu.isPopupTrigger() depends on the OS.
         lstFlurstueckeMousePressed(evt);
-    } //GEN-LAST:event_lstFlurstueckeMouseReleased
+    }//GEN-LAST:event_lstFlurstueckeMouseReleased
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
         txtBlatt.setText("");
         txtFlur.setText("");
         txtGemarkung.setText("");
@@ -958,14 +959,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkSearchInCismap.setSelected(false);
 
         flurstuecksvermessungFilterModel.clear();
-    } //GEN-LAST:event_btnNewSearchActionPerformed
+    }//GEN-LAST:event_btnNewSearchActionPerformed
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (VermessungRissCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
     }
@@ -1275,7 +1276,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 for (final CidsBean dropped : beans) {
                     final CidsBean newEntry = CidsBean.createNewCidsBeanFromTableName(
                             "WUNDA_BLAU",
-                            "vermessung_flurstuecksvermessung");
+                            "vermessung_flurstuecksvermessung",
+                            getConnectionContext());
                     newEntry.setProperty("veraenderungsart", null);
                     newEntry.setProperty("tmp_lp_orig", dropped);
                     VermessungRissUtils.setFluerstueckKickerInVermessung(newEntry, getConnectionContext());
