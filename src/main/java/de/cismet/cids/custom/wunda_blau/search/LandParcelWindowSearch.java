@@ -393,12 +393,12 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
         chkActual.setSelected(true);
         chkHistorical.setSelected(false);
         initDateChoosers();
         chkMap.setSelected(false);
-    }//GEN-LAST:event_btnNewSearchActionPerformed
+    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
 
     @Override
     public JComponent getSearchWindowComponent() {

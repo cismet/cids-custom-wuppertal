@@ -281,16 +281,16 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtTillBildnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtTillBildnummerActionPerformed
+    private void txtTillBildnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTillBildnummerActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtTillBildnummerActionPerformed
+    }//GEN-LAST:event_txtTillBildnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         stadtBilderBeans.clear();
         final StringBuilder bildnummern = new StringBuilder("'" + bildnummernToAdd.get(0) + "'");
         for (int i = 1; i < bildnummernToAdd.size(); i++) {
@@ -319,7 +319,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
             }
             for (final String bildnummer : bildnummernToAdd) {
                 if (!stadtBilderBeans.containsKey(bildnummer)) {
-                    final MetaObject metaObject = mc.getEmptyInstance();
+                    final MetaObject metaObject = mc.getEmptyInstance(getConnectionContext());
                     metaObject.setStatus(MetaObject.NEW);
                     final CidsBean cidsBean = metaObject.getBean();
                     try {
@@ -337,18 +337,18 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
             setVisible(false);
             dispose();
         }
-    }                                                                         //GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         stadtBilderBeans.clear();
         setVisible(false);
         dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!

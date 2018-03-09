@@ -89,7 +89,7 @@ public final class CidsBeanSupport {
         if (tableName != null) {
             final MetaClass metaClass = ClassCacheMultiple.getMetaClass(DOMAIN_NAME, tableName, connectionContext);
             if (metaClass != null) {
-                return metaClass.getEmptyInstance().getBean();
+                return metaClass.getEmptyInstance(connectionContext).getBean();
             }
         }
         throw new Exception("Could not find MetaClass for table " + tableName);
