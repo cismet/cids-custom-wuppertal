@@ -339,33 +339,33 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
         String imageString = null;
 
         try {
-            imageString = (String)model.getValueAt(0, 0);
+            imageString = (String)model.getFileName(0);
             if ((imageString != null) && !imageString.equals("")) {
                 final BufferedImage image = ImageIO.read(new File(imageString));
                 hm.put(IMAGE1, ConversionUtils.image2String(image));
-                hm.put(SIGNATURE1, (String)model.getValueAt(0, 1));
+                hm.put(SIGNATURE1, (String)model.getValueAt(0, 2));
             }
         } catch (Exception e) {
             LOG.error("Cannot read image", e);
         }
 
         try {
-            imageString = (String)model.getValueAt(1, 0);
+            imageString = (String)model.getFileName(1);
             if ((imageString != null) && !imageString.equals("")) {
                 final BufferedImage image = ImageIO.read(new File(imageString));
                 hm.put(IMAGE2, ConversionUtils.image2String(image));
-                hm.put(SIGNATURE2, (String)model.getValueAt(1, 1));
+                hm.put(SIGNATURE2, (String)model.getValueAt(1, 2));
             }
         } catch (Exception e) {
             LOG.error("Cannot read image", e);
         }
 
         try {
-            imageString = (String)model.getValueAt(2, 0);
+            imageString = (String)model.getFileName(2);
             if ((imageString != null) && !imageString.equals("")) {
                 final BufferedImage image = ImageIO.read(new File(imageString));
                 hm.put(IMAGE3, ConversionUtils.image2String(image));
-                hm.put(SIGNATURE3, (String)model.getValueAt(2, 1));
+                hm.put(SIGNATURE3, (String)model.getValueAt(2, 2));
             }
         } catch (Exception e) {
             LOG.error("Cannot read image", e);
@@ -652,17 +652,17 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtNameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
-    }//GEN-LAST:event_txtNameActionPerformed
+    private void txtNameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtNameActionPerformed
+    }                                                                           //GEN-LAST:event_txtNameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtAuthorActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAuthorActionPerformed
+    private void txtAuthorActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtAuthorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAuthorActionPerformed
+    } //GEN-LAST:event_txtAuthorActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -676,6 +676,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
 
             if (image != null) {
                 model.setValueAt(imageFile.getName(), index, 0);
+                model.setFileName(index, imageFile.getAbsolutePath());
                 model.fireContentsChanged();
             } else {
                 JOptionPane.showMessageDialog(
@@ -741,7 +742,6 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
         CismetThreadPool.execute(r);
     }
 
-
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -760,6 +760,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
                 new String[] { "", "" },
                 new String[] { "", "" }
             };
+        private String[] fileName = { "", "", "" };
 
         //~ Methods ------------------------------------------------------------
 
@@ -785,6 +786,27 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
             } else {
                 return String.class;
             }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  index  DOCUMENT ME!
+         * @param  path   DOCUMENT ME!
+         */
+        public void setFileName(final int index, final String path) {
+            fileName[index] = path;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   index  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getFileName(final int index) {
+            return fileName[index];
         }
 
         @Override
