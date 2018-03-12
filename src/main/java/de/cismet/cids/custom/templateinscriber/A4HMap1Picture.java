@@ -642,8 +642,8 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
             } else {
                 JOptionPane.showMessageDialog(
                     this,
-                    NbBundle.getMessage(A4HMap1Picture.class, "A4HMap1Picture.setFile().exception.message"),
-                    NbBundle.getMessage(A4HMap1Picture.class, "A4HMap1Picture.setFile().exception.title"),
+                    NbBundle.getMessage(A4HMap1Picture.class, "A4HMap1Picture.setFile().null.message"),
+                    NbBundle.getMessage(A4HMap1Picture.class, "A4HMap1Picture.setFile().null.title"),
                     JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
@@ -654,7 +654,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
                         "A4HMap1Picture.setFile().exception.title"),
                     NbBundle.getMessage(
                         A4HMap1Picture.class,
-                        "MergeFeatureAction.setFile().exception.message"),
+                        "A4HMap1Picture.setFile().exception.message"),
                     null,
                     null,
                     e,
