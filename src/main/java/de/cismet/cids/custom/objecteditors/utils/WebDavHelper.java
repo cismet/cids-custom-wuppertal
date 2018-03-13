@@ -22,7 +22,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
@@ -33,6 +32,8 @@ import javax.swing.ProgressMonitorInputStream;
 import de.cismet.cids.custom.wunda_blau.search.actions.WebDavTunnelAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.netutil.Proxy;
 
@@ -96,17 +97,19 @@ public class WebDavHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param   fileName         DOCUMENT ME!
-     * @param   toUpload         DOCUMENT ME!
-     * @param   webDavDirectory  DOCUMENT ME!
-     * @param   parent           DOCUMENT ME!
+     * @param   fileName           DOCUMENT ME!
+     * @param   toUpload           DOCUMENT ME!
+     * @param   webDavDirectory    DOCUMENT ME!
+     * @param   parent             DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     public void uploadFileToWebDAV(final String fileName,
             final File toUpload,
             final String webDavDirectory,
-            final Component parent) throws Exception {
+            final Component parent,
+            final ConnectionContext connectionContext) throws Exception {
         final BufferedInputStream bfis = new BufferedInputStream(new ProgressMonitorInputStream(
                     parent,
                     "Bild wird übertragen...",
@@ -135,6 +138,7 @@ public class WebDavHelper {
                         WEBDAV_OVER_TUNNEL,
                         "WUNDA_BLAU",
                         bytes,
+                        connectionContext,
                         putSAP,
                         proxySAP,
                         usernameSAP,
@@ -148,13 +152,15 @@ public class WebDavHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param   fileName         DOCUMENT ME!
-     * @param   webDavDirectory  DOCUMENT ME!
+     * @param   fileName           DOCUMENT ME!
+     * @param   webDavDirectory    DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public boolean deleteFileFromWebDAV(final String fileName,
-            final String webDavDirectory) {
+            final String webDavDirectory,
+            final ConnectionContext connectionContext) {
         if ((fileName != null) && (fileName.length() > 0)) {
             try {
                 final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(
@@ -178,7 +184,8 @@ public class WebDavHelper {
                         .executeTask(
                             WEBDAV_OVER_TUNNEL,
                             "WUNDA_BLAU",
-                            null,
+                            (Object)null,
+                            connectionContext,
                             deleteSAP,
                             proxySAP,
                             usernameSAP,
@@ -195,15 +202,17 @@ public class WebDavHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param   fileName         DOCUMENT ME!
-     * @param   webDavDirectory  DOCUMENT ME!
+     * @param   fileName           DOCUMENT ME!
+     * @param   webDavDirectory    DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     public InputStream getFileFromWebDAV(final String fileName,
-            final String webDavDirectory) throws Exception {
+            final String webDavDirectory,
+            final ConnectionContext connectionContext) throws Exception {
         final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY
                         .toString(),
                 proxy);
@@ -226,7 +235,8 @@ public class WebDavHelper {
                     .executeTask(
                             WebDavHelper.WEBDAV_OVER_TUNNEL,
                             "WUNDA_BLAU",
-                            null,
+                            (Object)null,
+                            connectionContext,
                             getSAP,
                             proxySAP,
                             usernameSAP,

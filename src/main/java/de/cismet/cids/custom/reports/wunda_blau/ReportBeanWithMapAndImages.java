@@ -42,6 +42,9 @@ import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.netutil.Proxy;
 
 import de.cismet.tools.CismetThreadPool;
@@ -53,7 +56,7 @@ import de.cismet.tools.PasswordEncrypter;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class ReportBeanWithMapAndImages {
+public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -73,24 +76,28 @@ public class ReportBeanWithMapAndImages {
     private final CidsBean cidsBean;
     private final ImageState imgState0 = new ImageState();
     private final ImageState imgState1 = new ImageState();
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new MauernBeanWithMapAndImages object.
      *
-     * @param  cidsBean    DOCUMENT ME!
-     * @param  geomProp    DOCUMENT ME!
-     * @param  imgsProp    DOCUMENT ME!
-     * @param  davUrlProp  DOCUMENT ME!
-     * @param  mapUrl      DOCUMENT ME!
+     * @param  cidsBean           DOCUMENT ME!
+     * @param  geomProp           DOCUMENT ME!
+     * @param  imgsProp           DOCUMENT ME!
+     * @param  davUrlProp         DOCUMENT ME!
+     * @param  mapUrl             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public ReportBeanWithMapAndImages(final CidsBean cidsBean,
             final String geomProp,
             final String imgsProp,
             final String davUrlProp,
-            final String mapUrl) {
+            final String mapUrl,
+            final ConnectionContext connectionContext) {
         this.cidsBean = cidsBean;
+        this.connectionContext = connectionContext;
         final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
         String pass = webDavBundle.getString("password");
 
@@ -185,7 +192,8 @@ public class ReportBeanWithMapAndImages {
                         }
                         final InputStream iStream = webDavHelper.getFileFromWebDAV(
                                 url,
-                                WEB_DAV_DIRECTORY);
+                                WEB_DAV_DIRECTORY,
+                                getConnectionContext());
                         final Image img = ImageIO.read(iStream);
                         if (img == null) {
                             imgState.setError(true);
@@ -289,6 +297,11 @@ public class ReportBeanWithMapAndImages {
         return (cidsBean != null) && ((mapImage != null) || mapError)
                     && ((imgState0.getImg() != null) || imgState0.isError())
                     && ((imgState1.getImg() != null) || imgState1.isError());
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

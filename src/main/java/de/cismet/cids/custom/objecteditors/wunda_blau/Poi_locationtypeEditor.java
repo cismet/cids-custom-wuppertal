@@ -21,18 +21,13 @@ import Sirius.server.middleware.types.MetaObject;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import java.net.URL;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.logging.Level;
 
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -40,6 +35,9 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -50,13 +48,16 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled {
+public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled, ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String latestIconUrl = null;
     private String title = "";
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnMenAbort;
@@ -93,15 +94,25 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form LocationinstanceEditor.
+     * Creates a new Poi_locationtypeEditor object.
      */
     public Poi_locationtypeEditor() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         dlgAddLocationType.pack();
         dlgAddLocationType.getRootPane().setDefaultButton(btnMenOk);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -138,7 +149,8 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         final MetaObject[] lebenslagen = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
                     .getLightweightMetaObjectsForTable(
                         "poi_spatialreferencesystemusinggeographicidentifiers",
-                        new String[] { "theme" });
+                        new String[] { "theme" },
+                        getConnectionContext());
         if (lebenslagen != null) {
             Arrays.sort(lebenslagen);
             cbTypes = new javax.swing.JComboBox(lebenslagen);
@@ -157,7 +169,9 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             panContent2 = new RoundedPanel();
             lblSignatur = new javax.swing.JLabel();
             lblLocationTypes = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[] { "definition", "filename" });
+            cbSignatur = new FastBindableReferenceCombo(
+                    "%1$2s",
+                    new String[] { "definition", "filename" });
             scpLocationtypeList = new javax.swing.JScrollPane();
             lstLocationTypes = new javax.swing.JList();
             panButtons = new javax.swing.JPanel();

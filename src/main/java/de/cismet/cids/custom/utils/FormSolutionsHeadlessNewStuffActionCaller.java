@@ -26,6 +26,9 @@ import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuf
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -34,7 +37,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FormSolutionsHeadlessNewStuffActionCaller {
+public class FormSolutionsHeadlessNewStuffActionCaller implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -44,6 +47,10 @@ public class FormSolutionsHeadlessNewStuffActionCaller {
         "Sirius.navigator.connection.proxy.DefaultConnectionProxyHandler";
     private static final String CONNECTION_CLASS = "Sirius.navigator.connection.RESTfulConnection";
     private static final String DOMAIN = "WUNDA_BLAU";
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
 
@@ -56,10 +63,15 @@ public class FormSolutionsHeadlessNewStuffActionCaller {
         final String callserver = args[0];
         final String user = args[1];
         final String password = args[2];
+        final String compression = args[3];
 
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
 
-        if (FormSolutionsHeadlessNewStuffActionCaller.authenticate(user, password, callserver)) {
+        if (FormSolutionsHeadlessNewStuffActionCaller.authenticate(
+                        user,
+                        password,
+                        callserver,
+                        "ja".equalsIgnoreCase(compression))) {
             new FormSolutionsHeadlessNewStuffActionCaller().executeTask();
         }
     }
@@ -69,7 +81,12 @@ public class FormSolutionsHeadlessNewStuffActionCaller {
      */
     private void executeTask() {
         try {
-            SessionManager.getProxy().executeTask(FormSolutionServerNewStuffAvailableAction.TASK_NAME, DOMAIN, null);
+            SessionManager.getProxy()
+                    .executeTask(
+                        FormSolutionServerNewStuffAvailableAction.TASK_NAME,
+                        DOMAIN,
+                        (Object)null,
+                        getConnectionContext());
         } catch (ConnectionException ex) {
             System.err.println("error executing task");
             ex.printStackTrace();
@@ -80,15 +97,24 @@ public class FormSolutionsHeadlessNewStuffActionCaller {
     /**
      * DOCUMENT ME!
      *
-     * @param   user        DOCUMENT ME!
-     * @param   password    DOCUMENT ME!
-     * @param   callserver  DOCUMENT ME!
+     * @param   user                DOCUMENT ME!
+     * @param   password            DOCUMENT ME!
+     * @param   callserver          DOCUMENT ME!
+     * @param   compressionEnabled  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private static boolean authenticate(final String user, final String password, final String callserver) {
+    private static boolean authenticate(final String user,
+            final String password,
+            final String callserver,
+            final boolean compressionEnabled) {
         try {
-            final Connection connection = ConnectionFactory.getFactory().createConnection(CONNECTION_CLASS, callserver);
+            final Connection connection = ConnectionFactory.getFactory()
+                        .createConnection(
+                            CONNECTION_CLASS,
+                            callserver,
+                            compressionEnabled,
+                            ConnectionContext.createDeprecated());
             final ConnectionInfo connectionInfo = new ConnectionInfo();
             connectionInfo.setCallserverURL(callserver);
             connectionInfo.setPassword(password);
@@ -97,11 +123,12 @@ public class FormSolutionsHeadlessNewStuffActionCaller {
             connectionInfo.setUsergroupDomain(DOMAIN);
             connectionInfo.setUsername(user);
             final ConnectionSession session = ConnectionFactory.getFactory()
-                        .createSession(connection, connectionInfo, true);
-            final ConnectionProxy proxy = ConnectionFactory.getFactory().createProxy(CONNECTION_PROXY_CLASS, session);
+                        .createSession(connection, connectionInfo, true, ConnectionContext.createDeprecated());
+            final ConnectionProxy proxy = ConnectionFactory.getFactory()
+                        .createProxy(CONNECTION_PROXY_CLASS, session, ConnectionContext.createDeprecated());
             SessionManager.init(proxy);
 
-            ClassCacheMultiple.setInstance(DOMAIN);
+            ClassCacheMultiple.setInstance(DOMAIN, ConnectionContext.createDeprecated());
             return true;
         } catch (final Exception ex) {
             System.err.println("Error while login");
@@ -109,5 +136,10 @@ public class FormSolutionsHeadlessNewStuffActionCaller {
             LOG.error("Error while login", ex);
             return false;
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -27,17 +27,22 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_projektEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
+public class Oab_projektEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ListSelectionListener condMeasSelL;
+    private final ListSelectionListener condMeasSelL = new ConditionMeasureSelectionL();
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserAlkis;
@@ -81,14 +86,6 @@ public class Oab_projektEditor extends AbstractCidsBeanRenderer implements Reque
      * Creates new form OABProjectEditor.
      */
     public Oab_projektEditor() {
-        initComponents();
-
-        condMeasSelL = new ConditionMeasureSelectionL();
-
-        lstConditionsMeasures.addListSelectionListener(WeakListeners.create(
-                ListSelectionListener.class,
-                condMeasSelL,
-                lstConditionsMeasures));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -100,7 +97,8 @@ public class Oab_projektEditor extends AbstractCidsBeanRenderer implements Reque
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
 
             bindingGroup.bind();
 
@@ -139,7 +137,7 @@ public class Oab_projektEditor extends AbstractCidsBeanRenderer implements Reque
                 }
             });
 
-        final DefaultListModel<CidsBean> dlm = new DefaultListModel<CidsBean>();
+        final DefaultListModel<CidsBean> dlm = new DefaultListModel<>();
         dlm.setSize(c.size());
         for (int i = 0; i < c.size(); ++i) {
             dlm.set(i, c.get(i));
@@ -585,6 +583,21 @@ public class Oab_projektEditor extends AbstractCidsBeanRenderer implements Reque
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+        lstConditionsMeasures.addListSelectionListener(WeakListeners.create(
+                ListSelectionListener.class,
+                condMeasSelL,
+                lstConditionsMeasures));
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     //~ Inner Classes ----------------------------------------------------------
 

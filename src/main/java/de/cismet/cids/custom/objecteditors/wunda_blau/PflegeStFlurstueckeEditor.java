@@ -35,6 +35,9 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.CrsTransformer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.StaticDecimalTools;
 //import javax.swing.JOptionPane;
 //import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
@@ -46,7 +49,8 @@ import de.cismet.tools.StaticDecimalTools;
  * @version  $Revision$, $Date$
  */
 public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    BindingGroupStore {
+    BindingGroupStore,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -59,6 +63,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private CidsBean cidsBean = null;
     private boolean isEditor = true;
     private Geometry geom;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbGeom;
@@ -183,8 +188,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
      * Creates new form pflege_st_flurstuecke.
      */
     public PflegeStFlurstueckeEditor() {
-        initComponents();
-        ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString("georeferenz");
+        this(true);
     }
 
     /**
@@ -194,6 +198,13 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
      */
     public PflegeStFlurstueckeEditor(final boolean createEditor) {
         this.isEditor = createEditor;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         if (!isEditor) {
             txtStadtbezirk.setEditable(false);
@@ -211,10 +222,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
             dcletztePflege.setEditable(false);
             dcAufnahme.setEditable(false);
+        } else {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString("georeferenz");
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -2207,7 +2218,8 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
             // werden evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cb);
+                cb,
+                getConnectionContext());
             panPreviewMap.initMap(cb, "georeferenz.geo_field");
 
             bindingGroup.bind();
@@ -2243,5 +2255,10 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -85,6 +85,9 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -102,7 +105,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     RequestsFullSizeComponent,
     PropertyChangeListener,
     EditorSaveListener,
-    CidsBeanDropListener {
+    CidsBeanDropListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -129,8 +133,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     protected final boolean editable;
 
     private CidsBean cidsBean = null;
-    private final CardLayout cardLayout;
-    private List<CidsBean> beansToRemoveFromOtherVerfahren = new ArrayList<CidsBean>();
+    private CardLayout cardLayout;
+    private final List<CidsBean> beansToRemoveFromOtherVerfahren = new ArrayList<>();
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddLaufendeNummer;
@@ -233,63 +238,6 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      */
     public KkVerfahrenEditor(final boolean editable) {
         this.editable = editable;
-        initComponents();
-        edFlaeche.addNameChangedListener(new KeyAdapter() {
-
-                @Override
-                public void keyReleased(final KeyEvent e) {
-                    EventQueue.invokeLater(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                refreshLabels();
-                            }
-                        });
-                }
-            });
-        cardLayout = (CardLayout)getLayout();
-        RendererTools.makeReadOnly(txtId);
-        lstFlaechen.setCellRenderer(new DefaultListCellRenderer() {
-
-                @Override
-                public Component getListCellRendererComponent(final JList list,
-                        final Object value,
-                        final int index,
-                        final boolean isSelected,
-                        final boolean cellHasFocus) {
-                    Object newValue = value;
-
-                    if (value instanceof CidsBean) {
-                        final CidsBean bean = (CidsBean)value;
-                        newValue = bean.getProperty("schluessel");
-
-                        if (newValue == null) {
-                            newValue = "unbenannt";
-                        }
-                    }
-
-                    return super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
-                }
-            });
-
-        if (!editable) {
-            makeReadOnly(txtBezeichnung);
-            makeReadOnly(txtTraeger);
-            makeReadOnly(txtVerfahrensstand);
-            dcAufnahme.setEditable(false);
-            dcRechtskraft.setEditable(false);
-            RendererTools.makeReadOnly(cbGrundlage);
-            RendererTools.makeReadOnly(cbStatus);
-            RendererTools.makeReadOnly(btnAddLaufendeNummer2);
-            RendererTools.makeReadOnly(btnRemoveLaufendeNummer2);
-            RendererTools.makeReadOnly(btnAddLaufendeNummer1);
-            RendererTools.makeReadOnly(btnRemoveLaufendeNummer1);
-            makeReadOnly(chkAusgleich);
-            makeReadOnly(chkErsatzzahlung);
-            makeReadOnly(chkErstattung);
-        } else {
-            new CidsBeanDropTarget(this);
-        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1492,7 +1440,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      */
     private void btnAddLaufendeNummer1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummer1ActionPerformed
         try {
-            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_kompensation");
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(
+                    "kk_kompensation",
+                    getConnectionContext());
             final String schluessel = getSchluessel();
 
             if (schluessel == null) {
@@ -1530,7 +1480,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         try {
             final AbstractCidsServerSearch search = new KkKompensationNextSchluesselSearch();
             final List res = (List)SessionManager.getProxy()
-                        .customServerSearch(SessionManager.getSession().getUser(), search);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                                search,
+                                getConnectionContext());
 
             if ((res != null) && (res.size() == 1) && (res.get(0) != null)) {
                 return res.get(0).toString();
@@ -1571,7 +1523,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
      */
     private void btnAddLaufendeNummer2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLaufendeNummer2ActionPerformed
         try {
-            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_v_kosten");
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName("kk_v_kosten", getConnectionContext());
 
             ((KompensationskatasterBeanTable)xtKosten.getModel()).addBean(bean);
         } catch (Exception e) {
@@ -1649,7 +1601,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                             final CidsServerSearch bPlanSearch = new BPlanByGeometrySearch(geom.toText());
 
                             final List bplan = (List)SessionManager.getProxy()
-                                        .customServerSearch(SessionManager.getSession().getUser(), bPlanSearch);
+                                        .customServerSearch(SessionManager.getSession().getUser(),
+                                                bPlanSearch,
+                                                getConnectionContext());
 
                             if ((bplan != null) && (bplan.size() > 0)) {
                                 labBPlan.setText("BPlan: " + String.valueOf(bplan.get(0)));
@@ -1680,7 +1634,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
             lblTitle.setText("Verfahren " + String.valueOf(cidsBean.getProperty("bezeichnung")));
 
@@ -1855,10 +1810,11 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                                                             SessionManager.getSession().getUser(),
                                                             kompBean.getMetaObject().getId(),
                                                             kompBean.getMetaObject().getClassID(),
-                                                            kompBean.getMetaObject().getDomain());
+                                                            kompBean.getMetaObject().getDomain(),
+                                                            getConnectionContext());
                                             kompMo.setStatus(MetaObject.MODIFIED);
                                             kompMo.getAttribute("name").setChanged(true);
-                                            kompMo.getBean().persist();
+                                            kompMo.getBean().persist(getConnectionContext());
                                         } catch (Exception e) {
                                             LOG.error("Error while saving kompensation object", e);
                                         }
@@ -1897,6 +1853,75 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
                 cidsBean.setArtificialChangeFlag(true);
                 // a db trigger will remove the reference between this kompensation and its previous verfahren
             }
+        }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
+        initComponents();
+        edFlaeche.initWithConnectionContext(getConnectionContext());
+        edFlaeche.addNameChangedListener(new KeyAdapter() {
+
+                @Override
+                public void keyReleased(final KeyEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                refreshLabels();
+                            }
+                        });
+                }
+            });
+        cardLayout = (CardLayout)getLayout();
+        RendererTools.makeReadOnly(txtId);
+        lstFlaechen.setCellRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    Object newValue = value;
+
+                    if (value instanceof CidsBean) {
+                        final CidsBean bean = (CidsBean)value;
+                        newValue = bean.getProperty("schluessel");
+
+                        if (newValue == null) {
+                            newValue = "unbenannt";
+                        }
+                    }
+
+                    return super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
+                }
+            });
+
+        if (!editable) {
+            makeReadOnly(txtBezeichnung);
+            makeReadOnly(txtTraeger);
+            makeReadOnly(txtVerfahrensstand);
+            dcAufnahme.setEditable(false);
+            dcRechtskraft.setEditable(false);
+            RendererTools.makeReadOnly(cbGrundlage);
+            RendererTools.makeReadOnly(cbStatus);
+            RendererTools.makeReadOnly(btnAddLaufendeNummer2);
+            RendererTools.makeReadOnly(btnRemoveLaufendeNummer2);
+            RendererTools.makeReadOnly(btnAddLaufendeNummer1);
+            RendererTools.makeReadOnly(btnRemoveLaufendeNummer1);
+            makeReadOnly(chkAusgleich);
+            makeReadOnly(chkErsatzzahlung);
+            makeReadOnly(chkErstattung);
+        } else {
+            new CidsBeanDropTarget(this);
         }
     }
 

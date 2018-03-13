@@ -20,10 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -47,8 +45,10 @@ import javax.swing.Action;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.ALLOWED_USAGE_CONFIG_ATTR;
-import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.RESTRICTED_USAGE_CONFIG_ATTR;
 
 /**
  * DOCUMENT ME!
@@ -56,7 +56,8 @@ import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.RE
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterSettingChangedTrigger {
+public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterSettingChangedTrigger,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -88,12 +89,24 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     private javax.swing.JPanel pnlVerwendungszweckCheckBoxes;
     // End of variables declaration//GEN-END:variables
 
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates new form VerwendungszweckPanel.
      */
     public VerwendungszweckPanel() {
+        this(ConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new VerwendungszweckPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public VerwendungszweckPanel(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
@@ -109,11 +122,11 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    private static String[] getAllowedUsages(final User user, final String product) throws ConnectionException {
+    private String[] getAllowedUsages(final User user, final String product) throws ConnectionException {
         final Set<String> allowedUsages = new LinkedHashSet<String>();
 
         final String rawAllowedUsageLines = SessionManager.getConnection()
-                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR);
+                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR, getConnectionContext());
         if (rawAllowedUsageLines != null) {
             for (final String rawAllowedUsageLine : rawAllowedUsageLines.split("\n")) {
                 final int indexOfAllowed = rawAllowedUsageLine.indexOf(":");
@@ -285,5 +298,10 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
      */
     public static HashMap<String, Usage> getUsages() {
         return USAGES;
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

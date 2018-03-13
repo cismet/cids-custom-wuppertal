@@ -58,6 +58,10 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -101,6 +105,10 @@ public class AlkisUtils {
     static final Buchungsblattbezirke BUCHUNGSBLATTBEZIRKE;
 
     static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                Category.STATIC,
+                AlkisUtils.class.getSimpleName());
+
         Buchungsblattbezirke buchungsblattbezirke = null;
         try {
             final Object ret = SessionManager.getSession()
@@ -108,7 +116,8 @@ public class AlkisUtils {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.ALKIS_BUCHUNTSBLATTBEZIRKE_JSON.getValue());
+                            WundaBlauServerResources.ALKIS_BUCHUNTSBLATTBEZIRKE_JSON.getValue(),
+                            connectionContext);
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }
@@ -128,7 +137,8 @@ public class AlkisUtils {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.ALKIS_PRODUCTS_PROPERTIES.getValue());
+                            WundaBlauServerResources.ALKIS_PRODUCTS_PROPERTIES.getValue(),
+                            connectionContext);
             if (productsRet instanceof Exception) {
                 throw new Exception("error while loading server resource "
                             + WundaBlauServerResources.ALKIS_PRODUCTS_PROPERTIES,
@@ -142,7 +152,8 @@ public class AlkisUtils {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.ALKIS_FORMATS_PROPERTIES.getValue());
+                            WundaBlauServerResources.ALKIS_FORMATS_PROPERTIES.getValue(),
+                            connectionContext);
             if (formatsRet instanceof Exception) {
                 throw new Exception("error while loading server resource "
                             + WundaBlauServerResources.ALKIS_FORMATS_PROPERTIES,
@@ -155,7 +166,8 @@ public class AlkisUtils {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.ALKIS_PRODUKTBESCHREIBUNG_XML.getValue());
+                            WundaBlauServerResources.ALKIS_PRODUKTBESCHREIBUNG_XML.getValue(),
+                            connectionContext);
             if (beschreibungRet instanceof Exception) {
                 throw new Exception("error while loading server resource "
                             + WundaBlauServerResources.ALKIS_PRODUKTBESCHREIBUNG_XML.getValue(),
@@ -319,13 +331,15 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   usageKey  DOCUMENT ME!
+     * @param   usageKey           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static String getFertigungsVermerk(final String usageKey) throws ConnectionException {
+    public static String getFertigungsVermerk(final String usageKey, final ConnectionContext connectionContext)
+            throws ConnectionException {
         final String fertigungsVermerk;
         final String currentUsageKey = (BillingPopup.getInstance().getCurrentUsage() != null)
             ? BillingPopup.getInstance().getCurrentUsage().getKey() : null;
@@ -333,7 +347,8 @@ public class AlkisUtils {
             fertigungsVermerk = SessionManager.getConnection()
                         .getConfigAttr(
                                 SessionManager.getSession().getUser(),
-                                "custom.alkis.fertigungsVermerk@WUNDA_BLAU");
+                                "custom.alkis.fertigungsVermerk@WUNDA_BLAU",
+                                connectionContext);
         } else {
             fertigungsVermerk = null;
         }
@@ -803,12 +818,16 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasAlkisPrintAccess() {
+    public static boolean validateUserHasAlkisPrintAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print@WUNDA_BLAU")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "navigator.alkis.print@WUNDA_BLAU",
+                                connectionContext)
                         != null;
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Print Dialog!", ex);
@@ -819,12 +838,16 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasAlkisProductAccess() {
+    public static boolean validateUserHasAlkisProductAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products@WUNDA_BLAU")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "navigator.alkis.products@WUNDA_BLAU",
+                                connectionContext)
                         != null;
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Products!", ex);
@@ -835,12 +858,16 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasEigentuemerAccess() {
+    public static boolean validateUserHasEigentuemerAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), ALKIS_EIGENTUEMER)
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                ALKIS_EIGENTUEMER,
+                                connectionContext)
                         != null;
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
@@ -851,12 +878,16 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasAlkisHTMLProductAccess() {
+    public static boolean validateUserHasAlkisHTMLProductAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), ALKIS_HTML_PRODUCTS_ENABLED)
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                ALKIS_HTML_PRODUCTS_ENABLED,
+                                connectionContext)
                         != null;
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis HTML Products!", ex);
@@ -867,14 +898,17 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserShouldUseAlkisSOAPServerActions() {
+    public static boolean validateUserShouldUseAlkisSOAPServerActions(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
                                 DomainServerImpl.SERVER_ACTION_PERMISSION_ATTRIBUTE_PREFIX
-                                + ALKIS_SOAP_OVER_CSA)
+                                + ALKIS_SOAP_OVER_CSA,
+                                connectionContext)
                         != null;
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis SOAP CSA Calls!", ex);
@@ -885,13 +919,15 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   pointCode  DOCUMENT ME!
+     * @param   pointCode          DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static Point getPointFromAlkisSOAPServerAction(final String pointCode) throws Exception {
+    public static Point getPointFromAlkisSOAPServerAction(final String pointCode,
+            final ConnectionContext connectionContext) throws Exception {
         final ServerActionParameter pointCodeSAP = new ServerActionParameter<String>(
                 ServerAlkisSoapAction.RETURN_VALUE.POINT.toString(),
                 pointCode);
@@ -902,6 +938,7 @@ public class AlkisUtils {
                             ALKIS_SOAP_OVER_CSA,
                             "WUNDA_BLAU",
                             body,
+                            connectionContext,
                             pointCodeSAP);
         return result;
     }
@@ -910,13 +947,14 @@ public class AlkisUtils {
      * DOCUMENT ME!
      *
      * @param   buchungsblattCode  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static Buchungsblatt getBuchungsblattFromAlkisSOAPServerAction(final String buchungsblattCode)
-            throws Exception {
+    public static Buchungsblatt getBuchungsblattFromAlkisSOAPServerAction(final String buchungsblattCode,
+            final ConnectionContext connectionContext) throws Exception {
         final ServerActionParameter buchungsblattCodeSAP = new ServerActionParameter<String>(
                 ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT.toString(),
                 buchungsblattCode);
@@ -927,6 +965,7 @@ public class AlkisUtils {
                             ALKIS_SOAP_OVER_CSA,
                             "WUNDA_BLAU",
                             body,
+                            connectionContext,
                             buchungsblattCodeSAP);
         return result;
     }

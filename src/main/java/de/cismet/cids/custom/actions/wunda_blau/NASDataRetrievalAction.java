@@ -28,6 +28,9 @@ import de.cismet.cismap.commons.features.CommonFeatureAction;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -37,7 +40,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CommonFeatureAction.class)
-public class NASDataRetrievalAction extends AbstractAction implements CommonFeatureAction {
+public class NASDataRetrievalAction extends AbstractAction implements CommonFeatureAction, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -49,6 +52,8 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private boolean hasNasAccess = false;
 
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -56,17 +61,24 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
      */
     public NASDataRetrievalAction() {
         super("NAS Daten abfragen");
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             hasNasAccess = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://nasDataQuery",
+                                getConnectionContext())
                         != null;
         } catch (Exception ex) {
             log.error("Could not validate nas action tag (csa://nasDataQuery)!", ex);
             hasNasAccess = false;
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -125,9 +137,15 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
                             StaticSwingTools.getParentFrame(
                                 CismapBroker.getInstance().getMappingComponent()),
                             false,
-                            featureToSelect);
+                            featureToSelect,
+                            getConnectionContext());
                     StaticSwingTools.showDialog(dialog);
                 }
             });
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -44,6 +44,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
@@ -53,7 +56,8 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -67,6 +71,7 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNewSearch;
     private javax.swing.JCheckBox chkActual;
@@ -91,8 +96,15 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
      * Creates new form LandParcelWindowSearch.
      */
     public LandParcelWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
-            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "FLURSTUECK"); // TODO ask for correct
+            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "FLURSTUECK", getConnectionContext()); // TODO ask for correct
             // Name
             icon = new ImageIcon(mc.getIconData());
 
@@ -100,7 +112,7 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
 
             initDateChoosers();
 
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -134,8 +146,6 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
             log.warn("Error in Constructor of LandParcelWindowSearch", exception);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -472,8 +482,13 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
         if (LandParcelSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

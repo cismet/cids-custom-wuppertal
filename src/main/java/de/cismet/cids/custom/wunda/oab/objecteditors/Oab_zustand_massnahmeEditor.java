@@ -34,20 +34,34 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
+public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ActionListener editTinL;
-    private final ActionListener editBeL;
-    private final ListSelectionListener calcSelL;
-    private final ItemListener importChkL;
+    private final ActionListener editTinL = new EditWMSPropertiesListener(
+            "tin", // NOI18N
+            NbBundle.getMessage(
+                Oab_zustand_massnahmeEditor.class,
+                "Oab_Zustand_MassnahmeEditor.<init>.editTinL.title"));
+    private final ActionListener editBeL = new EditWMSPropertiesListener(
+            "bruchkanten", // NOI18N
+            NbBundle.getMessage(
+                Oab_zustand_massnahmeEditor.class,
+                "Oab_Zustand_MassnahmeEditor.<init>.editBeL.title"));
+    private final ListSelectionListener calcSelL = new CalculationSelectionL();
+    private final ItemListener importChkL = new ImportCheckL();
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditBe;
@@ -93,28 +107,6 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
      * Creates new form OABProjectEditor.
      */
     public Oab_zustand_massnahmeEditor() {
-        initComponents();
-
-        editTinL = new EditWMSPropertiesListener(
-                "tin", // NOI18N
-                NbBundle.getMessage(
-                    Oab_zustand_massnahmeEditor.class,
-                    "Oab_Zustand_MassnahmeEditor.<init>.editTinL.title")); // NOI18N
-        editBeL = new EditWMSPropertiesListener(
-                "bruchkanten", // NOI18N
-                NbBundle.getMessage(
-                    Oab_zustand_massnahmeEditor.class,
-                    "Oab_Zustand_MassnahmeEditor.<init>.editBeL.title")); // NOI18N
-        calcSelL = new CalculationSelectionL();
-        importChkL = new ImportCheckL();
-
-        btnEditTin.addActionListener(WeakListeners.create(ActionListener.class, editTinL, btnEditTin));
-        btnEditBe.addActionListener(WeakListeners.create(ActionListener.class, editBeL, btnEditBe));
-        lstCalculations.addListSelectionListener(WeakListeners.create(
-                ListSelectionListener.class,
-                calcSelL,
-                lstCalculations));
-        chkImportFinished.addItemListener(WeakListeners.create(ItemListener.class, importChkL, chkImportFinished));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -126,7 +118,8 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
 
             bindingGroup.bind();
 
@@ -610,6 +603,25 @@ public class Oab_zustand_massnahmeEditor extends AbstractCidsBeanRenderer implem
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+
+        btnEditTin.addActionListener(WeakListeners.create(ActionListener.class, editTinL, btnEditTin));
+        btnEditBe.addActionListener(WeakListeners.create(ActionListener.class, editBeL, btnEditBe));
+        lstCalculations.addListSelectionListener(WeakListeners.create(
+                ListSelectionListener.class,
+                calcSelL,
+                lstCalculations));
+        chkImportFinished.addItemListener(WeakListeners.create(ItemListener.class, importChkL, chkImportFinished));
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     //~ Inner Classes ----------------------------------------------------------
 

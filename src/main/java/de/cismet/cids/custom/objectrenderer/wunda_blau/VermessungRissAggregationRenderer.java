@@ -74,6 +74,9 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.CismetThreadPool;
@@ -92,7 +95,8 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  * @version  $Revision$, $Date$
  */
 public class VermessungRissAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -127,6 +131,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
     private PrintingWaitDialog printingWaitDialog;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
     private javax.swing.JComboBox cmbType;
@@ -146,9 +152,16 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form NivellementPunktAggregationRenderer.
+     * Creates a new VermessungRissAggregationRenderer object.
      */
     public VermessungRissAggregationRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         scpRisse.getViewport().setOpaque(false);
@@ -158,8 +171,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -595,7 +606,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 jobname,
                                 (VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type))
                                     ? "vermriss" : "ergdok",
-                                ".pdf");
+                                ".pdf",
+                                getConnectionContext());
 
                         final Collection<Download> downloads = new ArrayList<Download>();
                         downloads.add(serverActionDownload);
@@ -733,8 +745,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
             tableSorter.setSortKeys(sortKeys);
 
-            final boolean billingAllowed = BillingPopup.isBillingAllowed("doklapdf")
-                        || BillingPopup.isBillingAllowed("vrpdf");
+            final boolean billingAllowed = BillingPopup.isBillingAllowed("doklapdf", getConnectionContext())
+                        || BillingPopup.isBillingAllowed("vrpdf", getConnectionContext());
 
             final boolean enabled = billingAllowed
                         && ((allowErgaenzendeDokumenteReport && allowVermessungsrisseReport)
@@ -1002,6 +1014,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

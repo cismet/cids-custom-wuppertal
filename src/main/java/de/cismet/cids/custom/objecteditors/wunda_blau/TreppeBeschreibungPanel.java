@@ -72,6 +72,11 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.SemiRoundedPanel;
 
 /**
@@ -80,26 +85,34 @@ import de.cismet.tools.gui.SemiRoundedPanel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
+public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsBeanStore,
+    Disposable,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TreppeBeschreibungPanel.class);
     private static final TreppeEditor.IntegerToLongConverter CONVERTER_INT = new TreppeEditor.IntegerToLongConverter();
-    private static final MetaClass MC__GEOM = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "GEOM");
-    private static final MetaClass MC__PRUEFUNGSART = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_PRUEFUNGSART");
-    private static final MetaClass MC__BEURTEILUNG = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_BEURTEILUNG");
-    private static final MetaClass MC__EINSATZ = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_EINSATZ");
+
+    private static final MetaClass MC__GEOM;
+    private static final MetaClass MC__PRUEFUNGSART;
+    private static final MetaClass MC__BEURTEILUNG;
+    private static final MetaClass MC__EINSATZ;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                Category.STATIC,
+                TreppeBeschreibungPanel.class.getSimpleName());
+        MC__GEOM = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "GEOM", connectionContext);
+        MC__PRUEFUNGSART = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_PRUEFUNGSART", connectionContext);
+        MC__BEURTEILUNG = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_BEURTEILUNG", connectionContext);
+        MC__EINSATZ = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "TREPPE_EINSATZ", connectionContext);
+    }
 
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
+    private final ConnectionContext connectionContext;
 
     private final boolean editable;
 
@@ -166,18 +179,22 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
     /**
      * Creates a new TreppeLaufPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeBeschreibungPanel() {
-        this(true);
+    public TreppeBeschreibungPanel(final ConnectionContext connectionContext) {
+        this(true, connectionContext);
     }
 
     /**
      * Creates new form TreppePodestPanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeBeschreibungPanel(final boolean editable) {
+    public TreppeBeschreibungPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
+        this.connectionContext = connectionContext;
         initComponents();
 
         if (!editable) {
@@ -319,8 +336,14 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         defaultBindableDateChooser6 = new DefaultBindableDateChooser();
         defaultBindableDateChooser4 = new DefaultBindableDateChooser();
         defaultBindableDateChooser5 = new DefaultBindableDateChooser();
-        defaultBindableReferenceCombo3 = new DefaultBindableReferenceCombo(MC__PRUEFUNGSART, true, false);
-        defaultBindableReferenceCombo2 = new DefaultBindableReferenceCombo(MC__PRUEFUNGSART, true, false);
+        defaultBindableReferenceCombo3 = new DefaultBindableReferenceCombo(
+                MC__PRUEFUNGSART,
+                true,
+                false);
+        defaultBindableReferenceCombo2 = new DefaultBindableReferenceCombo(
+                MC__PRUEFUNGSART,
+                true,
+                false);
         final JLabel jLabel49 = new JLabel();
         final JLabel jLabel48 = new JLabel();
         final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
@@ -329,10 +352,22 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         final JPanel jPanel7 = new JPanel();
         final JLabel jLabel52 = new JLabel();
         final JLabel jLabel53 = new JLabel();
-        defaultBindableReferenceCombo7 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
-        defaultBindableReferenceCombo8 = new DefaultBindableReferenceCombo(MC__EINSATZ, true, false);
-        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
-        defaultBindableReferenceCombo6 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
+        defaultBindableReferenceCombo7 = new DefaultBindableReferenceCombo(
+                MC__BEURTEILUNG,
+                true,
+                false);
+        defaultBindableReferenceCombo8 = new DefaultBindableReferenceCombo(
+                MC__EINSATZ,
+                true,
+                false);
+        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(
+                MC__BEURTEILUNG,
+                true,
+                false);
+        defaultBindableReferenceCombo6 = new DefaultBindableReferenceCombo(
+                MC__BEURTEILUNG,
+                true,
+                false);
         final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         final JPanel jPanel30 = new JPanel();
 
@@ -1793,12 +1828,16 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
                         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                     .customServerSearch(new CustomStrassenSearchStatement(
                                             strassenschluessel.toString(),
-                                            true));
+                                            true),
+                                        getConnectionContext());
                         if ((mons != null) && !mons.isEmpty()) {
                             final MetaObjectNode mon = mons.toArray(new MetaObjectNode[0])[0];
 
                             final MetaObject mo = SessionManager.getProxy()
-                                        .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                        .getMetaObject(mon.getObjectId(),
+                                            mon.getClassId(),
+                                            mon.getDomain(),
+                                            getConnectionContext());
                             final CidsBean strasseBean = mo.getBean();
                             return strasseBean;
                         } else {
@@ -1858,5 +1897,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
             cidsBean.removePropertyChangeListener(propChangeListener);
             cidsBean = null;
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

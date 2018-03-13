@@ -50,6 +50,9 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
@@ -58,7 +61,8 @@ import de.cismet.tools.collections.TypeSafeCollections;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements DisposableCidsBeanStore {
+public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -68,6 +72,9 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
+
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblBauweise;
     private javax.swing.JLabel lblDescBauweise;
@@ -89,9 +96,12 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alkis_gebaeudeRendererPanel.
+     * Creates a new AlkisGebaeudeRendererPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public AlkisGebaeudeRendererPanel() {
+    public AlkisGebaeudeRendererPanel(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
@@ -377,7 +387,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
                     search.setRepresentationFields(new String[] { "id", "strasse", "nummer" });
                     search.setGebaudeId(gebaeudeId);
                     final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                                .customServerSearch(search);
+                                .customServerSearch(search, getConnectionContext());
                     for (final LightweightMetaObject lwmo : lwmos) {
                         lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -412,7 +422,10 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
                 final Object jumpID = selBean.getProperty("fullobjectid");
                 if (jumpID instanceof Integer) {
                     final String tabname = "alkis_landparcel";
-                    final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabname);
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                            CidsBeanSupport.DOMAIN_NAME,
+                            tabname,
+                            getConnectionContext());
                     if (mc != null) {
                         ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer)jumpID, "");
                     } else {
@@ -429,5 +442,10 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
     @Override
     public void dispose() {
         bindingGroup.unbind();
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

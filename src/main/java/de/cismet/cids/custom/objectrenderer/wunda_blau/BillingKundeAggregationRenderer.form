@@ -337,7 +337,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRechnungsanlageActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BillingRestrictedReportJButton()"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BillingRestrictedReportJButton(getClientConnectionContext())"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnBuchungsbeleg">
@@ -362,7 +362,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGeschaeftsstatistikActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BillingRestrictedReportJButton()"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BillingRestrictedReportJButton(getClientConnectionContext())"/>
               </AuxValues>
             </Component>
           </SubComponents>

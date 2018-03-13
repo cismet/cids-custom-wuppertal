@@ -16,10 +16,10 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_demo;
 
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.dynamics.DisposableCidsBeanStore;
-
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -27,7 +27,11 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class AapersonEditor_ extends DefaultCustomObjectEditor {
+public class AapersonEditor_ extends DefaultCustomObjectEditor implements ConnectionContextStore {
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo2;
@@ -45,7 +49,6 @@ public class AapersonEditor_ extends DefaultCustomObjectEditor {
      * Creates new form AapersonEditor_.
      */
     public AapersonEditor_() {
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -151,4 +154,15 @@ public class AapersonEditor_ extends DefaultCustomObjectEditor {
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 }

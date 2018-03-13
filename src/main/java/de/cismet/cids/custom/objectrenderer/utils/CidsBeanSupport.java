@@ -25,6 +25,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -56,14 +58,16 @@ public final class CidsBeanSupport {
      *
      * @param   tableName          DOCUMENT ME!
      * @param   initialProperties  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     public static CidsBean createNewCidsBeanFromTableName(final String tableName,
-            final Map<String, Object> initialProperties) throws Exception {
-        final CidsBean newBean = createNewCidsBeanFromTableName(tableName);
+            final Map<String, Object> initialProperties,
+            final ConnectionContext connectionContext) throws Exception {
+        final CidsBean newBean = createNewCidsBeanFromTableName(tableName, connectionContext);
         for (final Entry<String, Object> property : initialProperties.entrySet()) {
             newBean.setProperty(property.getKey(), property.getValue());
         }
@@ -73,17 +77,19 @@ public final class CidsBeanSupport {
     /**
      * DOCUMENT ME!
      *
-     * @param   tableName  DOCUMENT ME!
+     * @param   tableName          DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static CidsBean createNewCidsBeanFromTableName(final String tableName) throws Exception {
+    public static CidsBean createNewCidsBeanFromTableName(final String tableName,
+            final ConnectionContext connectionContext) throws Exception {
         if (tableName != null) {
-            final MetaClass metaClass = ClassCacheMultiple.getMetaClass(DOMAIN_NAME, tableName);
+            final MetaClass metaClass = ClassCacheMultiple.getMetaClass(DOMAIN_NAME, tableName, connectionContext);
             if (metaClass != null) {
-                return metaClass.getEmptyInstance().getBean();
+                return metaClass.getEmptyInstance(connectionContext).getBean();
             }
         }
         throw new Exception("Could not find MetaClass for table " + tableName);

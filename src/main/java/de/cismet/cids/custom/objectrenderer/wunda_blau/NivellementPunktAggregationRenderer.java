@@ -60,6 +60,9 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -75,7 +78,8 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @version  $Revision$, $Date$
  */
 public class NivellementPunktAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -110,6 +114,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
@@ -128,21 +133,26 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form NivellementPunktAggregationRenderer.
+     * Creates a new NivellementPunktAggregationRenderer object.
      */
     public NivellementPunktAggregationRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         scpPunkte.getViewport().setOpaque(false);
         tblPunkte.getSelectionModel().addListSelectionListener(new TableSelectionListener());
         tableComparator = new TableModelIndexConvertingToViewIndexComparator((tblPunkte));
 
-        final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf", getConnectionContext());
 
         btnGenerateReport.setEnabled(billingAllowed);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -353,7 +363,11 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                             "no.yet",
                             (Geometry)null,
                             new ProductGroupAmount("ea", selectedNivellementPunkte.size()))) {
-                downloadReport(selectedNivellementPunkte, txtJobnumber.getText(), txtProjectname.getText());
+                downloadReport(
+                    selectedNivellementPunkte,
+                    txtJobnumber.getText(),
+                    txtProjectname.getText(),
+                    getConnectionContext());
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -364,13 +378,15 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     /**
      * DOCUMENT ME!
      *
-     * @param  nivPoints    DOCUMENT ME!
-     * @param  jobnumber    DOCUMENT ME!
-     * @param  projectname  DOCUMENT ME!
+     * @param  nivPoints          DOCUMENT ME!
+     * @param  jobnumber          DOCUMENT ME!
+     * @param  projectname        DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public static void downloadReport(final Collection<CidsBean> nivPoints,
             final String jobnumber,
-            final String projectname) {
+            final String projectname,
+            final ConnectionContext connectionContext) {
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         ComponentRegistry.getRegistry().getDescriptionPane())) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -399,7 +415,8 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                                 ? ((nivPoints.size() == 1) ? "Nivellement-Punkt" : "Nivellement-Punkte") : projectname,
                             jobname,
                             "nivp",
-                            ".pdf"));
+                            ".pdf",
+                            connectionContext));
         }
     }
 
@@ -611,6 +628,11 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         }
 
         return new Object[0];
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

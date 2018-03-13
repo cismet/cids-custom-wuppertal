@@ -38,6 +38,9 @@ import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.JPopupMenuButton;
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -48,15 +51,16 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class DigitalDataExportToolbarComponentProvider implements ToolbarComponentsProvider {
+public class DigitalDataExportToolbarComponentProvider implements ToolbarComponentsProvider, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger log = Logger.getLogger(DigitalDataExportToolbarComponentProvider.class);
+    private static final Logger LOG = Logger.getLogger(DigitalDataExportToolbarComponentProvider.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    private final List<ToolbarComponentDescription> toolbarComponents;
+    private List<ToolbarComponentDescription> toolbarComponents;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -64,7 +68,15 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
      * Creates a new DigitalDataExportToolbarComponentProvider object.
      */
     public DigitalDataExportToolbarComponentProvider() {
-        final List<ToolbarComponentDescription> preparationList = new LinkedList<ToolbarComponentDescription>();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
+        final List<ToolbarComponentDescription> preparationList = new LinkedList<>();
         final ToolbarComponentDescription description = new ToolbarComponentDescription(
                 "tlbMain",
                 new DataExportButton(),
@@ -74,8 +86,6 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
         this.toolbarComponents = Collections.unmodifiableList(preparationList);
     }
 
-    //~ Methods ----------------------------------------------------------------
-
     @Override
     public String getPluginName() {
         return "BUTLER";
@@ -83,7 +93,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
 
     @Override
     public Collection<ToolbarComponentDescription> getToolbarComponents() {
-        if (validateUserHasButler1Access() || validateUserHasNasAccess()) {
+        if (validateUserHasButler1Access(getConnectionContext()) || validateUserHasNasAccess(getConnectionContext())) {
             return toolbarComponents;
         } else {
             return Collections.emptyList();
@@ -93,15 +103,19 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionCon1text  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasButler1Access() {
+    public static boolean validateUserHasButler1Access(final ConnectionContext connectionCon1text) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://butler1Query")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://butler1Query",
+                                connectionCon1text)
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Butler!", ex);
+            LOG.error("Could not validate action tag for Butler!", ex);
         }
         return false;
     }
@@ -111,17 +125,26 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
      * .getConfigAttr(SessionManager.getSession().getUser(), "csa://butler1Query") != null; } catch (ConnectionException
      * ex) { log.error("Could not validate action tag for Butler!", ex); } return false; }.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static boolean validateUserHasNasAccess() {
+    public static boolean validateUserHasNasAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://nasDataQuery",
+                                connectionContext)
                         != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Butler!", ex);
+            LOG.error("Could not validate action tag for Butler!", ex);
         }
         return false;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -191,10 +214,10 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
          * Creates a new DataExportPopupMenu object.
          */
         public DataExportPopupMenu() {
-            if (validateUserHasNasAccess()) {
+            if (validateUserHasNasAccess(getConnectionContext())) {
                 this.add(createNASMenuItem());
             }
-            if (validateUserHasButler1Access()) {
+            if (validateUserHasButler1Access(getConnectionContext())) {
                 this.add(createButler2MenuItem());
                 this.add(createButler1MenuItem());
             }
@@ -217,7 +240,8 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
                             new NasDialog(
                                 StaticSwingTools.getParentFrame(
                                     CismapBroker.getInstance().getMappingComponent()),
-                                true));
+                                true,
+                                getConnectionContext()));
                     }
                 };
             return new JMenuItem(action);
@@ -238,7 +262,8 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
                             new Butler1Dialog(
                                 StaticSwingTools.getParentFrame(
                                     CismapBroker.getInstance().getMappingComponent()),
-                                true));
+                                true,
+                                getConnectionContext()));
                     }
                 };
             return new JMenuItem(action);
@@ -259,7 +284,8 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
                             new Butler2Dialog(
                                 StaticSwingTools.getParentFrame(
                                     CismapBroker.getInstance().getMappingComponent()),
-                                true));
+                                true,
+                                getConnectionContext()));
                     }
                 };
             return new JMenuItem(action);

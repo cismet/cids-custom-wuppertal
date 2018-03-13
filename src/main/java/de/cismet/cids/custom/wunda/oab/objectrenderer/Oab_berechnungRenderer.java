@@ -21,18 +21,23 @@ import de.cismet.cids.custom.wunda.oab.mapvis.Oab_BerechnungMapVisualisationProv
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
  * @author   martin.scholl@cismet.de
  * @version  1.0
  */
-public class Oab_berechnungRenderer extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent {
+public class Oab_berechnungRenderer extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
     // only to hold strong reference to listeners
     private EventListenerList refHolderList;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGotoCondMeas;
@@ -56,14 +61,19 @@ public class Oab_berechnungRenderer extends AbstractCidsBeanRenderer implements 
      * Creates new form OABProjectEditor.
      */
     public Oab_berechnungRenderer() {
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+    }
+
+    @Override
     protected void init() {
-        cidsBean = OabUtilities.getBean(cidsBean, "zustand_massnahme"); // NOI18N
+        cidsBean = OabUtilities.getBean(cidsBean, "zustand_massnahme", getConnectionContext()); // NOI18N
 
         final Runnable r = new Runnable() {
 
@@ -260,4 +270,9 @@ public class Oab_berechnungRenderer extends AbstractCidsBeanRenderer implements 
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 }

@@ -3010,7 +3010,7 @@
         <BindingProperty name="cidsBean" source="Form" sourcePath="${cidsBean}" target="webDavPicturePanel1" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
       </BindingProperties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(editable, &quot;url_mauern&quot;, &quot;bilder&quot;, &quot;mauer_bilder&quot;, &quot;mauer_nummer&quot;, &quot;georeferenz.geo_field&quot;)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(editable, &quot;url_mauern&quot;, &quot;bilder&quot;, &quot;mauer_bilder&quot;, &quot;mauer_nummer&quot;, &quot;georeferenz.geo_field&quot;, getClientConnectionContext())"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">

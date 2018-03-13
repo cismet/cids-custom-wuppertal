@@ -35,13 +35,18 @@ import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler2ProductPanel extends javax.swing.JPanel implements ActionListener, ListSelectionListener {
+public class Butler2ProductPanel extends javax.swing.JPanel implements ActionListener,
+    ListSelectionListener,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -53,6 +58,8 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ActionLis
     ArrayList<ButlerProduct> products;
     ArrayList<ButlerResolution> resolutions;
     private Geometry geom;
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
     private javax.swing.JScrollPane jScrollPane1;
@@ -73,11 +80,14 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ActionLis
 
     /**
      * Creates new form Butler2ProductPanel.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Butler2ProductPanel() {
+    public Butler2ProductPanel(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         loadPrductDescriptions();
         initComponents();
-        pnlFeePreview = new NasFeePreviewPanel();
+        pnlFeePreview = new NasFeePreviewPanel(getConnectionContext());
         lstProdukt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         rbShp.addActionListener(this);
         rbTif.addActionListener(this);
@@ -112,7 +122,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ActionLis
         lblFiller = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         pnlFee = new javax.swing.JPanel();
-        pnlFeePreview = new de.cismet.cids.custom.nas.NasFeePreviewPanel();
+        pnlFeePreview = new de.cismet.cids.custom.nas.NasFeePreviewPanel(getConnectionContext());
 
         setPreferredSize(new java.awt.Dimension(400, 425));
         setLayout(new java.awt.GridBagLayout());
@@ -350,7 +360,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ActionLis
      */
     private void calculateFee() {
         pnlFee.removeAll();
-        pnlFeePreview = new NasFeePreviewPanel();
+        pnlFeePreview = new NasFeePreviewPanel(getConnectionContext());
         pnlFeePreview.setDiscount(RASTER_DISCOUNT);
         pnlFeePreview.setGeom(geom);
         pnlFeePreview.refresh();
@@ -376,5 +386,10 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ActionLis
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         calculateFee();
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -70,6 +70,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -80,7 +83,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
  */
 public class BillingKundeAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -101,6 +105,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private Collection<Object[]> tableData;
     private List<CidsBean> filteredBillingBeans;
     private Date[] fromDate_tillDate;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnBuchungsbeleg;
@@ -145,16 +151,26 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form BillingKundeAggregationRenderer.
+     * Creates a new BillingKundeAggregationRenderer object.
      */
     public BillingKundeAggregationRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         setFilterActionInExternalPanels();
         final AggregatedBillingTableModel tableModel = new AggregatedBillingTableModel(new Object[0][],
                 AGR_COMLUMN_NAMES);
         tblCustomers.setModel(tableModel);
 
-        if (!ObjectRendererUtils.checkActionTag(BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT)) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT,
+                        getConnectionContext())) {
             btnRechnungsanlage.setEnabled(false);
             cboHideFreeDownloadsRechnungsanlage.setEnabled(false);
 
@@ -163,8 +179,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             cboAbgerechnet.setVisible(false);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -200,9 +214,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         cboHideFreeDownloadsBuchungsbeleg = new javax.swing.JCheckBox();
         cboHideFreeDownloadsRechnungsanlage = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
-        btnRechnungsanlage = new BillingRestrictedReportJButton();
+        btnRechnungsanlage = new BillingRestrictedReportJButton(getConnectionContext());
         btnBuchungsbeleg = new javax.swing.JButton();
-        btnGeschaeftsstatistik = new BillingRestrictedReportJButton();
+        btnGeschaeftsstatistik = new BillingRestrictedReportJButton(getConnectionContext());
         jPanel7 = new javax.swing.JPanel();
         lblFilterResult = new javax.swing.JLabel();
         pnlTable = new javax.swing.JPanel();
@@ -710,7 +724,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                         public void billingDone(final boolean isDone) {
                             filterBuchungen();
                         }
-                    }).print();
+                    },
+                    getConnectionContext()).print();
             }
         }
     } //GEN-LAST:event_btnBuchungsbelegActionPerformed
@@ -772,7 +787,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                         true,
                         this,
                         retrieveShowBillingWithoutCostInReport(evt),
-                        null);
+                        null,
+                        getConnectionContext());
 
                 // refresh the table after the report was successfully created and the billings were marked
                 printBillingReportForCustomer.setDownloadFinishedObserver(printBillingReportForCustomer.new DownloadFinishedObserver() {
@@ -806,7 +822,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                     "BillingKundeAggregationRenderer.btnGeschaeftsstatistikActionPerformed().dialog.title"),
                 JOptionPane.ERROR_MESSAGE);
         } else {
-            new PrintStatisticsReport(fromDate_tillDate, billings).print();
+            new PrintStatisticsReport(fromDate_tillDate, billings, getConnectionContext()).print();
         }
     }                                                                                          //GEN-LAST:event_btnGeschaeftsstatistikActionPerformed
 
@@ -978,7 +994,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 protected List<CidsBean> doInBackground() throws Exception {
                     final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),
-                                    cidsBillingSearchStatement);
+                                    cidsBillingSearchStatement,
+                                    getConnectionContext());
                     publish(mons.size());
 
                     final List<CidsBean> beans;
@@ -991,7 +1008,10 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                             if (mon != null) {
                                 publish(beans.size() + 1);
                                 final MetaObject mo = SessionManager.getProxy()
-                                            .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                            .getMetaObject(mon.getObjectId(),
+                                                mon.getClassId(),
+                                                mon.getDomain(),
+                                                getConnectionContext());
                                 final CidsBean bean = (mo != null) ? mo.getBean() : null;
                                 beans.add(bean);
                             }
@@ -1326,6 +1346,11 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

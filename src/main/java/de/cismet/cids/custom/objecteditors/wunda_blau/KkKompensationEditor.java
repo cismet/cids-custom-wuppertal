@@ -31,6 +31,8 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -51,13 +53,6 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
 
     /**
      * Creates a new KkKompensationEditor object.
-     */
-    public KkKompensationEditor() {
-        super();
-    }
-
-    /**
-     * Creates a new KkKompensationEditor object.
      *
      * @param  editable  DOCUMENT ME!
      */
@@ -74,7 +69,9 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
             try {
                 final AbstractCidsServerSearch search = new KkVerfahrenSearch(cidsBean.getMetaObject().getId());
                 final List res = (List)SessionManager.getProxy()
-                            .customServerSearch(SessionManager.getSession().getUser(), search);
+                            .customServerSearch(SessionManager.getSession().getUser(),
+                                    search,
+                                    getConnectionContext());
 
                 if ((res != null) && (res.size() == 1)) {
                     setVerfahrenBean(((MetaObject)res.get(0)).getBean());
@@ -123,7 +120,7 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
             if (super.prepareForSave()) {
                 final CidsBean verfahrenBean = super.getCidsBean();
                 if (verfahrenBean != null) {
-                    super.setCidsBean(verfahrenBean.persist());
+                    super.setCidsBean(verfahrenBean.persist(getConnectionContext()));
                     return true;
                 }
             }

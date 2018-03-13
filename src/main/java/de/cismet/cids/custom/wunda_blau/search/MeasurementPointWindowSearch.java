@@ -53,6 +53,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
@@ -63,7 +66,8 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 public class MeasurementPointWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -83,6 +87,9 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     private MappingComponent mappingComponent;
     private SearchControlPanel pnlSearchCancel;
     private GeoSearchButton btnGeoSearch;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrFilterGST;
     private javax.swing.JButton btnAllePunkte;
@@ -125,10 +132,20 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      * Creates new form AlkisPointWindowSearch.
      */
     public MeasurementPointWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             mappingComponent = CismapBroker.getInstance().getMappingComponent();
             geoSearchEnabled = mappingComponent != null;
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_POINT");
+            metaClass = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "ALKIS_POINT",
+                    getConnectionContext());
             final byte[] iconDataFromMetaclass = metaClass.getIconData();
 
             if (iconDataFromMetaclass.length > 0) {
@@ -147,7 +164,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
 
             initComponents();
 
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -190,7 +207,10 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -904,7 +924,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
     }
@@ -1021,7 +1041,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      */
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
 
     /**

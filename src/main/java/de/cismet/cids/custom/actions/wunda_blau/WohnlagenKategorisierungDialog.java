@@ -57,13 +57,16 @@ import de.cismet.cismap.cidslayer.CidsLayerFeature;
 
 import de.cismet.cismap.commons.featureservice.AbstractFeatureService;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
+public class WohnlagenKategorisierungDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -73,9 +76,12 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
     private static final MetaClass MC_WOHNLAGE_KATEGORIE;
 
     static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
+                WohnlagenKategorisierungDialog.class.getSimpleName());
         MetaClass mcWohnlage = null;
         try {
-            mcWohnlage = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE");
+            mcWohnlage = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE", connectionContext);
         } catch (final Exception ex) {
             LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
         }
@@ -83,7 +89,10 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
 
         MetaClass mcWohnlageKategorie = null;
         try {
-            mcWohnlageKategorie = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE_KATEGORIE");
+            mcWohnlageKategorie = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "WOHNLAGE_KATEGORIE",
+                    connectionContext);
         } catch (final Exception ex) {
             LOG.error("Could get MetaClass (WOHNLAGE_KATEGORIE)!", ex);
         }
@@ -92,9 +101,11 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Map<ButtonModel, CidsBean> buttonToBeanMap = new HashMap<ButtonModel, CidsBean>();
+    private final Map<ButtonModel, CidsBean> buttonToBeanMap = new HashMap<>();
 
     private final Collection<CidsLayerFeature> cidsLayerFeatures;
+
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
@@ -131,12 +142,15 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
      * @param  parent             DOCUMENT ME!
      * @param  cidsLayerFeatures  DOCUMENT ME!
      * @param  kategorieToSelect  DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public WohnlagenKategorisierungDialog(final java.awt.Frame parent,
             final Collection<CidsLayerFeature> cidsLayerFeatures,
-            final CidsBean kategorieToSelect) {
+            final CidsBean kategorieToSelect,
+            final ConnectionContext connectionContext) {
         super(parent, true);
         this.cidsLayerFeatures = cidsLayerFeatures;
+        this.connectionContext = connectionContext;
 
         initComponents();
 
@@ -145,7 +159,8 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
             final String query = "SELECT " + MC_WOHNLAGE_KATEGORIE.getID() + "," + MC_WOHNLAGE_KATEGORIE.getPrimaryKey()
                         + " FROM " + MC_WOHNLAGE_KATEGORIE.getTableName()
                         + " WHERE schluessel != 'keine' ORDER BY reihenfolge";
-            metaObjects = MetaObjectCache.getInstance().getMetaObjectsByQuery(query, MC_WOHNLAGE_KATEGORIE.getDomain());
+            metaObjects = MetaObjectCache.getInstance()
+                        .getMetaObjectsByQuery(query, MC_WOHNLAGE_KATEGORIE.getDomain(), getConnectionContext());
         } catch (final CacheException ex) {
             metaObjects = new MetaObject[0];
         }
@@ -638,7 +653,8 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
                                 .executeTask(
                                     WohnlagenKategorisierungServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    null,
+                                    (Object)null,
+                                    getConnectionContext(),
                                     new ServerActionParameter<MetaObjectNode>(
                                         WohnlagenKategorisierungServerAction.ParameterType.KATEGORIE.toString(),
                                         kategorieNode),
@@ -717,5 +733,10 @@ public class WohnlagenKategorisierungDialog extends javax.swing.JDialog {
      */
     private void inputChanged() {
         btnOk.setEnabled((buttonGroup1.getSelection() != null) || !jTextArea1.getText().trim().isEmpty());
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

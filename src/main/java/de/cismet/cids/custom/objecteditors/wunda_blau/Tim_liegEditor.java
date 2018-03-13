@@ -36,6 +36,8 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -3145,7 +3147,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
     @Override
     public BeanInitializer getBeanInitializer() {
         log.fatal("getBeanInitializer");
-        return new CompleteBeanInitializer(cidsBean);
+        return new CompleteBeanInitializer(cidsBean, getConnectionContext());
     }
 
     @Override
@@ -3185,10 +3187,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
         /**
          * Creates a new CompleteBeanInitializer object.
          *
-         * @param  template  DOCUMENT ME!
+         * @param  template           DOCUMENT ME!
+         * @param  connectionContext  DOCUMENT ME!
          */
-        public CompleteBeanInitializer(final CidsBean template) {
-            super(template);
+        public CompleteBeanInitializer(final CidsBean template, final ConnectionContext connectionContext) {
+            super(template, connectionContext);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -3198,10 +3201,12 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
                 final String propertyName,
                 final CidsBean complexValueToProcess) throws Exception {
             if (complexValueToProcess != null) {
-                final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(complexValueToProcess);
+                final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(
+                        complexValueToProcess,
+                        getConnectionContext());
                 final CidsBean newBean = complexValueToProcess.getMetaObject()
                             .getMetaClass()
-                            .getEmptyInstance()
+                            .getEmptyInstance(getConnectionContext())
                             .getBean();
                 subInitializer.initializeBean(newBean);
                 beanToInit.setProperty(propertyName, newBean);
