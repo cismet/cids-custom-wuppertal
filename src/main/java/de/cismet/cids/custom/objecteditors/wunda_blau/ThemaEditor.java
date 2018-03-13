@@ -39,6 +39,9 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.DoNotWrap;
 import de.cismet.tools.gui.PureCoolPanel;
 import de.cismet.tools.gui.RoundedPanel;
@@ -52,7 +55,7 @@ import de.cismet.tools.gui.RoundedPanel;
  * @version  $Revision$, $Date$
  */
 @AggregationRenderer
-public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableCidsBeanStore {
+public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableCidsBeanStore, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -76,6 +79,8 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableC
     private CidsBean cidsBean;
     private JXLayer<JComponent> layer1;
     private JXLayer<JComponent> layer2;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnForwrd;
@@ -205,7 +210,7 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableC
      */
     public ThemaEditor(final boolean editable) {
         // init graphics
-        inputFields = new ArrayList<JComponent>();
+        inputFields = new ArrayList<>();
         cardLayout = new CardLayout();
         initLockUIs();
         initComponents();
@@ -243,6 +248,47 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableC
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        final Runnable layerLockRunnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    lockLayer1.setLocked(!editable);
+                    lockLayer2.setLocked(!editable);
+//
+//                jScrollPane2.getViewport().setVisible(editable);
+//                jScrollPane3.getViewport().setVisible(editable);
+
+//                scpTxtBemerkung.getViewport().setOpaque(editable);
+//                scpTxtInhalt.getViewport().setOpaque(editable);
+
+                    for (final JComponent inputField : inputFields) {
+                        if ((inputField instanceof JTextField) || (inputField instanceof JTextArea)) {
+                            inputField.setBorder(null);
+                            inputField.setOpaque(editable);
+                            if (!editable) {
+                                inputField.setBackground(COLOR_TXT_BACK);
+                            }
+                        } else if (inputField instanceof DefaultBindableReferenceCombo) {
+                            ((DefaultBindableReferenceCombo)inputField).setFakeModel(!editable);
+                        }
+                    }
+                }
+            };
+        if (!EventQueue.isDispatchThread()) {
+            EventQueue.invokeLater(layerLockRunnable);
+        } else {
+            layerLockRunnable.run();
+        }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
     /**
      * DOCUMENT ME!
      *
@@ -277,7 +323,8 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableC
                     try {
                         DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                             bindingGroup,
-                            cidsBean);
+                            cidsBean,
+                            getConnectionContext());
 
                         bindingGroup.bind();
                     } catch (Exception e) {
@@ -358,37 +405,6 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableC
      */
     public void setEditable(final boolean editable) {
         this.editable = editable;
-        final Runnable layerLockRunnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    lockLayer1.setLocked(!editable);
-                    lockLayer2.setLocked(!editable);
-//
-//                jScrollPane2.getViewport().setVisible(editable);
-//                jScrollPane3.getViewport().setVisible(editable);
-
-//                scpTxtBemerkung.getViewport().setOpaque(editable);
-//                scpTxtInhalt.getViewport().setOpaque(editable);
-
-                    for (final JComponent inputField : inputFields) {
-                        if ((inputField instanceof JTextField) || (inputField instanceof JTextArea)) {
-                            inputField.setBorder(null);
-                            inputField.setOpaque(editable);
-                            if (!editable) {
-                                inputField.setBackground(COLOR_TXT_BACK);
-                            }
-                        } else if (inputField instanceof DefaultBindableReferenceCombo) {
-                            ((DefaultBindableReferenceCombo)inputField).setFakeModel(!editable);
-                        }
-                    }
-                }
-            };
-        if (!EventQueue.isDispatchThread()) {
-            EventQueue.invokeLater(layerLockRunnable);
-        } else {
-            layerLockRunnable.run();
-        }
     }
 
     /**

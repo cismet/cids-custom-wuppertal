@@ -25,6 +25,9 @@ import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.configuration.StartupHook;
 
 /**
@@ -34,13 +37,22 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class TotdStartUpHook implements StartupHook {
+public class TotdStartUpHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TotdStartUpHook.class);
 
+    //~ Instance fields --------------------------------------------------------
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     @Override
     public void applicationStarted() {
@@ -49,7 +61,8 @@ public class TotdStartUpHook implements StartupHook {
                 if (SessionManager.getConnection().hasConfigAttr(
                                 SessionManager.getSession().getUser(),
                                 "csm://"
-                                + MotdWundaStartupHook.MOTD_MESSAGE_TOTD)) {
+                                + MotdWundaStartupHook.MOTD_MESSAGE_TOTD,
+                                getConnectionContext())) {
                     CidsServerMessageNotifier.getInstance()
                             .subscribe(new CidsServerMessageNotifierListener() {
 
@@ -71,5 +84,10 @@ public class TotdStartUpHook implements StartupHook {
                     ex);
             }
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

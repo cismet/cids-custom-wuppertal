@@ -45,6 +45,9 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
@@ -55,7 +58,7 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class ButlerDownload extends HttpDownload {
+public class ButlerDownload extends HttpDownload implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -97,6 +100,8 @@ public class ButlerDownload extends HttpDownload {
     private String boxSize;
     private boolean isEtrsRahmenkarte = false;
 
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -109,6 +114,7 @@ public class ButlerDownload extends HttpDownload {
      * @param  boxSize            DOCUMENT ME!
      * @param  middleX            DOCUMENT ME!
      * @param  middleY            DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public ButlerDownload(final String directory,
             final String orderId,
@@ -116,7 +122,8 @@ public class ButlerDownload extends HttpDownload {
             final boolean isEtrsRahmenkarte,
             final String boxSize,
             final double middleX,
-            final double middleY) {
+            final double middleY,
+            final ConnectionContext connectionContext) {
         isButler2 = true;
         this.directory = directory;
         this.orderId = orderId;
@@ -129,6 +136,7 @@ public class ButlerDownload extends HttpDownload {
         status = State.WAITING;
         this.boxSize = boxSize;
         this.title = orderId;
+        this.connectionContext = connectionContext;
         final ButlerFormat format = product.getFormat();
         determineDestinationFile(orderId, "." + format.getKey());
     }
@@ -136,13 +144,14 @@ public class ButlerDownload extends HttpDownload {
     /**
      * Creates a new ButlerDownload object.
      *
-     * @param  directory  DOCUMENT ME!
-     * @param  orderId    DOCUMENT ME!
-     * @param  product    DOCUMENT ME!
-     * @param  minX       DOCUMENT ME!
-     * @param  minY       DOCUMENT ME!
-     * @param  maxX       DOCUMENT ME!
-     * @param  maxY       DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  orderId            DOCUMENT ME!
+     * @param  product            DOCUMENT ME!
+     * @param  minX               DOCUMENT ME!
+     * @param  minY               DOCUMENT ME!
+     * @param  maxX               DOCUMENT ME!
+     * @param  maxY               DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public ButlerDownload(final String directory,
             final String orderId,
@@ -150,7 +159,8 @@ public class ButlerDownload extends HttpDownload {
             final double minX,
             final double minY,
             final double maxX,
-            final double maxY) {
+            final double maxY,
+            final ConnectionContext connectionContext) {
         this.directory = directory;
         this.orderId = orderId;
         this.product = product;
@@ -160,6 +170,7 @@ public class ButlerDownload extends HttpDownload {
         this.maxY = maxY;
         status = State.WAITING;
         this.title = orderId;
+        this.connectionContext = connectionContext;
         final ButlerFormat format = product.getFormat();
         if (format.getKey().equals("shp") || format.getKey().equals("geotif")) {
             determineDestinationFile(orderId, ".zip");
@@ -172,17 +183,22 @@ public class ButlerDownload extends HttpDownload {
     /**
      * Creates a new ButlerDownload object.
      *
-     * @param  requestId    DOCUMENT ME!
-     * @param  userOrderId  DOCUMENT ME!
-     * @param  product      DOCUMENT ME!
+     * @param  requestId          DOCUMENT ME!
+     * @param  userOrderId        DOCUMENT ME!
+     * @param  product            DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    ButlerDownload(final String requestId, final String userOrderId, final ButlerProduct product) {
+    ButlerDownload(final String requestId,
+            final String userOrderId,
+            final ButlerProduct product,
+            final ConnectionContext connectionContext) {
         omitSendingRequest = true;
         this.orderId = userOrderId;
         this.requestId = requestId;
         this.product = product;
         status = State.WAITING;
         this.title = orderId;
+        this.connectionContext = connectionContext;
         final ButlerFormat format = product.getFormat();
         if (format.getKey().equals("shp") || format.getKey().equals("geotif")) {
             determineDestinationFile(orderId, ".zip");
@@ -406,7 +422,8 @@ public class ButlerDownload extends HttpDownload {
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    null,
+                                    (Object)null,
+                                    getConnectionContext(),
                                     paramMethod,
                                     paramOrderId,
                                     paramProduct,
@@ -430,7 +447,8 @@ public class ButlerDownload extends HttpDownload {
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    null,
+                                    (Object)null,
+                                    getConnectionContext(),
                                     paramMethod,
                                     paramOrderId,
                                     paramProduct,
@@ -469,15 +487,22 @@ public class ButlerDownload extends HttpDownload {
                         .toString(),
                 ButlerQueryAction.METHOD_TYPE.CANCEL);
         try {
-            SessionManager.getProxy().executeTask(
-                SERVER_ACTION,
-                "WUNDA_BLAU",
-                null,
-                paramOrderId,
-                paramMethod);
+            SessionManager.getProxy()
+                    .executeTask(
+                        SERVER_ACTION,
+                        "WUNDA_BLAU",
+                        (Object)null,
+                        getConnectionContext(),
+                        paramOrderId,
+                        paramMethod);
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

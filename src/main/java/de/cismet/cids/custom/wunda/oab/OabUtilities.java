@@ -58,6 +58,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.EventListenerList;
 import javax.swing.tree.TreePath;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.Crs;
@@ -71,6 +73,8 @@ import de.cismet.cismap.commons.raster.wms.WMSServiceLayer;
 import de.cismet.cismap.commons.wms.capabilities.Layer;
 import de.cismet.cismap.commons.wms.capabilities.WMSCapabilities;
 import de.cismet.cismap.commons.wms.capabilities.WMSCapabilitiesFactory;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -214,14 +218,17 @@ public class OabUtilities {
     /**
      * Re-fetches a cidsbean if the backlink is not set (e.g. if it is part of the collection of the parent).
      *
-     * @param   source            DOCUMENT ME!
-     * @param   backlinkProperty  DOCUMENT ME!
+     * @param   source             DOCUMENT ME!
+     * @param   backlinkProperty   DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  IllegalStateException  DOCUMENT ME!
      */
-    public static CidsBean getBean(final CidsBean source, final String backlinkProperty) {
+    public static CidsBean getBean(final CidsBean source,
+            final String backlinkProperty,
+            final ConnectionContext connectionContext) {
         // backlink not set due to 1:n
         if (source.getProperty(backlinkProperty) == null) {
             try {
@@ -230,7 +237,8 @@ public class OabUtilities {
                             .getMetaObject(SessionManager.getSession().getUser(),
                                 mo.getID(),
                                 mo.getClassID(),
-                                mo.getDomain());
+                                mo.getDomain(),
+                                connectionContext);
                 return copy.getBean();
             } catch (final ConnectionException ex) {
                 throw new IllegalStateException("cannot re-fetch cidsbean", ex); // NOI18N

@@ -11,6 +11,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.NivellementPunktEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *

@@ -22,6 +22,10 @@ import de.cismet.cids.custom.utils.alkis.AlkisConf;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -32,21 +36,24 @@ public final class AlkisConstants {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final AlkisConf COMMONS;
-
-    //
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisConstants.class);
+
+    public static final AlkisConf COMMONS;
     public static final String NEWLINE = "<br>";
     public static final String LINK_SEPARATOR_TOKEN = "::";
 
     static {
         try {
+            final ConnectionContext connectionContext = ConnectionContext.create(
+                    Category.STATIC,
+                    AlkisConstants.class.getSimpleName());
             final Object ret = SessionManager.getSession()
                         .getConnection()
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.ALKIS_CONF.getValue());
+                            WundaBlauServerResources.ALKIS_CONF.getValue(),
+                            connectionContext);
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }

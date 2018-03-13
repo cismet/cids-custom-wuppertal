@@ -71,6 +71,9 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.CismetThreadPool;
 
@@ -88,7 +91,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProvider,
     CidsBeanRenderer,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -98,7 +102,10 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 
     private CidsBean cidsBean;
     private String title;
-    private final MappingComponent map;
+    private MappingComponent map;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel6;
     private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
@@ -125,16 +132,21 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form FlurstueckRenderer.
+     * Creates a new FlurstueckRenderer object.
      */
     public FlurstueckRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
         jXHyperlink1.setVisible(false);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -469,7 +481,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 
                 @Override
                 protected MetaObjectNode doInBackground() throws Exception {
-                    return searchAlkisLandparcel(cidsBean);
+                    return searchAlkisLandparcel(cidsBean, getConnectionContext());
                 }
 
                 @Override
@@ -496,13 +508,15 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     /**
      * DOCUMENT ME!
      *
-     * @param   fsBean  DOCUMENT ME!
+     * @param   fsBean   DOCUMENT ME!
+     * @param   context  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static MetaObjectNode searchAlkisLandparcel(final CidsBean fsBean) throws Exception {
+    public static MetaObjectNode searchAlkisLandparcel(final CidsBean fsBean, final ConnectionContext context)
+            throws Exception {
         final String z = String.valueOf(fsBean.getProperty("fstnr_z"));
         final String n = String.valueOf(fsBean.getProperty("fstnr_n"));
 
@@ -522,7 +536,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 null);
 
         final Collection<Node> nodes = SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), stmnt);
+                    .customServerSearch(SessionManager.getSession().getUser(), stmnt, context);
         return ((nodes != null) && !nodes.isEmpty()) ? (MetaObjectNode)nodes.iterator().next() : null;
     }
 
@@ -678,5 +692,10 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

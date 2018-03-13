@@ -16,6 +16,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.KkKompensationEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *

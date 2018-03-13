@@ -67,6 +67,9 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -83,7 +86,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     EditorSaveListener,
     FooterComponentProvider,
     TitleComponentProvider,
-    BorderProvider {
+    BorderProvider,
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -92,6 +96,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private final Logger log = Logger.getLogger(MauerEditor.class);
     private boolean editable;
     private CardLayout cardLayout;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImages;
     private javax.swing.JButton btnInfo;
@@ -310,6 +316,13 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      */
     public MauerEditor(final boolean editable) {
         this.editable = editable;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         if (editable) {
             pnlLeft.setPreferredSize(new Dimension(500, 900));
@@ -416,8 +429,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         setLimitDocumentFilter(taSanMassnahmeGruendung2, 500);
         setLimitDocumentFilter(taSanMassnahmeKopf, 500);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -636,7 +647,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 "bilder",
                 "mauer_bilder",
                 "mauer_nummer",
-                "georeferenz.geo_field");
+                "georeferenz.geo_field",
+                getConnectionContext());
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
@@ -2994,13 +3006,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
-
         cardLayout.show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    } //GEN-LAST:event_btnImagesActionPerformed
+    }                                                                             //GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3032,7 +3043,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         final Collection<CidsBean> c = new LinkedList<>();
         c.add(cidsBean);
-        MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this);
+        MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this, getConnectionContext());
     }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     /**
@@ -3064,7 +3075,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             this.cidsBean = cidsBean;
             final String lagebez = (String)cidsBean.getProperty("lagebezeichnung");
             this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix")
@@ -3144,7 +3156,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             if (mauerNummer != null) {
                 final CidsServerSearch search = new MauerNummerSearch(mauerNummer);
                 final Collection res = SessionManager.getProxy()
-                            .customServerSearch(SessionManager.getSession().getUser(), search);
+                            .customServerSearch(SessionManager.getSession().getUser(),
+                                search,
+                                getConnectionContext());
 
                 final ArrayList<ArrayList> tmp = (ArrayList<ArrayList>)res;
 
@@ -3232,6 +3246,11 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(new Insets(10, 10, 10, 10));
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

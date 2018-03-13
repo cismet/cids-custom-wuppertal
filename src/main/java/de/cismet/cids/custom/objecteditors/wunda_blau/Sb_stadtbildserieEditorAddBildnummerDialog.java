@@ -36,6 +36,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -44,7 +47,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDialog {
+public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDialog
+        implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -64,6 +68,8 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         new BildnummerEvaluationDocumentListener();
     private ShowWarning showWarning;
 
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
@@ -82,11 +88,16 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
     /**
      * Creates new form Sb_stadtbildserieEditorAddBildnummerDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_stadtbildserieEditorAddBildnummerDialog(final java.awt.Frame parent, final boolean modal) {
+    public Sb_stadtbildserieEditorAddBildnummerDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
+
         initComponents();
         new NextBildNummerFetcherWorker().execute();
     }
@@ -270,23 +281,23 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtTillBildnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtTillBildnummerActionPerformed
+    private void txtTillBildnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTillBildnummerActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtTillBildnummerActionPerformed
+    }//GEN-LAST:event_txtTillBildnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         stadtBilderBeans.clear();
         final StringBuilder bildnummern = new StringBuilder("'" + bildnummernToAdd.get(0) + "'");
         for (int i = 1; i < bildnummernToAdd.size(); i++) {
             bildnummern.append(",");
             bildnummern.append("'").append(bildnummernToAdd.get(i)).append("'");
         }
-        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, STADTBILDER_TABLE);
+        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, STADTBILDER_TABLE, getConnectionContext());
         final String query = "SELECT "
                     + mc.getID()
                     + ", "
@@ -298,14 +309,17 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
                     + " order by bildnummer";
         try {
             final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(SessionManager.getSession().getUser(), query, DOMAIN);
+                        .getMetaObjectByQuery(SessionManager.getSession().getUser(),
+                            query,
+                            DOMAIN,
+                            getConnectionContext());
             for (final MetaObject mo : metaObjects) {
                 final CidsBean cb = mo.getBean();
                 stadtBilderBeans.put((String)cb.getProperty("bildnummer"), cb);
             }
             for (final String bildnummer : bildnummernToAdd) {
                 if (!stadtBilderBeans.containsKey(bildnummer)) {
-                    final MetaObject metaObject = mc.getEmptyInstance();
+                    final MetaObject metaObject = mc.getEmptyInstance(getConnectionContext());
                     metaObject.setStatus(MetaObject.NEW);
                     final CidsBean cidsBean = metaObject.getBean();
                     try {
@@ -323,18 +337,18 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
             setVisible(false);
             dispose();
         }
-    }                                                                         //GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         stadtBilderBeans.clear();
         setVisible(false);
         dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -385,7 +399,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
                 @Override
                 public void run() {
                     final Sb_stadtbildserieEditorAddBildnummerDialog dialog =
-                        new Sb_stadtbildserieEditorAddBildnummerDialog(new javax.swing.JFrame(), true);
+                        new Sb_stadtbildserieEditorAddBildnummerDialog(new javax.swing.JFrame(), true, null);
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -439,6 +453,11 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         }
         lblWarning.setText("");
         btnOk.setEnabled(true);
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -661,7 +680,9 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         protected Integer doInBackground() throws Exception {
             final Sb_maxBildnummerFetcherServerSearch maxBildnummerFetcher = new Sb_maxBildnummerFetcherServerSearch();
             final Collection maxBildnummerCollection = SessionManager.getConnection()
-                        .customServerSearch(SessionManager.getSession().getUser(), maxBildnummerFetcher);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                            maxBildnummerFetcher,
+                            getConnectionContext());
             if ((maxBildnummerCollection != null) && !maxBildnummerCollection.isEmpty()) {
                 final ArrayList firstColumnObject = (ArrayList)maxBildnummerCollection.toArray(new Object[1])[0];
                 final Object firstRowObject = firstColumnObject.get(0);

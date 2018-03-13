@@ -27,6 +27,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -40,7 +42,7 @@ public class Sb_RestrictionLevelUtils {
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_RestrictionLevelUtils.class);
 
-    private static final CidsBean NO_RESTRICTION;
+    private static CidsBean NO_RESTRICTION;
 
     private static Image FULL_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
     private static Image NO_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
@@ -50,8 +52,6 @@ public class Sb_RestrictionLevelUtils {
     private static String MIDDLE_RESTRICTION_TOOLTIP = "";
 
     static {
-        NO_RESTRICTION = getNutzungseinschraenkungNoRestriction();
-
         try {
             FULL_RESTRICTION_IMAGE = ImageIO.read(Sb_RestrictionLevelUtils.class.getResource(
                         "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
@@ -80,22 +80,30 @@ public class Sb_RestrictionLevelUtils {
     /**
      * Get the CidsBean of the table SB_nutzungseinschraenkung with the key 'noRestriction'. Might be null.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean getNoRestriction() {
+    public static CidsBean getNoRestriction(final ConnectionContext connectionContext) {
+        if (NO_RESTRICTION == null) {
+            NO_RESTRICTION = getNutzungseinschraenkungNoRestriction(connectionContext);
+        }
         return NO_RESTRICTION;
     }
 
     /**
      * Fetches the Sb_Nutzungseinschraenkung with the key "noRestriction" from the database.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  the Sb_Nutzungseinschraenkung "noRestriction" or null, in case of error.
      */
-    private static CidsBean getNutzungseinschraenkungNoRestriction() {
+    private static CidsBean getNutzungseinschraenkungNoRestriction(final ConnectionContext connectionContext) {
         try {
             final MetaClass nutzungsClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
-                    "sb_nutzungseinschraenkung");
+                    "sb_nutzungseinschraenkung",
+                    connectionContext);
             if (nutzungsClass != null) {
                 final StringBuffer noRestrictionQuery = new StringBuffer("select ").append(nutzungsClass.getId())
                             .append(", ")
@@ -108,7 +116,8 @@ public class Sb_RestrictionLevelUtils {
                 }
                 final MetaObject[] noRestriction;
                 try {
-                    noRestriction = SessionManager.getProxy().getMetaObjectByQuery(noRestrictionQuery.toString(), 0);
+                    noRestriction = SessionManager.getProxy()
+                                .getMetaObjectByQuery(noRestrictionQuery.toString(), 0, connectionContext);
                     if (noRestriction.length > 0) {
                         return noRestriction[0].getBean();
                     }
@@ -129,11 +138,13 @@ public class Sb_RestrictionLevelUtils {
      * <p>The determined restriction level is saved in the extension attribute tmp_restriction_level, so the fetch is
      * faster for the CidsBean the next time.</p>
      *
-     * @param   stadtbildserie  DOCUMENT ME!
+     * @param   stadtbildserie     DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static RestrictionLevel determineRestrictionLevelForStadtbildserie(final CidsBean stadtbildserie) {
+    public static RestrictionLevel determineRestrictionLevelForStadtbildserie(final CidsBean stadtbildserie,
+            final ConnectionContext connectionContext) {
         RestrictionLevel determinedLevel = new RestrictionLevel();
         if (stadtbildserie != null) {
             synchronized (stadtbildserie) {
@@ -144,7 +155,8 @@ public class Sb_RestrictionLevelUtils {
                     final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty(
                             "nutzungseinschraenkung");
                     final RestrictionLevel level = determineRestrictionLevelForNutzungseinschraenkung(
-                            nutzungseinschraenkung);
+                            nutzungseinschraenkung,
+                            connectionContext);
                     if (level != null) {
                         try {
                             stadtbildserie.setProperty("tmp_restriction_level", level);
@@ -163,11 +175,13 @@ public class Sb_RestrictionLevelUtils {
      * DOCUMENT ME!
      *
      * @param   nutzungseinschraenkung  DOCUMENT ME!
+     * @param   connectionContext       DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static synchronized RestrictionLevel determineRestrictionLevelForNutzungseinschraenkung(
-            final CidsBean nutzungseinschraenkung) {
+            final CidsBean nutzungseinschraenkung,
+            final ConnectionContext connectionContext) {
         if (nutzungseinschraenkung != null) {
             final RestrictionLevel level = new RestrictionLevel();
             final String key = (String)nutzungseinschraenkung.getProperty("key");
@@ -177,10 +191,18 @@ public class Sb_RestrictionLevelUtils {
                 final String actionTagInternalUsage = "custom.stadtbilder." + key + ".internalUsage";
                 final String actionTagExternalUsage = "custom.stadtbilder." + key + ".externalUsage";
 
-                final boolean previewAllowed = ObjectRendererUtils.checkActionTag(actionTagPreview);
-                final boolean downloadAllowed = ObjectRendererUtils.checkActionTag(actionTagDownload);
-                final boolean internalUsageAllowed = ObjectRendererUtils.checkActionTag(actionTagInternalUsage);
-                final boolean externalUsageAllowed = ObjectRendererUtils.checkActionTag(actionTagExternalUsage);
+                final boolean previewAllowed = ObjectRendererUtils.checkActionTag(
+                        actionTagPreview,
+                        connectionContext);
+                final boolean downloadAllowed = ObjectRendererUtils.checkActionTag(
+                        actionTagDownload,
+                        connectionContext);
+                final boolean internalUsageAllowed = ObjectRendererUtils.checkActionTag(
+                        actionTagInternalUsage,
+                        connectionContext);
+                final boolean externalUsageAllowed = ObjectRendererUtils.checkActionTag(
+                        actionTagExternalUsage,
+                        connectionContext);
 
                 level.setPreviewAllowed(previewAllowed);
                 level.setDownloadAllowed(downloadAllowed);
@@ -204,13 +226,16 @@ public class Sb_RestrictionLevelUtils {
      * <p>To do this the RetsrictionLevel of {@code gridObject} is determined, afterwards it is checked if the user is
      * allowed to use the images of the Stadtbildserie internally or externally.</p>
      *
-     * @param   stadtbildserie  gridObject DOCUMENT ME!
+     * @param   stadtbildserie     gridObject DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static BulletPointSettings determineBulletPointAndInfoText(final CidsBean stadtbildserie) {
+    public static BulletPointSettings determineBulletPointAndInfoText(final CidsBean stadtbildserie,
+            final ConnectionContext connectionContext) {
         final RestrictionLevel level = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
-                stadtbildserie);
+                stadtbildserie,
+                connectionContext);
 
         Image colorImage = FULL_RESTRICTION_IMAGE;
         String tooltipText = FULL_RESTRICTION_TOOLTIP;

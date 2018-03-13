@@ -54,7 +54,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
-import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.connectioncontext.ConnectionContext;
+
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -289,15 +290,15 @@ public class BaulastBescheinigungUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   info  DOCUMENT ME!
+     * @param   info               DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean loadBaulast(final BerechtigungspruefungBescheinigungBaulastInfo info) {
+    public static CidsBean loadBaulast(final BerechtigungspruefungBescheinigungBaulastInfo info,
+            final ConnectionContext connectionContext) {
         if (!BAULAST_CACHE.containsKey(info)) {
-            final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
-                    "WUNDA_BLAU",
-                    "alb_baulast");
+            final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "alb_baulast", connectionContext);
 
             final String query = "SELECT %d, id "
                         + "FROM alb_baulast "
@@ -310,7 +311,8 @@ public class BaulastBescheinigungUtils {
                                     mcBaulast.getID(),
                                     info.getBlattnummer(),
                                     info.getLaufende_nummer()),
-                                0);
+                                0,
+                                connectionContext);
                 BAULAST_CACHE.put(info, mos[0].getBean());
             } catch (ConnectionException ex) {
                 LOG.error(ex, ex);
@@ -331,6 +333,7 @@ public class BaulastBescheinigungUtils {
      * @param   fabricationdate       DOCUMENT ME!
      * @param   number                projectname DOCUMENT ME!
      * @param   max                   DOCUMENT ME!
+     * @param   connectionContext     DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
@@ -344,7 +347,8 @@ public class BaulastBescheinigungUtils {
             final String anfrageSchluessel,
             final Date fabricationdate,
             final int number,
-            final int max) throws Exception {
+            final int max,
+            final ConnectionContext connectionContext) throws Exception {
         final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
             new JasperReportDownload.JasperReportDataSourceGenerator() {
 
@@ -382,7 +386,7 @@ public class BaulastBescheinigungUtils {
                             !bescheinigungsGruppe.getBaulastenBeguenstigt().isEmpty());
                         parameters.put(
                             PARAMETER_FABRICATIONNOTICE,
-                            createFertigungsVermerk(SessionManager.getSession().getUser()));
+                            createFertigungsVermerk(SessionManager.getSession().getUser(), connectionContext));
                         return parameters;
                     } catch (final Exception ex) {
                         LOG.warn(ex, ex);
@@ -415,11 +419,13 @@ public class BaulastBescheinigungUtils {
      *
      * @param  downloadInfo       DOCUMENT ME!
      * @param  anfrageSchluessel  DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public static void doDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
-            final String anfrageSchluessel) {
+            final String anfrageSchluessel,
+            final ConnectionContext connectionContext) {
         try {
-            final Download download = generateDownload(downloadInfo, anfrageSchluessel);
+            final Download download = generateDownload(downloadInfo, anfrageSchluessel, connectionContext);
             if (download != null) {
                 DownloadManager.instance().add(download);
             }
@@ -433,13 +439,15 @@ public class BaulastBescheinigungUtils {
      *
      * @param   downloadInfo       DOCUMENT ME!
      * @param   anfrageSchluessel  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     public static Download generateDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
-            final String anfrageSchluessel) throws Exception {
+            final String anfrageSchluessel,
+            final ConnectionContext connectionContext) throws Exception {
         if (
             !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         ComponentRegistry.getRegistry().getMainWindow())) {
@@ -452,7 +460,7 @@ public class BaulastBescheinigungUtils {
 
                 @Override
                 public Collection<? extends Download> fetchDownloads() throws Exception {
-                    final Collection<Download> downloads = new ArrayList<Download>();
+                    final Collection<Download> downloads = new ArrayList<>();
                     try {
                         downloads.add(new TxtDownload(
                                 downloadInfo.getProtokoll(),
@@ -462,14 +470,14 @@ public class BaulastBescheinigungUtils {
                                 ".txt"));
 
                         if (downloadInfo.getBescheinigungsInfo() != null) {
-                            final Set<CidsBean> allBaulasten = new HashSet<CidsBean>();
+                            final Set<CidsBean> allBaulasten = new HashSet<>();
 
                             // Download: Berichte für alle Bescheinigungsgruppen
                             int number = 0;
                             final int max = downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen().size();
 
                             final List<BerechtigungspruefungBescheinigungGruppeInfo> sortedBescheinigungsGruppen =
-                                new ArrayList<BerechtigungspruefungBescheinigungGruppeInfo>(
+                                new ArrayList<>(
                                     downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen());
                             Collections.sort(
                                 sortedBescheinigungsGruppen,
@@ -493,15 +501,16 @@ public class BaulastBescheinigungUtils {
                                         anfrageSchluessel,
                                         downloadInfo.getBescheinigungsInfo().getDatum(),
                                         ++number,
-                                        max));
+                                        max,
+                                        connectionContext));
                                 // alle Baulasten ermitteln
                                 for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
                                             : bescheinigungsGruppe.getBaulastenBelastet()) {
-                                    allBaulasten.add(loadBaulast(baulastInfo));
+                                    allBaulasten.add(loadBaulast(baulastInfo, connectionContext));
                                 }
                                 for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
                                             : bescheinigungsGruppe.getBaulastenBeguenstigt()) {
-                                    allBaulasten.add(loadBaulast(baulastInfo));
+                                    allBaulasten.add(loadBaulast(baulastInfo, connectionContext));
                                 }
                             }
 
@@ -511,7 +520,8 @@ public class BaulastBescheinigungUtils {
                                         jobname,
                                         allBaulasten,
                                         downloadInfo.getAuftragsnummer(),
-                                        downloadInfo.getProduktbezeichnung()));
+                                        downloadInfo.getProduktbezeichnung(),
+                                        connectionContext));
                             }
                         }
                     } catch (final Exception ex) {
@@ -527,15 +537,18 @@ public class BaulastBescheinigungUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   user  DOCUMENT ME!
+     * @param   user               DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Collection<CidsBean> loadOpenDownloads(final User user) {
+    public static Collection<CidsBean> loadOpenDownloads(final User user,
+            final ConnectionContext connectionContext) {
         try {
             final MetaClass mcBerechtigungspruefung = CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
-                    "berechtigungspruefung");
+                    "berechtigungspruefung",
+                    connectionContext);
 
             final String pruefungQuery = "SELECT DISTINCT %d, id "
                         + "FROM berechtigungspruefung "
@@ -548,7 +561,8 @@ public class BaulastBescheinigungUtils {
                                 pruefungQuery,
                                 mcBerechtigungspruefung.getID(),
                                 user.getKey()),
-                            0);
+                            0,
+                            connectionContext);
             if (mos != null) {
                 final Collection<CidsBean> beans = new ArrayList<CidsBean>(mos.length);
                 for (final MetaObject mo : mos) {
@@ -565,15 +579,17 @@ public class BaulastBescheinigungUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   schluessel  DOCUMENT ME!
+     * @param   schluessel         DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean loadPruefung(final String schluessel) {
+    public static CidsBean loadPruefung(final String schluessel, final ConnectionContext connectionContext) {
         try {
             final MetaClass mcBerechtigungspruefung = CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
-                    "berechtigungspruefung");
+                    "berechtigungspruefung",
+                    connectionContext);
 
             final String pruefungQuery = "SELECT DISTINCT %d, id "
                         + "FROM berechtigungspruefung "
@@ -582,7 +598,8 @@ public class BaulastBescheinigungUtils {
 
             final MetaObject[] mos = SessionManager.getProxy()
                         .getMetaObjectByQuery(String.format(pruefungQuery, mcBerechtigungspruefung.getID(), schluessel),
-                            0);
+                            0,
+                            connectionContext);
             if ((mos != null) && (mos.length > 0)) {
                 return mos[0].getBean();
             }

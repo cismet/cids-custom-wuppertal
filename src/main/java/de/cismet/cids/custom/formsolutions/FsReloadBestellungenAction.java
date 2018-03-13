@@ -7,29 +7,16 @@
 ****************************************************/
 package de.cismet.cids.custom.formsolutions;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.types.treenode.PureTreeNode;
-import Sirius.navigator.types.treenode.RootTreeNode;
-import Sirius.navigator.ui.ComponentRegistry;
-import Sirius.navigator.ui.tree.MetaCatalogueTree;
 
-import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
-
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
-import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionBestellungChangeStatusServerAction;
-import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
-
-import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.utils.abstracts.AbstractCidsBeanAction;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -41,7 +28,7 @@ import static javax.swing.Action.NAME;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FsReloadBestellungenAction extends AbstractCidsBeanAction {
+public class FsReloadBestellungenAction extends AbstractCidsBeanAction implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -51,15 +38,18 @@ public class FsReloadBestellungenAction extends AbstractCidsBeanAction {
     //~ Instance fields --------------------------------------------------------
 
     private final PureTreeNode ptn;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new FsStatusBearbeitetAction object.
      *
-     * @param  ptn  DOCUMENT ME!
+     * @param  ptn                DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FsReloadBestellungenAction(final PureTreeNode ptn) {
+    public FsReloadBestellungenAction(final PureTreeNode ptn, final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         putValue(NAME, "Offene Bestellungen vom Formularserver abholen");
         final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
                     "/res/16/FsBestellungReload.png"));
@@ -73,9 +63,14 @@ public class FsReloadBestellungenAction extends AbstractCidsBeanAction {
     @Override
     public void actionPerformed(final ActionEvent e) {
         try {
-            StaticSwingTools.showDialog(new FSReloadBestellungenDialog());
+            StaticSwingTools.showDialog(new FSReloadBestellungenDialog(getConnectionContext()));
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -33,6 +33,9 @@ import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -42,7 +45,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsToolbarSearch.class)
-public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
+public class CustomStrassenToolbarSearch implements CidsToolbarSearch, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -52,9 +55,10 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     //~ Instance fields --------------------------------------------------------
 
     private String searchString;
-    private final MetaClass mc;
-    private final ImageIcon icon;
-    private final Collection<MetaClass> classCol;
+    private MetaClass mc;
+    private ImageIcon icon;
+    private Collection<MetaClass> classCol;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -62,8 +66,15 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
      * Creates a new CustomStrassenToolbarSearch object.
      */
     public CustomStrassenToolbarSearch() {
-        mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "STRASSE");
-        classCol = new ArrayList<MetaClass>(1);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "STRASSE", getConnectionContext());
+        classCol = new ArrayList<>(1);
         if (mc != null) {
             icon = new ImageIcon(mc.getIconData());
             classCol.add(mc);
@@ -72,8 +83,6 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
             LOG.info("MetaClass Strasse is null, the permissions are probably missing.");
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -134,5 +143,10 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
         }
 
         return new CustomStrassenSearchStatement(searchString);
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

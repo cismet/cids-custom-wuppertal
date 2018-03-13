@@ -36,6 +36,10 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.AbstractConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -44,7 +48,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialog {
+public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -55,10 +59,12 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Collection<CidsBean> beansToReturn = new ArrayList<CidsBean>();
+    private final Collection<CidsBean> beansToReturn = new ArrayList<>();
 
     private TableRowSorter<TableModel> sorter;
     private MetaObject[] mos;
+
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -78,12 +84,15 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
     /**
      * Creates new form Sb_stadtbildserieEditorAddSuchwortDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    private Sb_stadtbildserieEditorAddSuchwortDialog(final java.awt.Frame parent, final boolean modal) {
+    private Sb_stadtbildserieEditorAddSuchwortDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ConnectionContext connectionContext) {
         super(parent, modal);
-
+        this.connectionContext = connectionContext;
         try {
             loadListItems();
         } catch (final ConnectionException exception) {
@@ -130,7 +139,12 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      */
     public static Sb_stadtbildserieEditorAddSuchwortDialog getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new Sb_stadtbildserieEditorAddSuchwortDialog(null, true);
+            INSTANCE = new Sb_stadtbildserieEditorAddSuchwortDialog(
+                    null,
+                    true,
+                    ConnectionContext.create(
+                        AbstractConnectionContext.Category.INSTANCE,
+                        Sb_stadtbildserieEditorAddSuchwortDialog.class.getSimpleName()));
         }
         return INSTANCE;
     }
@@ -185,13 +199,17 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      * @throws  ConnectionException  DOCUMENT ME!
      */
     private void loadListItems() throws ConnectionException {
-        final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_SUCHWORT");
+        final MetaClass metaClass = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "SB_SUCHWORT",
+                getConnectionContext());
         if (metaClass != null) {
             mos = SessionManager.getProxy()
                         .getAllLightweightMetaObjectsForClass(metaClass.getID(),
                                 SessionManager.getSession().getUser(),
                                 new String[] { "NAME" },
-                                "%1$2s");
+                                "%1$2s",
+                                getConnectionContext());
         } else {
             LOG.warn("MetaClass is null. Probably the permissions for the class SB_SUCHWORT are missing.");
         }
@@ -509,8 +527,8 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
 
                 @Override
                 public void run() {
-                    final Sb_stadtbildserieEditorAddSuchwortDialog dialog =
-                        new Sb_stadtbildserieEditorAddSuchwortDialog(new javax.swing.JFrame(), true);
+                    final Sb_stadtbildserieEditorAddSuchwortDialog dialog = Sb_stadtbildserieEditorAddSuchwortDialog
+                                .getInstance();
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -522,5 +540,10 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                     dialog.setVisible(true);
                 }
             });
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

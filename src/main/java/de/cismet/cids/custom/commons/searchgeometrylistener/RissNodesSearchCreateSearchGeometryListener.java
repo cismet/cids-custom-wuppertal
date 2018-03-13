@@ -23,6 +23,8 @@ import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -42,10 +44,12 @@ public class RissNodesSearchCreateSearchGeometryListener extends NodesSearchCrea
      *
      * @param  mc                  DOCUMENT ME!
      * @param  propChangeListener  DOCUMENT ME!
+     * @param  connectionContext   DOCUMENT ME!
      */
     public RissNodesSearchCreateSearchGeometryListener(final MappingComponent mc,
-            final PropertyChangeListener propChangeListener) {
-        super(mc, propChangeListener);
+            final PropertyChangeListener propChangeListener,
+            final ConnectionContext connectionContext) {
+        super(mc, propChangeListener, connectionContext);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -59,7 +63,10 @@ public class RissNodesSearchCreateSearchGeometryListener extends NodesSearchCrea
     public CidsServerSearch getCidsServerSearch(final Geometry geometry) {
         final BufferingGeosearch search = new BufferingGeosearch();
         try {
-            final MetaClass mc = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "vermessung_riss");
+            final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "vermessung_riss",
+                    getConnectionContext());
             search.setValidClasses(Arrays.asList(mc));
             search.setGeometry(geometry);
             return search;

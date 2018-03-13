@@ -74,6 +74,9 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -91,7 +94,8 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  */
 public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -116,6 +120,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
     private final Map<String, String> freigabegruendeMap = new HashMap<String, String>();
     private final Map<String, String> ablehnungsgruendeMap = new HashMap<String, String>();
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFreigeben;
@@ -218,10 +224,17 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Fs_BestellungRenderer.
+     * Creates a new BerechtigungspruefungRenderer object.
      */
     public BerechtigungspruefungRenderer() {
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         final DefaultComboBoxModel<String> freigabegruendeModel = new DefaultComboBoxModel<String>();
@@ -242,8 +255,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         }
         jComboBox2.setModel(ablehnungsgruendeModel);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1503,7 +1514,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         + (String)cidsBean.getProperty("schluessel"),
                 DownloadManagerDialog.getInstance().getJobName(),
                 pureName,
-                ext);
+                ext,
+                getConnectionContext());
         DownloadManager.instance().add(download);
     } //GEN-LAST:event_hlDateianhangValueActionPerformed
 
@@ -1607,7 +1619,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         try {
             AlkisProductDownloadHelper.download((String)cidsBean.getProperty("schluessel"),
                 downloadInfo.getProduktTyp(),
-                (String)cidsBean.getProperty("downloadinfo_json"));
+                (String)cidsBean.getProperty("downloadinfo_json"),
+                getConnectionContext());
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
@@ -1690,6 +1703,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
                                             schluessel,
+                                            getConnectionContext(),
                                             new ServerActionParameter<String>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.KOMMENTAR
                                                     .toString(),
@@ -1913,7 +1927,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
                                     @Override
                                     protected CidsBean doInBackground() throws Exception {
-                                        final CidsBean selBean = BaulastBescheinigungUtils.loadBaulast(baulastInfo);
+                                        final CidsBean selBean = BaulastBescheinigungUtils.loadBaulast(
+                                                baulastInfo,
+                                                getConnectionContext());
                                         return selBean;
                                     }
 
@@ -2032,10 +2048,12 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 null);
 
         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                    .customServerSearch(SessionManager.getSession().getUser(), search, getConnectionContext());
         if (!mons.isEmpty()) {
             final MetaObjectNode mon = mons.iterator().next();
-            return SessionManager.getProxy().getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU").getBean();
+            return SessionManager.getProxy()
+                        .getMetaObject(mon.getObjectId(), mon.getClassId(), "WUNDA_BLAU", getConnectionContext())
+                        .getBean();
         } else {
             return null;
         }
@@ -2063,6 +2081,11 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

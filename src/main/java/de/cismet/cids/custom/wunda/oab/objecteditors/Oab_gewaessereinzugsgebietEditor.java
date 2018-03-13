@@ -18,6 +18,9 @@ import de.cismet.cids.custom.wunda.oab.AbstractCidsBeanRenderer;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -27,7 +30,12 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @version  1.0
  */
 public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer implements RequestsFullSizeComponent,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ConnectionContextStore {
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooserFrom;
@@ -49,7 +57,6 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
      * Creates new form Oab_BerechnungEditor.
      */
     public Oab_gewaessereinzugsgebietEditor() {
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -192,7 +199,8 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
 
             setTitle((String)cidsBean.getProperty("name")); // NOI18N
 
@@ -213,5 +221,16 @@ public class Oab_gewaessereinzugsgebietEditor extends AbstractCidsBeanRenderer i
     @Override
     public String getTitle() {
         return lblTitle.getText();
+    }
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

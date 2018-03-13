@@ -41,6 +41,10 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -53,7 +57,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
+public class FlurstueckSelectionDialoge extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -66,6 +70,8 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
     private List<CidsBean> currentListToAdd;
     private final boolean createEnabled;
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFlurstueckAddMenCancel;
     private javax.swing.JButton btnFlurstueckAddMenOk;
@@ -85,18 +91,22 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
     /**
      * Creates a new FlurstueckSelectionDialoge object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FlurstueckSelectionDialoge() {
-        this(true);
+    public FlurstueckSelectionDialoge(final ConnectionContext connectionContext) {
+        this(true, connectionContext);
     }
 
     /**
      * Creates new form FlurstueckSelectionDialoge.
      *
-     * @param  createEnabled  DOCUMENT ME!
+     * @param  createEnabled      DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FlurstueckSelectionDialoge(final boolean createEnabled) {
+    public FlurstueckSelectionDialoge(final boolean createEnabled, final ConnectionContext connectionContext) {
         this.createEnabled = createEnabled;
+        this.connectionContext = connectionContext;
         setTitle("Bitte Flurstück auswählen");
         initComponents();
         setSize(419, 144);
@@ -131,7 +141,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
                 @Override
                 protected ComboBoxModel doInBackground() throws Exception {
-                    return new DefaultComboBoxModel(FlurstueckFinder.getLWGemarkungen());
+                    return new DefaultComboBoxModel(FlurstueckFinder.getLWGemarkungen(getConnectionContext()));
                 }
 
                 @Override
@@ -368,7 +378,8 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
-                        return new DefaultComboBoxModel(FlurstueckFinder.getLWFlure(selGemarkungsNr));
+                        return new DefaultComboBoxModel(
+                                FlurstueckFinder.getLWFlure(selGemarkungsNr, getConnectionContext()));
                     }
                 });
 
@@ -455,7 +466,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                     if (position < 0) {
                         try {
                             if (MetaObject.NEW == beanToAdd.getMetaObject().getStatus()) {
-                                beanToAdd = beanToAdd.persist();
+                                beanToAdd = beanToAdd.persist(getConnectionContext());
                             }
                             currentListToAdd.add(-position - 1, beanToAdd);
                         } catch (Exception ex) {
@@ -510,7 +521,10 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
                         return new DefaultComboBoxModel(
-                                FlurstueckFinder.getLWFurstuecksZaehlerNenner(selGem, selFlurNr.toString()));
+                                FlurstueckFinder.getLWFurstuecksZaehlerNenner(
+                                    selGem,
+                                    selFlurNr.toString(),
+                                    getConnectionContext()));
                     }
                 });
         } else {
@@ -631,7 +645,12 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                 // the following code tries to avoid the creation of multiple entries for the same landparcel. however,
                 // there *might* be a chance that a historic landparcel is created multiple times when more then one
                 // client creates the same parcel at the "same time".
-                final MetaObject[] searchResult = FlurstueckFinder.getLWLandparcel(gemarkung, flur, zaehler, nenner);
+                final MetaObject[] searchResult = FlurstueckFinder.getLWLandparcel(
+                        gemarkung,
+                        flur,
+                        zaehler,
+                        nenner,
+                        getConnectionContext());
                 if ((searchResult != null) && (searchResult.length > 0)) {
                     return searchResult[0].getBean();
                 } else {
@@ -640,7 +659,8 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 //                    if (newBean == null) {
                     final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName(
                             FlurstueckFinder.FLURSTUECK_KICKER_TABLE_NAME,
-                            newLandParcelProperties);
+                            newLandParcelProperties,
+                            getConnectionContext());
 //                        unpersistedHistoricLandparcels.put(compountParcelData, newBean);
 //                    }
                     return newBean;
@@ -650,6 +670,11 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
             log.error(ex, ex);
         }
         return null;
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

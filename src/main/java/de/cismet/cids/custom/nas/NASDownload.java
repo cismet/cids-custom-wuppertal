@@ -36,6 +36,9 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
 
 /**
@@ -44,7 +47,7 @@ import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class NASDownload extends AbstractCancellableDownload {
+public class NASDownload extends AbstractCancellableDownload implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -89,17 +92,25 @@ public class NASDownload extends AbstractCancellableDownload {
     private boolean omitSendingRequest = false;
     private String requestId;
 
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new NASDownload object.
      *
-     * @param  orderId     DOCUMENT ME!
-     * @param  isSplitted  DOCUMENT ME!
-     * @param  isDxf       DOCUMENT ME!
-     * @param  requestId   DOCUMENT ME!
+     * @param  orderId            DOCUMENT ME!
+     * @param  isSplitted         DOCUMENT ME!
+     * @param  isDxf              DOCUMENT ME!
+     * @param  requestId          DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public NASDownload(final String orderId, final boolean isSplitted, final boolean isDxf, final String requestId) {
+    public NASDownload(final String orderId,
+            final boolean isSplitted,
+            final boolean isDxf,
+            final String requestId,
+            final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         omitSendingRequest = true;
         this.orderId = orderId;
         product = new NasProduct();
@@ -131,12 +142,13 @@ public class NASDownload extends AbstractCancellableDownload {
     /**
      * Creates a new NASDownload object.
      *
-     * @param  title      DOCUMENT ME!
-     * @param  filename   DOCUMENT ME!
-     * @param  directory  DOCUMENT ME!
-     * @param  requestId  DOCUMENT ME!
-     * @param  product    template DOCUMENT ME!
-     * @param  g          DOCUMENT ME!
+     * @param  title              DOCUMENT ME!
+     * @param  filename           DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  requestId          DOCUMENT ME!
+     * @param  product            template DOCUMENT ME!
+     * @param  g                  DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
 // public NASDownload(final String title,
 // final String directory,
@@ -153,20 +165,23 @@ public class NASDownload extends AbstractCancellableDownload {
     /**
      * Creates a new NASDownload object.
      *
-     * @param  title      DOCUMENT ME!
-     * @param  filename   DOCUMENT ME!
-     * @param  directory  DOCUMENT ME!
-     * @param  requestId  DOCUMENT ME!
-     * @param  product    template DOCUMENT ME!
-     * @param  g          DOCUMENT ME!
+     * @param  title              DOCUMENT ME!
+     * @param  filename           DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  requestId          DOCUMENT ME!
+     * @param  product            template DOCUMENT ME!
+     * @param  g                  DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public NASDownload(final String title,
             final String filename,
             final String directory,
             final String requestId,
             final NasProduct product,
-            final GeometryCollection g) {
+            final GeometryCollection g,
+            final ConnectionContext connectionContext) {
         this.product = product;
+        this.connectionContext = connectionContext;
         geometries = g;
         this.title = title;
         this.directory = directory;
@@ -193,12 +208,20 @@ public class NASDownload extends AbstractCancellableDownload {
 
     /**
      * Creates a new NASDownload object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    private NASDownload() {
+    private NASDownload(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         fileToSaveTo = new File("" + System.currentTimeMillis());
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -454,7 +477,8 @@ public class NASDownload extends AbstractCancellableDownload {
                         .executeTask(
                                 SEVER_ACTION,
                                 "WUNDA_BLAU",
-                                null,
+                                (Object)null,
+                                getConnectionContext(),
                                 paramTemplate,
                                 paramGeom,
                                 paramRequest,
@@ -477,12 +501,14 @@ public class NASDownload extends AbstractCancellableDownload {
                         .toString(),
                 NasDataQueryAction.METHOD_TYPE.CANCEL);
         try {
-            SessionManager.getProxy().executeTask(
-                SEVER_ACTION,
-                "WUNDA_BLAU",
-                null,
-                paramOrderId,
-                paramMethod);
+            SessionManager.getProxy()
+                    .executeTask(
+                        SEVER_ACTION,
+                        "WUNDA_BLAU",
+                        (Object)null,
+                        getConnectionContext(),
+                        paramOrderId,
+                        paramMethod);
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }
@@ -528,7 +554,8 @@ public class NASDownload extends AbstractCancellableDownload {
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        null,
+                                        (Object)null,
+                                        getConnectionContext(),
                                         paramOrderId,
                                         paramMethod);
                 } catch (ConnectionException ex) {

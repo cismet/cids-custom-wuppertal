@@ -35,6 +35,7 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -2936,161 +2937,161 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         txtEin_beab.setText(getCurrentUser());
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         txtLoe_beab.setText(getCurrentUser());
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         txtAlk_ent_beab.setText(getCurrentUser());
-    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         txtAlk_ueb_beab.setText(getCurrentUser());
-    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         txtLinkbase_ueb_von.setText(getCurrentUser());
-    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton7ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton7ActionPerformed
+    private void jButton7ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         txtRealn_ueb_von.setText(getCurrentUser());
-    }                                                                            //GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton9ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton9ActionPerformed
+    private void jButton9ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         txtPruefung_von.setText(getCurrentUser());
-    }                                                                            //GEN-LAST:event_jButton9ActionPerformed
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton10ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton10ActionPerformed
+    private void jButton10ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         txtAlk_son2.setText(getCurrentUser());
-    }                                                                             //GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdAddKartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddKartActionPerformed
+    private void cmdAddKartActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddKartActionPerformed
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("kart");
         } catch (Exception e) {
             log.error("Error beim Erzeugen eines Kart Objektes", e);
         }
-    }                                                                              //GEN-LAST:event_cmdAddKartActionPerformed
+    }//GEN-LAST:event_cmdAddKartActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdAddSgkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddSgkActionPerformed
+    private void cmdAddSgkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddSgkActionPerformed
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("alkis");
         } catch (Exception e) {
             log.error("Error beim Erzeugen eines Alkis Objektes", e);
         }
-    }                                                                             //GEN-LAST:event_cmdAddSgkActionPerformed
+    }//GEN-LAST:event_cmdAddSgkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton11ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton11ActionPerformed
+    private void jButton11ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         txtStadt_ent_beab.setText(getCurrentUser());
-    }                                                                             //GEN-LAST:event_jButton11ActionPerformed
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton12ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton12ActionPerformed
+    private void jButton12ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         txtStadt_ueb_beab.setText(getCurrentUser());
-    }                                                                             //GEN-LAST:event_jButton12ActionPerformed
+    }//GEN-LAST:event_jButton12ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton13ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton13ActionPerformed
+    private void jButton13ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         txtCity_ueb_beab.setText(getCurrentUser());
-    }                                                                             //GEN-LAST:event_jButton13ActionPerformed
+    }//GEN-LAST:event_jButton13ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton14ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton14ActionPerformed
+    private void jButton14ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         txtUeber_ueb_beab.setText(getCurrentUser());
-    }                                                                             //GEN-LAST:event_jButton14ActionPerformed
+    }//GEN-LAST:event_jButton14ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton15ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton15ActionPerformed
+    private void jButton15ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         txtFreizeit_ueb_beab.setText(getCurrentUser());
-    }                                                                             //GEN-LAST:event_jButton15ActionPerformed
+    }//GEN-LAST:event_jButton15ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBodenschaetzung_ueb_vonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBodenschaetzung_ueb_vonActionPerformed
+    private void btnBodenschaetzung_ueb_vonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBodenschaetzung_ueb_vonActionPerformed
         txtBodenschaetzung_ueb_von.setText(getCurrentUser());
-    }                                                                                              //GEN-LAST:event_btnBodenschaetzung_ueb_vonActionPerformed
+    }//GEN-LAST:event_btnBodenschaetzung_ueb_vonActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSchlusspruefung_vonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSchlusspruefung_vonActionPerformed
+    private void btnSchlusspruefung_vonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSchlusspruefung_vonActionPerformed
         txtSchlusspruefung_von.setText(getCurrentUser());
-    }                                                                                          //GEN-LAST:event_btnSchlusspruefung_vonActionPerformed
+    }//GEN-LAST:event_btnSchlusspruefung_vonActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3145,7 +3146,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
     @Override
     public BeanInitializer getBeanInitializer() {
         log.fatal("getBeanInitializer");
-        return new CompleteBeanInitializer(cidsBean);
+        return new CompleteBeanInitializer(cidsBean, getConnectionContext());
     }
 
     @Override
@@ -3187,8 +3188,8 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
          *
          * @param  template  DOCUMENT ME!
          */
-        public CompleteBeanInitializer(final CidsBean template) {
-            super(template);
+        public CompleteBeanInitializer(final CidsBean template, final ConnectionContext connectionContext) {
+            super(template, connectionContext);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -3198,10 +3199,10 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
                 final String propertyName,
                 final CidsBean complexValueToProcess) throws Exception {
             if (complexValueToProcess != null) {
-                final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(complexValueToProcess);
+                final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(complexValueToProcess, getConnectionContext());
                 final CidsBean newBean = complexValueToProcess.getMetaObject()
                             .getMetaClass()
-                            .getEmptyInstance()
+                            .getEmptyInstance(getConnectionContext())
                             .getBean();
                 subInitializer.initializeBean(newBean);
                 beanToInit.setProperty(propertyName, newBean);

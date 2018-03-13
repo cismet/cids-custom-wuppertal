@@ -73,7 +73,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.alkis.AlkisPointReportBean;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisPointReportServerAction;
@@ -92,7 +91,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
-import de.cismet.security.WebAccessManager;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -110,7 +110,8 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  * @version  $Revision$, $Date$
  */
 public final class AlkisPointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -147,6 +148,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnRelease;
@@ -163,9 +167,16 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alkis_pointAggregationRenderer.
+     * Creates a new AlkisPointAggregationRenderer object.
      */
     public AlkisPointAggregationRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         scpAggregationTable.getViewport().setOpaque(false);
         tblAggregation.getSelectionModel().addListSelectionListener(new TableSelectionListener());
@@ -174,14 +185,19 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
 
-        final boolean billingAllowed = BillingPopup.isBillingAllowed("appdf")
-                    || BillingPopup.isBillingAllowed("pktlsttxt");
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("appdf", getConnectionContext())
+                    || BillingPopup.isBillingAllowed("pktlsttxt", getConnectionContext());
 
         btnCreate.setEnabled(billingAllowed
-                    && ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE));
+                    && ObjectRendererUtils.checkActionTag(
+                        AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE,
+                        getConnectionContext()));
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -320,7 +336,10 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * @param  evt  DOCUMENT ME!
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
-        if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE,
+                        getConnectionContext())) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
             return;
@@ -660,7 +679,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
             final ArrayList<String> comboBoxContent = new ArrayList<String>();
             comboBoxContent.add(PDF);
-            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess()) {
+            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext())) {
                 comboBoxContent.add(HTML);
             }
             comboBoxContent.add(TEXT);
@@ -851,7 +870,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                             "AP-Karten",
                             jobname,
                             "apkarten",
-                            ".pdf"));
+                            ".pdf",
+                            getConnectionContext()));
         }
     }
 

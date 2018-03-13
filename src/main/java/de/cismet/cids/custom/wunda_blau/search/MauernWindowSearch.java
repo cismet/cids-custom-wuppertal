@@ -79,6 +79,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
@@ -89,7 +92,8 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -107,6 +111,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbMapSearch;
@@ -193,10 +199,17 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      * Creates new form MauernWindowSearch.
      */
     public MauernWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             initComponents();
             // todo just for debug
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -211,7 +224,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                     new Double(pre.getHeight() + 5).intValue()));
             pnlButtons.add(pnlSearchCancel);
 
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer");
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer", getConnectionContext());
 
             byte[] iconDataFromMetaclass = new byte[] {};
 
@@ -296,8 +309,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             LOG.warn("Error in Constructor of MauernWindowSearch. Search will not work properly.", e);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1379,10 +1390,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      */
     private void fillEigentuemerListModel() {
         try {
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer_eigentuemer");
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "mauer_eigentuemer",
+                    getConnectionContext());
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
             query += "FROM " + MB_MC.getTableName() + ";";
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query, 0, getConnectionContext());
             for (int i = 0; i < metaObjects.length; i++) {
                 final CidsBean b = metaObjects[i].getBean();
                 eigentuemerListModel.addElement(b);
@@ -1416,10 +1431,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      */
     private void fillLastKlasseListModel() {
         try {
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer_lastklasse");
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "mauer_lastklasse",
+                    getConnectionContext());
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
             query += "FROM " + MB_MC.getTableName() + ";";
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query, 0, getConnectionContext());
             for (int i = 0; i < metaObjects.length; i++) {
                 final CidsBean b = metaObjects[i].getBean();
                 lastKlasseListModel.addElement(b);
@@ -1431,7 +1450,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
 
     @Override
@@ -1484,9 +1503,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         if (MauernCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
