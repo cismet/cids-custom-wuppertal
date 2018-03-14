@@ -1358,18 +1358,18 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddThemaActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddThemaActionPerformed
+    private void btnAddThemaActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddThemaActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationinstanceEditor.this),
             dlgAddLocationType,
             true);
-    }//GEN-LAST:event_btnAddThemaActionPerformed
+    }                                                                               //GEN-LAST:event_btnAddThemaActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveThemaActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveThemaActionPerformed
+    private void btnRemoveThemaActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveThemaActionPerformed
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1393,23 +1393,23 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveThemaActionPerformed
+    }                                                                                  //GEN-LAST:event_btnRemoveThemaActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortActionPerformed
+    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbortActionPerformed
         dlgAddLocationType.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortActionPerformed
+    }                                                                               //GEN-LAST:event_btnMenAbortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOkActionPerformed
+    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOkActionPerformed
         try {
             final Object selItem = cbTypes.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1420,25 +1420,25 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         } finally {
             dlgAddLocationType.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkActionPerformed
+    }                                                                            //GEN-LAST:event_btnMenOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddZusNamenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddZusNamenActionPerformed
+    private void btnAddZusNamenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddZusNamenActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationinstanceEditor.this),
             dlgAddZusNamen,
             true);
-    }//GEN-LAST:event_btnAddZusNamenActionPerformed
+    }                                                                                  //GEN-LAST:event_btnAddZusNamenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveZusNamenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveZusNamenActionPerformed
+    private void btnRemoveZusNamenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveZusNamenActionPerformed
         final Object selection = lstZusNamen.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1462,24 +1462,24 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveZusNamenActionPerformed
+    }                                                                                     //GEN-LAST:event_btnRemoveZusNamenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNamesMenAbortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNamesMenAbortActionPerformed
+    private void btnNamesMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNamesMenAbortActionPerformed
         dlgAddZusNamen.setVisible(false);
         txtZusNamen.setText("");
-    }//GEN-LAST:event_btnNamesMenAbortActionPerformed
+    }                                                                                    //GEN-LAST:event_btnNamesMenAbortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNamesMenOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNamesMenOkActionPerformed
+    private void btnNamesMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNamesMenOkActionPerformed
         try {
             final String addName = txtZusNamen.getText();
             if (addName.length() > 0) {
@@ -1498,32 +1498,32 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             txtZusNamen.setText("");
             dlgAddZusNamen.setVisible(false);
         }
-    }//GEN-LAST:event_btnNamesMenOkActionPerformed
+    }                                                                                 //GEN-LAST:event_btnNamesMenOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbInfoArtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbInfoArtActionPerformed
+    private void cbInfoArtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbInfoArtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbInfoArtActionPerformed
+    } //GEN-LAST:event_cbInfoArtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMainLocationTypeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMainLocationTypeActionPerformed
+    private void cbMainLocationTypeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMainLocationTypeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbMainLocationTypeActionPerformed
+    } //GEN-LAST:event_cbMainLocationTypeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateAreaFromPointActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAreaFromPointActionPerformed
+    private void btnCreateAreaFromPointActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateAreaFromPointActionPerformed
         final CidsBean geom_pos = (CidsBean)cidsBean.getProperty("pos");
         final CidsBean geom_area = (CidsBean)cidsBean.getProperty("geom_area");
         if (geom_area != null) {
@@ -1555,14 +1555,14 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         } catch (Exception e) {
             LOG.fatal("Problem during setting the area geom", e);
         }
-    }//GEN-LAST:event_btnCreateAreaFromPointActionPerformed
+    } //GEN-LAST:event_btnCreateAreaFromPointActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblUrlCheckImageMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblUrlCheckImageMouseClicked
+    private void lblUrlCheckImageMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblUrlCheckImageMouseClicked
         final String foto = (String)cidsBean.getProperty("foto");
         if (foto != null) {
             try {
@@ -1576,14 +1576,14 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                     JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_lblUrlCheckImageMouseClicked
+    }                                                                                //GEN-LAST:event_lblUrlCheckImageMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblUrlCheckWebsiteMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblUrlCheckWebsiteMouseClicked
+    private void lblUrlCheckWebsiteMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblUrlCheckWebsiteMouseClicked
         final String foto = (String)cidsBean.getProperty("fotostrecke");
         if (foto != null) {
             try {
@@ -1597,7 +1597,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                     JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_lblUrlCheckWebsiteMouseClicked
+    }                                                                                  //GEN-LAST:event_lblUrlCheckWebsiteMouseClicked
 
     /**
      * DOCUMENT ME!
