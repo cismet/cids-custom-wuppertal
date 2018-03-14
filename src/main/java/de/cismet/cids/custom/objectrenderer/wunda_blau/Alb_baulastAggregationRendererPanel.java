@@ -417,6 +417,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                             "bla",
                                             "no.yet",
                                             (Geometry)null,
+                                            getConnectionContext(),
                                             new ProductGroupAmount("ea_bla", selectedBaulasten.size()))) {
                                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                                 Alb_baulastAggregationRendererPanel.this)) {

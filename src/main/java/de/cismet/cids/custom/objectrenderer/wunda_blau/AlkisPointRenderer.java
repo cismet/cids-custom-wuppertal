@@ -2119,7 +2119,12 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlistePdfActionPerformed
         try {
-            if (BillingPopup.doBilling("pktlstpdf", "no.yet", (Geometry)null, new ProductGroupAmount("eafifty", 1))) {
+            if (BillingPopup.doBilling(
+                            "pktlstpdf",
+                            "no.yet",
+                            (Geometry)null,
+                            getConnectionContext(),
+                            new ProductGroupAmount("eafifty", 1))) {
                 downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
             }
         } catch (Exception e) {
@@ -2165,6 +2170,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                             "pktlsttxt",
                             "no.yet",
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("eapkt_1000", 1))) {
                 downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
             }
@@ -2221,6 +2227,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                                 "appdf",
                                 url.toString(),
                                 (Geometry)null,
+                                getConnectionContext(),
                                 new ProductGroupAmount("ea", 1))) {
                     CismetThreadPool.execute(new Runnable() {
 
