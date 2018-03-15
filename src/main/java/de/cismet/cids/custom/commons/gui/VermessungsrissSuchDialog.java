@@ -90,9 +90,8 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog implements Co
             final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
+        vermSearch.initWithConnectionContext(connectionContext);
         initComponents();
-
-//        vermSearch.ad
     }
 
     //~ Methods ----------------------------------------------------------------

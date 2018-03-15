@@ -26,6 +26,8 @@ import org.openide.util.NbBundle;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
@@ -41,10 +43,14 @@ import java.awt.image.BufferedImage;
 
 import java.beans.PropertyChangeListener;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import java.net.URLDecoder;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -90,7 +96,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class A4HMapMultiPicture extends AbstractPrintingInscriber {
+public class A4HMapMultiPicture extends AbstractPrintingInscriber implements DropTargetListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -121,6 +127,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
     private String lastPath = null;
     private CustomTableModel model = new CustomTableModel();
     private final Map<String, String> copyrightMap = new HashMap<String, String>();
+    private DropTarget dropTarget;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboCopyright;
     private javax.swing.JPanel filePanel;
@@ -174,6 +181,10 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
                     if (file != null) {
                         lastPath = file.getParent();
                         setFile(file, modelRow);
+                    } else {
+                        model.setFileName(modelRow, "");
+                        model.setValueAt("", modelRow, 0);
+                        model.fireContentsChanged();
                     }
                 }
             };
@@ -196,6 +207,8 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
                     setColWidth();
                 }
             });
+        dropTarget = new DropTarget(this, this);
+        new DropTarget(tabFile, this);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -699,6 +712,84 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber {
                     null);
             JXErrorPane.showDialog(CismapBroker.getInstance().getMappingComponent(), errorInfo);
         }
+    }
+
+    @Override
+    public void dragEnter(final DropTargetDragEvent dtde) {
+    }
+
+    @Override
+    public void dragOver(final DropTargetDragEvent dtde) {
+    }
+
+    @Override
+    public void dropActionChanged(final DropTargetDragEvent dtde) {
+    }
+
+    @Override
+    public void dragExit(final DropTargetEvent dte) {
+    }
+
+    @Override
+    public void drop(final DropTargetDropEvent dtde) {
+        try {
+            final Transferable tr = dtde.getTransferable();
+            final DataFlavor[] flavors = tr.getTransferDataFlavors();
+            boolean isAccepted = false;
+            for (int i = 0; i < flavors.length; i++) {
+                if (flavors[i].isFlavorJavaFileListType()) {
+                    // zunaechst annehmen
+                    dtde.acceptDrop(dtde.getDropAction());
+                    final List<File> files = (List<File>)tr.getTransferData(flavors[i]);
+                    if ((files != null) && (files.size() > 0)) {
+                        final int row = tabFile.rowAtPoint(dtde.getLocation());
+                        setFile(files.get(0), row);
+                    }
+                    dtde.dropComplete(true);
+                    return;
+                } else if (flavors[i].isRepresentationClassInputStream()) {
+                    // this is used under linux
+                    if (!isAccepted) {
+                        dtde.acceptDrop(dtde.getDropAction());
+                        isAccepted = true;
+                    }
+                    final BufferedReader br = new BufferedReader(new InputStreamReader(
+                                (InputStream)tr.getTransferData(flavors[i])));
+                    String tmp = null;
+                    final List<File> fileList = new ArrayList<File>();
+                    while ((tmp = br.readLine()) != null) {
+                        if (tmp.trim().startsWith(FILE_PROTOCOL_PREFIX)) {
+                            File f = new File(tmp.trim().substring(FILE_PROTOCOL_PREFIX.length()));
+                            if (f.exists()) {
+                                fileList.add(f);
+                            } else {
+                                f = new File(URLDecoder.decode(
+                                            tmp.trim().substring(FILE_PROTOCOL_PREFIX.length()),
+                                            "UTF-8"));
+
+                                if (f.exists()) {
+                                    fileList.add(f);
+                                } else {
+                                    log.warn("File " + f.toString() + " does not exist.");
+                                }
+                            }
+                        }
+                    }
+                    br.close();
+
+                    if ((fileList != null) && (fileList.size() > 0)) {
+                        final int row = tabFile.rowAtPoint(dtde.getLocation());
+                        setFile(fileList.get(0), row);
+                        dtde.dropComplete(true);
+                        return;
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            log.warn(ex, ex);
+        }
+        // Problem ist aufgetreten
+        dtde.rejectDrop();
     }
 
     /**
