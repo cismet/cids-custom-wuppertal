@@ -33,6 +33,9 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.CismetThreadPool;
 
 import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMetaClass;
@@ -43,7 +46,9 @@ import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMet
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingKundenLoginsEditor extends javax.swing.JPanel implements CidsBeanRenderer, EditorSaveListener {
+public class BillingKundenLoginsEditor extends javax.swing.JPanel implements CidsBeanRenderer,
+    EditorSaveListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -53,6 +58,8 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
 
     private CidsBean cidsBean;
     private boolean editable;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboCustomer;
     private javax.swing.Box.Filler filler1;
@@ -82,8 +89,15 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
      * @param  editable  DOCUMENT ME!
      */
     public BillingKundenLoginsEditor(final boolean editable) {
-        initComponents();
         this.editable = editable;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
         if (!editable) {
             RendererTools.makeReadOnly(txtKontakt);
             RendererTools.makeReadOnly(txtName);
@@ -91,8 +105,6 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
             RendererTools.makeReadOnly(txtTelNummer);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -254,7 +266,8 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             this.cidsBean = cidsBean;
             bindingGroup.bind();
         }
@@ -289,6 +302,11 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
         return true;
     }
 
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -305,7 +323,13 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
             if (!isFakeModel() && (mc != null)) {
                 DefaultComboBoxModel tmpModel = null;
                 if (!SwingUtilities.isEventDispatchThread()) {
-                    tmpModel = getModelByMetaClass(mc, isNullable(), isOnlyUsed(), getComparator(), true);
+                    tmpModel = getModelByMetaClass(
+                            mc,
+                            isNullable(),
+                            isOnlyUsed(),
+                            getComparator(),
+                            true,
+                            getConnectionContext());
                 }
                 final DefaultComboBoxModel model = tmpModel;
 
@@ -321,7 +345,8 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
                                         isNullable(),
                                         isOnlyUsed(),
                                         getComparator(),
-                                        forceReload);
+                                        forceReload,
+                                        getConnectionContext());
                             }
                         }
 

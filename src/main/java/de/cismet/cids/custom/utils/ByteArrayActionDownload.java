@@ -8,19 +8,16 @@
 package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
-
-import org.openide.util.Exceptions;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
-
 import de.cismet.cids.server.actions.ServerActionParameter;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
-import de.cismet.tools.gui.downloadmanager.ByteArrayDownload;
 
 /**
  * A ByteArrayDownload writes a given byte array to the file system. Using the DownloadManager this class can be used to
@@ -29,7 +26,7 @@ import de.cismet.tools.gui.downloadmanager.ByteArrayDownload;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class ByteArrayActionDownload extends AbstractDownload {
+public class ByteArrayActionDownload extends AbstractDownload implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -37,18 +34,21 @@ public class ByteArrayActionDownload extends AbstractDownload {
     private final Object body;
     private final ServerActionParameter[] params;
 
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new ByteArrayDownload object.
      *
-     * @param  taskname   DOCUMENT ME!
-     * @param  body       DOCUMENT ME!
-     * @param  params     DOCUMENT ME!
-     * @param  title      The title of the download.
-     * @param  directory  The directory of the download.
-     * @param  filename   The name of the file to be created.
-     * @param  extension  The extension of the file to be created.
+     * @param  taskname           DOCUMENT ME!
+     * @param  body               DOCUMENT ME!
+     * @param  params             DOCUMENT ME!
+     * @param  title              The title of the download.
+     * @param  directory          The directory of the download.
+     * @param  filename           The name of the file to be created.
+     * @param  extension          The extension of the file to be created.
+     * @param  connectionContext  DOCUMENT ME!
      */
     public ByteArrayActionDownload(final String taskname,
             final Object body,
@@ -56,12 +56,14 @@ public class ByteArrayActionDownload extends AbstractDownload {
             final String title,
             final String directory,
             final String filename,
-            final String extension) {
+            final String extension,
+            final ConnectionContext connectionContext) {
         this.taskname = taskname;
         this.body = body;
         this.params = params;
         this.title = title;
         this.directory = directory;
+        this.connectionContext = connectionContext;
 
         status = State.WAITING;
 
@@ -81,7 +83,12 @@ public class ByteArrayActionDownload extends AbstractDownload {
 
         final Object ret;
         try {
-            ret = SessionManager.getProxy().executeTask(taskname, "WUNDA_BLAU", body, params);
+            ret = SessionManager.getProxy().executeTask(
+                    taskname,
+                    "WUNDA_BLAU",
+                    body,
+                    getConnectionContext(),
+                    params);
 
             if (ret instanceof Exception) {
                 final Exception ex = (Exception)ret;
@@ -127,5 +134,10 @@ public class ByteArrayActionDownload extends AbstractDownload {
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

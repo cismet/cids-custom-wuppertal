@@ -23,6 +23,9 @@ import de.cismet.cids.custom.wunda_blau.startuphooks.MotdWundaStartupHook;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifier;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.configuration.StartupHook;
 
 /**
@@ -32,13 +35,22 @@ import de.cismet.tools.configuration.StartupHook;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class MotdStartUpHook implements StartupHook {
+public class MotdStartUpHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(MotdStartUpHook.class);
 
+    //~ Instance fields --------------------------------------------------------
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     @Override
     public void applicationStarted() {
@@ -46,7 +58,8 @@ public class MotdStartUpHook implements StartupHook {
             if (SessionManager.getConnection().hasConfigAttr(
                             SessionManager.getSession().getUser(),
                             "csm://"
-                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD)) {
+                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD,
+                            getConnectionContext())) {
                 CidsServerMessageNotifier.getInstance()
                         .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD);
             }
@@ -59,7 +72,8 @@ public class MotdStartUpHook implements StartupHook {
             if (SessionManager.getConnection().hasConfigAttr(
                             SessionManager.getSession().getUser(),
                             "csm://"
-                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN)) {
+                            + MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN,
+                            getConnectionContext())) {
                 CidsServerMessageNotifier.getInstance()
                         .subscribe(MotdDialog.getInstance(), MotdWundaStartupHook.MOTD_MESSAGE_MOTD_EXTERN);
             }
@@ -68,5 +82,10 @@ public class MotdStartUpHook implements StartupHook {
                         + " nicht abfragen. Keine Meldung des Tages !",
                 ex);
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

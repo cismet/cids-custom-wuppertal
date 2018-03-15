@@ -65,6 +65,9 @@ import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
@@ -72,7 +75,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
  * @version  $Revision$, $Date$
  */
 public class MauerAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -93,6 +97,8 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     private MauerTableModel tableModel;
     private MappingComponent map;
     private final Collection<Feature> pointFeatures = new LinkedList<Feature>();
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane jLayeredPane1;
     private org.jdesktop.swingx.JXHyperlink jxlHauptinfo;
@@ -114,6 +120,13 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
      * Creates new form MauerAggregationRenderer.
      */
     public MauerAggregationRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         tableModel = new MauerTableModel();
         initComponents();
         map = new MappingComponent();
@@ -135,8 +148,6 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                 }
             });
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -330,7 +341,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                 reportBeans.add(beanWrapper.cidsBean);
             }
         }
-        MauernReportGenerator.generateKatasterBlatt(reportBeans, MauerAggregationRenderer.this);
+        MauernReportGenerator.generateKatasterBlatt(reportBeans, MauerAggregationRenderer.this, getConnectionContext());
     }                                                                                    //GEN-LAST:event_jxlKatasterblattActionPerformed
 
     /**
@@ -345,7 +356,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                 reportBeans.add(beanWrapper.cidsBean);
             }
         }
-        MauernReportGenerator.generateMainInfo(reportBeans, MauerAggregationRenderer.this);
+        MauernReportGenerator.generateMainInfo(reportBeans, MauerAggregationRenderer.this, getConnectionContext());
     }                                                                                //GEN-LAST:event_jxlHauptinfoActionPerformed
 
     /**
@@ -586,6 +597,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                 EventQueue.invokeLater(mapRunnable);
             }
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

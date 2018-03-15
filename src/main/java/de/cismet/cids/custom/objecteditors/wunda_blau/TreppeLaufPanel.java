@@ -66,6 +66,9 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 
@@ -75,14 +78,24 @@ import de.cismet.tools.gui.SemiRoundedPanel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
+public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore,
+    Disposable,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TreppeLaufPanel.class);
-    private static final MetaClass MC__TREPPENLAUF_MATERIAL = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_TREPPENLAUF_MATERIAL");
+    private static final MetaClass MC__TREPPENLAUF_MATERIAL;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
+                TreppeLaufPanel.class.getSimpleName());
+        MC__TREPPENLAUF_MATERIAL = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "TREPPE_TREPPENLAUF_MATERIAL",
+                connectionContext);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -122,7 +135,10 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         final JLabel jLabel61 = new JLabel();
         final JLabel jLabel2 = new JLabel();
         final JPanel jPanel2 = new JPanel();
-        defaultBindableReferenceCombo1 = new DefaultBindableReferenceCombo(MC__TREPPENLAUF_MATERIAL, true, false);
+        defaultBindableReferenceCombo1 = new DefaultBindableReferenceCombo(
+                MC__TREPPENLAUF_MATERIAL,
+                true,
+                false);
         fastBindableReferenceCombo1 = new FastBindableReferenceCombo(
                 materialArtSearch1,
                 materialArtSearch1.getRepresentationPattern(),
@@ -752,6 +768,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
     private final boolean editable;
     private final TreppeMaterialArtLightweightSearch materialArtSearch1;
     private final TreppeMaterialArtLightweightSearch materialArtSearch2;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnRemoveArt1;
@@ -774,18 +791,22 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
 
     /**
      * Creates a new TreppeLaufPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaufPanel() {
-        this(true);
+    public TreppeLaufPanel(final ConnectionContext connectionContext) {
+        this(true, connectionContext);
     }
 
     /**
      * Creates new form TreppePodestPanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaufPanel(final boolean editable) {
+    public TreppeLaufPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
+        this.connectionContext = connectionContext;
         this.materialArtSearch1 = new TreppeMaterialArtLightweightSearch(
                 TreppeMaterialArtLightweightSearch.SearchFor.TREPPENLAUF,
                 "%1$2s",
@@ -894,5 +915,10 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         treppeBauteilZustandKostenPanel7.dispose();
         cidsBean = null;
         parent = null;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

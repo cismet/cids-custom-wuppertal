@@ -48,6 +48,9 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -67,7 +70,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    EditorSaveListener {
+    EditorSaveListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -95,7 +99,10 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
 
     private final boolean editable;
     private CidsBean cidsBean;
-    private final CardLayout cardLayout;
+    private CardLayout cardLayout;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
     private javax.swing.JButton btnBack;
@@ -141,7 +148,17 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      */
     public Alb_baulastEditor(final boolean editable) {
         this.editable = editable;
-        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable, false);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        this.alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(
+                !editable,
+                false,
+                getConnectionContext());
         alb_picturePanel.getDocTypePanel().setVisible(false);
         this.initComponents();
         initFooterElements();
@@ -152,8 +169,10 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         lblBearbeitetAm.setVisible(editable);
     }
 
-    //~ Methods ----------------------------------------------------------------
-
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
     /**
      * DOCUMENT ME!
      *
@@ -232,7 +251,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      * DOCUMENT ME!
      */
     private void disableSecondPageIfNoPermission() {
-        if (!ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+        if (!ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext())) {
             for (final MouseListener l : lblForw.getMouseListeners()) {
                 lblForw.removeMouseListener(l);
             }
@@ -289,7 +308,9 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         jPanel4 = alb_picturePanel.getDocTypePanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable);
+        panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(
+                editable,
+                getConnectionContext());
         alb_picturePanel = alb_picturePanel;
 
         panTitle.setOpaque(false);
@@ -634,7 +655,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
             final Object blattNrObj = cidsBean.getProperty("blattnummer");
             final boolean unique = Alb_Constraints.checkUniqueBaulastNummer(String.valueOf(blattNrObj),
                     String.valueOf(laufendeNrObj),
-                    cidsBean.getMetaObject().getID());
+                    cidsBean.getMetaObject().getID(),
+                    getConnectionContext());
             if (!unique) {
                 errors.add(
                     "Die Laufende Nummer "

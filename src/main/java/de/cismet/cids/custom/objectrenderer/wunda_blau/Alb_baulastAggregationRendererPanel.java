@@ -69,6 +69,9 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -82,7 +85,8 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @version  $Revision$, $Date$
  */
 public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -141,6 +145,9 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     private BaulastblattTableModel tableModel;
     private MultiMap featuresMM;
     private final Comparator<Integer> tableComparator;
+
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
     private javax.swing.JComboBox cmbType;
@@ -164,8 +171,12 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
 
     /**
      * Creates a new Alb_baulastblattAggregationRenderer object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastAggregationRendererPanel() {
+    public Alb_baulastAggregationRendererPanel(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
 
         scpRisse.getViewport().setOpaque(false);
@@ -175,6 +186,11 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -412,7 +428,8 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                             type,
                                             selectedBaulasten,
                                             txtJobnumber.getText(),
-                                            projectname);
+                                            projectname,
+                                            getConnectionContext());
                                     DownloadManager.instance().add(download);
                                 }
                             }
@@ -498,14 +515,17 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         tableSorter.setSortKeys(sortKeys);
 
         final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
-        final boolean billingAllowed = BillingPopup.isBillingAllowed("bla");
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && billingAllowed) {
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("bla", getConnectionContext());
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT);
         }
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && billingAllowed) {
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN);
         }
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && billingAllowed) {
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER);
         }
         final boolean enabled = billingAllowed && !items.isEmpty();

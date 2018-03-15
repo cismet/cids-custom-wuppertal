@@ -51,6 +51,11 @@ import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 
@@ -60,22 +65,35 @@ import de.cismet.tools.gui.SemiRoundedPanel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
+public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements CidsBeanStore,
+    Disposable,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TreppeEntwaesserungPanel.class);
-    private static final MetaClass MC__ENTWAESSERUNG_ART = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_ENTWAESSERUNG_ART");
-    private static final MetaClass MC__ENTWAESSERUNG_ABLEITUNG = ClassCacheMultiple.getMetaClass(
-            "WUNDA_BLAU",
-            "TREPPE_ENTWAESSERUNG_ABLEITUNG");
+    private static final MetaClass MC__ENTWAESSERUNG_ART;
+    private static final MetaClass MC__ENTWAESSERUNG_ABLEITUNG;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                Category.STATIC,
+                TreppeEntwaesserungPanel.class.getSimpleName());
+        MC__ENTWAESSERUNG_ART = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "TREPPE_ENTWAESSERUNG_ART",
+                connectionContext);
+        MC__ENTWAESSERUNG_ABLEITUNG = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "TREPPE_ENTWAESSERUNG_ABLEITUNG",
+                connectionContext);
+    }
 
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
     private final boolean editable;
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     DefaultBindableReferenceCombo defaultBindableReferenceCombo4;
@@ -89,18 +107,23 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
 
     /**
      * Creates a new TreppeLaufPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeEntwaesserungPanel() {
-        this(true);
+    public TreppeEntwaesserungPanel(final ConnectionContext connectionContext) {
+        this(true, connectionContext);
     }
 
     /**
      * Creates new form TreppePodestPanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeEntwaesserungPanel(final boolean editable) {
+    public TreppeEntwaesserungPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
+        this.connectionContext = connectionContext;
+
         initComponents();
         jTextArea6.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
@@ -129,9 +152,15 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         final JPanel panBeschreibungContent6 = new JPanel();
         final JPanel jPanel29 = new JPanel();
         final JLabel jLabel79 = new JLabel();
-        defaultBindableReferenceCombo4 = new DefaultBindableReferenceCombo(MC__ENTWAESSERUNG_ART, true, false);
+        defaultBindableReferenceCombo4 = new DefaultBindableReferenceCombo(
+                MC__ENTWAESSERUNG_ART,
+                true,
+                false);
         final JLabel jLabel80 = new JLabel();
-        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(MC__ENTWAESSERUNG_ABLEITUNG, true, false);
+        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(
+                MC__ENTWAESSERUNG_ABLEITUNG,
+                true,
+                false);
         final JLabel jLabel78 = new JLabel();
         final JPanel jPanel2 = new JPanel();
         final JScrollPane jScrollPane7 = new JScrollPane();
@@ -393,5 +422,10 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         bindingGroup.unbind();
         treppeBauteilZustandKostenPanel1.dispose();
         cidsBean = null;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -84,6 +84,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -97,7 +100,8 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  */
 public class BillingKundeRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanRenderer,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -136,6 +140,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private Date[] fromDate_tillDate;
     private BigDecimal totalSum;
     private boolean itsMe = false;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnBuchungsbeleg;
@@ -195,20 +202,28 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @param  editable  DOCUMENT ME!
      */
     public BillingKundeRenderer(final boolean editable) {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         tableModel = new BillingTableModel(new Object[0][], AGR_COMLUMN_NAMES);
         tblBillings.setModel(tableModel);
         setFilterActionInExternalPanels();
 
-        if (!ObjectRendererUtils.checkActionTag(BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT)) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT,
+                        getConnectionContext())) {
             btnRechnungsanlage.setEnabled(false);
             cboHideFreeDownloadsRechnungsanlage.setEnabled(false);
         }
 
         tblBillings.getRowSorter().toggleSortOrder(6);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -302,7 +317,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         jPanel4 = new javax.swing.JPanel();
         cboHideFreeDownloadsRechnungsanlage = new javax.swing.JCheckBox();
         cboHideFreeDownloadsBuchungsbeleg = new javax.swing.JCheckBox();
-        btnRechnungsanlage = new BillingRestrictedReportJButton();
+        btnRechnungsanlage = new BillingRestrictedReportJButton(getConnectionContext());
         btnBuchungsbeleg = new javax.swing.JButton();
         smiplFilter = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -923,7 +938,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                     public void billingDone(final boolean isDone) {
                         filterBuchungen();
                     }
-                });
+                },
+                getConnectionContext());
 
         printBillingReportForCustomer.print();
     } //GEN-LAST:event_btnRechnungsanlageActionPerformed
@@ -941,7 +957,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             false,
             this,
             retrieveShowBillingInReport(evt),
-            null).print();
+            null,
+            getConnectionContext()).print();
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
 
     /**
@@ -1058,7 +1075,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 itsMe = SessionManager.getConnection()
                             .hasConfigAttr(SessionManager.getSession().getUser(),
                                     "custom.billing.tree."
-                                    + (String)kundeBean.getProperty("name_intern"));
+                                    + (String)kundeBean.getProperty("name_intern"),
+                                    getConnectionContext());
             } catch (final Exception ex) {
             }
             pnlVerwendungszweck.initVerwendungszweckCheckBoxes(itsMe);
@@ -1339,7 +1357,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 @Override
                 protected List<CidsBean> doInBackground() throws Exception {
                     final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), cidsBillingSearchStatement);
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                    cidsBillingSearchStatement,
+                                    getConnectionContext());
                     publish(mons.size());
                     final List<CidsBean> beans;
                     if (mons != null) {
@@ -1351,7 +1371,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                             if (mon != null) {
                                 publish(beans.size() + 1);
                                 final MetaObject mo = SessionManager.getProxy()
-                                            .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                            .getMetaObject(mon.getObjectId(),
+                                                mon.getClassId(),
+                                                mon.getDomain(),
+                                                getConnectionContext());
                                 final CidsBean bean = (mo != null) ? mo.getBean() : null;
                                 beans.add(bean);
                             }
@@ -1435,6 +1458,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             };
         pnlTimeFilters.setFilterSettingChangedAction(filterAction);
         pnlVerwendungszweck.setFilterSettingChangedAction(filterAction);
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

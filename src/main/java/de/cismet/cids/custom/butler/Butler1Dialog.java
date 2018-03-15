@@ -67,6 +67,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -78,7 +81,7 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler1Dialog extends javax.swing.JDialog implements DocumentListener {
+public class Butler1Dialog extends javax.swing.JDialog implements DocumentListener, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -101,6 +104,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private final GeometryFactory factory = new GeometryFactory(new PrecisionModel(),
             CrsTransformer.extractSridFromCrs(AlkisConstants.COMMONS.SRS_SERVICE));
     private boolean documentListenersRemoved = false;
+    private final ConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
@@ -135,11 +139,15 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     /**
      * Creates new form Butler1Dialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Butler1Dialog(final java.awt.Frame parent, final boolean modal) {
+    public Butler1Dialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
         pointFeature = createPointFeature();
         rectangleFeature = createRectangleFeature();
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
@@ -239,7 +247,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 
         pnlProductSettings = new javax.swing.JPanel();
         tbpProducts = new javax.swing.JTabbedPane();
-        butler1ProductPanel1 = new de.cismet.cids.custom.butler.Butler1ProductPanel();
+        butler1ProductPanel1 = new de.cismet.cids.custom.butler.Butler1ProductPanel(getConnectionContext());
         pnlMapSettings = new javax.swing.JPanel();
         lblLowerPosition = new javax.swing.JLabel();
         tfLowerE = new javax.swing.JTextField();
@@ -699,7 +707,8 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                                 minX,
                                 minY,
                                 maxX,
-                                maxY);
+                                maxY,
+                                getConnectionContext());
                         downloads.add(download);
                     }
                     DownloadManager.instance()
@@ -1035,7 +1044,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         final int number = tbpProducts.getTabCount();
         final String title = "Produkt " + number;
         final int tabPos = tbpProducts.getTabCount() - 1;
-        final Butler1ProductPanel productPan = new Butler1ProductPanel();
+        final Butler1ProductPanel productPan = new Butler1ProductPanel(getConnectionContext());
         if ((rectangleFeature != null) && (rectangleFeature.getGeometry() != null)) {
             productPan.setGeometry(rectangleFeature.getGeometry());
         }
@@ -1358,5 +1367,10 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         fas.setSweetSpotY(0.5);
         dsf.setPointAnnotationSymbol(fas);
         return dsf;
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

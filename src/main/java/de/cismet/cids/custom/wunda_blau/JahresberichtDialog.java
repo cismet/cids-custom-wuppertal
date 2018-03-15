@@ -37,13 +37,16 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class JahresberichtDialog extends javax.swing.JDialog {
+public class JahresberichtDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -54,6 +57,8 @@ public class JahresberichtDialog extends javax.swing.JDialog {
     //~ Instance fields --------------------------------------------------------
 
     private SwingWorker worker;
+
+    private final ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -76,8 +81,9 @@ public class JahresberichtDialog extends javax.swing.JDialog {
     /**
      * Creates new form Jahresbericht.
      */
-    public JahresberichtDialog() {
+    private JahresberichtDialog() {
         super((JFrame)null, false);
+
         initComponents();
     }
 
@@ -323,7 +329,8 @@ public class JahresberichtDialog extends javax.swing.JDialog {
                     try {
                         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                     .customServerSearch(SessionManager.getSession().getUser(),
-                                        cidsBillingSearchStatement);
+                                        cidsBillingSearchStatement,
+                                        getConnectionContext());
 
                         if (mons == null) {
                             LOG.error("Billing metaobjects was null.");
@@ -338,7 +345,10 @@ public class JahresberichtDialog extends javax.swing.JDialog {
                                 if (mon != null) {
                                     publish(billingBeans.size() + 1);
                                     final MetaObject mo = SessionManager.getProxy()
-                                                .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                                .getMetaObject(mon.getObjectId(),
+                                                    mon.getClassId(),
+                                                    mon.getDomain(),
+                                                    getConnectionContext());
                                     final CidsBean bean = (mo != null) ? mo.getBean() : null;
                                     billingBeans.add(bean);
                                 }
@@ -388,7 +398,8 @@ public class JahresberichtDialog extends javax.swing.JDialog {
                                 final PrintJahresberichtReport report = new PrintJahresberichtReport(
                                         year,
                                         fromDate_tillDate,
-                                        billings);
+                                        billings,
+                                        getConnectionContext());
                                 report.print();
                             }
                         }
@@ -411,4 +422,9 @@ public class JahresberichtDialog extends javax.swing.JDialog {
             };
         worker.execute();
     } //GEN-LAST:event_btnOkActionPerformed
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 }

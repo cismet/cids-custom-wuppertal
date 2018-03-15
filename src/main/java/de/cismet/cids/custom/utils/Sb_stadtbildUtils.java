@@ -48,6 +48,7 @@ import javax.imageio.ImageIO;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -56,6 +57,9 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.commons.concurrency.CismetConcurrency;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.security.WebAccessManager;
 
@@ -79,8 +83,8 @@ public class Sb_stadtbildUtils {
     public static BufferedImage ERROR_IMAGE;
     public static BufferedImage PLACEHOLDER_IMAGE;
 
-    private static final CidsBean WUPPERTAL;
-    private static final CidsBean R102;
+    private static CidsBean WUPPERTAL;
+    private static CidsBean R102;
 
     private static final int CACHE_SIZE = 100;
 
@@ -96,9 +100,6 @@ public class Sb_stadtbildUtils {
     public static final int LOW_PRIORITY = -1;
 
     static {
-        WUPPERTAL = getOrtWupertal();
-        R102 = getLagerR102();
-
         try {
             ERROR_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResourceAsStream(
                         "/de/cismet/cids/custom/objecteditors/wunda_blau/no_image.png"));
@@ -139,9 +140,14 @@ public class Sb_stadtbildUtils {
     /**
      * Get the CidsBean of the Sb_Ort with the name 'Wuppertal'. Might be null.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean getWUPPERTAL() {
+    public static CidsBean getWuppertal(final ConnectionContext connectionContext) {
+        if (WUPPERTAL == null) {
+            WUPPERTAL = getOrtWuppertal(connectionContext);
+        }
         return WUPPERTAL;
     }
 
@@ -158,22 +164,30 @@ public class Sb_stadtbildUtils {
     /**
      * Get the CidsBean of the Sb_Lager with the name 'R102'. Might be null.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean getR102() {
+    public static CidsBean getR102(final ConnectionContext connectionContext) {
+        if (R102 == null) {
+            R102 = getLagerR102(connectionContext);
+        }
         return R102;
     }
 
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    private static CidsBean getOrtWupertal() {
+    private static CidsBean getOrtWuppertal(final ConnectionContext connectionContext) {
         try {
             final MetaClass ortClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
-                    "sb_ort");
+                    "sb_ort",
+                    connectionContext);
             if (ortClass != null) {
                 final StringBuffer wuppertalQuery = new StringBuffer("select ").append(ortClass.getId())
                             .append(", ")
@@ -186,7 +200,8 @@ public class Sb_stadtbildUtils {
                 }
                 final MetaObject[] wuppertal;
                 try {
-                    wuppertal = SessionManager.getProxy().getMetaObjectByQuery(wuppertalQuery.toString(), 0);
+                    wuppertal = SessionManager.getProxy()
+                                .getMetaObjectByQuery(wuppertalQuery.toString(), 0, connectionContext);
                     if (wuppertal.length > 0) {
                         return wuppertal[0].getBean();
                     }
@@ -203,13 +218,16 @@ public class Sb_stadtbildUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    private static CidsBean getLagerR102() {
+    private static CidsBean getLagerR102(final ConnectionContext connectionContext) {
         try {
             final MetaClass lagerClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
-                    "sb_lager");
+                    "sb_lager",
+                    connectionContext);
             if (lagerClass != null) {
                 final StringBuffer r102Query = new StringBuffer("select ").append(lagerClass.getId())
                             .append(", ")
@@ -222,7 +240,7 @@ public class Sb_stadtbildUtils {
                 }
                 final MetaObject[] r102;
                 try {
-                    r102 = SessionManager.getProxy().getMetaObjectByQuery(r102Query.toString(), 0);
+                    r102 = SessionManager.getProxy().getMetaObjectByQuery(r102Query.toString(), 0, connectionContext);
                     if (r102.length > 0) {
                         return r102[0].getBean();
                     }
@@ -242,15 +260,19 @@ public class Sb_stadtbildUtils {
      * model of the FastBindableReferenceCombo is set as the model of the combobox. Finally the combobox is decorated
      * with the AutoCompleteDecorator.
      *
-     * @param  combobox   The model of that combobox will be replaced
-     * @param  className  the cids class name. The elements of this class will be fetched.
+     * @param  combobox           The model of that combobox will be replaced
+     * @param  className          the cids class name. The elements of this class will be fetched.
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox, final String className) {
-        final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className);
+    public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox,
+            final String className,
+            final ConnectionContext connectionContext) {
+        final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className, connectionContext);
         if (metaClass != null) {
             final DefaultComboBoxModel comboBoxModel;
             try {
                 final FastBindableReferenceCombo tempFastBindableCombo = new FastBindableReferenceCombo();
+                new DummyContextPanel(connectionContext).add(tempFastBindableCombo);
                 tempFastBindableCombo.setSorted(true);
                 tempFastBindableCombo.setNullable(true);
                 tempFastBindableCombo.setMetaClass(metaClass);
@@ -375,15 +397,17 @@ public class Sb_stadtbildUtils {
      * cache. If this is the case the cached image is returned. If not the image corresponding to the number is
      * downloaded. In that case a Future&lt;Image&gt; is returned.
      *
-     * @param   statdbildserie  DOCUMENT ME!
-     * @param   bildnummer      DOCUMENT ME!
-     * @param   priority        DOCUMENT ME!
+     * @param   statdbildserie     DOCUMENT ME!
+     * @param   bildnummer         DOCUMENT ME!
+     * @param   priority           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static Object fetchImageForBildnummer(final CidsBean statdbildserie,
             final String bildnummer,
-            final int priority) {
+            final int priority,
+            final ConnectionContext connectionContext) {
         if (isBildnummerInCacheOrFailed(bildnummer)) {
             final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
             if (cachedImageRef != null) {
@@ -395,7 +419,8 @@ public class Sb_stadtbildUtils {
         }
         final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(
                     statdbildserie,
-                    bildnummer),
+                    bildnummer,
+                    connectionContext),
                 priority);
         return futureImage;
     }
@@ -441,14 +466,17 @@ public class Sb_stadtbildUtils {
     /**
      * Checks if the Stadtbilder are in the cache. If not they will be downloaded. Returns immediately.
      *
-     * @param  stadtbildserie  DOCUMENT ME!
-     * @param  stadtbilder     DOCUMENT ME!
+     * @param  stadtbildserie     DOCUMENT ME!
+     * @param  stadtbilder        DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie, final List<CidsBean> stadtbilder) {
+    public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie,
+            final List<CidsBean> stadtbilder,
+            final ConnectionContext connectionContext) {
         for (int i = 0; (i < CACHE_SIZE) && (i < stadtbilder.size()); i++) {
             final String bildnummer = (String)stadtbilder.get(i).getProperty("bildnummer");
             try {
-                fetchImageForBildnummer(stadtbildserie, bildnummer, NORMAL_PRIORITY);
+                fetchImageForBildnummer(stadtbildserie, bildnummer, NORMAL_PRIORITY, connectionContext);
             } catch (Exception ex) {
                 LOG.error("Problem while loading image " + bildnummer);
             }
@@ -600,28 +628,35 @@ public class Sb_stadtbildUtils {
 
         //~ Instance fields ----------------------------------------------------
 
-        CidsBean stadtbildserie;
-        String bildnummer;
+        final CidsBean stadtbildserie;
+        final String bildnummer;
+        final ConnectionContext connectionContext;
 
         //~ Constructors -------------------------------------------------------
 
         /**
          * Creates a new PriorityCallable object.
          *
-         * @param  stadtbildserie  DOCUMENT ME!
-         * @param  bildnummer      DOCUMENT ME!
+         * @param  stadtbildserie     DOCUMENT ME!
+         * @param  bildnummer         DOCUMENT ME!
+         * @param  connectionContext  DOCUMENT ME!
          */
-        public FetchImagePriorityCallable(final CidsBean stadtbildserie, final String bildnummer) {
+        public FetchImagePriorityCallable(final CidsBean stadtbildserie,
+                final String bildnummer,
+                final ConnectionContext connectionContext) {
             this.stadtbildserie = stadtbildserie;
             this.bildnummer = bildnummer;
+            this.connectionContext = connectionContext;
         }
 
         //~ Methods ------------------------------------------------------------
 
         @Override
         public Image call() throws Exception {
-            if (!Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie)
-                        .isPreviewAllowed()) {
+            if (
+                !Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
+                            stadtbildserie,
+                            connectionContext).isPreviewAllowed()) {
                 FAILED_IMAGES.put(bildnummer, "The user is not allowed to see the image "
                             + bildnummer);
                 return null;
@@ -889,6 +924,36 @@ public class Sb_stadtbildUtils {
         private void remove(final Key key) {
             queue.remove(key);
             map.get(key);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class DummyContextPanel extends JPanel implements ConnectionContextProvider {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final ConnectionContext connectionContext;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DummyContextPanel object.
+         *
+         * @param  connectionContext  DOCUMENT ME!
+         */
+        DummyContextPanel(final ConnectionContext connectionContext) {
+            this.connectionContext = connectionContext;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public ConnectionContext getConnectionContext() {
+            return connectionContext;
         }
     }
 }

@@ -61,13 +61,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -90,7 +88,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
-import de.cismet.cids.custom.utils.alkis.AlkisPunktReportScriptlet;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
@@ -102,6 +99,9 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.security.WebAccessManager;
 
@@ -133,7 +133,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     TitleComponentProvider,
     FooterComponentProvider,
     BorderProvider,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -342,8 +343,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private Point point;
     private CidsBean cidsBean;
     private String title;
-    private final CardLayout cardLayout;
-    private final CardLayout cardLayoutForContent;
+    private CardLayout cardLayout;
+    private CardLayout cardLayoutForContent;
 //    private BindingGroup punktOrtBindingGroup;
     private List<PointLocation> pointLocations;
     // should be static!
@@ -351,6 +352,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private ImageIcon PUNKT_HTML;
     private ImageIcon PUNKT_TXT;
     private String urlOfAPMap;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrAPMapControls;
     private org.jdesktop.swingx.JXBusyLabel blWaiting;
@@ -462,13 +466,19 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alkis_pointRenderer.
+     * Creates a new AlkisPointRenderer object.
      */
     public AlkisPointRenderer() {
         retrieveableLabels = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
+    }
 
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             try {
                 soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
                 infoService = soapProvider.getAlkisInfoService();
@@ -510,26 +520,29 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         retrieveableLabels.add(lblTxtLand);
         retrieveableLabels.add(lblTxtDienststelle);
         retrieveableLabels.add(lblTxtAnlass);
-        if (!AlkisUtils.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtils.validateUserHasAlkisProductAccess(getConnectionContext())) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
-        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
+        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext()));
 
-        final boolean billingAllowedPdf = BillingPopup.isBillingAllowed("pktlstpdf");
-        final boolean billingAllowedTxt = BillingPopup.isBillingAllowed("pktlsttxt");
+        final boolean billingAllowedPdf = BillingPopup.isBillingAllowed("pktlstpdf", getConnectionContext());
+        final boolean billingAllowedTxt = BillingPopup.isBillingAllowed("pktlsttxt", getConnectionContext());
         final boolean billingAllowedHtml = billingAllowedPdf || billingAllowedTxt;
 
         hlPunktlisteHtml.setEnabled(billingAllowedHtml
-                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext()));
         hlPunktlistePdf.setEnabled(billingAllowedPdf
-                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext()));
         hlPunktlisteTxt.setEnabled(billingAllowedTxt
-                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext()));
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -2022,7 +2035,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  productType  DOCUMENT ME!
      */
     private void downloadProduct(final String productType) {
-        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE)) {
+        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE, getConnectionContext())) {
             showNoProductPermissionWarning();
             return;
         }
@@ -2477,7 +2490,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             if (infoService != null) {
                 return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
             } else {
-                return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode);
+                return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode, getConnectionContext());
             }
         }
 

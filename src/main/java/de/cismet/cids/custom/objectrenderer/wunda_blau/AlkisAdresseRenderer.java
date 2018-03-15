@@ -45,6 +45,9 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
@@ -61,7 +64,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     BorderProvider,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -72,17 +76,9 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     private Buchungsblatt buchungsblatt;
     private CidsBean cidsBean;
     private String title;
-//    private final ListCellRenderer landparcelListCellRenderer = new DefaultListCellRenderer() {
-//
-//        @Override
-//        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-//            if(value instanceof CidsBean) {
-////                value = value.toString() + " "+;
-//            }
-//            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-//        }
-//
-//    };
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private javax.swing.JLabel jLabel1;
@@ -123,11 +119,16 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
      * Creates new form Alkis_pointRenderer.
      */
     public AlkisAdresseRenderer() {
-        initComponents();
-        blWait.setVisible(false);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+        blWait.setVisible(false);
+    }
 
     /**
      * DOCUMENT ME!
@@ -146,7 +147,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
                     search.setRepresentationFields(new String[] { "id", "strasse", "nummer" });
                     search.setGebaudeId(gebaeudeId);
                     final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
-                                .customServerSearch(search);
+                                .customServerSearch(search, getConnectionContext());
                     for (final LightweightMetaObject lwmo : lwmos) {
                         lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -512,7 +513,10 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
                 final Object jumpID = selBean.getProperty("fullobjectid");
                 if (jumpID instanceof Integer) {
                     final String tabname = "alkis_landparcel";
-                    final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabname);
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                            CidsBeanSupport.DOMAIN_NAME,
+                            tabname,
+                            getConnectionContext());
                     if (mc != null) {
                         ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer)jumpID, "");
                     } else {
@@ -720,5 +724,10 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
     @Override
     public void dispose() {
         bindingGroup.unbind();
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

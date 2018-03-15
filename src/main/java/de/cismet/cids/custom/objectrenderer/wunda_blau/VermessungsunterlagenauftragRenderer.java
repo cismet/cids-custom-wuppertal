@@ -93,6 +93,9 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -106,7 +109,9 @@ import de.cismet.tools.gui.downloadmanager.HttpOrFtpDownload;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer, TitleComponentProvider {
+public class VermessungsunterlagenauftragRenderer extends JPanel implements CidsBeanRenderer,
+    TitleComponentProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -124,13 +129,15 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private CidsBean cidsBean;
     private String title;
 
-    private final MappingComponent mappingComponent;
+    private MappingComponent mappingComponent;
     private StyledFeature geometrieFeature;
     private StyledFeature geometrieSaumFeature;
     private StyledFeature flurstueckeFeature;
     private String vermStelle;
 
-    private final Map<String, CidsBean> fsMap = new HashMap<String, CidsBean>();
+    private final Map<String, CidsBean> fsMap = new HashMap<>();
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -208,9 +215,16 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new Sb_stadtbildserieEditor object.
+     * Creates a new VermessungsunterlagenauftragRenderer object.
      */
     public VermessungsunterlagenauftragRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         title = "";
@@ -229,8 +243,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         objectMapper.registerModule(module);
         exceptionDialog.pack();
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1182,7 +1194,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                                 .executeTask(SessionManager.getSession().getUser(),
                                     GetServerResourceServerAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    WundaBlauServerResources.VERMESSUNGSUNTERLAGENPORTAL_PROPERTIES.getValue());
+                                    WundaBlauServerResources.VERMESSUNGSUNTERLAGENPORTAL_PROPERTIES.getValue(),
+                                    getConnectionContext());
                     if (ret instanceof Exception) {
                         throw (Exception)ret;
                     }
@@ -1304,9 +1317,14 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                                 if (cidsBean.getProperty("historisch") != null) {
                                     return cidsBean;
                                 } else {
-                                    final MetaObjectNode mon = FlurstueckRenderer.searchAlkisLandparcel(cidsBean);
+                                    final MetaObjectNode mon = FlurstueckRenderer.searchAlkisLandparcel(
+                                            cidsBean,
+                                            getConnectionContext());
                                     final MetaObject mo = SessionManager.getProxy()
-                                                .getMetaObject(mon.getObjectId(), mon.getClassId(), mon.getDomain());
+                                                .getMetaObject(mon.getObjectId(),
+                                                    mon.getClassId(),
+                                                    mon.getDomain(),
+                                                    getConnectionContext());
                                     return mo.getBean();
                                 }
                             }
@@ -1348,7 +1366,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 @Override
                 protected CidsBean doInBackground() throws Exception {
                     cidsBean.setProperty("test", jCheckBox1.isSelected());
-                    return cidsBean.persist();
+                    return cidsBean.persist(getConnectionContext());
                 }
 
                 @Override
@@ -1430,7 +1448,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             this.cidsBean = cidsBean;
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             initFeatures();
             initMap();
 
@@ -1525,12 +1544,17 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             final String flur,
             final String zaehler,
             final String nenner) throws Exception {
-        final MetaObject[] mos = FlurstueckFinder.getLWLandparcel(gemarkung, flur, zaehler, nenner);
+        final MetaObject[] mos = FlurstueckFinder.getLWLandparcel(
+                gemarkung,
+                flur,
+                zaehler,
+                nenner,
+                getConnectionContext());
 
         if ((mos != null) && (mos.length > 0)) {
             final MetaObject mo = mos[0];
             final CidsBean kickerBean = SessionManager.getProxy()
-                        .getMetaObject(mo.getId(), mo.getClassID(), "WUNDA_BLAU")
+                        .getMetaObject(mo.getId(), mo.getClassID(), "WUNDA_BLAU", getConnectionContext())
                         .getBean();
 
             return (CidsBean)kickerBean.getProperty("fs_referenz");
@@ -1704,7 +1728,9 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         final CidsServerSearch search = new KundeByVermessungsStellenNummerSearch(
                                 vermessungsstelle.substring(2));
                         final Collection res = SessionManager.getProxy()
-                                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                        search,
+                                        getConnectionContext());
                         if ((res == null) || res.isEmpty()) {
                             return "nicht registrierte Vermessungsstelle";
                         } else {
@@ -1725,6 +1751,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     }
                 }
             }.execute();
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

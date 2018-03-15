@@ -19,7 +19,6 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
@@ -51,7 +50,6 @@ import javax.swing.ListModel;
 
 import de.cismet.cids.custom.objecteditors.utils.VermessungRissUtils;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
-import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -76,6 +74,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static javax.swing.Action.NAME;
@@ -90,7 +91,8 @@ import static javax.swing.Action.NAME;
 public class VermessungRissWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -109,6 +111,9 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private GeoSearchButton btnGeoSearch;
     private VermessungFlurstueckSelectionDialog flurstueckDialog;
     private DefaultListModel flurstuecksvermessungFilterModel = null;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
 //    private ImageIcon icoPluginRectangle;
 //    private ImageIcon icoPluginPolygon;
 //    private ImageIcon icoPluginEllipse;
@@ -157,10 +162,20 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      * Creates new form VermessungRissWindowSearch.
      */
     public VermessungRissWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             mappingComponent = CismapBroker.getInstance().getMappingComponent();
             geoSearchEnabled = mappingComponent != null;
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "vermessung_riss");
+            metaClass = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "vermessung_riss",
+                    getConnectionContext());
 
             if (metaClass != null) {
                 byte[] iconDataFromMetaclass = new byte[] {};
@@ -192,7 +207,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
                 new CidsBeanDropTarget((DropAwareJList)lstFlurstuecke);
 
-                pnlSearchCancel = new SearchControlPanel(this);
+                pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
                 final Dimension max = pnlSearchCancel.getMaximumSize();
                 final Dimension min = pnlSearchCancel.getMinimumSize();
                 final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -231,7 +246,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 flurstuecksvermessungFilterModel = new DefaultListModel();
                 lstFlurstuecke.setModel(flurstuecksvermessungFilterModel);
 
-                flurstueckDialog = new VermessungFlurstueckSelectionDialog(false) {
+                flurstueckDialog = new VermessungFlurstueckSelectionDialog(false, getConnectionContext()) {
 
                         @Override
                         public void okHook() {
@@ -253,7 +268,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         result = SessionManager.getProxy()
                                     .customServerSearch(SessionManager.getSession().getUser(),
                                             new CidsVermessungRissArtSearchStatement(
-                                                SessionManager.getSession().getUser()));
+                                                SessionManager.getSession().getUser()),
+                                            getConnectionContext());
                     } catch (final ConnectionException ex) {
                         LOG.warn(
                             "Could not fetch veranederungsart entries. Editing flurstuecksvermessung will not work.",
@@ -271,7 +287,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 // for the search.
                 final CidsBean veraenderungsartAll = CidsBean.createNewCidsBeanFromTableName(
                         "WUNDA_BLAU",
-                        VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_TABLE_NAME);
+                        VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_TABLE_NAME,
+                        getConnectionContext());
                 veraenderungsartAll.setProperty(
                     VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_CODE,
                     VERAENDERUNGSART_ALL_CODE);
@@ -293,8 +310,6 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
             mappingComponent = null;
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -951,7 +966,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         if (VermessungRissCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
     }
@@ -1116,7 +1131,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
 
     @Override
@@ -1139,6 +1154,11 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1256,10 +1276,11 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 for (final CidsBean dropped : beans) {
                     final CidsBean newEntry = CidsBean.createNewCidsBeanFromTableName(
                             "WUNDA_BLAU",
-                            "vermessung_flurstuecksvermessung");
+                            "vermessung_flurstuecksvermessung",
+                            getConnectionContext());
                     newEntry.setProperty("veraenderungsart", null);
                     newEntry.setProperty("tmp_lp_orig", dropped);
-                    VermessungRissUtils.setFluerstueckKickerInVermessung(newEntry);
+                    VermessungRissUtils.setFluerstueckKickerInVermessung(newEntry, getConnectionContext());
                     flurstuecksvermessungFilterModel.addElement(newEntry);
                 }
             } catch (Exception ex) {

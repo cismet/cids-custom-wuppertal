@@ -67,6 +67,10 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -80,7 +84,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     CidsBeanDropListener,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -96,6 +101,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFS;
     private javax.swing.JButton btnFromMapFS;
@@ -128,10 +135,17 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      * Creates new form BaulastWindowSearch.
      */
     public BaulastWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
-            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
+            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST", getConnectionContext());
             icon = new ImageIcon(mc.getIconData());
-            fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
+            fsSelectionDialoge = new FlurstueckSelectionDialoge(false, getConnectionContext()) {
 
                     @Override
                     public void okHook() {
@@ -143,10 +157,13 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 };
 
             initComponents();
-            final MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
+            final MetaClass artMC = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "ALB_BAULAST_ART",
+                    getConnectionContext());
             final DefaultComboBoxModel cbArtModel;
             try {
-                cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true);
+                cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true, getConnectionContext());
                 cbArt.setModel(cbArtModel);
             } catch (Exception ex) {
                 log.error(ex, ex);
@@ -166,7 +183,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             new CidsBeanDropTarget(this);
             fsSelectionDialoge.pack();
 //        cmdAbort.setVisible(false);
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -202,8 +219,6 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             log.warn("Error in Constructor of BaulastWindowSearch", exception);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -623,9 +638,9 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 log.error("Can not parse information from Flurstueck bean: " + fsBean, ex);
             }
         }
-        MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST");
+        MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST", getConnectionContext());
         final int baulastClassID = mc.getID();
-        mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULASTBLATT");
+        mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULASTBLATT", getConnectionContext());
         final int baulastblattClassID = mc.getID();
         return new CidsBaulastSearchStatement(bsi, baulastClassID, baulastblattClassID);
     }
@@ -655,7 +670,9 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public boolean checkActionTag() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search@WUNDA_BLAU")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "navigator.baulasten.search@WUNDA_BLAU",
+                                getConnectionContext())
                         != null;
         } catch (ConnectionException ex) {
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
@@ -730,8 +747,13 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         if (BaulastCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -65,6 +65,9 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -78,7 +81,8 @@ import de.cismet.tools.gui.StaticSwingTools;
 public abstract class BodenAbstractEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     EditorSaveListener,
     RequestsFullSizeComponent,
-    Disposable {
+    Disposable,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -87,14 +91,15 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
 
     //~ Instance fields --------------------------------------------------------
 
-    final Collection<Feature> editorSupportingFeatures = new ArrayList<Feature>();
+    final Collection<Feature> editorSupportingFeatures = new ArrayList<>();
     private Collection<MetaObject> allSelectedObjects;
     private final boolean editable;
     private final Collection<JComponent> editableComponents;
-    private final FlurstueckSelectionDialoge fsDialoge;
-    private final MappingComponent map;
+    private FlurstueckSelectionDialoge fsDialoge;
+    private MappingComponent map;
     private String title;
     private CidsBean cidsBean;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField aktenzeichen;
@@ -137,7 +142,14 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
      */
     public BodenAbstractEditor(final boolean editable) {
         this.editable = editable;
-        this.editableComponents = new ArrayList<JComponent>();
+        this.editableComponents = new ArrayList<>();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         initEditableComponents();
 
@@ -150,10 +162,8 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
             this.remove(panMap);
             ((DefaultCismapGeometryComboBoxEditor)cbHinweisGeom).setLocalRenderFeatureString("hinweisgeometrie");
         }
-        fsDialoge = new FlurstueckSelectionDialoge();
+        fsDialoge = new FlurstueckSelectionDialoge(getConnectionContext());
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -751,11 +761,12 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
         try {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.unbind();
             if (cidsBean != null) {
                 final int[] flstIdx = lstFlurstuecke.getSelectedIndices();
-                final Collection<MetaObject> selObj = new ArrayList<MetaObject>(1);
+                final Collection<MetaObject> selObj = new ArrayList<>(1);
                 selObj.add(cidsBean.getMetaObject());
                 setAllSelectedMetaObjects(selObj);
                 this.cidsBean = cidsBean;
@@ -945,5 +956,10 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
         }
 
         return result;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

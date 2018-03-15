@@ -63,6 +63,9 @@ import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
@@ -91,7 +94,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    EditorSaveListener {
+    EditorSaveListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -122,6 +126,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     protected String oldLaufendeNummer;
     protected String urlOfDocument;
     protected RefreshDocumentWorker currentRefreshDocumentWorker;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
     private javax.swing.JButton btnHome;
@@ -191,7 +197,13 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      */
     public NivellementPunktEditor(final boolean readOnly) {
         this.readOnly = readOnly;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         setOpaque(false);
 
@@ -215,8 +227,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             chkHistorisch.setEnabled(false);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1096,7 +1106,10 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                             "no.yet",
                             (Geometry)null,
                             new ProductGroupAmount("ea", 1))) {
-                NivellementPunktAggregationRenderer.downloadReport(Arrays.asList(cidsBean), "", "");
+                NivellementPunktAggregationRenderer.downloadReport(Arrays.asList(cidsBean),
+                    "",
+                    "",
+                    getConnectionContext());
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -1169,7 +1182,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
 
             final String dgkBlattnummer = (String)cidsBean.getProperty("dgk_blattnummer");
@@ -1359,6 +1373,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 //            768);
     }
 
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1454,7 +1473,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
             measuringComponent.reset();
             if ((document != null) && !isCancelled()) {
-                final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+                final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf", getConnectionContext());
                 measuringComponent.setVisible(true);
                 lblMissingRasterdocument.setVisible(false);
                 measuringComponent.addImage(document);

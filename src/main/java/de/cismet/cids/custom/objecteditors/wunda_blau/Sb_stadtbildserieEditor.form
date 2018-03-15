@@ -322,7 +322,7 @@
                                   <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                                 </Property>
                                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="MauerEditor.btnAddImg.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="MauerEditor.btnRemoveImg.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                                 </Property>
                                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[46, 21]"/>
@@ -378,7 +378,7 @@
                                   <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                                 </Property>
                                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="MauerEditor.btnAddImg.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="MauerEditor.btnRemoveImg.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                                 </Property>
                                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[46, 21]"/>
@@ -554,7 +554,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.bildtyp}" target="dbcBildtyp" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(getConnectionContext())"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcBildtyp).setSorted(true);"/>
                             <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="((FastBindableReferenceCombo)dbcBildtyp).setNullable(false);"/>
                           </AuxValues>
@@ -572,7 +572,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.lager}" target="dbcLager" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(getConnectionContext())"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcLager).setSorted(true);"/>
                           </AuxValues>
                           <Constraints>
@@ -641,7 +641,7 @@
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dbcNutzungseinschraenkungActionPerformed"/>
                           </Events>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(getConnectionContext())"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcNutzungseinschraenkung).setSorted(true);&#xa;((FastBindableReferenceCombo)dbcNutzungseinschraenkung).setNullable(false);"/>
                           </AuxValues>
                           <Constraints>
@@ -737,7 +737,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.auftraggeber}" target="dbcAuftraggeber" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(getConnectionContext())"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableReferenceCombo)dbcAuftraggeber).setSortingColumn(&quot;name&quot;);"/>
                           </AuxValues>
                           <Constraints>
@@ -754,7 +754,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fotograf}" target="dbcFotograf" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(getConnectionContext())"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcFotograf).setSorted(true);"/>
                           </AuxValues>
                           <Constraints>
@@ -771,7 +771,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.filmart}" target="dbcFilmart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(getConnectionContext())"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcFilmart).setSorted(true);"/>
                           </AuxValues>
                           <Constraints>
@@ -913,7 +913,7 @@
                             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="dbcOrtItemStateChanged"/>
                           </Events>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(getConnectionContext())"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcOrt).setSorted(true);"/>
                           </AuxValues>
                           <Constraints>
@@ -1007,7 +1007,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.strasse}" target="bcbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo() "/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(getConnectionContext()) "/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)bcbStrasse).setSorted(true);"/>
                           </AuxValues>
                           <Constraints>
@@ -1036,7 +1036,8 @@
               <SubComponents>
                 <Component class="de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage" name="previewImage">
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="previewImage.setStadtbildserieProvider(this);&#xa;"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage(getConnectionContext())"/>
+                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="previewImage.setStadtbildserieProvider(this);"/>
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

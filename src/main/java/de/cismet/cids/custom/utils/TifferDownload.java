@@ -26,6 +26,9 @@ import de.cismet.cids.custom.wunda_blau.search.actions.TifferAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 
 import static de.cismet.cids.custom.wunda_blau.search.actions.TifferAction.ParameterType.*;
@@ -38,7 +41,7 @@ import static de.cismet.cids.custom.wunda_blau.search.actions.TifferAction.Param
  * @see      TifferAction
  * @see      ImageAnnotator
  */
-public class TifferDownload extends AbstractDownload {
+public class TifferDownload extends AbstractDownload implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -50,26 +53,31 @@ public class TifferDownload extends AbstractDownload {
     private final String scale;
     private final String format;
 
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new TifferDownload object.
      *
-     * @param  directory    DOCUMENT ME!
-     * @param  title        DOCUMENT ME!
-     * @param  filename     DOCUMENT ME!
-     * @param  imageNumber  DOCUMENT ME!
-     * @param  scale        DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  title              DOCUMENT ME!
+     * @param  filename           DOCUMENT ME!
+     * @param  imageNumber        DOCUMENT ME!
+     * @param  scale              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public TifferDownload(final String directory,
             final String title,
             final String filename,
             final String imageNumber,
-            final String scale) {
+            final String scale,
+            final ConnectionContext connectionContext) {
         this.imageNumber = imageNumber;
         this.directory = directory;
         this.title = title;
         this.scale = scale;
+        this.connectionContext = connectionContext;
 
         status = State.WAITING;
 
@@ -115,7 +123,8 @@ public class TifferDownload extends AbstractDownload {
                         .executeTask(
                                 TifferAction.ACTION_NAME,
                                 "WUNDA_BLAU",
-                                null,
+                                (Object)null,
+                                getConnectionContext(),
                                 paramNummer,
                                 paramScale,
                                 paramFormat,
@@ -158,5 +167,10 @@ public class TifferDownload extends AbstractDownload {
         return new ServerActionParameter(
                 SUBDIR.toString(),
                 subdir);
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

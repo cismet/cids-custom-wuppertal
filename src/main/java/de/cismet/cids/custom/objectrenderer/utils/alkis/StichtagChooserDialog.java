@@ -34,13 +34,16 @@ import java.util.logging.Level;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class StichtagChooserDialog extends javax.swing.JDialog {
+public class StichtagChooserDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -50,6 +53,8 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
     //~ Instance fields --------------------------------------------------------
 
     private Date lastValidDate;
+
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -74,10 +79,12 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
     /**
      * Creates new form StichtagChooserDialog2.
      *
-     * @param  parent  DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public StichtagChooserDialog(final java.awt.Frame parent) {
+    public StichtagChooserDialog(final java.awt.Frame parent, final ConnectionContext connectionContext) {
         super(parent, true);
+        this.connectionContext = connectionContext;
         initComponents();
         this.setTitle(NbBundle.getMessage(StichtagChooserDialog.class, "StichtagChooserDialog.title"));
         lblIcon.setIcon(UIManager.getIcon("OptionPane.questionIcon"));
@@ -283,10 +290,12 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
 
                 @Override
                 protected Date doInBackground() throws Exception {
-                    return (Date)SessionManager.getProxy().executeTask(
-                            "getDate",
-                            "WUNDA_BLAU",
-                            null);
+                    return (Date)SessionManager.getProxy()
+                                .executeTask(
+                                        "getDate",
+                                        "WUNDA_BLAU",
+                                        (Object)null,
+                                        getConnectionContext());
                 }
 
                 @Override
@@ -382,7 +391,9 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
 
                 @Override
                 public void run() {
-                    final StichtagChooserDialog dialog = new StichtagChooserDialog(new javax.swing.JFrame());
+                    final StichtagChooserDialog dialog = new StichtagChooserDialog(
+                            new javax.swing.JFrame(),
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -402,5 +413,10 @@ public class StichtagChooserDialog extends javax.swing.JDialog {
      */
     public Date getDate() {
         return datepicker.getDate();
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -38,6 +38,9 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
@@ -46,7 +49,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  *
  * @version  $Revision$, $Date$
  */
-public class TreppenReportTester {
+public class TreppenReportTester implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -57,16 +60,19 @@ public class TreppenReportTester {
     //~ Instance fields --------------------------------------------------------
 
     private final int id;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new TreppenReportTester object.
      *
-     * @param  id  DOCUMENT ME!
+     * @param  id                 DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppenReportTester(final int id) {
+    public TreppenReportTester(final int id, final ConnectionContext connectionContext) {
         this.id = id;
+        this.connectionContext = connectionContext;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -97,7 +103,7 @@ public class TreppenReportTester {
                         final int id = Integer.parseInt(args[2]);
                         final boolean compressionEnabled = (args.length > 3) && "compressionEnabled".equals(args[3]);
 
-                        final TreppenReportTester tester = new TreppenReportTester(id);
+                        final TreppenReportTester tester = new TreppenReportTester(id, ConnectionContext.createDummy());
                         tester.login(callServerURL, domain, compressionEnabled);
                         // System.exit(0);
                     } catch (final Exception ex) {
@@ -125,7 +131,11 @@ public class TreppenReportTester {
      * @param  compressionEnabled  DOCUMENT ME!
      */
     private void login(final String callServerURL, final String domain, final boolean compressionEnabled) {
-        final CidsAuthentification cidsAuth = new CidsAuthentification(callServerURL, domain, compressionEnabled);
+        final CidsAuthentification cidsAuth = new CidsAuthentification(
+                callServerURL,
+                domain,
+                compressionEnabled,
+                getConnectionContext());
         final JXLoginPane login = new JXLoginPane(cidsAuth);
 
         final JXLoginPane.JXLoginDialog loginDialog = new JXLoginPane.JXLoginDialog((Frame)null, login);
@@ -189,10 +199,14 @@ public class TreppenReportTester {
      * @throws  Exception  DOCUMENT ME!
      */
     public void go() throws Exception {
-        final MetaClass metaClass = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "treppe");
+        final MetaClass metaClass = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "treppe", getConnectionContext());
         LOG.fatal("load metaobject");
         final MetaObject metaObject = SessionManager.getProxy()
-                    .getMetaObject(SessionManager.getSession().getUser(), id, metaClass.getID(), "WUNDA_BLAU");
+                    .getMetaObject(SessionManager.getSession().getUser(),
+                        id,
+                        metaClass.getID(),
+                        "WUNDA_BLAU",
+                        getConnectionContext());
         final CidsBean cidsBean = metaObject.getBean();
         LOG.fatal("go test with bean");
         go(cidsBean);
@@ -206,7 +220,10 @@ public class TreppenReportTester {
      * @throws  Exception  DOCUMENT ME!
      */
     public void go(final CidsBean bean) throws Exception {
-        final TreppenReportBean reportBean = new TreppenReportBean(bean, null);
+        final TreppenReportBean reportBean = new TreppenReportBean(
+                bean,
+                null,
+                getConnectionContext());
 
         LOG.fatal("report bean created");
 
@@ -224,5 +241,10 @@ public class TreppenReportTester {
             "/de/cismet/cids/custom/reports/wunda_blau/treppe-katasterblatt.jasper",
             Arrays.asList(new TreppenReportBean[] { reportBean }),
             new HashMap<>());
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

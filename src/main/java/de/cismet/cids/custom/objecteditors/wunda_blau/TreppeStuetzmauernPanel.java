@@ -30,7 +30,6 @@ import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,13 +51,16 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Disposable {
+public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Disposable, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -70,6 +72,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     private List<CidsBean> cidsBeans;
     private final boolean editable;
     private final HashMap<CidsBean, CidsBean> zustandBeanMap = new HashMap<>();
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     Box.Filler filler1;
@@ -81,18 +84,21 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
     /**
      * Creates a new TreppeStuetzmauernPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel() {
-        this(true, true);
+    public TreppeStuetzmauernPanel(final ConnectionContext connectionContext) {
+        this(true, true, connectionContext);
     }
 
     /**
      * Creates a new TreppeStuetzmauernPanel object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel(final boolean editable) {
-        this(editable, false);
+    public TreppeStuetzmauernPanel(final boolean editable, final ConnectionContext connectionContext) {
+        this(editable, false, connectionContext);
     }
 
     /**
@@ -100,10 +106,14 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
      *
      * @param  editable             DOCUMENT ME!
      * @param  netbeansDesignDummy  DOCUMENT ME!
+     * @param  connectionContext    DOCUMENT ME!
      */
-    public TreppeStuetzmauernPanel(final boolean editable, final boolean netbeansDesignDummy) {
+    public TreppeStuetzmauernPanel(final boolean editable,
+            final boolean netbeansDesignDummy,
+            final ConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
         this.editable = editable;
+        this.connectionContext = connectionContext;
         initComponents();
     }
 
@@ -139,9 +149,10 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
                             protected CidsBean doInBackground() throws Exception {
                                 final MetaClass mc = CidsBean.getMetaClassFromTableName(
                                         "WUNDA_BLAU",
-                                        "mauer");
+                                        "mauer",
+                                        getConnectionContext());
                                 final MetaObject mo = SessionManager.getProxy()
-                                            .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU");
+                                            .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU", getConnectionContext());
                                 final CidsBean mauerBean = mo.getBean();
                                 return mauerBean;
                             }
@@ -206,7 +217,8 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
                     final CidsBean zustandBean = CidsBean.createNewCidsBeanFromTableName(
                             "WUNDA_BLAU",
-                            "TREPPE_ZUSTAND");
+                            "TREPPE_ZUSTAND",
+                            getConnectionContext());
                     zustandBean.setProperty("verkehrssicherheit", null);
                     zustandBean.setProperty("dauerhaftigkeit", null);
                     zustandBean.setProperty("standsicherheit", null);
@@ -389,6 +401,11 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         zustandBeanMap.clear();
     }
 
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -411,7 +428,8 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
                         try {
                             final CidsBean treppeMauerBean = CidsBean.createNewCidsBeanFromTableName(
                                     "WUNDA_BLAU",
-                                    "TREPPE_STUETZMAUER");
+                                    "TREPPE_STUETZMAUER",
+                                    getConnectionContext());
 
                             addMauerPanel(treppeMauerBean, droppedBean);
                             cidsBeans.add(treppeMauerBean);

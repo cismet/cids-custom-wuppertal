@@ -21,12 +21,13 @@ import org.openide.util.lookup.ServiceProvider;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.SwingUtilities;
-
 import de.cismet.cids.custom.utils.butler.ButlerRequestInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -40,14 +41,23 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class ButlerStartUpHook implements StartupHook {
+public class ButlerStartUpHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String SERVER_ACTION = "butler1Query";
-    private static final Logger log = Logger.getLogger(ButlerStartUpHook.class);
+    private static final Logger LOG = Logger.getLogger(ButlerStartUpHook.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     @Override
     public void applicationStarted() {
@@ -67,9 +77,11 @@ public class ButlerStartUpHook implements StartupHook {
         boolean hasButlerAccess = false;
         try {
             hasButlerAccess = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://butler1Query") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://butler1Query",
+                                getConnectionContext()) != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Butler!", ex);
+            LOG.error("Could not validate action tag for Butler!", ex);
         }
         if (hasButlerAccess) {
             final ServerActionParameter paramMethod = new ServerActionParameter(
@@ -81,14 +93,15 @@ public class ButlerStartUpHook implements StartupHook {
                             .executeTask(
                                     SERVER_ACTION,
                                     "WUNDA_BLAU",
-                                    null,
+                                    (Object)null,
+                                    getConnectionContext(),
                                     paramMethod);
             } catch (ConnectionException ex) {
-                log.error("error while getting the list of undelivered butler 1 requests from server", ex);
+                LOG.error("error while getting the list of undelivered butler 1 requests from server", ex);
                 return;
             }
             if ((openRequestIds == null) || openRequestIds.isEmpty()) {
-                log.info("no pending butler orders found for the logged in user");
+                LOG.info("no pending butler orders found for the logged in user");
                 return;
             }
 
@@ -97,12 +110,16 @@ public class ButlerStartUpHook implements StartupHook {
                 logMessageBuilder.append(s);
                 logMessageBuilder.append(",");
             }
-            log.fatal("pending nas orders found: " + logMessageBuilder.toString());
+            LOG.fatal("pending nas orders found: " + logMessageBuilder.toString());
             // generate a new NasDownload object for pending orders
             final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
             for (final String requestId : openRequestIds.keySet()) {
                 final ButlerRequestInfo info = (ButlerRequestInfo)openRequestIds.get(requestId);
-                final ButlerDownload download = new ButlerDownload(requestId, info.getUserOrderId(), info.getProduct());
+                final ButlerDownload download = new ButlerDownload(
+                        requestId,
+                        info.getUserOrderId(),
+                        info.getProduct(),
+                        getConnectionContext());
                 downloads.add(download);
             }
             DownloadManager.instance()
@@ -122,5 +139,10 @@ public class ButlerStartUpHook implements StartupHook {
     public static void main(final String[] args) {
         final ButlerStartUpHook cptHook = new ButlerStartUpHook();
         cptHook.restartPendingButler1Requests();
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

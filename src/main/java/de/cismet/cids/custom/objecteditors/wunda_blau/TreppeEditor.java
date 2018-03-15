@@ -43,8 +43,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -64,7 +62,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -73,7 +70,6 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 import de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.reports.wunda_blau.TreppenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -82,6 +78,9 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
@@ -99,7 +98,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     EditorSaveListener,
     FooterComponentProvider,
     TitleComponentProvider,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -166,26 +166,29 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         roundedPanel5 = new FullyRoundedPanel();
         roundedPanel6 = new FullyRoundedPanel();
         roundedPanel7 = new FullyRoundedPanel();
-        final TreppeBeschreibungPanel treppeBeschreibungPanel1 = new TreppeBeschreibungPanel(editable);
+        final TreppeBeschreibungPanel treppeBeschreibungPanel1 = new TreppeBeschreibungPanel(
+                editable,
+                getConnectionContext());
         final JPanel jPanel2 = new JPanel();
-        treppeLaeufePanel1 = new TreppeLaeufePanel(editable);
+        treppeLaeufePanel1 = new TreppeLaeufePanel(editable, getConnectionContext());
         final JPanel jPanel3 = new JPanel();
-        treppePodestePanel1 = new TreppePodestePanel(editable);
+        treppePodestePanel1 = new TreppePodestePanel(editable, getConnectionContext());
         final JPanel jPanel4 = new JPanel();
-        treppeLeitelementePanel1 = new TreppeLeitelementePanel(editable);
+        treppeLeitelementePanel1 = new TreppeLeitelementePanel(editable, getConnectionContext());
         final JPanel jPanel5 = new JPanel();
-        treppeHandlaeufePanel2 = new TreppeHandlaeufePanel(editable);
+        treppeHandlaeufePanel2 = new TreppeHandlaeufePanel(editable, getConnectionContext());
         final JPanel jPanel6 = new JPanel();
-        treppeEntwaesserung1 = new TreppeEntwaesserungPanel(editable);
+        treppeEntwaesserung1 = new TreppeEntwaesserungPanel(editable, getConnectionContext());
         final JPanel jPanel7 = new JPanel();
-        treppeStuetzmauernPanel1 = new TreppeStuetzmauernPanel(editable);
+        treppeStuetzmauernPanel1 = new TreppeStuetzmauernPanel(editable, getConnectionContext());
         treppePicturePanel1 = new WebDavPicturePanel(
                 editable,
                 "url_treppen",
                 "bilder",
                 "Treppe_bild",
                 "nummer",
-                "geometrie.geo_field");
+                "geometrie.geo_field",
+                getConnectionContext());
 
         final FormListener formListener = new FormListener();
 
@@ -993,6 +996,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
     //~ Instance fields --------------------------------------------------------
 
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     private final boolean editable;
     private CidsBean cidsBean;
     private final ZustandOverview overview = new ZustandOverview();
@@ -1061,10 +1066,15 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      */
     public TreppeEditor(final boolean editable) {
         this.editable = editable;
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+    }
 
     /**
      * DOCUMENT ME!
@@ -1118,7 +1128,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      * @param  evt  DOCUMENT ME!
      */
     private void btnReportActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
-        TreppenReportGenerator.generateKatasterBlatt(Arrays.asList(new CidsBean[] { cidsBean }), TreppeEditor.this);
+        TreppenReportGenerator.generateKatasterBlatt(Arrays.asList(new CidsBean[] { cidsBean }),
+            TreppeEditor.this,
+            getConnectionContext());
     }                                                              //GEN-LAST:event_btnReportActionPerformed
 
     /**
@@ -1208,10 +1220,14 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                     try {
                         entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
                                 "WUNDA_BLAU",
-                                "treppe_entwaesserung");
+                                "treppe_entwaesserung",
+                                getConnectionContext());
                         entwaesserungBean.setProperty(
                             "zustand",
-                            CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "treppe_zustand"));
+                            CidsBean.createNewCidsBeanFromTableName(
+                                "WUNDA_BLAU",
+                                "treppe_zustand",
+                                getConnectionContext()));
                         cidsBean.setProperty("entwaesserung", entwaesserungBean);
                     } catch (final Exception ex) {
                         LOG.error("could not create entwaesserung bean", ex);
@@ -1318,6 +1334,11 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      */
     public Map<CidsBean, CidsBean> getMauerBeans() {
         return treppeStuetzmauernPanel1.getMauerBeans();
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

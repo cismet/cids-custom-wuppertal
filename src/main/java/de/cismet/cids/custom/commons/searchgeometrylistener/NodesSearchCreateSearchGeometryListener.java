@@ -8,7 +8,6 @@
 package de.cismet.cids.custom.commons.searchgeometrylistener;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.Node;
 
@@ -18,14 +17,12 @@ import edu.umd.cs.piccolo.PNode;
 
 import org.apache.log4j.Logger;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.server.search.CidsServerSearch;
@@ -36,13 +33,17 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListenerInterface;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCreateSearchGeometryListener {
+public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCreateSearchGeometryListener
+        implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -54,6 +55,10 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
     public static final String ACTION_SEARCH_DONE = "ACTION_SEARCH_DONE";
     public static final String ACTION_SEARCH_FAILED = "ACTION_SEARCH_FAILED";
 
+    //~ Instance fields --------------------------------------------------------
+
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -61,10 +66,14 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
      *
      * @param  mc                  DOCUMENT ME!
      * @param  propChangeListener  DOCUMENT ME!
+     * @param  connectionContext   DOCUMENT ME!
      */
     public NodesSearchCreateSearchGeometryListener(final MappingComponent mc,
-            final PropertyChangeListener propChangeListener) {
+            final PropertyChangeListener propChangeListener,
+            final ConnectionContext connectionContext) {
         super(mc, INPUT_LISTENER_NAME);
+
+        this.connectionContext = connectionContext;
 
         setMode(CreateGeometryListenerInterface.POLYGON);
 
@@ -108,7 +117,9 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
                 protected Node[] doInBackground() throws Exception {
                     Node[] result = null;
                     final Collection searchResult = SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), search);
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                    search,
+                                    getConnectionContext());
 
                     if (isCancelled()) {
                         return result;
@@ -152,5 +163,10 @@ public abstract class NodesSearchCreateSearchGeometryListener extends AbstractCr
     @Override
     protected PNode getPointerAnnotation() {
         return null;
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

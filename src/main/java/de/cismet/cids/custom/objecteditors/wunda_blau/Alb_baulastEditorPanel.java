@@ -81,6 +81,9 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.NavigatorAttributeEditorGui;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.AlphaContainer;
@@ -92,7 +95,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore {
+public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -126,15 +130,18 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private CidsBean cidsBean;
     private Collection<MetaObject> allSelectedObjects;
     private final boolean editable;
-    private final Collection<JComponent> editableComponents;
+    private final Collection<JComponent> editableComponents = new ArrayList<>();
 //    private boolean landParcelListInitialized = false;
     private boolean baulastArtenListInitialized = false;
-    private final FlurstueckSelectionDialoge fsDialoge;
+    private FlurstueckSelectionDialoge fsDialoge;
     private boolean writePruefkommentar = false;
     private Object oldGeprueft_Von;
     private Object oldPruefdatum;
     private Object oldPruefkommentar;
-    private final WeakHashMap<CidsBean, String> propStringMap = new WeakHashMap<CidsBean, String>();
+    private final WeakHashMap<CidsBean, String> propStringMap = new WeakHashMap<>();
+
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser bdcBefristungsdatum;
     private de.cismet.cids.editors.DefaultBindableDateChooser bdcEintragungsdatum;
@@ -192,19 +199,22 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
     /**
      * Creates new form Alb_baulastEditorPanel.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastEditorPanel() {
-        this(true);
+    public Alb_baulastEditorPanel(final ConnectionContext connectionContext) {
+        this(true, connectionContext);
     }
 
     /**
      * Creates new form Alb_baulastEditorPanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastEditorPanel(final boolean editable) {
+    public Alb_baulastEditorPanel(final boolean editable, final ConnectionContext connectionContext) {
         this.editable = editable;
-        this.editableComponents = new ArrayList<JComponent>();
+        this.connectionContext = connectionContext;
         initComponents();
         initEditableComponents();
 //        final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
@@ -216,7 +226,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 //        cmbType.setModel(new DefaultComboBoxModel(items.toArray(new BaulastenReportGenerator.Type[0])));
 //        cmbType.setEnabled(enabled);
 
-        fsDialoge = new FlurstueckSelectionDialoge() {
+        fsDialoge = new FlurstueckSelectionDialoge(getConnectionContext()) {
 
                 @Override
                 public void okHook() {
@@ -965,7 +975,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         try {
             final BaulastArtLightweightSearch search = new BaulastArtLightweightSearch();
             search.setRepresentationFields(new String[] { "baulast_art" });
-            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy().customServerSearch(search);
+            final Collection<LightweightMetaObject> lwmos = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
             for (final LightweightMetaObject lwmo : lwmos) {
                 lwmo.setFormater(new AbstractAttributeRepresentationFormater() {
 
@@ -1260,7 +1271,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                     }
 
                     final User user = SessionManager.getSession().getUser();
-                    final boolean finalCheckEnable = SessionManager.getProxy().hasConfigAttr(user, ATAG_FINAL_CHECK)
+                    final boolean finalCheckEnable = SessionManager.getProxy()
+                                .hasConfigAttr(user, ATAG_FINAL_CHECK, getConnectionContext())
                                 && (!user.getName().equals(cidsBean.getProperty("bearbeitet_von"))
                                     || ((cidsBean.getProperty("geprueft") != null)
                                         && (Boolean)cidsBean.getProperty("geprueft")))
@@ -1359,6 +1371,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         bdcEintragungsdatum.getEditor().setFormatterFactory(factory);
         bdcGeschlossenAm.getEditor().setFormatterFactory(factory);
         bdcLoeschungsdatum.getEditor().setFormatterFactory(factory);
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

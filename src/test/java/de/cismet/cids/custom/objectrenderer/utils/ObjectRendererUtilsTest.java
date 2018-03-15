@@ -1,6 +1,7 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.commons.concurrency.CismetExecutors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
@@ -48,7 +49,7 @@ public class ObjectRendererUtilsTest {
         System.out.println("checkActionTag_internalUsage_once");
         String tagToCheck = "custom.stadtbilder.internalUse.internalUsage";
         boolean expResult = true;
-        boolean result = ObjectRendererUtils.checkActionTag(tagToCheck);
+        boolean result = ObjectRendererUtils.checkActionTag(tagToCheck, ConnectionContext.createDeprecated());
         assertEquals(expResult, result);
     }
 
@@ -60,7 +61,7 @@ public class ObjectRendererUtilsTest {
         System.out.println("checkActionTag_externalUsage_once");
         String tagToCheck = "custom.stadtbilder.internalUse.externalUsage";
         boolean expResult = false;
-        boolean result = ObjectRendererUtils.checkActionTag(tagToCheck);
+        boolean result = ObjectRendererUtils.checkActionTag(tagToCheck, ConnectionContext.createDeprecated());
         assertEquals(expResult, result);
     }
 
@@ -70,7 +71,7 @@ public class ObjectRendererUtilsTest {
         String tagToCheck = "custom.stadtbilder.internalUse.externalUsage";
         boolean expResult = false;
         for (int i = 0; i < 1000; i++) {
-            boolean result = ObjectRendererUtils.checkActionTag(tagToCheck);
+            boolean result = ObjectRendererUtils.checkActionTag(tagToCheck, ConnectionContext.createDeprecated());
             assertEquals(expResult, result);
         }
     }
@@ -91,7 +92,7 @@ public class ObjectRendererUtilsTest {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    boolean result = ObjectRendererUtils.checkActionTag(tagToCheckexternalUsage);
+                    boolean result = ObjectRendererUtils.checkActionTag(tagToCheckexternalUsage, ConnectionContext.createDeprecated());
                     if (expResultExternal != result) {
                         System.out.println("fetch externalUsage failed");
                         externalFailed.set(true);
@@ -132,7 +133,7 @@ public class ObjectRendererUtilsTest {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    boolean result = ObjectRendererUtils.checkActionTag(tagToCheckexternalUsage);
+                    boolean result = ObjectRendererUtils.checkActionTag(tagToCheckexternalUsage, ConnectionContext.createDeprecated());
                     if (expResultExternal != result) {
                         System.out.println("fetch externalUsage failed");
                         wrongResultExternal.incrementAndGet();
@@ -147,7 +148,7 @@ public class ObjectRendererUtilsTest {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    boolean result = ObjectRendererUtils.checkActionTag(tagToCheckinternalUsage);
+                    boolean result = ObjectRendererUtils.checkActionTag(tagToCheckinternalUsage, ConnectionContext.createDeprecated());
                     if (expResultInternal != result) {
                         System.out.println("fetch internalUsage failed");
                         wrongResultInternal.incrementAndGet();

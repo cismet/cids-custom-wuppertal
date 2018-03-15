@@ -13,7 +13,6 @@
 package de.cismet.cids.custom.nas;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 
 import org.apache.log4j.Logger;
 
@@ -35,6 +34,9 @@ import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -44,13 +46,23 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class PointNumberReservationToolbarComponentProvider implements ToolbarComponentsProvider {
+public class PointNumberReservationToolbarComponentProvider implements ToolbarComponentsProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(PointNumberReservationToolbarComponentProvider.class);
 
+    //~ Instance fields --------------------------------------------------------
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     @Override
     public String getPluginName() {
@@ -65,7 +77,7 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
             final List<ToolbarComponentDescription> preparationList = new LinkedList<ToolbarComponentDescription>();
             final ToolbarComponentDescription description = new ToolbarComponentDescription(
                     "tlbMain",
-                    new PunktNummernButton(),
+                    new PunktNummernButton(getConnectionContext()),
                     ToolbarPositionHint.AFTER,
                     "cmdPrint");
             preparationList.add(description);
@@ -81,15 +93,22 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
      *
      * @return  DOCUMENT ME!
      */
-    private static boolean validateUserHasAccess() {
+    private boolean validateUserHasAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://pointNumberReservation")
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://pointNumberReservation",
+                                getConnectionContext())
                         != null;
         } catch (final Exception ex) {
             LOG.error("Could not validate action tag for PunktnummernReservierung!", ex);
         }
         return false;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -110,8 +129,10 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
 
         /**
          * Creates a new PunktNummernButton object.
+         *
+         * @param  connectionContext  DOCUMENT ME!
          */
-        public PunktNummernButton() {
+        public PunktNummernButton(final ConnectionContext connectionContext) {
             super(new AbstractAction() {
 
                     @Override
@@ -123,7 +144,8 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
                                     final PointNumberDialog dialog = new PointNumberDialog(
                                             StaticSwingTools.getParentFrame(
                                                 CismapBroker.getInstance().getMappingComponent()),
-                                            true);
+                                            true,
+                                            connectionContext);
                                     StaticSwingTools.showDialog(dialog);
                                 }
                             });

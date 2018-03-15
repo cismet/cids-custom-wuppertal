@@ -28,6 +28,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -61,10 +63,14 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
      * @param  stadtbild            DOCUMENT ME!
      * @param  locationOfStadtbild  DOCUMENT ME!
      * @param  gridModel            DOCUMENT ME!
+     * @param  connectionContext    DOCUMENT ME!
      */
     public Sb_SingleStadtbildGridObject(final CidsBean stadtbild,
             final Sb_stadtbildserieGridObject locationOfStadtbild,
-            final DefaultListModel gridModel) {
+            final DefaultListModel gridModel,
+            final ConnectionContext connectionContext) {
+        super(connectionContext);
+
         this.stadtbild = stadtbild;
         this.locationOfStadtbild = locationOfStadtbild;
 
@@ -191,7 +197,10 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
     @Override
     protected boolean isPreviewAllowed() {
         final CidsBean stadtbildserie = locationOfStadtbild.getCidsBean();
-        return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
+        return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
+                    stadtbildserie,
+                    getConnectionContext())
+                    .isPreviewAllowed();
     }
 
     @Override

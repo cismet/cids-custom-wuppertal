@@ -45,6 +45,9 @@ import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -55,7 +58,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
+public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -69,6 +72,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
     private List<CidsBean> currentListToAdd;
     private final boolean usedInEditor;
+    private final ConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApply;
     private javax.swing.JButton btnCancel;
@@ -93,16 +97,19 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
      * Creates a new FlurstueckSelectionDialoge object.
      */
     public VermessungFlurstueckSelectionDialog() {
-        this(true);
+        this(true, ConnectionContext.createDeprecated());
     }
 
     /**
      * Creates new form FlurstueckSelectionDialoge.
      *
-     * @param  usedInEditor  DOCUMENT ME!
+     * @param  usedInEditor       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public VermessungFlurstueckSelectionDialog(final boolean usedInEditor) {
+    public VermessungFlurstueckSelectionDialog(final boolean usedInEditor,
+            final ConnectionContext connectionContext) {
         this.usedInEditor = usedInEditor;
+        this.connectionContext = connectionContext;
         setTitle("Bitte Flurstück auswählen");
         initComponents();
         setSize(419, 144);
@@ -144,7 +151,8 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
                 @Override
                 protected ComboBoxModel doInBackground() throws Exception {
-                    return new DefaultComboBoxModel(VermessungFlurstueckFinder.getLWGemarkungen());
+                    return new DefaultComboBoxModel(
+                            VermessungFlurstueckFinder.getLWGemarkungen(getConnectionContext()));
                 }
 
                 @Override
@@ -162,7 +170,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
                 @Override
                 protected ComboBoxModel doInBackground() throws Exception {
                     final DefaultComboBoxModel result = new DefaultComboBoxModel(
-                            VermessungFlurstueckFinder.getVeraenderungsarten());
+                            VermessungFlurstueckFinder.getVeraenderungsarten(getConnectionContext()));
 
                     if (!usedInEditor) {
                         result.insertElementAt("Alle", 0);
@@ -433,7 +441,8 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
-                        return new DefaultComboBoxModel(VermessungFlurstueckFinder.getLWFlure(gemarkung));
+                        return new DefaultComboBoxModel(
+                                VermessungFlurstueckFinder.getLWFlure(gemarkung, getConnectionContext()));
                     }
                 });
 
@@ -546,7 +555,10 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
                     @Override
                     protected ComboBoxModel doInBackground() throws Exception {
                         return new DefaultComboBoxModel(
-                                VermessungFlurstueckFinder.getLWFurstuecksZaehlerNenner(gemarkung, flur.toString()));
+                                VermessungFlurstueckFinder.getLWFurstuecksZaehlerNenner(
+                                    gemarkung,
+                                    flur.toString(),
+                                    getConnectionContext()));
                     }
                 });
         } else {
@@ -684,7 +696,8 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
                 }
 
                 final MetaObject gemarkungMetaObject = VermessungFlurstueckFinder.getLWGemarkung(Integer.valueOf(
-                            gemarkung));
+                            gemarkung),
+                        getConnectionContext());
                 if ((gemarkungMetaObject != null) && (gemarkungMetaObject.getBean() != null)) {
                     newLandParcelProperties.put(
                         VermessungFlurstueckFinder.FLURSTUECK_GEMARKUNG,
@@ -706,13 +719,15 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
                         gemarkung,
                         flur,
                         zaehler,
-                        nenner);
+                        nenner,
+                        getConnectionContext());
                 if ((searchResult != null) && (searchResult.length > 0)) {
                     return searchResult[0].getBean();
                 } else {
                     return CidsBeanSupport.createNewCidsBeanFromTableName(
                             VermessungFlurstueckFinder.FLURSTUECK_KICKER_TABLE_NAME,
-                            newLandParcelProperties);
+                            newLandParcelProperties,
+                            getConnectionContext());
                 }
             }
         } catch (Exception ex) {
@@ -748,7 +763,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
                 if (MetaObject.NEW == flurstueckBean.getMetaObject().getStatus()) {
                     try {
-                        flurstueckBean = flurstueckBean.persist();
+                        flurstueckBean = flurstueckBean.persist(getConnectionContext());
                     } catch (Exception ex) {
                         LOG.error("Could not persist new flurstueck.", ex);
                         flurstueckBean = null;
@@ -777,7 +792,8 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
             try {
                 flurstuecksvermessung = CidsBeanSupport.createNewCidsBeanFromTableName(
                         VermessungFlurstueckFinder.VERMESSUNG_FLURSTUECKSVERMESSUNG_TABLE_NAME,
-                        properties);
+                        properties,
+                        getConnectionContext());
             } catch (Exception ex) {
                 LOG.error("Could not add new flurstueck or flurstuecksvermessung.", ex);
             }
@@ -808,6 +824,11 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
         okHook();
 
         setVisible(visible);
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

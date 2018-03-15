@@ -13,8 +13,6 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import org.apache.log4j.Logger;
 
-import de.cismet.cids.client.tools.DevelopmentTools;
-
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -24,13 +22,16 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingProduktEditor extends javax.swing.JPanel implements CidsBeanRenderer {
+public class BillingProduktEditor extends javax.swing.JPanel implements CidsBeanRenderer, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -40,6 +41,8 @@ public class BillingProduktEditor extends javax.swing.JPanel implements CidsBean
 
     private CidsBean cidsBean;
     private boolean editable;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cmbClient;
     private javax.swing.JLabel jLabel1;
@@ -65,16 +68,21 @@ public class BillingProduktEditor extends javax.swing.JPanel implements CidsBean
      * @param  editable  DOCUMENT ME!
      */
     public BillingProduktEditor(final boolean editable) {
-        initComponents();
         this.editable = editable;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
         if (!editable) {
             RendererTools.makeReadOnly(txtDescription);
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(cmbClient);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -185,7 +193,8 @@ public class BillingProduktEditor extends javax.swing.JPanel implements CidsBean
             this.cidsBean = cidsBean;
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
         }
     }
@@ -207,5 +216,10 @@ public class BillingProduktEditor extends javax.swing.JPanel implements CidsBean
 
     @Override
     public void setTitle(final String title) {
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

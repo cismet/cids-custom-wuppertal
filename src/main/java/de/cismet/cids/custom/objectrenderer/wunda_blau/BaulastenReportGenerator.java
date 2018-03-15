@@ -56,6 +56,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 import de.cismet.tools.gui.WebAccessMultiPagePictureReader;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -141,15 +143,17 @@ public class BaulastenReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param   user  DOCUMENT ME!
+     * @param   user               DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    public static String createFertigungsVermerk(final User user) throws ConnectionException {
+    public static String createFertigungsVermerk(final User user, final ConnectionContext connectionContext)
+            throws ConnectionException {
         final String fertigungsVermerk = SessionManager.getConnection()
-                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU");
+                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU", connectionContext);
         if (fertigungsVermerk != null) {
             return fertigungsVermerk;
         } else {
@@ -241,6 +245,7 @@ public class BaulastenReportGenerator {
      * @param   selectedBaulasten  DOCUMENT ME!
      * @param   jobnumber          DOCUMENT ME!
      * @param   projectname        DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
@@ -250,8 +255,9 @@ public class BaulastenReportGenerator {
             final String jobname,
             final Collection<CidsBean> selectedBaulasten,
             final String jobnumber,
-            final String projectname) throws Exception {
-        final Collection<Download> downloads = new ArrayList<Download>();
+            final String projectname,
+            final ConnectionContext connectionContext) throws Exception {
+        final Collection<Download> downloads = new ArrayList<>();
         downloads.add(createJasperDownload(
 
                 Type.TEXTBLATT_PLAN_RASTER,
@@ -259,9 +265,10 @@ public class BaulastenReportGenerator {
                 jobname,
                 jobnumber,
                 projectname,
-                "Bericht aus dem Baulastenverzeichnis"));
+                "Bericht aus dem Baulastenverzeichnis",
+                connectionContext));
 
-        final Collection<URL> additionalFilesToDownload = new LinkedSet<URL>();
+        final Collection<URL> additionalFilesToDownload = new LinkedSet<>();
         for (final CidsBean selectedBaulast : selectedBaulasten) {
             final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
                     selectedBaulast);
@@ -292,6 +299,7 @@ public class BaulastenReportGenerator {
      * @param   selectedBaulasten  DOCUMENT ME!
      * @param   jobnumber          DOCUMENT ME!
      * @param   projectname        DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
@@ -300,7 +308,8 @@ public class BaulastenReportGenerator {
     public static Download generateDownload(final Type type,
             final Collection<CidsBean> selectedBaulasten,
             final String jobnumber,
-            final String projectname) throws Exception {
+            final String projectname,
+            final ConnectionContext connectionContext) throws Exception {
         final String jobname = DownloadManagerDialog.getJobname();
         if (Type.TEXTBLATT_PLAN_RASTER.equals(type)) {
             final BackgroundTaskMultipleDownload.FetchDownloadsTask fetchDownloadsTask =
@@ -308,12 +317,24 @@ public class BaulastenReportGenerator {
 
                     @Override
                     public Collection<? extends Download> fetchDownloads() throws Exception {
-                        return generateRasterDownloads(jobname, selectedBaulasten, jobnumber, projectname);
+                        return generateRasterDownloads(
+                                jobname,
+                                selectedBaulasten,
+                                jobnumber,
+                                projectname,
+                                connectionContext);
                     }
                 };
             return new BackgroundTaskMultipleDownload(null, jobname, fetchDownloadsTask);
         } else {
-            return createJasperDownload(type, selectedBaulasten, jobname, jobnumber, projectname, projectname);
+            return createJasperDownload(
+                    type,
+                    selectedBaulasten,
+                    jobname,
+                    jobnumber,
+                    projectname,
+                    projectname,
+                    connectionContext);
         }
     }
 
@@ -326,6 +347,7 @@ public class BaulastenReportGenerator {
      * @param   jobnumber          DOCUMENT ME!
      * @param   projectname        DOCUMENT ME!
      * @param   title              DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
@@ -336,7 +358,8 @@ public class BaulastenReportGenerator {
             final String jobname,
             final String jobnumber,
             final String projectname,
-            final String title) throws Exception {
+            final String title,
+            final ConnectionContext connectionContext) throws Exception {
         final HashMap parameters = new HashMap();
 
         final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
@@ -345,7 +368,7 @@ public class BaulastenReportGenerator {
                 @Override
                 public JRDataSource generateDataSource() {
                     try {
-                        final List<CidsBean> sortedBaulasten = new ArrayList<CidsBean>(selectedBaulasten);
+                        final List<CidsBean> sortedBaulasten = new ArrayList<>(selectedBaulasten);
                         Collections.sort(sortedBaulasten, new Comparator<CidsBean>() {
 
                                 @Override
@@ -366,10 +389,9 @@ public class BaulastenReportGenerator {
                                 }
                             });
 
-                        final Collection<BaulastReportBean> reportBeans = new LinkedList<BaulastReportBean>();
-                        final Collection<BaulastImageReportBean> imageBeans = new LinkedList<BaulastImageReportBean>();
-                        final Collection<BaulastPlotempfehlungReportBean> plotBeans =
-                            new LinkedList<BaulastPlotempfehlungReportBean>();
+                        final Collection<BaulastReportBean> reportBeans = new LinkedList<>();
+                        final Collection<BaulastImageReportBean> imageBeans = new LinkedList<>();
+                        final Collection<BaulastPlotempfehlungReportBean> plotBeans = new LinkedList<>();
 
                         final Map startingPages = new HashMap();
                         int tileTableRows = 10 + sortedBaulasten.size();
@@ -468,8 +490,8 @@ public class BaulastenReportGenerator {
                         int startingPage = 2 + (int)(tileTableRows / 37);
 
                         for (final CidsBean selectedBaulast : sortedBaulasten) {
-                            final List<URL> urlListTextblatt = new ArrayList<URL>();
-                            final List<URL> urlListLageplan = new ArrayList<URL>();
+                            final List<URL> urlListTextblatt = new ArrayList<>();
+                            final List<URL> urlListLageplan = new ArrayList<>();
                             try {
                                 urlListTextblatt.addAll(BaulastenPictureFinder.findReducedTextblattPicture(
                                         selectedBaulast));
@@ -489,7 +511,7 @@ public class BaulastenReportGenerator {
                                 LOG.info("No document URLS found for the Baulasten report");
                             }
                             int pageCount = 0;
-                            final List<URL> urlList = new ArrayList<URL>(urlListTextblatt);
+                            final List<URL> urlList = new ArrayList<>(urlListTextblatt);
                             urlList.addAll(urlListLageplan);
                             for (final URL url : urlList) {
                                 try {
@@ -536,7 +558,7 @@ public class BaulastenReportGenerator {
                         parameters.put(PARAMETER_IMAGEAVAILABLE, imageAvailable);
                         parameters.put(
                             PARAMETER_FABRICATIONNOTICE,
-                            createFertigungsVermerk(SessionManager.getSession().getUser()));
+                            createFertigungsVermerk(SessionManager.getSession().getUser(), connectionContext));
                         return new JRBeanCollectionDataSource(reportBeans);
                     } catch (final Exception ex) {
                         LOG.warn(ex, ex);
