@@ -90,6 +90,7 @@ public class BaulastSuchDialog extends javax.swing.JDialog implements Connection
             final ConnectionContext connectionContext) {
         super(parent, modal);
         this.connectionContext = connectionContext;
+        blSearch.initWithConnectionContext(connectionContext);
         initComponents();
     }
 
@@ -104,7 +105,7 @@ public class BaulastSuchDialog extends javax.swing.JDialog implements Connection
     private void initComponents() {
         final java.awt.GridBagConstraints gridBagConstraints;
 
-        baulastWindowSearch1 = new de.cismet.cids.custom.wunda_blau.search.BaulastWindowSearch();
+        baulastWindowSearch1 = blSearch;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(BaulastSuchDialog.class, "BaulastSuchDialog.title")); // NOI18N
