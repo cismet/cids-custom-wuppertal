@@ -53,7 +53,6 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -65,8 +64,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
-    BindingGroupStore,
-    ConnectionContextStore {
+    BindingGroupStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -77,7 +75,6 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     protected Object hausnr;
     private CidsBean cidsBean = null;
     private boolean isEditor = true;
-    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbAntragsteller;
@@ -147,7 +144,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+        super.initWithConnectionContext(connectionContext);
         initComponents();
         if (!isEditor) {
             noEdit();
@@ -1555,10 +1552,5 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
-    }
-
-    @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
     }
 }

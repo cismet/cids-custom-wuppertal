@@ -49,7 +49,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -62,7 +61,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements ConnectionContextStore {
+public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -88,8 +87,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements Co
                 }
             }
         };
-
-    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox bcbAuftraggeber;
@@ -153,7 +150,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements Co
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+        super.initWithConnectionContext(connectionContext);
         initComponents();
 //        final MetaClass swClass = ClassCacheMultiple.getMetaClass(domain, "ARC_S");
         suchwortModelProvider.setSorted(true);
@@ -1149,11 +1146,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor implements Co
         final MetaObject[] mos = suchwortModelProvider.receiveLightweightMetaObjects();
         final DefaultComboBoxModel model = new DefaultComboBoxModel(mos);
         return model;
-    }
-
-    @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -37,7 +37,6 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -48,15 +47,13 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled, ConnectionContextStore {
+public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Poi_locationtypeEditor.class);
     private String latestIconUrl = null;
     private String title = "";
-
-    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -103,15 +100,10 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+        super.initWithConnectionContext(connectionContext);
         initComponents();
         dlgAddLocationType.pack();
         dlgAddLocationType.getRootPane().setDefaultButton(btnMenOk);
-    }
-
-    @Override
-    public final ConnectionContext getConnectionContext() {
-        return connectionContext;
     }
 
     /**
@@ -504,18 +496,18 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationtypeEditor.this),
             dlgAddLocationType,
             true);
-    }                                                                          //GEN-LAST:event_btnAddActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -543,34 +535,34 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
                 }
             }
         }
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbortActionPerformed
+    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortActionPerformed
         dlgAddLocationType.setVisible(false);
-    }                                                                               //GEN-LAST:event_btnMenAbortActionPerformed
+    }//GEN-LAST:event_btnMenAbortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOkActionPerformed
+    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOkActionPerformed
         try {
             final Object selItem = cbTypes.getSelectedItem();
             if (selItem instanceof MetaObject) {
                 addLebenslageBeanToLebenslagen(((MetaObject)selItem).getBean());
             }
         } catch (Exception ex) {
-            log.error(ex, ex);
+            LOG.error(ex, ex);
         } finally {
             dlgAddLocationType.setVisible(false);
         }
-    }                                                                            //GEN-LAST:event_btnMenOkActionPerformed
+    }//GEN-LAST:event_btnMenOkActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -585,13 +577,13 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
                     final Collection<CidsBean> col = (Collection)o;
                     for (final CidsBean bean : col) {
                         if (newTypeBean.equals(bean)) {
-                            log.info("Locationtype " + newTypeBean.getProperty("theme") + " already present!");
+                            LOG.info("Locationtype " + newTypeBean.getProperty("theme") + " already present!");
                             return;
                         }
                     }
                     col.add(newTypeBean);
                 } catch (Exception ex) {
-                    log.error(ex, ex);
+                    LOG.error(ex, ex);
                 }
             }
         }

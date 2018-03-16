@@ -48,9 +48,10 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
     BeanInitializerProvider,
     PropertyChangeListener {
 
-    //~ Instance fields --------------------------------------------------------
+    //~ Static fields/initializers ---------------------------------------------
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Tim_liegEditor.class);
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBodenschaetzung_ueb_von;
     private javax.swing.JButton btnSchlusspruefung_von;
@@ -254,12 +255,18 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
      * Creates new form Tim_liegEditor.
      */
     public Tim_liegEditor() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        super.initWithConnectionContext(connectionContext);
+
         initComponents();
         scpKartographie.getVerticalScrollBar().setUnitIncrement(26);
         scpStadtgrundkarte.getVerticalScrollBar().setUnitIncrement(26);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -3014,7 +3021,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("kart");
         } catch (Exception e) {
-            log.error("Error beim Erzeugen eines Kart Objektes", e);
+            LOG.error("Error beim Erzeugen eines Kart Objektes", e);
         }
     }                                                                              //GEN-LAST:event_cmdAddKartActionPerformed
 
@@ -3027,7 +3034,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("alkis");
         } catch (Exception e) {
-            log.error("Error beim Erzeugen eines Alkis Objektes", e);
+            LOG.error("Error beim Erzeugen eines Alkis Objektes", e);
         }
     }                                                                             //GEN-LAST:event_cmdAddSgkActionPerformed
 
@@ -3146,7 +3153,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
 
     @Override
     public BeanInitializer getBeanInitializer() {
-        log.fatal("getBeanInitializer");
+        LOG.fatal("getBeanInitializer");
         return new CompleteBeanInitializer(cidsBean, getConnectionContext());
     }
 
