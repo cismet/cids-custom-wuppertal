@@ -36,7 +36,6 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.CrsTransformer;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.StaticDecimalTools;
 //import javax.swing.JOptionPane;
@@ -49,8 +48,7 @@ import de.cismet.tools.StaticDecimalTools;
  * @version  $Revision$, $Date$
  */
 public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    BindingGroupStore,
-    ConnectionContextStore {
+    BindingGroupStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -63,7 +61,6 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     private CidsBean cidsBean = null;
     private boolean isEditor = true;
     private Geometry geom;
-    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbGeom;
@@ -204,7 +201,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+        super.initWithConnectionContext(connectionContext);
         initComponents();
         if (!isEditor) {
             txtStadtbezirk.setEditable(false);
@@ -2255,10 +2252,5 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
     @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
-    }
-
-    @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
     }
 }
