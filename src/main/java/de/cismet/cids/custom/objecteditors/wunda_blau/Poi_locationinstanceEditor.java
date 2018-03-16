@@ -59,7 +59,6 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -72,25 +71,25 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled, ConnectionContextStore {
+public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static ImageIcon STATUS_RED = new javax.swing.ImageIcon(
+    private static final ImageIcon STATUS_RED = new javax.swing.ImageIcon(
             Poi_locationinstanceEditor.class.getResource(
                 "/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
-    private static ImageIcon STATUS_GREEN = new javax.swing.ImageIcon(
+    private static final ImageIcon STATUS_GREEN = new javax.swing.ImageIcon(
             Poi_locationinstanceEditor.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
-    private static ImageIcon STATUS_GREY = new javax.swing.ImageIcon(
+    private static final ImageIcon STATUS_GREY = new javax.swing.ImageIcon(
             Poi_locationinstanceEditor.class.getResource(
                 "/de/cismet/cids/custom/objecteditors/wunda_blau/status-offline.png"));
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Poi_locationinstanceEditor.class);
+
     //~ Instance fields --------------------------------------------------------
 
-    private final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(this.getClass());
     private String title = "";
-
-    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddThema;
@@ -184,7 +183,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+        super.initWithConnectionContext(connectionContext);
         initComponents();
         dlgAddLocationType.pack();
         dlgAddZusNamen.pack();
@@ -229,11 +228,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                     checkUrlAndIndicate(txtaWebsiteUrl.getText(), lblUrlCheckWebsite);
                 }
             });
-    }
-
-    @Override
-    public final ConnectionContext getConnectionContext() {
-        return connectionContext;
     }
 
     /**
