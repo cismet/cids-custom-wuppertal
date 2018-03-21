@@ -88,13 +88,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
     public static final Color COLOR_TXT_BACK = new Color(230, 230, 230);
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Wbf_gebaeudeEditor.class);
+
     //~ Instance fields --------------------------------------------------------
 
     MyLockableUI luiGeb;
     MyLockableUI luiVorg;
     JXLayer lVorg;
-
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Wbf_gebaeudeEditor.class);
     private String domain = "";
 //    ImageIcon warn = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/warn.png"));
     private final HashMap<String, Collection<String>> validationDependencies = new HashMap<>();
@@ -1295,7 +1295,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdAddVorgangActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddVorgangActionPerformed
+    private void cmdAddVorgangActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddVorgangActionPerformed
         final MetaClass vorgangMC = ClassCacheMultiple.getMetaClass(domain, "WBF_VORGANG", getConnectionContext());
         if (vorgangMC != null) {
             final MetaObject mo = vorgangMC.getEmptyInstance(getConnectionContext());
@@ -1314,14 +1314,14 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         } else {
             LOG.error("MetaClass von Vorgang war NULL");
         }
-    }//GEN-LAST:event_cmdAddVorgangActionPerformed
+    } //GEN-LAST:event_cmdAddVorgangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdRemoveVorgangActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveVorgangActionPerformed
+    private void cmdRemoveVorgangActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdRemoveVorgangActionPerformed
         final int answer = JOptionPane.showConfirmDialog(
                 StaticSwingTools.getParentFrame(this),
                 "Soll dieser Vorgang wirklich gelöscht werden?",
@@ -1344,14 +1344,14 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                 JXErrorPane.showDialog(this, ei);
             }
         }
-    }//GEN-LAST:event_cmdRemoveVorgangActionPerformed
+    }                                                                                    //GEN-LAST:event_cmdRemoveVorgangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstVorgaengeValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstVorgaengeValueChanged
+    private void lstVorgaengeValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstVorgaengeValueChanged
         if (!editable && (luiVorg != null)) {
             luiVorg.setDirty(true);
 //            luiVorg.setLocked(false);
@@ -1359,16 +1359,16 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 //            panVorgang.setSize(panVorgang.getSize().width+1,panVorgang.getSize().height);
 //            panVorgang.repaint();
         }
-    }//GEN-LAST:event_lstVorgaengeValueChanged
+    }                                                                                       //GEN-LAST:event_lstVorgaengeValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtFolgenummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFolgenummerActionPerformed
+    private void txtFolgenummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtFolgenummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFolgenummerActionPerformed
+    } //GEN-LAST:event_txtFolgenummerActionPerformed
     /**
      * End of variables declaration.
      *
