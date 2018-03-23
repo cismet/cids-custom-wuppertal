@@ -24,6 +24,8 @@ import org.apache.log4j.Logger;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import java.awt.Component;
+
 import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
@@ -44,6 +46,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.menu.CidsUiComponent;
 
 /**
  * DOCUMENT ME!
@@ -53,7 +56,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsClientToolbarItem.class)
 public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel implements CidsClientToolbarItem,
-    ConnectionContextStore {
+    ConnectionContextStore,
+    CidsUiComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -321,6 +325,20 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public String getValue(final String key) {
+        if (key.equals(CidsUiComponent.CIDS_ACTION_KEY)) {
+            return "BerechtigungspruefungToolbarWidget";
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Component getComponent() {
+        return this;
     }
 
     //~ Inner Classes ----------------------------------------------------------

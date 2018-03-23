@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.mapvis;
 
-import Sirius.navigator.plugin.PluginRegistry;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import org.apache.log4j.Logger;
 
@@ -131,11 +131,7 @@ public class OabMapVisualisationAction extends AbstractAction {
                     map.getMappingModel().addLayer(OabUtilities.createWMSLayer(cap, lname));
                 }
 
-                PluginRegistry.getRegistry()
-                        .getPluginDescriptor("cismap")
-                        .getUIDescriptor("cismap")
-                        .getView()
-                        .makeVisible();
+                ComponentRegistry.getRegistry().showComponent("map");
             } catch (final Exception ex) {
                 log.warn("illegal action setup, oab map visualisation state undefined", ex); // NOI18N
             }
