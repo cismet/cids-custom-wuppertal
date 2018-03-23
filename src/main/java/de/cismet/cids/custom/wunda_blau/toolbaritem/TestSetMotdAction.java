@@ -30,6 +30,8 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.StaticDebuggingTools;
 
+import de.cismet.tools.gui.menu.CidsUiAction;
+
 /**
  * DOCUMENT ME!
  *
@@ -37,7 +39,9 @@ import de.cismet.tools.StaticDebuggingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsClientToolbarItem.class)
-public class TestSetMotdAction extends AbstractAction implements CidsClientToolbarItem, ConnectionContextStore {
+public class TestSetMotdAction extends AbstractAction implements CidsClientToolbarItem,
+    ConnectionContextStore,
+    CidsUiAction {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -51,6 +55,7 @@ public class TestSetMotdAction extends AbstractAction implements CidsClientToolb
     public TestSetMotdAction() {
         putValue(Action.NAME, "MOTD");
         putValue(Action.SHORT_DESCRIPTION, "set MOTD (test)");
+        putValue(CidsUiAction.CIDS_ACTION_KEY, "TestSetMotdAction");
     }
 
     //~ Methods ----------------------------------------------------------------
