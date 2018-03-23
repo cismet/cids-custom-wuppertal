@@ -13,7 +13,7 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
-import Sirius.navigator.plugin.PluginRegistry;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
@@ -188,11 +188,7 @@ public class ObjectRendererUtils {
      * DOCUMENT ME!
      */
     public static void switchToCismapMap() {
-        PluginRegistry.getRegistry()
-                .getPluginDescriptor(CISMAP_PLUGIN_NAME)
-                .getUIDescriptor(CISMAP_PLUGIN_NAME)
-                .getView()
-                .makeVisible();
+        ComponentRegistry.getRegistry().showComponent("map");
     }
 
     /**

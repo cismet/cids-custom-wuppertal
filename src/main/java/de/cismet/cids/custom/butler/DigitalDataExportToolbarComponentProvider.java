@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -43,6 +44,7 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.JPopupMenuButton;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.menu.CidsUiComponent;
 
 /**
  * DOCUMENT ME!
@@ -51,7 +53,9 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class DigitalDataExportToolbarComponentProvider implements ToolbarComponentsProvider, ConnectionContextStore {
+public class DigitalDataExportToolbarComponentProvider implements ToolbarComponentsProvider,
+    ConnectionContextStore,
+    CidsUiComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -145,6 +149,24 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public String getValue(final String key) {
+        if (key.equals(CidsUiComponent.CIDS_ACTION_KEY)) {
+            return "DigitalDataExportToolbar";
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Component getComponent() {
+        if (validateUserHasButler1Access(connectionContext) || validateUserHasNasAccess(connectionContext)) {
+            return new DataExportButton();
+        } else {
+            return null;
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -19,6 +19,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.openide.util.NbBundle;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import java.util.Collection;
@@ -41,6 +42,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
+import de.cismet.tools.gui.menu.CidsUiComponent;
+
 /**
  * DOCUMENT ME!
  *
@@ -48,7 +51,9 @@ import de.cismet.connectioncontext.ConnectionContextStore;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class VirtualCityMapToolbarComponentProvider implements ToolbarComponentsProvider, ConnectionContextStore {
+public class VirtualCityMapToolbarComponentProvider implements ToolbarComponentsProvider,
+    ConnectionContextStore,
+    CidsUiComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -141,6 +146,20 @@ public class VirtualCityMapToolbarComponentProvider implements ToolbarComponents
     @Override
     public final ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public String getValue(final String key) {
+        if (key.equals(CidsUiComponent.CIDS_ACTION_KEY)) {
+            return "VirtualCityMapToolbar";
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Component getComponent() {
+        return new VirtualCityMapToolbarComponentProvider.VirtualCityMapButton(connectionContext);
     }
 
     //~ Inner Classes ----------------------------------------------------------

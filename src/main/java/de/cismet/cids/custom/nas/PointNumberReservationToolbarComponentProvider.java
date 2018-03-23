@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import java.util.Collection;
@@ -38,6 +39,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.menu.CidsUiComponent;
 
 /**
  * DOCUMENT ME!
@@ -47,7 +49,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
 public class PointNumberReservationToolbarComponentProvider implements ToolbarComponentsProvider,
-    ConnectionContextStore {
+    ConnectionContextStore,
+    CidsUiComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -109,6 +112,24 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public String getValue(final String key) {
+        if (key.equals(CidsUiComponent.CIDS_ACTION_KEY)) {
+            return "PointNumberReservationToolbar";
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Component getComponent() {
+        if (validateUserHasAccess()) {
+            return new PunktNummernButton(connectionContext);
+        } else {
+            return null;
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
