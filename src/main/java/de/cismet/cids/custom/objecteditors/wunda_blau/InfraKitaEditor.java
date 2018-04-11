@@ -24,7 +24,6 @@ import com.vividsolutions.jts.geom.Point;
 //import com.vividsolutions.jts.geom.PrecisionModel;
 import de.cismet.cids.custom.objecteditors.utils.InspireUtils;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
-import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
@@ -185,7 +184,6 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     private RoundedPanel rpKarte;
     private SemiRoundedPanel semiRoundedPanel7;
     private JSeparator sepOnline;
-    private SQLDateToStringConverter sqlDateToStringConverter;
     private JTextArea taName;
     private JTextArea taNein;
     private JTextField txtAdresse;
@@ -240,7 +238,6 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        sqlDateToStringConverter = new SQLDateToStringConverter();
         dlgChangeKitaName = new JDialog();
         panChangeKitaName = new JPanel();
         lblWarningTextNein = new JLabel();
