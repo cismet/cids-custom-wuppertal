@@ -42,44 +42,17 @@ public class TableUtils {
     /**
      * Zugiff auf Tabellen
      *
-     * @throws  ConnectionException  DOCUMENT ME!
-     * @throws  Exception            DOCUMENT ME!
+     *
+     * @param myTable
+     * @param myWhere
+     * @param connectionContext
+     * @return 
      */
        
     public static CidsBean getOtherTableValue(final String myTable, final String myWhere, final ConnectionContext connectionContext) {
-       /* try {
-            final MetaClass myClass = ClassCacheMultiple.getMetaClass(
-                    "WUNDA_BLAU",
-                    myTable);
-            if (myClass != null) {
-                final StringBuffer myQuery = new StringBuffer("select ").append(myClass.getId())
-                            .append(", ")
-                            .append(myClass.getPrimaryKey())
-                            .append(" from ")
-                            .append(myClass.getTableName())
-                            .append(myWhere);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("SQL: myQuery:" + myQuery.toString());
-                }
-                final MetaObject[] myMetaObject;
-                try {
-                    myMetaObject = SessionManager.getProxy().getMetaObjectByQuery(myQuery.toString(), 0);
-                    if (myMetaObject.length > 0) {
-                        return myMetaObject[0].getBean();
-                    }
-                } catch (ConnectionException ex) {
-                    LOG.error(ex, ex);
-                }
-            }
-        } catch (Exception ex) {
-            LOG.error(myWhere + " kann nicht geladen werden in getOtherTableValue.", ex);
-        }
-        return null;*/
-        final MetaObject[] myMetaObject = getOtherTableValues(myTable, myWhere,connectionContext);
-        if (myMetaObject != null){
-            if (myMetaObject.length > 0) {
-                return myMetaObject[0].getBean();
-            }
+        final MetaObject[] myMetaObject = getOtherTableValues(myTable, myWhere, connectionContext);
+        if (myMetaObject != null && myMetaObject.length > 0){
+            return myMetaObject[0].getBean();
         }
         return null;
     }
@@ -103,9 +76,8 @@ public class TableUtils {
                 }
                 final MetaObject[] myMetaObject;
                 try {
-                    myMetaObject = SessionManager.getProxy().getMetaObjectByQuery(myQuery.toString(), 0);
+                    myMetaObject = SessionManager.getProxy().getMetaObjectByQuery(myQuery.toString(), 0, connectionContext);
                     if (myMetaObject.length > 0) {
-                        //return myMetaObject[0].getBean();
                         return myMetaObject;
                     }
                 } catch (ConnectionException ex) {
@@ -126,9 +98,11 @@ public class TableUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param deleteBean
      * @param  propertyName           DOCUMENT ME!
      * @param  value                  DOCUMENT ME!
-     * @param  andDeleteItemFromList  DOCUMENT ME!
+     * @param andDeleteObjectFromDB
+     * @return 
      */
     public static CidsBean deleteItemFromList(CidsBean deleteBean, final String propertyName, final Object value, final boolean andDeleteObjectFromDB) {
         if ((value instanceof CidsBean) && (propertyName != null)) {
@@ -157,8 +131,10 @@ public class TableUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param addBean
      * @param  propName     DOCUMENT ME!
      * @param  newTypeBean  DOCUMENT ME!
+     * @return 
      */
     public static CidsBean addBeanToCollection(CidsBean addBean, final String propName, final CidsBean newTypeBean) {
         if ((newTypeBean != null) && (propName != null)) {

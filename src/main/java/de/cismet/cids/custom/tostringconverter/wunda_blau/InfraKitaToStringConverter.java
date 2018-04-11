@@ -13,7 +13,6 @@
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 
 import de.cismet.cids.tools.CustomToStringConverter;
-import javax.swing.JOptionPane;
 
 /**
  * DOCUMENT ME!
@@ -30,21 +29,16 @@ public class InfraKitaToStringConverter extends CustomToStringConverter {
      *
      * @return  DOCUMENT ME!
      */
-    public String myString() {
-        String mystrasse = "";
-        String myname = "";
-        mystrasse = String.valueOf(cidsBean.getProperty("adresse"));
-        mystrasse = mystrasse.trim();
-        myname = String.valueOf(cidsBean.getProperty("name"));
-        return myname + ", " + mystrasse;
-    }
+   
 
     @Override
     public String createString() {
-        /**
-         *
-         */
-
-        return myString();
+        String mystrasse;
+        String myname;
+        mystrasse = String.valueOf(cidsBean.getProperty("adresse"));
+        mystrasse = mystrasse.trim();
+        myname = String.valueOf(cidsBean.getProperty("name"));
+        
+        return myname + ", " + mystrasse;
     }
 }

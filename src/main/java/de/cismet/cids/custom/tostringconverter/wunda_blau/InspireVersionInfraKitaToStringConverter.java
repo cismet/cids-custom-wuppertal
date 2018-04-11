@@ -13,7 +13,7 @@
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 
 import de.cismet.cids.tools.CustomToStringConverter;
-import javax.swing.JOptionPane;
+
 
 /**
  * DOCUMENT ME!
@@ -30,20 +30,16 @@ public class InspireVersionInfraKitaToStringConverter extends CustomToStringConv
      *
      * @return  DOCUMENT ME!
      */
-    public String myString() {
-        String mykita = "";
-        String myversion = "";
-        mykita = String.valueOf(cidsBean.getProperty("infra_kita_reference"));
-        myversion = String.valueOf(cidsBean.getProperty("versionnr"));
-        return mykita + ", " + myversion;
-    }
+   
 
     @Override
     public String createString() {
-        /**
-         *
-         */
-
-        return myString();
+        String mykita;
+        String myversion;
+        
+        mykita = String.valueOf(cidsBean.getProperty("infra_kita_reference"));
+        myversion = String.valueOf(cidsBean.getProperty("versionnr"));
+        
+        return mykita + ", " + myversion;
     }
 }
