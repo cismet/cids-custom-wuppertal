@@ -12,12 +12,9 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditor;
 import de.cismet.cids.custom.objecteditors.wunda_blau.KkVerfahrenEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-
-import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -37,6 +34,16 @@ public class KkVerfahrenRenderer extends KkVerfahrenEditor implements CidsBeanRe
      * Creates a new KkVerfahrenRenderer object.
      */
     public KkVerfahrenRenderer() {
+        this(false);
+    }
+
+    /**
+     * Creates a new KkVerfahrenRenderer object.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public KkVerfahrenRenderer(final boolean editable) {
+        super(editable);
         this.title = "";
     }
 
