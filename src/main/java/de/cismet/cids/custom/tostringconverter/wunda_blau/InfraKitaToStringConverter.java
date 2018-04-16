@@ -29,16 +29,15 @@ public class InfraKitaToStringConverter extends CustomToStringConverter {
      *
      * @return  DOCUMENT ME!
      */
-   
 
     @Override
     public String createString() {
         String mystrasse;
-        String myname;
+        final String myname;
         mystrasse = String.valueOf(cidsBean.getProperty("adresse"));
         mystrasse = mystrasse.trim();
         myname = String.valueOf(cidsBean.getProperty("name"));
-        
+
         return myname + ", " + mystrasse;
     }
 }

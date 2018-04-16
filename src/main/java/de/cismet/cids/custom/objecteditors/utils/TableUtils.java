@@ -19,11 +19,13 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import java.util.Collection;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
 import de.cismet.connectioncontext.ConnectionContext;
-import java.util.Collection;
 
 /**
  * DOCUMENT ME!
@@ -40,25 +42,37 @@ public class TableUtils {
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * Zugiff auf Tabellen
+     * Zugiff auf Tabellen.
      *
+     * @param   myTable            DOCUMENT ME!
+     * @param   myWhere            DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
-     * @param myTable
-     * @param myWhere
-     * @param connectionContext
-     * @return 
+     * @return  DOCUMENT ME!
      */
-       
-    public static CidsBean getOtherTableValue(final String myTable, final String myWhere, final ConnectionContext connectionContext) {
+
+    public static CidsBean getOtherTableValue(final String myTable,
+            final String myWhere,
+            final ConnectionContext connectionContext) {
         final MetaObject[] myMetaObject = getOtherTableValues(myTable, myWhere, connectionContext);
-        if (myMetaObject != null && myMetaObject.length > 0){
+        if ((myMetaObject != null) && (myMetaObject.length > 0)) {
             return myMetaObject[0].getBean();
         }
         return null;
     }
-    
-    
-    public static MetaObject[] getOtherTableValues(final String myTable, final String myWhere, final ConnectionContext connectionContext) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   myTable            DOCUMENT ME!
+     * @param   myWhere            DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MetaObject[] getOtherTableValues(final String myTable,
+            final String myWhere,
+            final ConnectionContext connectionContext) {
         try {
             final MetaClass myClass = ClassCacheMultiple.getMetaClass(
                     "WUNDA_BLAU",
@@ -76,7 +90,8 @@ public class TableUtils {
                 }
                 final MetaObject[] myMetaObject;
                 try {
-                    myMetaObject = SessionManager.getProxy().getMetaObjectByQuery(myQuery.toString(), 0, connectionContext);
+                    myMetaObject = SessionManager.getProxy()
+                                .getMetaObjectByQuery(myQuery.toString(), 0, connectionContext);
                     if (myMetaObject.length > 0) {
                         return myMetaObject;
                     }
@@ -89,22 +104,32 @@ public class TableUtils {
         }
         return null;
     }
-    
-    public static String getMyWhere(final String myWhere) {
-        return " where name ilike '" + myWhere + "'";
-    }
-    
-    
+
     /**
      * DOCUMENT ME!
      *
-     * @param deleteBean
-     * @param  propertyName           DOCUMENT ME!
-     * @param  value                  DOCUMENT ME!
-     * @param andDeleteObjectFromDB
-     * @return 
+     * @param   myWhere  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public static CidsBean deleteItemFromList(CidsBean deleteBean, final String propertyName, final Object value, final boolean andDeleteObjectFromDB) {
+    public static String getMyWhere(final String myWhere) {
+        return " where name ilike '" + myWhere + "'";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   deleteBean             DOCUMENT ME!
+     * @param   propertyName           DOCUMENT ME!
+     * @param   value                  DOCUMENT ME!
+     * @param   andDeleteObjectFromDB  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static CidsBean deleteItemFromList(final CidsBean deleteBean,
+            final String propertyName,
+            final Object value,
+            final boolean andDeleteObjectFromDB) {
         if ((value instanceof CidsBean) && (propertyName != null)) {
             final CidsBean bean = (CidsBean)value;
             if (andDeleteObjectFromDB) {
@@ -122,21 +147,29 @@ public class TableUtils {
         }
         return deleteBean;
     }
-    
-    
-   /**
-     * DOCUMENT ME!
-     */
-  
+
     /**
      * DOCUMENT ME!
      *
-     * @param addBean
-     * @param  propName     DOCUMENT ME!
-     * @param  newTypeBean  DOCUMENT ME!
-     * @return 
+     * @param   addBean      DOCUMENT ME!
+     * @param   propName     DOCUMENT ME!
+     * @param   newTypeBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public static CidsBean addBeanToCollection(CidsBean addBean, final String propName, final CidsBean newTypeBean) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   addBean      DOCUMENT ME!
+     * @param   propName     DOCUMENT ME!
+     * @param   newTypeBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static CidsBean addBeanToCollection(final CidsBean addBean,
+            final String propName,
+            final CidsBean newTypeBean) {
         if ((newTypeBean != null) && (propName != null)) {
             final Object o = addBean.getProperty(propName);
             if (o instanceof Collection) {

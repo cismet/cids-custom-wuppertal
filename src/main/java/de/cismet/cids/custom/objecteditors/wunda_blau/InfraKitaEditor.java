@@ -12,29 +12,59 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 //import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+
+import org.apache.log4j.Logger;
+
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+
+import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import java.sql.Timestamp;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.logging.Level;
+
+import javax.swing.*;
+
 //import com.vividsolutions.jts.geom.PrecisionModel;
 import de.cismet.cids.custom.objecteditors.utils.InspireUtils;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
-
-import org.apache.log4j.Logger;
-
-import org.jdesktop.beansbinding.BindingGroup;
-
-import org.openide.util.Exceptions;
-import org.openide.util.NbBundle;
-
-import javax.swing.*;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -49,38 +79,16 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
 import de.cismet.connectioncontext.ConnectionContext;
+
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
-
 import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Date;
-import java.util.logging.Level;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -91,55 +99,56 @@ import org.jdesktop.swingx.error.ErrorInfo;
 public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
     BindingGroupStore,
-    PropertyChangeListener, 
-    RequestsFullSizeComponent{
+    PropertyChangeListener,
+    RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(InfraKitaEditor.class);
 
+    public static final String FIELD__VERSION_KITA = "version_kita";                    // infra_kita
+    public static final String FIELD__VERSIONNR = "versionnr";                          // inspire_infra_kita_version
+    public static final String FIELD__ONLINE_STELLEN = "online_stellen";                // infra_kita
+    public static final String FIELD__ENDLIFESPANVERSION = "endlifespanversion";        // inspire_infra_kita_version
+    public static final String FIELD__BEGINLIFESPANVERSION = "beginlifespanversion";    // inspire_infra_kita_version
+    public static final String FIELD__GEOREFERENZ = "georeferenz";                      // infra_kita
+    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "georeferenz.geo_field"; // infra_kita
+    public static final String FIELD__URL = "url";                                      // infra_kita
+    public static final String FIELD__TELEFEON = "telefon";                             // infra_kita
+    public static final String FIELD__INSPIRE_ID = "inspire_id";                        // infra_kita
+    public static final String FIELD__GEO_FIELD = "geo_field";                          // geom
+    public static final String FIELD__POINT = "point";                                  // inspire_infra_kita_version
+    public static final String FIELD__WEBSITE = "website";                              // inspire_infra_kita_version
+    public static final String FIELD__TELEPHONEVOICE = "telephonevoice";                // inspire_infra_kita_version
+    public static final String FIELD__NAME = "name";                                    // infra_kita
+    public static final String TABLE_NAME = "infra_kita";
+    public static final String TABLE_GEOM = "geom";
+    public static final String TABLE_NAME_VERSION = "inspire_infra_kita_version";
+
+    public static final Coordinate RATHAUS_POINT = new Coordinate(374420, 5681660);
+
     //~ Instance fields --------------------------------------------------------
 
     private boolean isEditor = true;
-    private String urlAttribute; 
+    private String urlAttribute;
     private String telAttribute;
     private String onlineAttribute;
     private String geomAttribute;
     private Object versionAttribute;
-    
-    public static final String FIELD__VERSION_KITA = "version_kita";//infra_kita
-    public static final String FIELD__VERSIONNR = "versionnr";//inspire_infra_kita_version
-    public static final String FIELD__ONLINE_STELLEN = "online_stellen";//infra_kita
-    public static final String FIELD__ENDLIFESPANVERSION = "endlifespanversion";//inspire_infra_kita_version
-    public static final String FIELD__BEGINLIFESPANVERSION = "beginlifespanversion";//inspire_infra_kita_version
-    public static final String FIELD__GEOREFERENZ = "georeferenz";//infra_kita
-    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "georeferenz.geo_field";//infra_kita
-    public static final String FIELD__URL = "url";//infra_kita
-    public static final String FIELD__TELEFEON = "telefon";//infra_kita
-    public static final String FIELD__INSPIRE_ID = "inspire_id";//infra_kita
-    public static final String FIELD__GEO_FIELD = "geo_field";//geom
-    public static final String FIELD__POINT = "point";//inspire_infra_kita_version
-    public static final String FIELD__WEBSITE = "website";//inspire_infra_kita_version
-    public static final String FIELD__TELEPHONEVOICE = "telephonevoice";//inspire_infra_kita_version
-    public static final String FIELD__NAME = "name";//infra_kita
-    public static final String TABLE_NAME = "infra_kita";
-    public static final String TABLE_GEOM = "geom";
-    public static final String TABLE_NAME_VERSION = "inspire_infra_kita_version";
-    
-    public static final Coordinate RATHAUS_POINT = new Coordinate(374420,5681660);
-    
-    final private ImageIcon statusFalsch = new ImageIcon(
+
+    private final ImageIcon statusFalsch = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
-    final private ImageIcon statusOK = new ImageIcon(
+    private final ImageIcon statusOK = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
     /*final private ImageIcon statusDefault = new ImageIcon(
-            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-offline.png"));*/
-    final private ImageIcon inspired = new ImageIcon(
+     *   getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-offline.png"));*/
+    private final ImageIcon inspired = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/inspire_logo_en_100x100px.png"));
-    final private ImageIcon notinspired = new ImageIcon(
-            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/inspire_logo_en_100x100px_soft.png"));
-    //final private DefaultListModel dLModel = new DefaultListModel();
-   
+    private final ImageIcon notinspired = new ImageIcon(
+            getClass().getResource(
+                "/de/cismet/cids/custom/objecteditors/wunda_blau/inspire_logo_en_100x100px_soft.png"));
+    // final private DefaultListModel dLModel = new DefaultListModel();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnMenOkName;
     private DefaultBindableReferenceCombo cbAlter;
@@ -204,7 +213,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
      */
     public InfraKitaEditor() {
     }
-    
+
     /**
      * Creates a new InfraKitaEditor object.
      *
@@ -214,11 +223,13 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         this.isEditor = boolEditor;
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        
+
         if (isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
             dlgChangeKitaName.pack();
@@ -226,7 +237,6 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         }
         setReadOnly();
     }
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -260,7 +270,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         lblName = new JLabel();
         lblGeom = new JLabel();
         txtName = new JTextField();
-        if (isEditor){
+        if (isEditor) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         txtAdresse = new JTextField();
@@ -289,9 +299,9 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         panUrl = new JPanel();
         txtUrl = new JTextField();
         lblUrlCheck = new JLabel();
-        cbTraegertyp = new DefaultBindableReferenceCombo(true) ;
-        cbAlter = new DefaultBindableReferenceCombo(true) ;
-        cbStunden = new DefaultBindableReferenceCombo(true) ;
+        cbTraegertyp = new DefaultBindableReferenceCombo(true);
+        cbAlter = new DefaultBindableReferenceCombo(true);
+        cbStunden = new DefaultBindableReferenceCombo(true);
         chOnline = new JCheckBox();
 
         dlgChangeKitaName.setTitle("Ist dies eine neue Kita?");
@@ -327,10 +337,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         btnMenOkName.setText("Ok");
         btnMenOkName.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenOkNameActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenOkNameActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -365,7 +377,8 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         panChangeKitaName.add(taNein, gridBagConstraints);
 
-        lblInspireKita.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/dialog-warning.png"))); // NOI18N
+        lblInspireKita.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/dialog-warning.png"))); // NOI18N
         lblInspireKita.setToolTipText("Warnung");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -382,14 +395,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -410,14 +421,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -479,14 +488,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerRechtsLage.setName(""); // NOI18N
         panFillerRechtsLage.setOpaque(false);
 
-        GroupLayout panFillerRechtsLageLayout = new GroupLayout(panFillerRechtsLage);
+        final GroupLayout panFillerRechtsLageLayout = new GroupLayout(panFillerRechtsLage);
         panFillerRechtsLage.setLayout(panFillerRechtsLageLayout);
-        panFillerRechtsLageLayout.setHorizontalGroup(panFillerRechtsLageLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerRechtsLageLayout.setVerticalGroup(panFillerRechtsLageLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerRechtsLageLayout.setHorizontalGroup(panFillerRechtsLageLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerRechtsLageLayout.setVerticalGroup(panFillerRechtsLageLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -528,7 +535,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -539,17 +551,21 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 4, 2, 2);
         panAdresse.add(txtName, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
+        if (isEditor) {
+            if (isEditor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.georeferenz}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.georeferenz}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 2;
@@ -561,7 +577,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         txtAdresse.setToolTipText("");
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.adresse}"), txtAdresse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.adresse}"),
+                txtAdresse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -581,7 +602,8 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panAdresse.add(lblAdresse, gridBagConstraints);
 
-        lblInspire.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard_100.png"))); // NOI18N
+        lblInspire.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard_100.png"))); // NOI18N
         lblInspire.setToolTipText("Der Datensatz ist inspired.");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -601,7 +623,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), txtTelefon, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.telefon}"),
+                txtTelefon,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -613,7 +640,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 4, 2, 2);
         panDaten.add(txtTelefon, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plz}"), txtPlz, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.plz}"),
+                txtPlz,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -625,7 +657,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 4, 2, 2);
         panDaten.add(txtPlz, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plaetze}"), txtPlaetze, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.plaetze}"),
+                txtPlaetze,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -637,7 +674,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 4, 2, 2);
         panDaten.add(txtPlaetze, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.leitung}"), txtLeitung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.leitung}"),
+                txtLeitung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -725,14 +767,16 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         panFiller.setOpaque(false);
         panFiller.setPreferredSize(new Dimension(20, 0));
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -750,7 +794,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         chInklusion.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plaetze_fuer_behinderte}"), chInklusion, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.plaetze_fuer_behinderte}"),
+                chInklusion,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -762,7 +811,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         txtBemerkung.setToolTipText("");
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), txtBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                txtBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -803,7 +857,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         panUrl.setLayout(new GridBagLayout());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.url}"), txtUrl, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.url}"),
+                txtUrl,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -816,7 +875,8 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 4, 2, 2);
         panUrl.add(txtUrl, gridBagConstraints);
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -834,7 +894,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         cbTraegertyp.setMinimumSize(new Dimension(150, 23));
         cbTraegertyp.setPreferredSize(new Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.traegertyp}"), cbTraegertyp, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.traegertyp}"),
+                cbTraegertyp,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -850,7 +915,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         cbAlter.setMinimumSize(new Dimension(150, 23));
         cbAlter.setPreferredSize(new Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.alter}"), cbAlter, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.alter}"),
+                cbAlter,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -866,7 +936,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         cbStunden.setMinimumSize(new Dimension(150, 23));
         cbStunden.setPreferredSize(new Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.stunden}"), cbStunden, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.stunden}"),
+                cbStunden,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -880,7 +955,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         chOnline.setToolTipText("");
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.online_stellen}"), chOnline, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.online_stellen}"),
+                chOnline,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -908,66 +988,87 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnMenOkNameActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkNameActionPerformed
-       dlgChangeKitaName.setVisible(false);
-    }//GEN-LAST:event_btnMenOkNameActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkNameActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkNameActionPerformed
+        dlgChangeKitaName.setVisible(false);
+    }                                                                 //GEN-LAST:event_btnMenOkNameActionPerformed
 
-    private void finishVersion(CidsBean versionBean, Timestamp timestamp){
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  versionBean  DOCUMENT ME!
+     * @param  timestamp    DOCUMENT ME!
+     */
+    private void finishVersion(final CidsBean versionBean, final Timestamp timestamp) {
         try {
             versionBean.setProperty(FIELD__ENDLIFESPANVERSION, timestamp);
         } catch (final Exception e) {
             LOG.fatal("Problem during closing kita", e);
             final ErrorInfo ei = new ErrorInfo(
-                            "Fehler beim Löschen",
-                            "Beim Löschen der Version dieser Kita ist ein Fehler aufgetreten",
-                            null,
-                            null,
-                            e,
-                            Level.SEVERE,
-                            null);
-                    JXErrorPane.showDialog(this, ei);
+                    "Fehler beim Löschen",
+                    "Beim Löschen der Version dieser Kita ist ein Fehler aufgetreten",
+                    null,
+                    null,
+                    e,
+                    Level.SEVERE,
+                    null);
+            JXErrorPane.showDialog(this, ei);
         }
     }
-    
-    private CidsBean getLastVersion(){
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private CidsBean getLastVersion() {
         CidsBean dateCidsBean = null;
         int version = 0;
         final Object o = cidsBean.getProperty(FIELD__VERSION_KITA);
-        if (o instanceof Collection){
-            try{
+        if (o instanceof Collection) {
+            try {
                 final Collection<CidsBean> col = (Collection)o;
-                for (final CidsBean bean : col){
-                    if (version < (int)bean.getProperty(FIELD__VERSIONNR)){
-                        version = (int) bean.getProperty(FIELD__VERSIONNR);
+                for (final CidsBean bean : col) {
+                    if (version < (int)bean.getProperty(FIELD__VERSIONNR)) {
+                        version = (int)bean.getProperty(FIELD__VERSIONNR);
                         dateCidsBean = bean;
                     }
                 }
-                
-            }catch (final Exception ex) {
-                    LOG.error(ex, ex);
-                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            }
         }
         return dateCidsBean;
     }
-    
-    private void checkInspireID(){
-        try{
-            if (cidsBean.getProperty(FIELD__INSPIRE_ID) == null){
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void checkInspireID() {
+        try {
+            if (cidsBean.getProperty(FIELD__INSPIRE_ID) == null) {
                 lblInspire.setIcon(notinspired);
                 lblInspire.setToolTipText("Der Datensatz ist nicht inspired.");
-            }else{
+            } else {
                 lblInspire.setIcon(inspired);
                 lblInspire.setToolTipText("Der Datensatz ist inspired.");
             }
-        }catch (final Exception e) {
+        } catch (final Exception e) {
             lblInspire.setIcon(inspired);
             lblInspire.setToolTipText("Der Datensatz ist inspired.");
-        } 
+        }
     }
-   
-    private void testUrlAndShowResult(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void testUrlAndShowResult() {
         try {
             final URL url = new URL(txtUrl.getText());
             if (checkURL(url)) {
@@ -977,10 +1078,17 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             }
         } catch (final Exception e) {
             lblUrlCheck.setIcon(statusFalsch);
-        }        
+        }
     }
-    
-     private boolean checkURL(final URL url) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean checkURL(final URL url) {
         try {
             final HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("HEAD");
@@ -990,54 +1098,56 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             return false;
         }
     }
-    
+
     @Override
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         boolean newVersion = false;
- 
+
         // adresse vorhanden
-       try {
-            if (txtAdresse.getText().trim().isEmpty() ){              
+        try {
+            if (txtAdresse.getText().trim().isEmpty()) {
                 LOG.warn("No adress specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(InfraKitaEditor.class,
-                                "InfraKitaEditor.prepareForSave().noAdresse"));
-            
+                errorMessage.append(NbBundle.getMessage(
+                        InfraKitaEditor.class,
+                        "InfraKitaEditor.prepareForSave().noAdresse"));
             }
         } catch (final Exception ex) {
             LOG.warn("Adress not given.", ex);
             save = false;
         }
-       
+
         // name vorhanden
         try {
-            if (txtName.getText().trim().isEmpty() ){              
+            if (txtName.getText().trim().isEmpty()) {
                 LOG.warn("No name specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(InfraKitaEditor.class,
-                                "InfraKitaEditor.prepareForSave().noName"));
-            
+                errorMessage.append(NbBundle.getMessage(
+                        InfraKitaEditor.class,
+                        "InfraKitaEditor.prepareForSave().noName"));
             }
         } catch (final Exception ex) {
             LOG.warn("Name not given.", ex);
             save = false;
         }
-               
-       // georeferenz muss gefüllt sein
-       try {
-            if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null){              
+
+        // georeferenz muss gefüllt sein
+        try {
+            if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(InfraKitaEditor.class,
-                                "InfraKitaEditor.prepareForSave().noGeom"));
-            
-            } else{
+                errorMessage.append(NbBundle.getMessage(
+                        InfraKitaEditor.class,
+                        "InfraKitaEditor.prepareForSave().noGeom"));
+            } else {
                 final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
-                if (! ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals( "Point")){
+                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(InfraKitaEditor.class,
-                                "InfraKitaEditor.prepareForSave().wrongGeom"));
-                } else{
-                    if (!(setNotNull(cidsBean.getProperty(FIELD__GEOREFERENZ)).equals(geomAttribute)) && cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
+                    errorMessage.append(NbBundle.getMessage(
+                            InfraKitaEditor.class,
+                            "InfraKitaEditor.prepareForSave().wrongGeom"));
+                } else {
+                    if (!(setNotNull(cidsBean.getProperty(FIELD__GEOREFERENZ)).equals(geomAttribute))
+                                && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW)) {
                         newVersion = true;
                     }
                 }
@@ -1046,39 +1156,47 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             LOG.warn("Geom not given.", ex);
             save = false;
         }
-       
-        //Änderung der url
-        if (  !(setNotNull(cidsBean.getProperty(FIELD__URL)).equals(urlAttribute)) && cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
+
+        // Änderung der url
+        if (!(setNotNull(cidsBean.getProperty(FIELD__URL)).equals(urlAttribute))
+                    && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW)) {
             newVersion = true;
         }
-      
-        //Änderung des Telefons
-        if (!(setNotNull(cidsBean.getProperty(FIELD__TELEFEON)).equals(telAttribute)) && cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
+
+        // Änderung des Telefons
+        if (!(setNotNull(cidsBean.getProperty(FIELD__TELEFEON)).equals(telAttribute))
+                    && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW)) {
             newVersion = true;
         }
-        
-        //Soll eine neue Version erstellt werden?
-        if (newVersion && chOnline.isSelected() && versionAttribute != null && onlineAttribute.equals(setNotNull(chOnline.isSelected()))){
-           createNewVersion(); 
+
+        // Soll eine neue Version erstellt werden?
+        if (newVersion && chOnline.isSelected() && (versionAttribute != null)
+                    && onlineAttribute.equals(setNotNull(chOnline.isSelected()))) {
+            createNewVersion();
         }
-        
-        //Erzeugung einer neuen eindeutigen uuid und Anlegen der ersten Version
-        try{
+
+        // Erzeugung einer neuen eindeutigen uuid und Anlegen der ersten Version
+        try {
             String uuid;
-            if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW && chOnline.isSelected() ){
+            if ((this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) && chOnline.isSelected()) {
                 uuid = InspireUtils.generateUuid(getConnectionContext());
                 InspireUtils.writeUuid(uuid, cidsBean, FIELD__INSPIRE_ID, TABLE_NAME, getConnectionContext());
                 createFirstVersion(1, new Timestamp(new Date().getTime()));
             } else {
-                if (cidsBean.getMetaObject().getStatus() != MetaObject.NEW && !(setNotNull(cidsBean.getProperty(FIELD__ONLINE_STELLEN)).equals(onlineAttribute)) && chOnline.isSelected()){
+                if ((cidsBean.getMetaObject().getStatus() != MetaObject.NEW)
+                            && !(setNotNull(cidsBean.getProperty(FIELD__ONLINE_STELLEN)).equals(onlineAttribute))
+                            && chOnline.isSelected()) {
                     uuid = InspireUtils.generateUuid(getConnectionContext());
                     InspireUtils.writeUuid(uuid, cidsBean, FIELD__INSPIRE_ID, TABLE_NAME, getConnectionContext());
                     createFirstVersion(1, new Timestamp(new Date().getTime()));
-                } else{
-                    if (cidsBean.getMetaObject().getStatus() != MetaObject.NEW && !(setNotNull(cidsBean.getProperty(FIELD__ONLINE_STELLEN)).equals(onlineAttribute))  && !(chOnline.isSelected())){
+                } else {
+                    if ((cidsBean.getMetaObject().getStatus() != MetaObject.NEW)
+                                && !(setNotNull(cidsBean.getProperty(FIELD__ONLINE_STELLEN)).equals(onlineAttribute))
+                                && !(chOnline.isSelected())) {
                         LOG.warn("Offline specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(InfraKitaEditor.class,
-                                "InfraKitaEditor.prepareForSave().wrongOffline"));    
+                        errorMessage.append(NbBundle.getMessage(
+                                InfraKitaEditor.class,
+                                "InfraKitaEditor.prepareForSave().wrongOffline"));
                     }
                 }
             }
@@ -1086,13 +1204,15 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             LOG.warn("inspireid not given.", ex);
             save = false;
         }
-        
+
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(InfraKitaEditor.class,
+                NbBundle.getMessage(
+                    InfraKitaEditor.class,
                     "InfraKitaEditor.prepareForSave().JOptionPane.message.prefix")
                         + errorMessage.toString()
-                        + NbBundle.getMessage(InfraKitaEditor.class,
+                        + NbBundle.getMessage(
+                            InfraKitaEditor.class,
                             "InfraKitaEditor.prepareForSave().JOptionPane.message.suffix"),
                 NbBundle.getMessage(InfraKitaEditor.class,
                     "InfraKitaEditor.prepareForSave().JOptionPane.title"),
@@ -1102,41 +1222,54 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         }
         return save;
     }
-    
-    private void createFirstVersion(int versionnr, Timestamp timestamp){
-        final MetaClass versionMetaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, TABLE_NAME_VERSION, getConnectionContext());
-        CidsBean newVersionBean = versionMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-        try{
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  versionnr  DOCUMENT ME!
+     * @param  timestamp  DOCUMENT ME!
+     */
+    private void createFirstVersion(final int versionnr, final Timestamp timestamp) {
+        final MetaClass versionMetaClass = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                TABLE_NAME_VERSION,
+                getConnectionContext());
+        final CidsBean newVersionBean = versionMetaClass.getEmptyInstance(getConnectionContext()).getBean();
+        try {
             newVersionBean.setProperty(FIELD__VERSIONNR, versionnr);
             newVersionBean.setProperty(FIELD__BEGINLIFESPANVERSION, timestamp);
             final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
-            if (geom_pos != null && ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals( "Point")){
-                Coordinate geom_point = ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getCoordinate();
-                Double point_x = geom_point.x;
-                Double point_y = geom_point.y;
+            if ((geom_pos != null)
+                        && ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
+                final Coordinate geom_point = ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getCoordinate();
+                final Double point_x = geom_point.x;
+                final Double point_y = geom_point.y;
                 newVersionBean.setProperty(FIELD__POINT, point_x + " " + point_y);
             }
-            if (cidsBean.getProperty(FIELD__URL) != null){
+            if (cidsBean.getProperty(FIELD__URL) != null) {
                 newVersionBean.setProperty(FIELD__WEBSITE, cidsBean.getProperty(FIELD__URL).toString());
             }
-            if (cidsBean.getProperty(FIELD__TELEFEON) != null){
+            if (cidsBean.getProperty(FIELD__TELEFEON) != null) {
                 newVersionBean.setProperty(FIELD__TELEPHONEVOICE, cidsBean.getProperty(FIELD__TELEFEON).toString());
             }
-            
-            cidsBean = TableUtils.addBeanToCollection(cidsBean,FIELD__VERSION_KITA, newVersionBean);
+
+            cidsBean = TableUtils.addBeanToCollection(cidsBean, FIELD__VERSION_KITA, newVersionBean);
         } catch (final Exception ex) {
             LOG.warn("inspireversion not created.", ex);
         }
     }
-    
-    private void createNewVersion(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void createNewVersion() {
         final Timestamp timestamp = new Timestamp(new Date().getTime());
-        CidsBean versionBean = getLastVersion();
+        final CidsBean versionBean = getLastVersion();
         finishVersion(versionBean, timestamp);
-        int version = (int)versionBean.getProperty(FIELD__VERSIONNR);
+        final int version = (int)versionBean.getProperty(FIELD__VERSIONNR);
         createFirstVersion(version + 1, timestamp);
     }
-    
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -1144,7 +1277,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.      
+        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
             if (isEditor && (this.cidsBean != null)) {
                 LOG.info("remove propchange str_adr_strasse: " + this.cidsBean);
@@ -1171,25 +1304,36 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             Exceptions.printStackTrace(ex);
         }
     }
-    
-    private void saveFirstAttributes(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void saveFirstAttributes() {
         urlAttribute = setNotNull(cidsBean.getProperty(FIELD__URL));
         telAttribute = setNotNull(cidsBean.getProperty(FIELD__TELEFEON));
         onlineAttribute = setNotNull(cidsBean.getProperty(FIELD__ONLINE_STELLEN));
         geomAttribute = setNotNull(cidsBean.getProperty(FIELD__GEOREFERENZ));
         versionAttribute = cidsBean.getProperty(FIELD__VERSION_KITA);
     }
-        
-    //COALESCE
-    private String setNotNull(Object notNullString){
-        if (notNullString == null){
+    /**
+     * COALESCE.
+     *
+     * @param   notNullString  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String setNotNull(final Object notNullString) {
+        if (notNullString == null) {
             return "";
         }
         return notNullString.toString();
     }
-              
-    private void setReadOnly(){
-        if (!(isEditor)){ 
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setReadOnly() {
+        if (!(isEditor)) {
             cbStunden.setEnabled(false);
             cbTraegertyp.setEnabled(false);
             cbAlter.setEnabled(false);
@@ -1206,19 +1350,23 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             lblGeom.setVisible(false);
         }
     }
-   
-    public void setMapWindow(){
-        CidsBean cb = this.getCidsBean();
-        try{
-            if (cb.getProperty(FIELD__GEOREFERENZ) != null){
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void setMapWindow() {
+        final CidsBean cb = this.getCidsBean();
+        try {
+            if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
 //panPreviewMap.initMap(cidsBean, "FIELD__GEOREFERENZ__GEO_FIELD", 50.0, "http://s10221.wuppertal-intra.de:7098/alkis/services?&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=FALSE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=alf&STYLES=&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&SRS=EPSG:25832");
                 panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, 20.0);
-            }else{
+            } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
                 final BoundingBox initialBoundingBox;
-                initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel().getInitialBoundingBox();
+                initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
+                            .getInitialBoundingBox();
                 final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-                
+
                 final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
                         CidsBeanSupport.DOMAIN_NAME,
                         TABLE_GEOM,
@@ -1231,7 +1379,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             Exceptions.printStackTrace(ex);
         }
     }
-        
+
     @Override
     public void dispose() {
         super.dispose();
@@ -1260,24 +1408,22 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-       //throw new UnsupportedOperationException("Not supported yet.");
-        //To change body of generated methods, choose Tools | Templates.
-        if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)){
+    public void propertyChange(final PropertyChangeEvent evt) {
+        // throw new UnsupportedOperationException("Not supported yet.");
+        // To change body of generated methods, choose Tools | Templates.
+        if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)) {
             setMapWindow();
         }
-        
-        if (evt.getPropertyName().equals(FIELD__URL)){
-           testUrlAndShowResult();
+
+        if (evt.getPropertyName().equals(FIELD__URL)) {
+            testUrlAndShowResult();
         }
-        if (evt.getPropertyName().equals(FIELD__NAME)){
-           if(cidsBean.getProperty(FIELD__INSPIRE_ID)!= null){
-               StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(InfraKitaEditor.this),
-            dlgChangeKitaName,
-            true);
-           }
+        if (evt.getPropertyName().equals(FIELD__NAME)) {
+            if (cidsBean.getProperty(FIELD__INSPIRE_ID) != null) {
+                StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(InfraKitaEditor.this),
+                    dlgChangeKitaName,
+                    true);
+            }
         }
     }
 }
-
-
