@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
 import de.cismet.connectioncontext.ConnectionContext;
 
 /**
@@ -37,47 +38,72 @@ public class InspireUtils {
 
     //~ Methods ----------------------------------------------------------------
 
-    
-    
-    public static String generateUuid(ConnectionContext connectionContext){
-        String uuid;
-        String neueUuid;
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String generateUuid(final ConnectionContext connectionContext) {
+        final String uuid;
+        final String neueUuid;
 
-        uuid = getRandomHex() + getRandomHex() + "-" + getRandomHex() + "-" + getRandomHex() + "-" + getRandomHex() + "-" + getRandomHex() + getRandomHex() + getRandomHex();
+        uuid = getRandomHex() + getRandomHex() + "-" + getRandomHex() + "-" + getRandomHex() + "-" + getRandomHex()
+                    + "-" + getRandomHex() + getRandomHex() + getRandomHex();
 
         final String myWhere = " where uuid ilike '" + uuid + "'";
         final CidsBean uuidBean = TableUtils.getOtherTableValue(FIELD__INSPIRE_EIND_ID, myWhere, connectionContext);
 
-        if (uuidBean == null){
+        if (uuidBean == null) {
             return uuid;
-        }else{ 
+        } else {
             neueUuid = generateUuid(connectionContext);
         }
         return neueUuid;
     }
-    
-    //Liefert eine vierstellige zufällige Hexadezimalzahl
-    public static String getRandomHex(){
-        //8-4-4-4-12; 4:65535 8:4294967295, 12:281474976710655 --> aber nicht möglich
-        int zahl;
+    /**
+     * Liefert eine vierstellige zufällige Hexadezimalzahl.
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getRandomHex() {
+        // 8-4-4-4-12; 4:65535 8:4294967295, 12:281474976710655 --> aber nicht möglich
+        final int zahl;
         String uuid;
-        
-        zahl = (int)Math.floor(Math.random()* Math.floor(65536));
+
+        zahl = (int)Math.floor(Math.random() * Math.floor(65536));
         uuid = Integer.toHexString(zahl);
-        
-        while (uuid.length() < 4){
+
+        while (uuid.length() < 4) {
             uuid = "0" + uuid;
         }
-        
+
         return uuid;
     }
-    
-    //Trägt die uuid des neuen Objektes in die Tabelle inspire_eindeutige_id ein
-    public static CidsBean writeUuid(final String uuid, CidsBean classBean, final String propertyValue, final String herkunft,  final ConnectionContext connectionContext){
+    /**
+     * Trägt die uuid des neuen Objektes in die Tabelle inspire_eindeutige_id ein.
+     *
+     * @param   uuid               DOCUMENT ME!
+     * @param   classBean          DOCUMENT ME!
+     * @param   propertyValue      DOCUMENT ME!
+     * @param   herkunft           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static CidsBean writeUuid(final String uuid,
+            final CidsBean classBean,
+            final String propertyValue,
+            final String herkunft,
+            final ConnectionContext connectionContext) {
         try {
-            final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", FIELD__INSPIRE_EIND_ID, connectionContext);        
+            final MetaClass metaClass = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    FIELD__INSPIRE_EIND_ID,
+                    connectionContext);
             if (metaClass != null) {
-                CidsBean newInspireBean = metaClass.getEmptyInstance(connectionContext).getBean();
+                final CidsBean newInspireBean = metaClass.getEmptyInstance(connectionContext).getBean();
                 newInspireBean.setProperty(FIELD__UUID, uuid);
                 newInspireBean.setProperty(FIELD__HERKUNFT, herkunft);
                 classBean.setProperty(propertyValue, newInspireBean);
