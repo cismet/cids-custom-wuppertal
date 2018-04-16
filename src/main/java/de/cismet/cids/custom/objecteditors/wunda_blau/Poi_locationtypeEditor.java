@@ -49,9 +49,12 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled {
 
-    //~ Instance fields --------------------------------------------------------
+    //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Poi_locationtypeEditor.class);
+
+    //~ Instance fields --------------------------------------------------------
+
     private String latestIconUrl = null;
     private String title = "";
 
@@ -496,18 +499,18 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationtypeEditor.this),
             dlgAddLocationType,
             true);
-    }//GEN-LAST:event_btnAddActionPerformed
+    }                                                                          //GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -535,23 +538,23 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveActionPerformed
+    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortActionPerformed
+    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbortActionPerformed
         dlgAddLocationType.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortActionPerformed
+    }                                                                               //GEN-LAST:event_btnMenAbortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOkActionPerformed
+    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOkActionPerformed
         try {
             final Object selItem = cbTypes.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -562,7 +565,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         } finally {
             dlgAddLocationType.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkActionPerformed
+    }                                                                            //GEN-LAST:event_btnMenOkActionPerformed
 
     /**
      * DOCUMENT ME!

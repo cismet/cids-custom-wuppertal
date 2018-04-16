@@ -31,7 +31,6 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
 
-
 /**
  * DOCUMENT ME!
  *
