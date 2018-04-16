@@ -257,7 +257,7 @@ public class ObjectRendererUtils {
     public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName,
             final String[] fields,
             final ConnectionContext connectionContext) {
-        return getLightweightMetaObjectsForTable(tabName, fields, connectionContext);
+        return getLightweightMetaObjectsForTable(tabName, fields, null, connectionContext);
     }
 
     /**
