@@ -431,12 +431,11 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 5.0E-4;
+        gridBagConstraints.weighty = 1.0;
         panContent.add(panFillerUnten1, gridBagConstraints);
 
         panLage.setMinimumSize(new Dimension(300, 142));
@@ -510,7 +509,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.9;
-        gridBagConstraints.insets = new Insets(5, 0, 5, 0);
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panContent.add(panLage, gridBagConstraints);
 
         panAdresse.setOpaque(false);
@@ -603,8 +602,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panAdresse.add(lblAdresse, gridBagConstraints);
 
-        lblInspire.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard_100.png"))); // NOI18N
+        lblInspire.setIcon(inspired);
         lblInspire.setToolTipText("Der Datensatz ist inspired.");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -618,6 +616,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(5, 5, 0, 5);
         panContent.add(panAdresse, gridBagConstraints);
 
         panDaten.setMinimumSize(new Dimension(374, 190));
@@ -976,6 +975,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         panContent.add(panDaten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
