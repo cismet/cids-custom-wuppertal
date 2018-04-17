@@ -51,6 +51,13 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
 
     /**
      * Creates a new KkKompensationEditor object.
+     */
+    public KkKompensationEditor() {
+        this(true);
+    }
+
+    /**
+     * Creates a new KkKompensationEditor object.
      *
      * @param  editable  DOCUMENT ME!
      */
