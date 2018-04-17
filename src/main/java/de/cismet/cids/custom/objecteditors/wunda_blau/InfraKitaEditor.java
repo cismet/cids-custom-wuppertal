@@ -60,6 +60,7 @@ import java.util.logging.Level;
 
 import javax.swing.*;
 
+
 //import com.vividsolutions.jts.geom.PrecisionModel;
 import de.cismet.cids.custom.objecteditors.utils.InspireUtils;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
