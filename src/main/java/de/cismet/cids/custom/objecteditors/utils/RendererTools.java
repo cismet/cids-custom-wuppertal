@@ -11,6 +11,14 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
+import Sirius.server.localserver.attribute.ObjectAttribute;
+
+import org.apache.log4j.Logger;
+
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.el.impl.ValueExpressionImpl;
 import org.jdesktop.swingx.JXDatePicker;
 
 import java.awt.Color;
@@ -18,7 +26,11 @@ import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import java.lang.reflect.Field;
+
 import java.text.DecimalFormat;
+
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
@@ -50,10 +62,41 @@ public class RendererTools {
 
     //~ Static fields/initializers ---------------------------------------------
 
+    private static final Logger LOG = Logger.getLogger(RendererTools.class);
     public static final Color ERROR_BACKGROUND = new Color(250, 215, 216);
     public static final Color ERROR_FORGROUND = new Color(145, 32, 32);
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bindingGroup  DOCUMENT ME!
+     * @param  baseProp      DOCUMENT ME!
+     */
+    public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp) {
+        final List<Binding> bindings = bindingGroup.getBindings();
+        for (final Binding binding : bindings) {
+            if ((binding != null) && (binding.getTargetObject() instanceof JComponent)) {
+                final JComponent target = (JComponent)binding.getTargetObject();
+                final ELProperty p = (ELProperty)binding.getSourceProperty();
+
+                try {
+                    final Field expressionField = p.getClass().getDeclaredField("expression"); // NOI18N
+                    expressionField.setAccessible(true);
+
+                    final ValueExpressionImpl valueExpression = (ValueExpressionImpl)expressionField.get(p);
+
+                    final String expr = valueExpression.getExpressionString();
+                    if (expr.substring(2, expr.length() - 1).startsWith(baseProp + ".")) {
+                        makeReadOnly(target);
+                    }
+                } catch (final Exception ex) {
+                    LOG.warn("", ex);
+                }
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!
