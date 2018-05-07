@@ -130,7 +130,7 @@
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>6.1.5-navigatorx-pre-release-1</version>
+                <version>6.2.5-navigatorx-pre-release-1</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -138,7 +138,7 @@
             <dependency>
                 <groupId>de.cismet.cismap</groupId>
                 <artifactId>cismap-plugin</artifactId>
-                <version>6.1-navigatorx-pre-release-1</version>
+                <version>6.1-navigatorx-pre-release-2</version>
                 <type>jar</type>
             </dependency>
             
