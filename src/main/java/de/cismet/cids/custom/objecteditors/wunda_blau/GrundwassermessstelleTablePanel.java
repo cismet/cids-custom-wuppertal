@@ -22,16 +22,27 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import org.openide.util.Exceptions;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+
+import java.io.Serializable;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
@@ -55,15 +66,6 @@ import de.cismet.cids.dynamics.CidsBeanStore;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.io.Serializable;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.EventObject;
-import java.util.Locale;
-import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
@@ -126,7 +128,9 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
         jPanel3 = new javax.swing.JPanel();
         btnRemove = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -136,7 +140,11 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
 
         jPanel2.setOpaque(false);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(GrundwassermessstelleTablePanel.class, "GrundwassermessstelleTablePanel.jButton1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleTablePanel.class,
+                "GrundwassermessstelleTablePanel.jButton1.text")); // NOI18N
         jPanel2.add(jButton1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -165,12 +173,15 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemove.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -178,12 +189,15 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel3.add(btnRemove, gridBagConstraints);
 
-        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAdd.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -208,39 +222,42 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel1, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
         try {
-            final CidsBean messungBean = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "grundwassermessstelle_messung", getConnectionContext());
+            final CidsBean messungBean = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    "grundwassermessstelle_messung",
+                    getConnectionContext());
             messungBean.setProperty("kategorie", getModel().getKategorieBean());
-            getModel().addMessung(messungBean); 
+            getModel().addMessung(messungBean);
             final int rowIndex = getModel().getRowIndex(messungBean);
             jXTable1.setRowSelectionInterval(rowIndex, rowIndex);
             jXTable1.scrollRowToVisible(rowIndex);
         } catch (final Exception ex) {
             LOG.error("error while creating new messung", ex);
         }
-    }//GEN-LAST:event_btnAddActionPerformed
+    }                                                                          //GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
         final int rowIndex = (jXTable1.getSelectedRow() >= 0)
-            ? jXTable1.convertRowIndexToModel(jXTable1.getSelectedRow()) : -1;        
+            ? jXTable1.convertRowIndexToModel(jXTable1.getSelectedRow()) : -1;
         if ((rowIndex >= 0)) {
             final CidsBean messungBean = getModel().getMessungBean(rowIndex);
             getModel().removeMessung(messungBean);
         }
-    }//GEN-LAST:event_btnRemoveActionPerformed
+    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -451,10 +468,17 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
             fireTableStructureChanged();
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   messungBean  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         public int getRowIndex(final CidsBean messungBean) {
             return messungBeans.indexOf(messungBean);
         }
-        
+
         /**
          * DOCUMENT ME!
          *
@@ -462,7 +486,7 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
          */
         public void addMessung(final CidsBean messungBean) {
             messungBeans.add(messungBean);
-            fireTableDataChanged();            
+            fireTableDataChanged();
         }
 
         /**
@@ -567,8 +591,8 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
         /**
          * DOCUMENT ME!
          *
-         * @param   columnIndex  DOCUMENT ME!
          * @param   rowIndex     DOCUMENT ME!
+         * @param   columnIndex  DOCUMENT ME!
          *
          * @return  DOCUMENT ME!
          */
@@ -614,7 +638,7 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
                     final CidsBean foundMesswertBean = getMesswertBean(rowIndex, columnIndex);
                     if (foundMesswertBean != null) {
                         if (value != null) {
-                        foundMesswertBean.setProperty("wert", (Double)value);
+                            foundMesswertBean.setProperty("wert", (Double)value);
                         } else {
                             messungBean.getBeanCollectionProperty("messwerte").remove(foundMesswertBean);
                         }
@@ -678,15 +702,16 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
                     format.setMinimumFractionDigits(nachkommastellen);
                     format.setMaximumFractionDigits(nachkommastellen);
                     label.setHorizontalAlignment(SwingConstants.TRAILING);
-                    label.setText(wert != null ? format.format(wert) + " " + (String)stoffBean.getProperty("einheit") : null);
+                    label.setText((wert != null)
+                            ? (format.format(wert) + " " + (String)stoffBean.getProperty("einheit")) : null);
                     label.setToolTipText((String)messwertBean.getProperty("bemerkung"));
                     break;
                 }
             }
             return label;
         }
-    }    
-    
+    }
+
     /**
      * DOCUMENT ME!
      *
@@ -696,20 +721,28 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
 
         //~ Instance fields ----------------------------------------------------
 
-        private final JFormattedTextField formattedTextField = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.GERMAN));
+        private final JFormattedTextField formattedTextField = new JFormattedTextField(NumberFormat.getNumberInstance(
+                    Locale.GERMAN));
 
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new MesswertTableCellEditor object.
+         */
         public MesswertTableCellEditor() {
             formattedTextField.setHorizontalAlignment(JFormattedTextField.RIGHT);
-            
-             formattedTextField.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    stopCellEditing();
-                }
-            });
+
+            formattedTextField.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        stopCellEditing();
+                    }
+                });
         }
-        
+
         //~ Methods ------------------------------------------------------------
-        
+
         @Override
         public Component getTableCellEditorComponent(final JTable table,
                 final Object value,
@@ -719,16 +752,16 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
             final CidsBean stoffBean = getModel().getStoffBean(columnIndex);
 
             final NumberFormatter formatter = new NumberFormatter(new DecimalFormat()) {
-                @Override
-                public Object stringToValue(String text) throws ParseException {
-                    if (text == null || text.trim().isEmpty()) {
-                        return null;
-                    } else {
-                        return super.stringToValue(text);
+
+                    @Override
+                    public Object stringToValue(final String text) throws ParseException {
+                        if ((text == null) || text.trim().isEmpty()) {
+                            return null;
+                        } else {
+                            return super.stringToValue(text);
+                        }
                     }
-                }
-              
-            };
+                };
             formattedTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
             formattedTextField.setValue((value != null) ? ((Number)value).doubleValue() : null);
             return formattedTextField;
@@ -740,8 +773,8 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
                 return ((MouseEvent)anEvent).getClickCount() >= 2;
             }
             return true;
-        }        
-        
+        }
+
         @Override
         public Object getCellEditorValue() {
             return (formattedTextField.getValue() != null) ? ((Number)formattedTextField.getValue()).doubleValue()
@@ -777,13 +810,13 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
         public Object getCellEditorValue() {
             return datePicker.getDate();
         }
-        
+
+        @Override
         public boolean isCellEditable(final EventObject anEvent) {
             if (anEvent instanceof MouseEvent) {
                 return ((MouseEvent)anEvent).getClickCount() >= 2;
             }
             return true;
-        }        
-        
+        }
     }
 }
