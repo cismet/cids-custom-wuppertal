@@ -16,6 +16,8 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import javax.swing.JComponent;
 
+import de.cismet.cids.client.tools.DevelopmentTools;
+
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -29,12 +31,14 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
  * DOCUMENT ME!
@@ -88,19 +92,18 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleTablePanel
+        grundwassermessstelleTablePanel1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblBrunnennummerAlt;
     private javax.swing.JLabel lblEigentuemer;
@@ -176,10 +179,33 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        Log4JQuickConfig.configure4LumbermillOnLocalhost();
+        final MappingComponent mc = new MappingComponent();
+        CismapBroker.getInstance().setMappingComponent(mc);
+        DevelopmentTools.createEditorInFrameFromRestfulConnection(
+            "WUNDA_BLAU",
+            null,
+            "admin",
+            "xxx",
+            "grundwassermessstelle",
+            30,
+            1000,
+            1000);
+    }
+
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+        this.grundwassermessstelleTablePanel1.initWithConnectionContext(connectionContext);
 
         if (!editable) {
             lblGeometrie.setVisible(false);
@@ -312,9 +338,8 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panMessungenTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblMessungenTitle = new javax.swing.JLabel();
         panMessungenBody = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        grundwassermessstelleTablePanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleTablePanel(editable);
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -721,14 +746,15 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel3.add(lblGeometrie, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"),
-                cbGeometrie,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
+        if (editable) {
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"),
+                    cbGeometrie,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            bindingGroup.addBinding(binding);
+        }
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1086,7 +1112,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ausbau_gok}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gok_ausbau}"),
                 cboProjekt4,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -1272,32 +1298,19 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panMessungenBody.setOpaque(false);
         panMessungenBody.setLayout(new java.awt.GridBagLayout());
 
-        jPanel4.setOpaque(false);
-        jPanel4.setLayout(new java.awt.GridBagLayout());
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                    { null, null, null, null },
-                    { null, null, null, null },
-                    { null, null, null, null },
-                    { null, null, null, null }
-                },
-                new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
-        jScrollPane1.setViewportView(jTable1);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"),
+                grundwassermessstelleTablePanel1,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel4.add(jScrollPane1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMessungenBody.add(jPanel4, gridBagConstraints);
+        panMessungenBody.add(grundwassermessstelleTablePanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
