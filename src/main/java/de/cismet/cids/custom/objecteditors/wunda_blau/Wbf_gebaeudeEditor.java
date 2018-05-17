@@ -82,21 +82,19 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Titled,
-    BindingGroupStore,
-    ConnectionContextStore {
+public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Titled, BindingGroupStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     public static final Color COLOR_TXT_BACK = new Color(230, 230, 230);
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Wbf_gebaeudeEditor.class);
 
     //~ Instance fields --------------------------------------------------------
 
     MyLockableUI luiGeb;
     MyLockableUI luiVorg;
     JXLayer lVorg;
-
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String domain = "";
 //    ImageIcon warn = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/warn.png"));
     private final HashMap<String, Collection<String>> validationDependencies = new HashMap<>();
@@ -104,7 +102,6 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     private boolean editable;
     private String title = "";
     private final List<PropertyChangeListener> strongReferencesToWeakListeners = new ArrayList<>();
-    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbEinkommensgruppe;
@@ -192,7 +189,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
+        super.initWithConnectionContext(connectionContext);
         initComponents();
 
         panVorgangX.setOpaque(false);
@@ -307,8 +304,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                 @Override
                 public void syncFailed(final Binding binding, final SyncFailure failure) {
                     if (Wbf_gebaeudeEditor.this.editable) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("syncFailed");
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("syncFailed");
                         }
                         final Object target = binding.getTargetObject();
                         if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
@@ -320,7 +317,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                             } catch (Exception skip) {
                             }
                         } else {
-                            log.error("keine JCOmponent");
+                            LOG.error("keine JCOmponent");
                         }
                     }
                 }
@@ -328,8 +325,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                 @Override
                 public void syncWarning(final Binding binding, final SyncFailure failure) {
                     if (Wbf_gebaeudeEditor.this.editable) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("synWarning " + failure);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("synWarning " + failure);
                         }
                         final Object target = binding.getTargetObject();
                         if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
@@ -337,7 +334,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                             c.setForeground(Color.magenta);
                             c.setToolTipText(failure.getValidationResult().getDescription());
                         } else {
-                            log.error("keine JCOmponent");
+                            LOG.error("keine JCOmponent");
                         }
                     }
                 }
@@ -345,8 +342,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                 @Override
                 public void synced(final Binding binding) {
                     if (Wbf_gebaeudeEditor.this.editable) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("sync");
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("sync");
                         }
                         final Object target = binding.getTargetObject();
                         if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
@@ -354,15 +351,15 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                             c.setForeground(Color.black);
                             c.setToolTipText(null);
                         } else {
-                            log.error("keine JCOmponent");
+                            LOG.error("keine JCOmponent");
                         }
 
                         final String bindingName = binding.getName();
                         if (bindingName != null) {
                             final Collection<String> additionalValidationBindings = validationDependencies.get(
                                     binding.getName());
-                            if (log.isDebugEnabled()) {
-                                log.debug(
+                            if (LOG.isDebugEnabled()) {
+                                LOG.debug(
                                     "for binding "
                                             + bindingName
                                             + "-->> dependencies: "
@@ -372,8 +369,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                                 for (final String name : additionalValidationBindings) {
                                     final Binding b = bindingGroup.getBinding(name);
                                     if (b != null) {
-                                        if (log.isDebugEnabled()) {
-                                            log.debug("CheckAgain: " + name);
+                                        if (LOG.isDebugEnabled()) {
+                                            LOG.debug("CheckAgain: " + name);
                                         }
                                         b.saveAndNotify();
                                     }
@@ -442,11 +439,6 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                     return l;
                 }
             });
-    }
-
-    @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
     }
 
     /**
@@ -1320,7 +1312,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
             ((ObservableList)cidsBean.getProperty("vorgaenge")).add(vorgangBean);
         } else {
-            log.error("MetaClass von Vorgang war NULL");
+            LOG.error("MetaClass von Vorgang war NULL");
         }
     } //GEN-LAST:event_cmdAddVorgangActionPerformed
 
@@ -1414,7 +1406,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 //            ((DefaultBindableReferenceCombo)cbMassnahmenkategorisierung).setMetaClass(massnahmenClass);
 
         } catch (Exception e) {
-            log.error("Fehler beim fuellen der MassnahmenComboBox", e);
+            LOG.error("Fehler beim fuellen der MassnahmenComboBox", e);
         }
         super.setCidsBean(cidsBean);
     }
@@ -1578,8 +1570,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
             if (nutzungsart != null) {
                 String gueltigeMassnahmen = null;
                 gueltigeMassnahmen = (String)nutzungsart.getProperty("massnahmen_gueltig");
-                if (log.isDebugEnabled()) {
-                    log.debug("ist kuerzel:" + kuerzel + " in " + gueltigeMassnahmen + " ?");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("ist kuerzel:" + kuerzel + " in " + gueltigeMassnahmen + " ?");
                 }
                 if ((kuerzel != null) && (gueltigeMassnahmen != null) && gueltigeMassnahmen.contains(kuerzel)) {
                     return null;

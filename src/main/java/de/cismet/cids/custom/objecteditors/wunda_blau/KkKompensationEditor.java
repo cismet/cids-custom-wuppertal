@@ -31,8 +31,6 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
 
-import de.cismet.connectioncontext.ConnectionContext;
-
 /**
  * DOCUMENT ME!
  *
@@ -50,6 +48,13 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
     private CidsBean kompensationBean;
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new KkKompensationEditor object.
+     */
+    public KkKompensationEditor() {
+        this(true);
+    }
 
     /**
      * Creates a new KkKompensationEditor object.

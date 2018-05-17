@@ -869,7 +869,7 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
             final String extension = jFileChooser1.getSelectedFile()
@@ -890,7 +890,7 @@ public class BillingPopup extends javax.swing.JDialog {
             file = null;
         }
         updateFileLabel();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
