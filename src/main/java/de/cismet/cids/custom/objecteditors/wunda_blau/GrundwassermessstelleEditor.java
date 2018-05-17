@@ -14,6 +14,10 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.swing.JComponent;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
@@ -65,7 +69,6 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     private final boolean editable;
     private CidsBean cidsBean;
     private ConnectionContext connectionContext;
-    private final MappingComponent map = new MappingComponent();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor cbGeometrie;
@@ -156,6 +159,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     private javax.swing.JTextField txtNummer4;
     private javax.swing.JTextField txtNummer5;
     private javax.swing.JLabel txtTitle;
+    private javax.swing.JLabel txtTitle1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -190,6 +194,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         final MappingComponent mc = new MappingComponent();
         CismapBroker.getInstance().setMappingComponent(mc);
+        final long before = System.currentTimeMillis();
         DevelopmentTools.createEditorInFrameFromRestfulConnection(
             "WUNDA_BLAU",
             null,
@@ -199,6 +204,9 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
             30,
             1000,
             1000);
+        final long after = System.currentTimeMillis();
+
+        System.out.println(after - before);
     }
 
     @Override
@@ -226,6 +234,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
+        txtTitle1 = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -344,6 +353,9 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
+        txtTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        txtTitle.setForeground(new java.awt.Color(255, 255, 255));
+
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -352,7 +364,25 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        panTitle.add(txtTitle, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panTitle.add(txtTitle, gridBagConstraints);
+
+        txtTitle1.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        txtTitle1.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            txtTitle1,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.txtTitle1.text"));     // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panTitle.add(txtTitle1, gridBagConstraints);
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
@@ -753,6 +783,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
                     org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"),
                     cbGeometrie,
                     org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeometrie).getConverter());
             bindingGroup.addBinding(binding);
         }
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1298,6 +1329,8 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panMessungenBody.setOpaque(false);
         panMessungenBody.setLayout(new java.awt.GridBagLayout());
 
+        grundwassermessstelleTablePanel1.setOpaque(false);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -1343,7 +1376,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(jPanel1, gridBagConstraints);
 
         bindingGroup.bind();
@@ -1377,7 +1410,18 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
     @Override
     public String getTitle() {
-        return (cidsBean != null) ? (String)cidsBean.getProperty(PROP__NAME) : null;
+        final List<String> strings = new ArrayList<>();
+        if (cidsBean != null) {
+            if (cidsBean.getProperty("projekt.name") != null) {
+                strings.add((String)cidsBean.getProperty("projekt.name"));
+            }
+            if (cidsBean.getProperty(PROP__NAME) != null) {
+                strings.add((String)cidsBean.getProperty(PROP__NAME));
+            }
+            return String.join(" - ", strings);
+        } else {
+            return "";
+        }
     }
 
     @Override
