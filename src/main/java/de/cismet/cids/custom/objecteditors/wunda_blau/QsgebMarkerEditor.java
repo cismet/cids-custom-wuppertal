@@ -248,7 +248,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
      * @param  boolEditor  DOCUMENT ME!
      */
     public QsgebMarkerEditor(final boolean boolEditor) {
-        //initStatus();
+        initStatus();
         this.isEditor = boolEditor;
     }
 
@@ -1493,7 +1493,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     
     private void refreshStatus() {
         //statusSearch.setStatusId((Integer)cidsBean.getProperty(FIELD__STATUS_ID));
-        statusSearch.setStatusId(statusAttribute);
+      //  statusSearch.setStatusId(statusAttribute);
 
         new SwingWorker<Void, Void>() {
 

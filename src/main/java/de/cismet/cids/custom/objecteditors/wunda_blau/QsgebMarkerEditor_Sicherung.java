@@ -62,7 +62,7 @@ import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.BufferingGeosearch;
-import de.cismet.cids.custom.wunda_blau.search.server.QsgebStatusLightweightSearch;
+//import de.cismet.cids.custom.wunda_blau.search.server.QsgebStatusLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -158,7 +158,7 @@ public class QsgebMarkerEditor_Sicherung extends DefaultCustomObjectEditor imple
     private String bearbeitungAttribute;
     private String pruefdatumAttribute;
     private String bearbeitungsdatumAttribute;
-    private QsgebStatusLightweightSearch statusSearch;
+//    private QsgebStatusLightweightSearch statusSearch;
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -237,19 +237,19 @@ public class QsgebMarkerEditor_Sicherung extends DefaultCustomObjectEditor imple
     }
 
     //~ Methods ----------------------------------------------------------------
-    public void initStatus(){
+ /*   public void initStatus(){
        this.statusSearch = new QsgebStatusLightweightSearch(
                 QsgebStatusLightweightSearch.SearchFor.STATUS,
                 "%1$2s",
                 new String[] { "NAME" });
         statusSearch.setStatusId(1);
-    }
+    }*/
     
     
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
-        initStatus();
+        //initStatus();
         initComponents();
 
         String documentname = "/home/lat-lon/3001-338_1.pdf";
@@ -319,9 +319,7 @@ public class QsgebMarkerEditor_Sicherung extends DefaultCustomObjectEditor imple
         jScrollPane2 = new JScrollPane();
         taBemerkung = new JTextArea();
         cbStatus = new FastBindableReferenceCombo(
-            statusSearch,
-            statusSearch.getRepresentationPattern(),
-            statusSearch.getRepresentationFields()
+
         );
         panBild = new JPanel();
         pnlDocument = new RoundedPanel();
@@ -1358,7 +1356,7 @@ public class QsgebMarkerEditor_Sicherung extends DefaultCustomObjectEditor imple
     
     private void refreshStatus() {
         //statusSearch.setStatusId((Integer)cidsBean.getProperty(FIELD__STATUS_ID));
-        statusSearch.setStatusId(statusAttribute);
+     //   statusSearch.setStatusId(statusAttribute);
 
         new SwingWorker<Void, Void>() {
 
