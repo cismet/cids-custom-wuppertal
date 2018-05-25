@@ -72,12 +72,12 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
@@ -702,7 +702,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void initSoapServiceAccess() {
         try {
-            soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
+            soapProvider = new SOAPAccessProvider(ClientAlkisConf.getInstance());
             infoService = soapProvider.getAlkisInfoService();
         } catch (Exception ex) {
             LOG.fatal(ex, ex);
@@ -1547,13 +1547,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void hlKarteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlKarteActionPerformed
         if (!demoMode) {
-            if (ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE, getConnectionContext())) {
-                downloadKarteProduct();
-            } else {
-                AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
-            }
+            downloadKarteProduct();
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "flurstueckskarte.pdf");
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL + "flurstueckskarte.pdf");
         }
     }                                                                           //GEN-LAST:event_hlKarteActionPerformed
 
@@ -1566,7 +1562,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (!demoMode) {
             downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF, true);
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "flurstuecksnachweis.pdf");
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL + "flurstuecksnachweis.pdf");
         }
     }                                                                                            //GEN-LAST:event_hlFlurstuecksnachweisPdfActionPerformed
 
@@ -1579,7 +1575,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (!demoMode) {
             downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML, false);
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "flurstuecksnachweis.pdf");
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL + "flurstuecksnachweis.pdf");
         }
     }                                                                                                         //GEN-LAST:event_hlFlurstuecksEigentumsnachweisKomHtmlActionPerformed
 
@@ -1592,7 +1588,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (!demoMode) {
             downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML, false);
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "flurstuecksnachweis.html");
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL + "flurstuecksnachweis.html");
         }
     }                                                                                             //GEN-LAST:event_hlFlurstuecksnachweisHtmlActionPerformed
 
@@ -1679,7 +1675,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (!demoMode) {
             downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF, true);
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL
                         + "flurstuecksundeigentumsnachweis_nrw.pdf");
         }
     }                                                                                                        //GEN-LAST:event_hlFlurstuecksEigentumsnachweisNrwPdfActionPerformed
@@ -1708,7 +1704,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (!demoMode) {
             downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF, true);
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL
                         + "flurstuecksundeigentumsnachweis_kommunal.pdf");
         }
     }                                                                                                        //GEN-LAST:event_hlFlurstuecksEigentumsnachweisKomPdfActionPerformed
@@ -1722,7 +1718,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (!demoMode) {
             downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML, false);
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL
                         + "flurstuecksundeigentumsnachweis_kommunal.pdf");
         }
     }                                                                                                         //GEN-LAST:event_hlFlurstuecksEigentumsnachweisNrwHtmlActionPerformed
@@ -1738,7 +1734,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF,
                 true);
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL
                         + "flurstuecksundeigentumsnachweis_kommunal_intern.pdf");
         }
     }                                                                                                              //GEN-LAST:event_hlFlurstuecksEigentumsnachweisKomInternPdfActionPerformed
@@ -1754,7 +1750,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML,
                 false);
         } else {
-            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL
+            BrowserLauncher.openURLorFile(ClientAlkisConf.getInstance().DEMOSERVICEURL
                         + "flurstuecksundeigentumsnachweis_kommunal_intern.html");
         }
     }                                                                                                               //GEN-LAST:event_hlFlurstuecksEigentumsnachweisKomInternHtmlActionPerformed
@@ -1827,7 +1823,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (buchungsblaetterCollectionObj instanceof List) {
             final List<CidsBean> blaetterList = (List<CidsBean>)buchungsblaetterCollectionObj;
             for (final CidsBean blatt : blaetterList) {
-                gotoBeanMap.put(blatt.getMetaObject().getMetaClass().getID() + AlkisConstants.LINK_SEPARATOR_TOKEN
+                gotoBeanMap.put(blatt.getMetaObject().getMetaClass().getID() + AlkisUtils.LINK_SEPARATOR_TOKEN
                             + blatt.getMetaObject().getID(),
                     blatt);
             }
@@ -1838,7 +1834,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (adressenCollectionObj instanceof List) {
             final List<CidsBean> adressenList = (List<CidsBean>)adressenCollectionObj;
             for (final CidsBean adresse : adressenList) {
-                gotoBeanMap.put(adresse.getMetaObject().getMetaClass().getID() + AlkisConstants.LINK_SEPARATOR_TOKEN
+                gotoBeanMap.put(adresse.getMetaObject().getMetaClass().getID() + AlkisUtils.LINK_SEPARATOR_TOKEN
                             + adresse.getMetaObject().getID(),
                     adresse);
             }
@@ -1947,24 +1943,25 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                    AlkisConstants.COMMONS.SRS_SERVICE);
-            final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                    ClientAlkisConf.getInstance().SRS_SERVICE);
+            final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
+                        ClientAlkisConf.getInstance().GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
 
                     @Override
                     public void run() {
                         final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                        mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                        mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                         mappingModel.addHome(new XBoundingBox(
                                 box.getX1(),
                                 box.getY1(),
                                 box.getX2(),
                                 box.getY2(),
-                                AlkisConstants.COMMONS.SRS_SERVICE,
+                                ClientAlkisConf.getInstance().SRS_SERVICE,
                                 true));
                         final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                    AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                    ClientAlkisConf.getInstance().MAP_CALL_STRING));
                         swms.setName("Flurstueck");
                         final StyledFeature dsf = new DefaultStyledFeature();
                         dsf.setGeometry(pureGeom);

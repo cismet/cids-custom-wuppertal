@@ -43,10 +43,10 @@ import javax.swing.table.TableColumn;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
@@ -823,10 +823,10 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             initialisedMap = false;
 
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
             mappingModel.addHome(getBoundingBox());
 
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().MAP_CALL_STRING));
             swms.setName("Flurstueck");
 
             // add the raster layer to the model
@@ -863,13 +863,13 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                 final Geometry geometry = cidsBeanWrapper.getGeometry();
 
                 if (result == null) {
-                    result = new XBoundingBox(geometry.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
-                    result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    result = new XBoundingBox(geometry.getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
+                    result.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                     result.setMetric(true);
                 } else {
                     final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                AlkisConstants.COMMONS.GEO_BUFFER));
-                    temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                                ClientAlkisConf.getInstance().GEO_BUFFER));
+                    temp.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                     temp.setMetric(true);
 
                     if (temp.getX1() < result.getX1()) {
@@ -903,11 +903,15 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         @Override
         public void run() {
             final XBoundingBox boxToGoto = new XBoundingBox(selectedCidsBeanWrapper.getGeometry().getEnvelope().buffer(
-                        AlkisConstants.COMMONS.GEO_BUFFER));
-            boxToGoto.setX1(boxToGoto.getX1() - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-            boxToGoto.setX2(boxToGoto.getX2() + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-            boxToGoto.setY1(boxToGoto.getY1() - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
-            boxToGoto.setY2(boxToGoto.getY2() + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                        ClientAlkisConf.getInstance().GEO_BUFFER));
+            boxToGoto.setX1(boxToGoto.getX1()
+                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+            boxToGoto.setX2(boxToGoto.getX2()
+                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+            boxToGoto.setY1(boxToGoto.getY1()
+                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+            boxToGoto.setY2(boxToGoto.getY2()
+                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
             map.gotoBoundingBox(boxToGoto, false, true, 500);
         }
     }
@@ -977,7 +981,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             if (cidsBean.getProperty("geometrie.geo_field") instanceof Geometry) {
                 this.geometry = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                             "geometrie.geo_field"),
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().SRS_SERVICE);
             }
 
             final StyledFeature dsf = new DefaultStyledFeature();

@@ -21,7 +21,7 @@ import java.awt.event.MouseAdapter;
 
 import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -2224,7 +2224,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         setGeometry(CrsTransformer.transformToGivenCrs(
                 (Geometry)cidsBean.getProperty(
                     "georeferenz.geo_field"),
-                AlkisConstants.COMMONS.SRS_SERVICE));
+                ClientAlkisConf.getInstance().SRS_SERVICE));
     }
 
     /*  public void setCidsBean(CidsBean cb) {

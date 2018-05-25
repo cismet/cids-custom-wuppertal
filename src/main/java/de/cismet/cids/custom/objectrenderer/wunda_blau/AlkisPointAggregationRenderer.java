@@ -70,11 +70,11 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisPointReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -726,16 +726,16 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
             final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
                     box.getX1(),
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    AlkisConstants.COMMONS.SRS_SERVICE,
+                    ClientAlkisConf.getInstance().SRS_SERVICE,
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().MAP_CALL_STRING));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -810,7 +810,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     new Geometry[allGeomList.size()]),
                 new GeometryFactory());
 
-        return new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
     }
 
     /**
@@ -902,15 +902,17 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                         if ((modelIdx > -1) && (modelIdx < cidsBeans.size())) {
                             final CidsBean selectedBean = cidsBeans.get(modelIdx);
                             final XBoundingBox boxToGoto = new XBoundingBox(features.get(selectedBean).getGeometry()
-                                            .getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                                            .getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
                             boxToGoto.setX1(boxToGoto.getX1()
-                                        - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
                             boxToGoto.setX2(boxToGoto.getX2()
-                                        + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
                             boxToGoto.setY1(boxToGoto.getY1()
-                                        - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER
+                                            * boxToGoto.getHeight()));
                             boxToGoto.setY2(boxToGoto.getY2()
-                                        + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER
+                                            * boxToGoto.getHeight()));
                             mappingComponent.gotoBoundingBox(boxToGoto, false, true, 500);
                             break;
                         }

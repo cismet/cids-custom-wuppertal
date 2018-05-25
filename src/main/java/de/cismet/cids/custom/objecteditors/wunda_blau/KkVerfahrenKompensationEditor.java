@@ -54,7 +54,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.KompensationskatasterBeanTable;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.wunda_blau.search.server.GemeindeByGeometrySearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1543,12 +1543,12 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
             if (geoObj instanceof Geometry) {
                 pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().SRS_SERVICE);
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + ClientAlkisConf.getInstance().GEO_BUFFER);
                 }
                 box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                            AlkisConstants.COMMONS.GEO_BUFFER));
+                            ClientAlkisConf.getInstance().GEO_BUFFER));
                 diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
                                 + (box.getHeight() * box.getHeight()));
                 if (LOG.isDebugEnabled()) {
@@ -1566,7 +1566,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
 
                     if (bufferedBox != null) {
                         mappingModel.addHome(new XBoundingBox(
@@ -1574,10 +1574,10 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                                 bufferedBox.getY1(),
                                 bufferedBox.getX2(),
                                 bufferedBox.getY2(),
-                                AlkisConstants.COMMONS.SRS_SERVICE,
+                                ClientAlkisConf.getInstance().SRS_SERVICE,
                                 true));
                         final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                    AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                    ClientAlkisConf.getInstance().MAP_CALL_STRING));
                         swms.setName("Stadtbildserie");
 
                         // add the raster layer to the model
@@ -1588,7 +1588,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                                 1,
                                 2,
                                 2,
-                                AlkisConstants.COMMONS.SRS_SERVICE,
+                                ClientAlkisConf.getInstance().SRS_SERVICE,
                                 true));
                     }
                     // set the model

@@ -43,7 +43,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
 import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
@@ -244,8 +244,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
         nbz = new ArrayList<String>();
         final MappingComponent mapC = CismapBroker.getInstance().getMappingComponent();
         Geometry g = ((XBoundingBox)mapC.getCurrentBoundingBoxFromCamera()).getGeometry();
-        if (!CrsTransformer.createCrsFromSrid(g.getSRID()).equals(AlkisConstants.COMMONS.SRS_SERVICE)) {
-            g = CrsTransformer.transformToGivenCrs(g, AlkisConstants.COMMONS.SRS_SERVICE);
+        if (!CrsTransformer.createCrsFromSrid(g.getSRID()).equals(ClientAlkisConf.getInstance().SRS_SERVICE)) {
+            g = CrsTransformer.transformToGivenCrs(g, ClientAlkisConf.getInstance().SRS_SERVICE);
         }
         final XBoundingBox bb = new XBoundingBox(g);
         final int lowerX = ((Double)Math.floor(bb.getX1())).intValue() / 1000;

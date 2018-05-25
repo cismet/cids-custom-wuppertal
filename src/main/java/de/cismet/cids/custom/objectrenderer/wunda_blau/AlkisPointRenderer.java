@@ -85,12 +85,12 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -159,12 +159,12 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             5682507.032498134d,
             2584022.9413952776d,
             5682742.852810634d,
-            AlkisConstants.COMMONS.SRS_SERVICE,
+            ClientAlkisConf.getInstance().SRS_SERVICE,
             true);
     protected static Crs CRS = new Crs(
-            AlkisConstants.COMMONS.SRS_SERVICE,
-            AlkisConstants.COMMONS.SRS_SERVICE,
-            AlkisConstants.COMMONS.SRS_SERVICE,
+            ClientAlkisConf.getInstance().SRS_SERVICE,
+            ClientAlkisConf.getInstance().SRS_SERVICE,
+            ClientAlkisConf.getInstance().SRS_SERVICE,
             true,
             true);
     private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
@@ -480,7 +480,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         this.connectionContext = connectionContext;
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             try {
-                soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
+                soapProvider = new SOAPAccessProvider(ClientAlkisConf.getInstance());
                 infoService = soapProvider.getAlkisInfoService();
             } catch (Exception ex) {
                 LOG.fatal(ex, ex);

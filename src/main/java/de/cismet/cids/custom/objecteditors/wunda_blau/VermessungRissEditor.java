@@ -80,9 +80,9 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
@@ -160,17 +160,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             5682507.032498134d,
             2584022.9413952776d,
             5682742.852810634d,
-            AlkisConstants.COMMONS.SRS_SERVICE,
+            ClientAlkisConf.getInstance().SRS_SERVICE,
             true);
     protected static Crs CRS = new Crs(
-            AlkisConstants.COMMONS.SRS_SERVICE,
-            AlkisConstants.COMMONS.SRS_SERVICE,
-            AlkisConstants.COMMONS.SRS_SERVICE,
+            ClientAlkisConf.getInstance().SRS_SERVICE,
+            ClientAlkisConf.getInstance().SRS_SERVICE,
+            ClientAlkisConf.getInstance().SRS_SERVICE,
             true,
             true);
     protected static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(
                 PrecisionModel.FLOATING),
-            CrsTransformer.extractSridFromCrs(AlkisConstants.COMMONS.SRS_SERVICE));
+            CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().SRS_SERVICE));
     private static Collection<CidsBean> veraenderungsarts = new LinkedList<CidsBean>();
     protected static final Map<Integer, Color> COLORS_GEOMETRIE_STATUS = new HashMap<Integer, Color>();
 
@@ -1605,7 +1605,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                         "umschreibendes_rechteck.geo_field");
                 final Geometry transformedGeometry = CrsTransformer.transformToGivenCrs(
                         geometry,
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().SRS_SERVICE);
 
                 union.add(transformedGeometry);
             }

@@ -28,8 +28,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.List;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
@@ -61,7 +61,7 @@ public class AlkisPrintListener extends FeatureMoveListener {
     //
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(
                 PrecisionModel.FLOATING),
-            CrsTransformer.extractSridFromCrs(AlkisConstants.COMMONS.SRS_SERVICE));
+            CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().SRS_SERVICE));
     private static final AlkisPrintingToolTip PRINTING_TOOLTIP = new AlkisPrintingToolTip();
     public static final String WIDTH = "WIDTH";
     public static final String HEIGHT = "HEIGHT";
@@ -154,7 +154,7 @@ public class AlkisPrintListener extends FeatureMoveListener {
             // translate from alkis db geom srid to alkis service srid
             final Geometry serviceConformGeometry = CrsTransformer.transformToGivenCrs(
                     geom,
-                    AlkisConstants.COMMONS.SRS_SERVICE);
+                    ClientAlkisConf.getInstance().SRS_SERVICE);
             final double massstab = Double.parseDouble(product.getMassstab());
             final double realWorldWidth = product.getWidth() / 1000.0d * massstab;
             final double realWorldHeight = product.getHeight() / 1000.0d * massstab;
@@ -305,7 +305,7 @@ public class AlkisPrintListener extends FeatureMoveListener {
                         + halfDiagonal,
                 center.getY()
                         + halfDiagonal,
-                AlkisConstants.COMMONS.SRS_SERVICE,
+                ClientAlkisConf.getInstance().SRS_SERVICE,
                 true);
         mappingComponent.gotoBoundingBoxWithHistory(gotoBB);
     }

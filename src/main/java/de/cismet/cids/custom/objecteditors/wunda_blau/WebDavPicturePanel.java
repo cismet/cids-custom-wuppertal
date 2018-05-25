@@ -100,7 +100,7 @@ import javax.swing.filechooser.FileFilter;
 
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -1043,12 +1043,13 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
                         protected Void doInBackground() throws Exception {
                             try {
                                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                                        AlkisConstants.COMMONS.SRS_SERVICE);
+                                        ClientAlkisConf.getInstance().SRS_SERVICE);
                                 if (LOG.isDebugEnabled()) {
-                                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: "
+                                                + ClientAlkisConf.getInstance().GEO_BUFFER);
                                 }
                                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                                            AlkisConstants.COMMONS.GEO_BUFFER));
+                                            ClientAlkisConf.getInstance().GEO_BUFFER));
                                 final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
                                                 + (box.getHeight() * box.getHeight()));
                                 if (LOG.isDebugEnabled()) {
@@ -1057,16 +1058,16 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
                                 final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(
                                             diagonalLength));
                                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                                mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                                mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                                 mappingModel.addHome(new XBoundingBox(
                                         bufferedBox.getX1(),
                                         bufferedBox.getY1(),
                                         bufferedBox.getX2(),
                                         bufferedBox.getY2(),
-                                        AlkisConstants.COMMONS.SRS_SERVICE,
+                                        ClientAlkisConf.getInstance().SRS_SERVICE,
                                         true));
                                 final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                            AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                            ClientAlkisConf.getInstance().MAP_CALL_STRING));
                                 swms.setName("Treppe");
                                 final StyledFeature dsf = new DefaultStyledFeature();
                                 dsf.setGeometry(pureGeom);

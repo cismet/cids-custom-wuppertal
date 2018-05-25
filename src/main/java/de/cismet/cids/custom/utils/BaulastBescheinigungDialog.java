@@ -53,10 +53,10 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungInfo;
@@ -138,7 +138,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         ALKISInfoServices infoService = null;
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
             try {
-                soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
+                soapProvider = new SOAPAccessProvider(ClientAlkisConf.getInstance());
                 infoService = soapProvider.getAlkisInfoService();
             } catch (final Exception ex) {
                 LOG.warn("error while creating ALKISInfoServices", ex);

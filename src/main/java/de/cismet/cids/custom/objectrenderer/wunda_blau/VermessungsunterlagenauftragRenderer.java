@@ -61,8 +61,8 @@ import javax.swing.SwingWorker;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenHelper;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenProperties;
@@ -1616,13 +1616,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         if (cidsBean != null) {
             final Geometry geometrie = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                         "geometrie.geo_field"),
-                    AlkisConstants.COMMONS.SRS_SERVICE);
+                    ClientAlkisConf.getInstance().SRS_SERVICE);
             final Geometry geometrieSaum = CrsTransformer.transformToGivenCrs(
                     ((Geometry)cidsBean.getProperty("geometrie.geo_field")).buffer((saum != null) ? saum : 0),
-                    AlkisConstants.COMMONS.SRS_SERVICE);
+                    ClientAlkisConf.getInstance().SRS_SERVICE);
             final Geometry geometrieFlurstuecke = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                         "geometrie_flurstuecke.geo_field"),
-                    AlkisConstants.COMMONS.SRS_SERVICE);
+                    ClientAlkisConf.getInstance().SRS_SERVICE);
 
             final StyledFeature geometrieFeature = new DefaultStyledFeature();
             geometrieFeature.setGeometry(geometrie);
@@ -1667,22 +1667,22 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             }
             try {
                 final XBoundingBox box = new XBoundingBox(combinedGeom.getEnvelope().buffer(
-                            AlkisConstants.COMMONS.GEO_BUFFER));
+                            ClientAlkisConf.getInstance().GEO_BUFFER));
                 final Runnable mapRunnable = new Runnable() {
 
                         @Override
                         public void run() {
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                             mappingModel.addHome(new XBoundingBox(
                                     box.getX1(),
                                     box.getY1(),
                                     box.getX2(),
                                     box.getY2(),
-                                    AlkisConstants.COMMONS.SRS_SERVICE,
+                                    ClientAlkisConf.getInstance().SRS_SERVICE,
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                        AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                        ClientAlkisConf.getInstance().MAP_CALL_STRING));
                             swms.setName("Vermessungsunterlagen-Auftrag");
 
                             // add the raster layer to the model

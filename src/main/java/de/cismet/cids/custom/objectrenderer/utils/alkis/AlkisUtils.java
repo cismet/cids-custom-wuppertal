@@ -50,7 +50,6 @@ import java.util.List;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.ServerAlkisSoapAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -73,6 +72,9 @@ public class AlkisUtils {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
+
+    public static final String NEWLINE = "<br>";
+    public static final String LINK_SEPARATOR_TOKEN = "::";
 
     public static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW =
         "custom.alkis.product.bestandsnachweis_nrw@WUNDA_BLAU";
@@ -175,7 +177,7 @@ public class AlkisUtils {
             }
 
             alkisProducts = new AlkisProducts(
-                    AlkisConstants.COMMONS,
+                    ClientAlkisConf.getInstance(),
                     productsProperties,
                     formatsProperties,
                     (String)beschreibungRet);
@@ -204,9 +206,7 @@ public class AlkisUtils {
             final int objectID = bean.getMetaObject().getId();
             final StringBuilder result = new StringBuilder("<a href=\"");
 //            result.append(bean.getMetaObject().getMetaClass().getID()).append(LINK_SEPARATOR_TOKEN).append(objectID);
-            result.append(bean.getMetaObject().getMetaClass().getID())
-                    .append(AlkisConstants.LINK_SEPARATOR_TOKEN)
-                    .append(objectID);
+            result.append(bean.getMetaObject().getMetaClass().getID()).append(LINK_SEPARATOR_TOKEN).append(objectID);
             result.append("\">");
             result.append(description);
             result.append("</a>");
@@ -308,7 +308,7 @@ public class AlkisUtils {
                 addressStringBuilder.append(address.getHouseNumber());
             }
             if (addressStringBuilder.length() > 0) {
-                addressStringBuilder.append(AlkisConstants.NEWLINE);
+                addressStringBuilder.append(NEWLINE);
             }
             if (address.getPostalCode() != null) {
                 addressStringBuilder.append(address.getPostalCode()).append(" ");
@@ -317,10 +317,10 @@ public class AlkisUtils {
                 addressStringBuilder.append(address.getCity());
             }
             if (addressStringBuilder.length() > 0) {
-                addressStringBuilder.append(AlkisConstants.NEWLINE);
+                addressStringBuilder.append(NEWLINE);
             }
             addressStringBuilder.append(getAdressPostfix(address));
-            addressStringBuilder.append(AlkisConstants.NEWLINE);
+            addressStringBuilder.append(NEWLINE);
             addressStringBuilder.append(getAddressBoldCloseTag(address));
             return addressStringBuilder.toString();
         } else {
@@ -612,14 +612,14 @@ public class AlkisUtils {
                         .append(owner.getNameOfBirth())
                         .append("</td><td></tr>");
             }
-            ownerStringBuilder.append(AlkisConstants.NEWLINE).append("</td></tr>");
+            ownerStringBuilder.append(NEWLINE).append("</td></tr>");
             final Address[] addresses = owner.getAddresses();
             if (addresses != null) {
                 for (final Address address : addresses) {
                     if ((address != null) && (address.getHerkunftAdress() != null)
                                 && address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
                         ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
-                        ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
+                        ownerStringBuilder.append(addressToString(address)).append(NEWLINE);
                         ownerStringBuilder.append("</td><td></td><td></td></tr>");
                     }
                 }
@@ -628,7 +628,7 @@ public class AlkisUtils {
                                 && ((address.getHerkunftAdress() == null)
                                     || (!address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)))) {
                         ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
-                        ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
+                        ownerStringBuilder.append(addressToString(address)).append(NEWLINE);
                         ownerStringBuilder.append("</td><td></td><td></td></tr>");
                     }
                 }
@@ -682,7 +682,7 @@ public class AlkisUtils {
      */
     private static String generateBuchungsblattLinkInfo(final Buchungsblatt buchungsblatt) {
         // TODO: Should return metaclassID::objectID instead of metaclassID::BuchungsblattCode...
-        return new StringBuilder("ALKIS_BUCHUNGSBLATT").append(AlkisConstants.LINK_SEPARATOR_TOKEN)
+        return new StringBuilder("ALKIS_BUCHUNGSBLATT").append(LINK_SEPARATOR_TOKEN)
                     .append(buchungsblatt.getBuchungsblattCode())
                     .toString();
     }

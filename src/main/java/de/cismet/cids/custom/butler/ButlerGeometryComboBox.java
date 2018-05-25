@@ -27,7 +27,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.features.Feature;
@@ -70,7 +70,8 @@ public class ButlerGeometryComboBox extends JComboBox {
         final List objects = new ArrayList();
         objects.add("keine Auswahl");
         for (final Feature f : fc.getAllFeatures()) {
-            final Geometry g = CrsTransformer.transformToGivenCrs(f.getGeometry(), AlkisConstants.COMMONS.SRS_SERVICE);
+            final Geometry g = CrsTransformer.transformToGivenCrs(f.getGeometry(),
+                    ClientAlkisConf.getInstance().SRS_SERVICE);
             // todo check that the geoms are in the right crs
             if (validatesFilter(g, filter)) {
                 objects.add(g);

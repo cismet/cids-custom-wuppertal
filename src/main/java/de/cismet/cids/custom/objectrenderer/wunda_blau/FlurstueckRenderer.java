@@ -53,7 +53,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -547,24 +547,25 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         final Object geoObj = cidsBean.getProperty("umschreibendes_rechteck.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                    AlkisConstants.COMMONS.SRS_SERVICE);
-            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                    ClientAlkisConf.getInstance().SRS_SERVICE);
+            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(
+                        ClientAlkisConf.getInstance().GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
 
                     @Override
                     public void run() {
                         final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                        mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                        mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                         mappingModel.addHome(new XBoundingBox(
                                 box.getX1(),
                                 box.getY1(),
                                 box.getX2(),
                                 box.getY2(),
-                                AlkisConstants.COMMONS.SRS_SERVICE,
+                                ClientAlkisConf.getInstance().SRS_SERVICE,
                                 true));
                         final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                    AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                    ClientAlkisConf.getInstance().MAP_CALL_STRING));
                         swms.setName("Flurstueck");
                         final StyledFeature dsf = new DefaultStyledFeature();
                         dsf.setGeometry(pureGeom);

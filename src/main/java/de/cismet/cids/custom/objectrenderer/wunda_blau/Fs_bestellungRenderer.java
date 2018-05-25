@@ -49,8 +49,8 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -235,20 +235,20 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 public void run() {
                     final Geometry pureGeom = CrsTransformer.transformToGivenCrs(
                             geom,
-                            AlkisConstants.COMMONS.SRS_SERVICE);
+                            ClientAlkisConf.getInstance().SRS_SERVICE);
                     final de.cismet.cismap.commons.XBoundingBox box = new de.cismet.cismap.commons.XBoundingBox(
-                            pureGeom.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                            pureGeom.getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                     mappingModel.addHome(new XBoundingBox(
                             box.getX1(),
                             box.getY1(),
                             box.getX2(),
                             box.getY2(),
-                            AlkisConstants.COMMONS.SRS_SERVICE,
+                            ClientAlkisConf.getInstance().SRS_SERVICE,
                             true));
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                ClientAlkisConf.getInstance().MAP_CALL_STRING));
                     swms.setName("Flurstueck");
                     final StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(pureGeom);

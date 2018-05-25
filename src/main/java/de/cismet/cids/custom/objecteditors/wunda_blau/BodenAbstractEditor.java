@@ -40,7 +40,7 @@ import javax.swing.JOptionPane;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
@@ -854,17 +854,17 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
 
             if (geoObj instanceof Geometry) {
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().SRS_SERVICE);
 
                 final Runnable mapRunnable = new Runnable() {
 
                         @Override
                         public void run() {
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                             mappingModel.addHome(getBoundingBox());
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                        AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                        ClientAlkisConf.getInstance().MAP_CALL_STRING));
                             swms.setName("Flurstueck");
 
                             final Collection<MetaObject> selObj = new ArrayList<MetaObject>(1);
@@ -926,16 +926,16 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
             if (flurstueck.getProperty(getFlurstueckReferenzGeometryPropertyName()) instanceof Geometry) {
                 final Geometry geometry = CrsTransformer.transformToGivenCrs((Geometry)flurstueck.getProperty(
                             getFlurstueckReferenzGeometryPropertyName()),
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().SRS_SERVICE);
 
                 if (result == null) {
-                    result = new XBoundingBox(geometry.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER),
-                            AlkisConstants.COMMONS.SRS_SERVICE,
+                    result = new XBoundingBox(geometry.getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER),
+                            ClientAlkisConf.getInstance().SRS_SERVICE,
                             true);
                 } else {
                     final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                AlkisConstants.COMMONS.GEO_BUFFER));
-                    temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                                ClientAlkisConf.getInstance().GEO_BUFFER));
+                    temp.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
                     temp.setMetric(true);
 
                     if (temp.getX1() < result.getX1()) {
