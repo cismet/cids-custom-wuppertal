@@ -77,7 +77,7 @@ public class AlkisProductDownloadHelper {
         final String downloadTitle = AlkisUtils.getProductName(product);
         final Date stichtag = downloadInfo.getDate();
 
-        final List<Download> downloads = new LinkedList<Download>();
+        final List<Download> downloads = new LinkedList<>();
         for (final String buchungsblattCode : downloadInfo.getAlkisCodes()) {
             final Download d = createBuchungsblattStichtagProductDownload(
                     stichtag,
@@ -122,10 +122,10 @@ public class AlkisProductDownloadHelper {
         }
 
         String extension = ".pdf";
-        if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML.equals(product)) {
+        if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_HTML).equals(product)) {
             extension = ".html";
         }
 
@@ -134,10 +134,9 @@ public class AlkisProductDownloadHelper {
         }
         final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
-        final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
+        final List<HttpDownload> downloads = new LinkedList<>();
 
         for (final String buchungsblattCode : downloadInfo.getAlkisCodes()) {
-            URL url = null;
 
             if ((buchungsblattCode == null) || (buchungsblattCode.trim().length() <= 0)) {
                 continue;
@@ -145,19 +144,21 @@ public class AlkisProductDownloadHelper {
 
             final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode);
 
+            URL url;
             try {
-                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                url = ClientAlkisProducts.getInstance().productEinzelNachweisUrl(
                         queryID,
                         product,
                         SessionManager.getSession().getUser(),
                         null);
 
-                final URL urlFertigungsvermerk = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                final URL urlFertigungsvermerk = ClientAlkisProducts.getInstance().productEinzelNachweisUrl(
                         queryID,
                         product,
                         SessionManager.getSession().getUser(),
-                        AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
-                final Map<String, String> requestPerUsage = new HashMap<String, String>();
+                        fertigungsVermerk);
+                final Map<String, String> requestPerUsage = new HashMap<>();
                 requestPerUsage.put("WV ein", (urlFertigungsvermerk != null) ? urlFertigungsvermerk.toString() : null);
 
                 if (url != null) {
@@ -254,7 +255,7 @@ public class AlkisProductDownloadHelper {
         try {
             if (completeBuchungsblattCode.length() > 0) {
                 final String queryID = AlkisUtils.escapeHtmlSpaces(completeBuchungsblattCode);
-                final URL url = AlkisUtils.PRODUCTS.productEinzelnachweisStichtagsbezogenUrl(
+                final URL url = ClientAlkisProducts.getInstance().productEinzelnachweisStichtagsbezogenUrl(
                         queryID,
                         product,
                         stichtag,
@@ -342,10 +343,10 @@ public class AlkisProductDownloadHelper {
         }
 
         String extension = ".pdf";
-        if (AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML.equals(product)) {
+        if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML).equals(product)) {
             extension = ".html";
         }
 
@@ -354,18 +355,18 @@ public class AlkisProductDownloadHelper {
         }
         final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
-        final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
+        final List<HttpDownload> downloads = new LinkedList<>();
 
         for (final String parcelCode : downloadInfo.getAlkisCodes()) {
             final URL url;
             if ((parcelCode != null) && (parcelCode.length() > 0)) {
                 try {
-                    url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
+                    final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                    url = ClientAlkisProducts.getInstance().productEinzelNachweisUrl(
                             parcelCode,
                             product,
                             SessionManager.getSession().getUser(),
-                            AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
-
+                            fertigungsVermerk);
                     if (url != null) {
                         final String filename = product + "." + parcelCode.replace("/", "--");
                         downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, extension));
@@ -425,15 +426,16 @@ public class AlkisProductDownloadHelper {
         }
         final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
-        final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
+        final List<HttpDownload> downloads = new LinkedList<>();
         for (final String parcelCode : downloadInfo.getAlkisCodes()) {
             URL url = null;
 
             if (parcelCode.length() > 0) {
                 try {
-                    url = AlkisUtils.PRODUCTS.productKarteUrl(
+                    final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                    url = ClientAlkisProducts.getInstance().productKarteUrl(
                             parcelCode,
-                            AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
+                            fertigungsVermerk);
                 } catch (final Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: Kartenprodukt",
@@ -489,7 +491,7 @@ public class AlkisProductDownloadHelper {
                         }
                         break;
                         case BUCHUNGSBLAETTER: {
-                            if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(
+                            if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(
                                             einzelnachweisDownloadInfo.getAlkisProdukt())) {
                                 downloadBuchungsblattnachweisStichtagProduct(
                                     einzelnachweisDownloadInfo,

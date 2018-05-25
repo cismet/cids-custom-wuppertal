@@ -34,37 +34,6 @@ import de.cismet.connectioncontext.ConnectionContext;
  */
 public class ClientAlkisConf extends AlkisConf {
 
-    //~ Static fields/initializers ---------------------------------------------
-
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ClientAlkisConf.class);
-    private static final Properties PROPERTIES;
-
-    static {
-        final Properties properties = new Properties();
-        try {
-            final ConnectionContext connectionContext = ConnectionContext.create(
-                    AbstractConnectionContext.Category.STATIC,
-                    ClientAlkisConf.class.getSimpleName());
-            final Object ret = SessionManager.getSession()
-                        .getConnection()
-                        .executeTask(SessionManager.getSession().getUser(),
-                            GetServerResourceServerAction.TASK_NAME,
-                            "WUNDA_BLAU",
-                            WundaBlauServerResources.ALKIS_CONF.getValue(),
-                            connectionContext);
-            if (ret instanceof Exception) {
-                throw (Exception)ret;
-            }
-            final String conf = (String)ret;
-
-            properties.load(new StringReader(conf));
-        } catch (final Exception ex) {
-            LOG.fatal("AlkisCommons Error!", ex);
-            throw new RuntimeException(ex);
-        }
-        PROPERTIES = properties;
-    }
-
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -72,8 +41,8 @@ public class ClientAlkisConf extends AlkisConf {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private ClientAlkisConf() throws Exception {
-        super(PROPERTIES);
+    private ClientAlkisConf(final Properties properties) throws Exception {
+        super(properties);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -102,7 +71,24 @@ public class ClientAlkisConf extends AlkisConf {
 
         static {
             try {
-                INSTANCE = new ClientAlkisConf();
+            final ConnectionContext connectionContext = ConnectionContext.create(
+                    AbstractConnectionContext.Category.STATIC,
+                    ClientAlkisConf.class.getSimpleName());
+            final Object ret = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.ALKIS_CONF.getValue(),
+                            connectionContext);
+            if (ret instanceof Exception) {
+                throw (Exception)ret;
+            }
+
+            final Properties properties = new Properties();
+            properties.load(new StringReader((String)ret));
+        
+                INSTANCE = new ClientAlkisConf(properties);
             } catch (final Exception ex) {
                 throw new RuntimeException("Exception while initializing ServerAlkisConf", ex);
             }

@@ -71,6 +71,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
@@ -335,7 +336,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         if (
             !ObjectRendererUtils.checkActionTag(
                         AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE,
@@ -444,7 +445,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
             }
         }
-    } //GEN-LAST:event_btnCreateActionPerformed
+    }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -485,38 +486,38 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReleaseActionPerformed
+    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReleaseActionPerformed
         gehaltenePunkte.clear();
         setCidsBeans(pureSelectionCidsBeans);
         btnRelease.setEnabled(false);
-    }                                                                              //GEN-LAST:event_btnReleaseActionPerformed
+    }//GEN-LAST:event_btnReleaseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRememberActionPerformed
+    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRememberActionPerformed
         gehaltenePunkte.addAll(cidsBeans);
         btnRelease.setEnabled(true);
-    }                                                                               //GEN-LAST:event_btnRememberActionPerformed
+    }//GEN-LAST:event_btnRememberActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblAggregationFocusLost
+    private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblAggregationFocusLost
         animateToOverview();
         tblAggregation.clearSelection();
-    }                                                                           //GEN-LAST:event_tblAggregationFocusLost
+    }//GEN-LAST:event_tblAggregationFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -535,7 +536,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
@@ -598,7 +599,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             if (punktListeString.length() > 0) {
                 punktListeString.append(",");
             }
-            punktListeString.append(AlkisUtils.PRODUCTS.getPointDataForProduct(alkisPoint));
+            punktListeString.append(ClientAlkisProducts.getInstance().getPointDataForProduct(alkisPoint));
         }
 
         return punktListeString.toString();
@@ -1011,20 +1012,20 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             final String extension;
 
             if (PDF.equals(format)) {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_PDF;
+                code = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_PDF);
                 extension = ".pdf";
             } else if (HTML.equals(format)) {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_HTML;
+                code = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_HTML);
                 extension = ".html";
             } else {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_TXT;
+                code = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_TXT);
                 extension = ".plst";
             }
 
             if (punktListenString.length() > 3) {
                 if ((code != null) && (code.length() > 0)) {
                     try {
-                        final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
+                        final String url = ClientAlkisProducts.getInstance().productListenNachweisUrl(punktListenString, code);
                         if ((url != null) && (url.trim().length() > 0)) {
                             if (
                                 !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(

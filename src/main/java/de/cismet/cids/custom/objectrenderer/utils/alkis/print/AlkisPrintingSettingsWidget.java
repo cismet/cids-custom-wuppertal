@@ -53,6 +53,7 @@ import javax.swing.ListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
@@ -274,11 +275,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      */
     private ComboBoxModel getProductClassModel() {
         final Set<String> classes = new HashSet<String>();
-//        log.fatal(AlkisCommons.Products.ALKIS_MAP_PRODUCTS);
-//        log.fatal(AlkisCommons.Products.ALKIS_FORMATS);
-//        log.fatal(AlkisCommons.Products.FLURSTUECKSNACHWEIS_PDF);
-//        log.fatal(AlkisCommons.USER);
-        for (final AlkisProductDescription product : AlkisUtils.PRODUCTS.ALKIS_MAP_PRODUCTS) {
+        for (final AlkisProductDescription product : ClientAlkisProducts.getInstance().getAlkisMapProducts()) {
             classes.add(product.getClazz());
             if (product.isDefaultProduct()) {
                 defaultProduct = product;
@@ -296,7 +293,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final String clazz = String.valueOf(cbClazz.getSelectedItem());
         final Set<String> prodSet = new HashSet<String>();
         final List<String> typesOrdered = new ArrayList<String>();
-        for (final AlkisProductDescription product : AlkisUtils.PRODUCTS.ALKIS_MAP_PRODUCTS) {
+        for (final AlkisProductDescription product : ClientAlkisProducts.getInstance().getAlkisMapProducts()) {
             if (clazz.equals(product.getClazz())) {
                 if (prodSet.add(product.getType())) {
                     typesOrdered.add(product.getType());
@@ -346,7 +343,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final Set<String> prodScale = new TreeSet<String>(AlphanumComparator.getInstance());
         final Set<String> prodLayout = new HashSet<String>();
         final List<LayoutMetaInfo> prodLayoutOrdered = new ArrayList<LayoutMetaInfo>();
-        for (final AlkisProductDescription product : AlkisUtils.PRODUCTS.ALKIS_MAP_PRODUCTS) {
+        for (final AlkisProductDescription product : ClientAlkisProducts.getInstance().getAlkisMapProducts()) {
             if (clazz.equals(product.getClazz()) && type.equals(product.getType())) {
                 prodScale.add(product.getMassstab());
                 if (prodLayout.add(product.getDinFormat())) {
@@ -372,7 +369,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final String type = String.valueOf(cbProduct.getSelectedItem());
         final String scale = String.valueOf(cbScales.getSelectedItem());
         final String layout = String.valueOf(cbFormat.getSelectedItem());
-        for (final AlkisProductDescription product : AlkisUtils.PRODUCTS.ALKIS_MAP_PRODUCTS) {
+        for (final AlkisProductDescription product : ClientAlkisProducts.getInstance().getAlkisMapProducts()) {
             if (clazz.equals(product.getClazz()) && type.equals(product.getType())
                         && scale.equals(product.getMassstab()) && layout.equals(product.getDinFormat())) {
                 return product;
@@ -813,17 +810,17 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
+    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
         super.dispose();
-    }                                                                         //GEN-LAST:event_cmdOkActionPerformed
+    }//GEN-LAST:event_cmdOkActionPerformed
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
+    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
         dispose();
-    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
+    }//GEN-LAST:event_cmdCancelActionPerformed
 
     @Override
     public void dispose() {
@@ -837,53 +834,53 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final int[] sel = lstFlurstuecke.getSelectedIndices();
         for (int i = sel.length; --i >= 0;) {
             alkisObjectListModel.removeElementAt(sel[i]);
         }
         updateFormatProposal();
         syncOkButtonWithListStatus();
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbClazzActionPerformed
+    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClazzActionPerformed
         cbProduct.setModel(getProductTypeModel());
         cbProductActionPerformed(null);
         updateFormatProposal();
-    }                                                                           //GEN-LAST:event_cbClazzActionPerformed
+    }//GEN-LAST:event_cbClazzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbProductActionPerformed
+    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductActionPerformed
         final ComboBoxModel[] models = getProductDetailModels();
         cbFormat.setModel(models[0]);
         cbScales.setModel(models[1]);
         updateFormatProposal();
-    }                                                                             //GEN-LAST:event_cbProductActionPerformed
+    }//GEN-LAST:event_cbProductActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbScalesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbScalesActionPerformed
-    }                                                                            //GEN-LAST:event_cbScalesActionPerformed
+    private void cbScalesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbScalesActionPerformed
+    }//GEN-LAST:event_cbScalesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbFormatActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFormatActionPerformed
-    }                                                                            //GEN-LAST:event_cbFormatActionPerformed
+    private void cbFormatActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFormatActionPerformed
+    }//GEN-LAST:event_cbFormatActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1056,7 +1053,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final AlkisProductDescription selectedProduct = getSelectedProduct();
         URL url = null;
         try {
-            url = AlkisUtils.PRODUCTS.productKarteUrl(
+            url = ClientAlkisProducts.getInstance().productKarteUrl(
                     landParcelCode,
                     selectedProduct,
                     toInt(rotationAngle),
@@ -1067,7 +1064,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     false,
                     null);
 
-            final URL urlFertigungsvermerk = AlkisUtils.PRODUCTS.productKarteUrl(
+            final URL urlFertigungsvermerk = ClientAlkisProducts.getInstance().productKarteUrl(
                     landParcelCode,
                     selectedProduct,
                     toInt(rotationAngle),
