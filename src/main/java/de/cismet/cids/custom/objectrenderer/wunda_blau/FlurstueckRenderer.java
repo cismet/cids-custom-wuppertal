@@ -668,10 +668,6 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
     @Override
     public void dispose() {
         bindingGroup.unbind();
-//        if (!continueInBackground) {
-//            AlkisSOAPWorkerService.cancel(retrieveBuchungsblaetterWorker);
-//            setWaiting(false);
-//        }
         map.dispose();
     }
 

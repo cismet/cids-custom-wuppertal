@@ -24,7 +24,6 @@ import com.sun.media.jai.codec.TIFFDecodeParam;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
 
@@ -91,7 +90,6 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
-import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -339,8 +337,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
     private final Map<Object, ImageIcon> productPreviewImages;
     private final List<JLabel> retrieveableLabels;
-    private SOAPAccessProvider soapProvider;
-    private ALKISInfoServices infoService;
     private Point point;
     private CidsBean cidsBean;
     private String title;
@@ -479,18 +475,12 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
-            try {
-                soapProvider = new SOAPAccessProvider(ClientAlkisConf.getInstance());
-                infoService = soapProvider.getAlkisInfoService();
-            } catch (Exception ex) {
-                LOG.fatal(ex, ex);
-            }
-        }
+
         initIcons();
         initComponents();
         initFooterElements();
         initProductPreview();
+
         setWait(false);
         panLocationInfos.setVisible(false);
         cbPunktorte.setRenderer(new LocationComboBoxRenderer());
@@ -2488,11 +2478,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
          */
         @Override
         protected Point doInBackground() throws Exception {
-            if (infoService != null) {
-                return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
-            } else {
-                return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode, getConnectionContext());
-            }
+            return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode, getConnectionContext());
         }
 
         /**

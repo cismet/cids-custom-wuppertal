@@ -21,7 +21,6 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.LandParcel;
@@ -78,7 +77,6 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
-import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
@@ -238,8 +236,6 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private final Map<String, CidsBean> gotoBeanMap;
     private CardLayout cardLayout;
     private MappingComponent map;
-    private SOAPAccessProvider soapProvider;
-    private ALKISInfoServices infoService;
     private LandParcel landparcel;
     private CidsBean cidsBean;
     private String title;
@@ -335,12 +331,10 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         eigentuemerPermission = AlkisUtils.validateUserHasEigentuemerAccess(getConnectionContext());
 
         initIcons();
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
-            initSoapServiceAccess();
-        }
         initComponents();
         initFooterElements();
         initProductPreview();
+
         scpInhaltBuchungsblatt.getViewport().setOpaque(false);
         scpLage.getViewport().setOpaque(false);
         blWait.setVisible(false);
@@ -629,20 +623,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
                     if (!demoMode) {
-                        if (infoService != null) {
-                            final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(
-                                    soapProvider.getIdentityCard(),
-                                    soapProvider.getService(),
-                                    AlkisUtils.fixBuchungslattCode(buchungsblattcode));
-                            buchungsblatt = infoService.getBuchungsblattWithUUID(soapProvider.getIdentityCard(),
-                                    soapProvider.getService(),
-                                    uuids[0],
-                                    true);
-                        } else {
-                            buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                                    AlkisUtils.fixBuchungslattCode(buchungsblattcode),
-                                    getConnectionContext());
-                        }
+                        buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
+                                AlkisUtils.fixBuchungslattCode(buchungsblattcode),
+                                getConnectionContext());
                     } else {
                         final Owner o = new Owner();
                         o.setForeName("***");
@@ -702,18 +685,6 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             ObjectRendererUtils.BACKWARD_PRESSED);
 //        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
 //        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void initSoapServiceAccess() {
-        try {
-            soapProvider = new SOAPAccessProvider(ClientAlkisConf.getInstance());
-            infoService = soapProvider.getAlkisInfoService();
-        } catch (Exception ex) {
-            LOG.fatal(ex, ex);
-        }
     }
 
     /**

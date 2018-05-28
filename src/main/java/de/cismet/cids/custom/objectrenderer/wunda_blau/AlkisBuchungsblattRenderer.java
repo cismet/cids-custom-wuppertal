@@ -28,7 +28,6 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.LandParcel;
@@ -97,7 +96,6 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
-import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -176,8 +174,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private MappingComponent map;
     //
     private RetrieveWorker retrieveWorker;
-    private SOAPAccessProvider soapProvider;
-    private ALKISInfoServices infoService;
     private Buchungsblatt buchungsblatt;
     private CidsBean cidsBean;
     private String title;
@@ -283,18 +279,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         map = new MappingComponent();
         map.setOpaque(false);
 
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
-            try {
-                soapProvider = new SOAPAccessProvider(ClientAlkisConf.getInstance());
-                infoService = soapProvider.getAlkisInfoService();
-            } catch (Exception ex) {
-                LOG.fatal(ex, ex);
-            }
-        }
         initIcons();
         initComponents();
         initFooterElements();
         initProductPreview();
+
         final LayoutManager layoutManager = getLayout();
         if (layoutManager instanceof CardLayout) {
             cardLayout = (CardLayout)layoutManager;
@@ -2152,20 +2141,10 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
          */
         @Override
         protected Buchungsblatt doInBackground() throws Exception {
-            Buchungsblatt buchungsblatt;
-            if (infoService != null) {
-                final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(soapProvider.getIdentityCard(),
-                        soapProvider.getService(),
-                        AlkisUtils.fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));
-                buchungsblatt = infoService.getBuchungsblattWithUUID(soapProvider.getIdentityCard(),
-                        soapProvider.getService(),
-                        uuids[0],
-                        true);
-            } else {
-                buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisUtils.fixBuchungslattCode(
-                            String.valueOf(bean.getProperty("buchungsblattcode"))),
-                        getConnectionContext());
-            }
+            final Buchungsblatt buchungsblatt;
+            buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisUtils.fixBuchungslattCode(
+                        String.valueOf(bean.getProperty("buchungsblattcode"))),
+                    getConnectionContext());
             if (buchungsblatt != null) {
                 generateLightweightLandParcel3A(buchungsblatt);
             }

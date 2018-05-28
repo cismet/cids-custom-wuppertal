@@ -26,8 +26,6 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
-import Sirius.server.middleware.impls.domainserver.DomainServerImpl;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.aedsicad.aaaweb.service.util.Address;
@@ -98,7 +96,6 @@ public class AlkisUtils {
         "baulast.report.bescheinigung_disabled@WUNDA_BLAU";
 
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
-    public static final String ALKIS_SOAP_OVER_CSA = "alkisSoapTunnelAction";
     public static final String ALKIS_EIGENTUEMER = "custom.alkis.buchungsblatt@WUNDA_BLAU";
     static final Buchungsblattbezirke BUCHUNGSBLATTBEZIRKE;
 
@@ -839,27 +836,6 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static boolean validateUserShouldUseAlkisSOAPServerActions(final ConnectionContext connectionContext) {
-        try {
-            return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                DomainServerImpl.SERVER_ACTION_PERMISSION_ATTRIBUTE_PREFIX
-                                + ALKIS_SOAP_OVER_CSA,
-                                connectionContext)
-                        != null;
-        } catch (ConnectionException ex) {
-            LOG.error("Could not validate action tag for Alkis SOAP CSA Calls!", ex);
-        }
-        return false;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param   pointCode          DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
@@ -876,7 +852,7 @@ public class AlkisUtils {
 
         final Point result = (Point)SessionManager.getProxy()
                     .executeTask(
-                            ALKIS_SOAP_OVER_CSA,
+                            ServerAlkisSoapAction.TASKNAME,
                             "WUNDA_BLAU",
                             body,
                             connectionContext,
@@ -903,7 +879,7 @@ public class AlkisUtils {
 
         final Buchungsblatt result = (Buchungsblatt)SessionManager.getProxy()
                     .executeTask(
-                            ALKIS_SOAP_OVER_CSA,
+                            ServerAlkisSoapAction.TASKNAME,
                             "WUNDA_BLAU",
                             body,
                             connectionContext,
