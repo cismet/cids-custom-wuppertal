@@ -336,7 +336,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
         if (
             !ObjectRendererUtils.checkActionTag(
                         AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE,
@@ -445,7 +445,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
             }
         }
-    }//GEN-LAST:event_btnCreateActionPerformed
+    } //GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -486,38 +486,38 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReleaseActionPerformed
+    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReleaseActionPerformed
         gehaltenePunkte.clear();
         setCidsBeans(pureSelectionCidsBeans);
         btnRelease.setEnabled(false);
-    }//GEN-LAST:event_btnReleaseActionPerformed
+    }                                                                              //GEN-LAST:event_btnReleaseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRememberActionPerformed
+    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRememberActionPerformed
         gehaltenePunkte.addAll(cidsBeans);
         btnRelease.setEnabled(true);
-    }//GEN-LAST:event_btnRememberActionPerformed
+    }                                                                               //GEN-LAST:event_btnRememberActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblAggregationFocusLost
+    private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblAggregationFocusLost
         animateToOverview();
         tblAggregation.clearSelection();
-    }//GEN-LAST:event_tblAggregationFocusLost
+    }                                                                           //GEN-LAST:event_tblAggregationFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -536,7 +536,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                         });
                 }
             });
-    }//GEN-LAST:event_formAncestorAdded
+    } //GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
@@ -727,16 +727,17 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
             final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
                     box.getX1(),
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    ClientAlkisConf.getInstance().SRS_SERVICE,
+                    ClientAlkisConf.getInstance().getSrsService(),
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -811,7 +812,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     new Geometry[allGeomList.size()]),
                 new GeometryFactory());
 
-        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
+        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
     }
 
     /**
@@ -903,16 +904,18 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                         if ((modelIdx > -1) && (modelIdx < cidsBeans.size())) {
                             final CidsBean selectedBean = cidsBeans.get(modelIdx);
                             final XBoundingBox boxToGoto = new XBoundingBox(features.get(selectedBean).getGeometry()
-                                            .getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
+                                            .getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
                             boxToGoto.setX1(boxToGoto.getX1()
-                                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getWidth()));
                             boxToGoto.setX2(boxToGoto.getX2()
-                                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getWidth()));
                             boxToGoto.setY1(boxToGoto.getY1()
-                                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER
+                                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
                                             * boxToGoto.getHeight()));
                             boxToGoto.setY2(boxToGoto.getY2()
-                                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER
+                                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
                                             * boxToGoto.getHeight()));
                             mappingComponent.gotoBoundingBox(boxToGoto, false, true, 500);
                             break;
@@ -1025,7 +1028,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             if (punktListenString.length() > 3) {
                 if ((code != null) && (code.length() > 0)) {
                     try {
-                        final String url = ClientAlkisProducts.getInstance().productListenNachweisUrl(punktListenString, code);
+                        final String url = ClientAlkisProducts.getInstance()
+                                    .productListenNachweisUrl(punktListenString, code);
                         if ((url != null) && (url.trim().length() > 0)) {
                             if (
                                 !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(

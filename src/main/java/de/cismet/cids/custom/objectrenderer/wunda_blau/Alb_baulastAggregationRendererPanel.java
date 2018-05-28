@@ -583,7 +583,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     protected void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
 
             final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
@@ -591,9 +591,10 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    ClientAlkisConf.getInstance().SRS_SERVICE,
+                    ClientAlkisConf.getInstance().getSrsService(),
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Alb_Baulast");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -685,7 +686,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                     new Geometry[geometries.size()]),
                 new GeometryFactory());
 
-        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
+        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
     }
 
     /**
@@ -794,15 +795,15 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                 }
                 final GeometryCollection geoCollection = new GeometryCollection(geometries, new GeometryFactory());
                 final XBoundingBox boxToGoto = new XBoundingBox(geoCollection.getEnvelope().buffer(
-                            ClientAlkisConf.getInstance().GEO_BUFFER));
+                            ClientAlkisConf.getInstance().getGeoBuffer()));
                 boxToGoto.setX1(boxToGoto.getX1()
-                            - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                            - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
                 boxToGoto.setX2(boxToGoto.getX2()
-                            + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                            + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
                 boxToGoto.setY1(boxToGoto.getY1()
-                            - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                            - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
                 boxToGoto.setY2(boxToGoto.getY2()
-                            + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                            + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
                 mappingComponent.gotoBoundingBox(boxToGoto, false, true, 500);
             } else {
                 mappingComponent.gotoInitialBoundingBox();

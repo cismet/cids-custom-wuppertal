@@ -235,20 +235,20 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 public void run() {
                     final Geometry pureGeom = CrsTransformer.transformToGivenCrs(
                             geom,
-                            ClientAlkisConf.getInstance().SRS_SERVICE);
+                            ClientAlkisConf.getInstance().getSrsService());
                     final de.cismet.cismap.commons.XBoundingBox box = new de.cismet.cismap.commons.XBoundingBox(
-                            pureGeom.getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
+                            pureGeom.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     mappingModel.addHome(new XBoundingBox(
                             box.getX1(),
                             box.getY1(),
                             box.getX2(),
                             box.getY2(),
-                            ClientAlkisConf.getInstance().SRS_SERVICE,
+                            ClientAlkisConf.getInstance().getSrsService(),
                             true));
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                ClientAlkisConf.getInstance().MAP_CALL_STRING));
+                                ClientAlkisConf.getInstance().getMapCallString()));
                     swms.setName("Flurstueck");
                     final StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(pureGeom);

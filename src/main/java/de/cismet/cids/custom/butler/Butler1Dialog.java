@@ -102,7 +102,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private DefaultStyledFeature pointFeature;
     private boolean isPointCentered = false;
     private final GeometryFactory factory = new GeometryFactory(new PrecisionModel(),
-            CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().SRS_SERVICE));
+            CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().getSrsService()));
     private boolean documentListenersRemoved = false;
     private final ConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -900,11 +900,11 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     mappingModel.addHome(getBoundingBox());
 
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                ClientAlkisConf.getInstance().MAP_CALL_STRING));
+                                ClientAlkisConf.getInstance().getMapCallString()));
                     swms.setName("butler-background");
 
                     // add the raster layer to the model
@@ -927,7 +927,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
                     final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
-                            ClientAlkisConf.getInstance().SRS_SERVICE);
+                            ClientAlkisConf.getInstance().getSrsService());
                     final XBoundingBox result = new XBoundingBox(transformedGeom.buffer(20));
 
                     return result;

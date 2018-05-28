@@ -373,46 +373,52 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisNRWActionPerformed
-        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF), true);
-    }//GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
+    private void jxlBestandsnachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisNRWActionPerformed
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF),
+            true);
+    }                                                                                          //GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisKommunalActionPerformed
-        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF), true);
-    }//GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
+    private void jxlBestandsnachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisKommunalActionPerformed
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF),
+            true);
+    }                                                                                               //GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBestandsnachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisKommunalInternActionPerformed
-        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF), true);
-    }//GEN-LAST:event_jxlBestandsnachweisKommunalInternActionPerformed
+    private void jxlBestandsnachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisKommunalInternActionPerformed
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF),
+            true);
+    }                                                                                                     //GEN-LAST:event_jxlBestandsnachweisKommunalInternActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBuchungsblaetterFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblBuchungsblaetterFocusLost
+    private void tblBuchungsblaetterFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblBuchungsblaetterFocusLost
         map.gotoInitialBoundingBox();
         tblBuchungsblaetter.clearSelection();
-    }//GEN-LAST:event_tblBuchungsblaetterFocusLost
+    }                                                                                //GEN-LAST:event_tblBuchungsblaetterFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlBestandsnachweisStichtagNRWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisStichtagNRWActionPerformed
+    private void hlBestandsnachweisStichtagNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisStichtagNRWActionPerformed
         downloadEinzelnachweisStichtagProduct(true);
-    }//GEN-LAST:event_hlBestandsnachweisStichtagNRWActionPerformed
+    }                                                                                                 //GEN-LAST:event_hlBestandsnachweisStichtagNRWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -420,7 +426,8 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  berechtigungspruefung  DOCUMENT ME!
      */
     private void downloadEinzelnachweisStichtagProduct(final boolean berechtigungspruefung) {
-        final String product = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF);
+        final String product = ClientAlkisProducts.getInstance()
+                    .get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF);
         if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product), getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
@@ -481,7 +488,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
+    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
         final Collection<CidsBean> selectedFlurstuecke = new ArrayList<CidsBean>();
         for (final CidsBeanWrapper wrapper : cidsBeanWrappers) {
             if (wrapper.isSelected()) {
@@ -489,7 +496,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             }
         }
         BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, AlkisBuchungsblattAggregationRenderer.this);
-    }//GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
+    }                                                                                           //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
@@ -960,10 +967,11 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             initialisedMap = false;
 
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
             mappingModel.addHome(getBoundingBox());
 
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Buchungsblatt");
 
             // add the raster layer to the model
@@ -1001,13 +1009,13 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 for (final Geometry geometry : cidsBeanWrapper.getGeometries()) {
                     if (result == null) {
                         result = new XBoundingBox(geometry.getEnvelope().buffer(
-                                    ClientAlkisConf.getInstance().GEO_BUFFER));
-                        result.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                                    ClientAlkisConf.getInstance().getGeoBuffer()));
+                        result.setSrs(ClientAlkisConf.getInstance().getSrsService());
                         result.setMetric(true);
                     } else {
                         final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                    ClientAlkisConf.getInstance().GEO_BUFFER));
-                        temp.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                                    ClientAlkisConf.getInstance().getGeoBuffer()));
+                        temp.setSrs(ClientAlkisConf.getInstance().getSrsService());
                         temp.setMetric(true);
 
                         if (temp.getX1() < result.getX1()) {
@@ -1046,15 +1054,15 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                                 new Geometry[selectedCidsBeanWrapper.getGeometries().size()]),
                     new GeometryFactory());
             final XBoundingBox boxToGoto = new XBoundingBox(geoCollection.getEnvelope().buffer(
-                        ClientAlkisConf.getInstance().GEO_BUFFER));
+                        ClientAlkisConf.getInstance().getGeoBuffer()));
             boxToGoto.setX1(boxToGoto.getX1()
-                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
             boxToGoto.setX2(boxToGoto.getX2()
-                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
             boxToGoto.setY1(boxToGoto.getY1()
-                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
             boxToGoto.setY2(boxToGoto.getY2()
-                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
             map.gotoBoundingBox(boxToGoto, false, true, 500);
         }
     }
@@ -1128,7 +1136,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 final Object geometry = landparcel.getProperty("geometrie.geo_field");
                 if (geometry instanceof Geometry) {
                     final Geometry transformedGeometry = CrsTransformer.transformToGivenCrs((Geometry)geometry,
-                            ClientAlkisConf.getInstance().SRS_SERVICE);
+                            ClientAlkisConf.getInstance().getSrsService());
 
                     final StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(transformedGeometry);

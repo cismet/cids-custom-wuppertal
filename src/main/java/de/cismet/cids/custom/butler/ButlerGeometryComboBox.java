@@ -71,7 +71,7 @@ public class ButlerGeometryComboBox extends JComboBox {
         objects.add("keine Auswahl");
         for (final Feature f : fc.getAllFeatures()) {
             final Geometry g = CrsTransformer.transformToGivenCrs(f.getGeometry(),
-                    ClientAlkisConf.getInstance().SRS_SERVICE);
+                    ClientAlkisConf.getInstance().getSrsService());
             // todo check that the geoms are in the right crs
             if (validatesFilter(g, filter)) {
                 objects.add(g);

@@ -39,7 +39,6 @@ import de.aedsicad.aaaweb.service.util.Point;
 
 import org.apache.commons.lang.ArrayUtils;
 
-
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -942,30 +941,52 @@ public class AlkisUtils {
     public static String getActionTag(final String product) {
         final String actionTag;
         if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_HTML).equals(product)) {
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_HTML).equals(
+                        product)) {
             actionTag = PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS;
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF)
+                    .equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML).equals(product)) {
             actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW;
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(
+                        product)) {
             actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN;
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML).equals(product)) {
             actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM;
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(
+                        product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_HTML)
+                    .equals(product)) {
             actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM;
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(
+                        product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)) {
             actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN;
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_HTML).equals(
+                        product)) {
             actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW;
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
+        } else if (ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
             actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW;
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_HTML)
+                    .equals(product)) {
             actionTag = PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW;
         } else {
             actionTag = "3wbgW§$%Q&/"; // unknown product, prevent NPE while checking action tag with null
@@ -983,30 +1004,52 @@ public class AlkisUtils {
     public static String getProductName(final String product) {
         final String downloadTitle;
         if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_HTML).equals(product)) {
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_HTML).equals(
+                        product)) {
             downloadTitle = "Flurstücksnachweis";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF)
+                    .equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML).equals(product)) {
             downloadTitle = "Flurstücks- und Eigentumsnachweis NRW";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML).equals(product)) {
             downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal)";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(
+                        product)) {
             downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal, intern)";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_HTML).equals(
+                        product)) {
             downloadTitle = "Bestandsnachweis (NRW)";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
+        } else if (ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
             downloadTitle = "Bestandsnachweis stichtagsbezogen (NRW)";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(
+                        product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_HTML)
+                    .equals(product)) {
             downloadTitle = "Bestandsnachweis (kommunal)";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(
+                        product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)) {
             downloadTitle = "Bestandsnachweis (kommunal, intern)";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_HTML).equals(product)) {
+        } else if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_HTML)
+                    .equals(product)) {
             downloadTitle = "Grundstücksnachweis (NRW)";
         } else {
             downloadTitle = null;
@@ -1025,17 +1068,23 @@ public class AlkisUtils {
         final String billingKey;
         if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF).equals(product)) {
             billingKey = "fsnw";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF).equals(product)) {
+        } else if (ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF).equals(product)) {
             billingKey = "fsuenw";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)) {
+        } else if (ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)) {
             billingKey = "fsuekom";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(product)) {
+        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(
+                        product)) {
             billingKey = "benw";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
+        } else if (ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
             billingKey = "bestnw";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(product)) {
+        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(
+                        product)) {
             billingKey = "bekom";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(product)) {
+        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(
+                        product)) {
             billingKey = "grnw";
         } else {
             billingKey = null;

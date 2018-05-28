@@ -1616,13 +1616,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         if (cidsBean != null) {
             final Geometry geometrie = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                         "geometrie.geo_field"),
-                    ClientAlkisConf.getInstance().SRS_SERVICE);
+                    ClientAlkisConf.getInstance().getSrsService());
             final Geometry geometrieSaum = CrsTransformer.transformToGivenCrs(
                     ((Geometry)cidsBean.getProperty("geometrie.geo_field")).buffer((saum != null) ? saum : 0),
-                    ClientAlkisConf.getInstance().SRS_SERVICE);
+                    ClientAlkisConf.getInstance().getSrsService());
             final Geometry geometrieFlurstuecke = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                         "geometrie_flurstuecke.geo_field"),
-                    ClientAlkisConf.getInstance().SRS_SERVICE);
+                    ClientAlkisConf.getInstance().getSrsService());
 
             final StyledFeature geometrieFeature = new DefaultStyledFeature();
             geometrieFeature.setGeometry(geometrie);
@@ -1667,22 +1667,22 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
             }
             try {
                 final XBoundingBox box = new XBoundingBox(combinedGeom.getEnvelope().buffer(
-                            ClientAlkisConf.getInstance().GEO_BUFFER));
+                            ClientAlkisConf.getInstance().getGeoBuffer()));
                 final Runnable mapRunnable = new Runnable() {
 
                         @Override
                         public void run() {
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                             mappingModel.addHome(new XBoundingBox(
                                     box.getX1(),
                                     box.getY1(),
                                     box.getX2(),
                                     box.getY2(),
-                                    ClientAlkisConf.getInstance().SRS_SERVICE,
+                                    ClientAlkisConf.getInstance().getSrsService(),
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                        ClientAlkisConf.getInstance().MAP_CALL_STRING));
+                                        ClientAlkisConf.getInstance().getMapCallString()));
                             swms.setName("Vermessungsunterlagen-Auftrag");
 
                             // add the raster layer to the model

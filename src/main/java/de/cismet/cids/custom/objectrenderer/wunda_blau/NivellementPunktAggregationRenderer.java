@@ -549,7 +549,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     protected void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
 
             final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
@@ -557,9 +557,10 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    ClientAlkisConf.getInstance().SRS_SERVICE,
+                    ClientAlkisConf.getInstance().getSrsService(),
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Nivellement_Punkte");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -602,7 +603,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                     new Geometry[geometries.size()]),
                 new GeometryFactory());
 
-        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
+        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
     }
 
     /**
@@ -662,16 +663,18 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                         if ((modelIdx > -1) && (modelIdx < cidsBeans.size())) {
                             final CidsBean selectedBean = cidsBeans.get(modelIdx);
                             final XBoundingBox boxToGoto = new XBoundingBox(features.get(selectedBean).getGeometry()
-                                            .getEnvelope().buffer(ClientAlkisConf.getInstance().GEO_BUFFER));
+                                            .getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
                             boxToGoto.setX1(boxToGoto.getX1()
-                                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getWidth()));
                             boxToGoto.setX2(boxToGoto.getX2()
-                                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getWidth()));
                             boxToGoto.setY1(boxToGoto.getY1()
-                                        - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER
+                                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
                                             * boxToGoto.getHeight()));
                             boxToGoto.setY2(boxToGoto.getY2()
-                                        + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER
+                                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
                                             * boxToGoto.getHeight()));
                             mappingComponent.gotoBoundingBox(boxToGoto, false, true, 500);
                             break;

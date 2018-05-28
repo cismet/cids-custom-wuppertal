@@ -39,6 +39,8 @@ public class ClientAlkisConf extends AlkisConf {
     /**
      * Creates a new ServerAlkisConf object.
      *
+     * @param   properties  DOCUMENT ME!
+     *
      * @throws  Exception  DOCUMENT ME!
      */
     private ClientAlkisConf(final Properties properties) throws Exception {
@@ -71,23 +73,23 @@ public class ClientAlkisConf extends AlkisConf {
 
         static {
             try {
-            final ConnectionContext connectionContext = ConnectionContext.create(
-                    AbstractConnectionContext.Category.STATIC,
-                    ClientAlkisConf.class.getSimpleName());
-            final Object ret = SessionManager.getSession()
-                        .getConnection()
-                        .executeTask(SessionManager.getSession().getUser(),
-                            GetServerResourceServerAction.TASK_NAME,
-                            "WUNDA_BLAU",
-                            WundaBlauServerResources.ALKIS_CONF.getValue(),
-                            connectionContext);
-            if (ret instanceof Exception) {
-                throw (Exception)ret;
-            }
+                final ConnectionContext connectionContext = ConnectionContext.create(
+                        AbstractConnectionContext.Category.STATIC,
+                        ClientAlkisConf.class.getSimpleName());
+                final Object ret = SessionManager.getSession()
+                            .getConnection()
+                            .executeTask(SessionManager.getSession().getUser(),
+                                GetServerResourceServerAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                WundaBlauServerResources.ALKIS_CONF.getValue(),
+                                connectionContext);
+                if (ret instanceof Exception) {
+                    throw (Exception)ret;
+                }
 
-            final Properties properties = new Properties();
-            properties.load(new StringReader((String)ret));
-        
+                final Properties properties = new Properties();
+                properties.load(new StringReader((String)ret));
+
                 INSTANCE = new ClientAlkisConf(properties);
             } catch (final Exception ex) {
                 throw new RuntimeException("Exception while initializing ServerAlkisConf", ex);

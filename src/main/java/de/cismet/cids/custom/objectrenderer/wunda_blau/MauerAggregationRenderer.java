@@ -392,17 +392,17 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                         return;
                     }
                     final XBoundingBox boxToGoto = new XBoundingBox(g.getEnvelope().buffer(
-                                ClientAlkisConf.getInstance().GEO_BUFFER),
-                            ClientAlkisConf.getInstance().SRS_SERVICE,
+                                ClientAlkisConf.getInstance().getGeoBuffer()),
+                            ClientAlkisConf.getInstance().getSrsService(),
                             true);
                     boxToGoto.setX1(boxToGoto.getX1()
-                                - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
                     boxToGoto.setX2(boxToGoto.getX2()
-                                + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
                     boxToGoto.setY1(boxToGoto.getY1()
-                                - (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                                - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
                     boxToGoto.setY2(boxToGoto.getY2()
-                                + (ClientAlkisConf.getInstance().GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                                + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
                     map.getFeatureCollection().removeFeatures(pointFeatures);
                     map.gotoBoundingBox(boxToGoto, false, true, 500);
                 }
@@ -510,11 +510,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
 //                   initialisedMap = false;
 
                         final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                        mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                        mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                         mappingModel.addHome(getBoundingBox());
 
                         final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                    ClientAlkisConf.getInstance().MAP_CALL_STRING));
+                                    ClientAlkisConf.getInstance().getMapCallString()));
                         swms.setName("Mauer");
 
                         // add the raster layer to the model
@@ -554,21 +554,21 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                             if (g != null) {
                                 final Geometry geometry = CrsTransformer.transformToGivenCrs(
                                         g,
-                                        ClientAlkisConf.getInstance().SRS_SERVICE);
+                                        ClientAlkisConf.getInstance().getSrsService());
 
                                 if (result == null) {
                                     result = new XBoundingBox(geometry.getEnvelope().buffer(
-                                                ClientAlkisConf.getInstance().GEO_BUFFER),
-                                            ClientAlkisConf.getInstance().SRS_SERVICE,
+                                                ClientAlkisConf.getInstance().getGeoBuffer()),
+                                            ClientAlkisConf.getInstance().getSrsService(),
                                             true);
-                                    result.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                                    result.setSrs(ClientAlkisConf.getInstance().getSrsService());
                                     result.setMetric(true);
                                 } else {
                                     final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                                ClientAlkisConf.getInstance().GEO_BUFFER),
-                                            ClientAlkisConf.getInstance().SRS_SERVICE,
+                                                ClientAlkisConf.getInstance().getGeoBuffer()),
+                                            ClientAlkisConf.getInstance().getSrsService(),
                                             true);
-                                    temp.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                                    temp.setSrs(ClientAlkisConf.getInstance().getSrsService());
                                     temp.setMetric(true);
 
                                     if (temp.getX1() < result.getX1()) {
@@ -766,7 +766,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                         && (cidsBean.getProperty("georeferenz.geo_field") instanceof Geometry)) {
                 this.geometry = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                             "georeferenz.geo_field"),
-                        ClientAlkisConf.getInstance().SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
             }
 
             if (this.geometry != null) {

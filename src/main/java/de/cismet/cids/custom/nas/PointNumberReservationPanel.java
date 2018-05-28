@@ -244,8 +244,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
         nbz = new ArrayList<String>();
         final MappingComponent mapC = CismapBroker.getInstance().getMappingComponent();
         Geometry g = ((XBoundingBox)mapC.getCurrentBoundingBoxFromCamera()).getGeometry();
-        if (!CrsTransformer.createCrsFromSrid(g.getSRID()).equals(ClientAlkisConf.getInstance().SRS_SERVICE)) {
-            g = CrsTransformer.transformToGivenCrs(g, ClientAlkisConf.getInstance().SRS_SERVICE);
+        if (!CrsTransformer.createCrsFromSrid(g.getSRID()).equals(ClientAlkisConf.getInstance().getSrsService())) {
+            g = CrsTransformer.transformToGivenCrs(g, ClientAlkisConf.getInstance().getSrsService());
         }
         final XBoundingBox bb = new XBoundingBox(g);
         final int lowerX = ((Double)Math.floor(bb.getX1())).intValue() / 1000;

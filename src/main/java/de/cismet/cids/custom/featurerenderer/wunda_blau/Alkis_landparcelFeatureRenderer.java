@@ -31,7 +31,7 @@ public class Alkis_landparcelFeatureRenderer extends CustomCidsFeatureRenderer {
 
     static {
         try {
-            final String rgbValueStr = ClientAlkisConf.getInstance().LANDPARCEL_FEATURE_RENDERER_COLOR;
+            final String rgbValueStr = ClientAlkisConf.getInstance().getLandparcelFeatureRendererColor();
             int rgbValue;
             if (rgbValueStr != null) {
                 rgbValue = Integer.parseInt(rgbValueStr, 16);

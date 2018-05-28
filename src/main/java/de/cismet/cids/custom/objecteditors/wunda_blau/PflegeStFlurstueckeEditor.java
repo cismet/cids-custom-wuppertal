@@ -2224,7 +2224,7 @@ public class PflegeStFlurstueckeEditor extends DefaultCustomObjectEditor impleme
         setGeometry(CrsTransformer.transformToGivenCrs(
                 (Geometry)cidsBean.getProperty(
                     "georeferenz.geo_field"),
-                ClientAlkisConf.getInstance().SRS_SERVICE));
+                ClientAlkisConf.getInstance().getSrsService()));
     }
 
     /*  public void setCidsBean(CidsBean cb) {

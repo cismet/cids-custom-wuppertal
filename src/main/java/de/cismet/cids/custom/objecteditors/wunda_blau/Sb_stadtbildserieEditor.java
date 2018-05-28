@@ -2306,12 +2306,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             final Object geoObj = cidsBean.getProperty("geom.geo_field");
             if (geoObj instanceof Geometry) {
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        ClientAlkisConf.getInstance().SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + ClientAlkisConf.getInstance().GEO_BUFFER);
+                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + ClientAlkisConf.getInstance().getGeoBuffer());
                 }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                            ClientAlkisConf.getInstance().GEO_BUFFER));
+                            ClientAlkisConf.getInstance().getGeoBuffer()));
                 final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
                                 + (box.getHeight() * box.getHeight()));
                 if (LOG.isDebugEnabled()) {
@@ -2323,16 +2323,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                         @Override
                         public void run() {
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                            mappingModel.setSrs(ClientAlkisConf.getInstance().SRS_SERVICE);
+                            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                             mappingModel.addHome(new XBoundingBox(
                                     bufferedBox.getX1(),
                                     bufferedBox.getY1(),
                                     bufferedBox.getX2(),
                                     bufferedBox.getY2(),
-                                    ClientAlkisConf.getInstance().SRS_SERVICE,
+                                    ClientAlkisConf.getInstance().getSrsService(),
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                        ClientAlkisConf.getInstance().MAP_CALL_STRING));
+                                        ClientAlkisConf.getInstance().getMapCallString()));
                             swms.setName("Stadtbildserie");
 
                             previewGeometry.setGeometry(pureGeom);
@@ -2388,11 +2388,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     previewMap.getFeatureCollection().addFeature(previewGeometry);
                 }
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        ClientAlkisConf.getInstance().SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
                 previewGeometry.setGeometry(pureGeom);
                 previewMap.reconsiderFeature(previewGeometry);
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                            ClientAlkisConf.getInstance().GEO_BUFFER));
+                            ClientAlkisConf.getInstance().getGeoBuffer()));
                 final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
                                 + (box.getHeight() * box.getHeight()));
                 final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(diagonalLength));

@@ -160,17 +160,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             5682507.032498134d,
             2584022.9413952776d,
             5682742.852810634d,
-            ClientAlkisConf.getInstance().SRS_SERVICE,
+            ClientAlkisConf.getInstance().getSrsService(),
             true);
     protected static Crs CRS = new Crs(
-            ClientAlkisConf.getInstance().SRS_SERVICE,
-            ClientAlkisConf.getInstance().SRS_SERVICE,
-            ClientAlkisConf.getInstance().SRS_SERVICE,
+            ClientAlkisConf.getInstance().getSrsService(),
+            ClientAlkisConf.getInstance().getSrsService(),
+            ClientAlkisConf.getInstance().getSrsService(),
             true,
             true);
     protected static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(
                 PrecisionModel.FLOATING),
-            CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().SRS_SERVICE));
+            CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().getSrsService()));
     private static Collection<CidsBean> veraenderungsarts = new LinkedList<CidsBean>();
     protected static final Map<Integer, Color> COLORS_GEOMETRIE_STATUS = new HashMap<Integer, Color>();
 
@@ -1605,7 +1605,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                         "umschreibendes_rechteck.geo_field");
                 final Geometry transformedGeometry = CrsTransformer.transformToGivenCrs(
                         geometry,
-                        ClientAlkisConf.getInstance().SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
 
                 union.add(transformedGeometry);
             }
