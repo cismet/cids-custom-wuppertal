@@ -896,7 +896,7 @@ public class AlkisUtils {
      */
     public static Buchungsblatt getBuchungsblattFromAlkisSOAPServerAction(final String buchungsblattCode,
             final ConnectionContext connectionContext) throws Exception {
-        final ServerActionParameter buchungsblattCodeSAP = new ServerActionParameter<String>(
+        final ServerActionParameter buchungsblattCodeSAP = new ServerActionParameter<>(
                 ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT.toString(),
                 buchungsblattCode);
         final Object body = ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT;
