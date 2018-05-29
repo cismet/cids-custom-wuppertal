@@ -42,8 +42,6 @@ import org.openide.util.NbBundle;
 import java.awt.EventQueue;
 import java.awt.geom.Rectangle2D;
 
-import java.net.URL;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -75,8 +73,8 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisPointReportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -100,9 +98,9 @@ import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -1011,64 +1009,52 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         @Override
         public void run() {
             final String punktListenString = getPunktlistenStringForChosenPoints(alkisPoints);
-            final String code;
+            final String product;
             final String extension;
 
             if (PDF.equals(format)) {
-                code = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_PDF);
+                product = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_PDF);
                 extension = ".pdf";
             } else if (HTML.equals(format)) {
-                code = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_HTML);
+                product = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_HTML);
                 extension = ".html";
             } else {
-                code = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_TXT);
+                product = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_TXT);
                 extension = ".plst";
             }
 
             if (punktListenString.length() > 3) {
-                if ((code != null) && (code.length() > 0)) {
+                if ((product != null) && (product.length() > 0)) {
                     try {
-                        final String url = ClientAlkisProducts.getInstance()
-                                    .productListenNachweisUrl(punktListenString, code);
-                        if ((url != null) && (url.trim().length() > 0)) {
-                            if (
-                                !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
-                                            AlkisPointAggregationRenderer.this)) {
-                                return;
-                            }
+                        final String title = "Punktnachweis";
+                        final String filename = product;
+                        final String directory = DownloadManagerDialog.getInstance().getJobName();
+                        final Download download = new ByteArrayActionDownload(
+                                AlkisProductServerAction.TASK_NAME,
+                                AlkisProductServerAction.Body.LISTENNACHWEIS,
+                                new ServerActionParameter[] {
+                                    new ServerActionParameter(
+                                        AlkisProductServerAction.Parameter.PRODUKT.toString(),
+                                        product),
+                                    new ServerActionParameter(
+                                        AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                                        punktListenString)
+                                },
+                                title,
+                                directory,
+                                filename,
+                                extension,
+                                connectionContext);
 
-                            HttpDownload download = null;
-                            final int parameterPosition = url.indexOf('?');
-
-                            if (parameterPosition < 0) {
-                                download = new HttpDownload(
-                                        new URL(url),
-                                        "",
-                                        DownloadManagerDialog.getInstance().getJobName(),
-                                        "Punktnachweis",
-                                        code,
-                                        extension);
-                            } else {
-                                final String parameters = url.substring(parameterPosition + 1);
-                                download = new HttpDownload(
-                                        new URL(url.substring(0, parameterPosition)),
-                                        parameters,
-                                        AlkisProducts.POST_HEADER,
-                                        DownloadManagerDialog.getInstance().getJobName(),
-                                        "Punktnachweis",
-                                        code,
-                                        extension);
-                            }
-
-                            DownloadManager.instance().add(download);
-                        }
+                        DownloadManager.instance().add(download);
+                        DownloadManager.instance().add(download);
                     } catch (Exception ex) {
                         ObjectRendererUtils.showExceptionWindowToUser(
                             "Fehler beim Aufruf des Produkts: "
-                                    + code,
+                                    + product,
                             ex,
                             AlkisPointAggregationRenderer.this);
-                        log.error("The URL to download product '" + code + "' (actionTag: "
+                        log.error("The URL to download product '" + product + "' (actionTag: "
                                     + AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.",
                             ex);
                     }
