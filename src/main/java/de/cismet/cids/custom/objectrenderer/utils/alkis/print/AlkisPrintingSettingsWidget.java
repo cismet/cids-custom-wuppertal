@@ -18,6 +18,8 @@ import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -50,6 +52,7 @@ import javax.swing.ListCellRenderer;
 
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
@@ -92,19 +95,16 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
     //~ Static fields/initializers ---------------------------------------------
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            AlkisPrintingSettingsWidget.class);
     private static final String ALKIS_LANDPARCEL_TABLE = "ALKIS_LANDPARCEL";
     private static final String ALKIS_BUCHUNGSBLATT_TABLE = "ALKIS_BUCHUNGSBLATT";
     private static final String X_POS = "X_POS";
     private static final String Y_POS = "Y_POS";
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     //~ Instance fields --------------------------------------------------------
 
-// private static final ProductLayout[] LAYOUTS = ProductLayout.values();
-// private static final ProductTyp[] TYPES = ProductTyp.values();
-// private static final LiegenschaftskarteProduct[] PRODUCTS = LiegenschaftskarteProduct.values();
-// private static final Integer[] MASSSTAEBE = new Integer[]{500, 1000, 2000, 5000};
-    //
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private final MappingComponent mappingComponent;
     private final DefaultListModel alkisObjectListModel;
     private final AlkisPrintListener mapPrintListener;
@@ -329,7 +329,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         try {
             backingStore.flush();
         } catch (BackingStoreException ex) {
-            log.warn("Error when storing preferres position on screen", ex);
+            LOG.warn("Error when storing preferres position on screen", ex);
         }
     }
 
@@ -420,7 +420,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                             result.add(metaTreeNode.getMetaObject().getBean());
                         }
                     } catch (Exception ex) {
-                        log.error(ex, ex);
+                        LOG.error(ex, ex);
                     }
                 }
             }
@@ -1054,8 +1054,34 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
         final AlkisProductDescription selectedProduct = getSelectedProduct();
         try {
+            final AlkisProductDownloadHelper.AlkisKarteDownloadInfo info =
+                new AlkisProductDownloadHelper.AlkisKarteDownloadInfo(
+                    selectedProduct.getCode(),
+                    landParcelCode,
+                    txtAuftragsnummer.getText().replaceAll("\\?", ""),
+                    null,
+                    taAdditionalText.getText(),
+                    selectedProduct.getMassstabMin(),
+                    selectedProduct.getMassstabMax(),
+                    toInt(rotationAngle),
+                    toInt(center.getX()),
+                    toInt(center.getY()));
+
+            final AlkisProductDownloadHelper.AlkisKarteDownloadInfo infoVermerk =
+                new AlkisProductDownloadHelper.AlkisKarteDownloadInfo(
+                    info.getProduct(),
+                    info.getLandparcelCode(),
+                    info.getAuftragsnummer(),
+                    AlkisUtils.getFertigungsVermerk(null, getConnectionContext()),
+                    info.getZusatz(),
+                    info.getMassstabMin(),
+                    info.getMassstabMax(),
+                    toInt(info.getWinkel()),
+                    info.getX(),
+                    info.getY());
+
             final Map<String, String> requestPerUsage = new HashMap<>();
-            requestPerUsage.put("WV ein", AlkisUtils.getFertigungsVermerk(null, getConnectionContext()));
+            requestPerUsage.put("WV ein", MAPPER.writeValueAsString(infoVermerk));
 
             try {
                 final String product;
@@ -1295,42 +1321,38 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     prGroup = null;
                 }
 
+                if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
+                    return;
+                }
+
                 if ((product != null) && (prGroup != null)) {
                     if (BillingPopup.doBilling(
                                     product,
-                                    null,
+                                    MAPPER.writeValueAsString(info),
                                     requestPerUsage,
                                     (Geometry)null,
                                     getConnectionContext(),
                                     new ProductGroupAmount(prGroup, 1))) {
-                        doDownload(
-                            selectedProduct.getCode(),
-                            landParcelCode,
-                            txtAuftragsnummer.getText().replaceAll("\\?", ""),
-                            BillingPopup.getInstance().getCurrentRequest(),
-                            taAdditionalText.getText(),
-                            selectedProduct.getMassstabMin(),
-                            selectedProduct.getMassstabMax(),
-                            toInt(rotationAngle),
-                            toInt(center.getX()),
-                            toInt(center.getY()));
+                        AlkisProductDownloadHelper.downloadKarteCustomProduct(
+                            MAPPER.readValue(
+                                BillingPopup.getInstance().getCurrentRequest(),
+                                AlkisProductDownloadHelper.AlkisKarteDownloadInfo.class),
+                            DownloadManagerDialog.getInstance().getJobName(),
+                            alkisObjectListModel.size()
+                                    > 1,
+                            getConnectionContext());
                     }
                 } else {
-                    log.info("no product or productgroup is matching");
-                    doDownload(
-                        selectedProduct.getCode(),
-                        landParcelCode,
-                        txtAuftragsnummer.getText().replaceAll("\\?", ""),
-                        null,
-                        taAdditionalText.getText(),
-                        selectedProduct.getMassstabMin(),
-                        selectedProduct.getMassstabMax(),
-                        toInt(rotationAngle),
-                        toInt(center.getX()),
-                        toInt(center.getY()));
+                    LOG.info("no product or productgroup is matching");
+                    AlkisProductDownloadHelper.downloadKarteCustomProduct(
+                        info,
+                        DownloadManagerDialog.getInstance().getJobName(),
+                        alkisObjectListModel.size()
+                                > 1,
+                        getConnectionContext());
                 }
             } catch (Exception e) {
-                log.error("Error when trying to produce a alkis product", e);
+                LOG.error("Error when trying to produce a alkis product", e);
                 // Hier noch ein Fehlerdialog
             }
         } catch (Exception e) {
@@ -1339,75 +1361,10 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                         + selectedProduct,
                 e,
                 AlkisPrintingSettingsWidget.this);
-            log.error(e);
+            LOG.error(e);
         }
         // hier kommt evtl. noch ein dispose() hin
         dispose();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  product            landParcelCode DOCUMENT ME!
-     * @param  landparcelCode     DOCUMENT ME!
-     * @param  auftragsnummer     DOCUMENT ME!
-     * @param  fertigungsvermerk  url DOCUMENT ME!
-     * @param  zusatz             DOCUMENT ME!
-     * @param  massstabMin        DOCUMENT ME!
-     * @param  massstabMax        DOCUMENT ME!
-     * @param  winkel             DOCUMENT ME!
-     * @param  x                  DOCUMENT ME!
-     * @param  y                  DOCUMENT ME!
-     */
-    private void doDownload(final String product,
-            final String landparcelCode,
-            final String auftragsnummer,
-            final String fertigungsvermerk,
-            final String zusatz,
-            final String massstabMin,
-            final String massstabMax,
-            final int winkel,
-            final int x,
-            final int y) {
-        if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
-            return;
-        }
-
-        String moreFlurstuckeSuffix = "";
-        if (alkisObjectListModel.size() > 1) {
-            moreFlurstuckeSuffix = ".ua";
-        }
-
-        final String title = "ALKIS-Druck";
-        final String directory = DownloadManagerDialog.getInstance().getJobName();
-        final String filename = product + "." + landparcelCode.replace("/", "--") + moreFlurstuckeSuffix;
-        final String extension = ".pdf";
-
-        final Download download = new ByteArrayActionDownload(
-                AlkisProductServerAction.TASK_NAME,
-                AlkisProductServerAction.Body.KARTE_CUSTOM,
-                new ServerActionParameter[] {
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), product),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.ALKIS_CODE.toString(), landparcelCode),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.WINKEL.toString(), winkel),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.X.toString(), x),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.Y.toString(), y),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.MASSSTAB_MIN.toString(), massstabMin),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.MASSSTAB_MAX.toString(), massstabMax),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.ZUSATZ.toString(), zusatz),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.AUFTRAGSNUMMER.toString(),
-                        auftragsnummer),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
-                        fertigungsvermerk)
-                },
-                title,
-                directory,
-                filename,
-                extension,
-                connectionContext);
-        DownloadManager.instance().add(download);
     }
 
     /**

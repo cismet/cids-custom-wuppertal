@@ -15,7 +15,11 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
@@ -575,6 +579,125 @@ public class AlkisProductDownloadHelper {
         } catch (final Exception ex) {
             LOG.info("could now check Berechtigungspruefung confattr", ex);
             return false;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  info                   DOCUMENT ME!
+     * @param  jobName                DOCUMENT ME!
+     * @param  moreFlurstueckeSuffix  DOCUMENT ME!
+     * @param  connectionContext      DOCUMENT ME!
+     */
+    public static void downloadKarteCustomProduct(final AlkisKarteDownloadInfo info,
+            final String jobName,
+            final boolean moreFlurstueckeSuffix,
+            final ConnectionContext connectionContext) {
+        final String title = "ALKIS-Druck";
+        final String directory = DownloadManagerDialog.getInstance().getJobName();
+        final String filename = info.getProduct() + "." + info.getLandparcelCode().replace("/", "--")
+                    + (moreFlurstueckeSuffix ? ".ua" : "");
+        final String extension = ".pdf";
+
+        final Download download = new ByteArrayActionDownload(
+                AlkisProductServerAction.TASK_NAME,
+                AlkisProductServerAction.Body.KARTE_CUSTOM,
+                new ServerActionParameter[] {
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), info.getProduct()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                        info.getLandparcelCode()),
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.WINKEL.toString(), info.getWinkel()),
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.X.toString(), info.getX()),
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.Y.toString(), info.getY()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.MASSSTAB_MIN.toString(),
+                        info.getMassstabMin()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.MASSSTAB_MAX.toString(),
+                        info.getMassstabMax()),
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.ZUSATZ.toString(), info.getZusatz()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.AUFTRAGSNUMMER.toString(),
+                        info.getAuftragsnummer()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                        info.getFertigungsvermerk())
+                },
+                title,
+                directory,
+                filename,
+                extension,
+                connectionContext);
+        DownloadManager.instance().add(download);
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @Getter
+    @JsonAutoDetect(
+        fieldVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE
+    )
+    public static class AlkisKarteDownloadInfo {
+
+        //~ Instance fields ----------------------------------------------------
+
+        @JsonProperty private final String product;
+        @JsonProperty private final String landparcelCode;
+        @JsonProperty private final String auftragsnummer;
+        @JsonProperty private final String fertigungsvermerk;
+        @JsonProperty private final String zusatz;
+        @JsonProperty private final String massstabMin;
+        @JsonProperty private final String massstabMax;
+        @JsonProperty private final int winkel;
+        @JsonProperty private final int x;
+        @JsonProperty private final int y;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new AlkisKarteDownloadInfo object.
+         *
+         * @param  product            DOCUMENT ME!
+         * @param  landparcelCode     DOCUMENT ME!
+         * @param  auftragsnummer     DOCUMENT ME!
+         * @param  fertigungsvermerk  DOCUMENT ME!
+         * @param  zusatz             DOCUMENT ME!
+         * @param  massstabMin        DOCUMENT ME!
+         * @param  massstabMax        DOCUMENT ME!
+         * @param  winkel             DOCUMENT ME!
+         * @param  x                  DOCUMENT ME!
+         * @param  y                  DOCUMENT ME!
+         */
+        public AlkisKarteDownloadInfo(@JsonProperty("product") final String product,
+                @JsonProperty("landparcelCode") final String landparcelCode,
+                @JsonProperty("auftragsnummer") final String auftragsnummer,
+                @JsonProperty("fertigungsvermerk") final String fertigungsvermerk,
+                @JsonProperty("zusatz") final String zusatz,
+                @JsonProperty("massstabMin") final String massstabMin,
+                @JsonProperty("massstabMax") final String massstabMax,
+                @JsonProperty("winkel") final int winkel,
+                @JsonProperty("x") final int x,
+                @JsonProperty("y") final int y) {
+            this.product = product;
+            this.landparcelCode = landparcelCode;
+            this.auftragsnummer = auftragsnummer;
+            this.fertigungsvermerk = fertigungsvermerk;
+            this.zusatz = zusatz;
+            this.massstabMin = massstabMin;
+            this.massstabMax = massstabMax;
+            this.winkel = winkel;
+            this.x = x;
+            this.y = y;
         }
     }
 }
