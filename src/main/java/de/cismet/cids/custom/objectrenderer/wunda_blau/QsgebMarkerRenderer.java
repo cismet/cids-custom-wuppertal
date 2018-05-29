@@ -9,7 +9,8 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.StrAdrStrasseEditor;
+
+import de.cismet.cids.custom.objecteditors.wunda_blau.QsgebMarkerEditor;
 
 /**
  * DOCUMENT ME!
@@ -17,14 +18,14 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.StrAdrStrasseEditor;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class StrAdrStrasseRenderer extends StrAdrStrasseEditor {
+public class QsgebMarkerRenderer extends QsgebMarkerEditor {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new StrAdrGeplanteAdresseRenderer object.
+     * Creates a new QsgebMarkerRenderer object.
      */
-    public StrAdrStrasseRenderer() {
+    public QsgebMarkerRenderer() {
         super(false);
     }
 
@@ -42,10 +43,10 @@ public class StrAdrStrasseRenderer extends StrAdrStrasseEditor {
             "WUNDA_BLAU",
             "Administratoren",
             "admin",
-            "stradr",
-            "stradrstrasse",
+            "qsgeb",
+            "qsgeb_marker",
             1,
-            "Geplante Strassen",
+            "QS Gebäude",
             1280,
             1024);
     }
