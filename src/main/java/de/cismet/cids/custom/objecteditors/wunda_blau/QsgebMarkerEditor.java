@@ -1489,29 +1489,24 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
-                            break;
                         case 1: //Zur Bearbeitung
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
-                            break;
                         case 2: //In Bearbeitung
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
-                            break;
                         case 3: //Erledigt
                             cbStatus.setEnabled(false);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             txtLage.setEnabled(false);
                             taBemerkung.setEnabled(false);
-                            break;
                         case 4: //Keine Bearbeitung erforderlich
                             cbStatus.setEnabled(false);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
-                            break;
                         default:
                             cbStatus.setEnabled(false);
                             cbGeom.setEnabled(true);
