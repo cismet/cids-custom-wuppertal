@@ -753,7 +753,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         txtaInfo.setColumns(5);
         txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtaInfo.setLineWrap(true);
         txtaInfo.setRows(5);
+        txtaInfo.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -957,7 +959,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panContent2.setLayout(new java.awt.GridBagLayout());
 
         lblMainLocationType.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblMainLocationType.setText("Haupthema:");
+        lblMainLocationType.setText("Hauptthema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
