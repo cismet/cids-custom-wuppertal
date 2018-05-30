@@ -21,7 +21,6 @@ import de.cismet.cids.tools.CustomToStringConverter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 /**
  * DOCUMENT ME!
@@ -30,7 +29,6 @@ import org.apache.log4j.Logger;
  * @version  $1.0$, $30.05.2018$
  */
 public class QsgebMarkerToStringConverter extends CustomToStringConverter {
-       // private static final Logger LOG = Logger.getLogger(QsgebMarkerToStringConverter.class);
     //~ Methods ----------------------------------------------------------------
 
     /**

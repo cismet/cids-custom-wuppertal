@@ -169,7 +169,6 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private String pruefdatumAttribute;
     private String bearbeitungsdatumAttribute;
     private QsgebStatusLightweightSearch statusSearch;
-    private int PICTURES;
     private String pictureUrl;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1402,7 +1401,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                     switch (statusAttribute){
                         case 0://Prüfen
                             if (status == 1 || status == 4){ //--> Zur Bearbeitung || Keine Bearbeitung erforderlich
-                                if (pruefAttribute.equals("")){
+                                if ("".equals(pruefAttribute)){
                                     lblGeprueftDurch.setText(getCurrentUser());
                                     lblDatumGeprueft.setText(df.format(datum));
                                 } else{
@@ -1423,7 +1422,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                             break;
                         case 1://ZurBearbeitung
                             if (status == 2){//--> In Bearbeitung
-                                if (bearbeitungAttribute.equals("")){
+                                if ("".equals(bearbeitungAttribute)){
                                     lblBearbeitungDurch.setText(getCurrentUser());
                                 } else{
                                     lblBearbeitungDurch.setText(null);
@@ -1441,7 +1440,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                             break;
                         case 2://In Bearbeitung
                             if (status == 3){//--> Erledigt
-                                if (bearbeitungsdatumAttribute.equals("")){
+                                if ("".equals(bearbeitungsdatumAttribute)){
                                     lblDatumBearbeitung.setText(df.format(datum));
                                     cbErgebnis.setEnabled(true);
                                 }
@@ -1457,6 +1456,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                                     cidsBean.setProperty(FIELD__ERGEBNIS, null);
                                 }
                             }
+                            break;
                         default://hier keine Bearbeitung möglich
                     }
                 } catch (final Exception ex) {
@@ -1562,17 +1562,13 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(FIELD__STATUS)) {
-            if (cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
+        if (evt.getPropertyName().equals(FIELD__STATUS) && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW)) {
                 setUserStatus();
-            }
         }
-        if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)) {
-            if (cidsBean.getProperty(FIELD__GEOREFERENZ) != null) { 
+        if (evt.getPropertyName().equals(FIELD__GEOREFERENZ) && (cidsBean.getProperty(FIELD__GEOREFERENZ) != null)) {
                 setMapWindow();
                 final Geometry myPoint = (Geometry)cidsBean.getProperty(FIELD__GEOREFERENZ__GEO_FIELD);
                 lookForLandparcel(myPoint);
-            }
         }
         if (evt.getPropertyName().equals(FIELD__HISTORISCH)) {
             if (cidsBean.getProperty(FIELD__HISTORISCH) == null ||  Boolean.FALSE.equals(cidsBean.getProperty(FIELD__HISTORISCH))) { 
