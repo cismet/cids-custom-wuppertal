@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * @version  $1.0$, $30.05.2018$
  */
 public class QsgebMarkerToStringConverter extends CustomToStringConverter {
-        private static final Logger LOG = Logger.getLogger(QsgebMarkerToStringConverter.class);
+       // private static final Logger LOG = Logger.getLogger(QsgebMarkerToStringConverter.class);
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -51,7 +51,7 @@ public class QsgebMarkerToStringConverter extends CustomToStringConverter {
     @Override
     public String createString() {
         final String myid = String.valueOf(cidsBean.getProperty(FIELD__ID));
-        if (myid.equals("-1")){
+        if ("-1".equals(myid)){
             return "neuer Marker";
         } else{
             String mylage;

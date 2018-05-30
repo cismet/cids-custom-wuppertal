@@ -173,11 +173,11 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private String pictureUrl;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    JButton btnImages;
-    JButton btnInfo;
+    private JButton btnImages;
+    private JButton btnInfo;
     private DefaultBindableReferenceCombo cbErgebnis;
     private JComboBox cbGeom;
-    FastBindableReferenceCombo cbStatus;
+    private FastBindableReferenceCombo cbStatus;
     private JCheckBox jCkbHistorisch;
     private JScrollPane jScrollPane2;
     private JScrollPane jspanBild;
@@ -209,8 +209,8 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private JLabel lblHistorisch_txt;
     private JLabel lblId;
     private JLabel lblId_txt;
-    JLabel lblImages;
-    JLabel lblInfo;
+    private JLabel lblImages;
+    private JLabel lblInfo;
     private JLabel lblJahr;
     private JLabel lblJahr_txt;
     private JLabel lblKarte;
@@ -222,7 +222,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFillerRechtsLage;
-    JPanel panFooter;
+    private JPanel panFooter;
     private JPanel panLage;
     private JPanel panLeft;
     private DefaultPreviewMapPanel panPreviewMap;
@@ -585,7 +585,6 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         panDaten.add(lblId_txt, gridBagConstraints);
 
         lblId.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        lblId.setText("neu");
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.id}"), lblId, BeanProperty.create("text"));
         binding.setSourceNullValue("- -");
@@ -601,7 +600,6 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         panDaten.add(lblId, gridBagConstraints);
 
         lblGemarkung.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        lblGemarkung.setText("neuer Marker");
         lblGemarkung.setMinimumSize(new Dimension(120, 15));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gemarkung}"), lblGemarkung, BeanProperty.create("text"));
@@ -617,7 +615,6 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         panDaten.add(lblGemarkung, gridBagConstraints);
 
         lblFlur.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        lblFlur.setText("neuer Marker");
         lblFlur.setMinimumSize(new Dimension(60, 15));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.flur}"), lblFlur, BeanProperty.create("text"));
@@ -633,7 +630,6 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         panDaten.add(lblFlur, gridBagConstraints);
 
         lblFlurstueck.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        lblFlurstueck.setText("neuer Marker");
         lblFlurstueck.setMinimumSize(new Dimension(120, 15));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.flurstueck}"), lblFlurstueck, BeanProperty.create("text"));
@@ -1218,19 +1214,17 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
             ImageReader reader = (ImageReader) iterator.next();
             iterator = null;
             reader.setInput(is);
-            PICTURES = reader.getNumImages(true);
+            int pictures = reader.getNumImages(true);
             BufferedImage pageImage = reader.read(pagenr);
             final ImageIcon pageIcon = new ImageIcon(adjustScale(pageImage, lblBild, 20, 20));
             lblBild.setIcon(pageIcon);
             
-            final ListModel MODEL_PICTURES = new DefaultListModel() {
-                {
-                    int i;
-                    for (i = 0; i < PICTURES; i++) {
-                        add(i, "Seite " + (i+1));
-                }}
-            };
-            lstPages.setModel(MODEL_PICTURES);
+            final DefaultListModel modelPictures = new DefaultListModel();
+            for (int i = 0; i < pictures; i++) {
+                modelPictures.add(i, "Seite " + (i+1));
+            }
+           
+            lstPages.setModel(modelPictures);
             reader.dispose();
         }catch (final FileNotFoundException e) {
             LOG.warn("Document not produced.", e);
@@ -1463,6 +1457,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                                     cidsBean.setProperty(FIELD__ERGEBNIS, null);
                                 }
                             }
+                        default://hier keine Bearbeitung möglich
                     }
                 } catch (final Exception ex) {
                     Exceptions.printStackTrace(ex);
