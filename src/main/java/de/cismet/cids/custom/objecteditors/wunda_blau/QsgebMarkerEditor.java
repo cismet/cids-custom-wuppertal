@@ -131,16 +131,26 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private static final Logger LOG = Logger.getLogger(QsgebMarkerEditor.class);
 
     public static final String FIELD__STATUS = "status"; 
-    public static final String FIELD__STATUS_ID = "status.id";
+    public static final String FIELD__STATUS__ID = "status.id";
+    public static final String FIELD__STATUS__NAME = "status.name";
+    public static final String STATUS_PRUEFEN = "Prüfen";
+    public static final String STATUS_ZUR_BEARBEITUNG = "Zur Bearbeitung";
+    public static final String STATUS_IN_BEARBEITUNG = "In Bearbeitung";
+    public static final String STATUS_KEINE_BEARBEITUNG = "Keine Bearbeitung erforderlich";
+    public static final String STATUS_ERLEDIGT = "Erledigt";
+    public static final int STATUS_KEY_PRUEFEN = 0;
+    public static final int STATUS_KEY_ZUR_BEARBEITUNG = 1;
+    public static final int STATUS_KEY_IN_BEARBEITUNG = 2;
+    public static final int STATUS_KEY_KEINE_BEARBEITUNG = 4;
+    public static final int STATUS_KEY_ERLEDIGT = 3;
     public static final String FIELD__ID = "id"; 
     public static final String FIELD__LAGE = "lage";                    
     public static final String FIELD__ANGELEGT_DURCH = "angelegt_durch";                         
     public static final String FIELD__DATUM_ANGELEGT = "datum_angelegt";                    
     public static final String FIELD__GEPRUEFT_DURCH = "geprueft_durch";                         
-    public static final String FIELD__DATUM_PRUEFUNG = "datum_pruefung";                        
-    public static final String FIELD__DATUM_BEARBEITUNG = "datum_bearbeitung";                    
-    public static final String FIELD__BEARBEITUNG_DURCH = "angelegt_bearbeitung";                         
-    public static final String FIELD__BEARBEITUNG_ANGELEGT = "datum_bearbeitung"; 
+    public static final String FIELD__DATUM_PRUEFUNG = "datum_pruefung";                    
+    public static final String FIELD__BEARBEITUNG_DURCH = "bearbeitung_durch";                        
+    public static final String FIELD__DATUM_BEARBEITUNG = "datum_bearbeitung";  
     public static final String FIELD__GEOREFERENZ = "georeferenz";                     
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "georeferenz.geo_field";                    
     public static final String FIELD__ERGEBNIS = "ergebnis";
@@ -260,7 +270,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     //~ Methods ----------------------------------------------------------------
     private void initStatus(){
         this.statusSearch = new QsgebStatusLightweightSearch(
-                QsgebStatusLightweightSearch.SearchFor.STATUS,
+//                QsgebStatusLightweightSearch.SearchFor.STATUS,
                 "%1$2s",
                 new String[] { "NAME" });
         statusSearch.setStatusId(1);
@@ -1108,7 +1118,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         //Status
         errorMessage.append(setUserStatus());
         try{
-            if (cidsBean.getProperty(FIELD__ERGEBNIS) == null && (int)cidsBean.getProperty(FIELD__STATUS_ID) == 3) {
+            if (cidsBean.getProperty(FIELD__ERGEBNIS) == null && STATUS_ERLEDIGT.equals(cidsBean.getProperty(FIELD__STATUS__NAME))){
                 LOG.warn("Wrong Ergebnis specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(QsgebMarkerEditor.class,
                                 "QsgebMarkerEditor.prepareForSave().noErgebnis"));
@@ -1161,40 +1171,54 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                 getConnectionContext());
             setMapWindow();
             bindingGroup.bind();
-            saveFirstAttributes();
-            if (cb.getMetaObject().getStatus() == MetaObject.NEW) {
-                CidsBean statusBean = getOtherTableValue(TABLE_NAME_STATUS, 
-                                getMyWhere("Prüfen"),
-                                getConnectionContext());
-                cidsBean.setProperty(
-                        FIELD__STATUS, 
-                        statusBean
-                );
-                cbStatus.setEnabled(false);
-                lblAngelegtDurch.setText(getCurrentUser());
-                DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
-                Date datum = new Date();
-                lblDatumAngelegt.setText(df.format(datum));
-            }
-            if (cidsBean != null) {
-                setYear();
-                if ((isEditor)) {
-                    refreshStatus();
-                }
-                createPictureUrl();
-                setDocument((int)0);
-            }
+            prepareIt();
             
-            if ((isEditor)) {
-                setEditableStatus();
-            }   
-            
-            setHistorischOnly();
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
+            LOG.warn("Error setCidsBean.", ex);
         }
     }
 
+    private void prepareIt(){
+        saveFirstAttributes();
+        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
+            prepareFirstMarker();
+        }
+        if (cidsBean != null) {
+            setYear(); //Ist nur ein Label, welches sich aus dem Anlegedatum ergibt.
+            if ((isEditor)) {
+                refreshStatus();//setzt den Status auf Ausgangsstatus.
+            }
+            createPictureUrl();//Erzeugt aus den einzelnen Attributen den fest definierten Dokumentnamen.
+            setDocument((int)0);//Erzeugt das Dokument mit Ansicht auf der ersten Seite.
+        }
+
+        if ((isEditor)) {
+            setEditableStatus();//Darf Status editiert werden.
+        }   
+
+        setHistorischOnly();//Historisch ist nur dann interessant, wenn der Marker historisiert wurde, um ihn wieder zu enthistorisieren.
+    }
+    
+    private void prepareFirstMarker(){
+        CidsBean statusBean = getOtherTableValue(TABLE_NAME_STATUS, 
+                                getMyWhere(STATUS_PRUEFEN),
+                                getConnectionContext());
+        try {
+            cidsBean.setProperty(
+                    FIELD__STATUS,
+                    statusBean
+            );
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+            LOG.warn("prepareFirstMarker: Status not set.", ex);
+        }
+        cbStatus.setEnabled(false);
+        lblAngelegtDurch.setText(getCurrentUser());
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        Date datum = new Date();
+        lblDatumAngelegt.setText(df.format(datum));
+    }
     
     private void setDocument(int pagenr){
         try{
@@ -1312,10 +1336,10 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
             pruefdatumAttribute = null;
             bearbeitungsdatumAttribute = null;
         } else{
-            if (cidsBean.getProperty(FIELD__STATUS_ID)==null){
+            if (cidsBean.getProperty(FIELD__STATUS__ID)==null){
                 statusAttribute = -1;
             } else{
-                statusAttribute = (int) cidsBean.getProperty(FIELD__STATUS_ID);
+                statusAttribute = (int) cidsBean.getProperty(FIELD__STATUS__ID);
             }
             pruefAttribute = setNotNull(cidsBean.getProperty(FIELD__GEPRUEFT_DURCH));
             bearbeitungAttribute = setNotNull(cidsBean.getProperty(FIELD__BEARBEITUNG_DURCH));
@@ -1386,6 +1410,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
             }
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
+            LOG.warn("Can't load Overview.", ex);
         }
     }
     
@@ -1393,14 +1418,16 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         final StringBuilder errorMessage = new StringBuilder();
         
         if ((isEditor)) {
-            if (cidsBean.getProperty(FIELD__STATUS_ID) != null){
-                int status = (int)cidsBean.getProperty(FIELD__STATUS_ID);
+            if (cidsBean.getProperty(FIELD__STATUS__ID) != null){
+                //int status = (int)cidsBean.getProperty(FIELD__STATUS__ID);
+                String statusName = cidsBean.getProperty(FIELD__STATUS__NAME).toString();
                 DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
                 Date datum = new Date();
                 try{
                     switch (statusAttribute){
-                        case 0://Prüfen
-                            if (status == 1 || status == 4){ //--> Zur Bearbeitung || Keine Bearbeitung erforderlich
+                        case STATUS_KEY_PRUEFEN:{//Prüfen
+                            //if (status == 1 || status == 4){ //--> Zur Bearbeitung || Keine Bearbeitung erforderlich
+                            if (statusName.equals(STATUS_ZUR_BEARBEITUNG)|| statusName.equals(STATUS_KEINE_BEARBEITUNG)){ //--> Zur Bearbeitung || Keine Bearbeitung erforderlich
                                 if ("".equals(pruefAttribute)){
                                     lblGeprueftDurch.setText(getCurrentUser());
                                     lblDatumGeprueft.setText(df.format(datum));
@@ -1409,47 +1436,54 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                                     lblDatumGeprueft.setText(pruefdatumAttribute);
                                 }
                             } else{
-                                if (status != 0){
+                                //if (status != 0){
+                                if (!(statusName.equals(STATUS_PRUEFEN))){
                                     LOG.warn("Wrong status specified. Skip persisting.");
                                     errorMessage.append(NbBundle.getMessage(QsgebMarkerEditor.class,
                                     "QsgebMarkerEditor.setUserStatus().wrongStatusPruefen"));
-                                    cbStatus.setSelectedIndex(0);
+                                    cbStatus.setSelectedIndex(STATUS_KEY_PRUEFEN);
                                 } else{
                                     lblGeprueftDurch.setText(pruefAttribute);
                                     lblDatumGeprueft.setText(pruefdatumAttribute);
                                 }
                             }
                             break;
-                        case 1://ZurBearbeitung
-                            if (status == 2){//--> In Bearbeitung
+                        }
+                        case STATUS_KEY_ZUR_BEARBEITUNG:{//ZurBearbeitung
+                            //if (status == 2){//--> In Bearbeitung
+                            if (statusName.equals(STATUS_IN_BEARBEITUNG)){//--> In Bearbeitung
                                 if ("".equals(bearbeitungAttribute)){
                                     lblBearbeitungDurch.setText(getCurrentUser());
                                 } else{
-                                    lblBearbeitungDurch.setText(null);
+                                    lblBearbeitungDurch.setText(bearbeitungAttribute);
                                 }
                             } else{
-                                if (status != 1){
+                                //if (status != 1){
+                                if (!(statusName.equals(STATUS_ZUR_BEARBEITUNG))){
                                     LOG.warn("Wrong status specified. Skip persisting.");
                                     errorMessage.append(NbBundle.getMessage(QsgebMarkerEditor.class,
                                     "QsgebMarkerEditor.setUserStatus().wrongStatusZurBearbeitung"));
-                                    cbStatus.setSelectedIndex(1);
+                                    cbStatus.setSelectedIndex(STATUS_KEY_ZUR_BEARBEITUNG);
                                 } else {
                                     lblBearbeitungDurch.setText(bearbeitungAttribute);
                                 }
                             }
                             break;
-                        case 2://In Bearbeitung
-                            if (status == 3){//--> Erledigt
+                        }
+                        case STATUS_KEY_IN_BEARBEITUNG:{//In Bearbeitung
+                           // if (status == 3){//--> Erledigt
+                            if (statusName.equals(STATUS_ERLEDIGT)){//--> Erledigt
                                 if ("".equals(bearbeitungsdatumAttribute)){
                                     lblDatumBearbeitung.setText(df.format(datum));
                                     cbErgebnis.setEnabled(true);
                                 }
                             } else{
-                                if (status != 2){
+                                //if (status != 2){
+                                if (!(statusName.equals(STATUS_IN_BEARBEITUNG))){
                                     LOG.warn("Wrong status specified. Skip persisting.");
                                     errorMessage.append(NbBundle.getMessage(QsgebMarkerEditor.class,
                                     "QsgebMarkerEditor.setUserStatus().wrongStatusInBearbeitung"));
-                                    cbStatus.setSelectedIndex(2);
+                                    cbStatus.setSelectedIndex(STATUS_KEY_IN_BEARBEITUNG);
                                 } else{
                                     lblDatumBearbeitung.setText(bearbeitungsdatumAttribute);
                                     cbErgebnis.setEnabled(false);
@@ -1457,11 +1491,14 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                                 }
                             }
                             break;
-                        default:
+                        }
+                        default:{
                             break;//hier keine Bearbeitung möglich
+                        }        
                     }
                 } catch (final Exception ex) {
                     Exceptions.printStackTrace(ex);
+                    LOG.warn("Error setting user or/and date.", ex);
                 }
             } 
             if (errorMessage.length() > 0) {
@@ -1486,38 +1523,44 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private void setEditableStatus() {
         if ((isEditor)) {
             switch (statusAttribute){
-                        case 0://Prüfen
+                        case STATUS_KEY_PRUEFEN:{//Prüfen
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             break;
-                        case 1: //Zur Bearbeitung
+                        }
+                        case STATUS_KEY_ZUR_BEARBEITUNG:{ //Zur Bearbeitung
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             break;
-                        case 2: //In Bearbeitung
+                        }
+                        case STATUS_KEY_IN_BEARBEITUNG:{ //In Bearbeitung
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             break;
-                        case 3: //Erledigt
+                        }
+                        case STATUS_KEY_ERLEDIGT:{ //Erledigt
                             cbStatus.setEnabled(false);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             txtLage.setEnabled(false);
                             taBemerkung.setEnabled(false);
                             break;
-                        case 4: //Keine Bearbeitung erforderlich
+                        }
+                        case STATUS_KEY_KEINE_BEARBEITUNG:{ //Keine Bearbeitung erforderlich
                             cbStatus.setEnabled(false);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             break;
-                        default:
+                        }
+                        default:{
                             cbStatus.setEnabled(false);
                             cbGeom.setEnabled(true);
                             cbErgebnis.setEnabled(false);
                             break;
+                        }
             }
         }
     }
@@ -1578,7 +1621,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                     cidsBean.setProperty(FIELD__DATUM_HISTORISCH, null);
                 } catch (Exception ex) {
                     Exceptions.printStackTrace(ex);
-                     LOG.warn("Could not set histdate.", ex);
+                    LOG.warn("Could not set histdate.", ex);
                 }
             }
         }
