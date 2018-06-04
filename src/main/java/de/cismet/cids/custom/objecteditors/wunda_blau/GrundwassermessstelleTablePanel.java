@@ -79,8 +79,8 @@ public class GrundwassermessstelleTablePanel extends JPanel implements Connectio
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
     private CidsBean cidsBean;
-    private Map<String, CidsBean> kategorieMap = new HashMap<>();
-    private Map<String, CidsBean> stoffMap = new HashMap<>();
+    private final Map<String, CidsBean> kategorieMap = new HashMap<>();
+    private final Map<String, CidsBean> stoffMap = new HashMap<>();
 
     private final boolean editable;
 
