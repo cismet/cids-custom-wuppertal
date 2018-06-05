@@ -33,7 +33,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import sun.misc.BASE64Encoder;
@@ -68,7 +67,10 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.imageio.ImageIO;
@@ -114,7 +116,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getMyWhere;
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 import static de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel.adjustScale;
 
@@ -180,6 +181,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     private String pruefdatumAttribute;
     private String bearbeitungsdatumAttribute;
     private QsgebStatusLightweightSearch statusSearch;
+    private Map<Integer, BufferedImage> imageMap = new HashMap<>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnImages;
@@ -1177,6 +1179,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         pnlBild.setOpaque(false);
         pnlBild.setLayout(new GridBagLayout());
 
+        lblBild.setHorizontalAlignment(SwingConstants.CENTER);
         lblBild.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1370,7 +1373,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             bindingGroup.bind();
             prepareIt();
         } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
             LOG.warn("Error setCidsBean.", ex);
         }
     }
@@ -1388,7 +1390,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             if ((isEditor)) {
                 refreshStatus(); // setzt den Status auf Ausgangsstatus.
             }
-            setDocument((int)0); // Erzeugt das Dokument mit Ansicht auf der ersten Seite.
+            loadDocument();
         }
 
         if ((isEditor)) {
@@ -1416,7 +1418,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                 FIELD__STATUS,
                 statusBean);
         } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
             LOG.warn("prepareFirstMarker: Status not set.", ex);
         }
         cbStatus.setEnabled(false);
@@ -1439,50 +1440,110 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
     /**
      * DOCUMENT ME!
+     */
+    private void loadDocument() {
+        imageMap.clear();
+        final DefaultListModel modelPictures = new DefaultListModel();
+        lstPages.setModel(modelPictures);
+        lstPages.setEnabled(false);
+        lblBild.setText("Wird geladen...");
+
+        new SwingWorker<Integer, Integer>() {
+
+                @Override
+                protected Integer doInBackground() throws Exception {
+                    ImageReader reader = null;
+                    InputStream in = null;
+                    ImageInputStream is = null;
+                    try {
+                        final String pictureUrl = getPictureUrl();
+                        final URLConnection con = new URL(pictureUrl).openConnection();
+                        con.setConnectTimeout(30000);
+                        con.setReadTimeout(30000);
+                        con.setRequestProperty("Authorization", getBase64EncodedCrendentials());
+                        in = con.getInputStream();
+                        is = ImageIO.createImageInputStream(in);
+                        final Iterator<ImageReader> iterator = ImageIO.getImageReaders(is);
+
+                        // null abfangen
+                        if ((iterator == null) || !(iterator.hasNext())) {
+                            throw new IOException("Image file format not supported by ImageIO: " + pictureUrl);
+                        }
+                        reader = (ImageReader)iterator.next();
+                        reader.setInput(is);
+
+                        final int numberOfPictures = reader.getNumImages(true);
+                        for (int i = 0; i < numberOfPictures; i++) {
+                            publish(i);
+                        }
+                        for (int i = 0; i < numberOfPictures; i++) {
+                            imageMap.put(numberOfPictures, reader.read(numberOfPictures));
+                        }
+                        return numberOfPictures;
+                    } catch (final FileNotFoundException ex) {
+                        LOG.warn("Document not produced.", ex);
+                    } finally {
+                        if (is != null) {
+                            try {
+                                is.close();
+                            } catch (final Exception e) {
+                                // do nothing
+                            }
+                        }
+                        if (in != null) {
+                            try {
+                                in.close();
+                            } catch (final Exception e) {
+                                // do nothing
+                            }
+                        }
+                        if (reader != null) {
+                            reader.dispose();
+                        }
+                    }
+                    return -1;
+                }
+
+                @Override
+                protected void process(final List<Integer> chunks) {
+                    for (final Integer chunk : chunks) {
+                        modelPictures.add(chunk, "Seite " + (chunk + 1));
+                    }
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final Integer numOfPictures = get();
+                        if (numOfPictures < 0) {
+                            lblBild.setText("Für diesen Marker ist kein Dokument vorhanden.");
+                            btnImages.setEnabled(false);
+                            btnInfo.setEnabled(false);
+                            lblImages.setEnabled(false);
+                            lblImages.setText("Kein Dokument vorhanden");
+                            lblInfo.setEnabled(false);
+                        }
+                        setDocument(0);
+                    } catch (final Exception ex) {
+                        LOG.warn("Document not available.", ex);
+                        lblBild.setText("Das Dokument für diesen Marker kann nicht geladen werden.");
+                    } finally {
+                        lstPages.setEnabled(true);
+                    }
+                }
+            }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @param  pagenr  DOCUMENT ME!
      */
     private void setDocument(final int pagenr) {
-        try {
-            // Diese Methode muss angepasst werden. Das geht besser.
-            final String pictureUrl = getPictureUrl();
-            final URLConnection con = new URL(pictureUrl).openConnection();
-            con.setConnectTimeout(30000);
-            con.setReadTimeout(30000);
-            con.setRequestProperty("Authorization", getBase64EncodedCrendentials());
-            final InputStream in = con.getInputStream();
-            final ImageInputStream is = ImageIO.createImageInputStream(in);
-            Iterator<ImageReader> iterator = ImageIO.getImageReaders(is);
-            // null abfangen
-            if ((iterator == null) || !(iterator.hasNext())) {
-                throw new IOException("Image file format not supported by ImageIO: " + pictureUrl);
-            }
-            final ImageReader reader = (ImageReader)iterator.next();
-            iterator = null;
-            reader.setInput(is);
-            final int pictures = reader.getNumImages(true);
-            final BufferedImage pageImage = reader.read(pagenr);
+        if (imageMap.containsKey(pagenr)) {
+            final BufferedImage pageImage = imageMap.get(pagenr);
             final ImageIcon pageIcon = new ImageIcon(adjustScale(pageImage, lblBild, 20, 20));
             lblBild.setIcon(pageIcon);
-
-            final DefaultListModel modelPictures = new DefaultListModel();
-            for (int i = 0; i < pictures; i++) {
-                modelPictures.add(i, "Seite " + (i + 1));
-            }
-
-            lstPages.setModel(modelPictures);
-            reader.dispose();
-        } catch (final FileNotFoundException e) {
-            LOG.warn("Document not produced.", e);
-            lblBild.setText("Für diesen Marker ist kein Dokument vorhanden.");
-            btnImages.setEnabled(false);
-            btnInfo.setEnabled(false);
-            lblImages.setEnabled(false);
-            lblImages.setText("Kein Dokument vorhanden");
-            lblInfo.setEnabled(false);
-        } catch (final Exception ex) {
-            LOG.warn("Document not available.", ex);
-            lblBild.setText("Das Dokument für diesen Marker kann nicht geladen werden.");
         }
     }
 
@@ -1527,36 +1588,52 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             final BufferingGeosearch search = new BufferingGeosearch();
             search.setValidClasses(Arrays.asList(mc));
             search.setGeometry(myPoint);
-            try {
-                // Suche ausführen
-                final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                            .customServerSearch(
-                                SessionManager.getSession().getUser(),
-                                search,
-                                getConnectionContext());
-                if ((mons != null) && !mons.isEmpty()) {
-                    final MetaObjectNode mon = mons.toArray(new MetaObjectNode[0])[0];
 
-                    final MetaObject mo = SessionManager.getProxy()
-                                .getMetaObject(mon.getObjectId(),
-                                    mon.getClassId(),
-                                    mon.getDomain(),
-                                    getConnectionContext());
-                    final CidsBean flurstueckBean = mo.getBean();
-                    if (flurstueckBean != null) {
-                        lblGemarkung.setText(flurstueckBean.getProperty(FIELD__GEMARKUNG).toString());
-                        lblFlur.setText(flurstueckBean.getProperty(FIELD__FLUR).toString());
-                        final String zaehler = flurstueckBean.getProperty(FIELD__ZAEHLER).toString();
-                        if (flurstueckBean.getProperty(FIELD__NENNER) != null) {
-                            lblFlurstueck.setText(zaehler + "/" + flurstueckBean.getProperty(FIELD__NENNER).toString());
+            new SwingWorker<CidsBean, Void>() {
+
+                    @Override
+                    protected CidsBean doInBackground() throws Exception {
+                        // Suche ausführen
+                        final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                    .customServerSearch(
+                                        SessionManager.getSession().getUser(),
+                                        search,
+                                        getConnectionContext());
+                        if ((mons != null) && !mons.isEmpty()) {
+                            final MetaObjectNode mon = mons.toArray(new MetaObjectNode[0])[0];
+
+                            final MetaObject mo = SessionManager.getProxy()
+                                        .getMetaObject(mon.getObjectId(),
+                                            mon.getClassId(),
+                                            mon.getDomain(),
+                                            getConnectionContext());
+                            final CidsBean flurstueckBean = mo.getBean();
+                            return flurstueckBean;
                         } else {
-                            lblFlurstueck.setText(zaehler);
+                            return null;
                         }
                     }
-                }
-            } catch (final Exception ex) {
-                LOG.warn("Geom Search Error.", ex);
-            }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final CidsBean flurstueckBean = get();
+                            if (flurstueckBean != null) {
+                                lblGemarkung.setText(flurstueckBean.getProperty(FIELD__GEMARKUNG).toString());
+                                lblFlur.setText(flurstueckBean.getProperty(FIELD__FLUR).toString());
+                                final String zaehler = flurstueckBean.getProperty(FIELD__ZAEHLER).toString();
+                                if (flurstueckBean.getProperty(FIELD__NENNER) != null) {
+                                    lblFlurstueck.setText(zaehler + "/"
+                                                + flurstueckBean.getProperty(FIELD__NENNER).toString());
+                                } else {
+                                    lblFlurstueck.setText(zaehler);
+                                }
+                            }
+                        } catch (final Exception ex) {
+                            LOG.warn("Geom Search Error.", ex);
+                        }
+                    }
+                }.execute();
         } else {
             LOG.error("Could not find MetaClass for alkis_landparcel ");
         }
@@ -1648,7 +1725,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                 panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, 20.0);
             }
         } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
             LOG.warn("Can't load Overview.", ex);
         }
     }
@@ -1763,7 +1839,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                         }
                     }
                 } catch (final Exception ex) {
-                    Exceptions.printStackTrace(ex);
                     LOG.warn("Error setting user or/and date.", ex);
                 }
             }
@@ -1846,15 +1921,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      */
     private void refreshStatus() {
         statusSearch.setStatusSchluessel(statusSchluesselAttribute);
-
-        new SwingWorker<Void, Void>() {
-
-                @Override
-                protected Void doInBackground() throws Exception {
-                    cbStatus.refreshModel();
-                    return null;
-                }
-            }.execute();
+        cbStatus.refreshModel();
     }
 
     @Override
@@ -1899,7 +1966,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                 try {
                     cidsBean.setProperty(FIELD__DATUM_HISTORISCH, null);
                 } catch (Exception ex) {
-                    Exceptions.printStackTrace(ex);
                     LOG.warn("Could not set histdate.", ex);
                 }
             }
