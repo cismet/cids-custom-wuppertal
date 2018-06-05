@@ -21,7 +21,6 @@ import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-//import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
 import org.apache.log4j.Logger;
@@ -54,7 +53,6 @@ import java.util.Collection;
 
 import javax.swing.*;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getMyWhere;
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 import static de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel.adjustScale;
 import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
@@ -133,16 +131,12 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     public static final String FIELD__STATUS = "status"; 
     public static final String FIELD__STATUS__ID = "status.id";
     public static final String FIELD__STATUS__NAME = "status.name";
-    public static final String STATUS_PRUEFEN = "Prüfen";
-    public static final String STATUS_ZUR_BEARBEITUNG = "Zur Bearbeitung";
-    public static final String STATUS_IN_BEARBEITUNG = "In Bearbeitung";
-    public static final String STATUS_KEINE_BEARBEITUNG = "Keine Bearbeitung erforderlich";
-    public static final String STATUS_ERLEDIGT = "Erledigt";
-    public static final int STATUS_KEY_PRUEFEN = 0;
-    public static final int STATUS_KEY_ZUR_BEARBEITUNG = 1;
-    public static final int STATUS_KEY_IN_BEARBEITUNG = 2;
-    public static final int STATUS_KEY_KEINE_BEARBEITUNG = 4;
-    public static final int STATUS_KEY_ERLEDIGT = 3;
+    public static final String FIELD__STATUS__SCHLUESSEL = "status.schluessel";
+    public static final String STATUS_PRUEFEN_SCHLUESSEL = "pruefen";
+    public static final String STATUS_ZUR_BEARBEITUNG_SCHLUESSEL = "zurBearbeitung";
+    public static final String STATUS_IN_BEARBEITUNG_SCHLUESSEL = "inBearbeitung";
+    public static final String STATUS_KEINE_BEARBEITUNG_SCHLUESSEL = "keineBearbeitung";
+    public static final String STATUS_ERLEDIGT_SCHLUESSEL = "erledigt";
     public static final String FIELD__ID = "id"; 
     public static final String FIELD__LAGE = "lage";                    
     public static final String FIELD__ANGELEGT_DURCH = "angelegt_durch";                         
@@ -166,6 +160,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     public static final String FIELD__ZAEHLER = "fstck_zaehler";
     public static final String FIELD__NENNER = "fstck_nenner";                                   
     public static final String TABLE_NAME_STATUS = "qsgeb_status";
+    public static final String FIELD__SCHLUESSEL = "schluessel";
   
 
     public static final Coordinate RATHAUS_POINT = new Coordinate(374420, 5681660);
@@ -173,7 +168,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     //~ Instance fields --------------------------------------------------------
 
     private boolean isEditor = true;
-    private int statusAttribute;
+    private String statusSchluesselAttribute;
     private String pruefAttribute;
     private String bearbeitungAttribute;
     private String pruefdatumAttribute;
@@ -182,11 +177,11 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private String pictureUrl;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton btnImages;
-    private JButton btnInfo;
+    JButton btnImages;
+    JButton btnInfo;
     private DefaultBindableReferenceCombo cbErgebnis;
     private JComboBox cbGeom;
-    private FastBindableReferenceCombo cbStatus;
+    FastBindableReferenceCombo cbStatus;
     private JCheckBox jCkbHistorisch;
     private JScrollPane jScrollPane2;
     private JScrollPane jspanBild;
@@ -218,12 +213,13 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private JLabel lblHistorisch_txt;
     private JLabel lblId;
     private JLabel lblId_txt;
-    private JLabel lblImages;
-    private JLabel lblInfo;
+    JLabel lblImages;
+    JLabel lblInfo;
     private JLabel lblJahr;
     private JLabel lblJahr_txt;
     private JLabel lblKarte;
     private JLabel lblLage_txt;
+    private JLabel lblMarkerInfo;
     private JLabel lblReducedSize;
     private JLabel lblStatus_txt;
     private JList lstPages;
@@ -231,7 +227,9 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFillerRechtsLage;
-    private JPanel panFooter;
+    private JPanel panFillerRechtsLage1;
+    JPanel panFooter;
+    private JPanel panInfo;
     private JPanel panLage;
     private JPanel panLeft;
     private DefaultPreviewMapPanel panPreviewMap;
@@ -241,9 +239,11 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     private SemiRoundedPanel pnlHeaderDocument;
     private SemiRoundedPanel pnlHeaderPages;
     private RoundedPanel pnlPages;
+    private RoundedPanel rpInfo;
     private RoundedPanel rpKarte;
     private JScrollPane scpPages;
     private SemiRoundedPanel semiRoundedPanel7;
+    private SemiRoundedPanel semiRoundedPanel8;
     private SQLDateToStringConverter sqlDateToStringConverter;
     private JTextArea taBemerkung;
     private JTextField txtLage;
@@ -270,10 +270,9 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     //~ Methods ----------------------------------------------------------------
     private void initStatus(){
         this.statusSearch = new QsgebStatusLightweightSearch(
-//                QsgebStatusLightweightSearch.SearchFor.STATUS,
                 "%1$2s",
-                new String[] { "NAME" });
-        statusSearch.setStatusId(1);
+                new String[] { "NAME" },
+                statusSchluesselAttribute);
     }
     
     
@@ -285,9 +284,11 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         
         if (isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
+        } else{
+            setReadOnly();
         }
         cbStatus.setMetaClassFromTableName("WUNDA_BLAU", TABLE_NAME_STATUS);
-        setReadOnly();
+        
     }
 
     /**
@@ -309,12 +310,11 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         btnImages = new JButton();
         lblImages = new JLabel();
         panContent = new RoundedPanel();
-        panLage = new JPanel();
-        rpKarte = new RoundedPanel();
-        panPreviewMap = new DefaultPreviewMapPanel();
-        semiRoundedPanel7 = new SemiRoundedPanel();
-        lblKarte = new JLabel();
-        panFillerRechtsLage = new JPanel();
+        panInfo = new JPanel();
+        panFillerRechtsLage1 = new JPanel();
+        rpInfo = new RoundedPanel();
+        semiRoundedPanel8 = new SemiRoundedPanel();
+        lblMarkerInfo = new JLabel();
         panDaten = new JPanel();
         lblJahr_txt = new JLabel();
         lblGeom_txt = new JLabel();
@@ -359,6 +359,12 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         jCkbHistorisch = new JCheckBox();
         lblDatumHistorisch_txt = new JLabel();
         lblDatumHistorisch = new JLabel();
+        panLage = new JPanel();
+        rpKarte = new RoundedPanel();
+        panPreviewMap = new DefaultPreviewMapPanel();
+        semiRoundedPanel7 = new SemiRoundedPanel();
+        lblKarte = new JLabel();
+        panFillerRechtsLage = new JPanel();
         panBild = new JPanel();
         pnlDocument = new RoundedPanel();
         pnlHeaderDocument = new SemiRoundedPanel();
@@ -429,64 +435,21 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         setLayout(new CardLayout());
 
         panContent.setName(""); // NOI18N
-        panContent.setOpaque(false);
         panContent.setPreferredSize(new Dimension(610, 600));
         panContent.setLayout(new GridBagLayout());
 
-        panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
+        panInfo.setOpaque(false);
+        panInfo.setLayout(new GridBagLayout());
 
-        rpKarte.setName(""); // NOI18N
-        rpKarte.setLayout(new GridBagLayout());
+        panFillerRechtsLage1.setName(""); // NOI18N
+        panFillerRechtsLage1.setOpaque(false);
 
-        panPreviewMap.setPreferredSize(new Dimension(500, 250));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = GridBagConstraints.RELATIVE;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 10, 5);
-        rpKarte.add(panPreviewMap, gridBagConstraints);
-
-        semiRoundedPanel7.setBackground(Color.darkGray);
-        semiRoundedPanel7.setLayout(new GridBagLayout());
-
-        lblKarte.setForeground(new Color(255, 255, 255));
-        lblKarte.setText("Lage");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
-        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.9;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 0, 0);
-        panLage.add(rpKarte, gridBagConstraints);
-
-        panFillerRechtsLage.setName(""); // NOI18N
-        panFillerRechtsLage.setOpaque(false);
-
-        GroupLayout panFillerRechtsLageLayout = new GroupLayout(panFillerRechtsLage);
-        panFillerRechtsLage.setLayout(panFillerRechtsLageLayout);
-        panFillerRechtsLageLayout.setHorizontalGroup(panFillerRechtsLageLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        GroupLayout panFillerRechtsLage1Layout = new GroupLayout(panFillerRechtsLage1);
+        panFillerRechtsLage1.setLayout(panFillerRechtsLage1Layout);
+        panFillerRechtsLage1Layout.setHorizontalGroup(panFillerRechtsLage1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        panFillerRechtsLageLayout.setVerticalGroup(panFillerRechtsLageLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        panFillerRechtsLage1Layout.setVerticalGroup(panFillerRechtsLage1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -495,19 +458,29 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
-        panLage.add(panFillerRechtsLage, gridBagConstraints);
+        panInfo.add(panFillerRechtsLage1, gridBagConstraints);
+
+        rpInfo.setName(""); // NOI18N
+        rpInfo.setLayout(new GridBagLayout());
+
+        semiRoundedPanel8.setBackground(Color.darkGray);
+        semiRoundedPanel8.setLayout(new GridBagLayout());
+
+        lblMarkerInfo.setForeground(new Color(255, 255, 255));
+        lblMarkerInfo.setText("Marker Information");
+        lblMarkerInfo.setToolTipText("");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
+        semiRoundedPanel8.add(lblMarkerInfo, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panContent.add(panLage, gridBagConstraints);
+        rpInfo.add(semiRoundedPanel8, gridBagConstraints);
 
-        panDaten.setName(""); // NOI18N
         panDaten.setOpaque(false);
         panDaten.setPreferredSize(new Dimension(340, 236));
         panDaten.setLayout(new GridBagLayout());
@@ -953,10 +926,103 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets(5, 5, 0, 5);
-        panContent.add(panDaten, gridBagConstraints);
+        rpInfo.add(panDaten, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.9;
+        gridBagConstraints.weighty = 1.0;
+        panInfo.add(rpInfo, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(0, 0, 5, 0);
+        panContent.add(panInfo, gridBagConstraints);
+
+        panLage.setOpaque(false);
+        panLage.setLayout(new GridBagLayout());
+
+        rpKarte.setName(""); // NOI18N
+        rpKarte.setLayout(new GridBagLayout());
+
+        panPreviewMap.setPreferredSize(new Dimension(500, 250));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 5, 10, 5);
+        rpKarte.add(panPreviewMap, gridBagConstraints);
+
+        semiRoundedPanel7.setBackground(Color.darkGray);
+        semiRoundedPanel7.setLayout(new GridBagLayout());
+
+        lblKarte.setForeground(new Color(255, 255, 255));
+        lblKarte.setText("Lage");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
+        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.9;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 0, 0, 0);
+        panLage.add(rpKarte, gridBagConstraints);
+
+        panFillerRechtsLage.setName(""); // NOI18N
+        panFillerRechtsLage.setOpaque(false);
+
+        GroupLayout panFillerRechtsLageLayout = new GroupLayout(panFillerRechtsLage);
+        panFillerRechtsLage.setLayout(panFillerRechtsLageLayout);
+        panFillerRechtsLageLayout.setHorizontalGroup(panFillerRechtsLageLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerRechtsLageLayout.setVerticalGroup(panFillerRechtsLageLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        panLage.add(panFillerRechtsLage, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        panContent.add(panLage, gridBagConstraints);
 
         add(panContent, "cardContent");
 
@@ -1056,8 +1122,8 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 0);
+        gridBagConstraints.anchor = GridBagConstraints.NORTHEAST;
+        gridBagConstraints.insets = new Insets(5, 0, 5, 0);
         panBild.add(pnlPages, gridBagConstraints);
 
         add(panBild, "cardBild");
@@ -1118,7 +1184,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         //Status
         errorMessage.append(setUserStatus());
         try{
-            if (cidsBean.getProperty(FIELD__ERGEBNIS) == null && STATUS_ERLEDIGT.equals(cidsBean.getProperty(FIELD__STATUS__NAME))){
+            if (cidsBean.getProperty(FIELD__ERGEBNIS) == null && STATUS_ERLEDIGT_SCHLUESSEL.equals(cidsBean.getProperty(FIELD__STATUS__SCHLUESSEL))){
                 LOG.warn("Wrong Ergebnis specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(QsgebMarkerEditor.class,
                                 "QsgebMarkerEditor.prepareForSave().noErgebnis"));
@@ -1202,7 +1268,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     
     private void prepareFirstMarker(){
         CidsBean statusBean = getOtherTableValue(TABLE_NAME_STATUS, 
-                                getMyWhere(STATUS_PRUEFEN),
+                               " where " + FIELD__SCHLUESSEL + " ilike '" + STATUS_PRUEFEN_SCHLUESSEL + "'",
                                 getConnectionContext());
         try {
             cidsBean.setProperty(
@@ -1330,16 +1396,16 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
      */
     private void saveFirstAttributes() {
         if (cidsBean == null){
-            statusAttribute = -1;
+            statusSchluesselAttribute = null;
             pruefAttribute = null;
             bearbeitungAttribute = null;
             pruefdatumAttribute = null;
             bearbeitungsdatumAttribute = null;
         } else{
             if (cidsBean.getProperty(FIELD__STATUS__ID)==null){
-                statusAttribute = -1;
+                statusSchluesselAttribute = "";
             } else{
-                statusAttribute = (int) cidsBean.getProperty(FIELD__STATUS__ID);
+                statusSchluesselAttribute = cidsBean.getProperty(FIELD__STATUS__SCHLUESSEL).toString();
             }
             pruefAttribute = setNotNull(cidsBean.getProperty(FIELD__GEPRUEFT_DURCH));
             bearbeitungAttribute = setNotNull(cidsBean.getProperty(FIELD__BEARBEITUNG_DURCH));
@@ -1365,14 +1431,12 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
             cbStatus.setEnabled(false);
             cbErgebnis.setEnabled(false);
             txtLage.setEnabled(false);
             taBemerkung.setEnabled(false);
             lblGeom_txt.setVisible(false);
             jCkbHistorisch.setEnabled(false);
-        }
     }
     
     private void setHistorischOnly() {
@@ -1419,15 +1483,14 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
         
         if ((isEditor)) {
             if (cidsBean.getProperty(FIELD__STATUS__ID) != null){
-                //int status = (int)cidsBean.getProperty(FIELD__STATUS__ID);
-                String statusName = cidsBean.getProperty(FIELD__STATUS__NAME).toString();
+                String statusSchluessel = cidsBean.getProperty(FIELD__STATUS__SCHLUESSEL).toString();
                 DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
                 Date datum = new Date();
+                CidsBean schluesselBean;
                 try{
-                    switch (statusAttribute){
-                        case STATUS_KEY_PRUEFEN:{//Prüfen
-                            //if (status == 1 || status == 4){ //--> Zur Bearbeitung || Keine Bearbeitung erforderlich
-                            if (statusName.equals(STATUS_ZUR_BEARBEITUNG)|| statusName.equals(STATUS_KEINE_BEARBEITUNG)){ //--> Zur Bearbeitung || Keine Bearbeitung erforderlich
+                    switch (statusSchluesselAttribute){
+                        case STATUS_PRUEFEN_SCHLUESSEL:{//Prüfen
+                            if (statusSchluessel.equals(STATUS_ZUR_BEARBEITUNG_SCHLUESSEL)|| statusSchluessel.equals(STATUS_KEINE_BEARBEITUNG_SCHLUESSEL)){ //--> Zur Bearbeitung || Keine Bearbeitung erforderlich
                                 if ("".equals(pruefAttribute)){
                                     lblGeprueftDurch.setText(getCurrentUser());
                                     lblDatumGeprueft.setText(df.format(datum));
@@ -1436,12 +1499,12 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                                     lblDatumGeprueft.setText(pruefdatumAttribute);
                                 }
                             } else{
-                                //if (status != 0){
-                                if (!(statusName.equals(STATUS_PRUEFEN))){
+                                if (!(statusSchluessel.equals(STATUS_PRUEFEN_SCHLUESSEL))){
                                     LOG.warn("Wrong status specified. Skip persisting.");
                                     errorMessage.append(NbBundle.getMessage(QsgebMarkerEditor.class,
                                     "QsgebMarkerEditor.setUserStatus().wrongStatusPruefen"));
-                                    cbStatus.setSelectedIndex(STATUS_KEY_PRUEFEN);
+                                    schluesselBean = getOtherTableValue(TABLE_NAME_STATUS, " where " + FIELD__SCHLUESSEL + " ilike '" + STATUS_PRUEFEN_SCHLUESSEL + "'", getConnectionContext());
+                                    cbStatus.setSelectedIndex((int)schluesselBean.getProperty(FIELD__STATUS__ID));
                                 } else{
                                     lblGeprueftDurch.setText(pruefAttribute);
                                     lblDatumGeprueft.setText(pruefdatumAttribute);
@@ -1449,41 +1512,39 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                             }
                             break;
                         }
-                        case STATUS_KEY_ZUR_BEARBEITUNG:{//ZurBearbeitung
-                            //if (status == 2){//--> In Bearbeitung
-                            if (statusName.equals(STATUS_IN_BEARBEITUNG)){//--> In Bearbeitung
+                        case STATUS_ZUR_BEARBEITUNG_SCHLUESSEL:{//ZurBearbeitung
+                            if (statusSchluessel.equals(STATUS_IN_BEARBEITUNG_SCHLUESSEL)){//--> In Bearbeitung
                                 if ("".equals(bearbeitungAttribute)){
                                     lblBearbeitungDurch.setText(getCurrentUser());
                                 } else{
                                     lblBearbeitungDurch.setText(bearbeitungAttribute);
                                 }
                             } else{
-                                //if (status != 1){
-                                if (!(statusName.equals(STATUS_ZUR_BEARBEITUNG))){
+                                if (!(statusSchluessel.equals(STATUS_ZUR_BEARBEITUNG_SCHLUESSEL))){
                                     LOG.warn("Wrong status specified. Skip persisting.");
                                     errorMessage.append(NbBundle.getMessage(QsgebMarkerEditor.class,
                                     "QsgebMarkerEditor.setUserStatus().wrongStatusZurBearbeitung"));
-                                    cbStatus.setSelectedIndex(STATUS_KEY_ZUR_BEARBEITUNG);
+                                    schluesselBean = getOtherTableValue(TABLE_NAME_STATUS, " where " + FIELD__SCHLUESSEL + " ilike '" + STATUS_ZUR_BEARBEITUNG_SCHLUESSEL + "'", getConnectionContext());
+                                    cbStatus.setSelectedIndex((int)schluesselBean.getProperty(FIELD__STATUS__ID));
                                 } else {
                                     lblBearbeitungDurch.setText(bearbeitungAttribute);
                                 }
                             }
                             break;
                         }
-                        case STATUS_KEY_IN_BEARBEITUNG:{//In Bearbeitung
-                           // if (status == 3){//--> Erledigt
-                            if (statusName.equals(STATUS_ERLEDIGT)){//--> Erledigt
+                        case STATUS_IN_BEARBEITUNG_SCHLUESSEL:{//In Bearbeitung
+                            if (statusSchluessel.equals(STATUS_ERLEDIGT_SCHLUESSEL)){//--> Erledigt
                                 if ("".equals(bearbeitungsdatumAttribute)){
                                     lblDatumBearbeitung.setText(df.format(datum));
                                     cbErgebnis.setEnabled(true);
                                 }
                             } else{
-                                //if (status != 2){
-                                if (!(statusName.equals(STATUS_IN_BEARBEITUNG))){
+                                if (!(statusSchluessel.equals(STATUS_IN_BEARBEITUNG_SCHLUESSEL))){
                                     LOG.warn("Wrong status specified. Skip persisting.");
                                     errorMessage.append(NbBundle.getMessage(QsgebMarkerEditor.class,
                                     "QsgebMarkerEditor.setUserStatus().wrongStatusInBearbeitung"));
-                                    cbStatus.setSelectedIndex(STATUS_KEY_IN_BEARBEITUNG);
+                                    schluesselBean = getOtherTableValue(TABLE_NAME_STATUS, " where " + FIELD__SCHLUESSEL + " ilike '" + STATUS_IN_BEARBEITUNG_SCHLUESSEL + "'", getConnectionContext());
+                                    cbStatus.setSelectedIndex((int)schluesselBean.getProperty(FIELD__STATUS__ID));
                                 } else{
                                     lblDatumBearbeitung.setText(bearbeitungsdatumAttribute);
                                     cbErgebnis.setEnabled(false);
@@ -1522,26 +1583,26 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     
     private void setEditableStatus() {
         if ((isEditor)) {
-            switch (statusAttribute){
-                        case STATUS_KEY_PRUEFEN:{//Prüfen
+            switch (statusSchluesselAttribute){
+                        case STATUS_PRUEFEN_SCHLUESSEL:{//Prüfen
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             break;
                         }
-                        case STATUS_KEY_ZUR_BEARBEITUNG:{ //Zur Bearbeitung
+                        case STATUS_ZUR_BEARBEITUNG_SCHLUESSEL:{ //Zur Bearbeitung
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             break;
                         }
-                        case STATUS_KEY_IN_BEARBEITUNG:{ //In Bearbeitung
+                        case STATUS_IN_BEARBEITUNG_SCHLUESSEL:{ //In Bearbeitung
                             cbStatus.setEnabled(true);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
                             break;
                         }
-                        case STATUS_KEY_ERLEDIGT:{ //Erledigt
+                        case STATUS_ERLEDIGT_SCHLUESSEL:{ //Erledigt
                             cbStatus.setEnabled(false);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
@@ -1549,7 +1610,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
                             taBemerkung.setEnabled(false);
                             break;
                         }
-                        case STATUS_KEY_KEINE_BEARBEITUNG:{ //Keine Bearbeitung erforderlich
+                        case STATUS_KEINE_BEARBEITUNG_SCHLUESSEL:{ //Keine Bearbeitung erforderlich
                             cbStatus.setEnabled(false);
                             cbGeom.setEnabled(false);
                             cbErgebnis.setEnabled(false);
@@ -1566,7 +1627,7 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
     }
     
     private void refreshStatus() {
-        statusSearch.setStatusId(statusAttribute);
+        statusSearch.setStatusSchluessel(statusSchluesselAttribute);
 
         new SwingWorker<Void, Void>() {
 
@@ -1597,7 +1658,6 @@ public  class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cid
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
-        //panBild.editorClosed(ece);
     }
 
     @Override
