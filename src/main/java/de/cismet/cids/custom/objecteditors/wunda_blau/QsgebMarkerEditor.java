@@ -1299,7 +1299,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                             publish(i);
                         }
                         for (int i = 0; i < numberOfPictures; i++) {
-                            imageMap.put(numberOfPictures, reader.read(numberOfPictures));
+                            imageMap.put(numberOfPictures, reader.read(i));
                         }
                         return numberOfPictures;
                     } catch (final FileNotFoundException ex) {
