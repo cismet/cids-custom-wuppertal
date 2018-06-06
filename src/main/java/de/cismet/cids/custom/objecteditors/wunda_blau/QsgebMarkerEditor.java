@@ -52,7 +52,7 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringReader;
 
 import java.net.URL;
@@ -1086,7 +1086,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         rpKarte.add(panPreviewMap, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1405,6 +1404,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         final DefaultListModel modelPictures = new DefaultListModel();
         lstPages.setModel(modelPictures);
         lstPages.setEnabled(false);
+        btnImages.setEnabled(false);
         showDocumentCard(DocumentCard.BUSY);
         measuringComponent1.reset();
         measuringComponent1.removeAllFeatures();
@@ -1414,7 +1414,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                 @Override
                 protected Integer doInBackground() throws Exception {
                     try {
-                        pictureReader = new WebAccessMultiPagePictureReader(new URL(getPictureUrl()), false, true);
+                        try {
+                            pictureReader = new WebAccessMultiPagePictureReader(new URL(getPictureUrl()), false, true);
+                        } catch (final IOException ex) {
+                            LOG.warn("Document not produced.", ex);
+                            return -1;
+                        }
                         final int numberOfPages = pictureReader.getNumberOfPages();
                         for (int i = 0; i < numberOfPages; i++) {
                             publish(i);
@@ -1423,18 +1428,16 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                             imageMap.put(page, pictureReader.loadPage(page));
                         }
                         return numberOfPages;
-                    } catch (final FileNotFoundException ex) {
-                        LOG.warn("Document not produced.", ex);
                     } finally {
                         if (pictureReader != null) {
                             pictureReader.close();
                         }
                     }
-                    return -1;
                 }
 
                 @Override
                 protected void process(final List<Integer> chunks) {
+                    btnImages.setEnabled(true);
                     for (final Integer chunk : chunks) {
                         modelPictures.add(chunk, "Seite " + (chunk + 1));
                     }
@@ -1451,8 +1454,9 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                             lblImages.setEnabled(false);
                             lblImages.setText("Kein Dokument vorhanden");
                             lblInfo.setEnabled(false);
+                        } else {
+                            lstPages.setSelectedIndex(0);
                         }
-                        setDocument(0);
                     } catch (final Exception ex) {
                         LOG.warn("Document not available.", ex);
                         showDocumentCard(DocumentCard.ERROR);
@@ -1471,6 +1475,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     private void setDocument(final int pagenr) {
         if (imageMap.containsKey(pagenr)) {
             final BufferedImage pageImage = imageMap.get(pagenr);
+            measuringComponent1.removeAllFeatures();
             measuringComponent1.addImage(pageImage);
             measuringComponent1.zoomToFeatureCollection();
             measuringComponent1.actionPan();
