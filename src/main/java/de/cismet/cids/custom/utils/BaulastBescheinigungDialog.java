@@ -21,7 +21,6 @@ import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.LandParcel;
@@ -55,8 +54,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelp
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungInfo;
@@ -94,12 +91,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
     //~ Instance fields --------------------------------------------------------
 
-    private final SOAPAccessProvider soapProvider;
-    private final ALKISInfoServices infoService;
-
     private final Collection<ProductGroupAmount> prodAmounts = new ArrayList<ProductGroupAmount>();
-    private final Collection<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen =
-        new HashSet<BerechtigungspruefungBescheinigungGruppeInfo>();
+    private final Collection<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen = new HashSet<>();
 
     private SwingWorker worker;
 
@@ -134,18 +127,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      */
     private BaulastBescheinigungDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
-        SOAPAccessProvider soapProvider = null;
-        ALKISInfoServices infoService = null;
-        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions(getConnectionContext())) {
-            try {
-                soapProvider = new SOAPAccessProvider(AlkisConstants.COMMONS);
-                infoService = soapProvider.getAlkisInfoService();
-            } catch (final Exception ex) {
-                LOG.warn("error while creating ALKISInfoServices", ex);
-            }
-        }
-        this.soapProvider = soapProvider;
-        this.infoService = infoService;
         initComponents();
     }
 
@@ -1158,21 +1139,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             if (buchungsblatt == null) {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
-                    if (infoService != null) {
-                        final String[] uuids = infoService.translateBuchungsblattCodeIntoUUIds(
-                                soapProvider.getIdentityCard(),
-                                soapProvider.getService(),
-                                AlkisUtils.fixBuchungslattCode(buchungsblattcode));
-                        buchungsblatt = infoService.getBuchungsblattWithUUID(soapProvider.getIdentityCard(),
-                                soapProvider.getService(),
-                                uuids[0],
-                                true);
-                    } else {
-                        buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                                AlkisUtils.fixBuchungslattCode(buchungsblattcode),
-                                getConnectionContext());
-                    }
-
+                    buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
+                            AlkisUtils.fixBuchungslattCode(buchungsblattcode),
+                            getConnectionContext());
                     BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);
                 }
             }

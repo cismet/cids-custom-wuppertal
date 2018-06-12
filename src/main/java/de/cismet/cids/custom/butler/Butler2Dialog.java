@@ -20,8 +20,6 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -59,9 +57,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 
@@ -893,11 +891,11 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     mappingModel.addHome(getBoundingBox());
 
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                ClientAlkisConf.getInstance().getMapCallString()));
                     swms.setName("butler-background");
 
                     // add the raster layer to the model
@@ -921,7 +919,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
                     final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
-                            AlkisConstants.COMMONS.SRS_SERVICE);
+                            ClientAlkisConf.getInstance().getSrsService());
                     final XBoundingBox result = new XBoundingBox(transformedGeom.buffer(20));
 
                     return result;

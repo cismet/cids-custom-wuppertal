@@ -54,7 +54,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -102,7 +102,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private DefaultStyledFeature pointFeature;
     private boolean isPointCentered = false;
     private final GeometryFactory factory = new GeometryFactory(new PrecisionModel(),
-            CrsTransformer.extractSridFromCrs(AlkisConstants.COMMONS.SRS_SERVICE));
+            CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().getSrsService()));
     private boolean documentListenersRemoved = false;
     private final ConnectionContext connectionContext;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -900,11 +900,11 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     mappingModel.addHome(getBoundingBox());
 
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                ClientAlkisConf.getInstance().getMapCallString()));
                     swms.setName("butler-background");
 
                     // add the raster layer to the model
@@ -927,7 +927,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
                     final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
-                            AlkisConstants.COMMONS.SRS_SERVICE);
+                            ClientAlkisConf.getInstance().getSrsService());
                     final XBoundingBox result = new XBoundingBox(transformedGeom.buffer(20));
 
                     return result;

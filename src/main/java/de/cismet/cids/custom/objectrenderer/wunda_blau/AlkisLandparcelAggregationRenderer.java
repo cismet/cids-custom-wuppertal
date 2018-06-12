@@ -43,10 +43,11 @@ import javax.swing.table.TableColumn;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
@@ -405,7 +406,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlFlurstuecksnachweisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlFlurstuecksnachweisActionPerformed
-        downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF, true);
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF),
+            true);
     }                                                                                          //GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
 
     /**
@@ -414,7 +417,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlNachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisNRWActionPerformed
-        downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF, true);
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF),
+            true);
     }                                                                                  //GEN-LAST:event_jxlNachweisNRWActionPerformed
 
     /**
@@ -423,7 +428,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlNachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalActionPerformed
-        downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF, true);
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF),
+            true);
     }                                                                                       //GEN-LAST:event_jxlNachweisKommunalActionPerformed
 
     /**
@@ -432,7 +439,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlNachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalInternActionPerformed
-        downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF, true);
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF),
+            true);
     }                                                                                             //GEN-LAST:event_jxlNachweisKommunalInternActionPerformed
 
     /**
@@ -823,10 +832,11 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             initialisedMap = false;
 
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
             mappingModel.addHome(getBoundingBox());
 
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Flurstueck");
 
             // add the raster layer to the model
@@ -863,13 +873,14 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                 final Geometry geometry = cidsBeanWrapper.getGeometry();
 
                 if (result == null) {
-                    result = new XBoundingBox(geometry.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
-                    result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    result = new XBoundingBox(geometry.getEnvelope().buffer(
+                                ClientAlkisConf.getInstance().getGeoBuffer()));
+                    result.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     result.setMetric(true);
                 } else {
                     final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                AlkisConstants.COMMONS.GEO_BUFFER));
-                    temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                                ClientAlkisConf.getInstance().getGeoBuffer()));
+                    temp.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     temp.setMetric(true);
 
                     if (temp.getX1() < result.getX1()) {
@@ -903,11 +914,15 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         @Override
         public void run() {
             final XBoundingBox boxToGoto = new XBoundingBox(selectedCidsBeanWrapper.getGeometry().getEnvelope().buffer(
-                        AlkisConstants.COMMONS.GEO_BUFFER));
-            boxToGoto.setX1(boxToGoto.getX1() - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-            boxToGoto.setX2(boxToGoto.getX2() + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-            boxToGoto.setY1(boxToGoto.getY1() - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
-            boxToGoto.setY2(boxToGoto.getY2() + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                        ClientAlkisConf.getInstance().getGeoBuffer()));
+            boxToGoto.setX1(boxToGoto.getX1()
+                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
+            boxToGoto.setX2(boxToGoto.getX2()
+                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
+            boxToGoto.setY1(boxToGoto.getY1()
+                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
+            boxToGoto.setY2(boxToGoto.getY2()
+                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
             map.gotoBoundingBox(boxToGoto, false, true, 500);
         }
     }
@@ -977,7 +992,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             if (cidsBean.getProperty("geometrie.geo_field") instanceof Geometry) {
                 this.geometry = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                             "geometrie.geo_field"),
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
             }
 
             final StyledFeature dsf = new DefaultStyledFeature();
