@@ -164,7 +164,7 @@ public class AlkisProductDownloadHelper {
                                 queryID),
                             new ServerActionParameter(
                                 AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
-                                fertigungsVermerk)                            
+                                fertigungsVermerk)
                         },
                         downloadTitle,
                         directory,
@@ -268,7 +268,7 @@ public class AlkisProductDownloadHelper {
                 final String extension = ".pdf";
                 final Download download = new ByteArrayActionDownload(
                         AlkisProductServerAction.TASK_NAME,
-                        AlkisProductServerAction.Body.EINZELNACHWEIS,
+                        AlkisProductServerAction.Body.EINZELNACHWEIS_STICHTAG,
                         new ServerActionParameter[] {
                             new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), product),
                             new ServerActionParameter(
