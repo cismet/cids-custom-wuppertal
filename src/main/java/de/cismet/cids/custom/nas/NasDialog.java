@@ -58,10 +58,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 import de.cismet.cids.custom.utils.nas.NasProduct;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
@@ -793,11 +793,11 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     mappingModel.addHome(getBoundingBox());
 
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                ClientAlkisConf.getInstance().getMapCallString()));
                     swms.setName("NAS-Dialog");
                     swms.setTranslucency(0.4f);
                     // add the raster layer to the model
@@ -831,25 +831,24 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
                     final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
-                            AlkisConstants.COMMONS.SRS_SERVICE);
+                            ClientAlkisConf.getInstance().getSrsService());
                     XBoundingBox result = new XBoundingBox(transformedGeom.buffer(MAP_BUFFER));
 //                    final double diagonalLength = Math.sqrt((result.getWidth() * result.getWidth())
 //                                    + (result.getHeight() * result.getHeight()));
 //                    final XBoundingBox bufferedBox = new XBoundingBox(result.getGeometry().buffer(TOTAL_MAP_BUFFER));
                     for (final GeomWrapper gw : geomWrappers) {
-                        final Geometry geometry = CrsTransformer.transformToGivenCrs(
-                                gw.getGeometry(),
-                                AlkisConstants.COMMONS.SRS_SERVICE);
+                        final Geometry geometry = CrsTransformer.transformToGivenCrs(gw.getGeometry(),
+                                ClientAlkisConf.getInstance().getSrsService());
 
                         if (result == null) {
                             result = new XBoundingBox(geometry.getEnvelope().buffer(
                                         MAP_BUFFER));
-                            result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            result.setSrs(ClientAlkisConf.getInstance().getSrsService());
                             result.setMetric(true);
                         } else {
                             final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
                                         MAP_BUFFER));
-                            temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            temp.setSrs(ClientAlkisConf.getInstance().getSrsService());
                             temp.setMetric(true);
 
                             if (temp.getX1() < result.getX1()) {
@@ -902,7 +901,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                         g = totalMapWrapper.getGeometry().buffer(buffer);
                     }
                     final XBoundingBox boxToGoto = new XBoundingBox(g.getEnvelope(),
-                            AlkisConstants.COMMONS.SRS_SERVICE,
+                            ClientAlkisConf.getInstance().getSrsService(),
                             true);
                     final XBoundingBox bufferedBox;
 //                            bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(diagonalLength / 2));
@@ -1276,7 +1275,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
             this.selected = selected;
             this.name = name;
             this.geometry = CrsTransformer.transformToGivenCrs(g,
-                    AlkisConstants.COMMONS.SRS_SERVICE);
+                    ClientAlkisConf.getInstance().getSrsService());
 
             this.feature = generateFeature();
         }
