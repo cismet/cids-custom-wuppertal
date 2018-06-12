@@ -23,18 +23,9 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXDatePicker;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -171,14 +162,6 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        jProgressBar1 = new javax.swing.JProgressBar();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -190,40 +173,20 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         jButton1 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        jProgressBar1 = new javax.swing.JProgressBar();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.CardLayout());
-
-        jPanel5.setOpaque(false);
-        jPanel5.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel5.add(filler3, gridBagConstraints);
-
-        jProgressBar1.setIndeterminate(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel5.add(jProgressBar1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel5.add(filler2, gridBagConstraints);
-
-        jPanel4.add(jPanel5, "progress");
 
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -293,6 +256,14 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(filler1, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel1.add(jPanel3, gridBagConstraints);
+        jPanel3.setVisible(editable);
+
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton1,
             org.openide.util.NbBundle.getMessage(
@@ -308,17 +279,38 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        jPanel3.add(jButton1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        jPanel1.add(jPanel3, gridBagConstraints);
-        jPanel3.setVisible(editable);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel1.add(jButton1, gridBagConstraints);
 
         jPanel4.add(jPanel1, "table");
+
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel5.add(filler3, gridBagConstraints);
+
+        jProgressBar1.setIndeterminate(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jProgressBar1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel5.add(filler2, gridBagConstraints);
+
+        jPanel4.add(jPanel5, "progress");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -333,7 +325,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         try {
             final CidsBean messungBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
@@ -351,72 +343,44 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         } catch (final Exception ex) {
             LOG.error("error while creating new messung", ex);
         }
-    }                                                                          //GEN-LAST:event_btnAddActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final int rowIndex = (jXTable1.getSelectedRow() >= 0)
             ? jXTable1.convertRowIndexToModel(jXTable1.getSelectedRow()) : -1;
         if ((rowIndex >= 0)) {
             final CidsBean messungBean = getModel().getMessungBean(rowIndex);
             getModel().removeMessung(messungBean);
         }
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        final TimeSeriesCollection dataset = new TimeSeriesCollection();
-
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         final CidsBean kategorieBean = getModel().getKategorieBean();
-        for (final CidsBean stoffBean : kategorieBean.getBeanCollectionProperty("stoffe")) {
-            final String stoffName = (String)stoffBean.getProperty("name");
-            final TimeSeries series = new TimeSeries(stoffName);
-
-            final List<CidsBean> selectedMessungBeans = new ArrayList<>();
-            for (final int rowIndex : jXTable1.getSelectedRows()) {
-                final CidsBean messungBean = getModel().getMessungBean(jXTable1.convertRowIndexToModel(rowIndex));
-                selectedMessungBeans.add(messungBean);
-            }
-            final List<CidsBean> messungBeans = (jXTable1.getSelectedRowCount() > 0) ? selectedMessungBeans
-                                                                                     : getModel().getMessungBeans();
-
-            for (final CidsBean messungBean : messungBeans) {
-                final Date datum = (Date)messungBean.getProperty("datum");
-                for (final CidsBean messwertBean : messungBean.getBeanCollectionProperty("messwerte")) {
-                    if (stoffBean.equals(
-                                    GrundwassermessstelleMessungenTablePanel.this.getStoffBean(
-                                        (String)messwertBean.getProperty("stoff_schluessel")))) {
-                        final double wert = (Double)messwertBean.getProperty("wert");
-                        series.add(new Day(datum), wert);
-                    }
-                }
-            }
-            dataset.addSeries(series);
+        final List<CidsBean> selectedMessungBeans = new ArrayList<>();
+        for (final int rowIndex : jXTable1.getSelectedRows()) {
+            final CidsBean messungBean = getModel().getMessungBean(jXTable1.convertRowIndexToModel(rowIndex));
+            selectedMessungBeans.add(messungBean);
         }
-
-        final JFreeChart chart = ChartFactory.createScatterPlot(
-                "Messungen",
-                "Datum",
-                "Wert",
-                dataset,
-                PlotOrientation.VERTICAL,
-                true,
-                false,
-                false);
-
-        final JDialog dialog = new JDialog();
-        dialog.setContentPane(new ChartPanel(chart));
+        final GrundwassermessstelleMesswerteDiagrammPanel diagrammPanel =
+            new GrundwassermessstelleMesswerteDiagrammPanel(
+                kategorieBean.getBeanCollectionProperty("stoffe"),
+                (jXTable1.getSelectedRowCount() > 0) ? selectedMessungBeans : getModel().getMessungBeans(),
+                getConnectionContext());
+        final JDialog dialog = new JDialog((Frame)null, "Messungen - Diagramm", true);
+        dialog.setContentPane(diagrammPanel);
         dialog.pack();
         StaticSwingTools.showDialog(dialog);
-    } //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -947,9 +911,9 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
                     format.setMinimumFractionDigits(nachkommastellen);
                     format.setMaximumFractionDigits(nachkommastellen);
                     label.setHorizontalAlignment(SwingConstants.TRAILING);
+                    final String einheit = (String)stoffBean.getProperty("einheit");
                     label.setText((wert != null)
-                            ? (format.format(wert) + " " + (String)stoffBean.getProperty("einheit")) : null);
-                    label.setToolTipText((String)messwertBean.getProperty("bemerkung"));
+                            ? (format.format(wert) + (einheit != null ? " " + einheit : "")) : null);
                     break;
                 }
             }

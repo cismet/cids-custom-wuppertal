@@ -202,7 +202,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
             "WUNDA_BLAU",
             null,
             "admin",
-            "xxx",
+            "9eh1nich10hne",
             "grundwassermessstelle",
             30,
             1000,
