@@ -151,6 +151,7 @@ public class AlkisProductDownloadHelper {
             final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
+                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
                 final String filename = product + "."
                             + buchungsblattCode.replace("/", "--").trim().replaceAll(" +", "_");    // replace all whitespaces;
                 final Download download = new ByteArrayActionDownload(
@@ -160,7 +161,10 @@ public class AlkisProductDownloadHelper {
                             new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), product),
                             new ServerActionParameter(
                                 AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
-                                queryID)
+                                queryID),
+                            new ServerActionParameter(
+                                AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                                fertigungsVermerk)                            
                         },
                         downloadTitle,
                         directory,
@@ -257,6 +261,7 @@ public class AlkisProductDownloadHelper {
             if (completeBuchungsblattCode.length() > 0) {
                 final String alkisCode = AlkisUtils.escapeHtmlSpaces(completeBuchungsblattCode);
 
+                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
                 final String directory = DownloadManagerDialog.getInstance().getJobName();
                 final String filename = product + "."
                             + completeBuchungsblattCode.replace("/", "--").trim().replaceAll(" +", "_"); // replace all whitespaces
@@ -269,7 +274,10 @@ public class AlkisProductDownloadHelper {
                             new ServerActionParameter(
                                 AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
                                 alkisCode),
-                            new ServerActionParameter(AlkisProductServerAction.Parameter.STICHTAG.toString(), stichtag)
+                            new ServerActionParameter(AlkisProductServerAction.Parameter.STICHTAG.toString(), stichtag),
+                            new ServerActionParameter(
+                                AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                                fertigungsVermerk)
                         },
                         downloadTitle,
                         directory,
