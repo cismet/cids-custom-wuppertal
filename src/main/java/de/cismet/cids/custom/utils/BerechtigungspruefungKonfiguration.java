@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 
+import org.apache.log4j.Logger;
+
 import java.io.StringReader;
 
 import java.util.Collection;
@@ -30,8 +32,6 @@ import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.connectioncontext.AbstractConnectionContext.Category;
 
 import de.cismet.connectioncontext.ConnectionContext;
-
-import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
 
 /**
  * DOCUMENT ME!
@@ -49,6 +49,8 @@ import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
 public class BerechtigungspruefungKonfiguration {
 
     //~ Static fields/initializers ---------------------------------------------
+
+    public static final Logger LOG = Logger.getLogger(BerechtigungspruefungKonfiguration.class);
 
     public static BerechtigungspruefungKonfiguration INSTANCE;
 

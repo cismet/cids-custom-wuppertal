@@ -1756,9 +1756,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * @param  evt  DOCUMENT ME!
      */
     private void hlBaulastbescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBaulastbescheinigungActionPerformed
-        final Collection<CidsBean> flurstuecke = new ArrayList<CidsBean>();
+        final Collection<CidsBean> flurstuecke = new ArrayList<>();
         flurstuecke.add(cidsBean);
-        BaulastBescheinigungDialog.getInstance().show(flurstuecke, this);
+        BaulastBescheinigungDialog.getInstance().show(flurstuecke, this, getConnectionContext());
     }                                                                                          //GEN-LAST:event_hlBaulastbescheinigungActionPerformed
 
     /**
