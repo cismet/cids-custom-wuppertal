@@ -474,19 +474,19 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 //            return;
 //        }
 
-        final Collection<CidsBean> selectedFlurstuecke = new ArrayList<CidsBean>();
+        final Collection<CidsBean> selectedFlurstuecke = new ArrayList<>();
         for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
             if (cidsBeanWrapper.isSelected()) {
                 selectedFlurstuecke.add(cidsBeanWrapper.getCidsBean());
             }
         }
 
-        BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, this);
+        BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, this, getConnectionContext());
     } //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
-        final Collection<CidsBean> result = new LinkedList<CidsBean>();
+        final Collection<CidsBean> result = new LinkedList<>();
 
         for (final CidsBeanWrapper wrapper : cidsBeanWrappers) {
             result.add(wrapper.getCidsBean());
@@ -499,7 +499,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
         if (cidsBeans != null) {
             int colorIndex = 0;
-            cidsBeanWrappers = new LinkedList<CidsBeanWrapper>();
+            cidsBeanWrappers = new LinkedList<>();
 
             for (final CidsBean cidsBean : cidsBeans) {
                 cidsBeanWrappers.add(new CidsBeanWrapper(cidsBean, true));
@@ -647,7 +647,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         }
 
         try {
-            final List<String> parcelCodes = new ArrayList<String>(cidsBeanWrappers.size());
+            final List<String> parcelCodes = new ArrayList<>(cidsBeanWrappers.size());
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
                 if (!cidsBeanWrapper.isSelected()) {
                     continue;
@@ -686,7 +686,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             return;
         }
 
-        final List<String> parcelCodes = new ArrayList<String>(cidsBeanWrappers.size());
+        final List<String> parcelCodes = new ArrayList<>(cidsBeanWrappers.size());
         for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
             if (!cidsBeanWrapper.isSelected()) {
                 continue;

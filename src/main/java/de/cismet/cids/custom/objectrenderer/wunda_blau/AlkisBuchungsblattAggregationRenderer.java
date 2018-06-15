@@ -495,7 +495,8 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 selectedFlurstuecke.addAll(selectedFlurstueckeMap.get(wrapper.getCidsBean()));
             }
         }
-        BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, AlkisBuchungsblattAggregationRenderer.this);
+        BaulastBescheinigungDialog.getInstance()
+                .show(selectedFlurstuecke, AlkisBuchungsblattAggregationRenderer.this, getConnectionContext());
     }                                                                                           //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
 
     @Override
