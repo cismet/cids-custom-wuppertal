@@ -1628,7 +1628,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void hlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBaulastBescheinigungActionPerformed
-        BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, AlkisBuchungsblattRenderer.this);
+        BaulastBescheinigungDialog.getInstance()
+                .show(selectedFlurstuecke, AlkisBuchungsblattRenderer.this, getConnectionContext());
     }                                                                                          //GEN-LAST:event_hlBaulastBescheinigungActionPerformed
 
     /**
