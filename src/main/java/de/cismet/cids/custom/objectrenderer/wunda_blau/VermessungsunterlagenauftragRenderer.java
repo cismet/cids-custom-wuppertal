@@ -36,9 +36,6 @@ import java.awt.Component;
 import java.awt.EventQueue;
 
 import java.io.IOException;
-import java.io.StringReader;
-
-import java.net.URL;
 
 import java.text.DateFormat;
 
@@ -46,7 +43,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
@@ -62,16 +58,16 @@ import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConver
 import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
-import de.cismet.cids.custom.utils.WundaBlauServerResources;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenHelper;
-import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenProperties;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenUtils;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenException;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenJobException;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenTaskException;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenTaskRetryException;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenValidatorException;
+import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsUnterlagenPortalDownloadAction;
 import de.cismet.cids.custom.wunda_blau.search.server.KundeByVermessungsStellenNummerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -79,7 +75,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.converters.BooleanToStringConverter;
 
-import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -101,7 +96,6 @@ import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.HttpOrFtpDownload;
 
 /**
  * DOCUMENT ME!
@@ -1185,39 +1179,21 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
         if (Boolean.TRUE.equals(cidsBean.getProperty("status"))) {
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
-                final String jobname = DownloadManagerDialog.getInstance().getJobName();
-                final String schluessel = (String)cidsBean.getProperty("schluessel");
-
                 try {
-                    final Object ret = SessionManager.getSession()
-                                .getConnection()
-                                .executeTask(SessionManager.getSession().getUser(),
-                                    GetServerResourceServerAction.TASK_NAME,
-                                    "WUNDA_BLAU",
-                                    WundaBlauServerResources.VERMESSUNGSUNTERLAGENPORTAL_PROPERTIES.getValue(),
-                                    getConnectionContext());
-                    if (ret instanceof Exception) {
-                        throw (Exception)ret;
-                    }
-                    final Properties properties = new Properties();
-                    properties.load(new StringReader((String)ret));
-
-                    final VermessungsunterlagenProperties props = new VermessungsunterlagenProperties(properties);
-                    // VermUnterlagen = alter prefix. wird bei neuen Anträgen nicht mehr verwendet.
-                    final String filename = ((schluessel.contains("_")) ? VermessungsunterlagenHelper.DIR_PREFIX
-                                                                        : "VermUnterlagen") + "_"
-                                + schluessel
-                                + ".zip";
-                    final URL url = new URL("ftp://" + props.getFtpLogin() + ":" + props.getFtpPass() + "@"
-                                    + props.getFtpHost()
-                                    + props.getFtpPath() + "/" + filename);
-                    final Download download = new HttpOrFtpDownload(
-                            url,
-                            "",
-                            jobname,
+                    final String schluessel = (String)cidsBean.getProperty("schluessel");
+                    final String jobname = DownloadManagerDialog.getInstance().getJobName();
+                    final String filename = (schluessel.contains("_") ? VermessungsunterlagenHelper.DIR_PREFIX
+                                                                      : "VermUnterlagen") + "_" + schluessel;
+                    final String extension = ".zip";
+                    final Download download = new ByteArrayActionDownload(
+                            VermessungsUnterlagenPortalDownloadAction.TASK_NAME,
+                            schluessel,
+                            null,
                             "Vermessungsunterlagen",
+                            jobname,
                             filename,
-                            ".zip");
+                            extension,
+                            getConnectionContext());
                     DownloadManager.instance().add(download);
                 } catch (final Exception ex) {
                     final ErrorInfo errorInfo = new ErrorInfo(
