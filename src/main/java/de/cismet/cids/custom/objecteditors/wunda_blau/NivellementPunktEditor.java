@@ -41,12 +41,12 @@ import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.NivellementPunktAggregationRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -106,12 +106,12 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             5682507.032498134d,
             2584022.9413952776d,
             5682742.852810634d,
-            AlkisConstants.COMMONS.SRS_SERVICE,
+            ClientAlkisConf.getInstance().getSrsService(),
             true);
     protected static Crs CRS = new Crs(
-            AlkisConstants.COMMONS.SRS_SERVICE,
-            AlkisConstants.COMMONS.SRS_SERVICE,
-            AlkisConstants.COMMONS.SRS_SERVICE,
+            ClientAlkisConf.getInstance().getSrsService(),
+            ClientAlkisConf.getInstance().getSrsService(),
+            ClientAlkisConf.getInstance().getSrsService(),
             true,
             true);
 
@@ -1398,8 +1398,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
-            final Collection<URL> validURLs = AlkisUtils.PRODUCTS.getCorrespondingNivPURLs(txtDGKBlattnummer.getText(),
-                    txtLaufendeNummer.getText());
+            final Collection<URL> validURLs = ClientAlkisProducts.getInstance()
+                        .getCorrespondingNivPURLs(txtDGKBlattnummer.getText(),
+                            txtLaufendeNummer.getText());
 
             InputStream streamToReadFrom = null;
             for (final URL url : validURLs) {

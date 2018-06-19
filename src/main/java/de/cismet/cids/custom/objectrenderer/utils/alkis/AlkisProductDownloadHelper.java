@@ -15,37 +15,39 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
 import java.awt.Component;
 
-import java.net.URL;
-
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
+import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.downloadmanager.CredentialsAwareHttpDownlaod;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 
 /**
@@ -77,7 +79,7 @@ public class AlkisProductDownloadHelper {
         final String downloadTitle = AlkisUtils.getProductName(product);
         final Date stichtag = downloadInfo.getDate();
 
-        final List<Download> downloads = new LinkedList<Download>();
+        final List<Download> downloads = new LinkedList<>();
         for (final String buchungsblattCode : downloadInfo.getAlkisCodes()) {
             final Download d = createBuchungsblattStichtagProductDownload(
                     stichtag,
@@ -122,23 +124,26 @@ public class AlkisProductDownloadHelper {
         }
 
         String extension = ".pdf";
-        if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML.equals(product)) {
+        if (
+            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_HTML).equals(
+                        product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_HTML)
+                    .equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_HTML).equals(
+                        product)) {
             extension = ".html";
         }
 
         if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
             return;
         }
-        final String jobname = DownloadManagerDialog.getInstance().getJobName();
+        final String directory = DownloadManagerDialog.getInstance().getJobName();
 
-        final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
+        final List<Download> downloads = new LinkedList<>();
 
         for (final String buchungsblattCode : downloadInfo.getAlkisCodes()) {
-            URL url = null;
-
             if ((buchungsblattCode == null) || (buchungsblattCode.trim().length() <= 0)) {
                 continue;
             }
@@ -146,25 +151,27 @@ public class AlkisProductDownloadHelper {
             final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
-                url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
-                        queryID,
-                        product,
-                        SessionManager.getSession().getUser(),
-                        null);
-
-                final URL urlFertigungsvermerk = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
-                        queryID,
-                        product,
-                        SessionManager.getSession().getUser(),
-                        AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
-                final Map<String, String> requestPerUsage = new HashMap<String, String>();
-                requestPerUsage.put("WV ein", (urlFertigungsvermerk != null) ? urlFertigungsvermerk.toString() : null);
-
-                if (url != null) {
-                    String filename = product + "." + buchungsblattCode.replace("/", "--").trim();
-                    filename = filename.replaceAll(" +", "_"); // replace all whitespaces
-                    downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, extension));
-                }
+                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                final String filename = product + "."
+                            + buchungsblattCode.replace("/", "--").trim().replaceAll(" +", "_");    // replace all whitespaces;
+                final Download download = new ByteArrayActionDownload(
+                        AlkisProductServerAction.TASK_NAME,
+                        AlkisProductServerAction.Body.EINZELNACHWEIS,
+                        new ServerActionParameter[] {
+                            new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), product),
+                            new ServerActionParameter(
+                                AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                                queryID),
+                            new ServerActionParameter(
+                                AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                                fertigungsVermerk)
+                        },
+                        downloadTitle,
+                        directory,
+                        filename,
+                        extension,
+                        connectionContext);
+                downloads.add(download);
             } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
                     "Fehler beim Aufruf des Produkts: "
@@ -178,7 +185,7 @@ public class AlkisProductDownloadHelper {
         }
 
         if (downloads.size() > 1) {
-            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+            DownloadManager.instance().add(new MultipleDownload(downloads, directory));
         } else if (downloads.size() == 1) {
             DownloadManager.instance().add(downloads.get(0));
         }
@@ -245,7 +252,6 @@ public class AlkisProductDownloadHelper {
             final String completeBuchungsblattCode,
             final Component parent,
             final ConnectionContext connectionContext) {
-        CredentialsAwareHttpDownlaod download = null;
         if (!ObjectRendererUtils.checkActionTag(actionTag, connectionContext)) {
             showNoProductPermissionWarning(parent);
             return null;
@@ -253,26 +259,32 @@ public class AlkisProductDownloadHelper {
 
         try {
             if (completeBuchungsblattCode.length() > 0) {
-                final String queryID = AlkisUtils.escapeHtmlSpaces(completeBuchungsblattCode);
-                final URL url = AlkisUtils.PRODUCTS.productEinzelnachweisStichtagsbezogenUrl(
-                        queryID,
-                        product,
-                        stichtag,
-                        SessionManager.getSession().getUser());
+                final String alkisCode = AlkisUtils.escapeHtmlSpaces(completeBuchungsblattCode);
 
-                if (url != null) {
-                    String filename = product + "." + completeBuchungsblattCode.replace("/", "--").trim();
-                    filename = filename.replaceAll(" +", "_"); // replace all whitespaces
-                    download = new CredentialsAwareHttpDownlaod(
-                            url,
-                            "",
-                            DownloadManagerDialog.getInstance().getJobName(),
-                            downloadTitle,
-                            filename,
-                            ".pdf",
-                            "user",
-                            "password");
-                }
+                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                final String directory = DownloadManagerDialog.getInstance().getJobName();
+                final String filename = product + "."
+                            + completeBuchungsblattCode.replace("/", "--").trim().replaceAll(" +", "_"); // replace all whitespaces
+                final String extension = ".pdf";
+                final Download download = new ByteArrayActionDownload(
+                        AlkisProductServerAction.TASK_NAME,
+                        AlkisProductServerAction.Body.EINZELNACHWEIS_STICHTAG,
+                        new ServerActionParameter[] {
+                            new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), product),
+                            new ServerActionParameter(
+                                AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                                alkisCode),
+                            new ServerActionParameter(AlkisProductServerAction.Parameter.STICHTAG.toString(), stichtag),
+                            new ServerActionParameter(
+                                AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                                fertigungsVermerk)
+                        },
+                        downloadTitle,
+                        directory,
+                        filename,
+                        extension,
+                        connectionContext);
+                return download;
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -281,9 +293,8 @@ public class AlkisProductDownloadHelper {
                 ex,
                 parent);
             LOG.error(ex);
-            return null;
         }
-        return download;
+        return null;
     }
 
     /**
@@ -341,35 +352,51 @@ public class AlkisProductDownloadHelper {
             return;
         }
 
-        String extension = ".pdf";
-        if (AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)
-                    || AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML.equals(product)) {
-            extension = ".html";
-        }
-
         if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
             return;
         }
-        final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
-        final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
+        final String directory = DownloadManagerDialog.getInstance().getJobName();
+        final String extension;
+        if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)
+                    || ClientAlkisProducts.getInstance().get(
+                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML).equals(product)) {
+            extension = ".html";
+        } else {
+            extension = ".pdf";
+        }
 
-        for (final String parcelCode : downloadInfo.getAlkisCodes()) {
-            final URL url;
-            if ((parcelCode != null) && (parcelCode.length() > 0)) {
+        final List<Download> downloads = new LinkedList<>();
+
+        for (final String alkisCode : downloadInfo.getAlkisCodes()) {
+            if ((alkisCode != null) && (alkisCode.length() > 0)) {
                 try {
-                    url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(
-                            parcelCode,
-                            product,
-                            SessionManager.getSession().getUser(),
-                            AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
-
-                    if (url != null) {
-                        final String filename = product + "." + parcelCode.replace("/", "--");
-                        downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, extension));
-                    }
+                    final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                    final String filename = product + "." + alkisCode.replace("/", "--");
+                    final Download download = new ByteArrayActionDownload(
+                            AlkisProductServerAction.TASK_NAME,
+                            AlkisProductServerAction.Body.EINZELNACHWEIS,
+                            new ServerActionParameter[] {
+                                new ServerActionParameter(
+                                    AlkisProductServerAction.Parameter.PRODUKT.toString(),
+                                    product),
+                                new ServerActionParameter(
+                                    AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                                    alkisCode),
+                                new ServerActionParameter(
+                                    AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                                    fertigungsVermerk)
+                            },
+                            downloadTitle,
+                            directory,
+                            filename,
+                            extension,
+                            connectionContext);
+                    downloads.add(download);
                 } catch (final Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts: " + product,
                         ex,
@@ -382,7 +409,7 @@ public class AlkisProductDownloadHelper {
         }
 
         if (downloads.size() > 1) {
-            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+            DownloadManager.instance().add(new MultipleDownload(downloads, directory));
         } else if (downloads.size() == 1) {
             DownloadManager.instance().add(downloads.get(0));
         }
@@ -423,17 +450,33 @@ public class AlkisProductDownloadHelper {
         if (!DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
             return;
         }
-        final String jobname = DownloadManagerDialog.getInstance().getJobName();
+        final String directory = DownloadManagerDialog.getInstance().getJobName();
 
-        final List<HttpDownload> downloads = new LinkedList<HttpDownload>();
-        for (final String parcelCode : downloadInfo.getAlkisCodes()) {
-            URL url = null;
-
-            if (parcelCode.length() > 0) {
+        final List<Download> downloads = new LinkedList<>();
+        for (final String alkisCode : downloadInfo.getAlkisCodes()) {
+            if (alkisCode.length() > 0) {
                 try {
-                    url = AlkisUtils.PRODUCTS.productKarteUrl(
-                            parcelCode,
-                            AlkisUtils.getFertigungsVermerk("WV ein", connectionContext));
+                    final String filename = "LK.GDBNRW.A.F." + alkisCode.replace("/", "--");
+                    final String extension = ".pdf";
+                    final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+
+                    final Download download = new ByteArrayActionDownload(
+                            AlkisProductServerAction.TASK_NAME,
+                            AlkisProductServerAction.Body.KARTE,
+                            new ServerActionParameter[] {
+                                new ServerActionParameter(
+                                    AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                                    alkisCode),
+                                new ServerActionParameter(
+                                    AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                                    fertigungsVermerk)
+                            },
+                            downloadTitle,
+                            directory,
+                            filename,
+                            extension,
+                            connectionContext);
+                    downloads.add(download);
                 } catch (final Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: Kartenprodukt",
@@ -442,15 +485,10 @@ public class AlkisProductDownloadHelper {
                     LOG.error(ex);
                 }
             }
-
-            if (url != null) {
-                final String filename = "LK.GDBNRW.A.F." + parcelCode.replace("/", "--");
-                downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
-            }
         }
 
         if (downloads.size() > 1) {
-            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+            DownloadManager.instance().add(new MultipleDownload(downloads, directory));
         } else if (downloads.size() == 1) {
             DownloadManager.instance().add(downloads.get(0));
         }
@@ -489,7 +527,8 @@ public class AlkisProductDownloadHelper {
                         }
                         break;
                         case BUCHUNGSBLAETTER: {
-                            if (AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF.equals(
+                            if (ClientAlkisProducts.getInstance().get(
+                                            ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(
                                             einzelnachweisDownloadInfo.getAlkisProdukt())) {
                                 downloadBuchungsblattnachweisStichtagProduct(
                                     einzelnachweisDownloadInfo,
@@ -548,6 +587,125 @@ public class AlkisProductDownloadHelper {
         } catch (final Exception ex) {
             LOG.info("could now check Berechtigungspruefung confattr", ex);
             return false;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  info                   DOCUMENT ME!
+     * @param  jobName                DOCUMENT ME!
+     * @param  moreFlurstueckeSuffix  DOCUMENT ME!
+     * @param  connectionContext      DOCUMENT ME!
+     */
+    public static void downloadKarteCustomProduct(final AlkisKarteDownloadInfo info,
+            final String jobName,
+            final boolean moreFlurstueckeSuffix,
+            final ConnectionContext connectionContext) {
+        final String title = "ALKIS-Druck";
+        final String directory = DownloadManagerDialog.getInstance().getJobName();
+        final String filename = info.getProduct() + "." + info.getLandparcelCode().replace("/", "--")
+                    + (moreFlurstueckeSuffix ? ".ua" : "");
+        final String extension = ".pdf";
+
+        final Download download = new ByteArrayActionDownload(
+                AlkisProductServerAction.TASK_NAME,
+                AlkisProductServerAction.Body.KARTE_CUSTOM,
+                new ServerActionParameter[] {
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), info.getProduct()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                        info.getLandparcelCode()),
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.WINKEL.toString(), info.getWinkel()),
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.X.toString(), info.getX()),
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.Y.toString(), info.getY()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.MASSSTAB_MIN.toString(),
+                        info.getMassstabMin()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.MASSSTAB_MAX.toString(),
+                        info.getMassstabMax()),
+                    new ServerActionParameter(AlkisProductServerAction.Parameter.ZUSATZ.toString(), info.getZusatz()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.AUFTRAGSNUMMER.toString(),
+                        info.getAuftragsnummer()),
+                    new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                        info.getFertigungsvermerk())
+                },
+                title,
+                directory,
+                filename,
+                extension,
+                connectionContext);
+        DownloadManager.instance().add(download);
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @Getter
+    @JsonAutoDetect(
+        fieldVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE
+    )
+    public static class AlkisKarteDownloadInfo {
+
+        //~ Instance fields ----------------------------------------------------
+
+        @JsonProperty private final String product;
+        @JsonProperty private final String landparcelCode;
+        @JsonProperty private final String auftragsnummer;
+        @JsonProperty private final String fertigungsvermerk;
+        @JsonProperty private final String zusatz;
+        @JsonProperty private final String massstabMin;
+        @JsonProperty private final String massstabMax;
+        @JsonProperty private final int winkel;
+        @JsonProperty private final int x;
+        @JsonProperty private final int y;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new AlkisKarteDownloadInfo object.
+         *
+         * @param  product            DOCUMENT ME!
+         * @param  landparcelCode     DOCUMENT ME!
+         * @param  auftragsnummer     DOCUMENT ME!
+         * @param  fertigungsvermerk  DOCUMENT ME!
+         * @param  zusatz             DOCUMENT ME!
+         * @param  massstabMin        DOCUMENT ME!
+         * @param  massstabMax        DOCUMENT ME!
+         * @param  winkel             DOCUMENT ME!
+         * @param  x                  DOCUMENT ME!
+         * @param  y                  DOCUMENT ME!
+         */
+        public AlkisKarteDownloadInfo(@JsonProperty("product") final String product,
+                @JsonProperty("landparcelCode") final String landparcelCode,
+                @JsonProperty("auftragsnummer") final String auftragsnummer,
+                @JsonProperty("fertigungsvermerk") final String fertigungsvermerk,
+                @JsonProperty("zusatz") final String zusatz,
+                @JsonProperty("massstabMin") final String massstabMin,
+                @JsonProperty("massstabMax") final String massstabMax,
+                @JsonProperty("winkel") final int winkel,
+                @JsonProperty("x") final int x,
+                @JsonProperty("y") final int y) {
+            this.product = product;
+            this.landparcelCode = landparcelCode;
+            this.auftragsnummer = auftragsnummer;
+            this.fertigungsvermerk = fertigungsvermerk;
+            this.zusatz = zusatz;
+            this.massstabMin = massstabMin;
+            this.massstabMax = massstabMax;
+            this.winkel = winkel;
+            this.x = x;
+            this.y = y;
         }
     }
 }

@@ -247,7 +247,7 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         if (dataSetRight != null) {
             final NumberAxis numberAxis = new NumberAxis(String.join(", ", einheitenRight));
             numberAxis.setLabelAngle(Math.toRadians(180));
-            plot.setRangeAxis(1, numberAxis);            
+            plot.setRangeAxis(1, numberAxis);
             plot.setDataset(1, dataSetRight);
             plot.mapDatasetToRangeAxis(1, 1);
         }

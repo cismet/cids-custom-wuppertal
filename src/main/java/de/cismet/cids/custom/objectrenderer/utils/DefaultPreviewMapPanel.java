@@ -16,7 +16,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -88,9 +88,10 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
             if (geoObj instanceof Geometry) {
                 showMap = true;
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("ALKISConstants.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                    LOG.debug("ClientAlkisConf.getInstance().GeoBUffer: "
+                                + ClientAlkisConf.getInstance().getGeoBuffer());
                 }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
                             geoBuffer));
@@ -105,13 +106,13 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
                         @Override
                         public void run() {
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                             mappingModel.addHome(new XBoundingBox(
                                     bufferedBox.getX1(),
                                     bufferedBox.getY1(),
                                     bufferedBox.getX2(),
                                     bufferedBox.getY2(),
-                                    AlkisConstants.COMMONS.SRS_SERVICE,
+                                    ClientAlkisConf.getInstance().getSrsService(),
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
                                         mapURL));
@@ -170,7 +171,7 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
      * @param  geoBuffer              DOCUMENT ME!
      */
     public void initMap(final CidsBean cidsBean, final String geometryAttributeName, final double geoBuffer) {
-        initMap(cidsBean, geometryAttributeName, geoBuffer, AlkisConstants.COMMONS.MAP_CALL_STRING);
+        initMap(cidsBean, geometryAttributeName, geoBuffer, ClientAlkisConf.getInstance().getMapCallString());
     }
 
     /**
@@ -183,8 +184,8 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
         initMap(
             cidsBean,
             geometryAttributeName,
-            AlkisConstants.COMMONS.GEO_BUFFER,
-            AlkisConstants.COMMONS.MAP_CALL_STRING);
+            ClientAlkisConf.getInstance().getGeoBuffer(),
+            ClientAlkisConf.getInstance().getMapCallString());
     }
 
     /**
