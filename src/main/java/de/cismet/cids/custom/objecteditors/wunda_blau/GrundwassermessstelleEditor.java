@@ -198,11 +198,11 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         final MappingComponent mc = new MappingComponent();
         CismapBroker.getInstance().setMappingComponent(mc);
         final long before = System.currentTimeMillis();
-        DevelopmentTools.createEditorInFrameFromRestfulConnection(
+        DevelopmentTools.createEditorFromRestfulConnection(
+            DevelopmentTools.RESTFUL_CALLSERVER_CALLSERVER,
             "WUNDA_BLAU",
             null,
-            "admin",
-            "xxx",
+            true,
             "grundwassermessstelle",
             30,
             1000,
