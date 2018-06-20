@@ -784,7 +784,7 @@ public class AlkisUtils {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
-                                "navigator.alkis.products@WUNDA_BLAU",
+                                "csa://alkisProduct@WUNDA_BLAU",
                                 connectionContext)
                         != null;
         } catch (ConnectionException ex) {
