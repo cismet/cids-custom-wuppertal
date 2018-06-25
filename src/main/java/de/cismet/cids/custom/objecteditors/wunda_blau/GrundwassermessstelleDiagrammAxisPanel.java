@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXList;
 
+import org.jfree.util.ShapeUtilities;
+
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -65,6 +67,8 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
 
     private final GrundwassermessstelleMesswerteDiagrammPanel diagrammPanel;
 
+    private final List<CidsBean> disabledStoffBeans = new ArrayList<>();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList<CidsBean> jList1;
@@ -100,6 +104,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
      * @param  stoffBeans  DOCUMENT ME!
      */
     public void setStoffBeans(final Collection<CidsBean> stoffBeans) {
+        disabledStoffBeans.clear();
         ((DefaultListModel<CidsBean>)jList1.getModel()).clear();
         if (stoffBeans != null) {
             for (final CidsBean stoffBean : stoffBeans) {
@@ -115,6 +120,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
      */
     public void setAxisName(final String name) {
         jLabel1.setText(name);
+        jLabel1.setVisible(name != null);
     }
 
     /**
@@ -153,6 +159,13 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
         add(jLabel1, gridBagConstraints);
 
         jList1.setCellRenderer(new MesswerteListCellRenderer());
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    jList1MouseClicked(evt);
+                }
+            });
         jScrollPane3.setViewportView(jList1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -167,6 +180,27 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList1MouseClicked
+        final JList list = (JList)evt.getSource();
+        if (evt.getClickCount() == 2) {
+            final int index = list.locationToIndex(evt.getPoint());
+            final CidsBean stoffBean = ((DefaultListModel<CidsBean>)list.getModel()).get(index);
+            if (stoffBean != null) {
+                if (disabledStoffBeans.contains(stoffBean)) {
+                    disabledStoffBeans.remove(stoffBean);
+                } else {
+                    disabledStoffBeans.add(stoffBean);
+                }
+                diagrammPanel.refreshChart();
+            }
+        }
+    }                                                                      //GEN-LAST:event_jList1MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     public List<CidsBean> getStoffBeans() {
@@ -176,6 +210,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
             final CidsBean stoffBean = model.getElementAt(index);
             stoffBeans.add(stoffBean);
         }
+        stoffBeans.removeAll(disabledStoffBeans);
         return stoffBeans;
     }
 
@@ -203,6 +238,10 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
                     isSelected,
                     cellHasFocus);
             final CidsBean stoffBean = (CidsBean)value;
+            final String schluessel = (String)stoffBean.getProperty("schluessel");
+
+            label.setEnabled(!disabledStoffBeans.contains(stoffBean));
+            label.setIcon(diagrammPanel.createIconForAxis(schluessel, GrundwassermessstelleDiagrammAxisPanel.this));
 
             final String name = (String)stoffBean.getProperty("name");
             final String einheit = (String)stoffBean.getProperty("einheit");
@@ -327,9 +366,11 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
                             ((MesswerteList)dsde.getDragSourceContext().getComponent()).getModel();
                         if (model.contains(stoffBean)) {
                             model.removeElement(stoffBean);
+                            disabledStoffBeans.remove(stoffBean);
                         }
                     }
                     diagrammPanel.refreshChart();
+                    jList1.revalidate();
                 } catch (final Exception ex) {
                     LOG.warn("could not obtain transferable data", ex); // NOI18N
                 }

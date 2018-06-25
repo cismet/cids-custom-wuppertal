@@ -23,28 +23,33 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.ui.RectangleEdge;
+import org.jfree.util.ShapeUtilities;
 
-import java.awt.Frame;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Paint;
+import java.awt.Shape;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.image.BufferedImage;
 
 import java.text.SimpleDateFormat;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import javax.swing.JDialog;
+import javax.swing.Icon;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-
-import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -67,20 +72,32 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
 
     private Collection<CidsBean> messungBeans;
     private final ConnectionContext connectionContext;
+    private final Shape[] shapes = new Shape[] {
+            ShapeUtilities.createDiagonalCross(3, 1),
+            ShapeUtilities.createDiamond(5),
+            ShapeUtilities.createDownTriangle(5),
+            ShapeUtilities.createRegularCross(3, 1),
+            ShapeUtilities.createUpTriangle(5)
+        };
+
+    private final Paint[] colors = new Paint[] {
+            Color.RED,
+            Color.BLUE,
+            Color.BLACK,
+            Color.YELLOW,
+            Color.CYAN,
+            Color.WHITE,
+            Color.PINK,
+            Color.GREEN
+        };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel
-        grundwassermessstelleDiagrammAxisPanel1;
+        grundwassermessstelleDiagrammAxisPanel4;
     private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel
-        grundwassermessstelleDiagrammAxisPanel2;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel
-        grundwassermessstelleDiagrammAxisPanel3;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JPanel jPanel1;
+        grundwassermessstelleDiagrammAxisPanel5;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -136,9 +153,8 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      * @param  stoffBeans  DOCUMENT ME!
      */
     public void setStoffBeans(final Collection<CidsBean> stoffBeans) {
-        grundwassermessstelleDiagrammAxisPanel1.setStoffBeans(null);
-        grundwassermessstelleDiagrammAxisPanel2.setStoffBeans(stoffBeans);
-        grundwassermessstelleDiagrammAxisPanel3.setStoffBeans(null);
+        grundwassermessstelleDiagrammAxisPanel4.setStoffBeans(stoffBeans);
+        grundwassermessstelleDiagrammAxisPanel5.setStoffBeans(null);
     }
 
     /**
@@ -159,67 +175,12 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        grundwassermessstelleDiagrammAxisPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this);
-        grundwassermessstelleDiagrammAxisPanel2 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this);
-        grundwassermessstelleDiagrammAxisPanel3 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this);
-        jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jPanel2 = new ChartPanel(createChartPanel());
-        jButton1 = new javax.swing.JButton();
-
-        jPanel1.setOpaque(false);
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
-
-        grundwassermessstelleDiagrammAxisPanel1.setAxisName(org.openide.util.NbBundle.getMessage(
-                GrundwassermessstelleMesswerteDiagrammPanel.class,
-                "GrundwassermessstelleMesswerteDiagrammPanel.grundwassermessstelleDiagrammAxisPanel1.axisName")); // NOI18N
-        grundwassermessstelleDiagrammAxisPanel1.setOpaque(false);
-        jPanel4.add(grundwassermessstelleDiagrammAxisPanel1);
-
-        grundwassermessstelleDiagrammAxisPanel2.setAxisName(org.openide.util.NbBundle.getMessage(
-                GrundwassermessstelleMesswerteDiagrammPanel.class,
-                "GrundwassermessstelleMesswerteDiagrammPanel.grundwassermessstelleDiagrammAxisPanel2.axisName")); // NOI18N
-        grundwassermessstelleDiagrammAxisPanel2.setOpaque(false);
-        jPanel4.add(grundwassermessstelleDiagrammAxisPanel2);
-
-        grundwassermessstelleDiagrammAxisPanel3.setAxisName(org.openide.util.NbBundle.getMessage(
-                GrundwassermessstelleMesswerteDiagrammPanel.class,
-                "GrundwassermessstelleMesswerteDiagrammPanel.grundwassermessstelleDiagrammAxisPanel3.axisName")); // NOI18N
-        grundwassermessstelleDiagrammAxisPanel3.setOpaque(false);
-        jPanel4.add(grundwassermessstelleDiagrammAxisPanel3);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jPanel4, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton2,
-            org.openide.util.NbBundle.getMessage(
-                GrundwassermessstelleMesswerteDiagrammPanel.class,
-                "GrundwassermessstelleMesswerteDiagrammPanel.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton2ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
-        jPanel1.add(jButton2, gridBagConstraints);
+        jPanel2 = new ChartPanel(null);
+        grundwassermessstelleDiagrammAxisPanel4 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this);
+        grundwassermessstelleDiagrammAxisPanel5 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -231,7 +192,7 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -239,23 +200,29 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(jPanel2, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
-            org.openide.util.NbBundle.getMessage(
-                GrundwassermessstelleMesswerteDiagrammPanel.class,
-                "GrundwassermessstelleMesswerteDiagrammPanel.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton1ActionPerformed(evt);
-                }
-            });
+        grundwassermessstelleDiagrammAxisPanel4.setAxisName(null);
+        grundwassermessstelleDiagrammAxisPanel4.setMinimumSize(new java.awt.Dimension(200, 152));
+        grundwassermessstelleDiagrammAxisPanel4.setOpaque(false);
+        grundwassermessstelleDiagrammAxisPanel4.setPreferredSize(new java.awt.Dimension(200, 152));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel3.add(jButton1, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel3.add(grundwassermessstelleDiagrammAxisPanel4, gridBagConstraints);
+
+        grundwassermessstelleDiagrammAxisPanel5.setAxisName(null);
+        grundwassermessstelleDiagrammAxisPanel5.setMinimumSize(new java.awt.Dimension(200, 152));
+        grundwassermessstelleDiagrammAxisPanel5.setOpaque(false);
+        grundwassermessstelleDiagrammAxisPanel5.setPreferredSize(new java.awt.Dimension(200, 152));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel3.add(grundwassermessstelleDiagrammAxisPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -263,27 +230,6 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         gridBagConstraints.weighty = 1.0;
         add(jPanel3, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        final JDialog dialog = new JDialog((Frame)null, "Stoffauswahl", true);
-        dialog.setContentPane(jPanel1);
-        dialog.pack();
-        StaticSwingTools.showDialog(dialog);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
-        ((JDialog)jPanel1.getParent().getParent().getParent()).dispose();
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -299,10 +245,11 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
             final String einheit = (String)stoffBean.getProperty("einheit");
             final String name = (String)stoffBean.getProperty("name");
             final TimeSeries series = new TimeSeries(name + ((einheit != null) ? (" (" + einheit + ")") : ""));
+            final String schluessel = (String)stoffBean.getProperty("schluessel");
+            series.setKey(schluessel);
             for (final CidsBean messungBean : messungBeans) {
                 final Date datum = (Date)messungBean.getProperty("datum");
                 for (final CidsBean messwertBean : messungBean.getBeanCollectionProperty("messwerte")) {
-                    final String schluessel = (String)stoffBean.getProperty("schluessel");
                     if ((schluessel != null)
                                 && schluessel.equals((String)messwertBean.getProperty("stoff_schluessel"))) {
                         if (series.getDataItem(new Day(datum)) == null) {
@@ -319,12 +266,110 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
     /**
      * DOCUMENT ME!
      *
+     * @param   schluessel  DOCUMENT ME!
+     * @param   axis        DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Icon createIconForAxis(final String schluessel, final GrundwassermessstelleDiagrammAxisPanel axis) {
+        final Shape shape = axis.equals(grundwassermessstelleDiagrammAxisPanel4) ? getShapeForLeft(schluessel)
+                                                                                 : getShapeForRight(schluessel);
+        final Paint color = axis.equals(grundwassermessstelleDiagrammAxisPanel4) ? getColorForLeft(schluessel)
+                                                                                 : getColorForRight(schluessel);
+        final Icon icon = new ShapeIcon(shape, color, 18, 18);
+        return icon;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   schluessel  DOCUMENT ME!
+     * @param   stoffBeans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getIndex(final String schluessel, final List<CidsBean> stoffBeans) {
+        for (final CidsBean stoffBean : stoffBeans) {
+            if (schluessel.equals(stoffBean.getProperty("schluessel"))) {
+                return stoffBeans.indexOf(stoffBean);
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   schluessel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Shape getShapeForLeft(final String schluessel) {
+        final int index = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel4.getStoffBeans());
+        if (index >= 0) {
+            return shapes[index % shapes.length];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   schluessel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Paint getColorForLeft(final String schluessel) {
+        final int index = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel4.getStoffBeans());
+        if (index >= 0) {
+            return colors[index % colors.length];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   schluessel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Shape getShapeForRight(final String schluessel) {
+        final int index = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel5.getStoffBeans());
+        if (index >= 0) {
+            return shapes[shapes.length - (index % shapes.length) - 1];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   schluessel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Paint getColorForRight(final String schluessel) {
+        final int index = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel5.getStoffBeans());
+        if (index >= 0) {
+            return colors[shapes.length - (index % colors.length) - 1];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     public JFreeChart createChartPanel() {
-        final TimeSeriesCollection dataSetLeft = createDataSet(grundwassermessstelleDiagrammAxisPanel2);
-        final TimeSeriesCollection dataSetRight = (!grundwassermessstelleDiagrammAxisPanel3.getStoffBeans().isEmpty())
-            ? createDataSet(grundwassermessstelleDiagrammAxisPanel3) : null;
+        final TimeSeriesCollection dataSetLeft = createDataSet(grundwassermessstelleDiagrammAxisPanel4);
+        final TimeSeriesCollection dataSetRight = (!grundwassermessstelleDiagrammAxisPanel5.getStoffBeans().isEmpty())
+            ? createDataSet(grundwassermessstelleDiagrammAxisPanel5) : null;
 
 //        final Set<String> einheitenLeft = new HashSet<>();
 //        for (final CidsBean stoffBean : grundwassermessstelleDiagrammAxisPanel2.getStoffBeans()) {
@@ -386,10 +431,17 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
 
         plot.setRangeAxis(0, plot.getRangeAxis());
         plot.mapDatasetToRangeAxis(0, 0);
-        final XYItemRenderer rendererLeft = plot.getRendererForDataset(dataSetLeft);
-        final LegendTitle legendLeft = new LegendTitle(rendererLeft);
-        legendLeft.setPosition(RectangleEdge.LEFT);
-        chart.addLegend(legendLeft);
+        final XYItemRenderer renderer = plot.getRendererForDataset(dataSetLeft);
+
+        for (int index = 0; index < dataSetLeft.getSeriesCount(); index++) {
+            final String schluessel = (String)dataSetLeft.getSeries(index).getKey();
+            renderer.setSeriesShape(index, getShapeForLeft(schluessel));
+            renderer.setSeriesPaint(index, getColorForLeft(schluessel));
+        }
+
+//        final LegendTitle legendLeft = new LegendTitle(rendererLeft);
+//        legendLeft.setPosition(RectangleEdge.LEFT);
+//        chart.addLegend(legendLeft);
 
         if (dataSetRight != null) {
             plot.setDataset(1, dataSetRight);
@@ -397,10 +449,10 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
             final NumberAxis numberAxis = new NumberAxis(); // String.join(", ", einheitenRight));
             plot.setRangeAxis(1, numberAxis);
             plot.mapDatasetToRangeAxis(1, 1);
-            final XYItemRenderer rendererRight = plot.getRendererForDataset(dataSetRight);
-            final LegendTitle legendRight = new LegendTitle(rendererRight);
-            legendRight.setPosition(RectangleEdge.RIGHT);
-            chart.addLegend(legendRight);
+//            final XYItemRenderer rendererRight = plot.getRendererForDataset(dataSetRight);
+//            final LegendTitle legendRight = new LegendTitle(rendererRight);
+//            legendRight.setPosition(RectangleEdge.RIGHT);
+//            chart.addLegend(legendRight);
         }
 
         return chart;
@@ -409,5 +461,61 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class ShapeIcon implements Icon {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final Shape shape;
+        private Paint paint;
+        private final int width;
+        private final int height;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ShapeIcon object.
+         *
+         * @param  shape   DOCUMENT ME!
+         * @param  paint   DOCUMENT ME!
+         * @param  width   DOCUMENT ME!
+         * @param  height  DOCUMENT ME!
+         */
+        public ShapeIcon(final Shape shape, final Paint paint, final int width, final int height) {
+            this.shape = shape;
+            this.width = width;
+            this.height = height;
+            this.paint = paint;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public int getIconWidth() {
+            return width;
+        }
+
+        @Override
+        public int getIconHeight() {
+            return height;
+        }
+
+        @Override
+        public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
+            final Graphics2D g2 = (Graphics2D)g;
+            g2.setPaint(paint);
+            g2.translate(width / 2, height / 2);
+            g2.draw(shape);
+            g2.fill(shape);
+            g2.translate(-width / 2, -height / 2);
+        }
     }
 }
