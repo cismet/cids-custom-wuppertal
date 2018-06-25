@@ -17,29 +17,34 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.ui.RectangleEdge;
 
+import java.awt.Frame;
 import java.awt.datatransfer.DataFlavor;
 
 import java.text.SimpleDateFormat;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
+import javax.swing.JDialog;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -60,8 +65,7 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Collection<CidsBean> stoffBeans;
-    private final Collection<CidsBean> messungBeans;
+    private Collection<CidsBean> messungBeans;
     private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -71,31 +75,71 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         grundwassermessstelleDiagrammAxisPanel2;
     private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel
         grundwassermessstelleDiagrammAxisPanel3;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new GrundwassermessstelleMesswerteDiagrammPanel object.
+     */
+    public GrundwassermessstelleMesswerteDiagrammPanel() {
+        this(ConnectionContext.createDummy());
+    }
+
+    /**
      * Creates new form GrundwassermessstelleMessungenDiagrammPanel.
      *
-     * @param  stoffBeans         DOCUMENT ME!
-     * @param  messungBeans       DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public GrundwassermessstelleMesswerteDiagrammPanel(final Collection<CidsBean> stoffBeans,
-            final Collection<CidsBean> messungBeans,
-            final ConnectionContext connectionContext) {
+    public GrundwassermessstelleMesswerteDiagrammPanel(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
-        this.stoffBeans = stoffBeans;
-        this.messungBeans = messungBeans;
 
         initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  messungBeans  DOCUMENT ME!
+     */
+    public void setMessungBeans(final Collection<CidsBean> messungBeans) {
+        this.messungBeans = messungBeans;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Collection<CidsBean> getMessungBeans() {
+        return messungBeans;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void refreshChart() {
+        getChartPanel().setChart(createChartPanel());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stoffBeans  DOCUMENT ME!
+     */
+    public void setStoffBeans(final Collection<CidsBean> stoffBeans) {
+        grundwassermessstelleDiagrammAxisPanel1.setStoffBeans(null);
+        grundwassermessstelleDiagrammAxisPanel2.setStoffBeans(stoffBeans);
+        grundwassermessstelleDiagrammAxisPanel3.setStoffBeans(null);
+    }
 
     /**
      * DOCUMENT ME!
@@ -115,60 +159,131 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         grundwassermessstelleDiagrammAxisPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this, stoffBeans);
+            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this);
         grundwassermessstelleDiagrammAxisPanel2 =
             new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this);
         grundwassermessstelleDiagrammAxisPanel3 =
             new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel(this);
-        jPanel2 = new ChartPanel(refreshChart());
+        jButton2 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel2 = new ChartPanel(createChartPanel());
+        jButton1 = new javax.swing.JButton();
 
-        setLayout(new java.awt.GridBagLayout());
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jPanel3.setLayout(new java.awt.GridBagLayout());
-
-        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         grundwassermessstelleDiagrammAxisPanel1.setAxisName(org.openide.util.NbBundle.getMessage(
                 GrundwassermessstelleMesswerteDiagrammPanel.class,
                 "GrundwassermessstelleMesswerteDiagrammPanel.grundwassermessstelleDiagrammAxisPanel1.axisName")); // NOI18N
-        jPanel1.add(grundwassermessstelleDiagrammAxisPanel1);
+        grundwassermessstelleDiagrammAxisPanel1.setOpaque(false);
+        jPanel4.add(grundwassermessstelleDiagrammAxisPanel1);
 
         grundwassermessstelleDiagrammAxisPanel2.setAxisName(org.openide.util.NbBundle.getMessage(
                 GrundwassermessstelleMesswerteDiagrammPanel.class,
                 "GrundwassermessstelleMesswerteDiagrammPanel.grundwassermessstelleDiagrammAxisPanel2.axisName")); // NOI18N
-        jPanel1.add(grundwassermessstelleDiagrammAxisPanel2);
+        grundwassermessstelleDiagrammAxisPanel2.setOpaque(false);
+        jPanel4.add(grundwassermessstelleDiagrammAxisPanel2);
 
         grundwassermessstelleDiagrammAxisPanel3.setAxisName(org.openide.util.NbBundle.getMessage(
                 GrundwassermessstelleMesswerteDiagrammPanel.class,
                 "GrundwassermessstelleMesswerteDiagrammPanel.grundwassermessstelleDiagrammAxisPanel3.axisName")); // NOI18N
-        jPanel1.add(grundwassermessstelleDiagrammAxisPanel3);
+        grundwassermessstelleDiagrammAxisPanel3.setOpaque(false);
+        jPanel4.add(grundwassermessstelleDiagrammAxisPanel3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        jPanel3.add(jPanel1, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jPanel4, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton2,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleMesswerteDiagrammPanel.class,
+                "GrundwassermessstelleMesswerteDiagrammPanel.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
+        jPanel1.add(jButton2, gridBagConstraints);
+
+        setOpaque(false);
+        setLayout(new java.awt.GridBagLayout());
+
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(jPanel2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleMesswerteDiagrammPanel.class,
+                "GrundwassermessstelleMesswerteDiagrammPanel.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel3.add(jButton1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel3, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        final JDialog dialog = new JDialog((Frame)null, "Stoffauswahl", true);
+        dialog.setContentPane(jPanel1);
+        dialog.pack();
+        StaticSwingTools.showDialog(dialog);
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        ((JDialog)jPanel1.getParent().getParent().getParent()).dispose();
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -178,7 +293,7 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      * @return  DOCUMENT ME!
      */
     private TimeSeriesCollection createDataSet(final GrundwassermessstelleDiagrammAxisPanel axisPanel) {
-        final TimeSeriesCollection datasetLeft = new TimeSeriesCollection();
+        final TimeSeriesCollection dataset = new TimeSeriesCollection();
 
         for (final CidsBean stoffBean : axisPanel.getStoffBeans()) {
             final String einheit = (String)stoffBean.getProperty("einheit");
@@ -190,13 +305,15 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
                     final String schluessel = (String)stoffBean.getProperty("schluessel");
                     if ((schluessel != null)
                                 && schluessel.equals((String)messwertBean.getProperty("stoff_schluessel"))) {
-                        series.add(new Day(datum), (Double)messwertBean.getProperty("wert"));
+                        if (series.getDataItem(new Day(datum)) == null) {
+                            series.add(new Day(datum), (Double)messwertBean.getProperty("wert"));
+                        }
                     }
                 }
             }
-            datasetLeft.addSeries(series);
+            dataset.addSeries(series);
         }
-        return datasetLeft;
+        return dataset;
     }
 
     /**
@@ -204,67 +321,87 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      *
      * @return  DOCUMENT ME!
      */
-    public JFreeChart refreshChart() {
+    public JFreeChart createChartPanel() {
         final TimeSeriesCollection dataSetLeft = createDataSet(grundwassermessstelleDiagrammAxisPanel2);
         final TimeSeriesCollection dataSetRight = (!grundwassermessstelleDiagrammAxisPanel3.getStoffBeans().isEmpty())
             ? createDataSet(grundwassermessstelleDiagrammAxisPanel3) : null;
 
-        final Set<String> einheitenLeft = new HashSet<String>();
-        for (final CidsBean stoffBean : grundwassermessstelleDiagrammAxisPanel2.getStoffBeans()) {
-            final String einheit = (String)stoffBean.getProperty("einheit");
-            if (einheit != null) {
-                einheitenLeft.add(einheit);
-            }
-        }
+//        final Set<String> einheitenLeft = new HashSet<>();
+//        for (final CidsBean stoffBean : grundwassermessstelleDiagrammAxisPanel2.getStoffBeans()) {
+//            final String einheit = (String)stoffBean.getProperty("einheit");
+//            if (einheit != null) {
+//                einheitenLeft.add(einheit);
+//            }
+//        }
 
         final JFreeChart chart = ChartFactory.createScatterPlot(
-                "Messwerte",
-                "Datum",
-                String.join(", ", einheitenLeft),
+                null,
+                null,
+                null,
                 dataSetLeft,
                 PlotOrientation.VERTICAL,
-                true,
+                false,
                 false,
                 false);
 
-        final DateAxis dateAxis = new DateAxis("Mess-Datum");
+        final XYPlot plot = chart.getXYPlot();
+
+        final DateAxis dateAxis = new DateAxis();
         dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);
         dateAxis.setDateFormatOverride(new SimpleDateFormat("dd.MM.yyy"));
         dateAxis.setVerticalTickLabels(true);
 
-        final XYPlot plot = chart.getXYPlot();
-        plot.setRangeAxisLocation(AxisLocation.TOP_OR_LEFT);
-        plot.getRangeAxis().setLabelAngle(Math.toRadians(0));
+//        if (getMessungBeans() != null) {
+//            Date maxDate = null;
+//            Date minDate = null;
+//            for (final CidsBean messungBean : getMessungBeans()) {
+//                final Date date = (Date)messungBean.getProperty("datum");
+//                if ((maxDate == null) || (maxDate.compareTo(date) < 0)) {
+//                    maxDate = date;
+//                }
+//                if ((minDate == null) || (minDate.compareTo(date) > 0)) {
+//                    minDate = date;
+//                }
+//            }
+//            dateAxis.setAutoRange(false);
+//            if (minDate != null) {
+//                dateAxis.setMinimumDate(minDate);
+//            }
+//            if (maxDate != null) {
+//                dateAxis.setMaximumDate(maxDate);
+//            }
+//        }
+
         plot.setDomainAxis(dateAxis);
 
-        final Set<String> einheitenRight = new HashSet<String>();
-        for (final CidsBean stoffBean : grundwassermessstelleDiagrammAxisPanel3.getStoffBeans()) {
-            final String einheit = (String)stoffBean.getProperty("einheit");
-            if (einheit != null) {
-                einheitenRight.add(einheit);
-            }
-        }
-        if (dataSetRight != null) {
-            final NumberAxis numberAxis = new NumberAxis(String.join(", ", einheitenRight));
-            numberAxis.setLabelAngle(Math.toRadians(180));
-            plot.setRangeAxis(1, numberAxis);
-            plot.setDataset(1, dataSetRight);
-            plot.mapDatasetToRangeAxis(1, 1);
-        }
+//        final Set<String> einheitenRight = new HashSet<>();
+//        for (final CidsBean stoffBean : grundwassermessstelleDiagrammAxisPanel3.getStoffBeans()) {
+//            final String einheit = (String)stoffBean.getProperty("einheit");
+//            if (einheit != null) {
+//                einheitenRight.add(einheit);
+//            }
+//        }
 
-        // create two legends and put them into a composite title
-// final XYItemRenderer rendererLeft = plot.getRendererForDataset(dataSetLeft);
-// XYItemRenderer rendererMiddle = plot.getRendererForDataset(dataSetMiddle);
-// final XYItemRenderer rendererRight = plot.getRendererForDataset(dataSetRight);
-// final LegendTitle legend1 = new LegendTitle(rendererLeft);
-// final LegendTitle legend2 = new LegendTitle(rendererRight);
-// final BlockContainer container = new BlockContainer(new BorderArrangement());
-// container.add(legend1, RectangleEdge.LEFT);
-// container.add(legend2, RectangleEdge.RIGHT);
-// container.add(new EmptyBlock(2000, 0));
-// final CompositeTitle legends = new CompositeTitle(container);
-// legends.setPosition(RectangleEdge.BOTTOM);
-// chart.addSubtitle(legends);
+        plot.setDataset(0, dataSetLeft);
+
+        plot.setRangeAxis(0, plot.getRangeAxis());
+        plot.mapDatasetToRangeAxis(0, 0);
+        final XYItemRenderer rendererLeft = plot.getRendererForDataset(dataSetLeft);
+        final LegendTitle legendLeft = new LegendTitle(rendererLeft);
+        legendLeft.setPosition(RectangleEdge.LEFT);
+        chart.addLegend(legendLeft);
+
+        if (dataSetRight != null) {
+            plot.setDataset(1, dataSetRight);
+
+            final NumberAxis numberAxis = new NumberAxis(); // String.join(", ", einheitenRight));
+            plot.setRangeAxis(1, numberAxis);
+            plot.mapDatasetToRangeAxis(1, 1);
+            final XYItemRenderer rendererRight = plot.getRendererForDataset(dataSetRight);
+            final LegendTitle legendRight = new LegendTitle(rendererRight);
+            legendRight.setPosition(RectangleEdge.RIGHT);
+            chart.addLegend(legendRight);
+        }
 
         return chart;
     }

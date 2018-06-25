@@ -87,29 +87,26 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
      * @param  diagrammPanel  DOCUMENT ME!
      */
     public GrundwassermessstelleDiagrammAxisPanel(final GrundwassermessstelleMesswerteDiagrammPanel diagrammPanel) {
-        this(diagrammPanel, null);
-    }
-
-    /**
-     * Creates a new GrundwassermessstelleDiagrammAxisPanel object.
-     *
-     * @param  diagrammPanel  DOCUMENT ME!
-     * @param  stoffBeans     DOCUMENT ME!
-     */
-    public GrundwassermessstelleDiagrammAxisPanel(final GrundwassermessstelleMesswerteDiagrammPanel diagrammPanel,
-            final Collection<CidsBean> stoffBeans) {
         this.diagrammPanel = diagrammPanel;
 
         initComponents();
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stoffBeans  DOCUMENT ME!
+     */
+    public void setStoffBeans(final Collection<CidsBean> stoffBeans) {
+        ((DefaultListModel<CidsBean>)jList1.getModel()).clear();
         if (stoffBeans != null) {
             for (final CidsBean stoffBean : stoffBeans) {
                 ((DefaultListModel<CidsBean>)jList1.getModel()).addElement(stoffBean);
             }
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -220,6 +217,52 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
      *
      * @version  $Revision$, $Date$
      */
+    class MesswerteListDnDObject {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final CidsBean stoffBean;
+        private final MesswerteList source;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new MesswerteListDnDObject object.
+         *
+         * @param  stoffBean  DOCUMENT ME!
+         * @param  source     DOCUMENT ME!
+         */
+        MesswerteListDnDObject(final CidsBean stoffBean, final MesswerteList source) {
+            this.stoffBean = stoffBean;
+            this.source = source;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public CidsBean getStoffBean() {
+            return stoffBean;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public MesswerteList getSource() {
+            return source;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class MesswerteList extends JXList implements DropTargetListener, DragGestureListener, DragSourceListener {
 
         //~ Instance fields ----------------------------------------------------
@@ -243,22 +286,28 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
         public void dragGestureRecognized(final DragGestureEvent dge) {
             final int index = this.locationToIndex(dge.getDragOrigin());
             final CidsBean stoffBean = getModel().getElementAt(this.convertIndexToModel(index));
-            dragSource.startDrag(dge, DragSource.DefaultMoveDrop, new StoffBeanTransferable(stoffBean), this);
+            dragSource.startDrag(
+                dge,
+                DragSource.DefaultMoveDrop,
+                new StoffBeanTransferable(new MesswerteListDnDObject(stoffBean, this)),
+                this);
         }
 
         @Override
         public void drop(final DropTargetDropEvent dtde) {
             try {
                 final Object o = dtde.getTransferable().getTransferData(STOFF_BEAN_FLAVOR);
-                if (o instanceof CidsBean) {
-                    final CidsBean stoffBean = (CidsBean)o;
-                    final DefaultListModel<CidsBean> model = ((MesswerteList)dtde.getDropTargetContext().getComponent())
-                                .getModel();
-                    if (!model.contains(stoffBean)) {
-                        model.addElement(stoffBean);
+                if (o instanceof MesswerteListDnDObject) {
+                    final MesswerteListDnDObject mldo = (MesswerteListDnDObject)o;
+                    if (!this.equals(mldo.getSource())) {
+                        final CidsBean stoffBean = mldo.getStoffBean();
+                        final DefaultListModel<CidsBean> model =
+                            ((MesswerteList)dtde.getDropTargetContext().getComponent()).getModel();
+                        if (!model.contains(stoffBean)) {
+                            model.addElement(stoffBean);
+                        }
+                        dtde.dropComplete(true);
                     }
-                    diagrammPanel.getChartPanel().setChart(diagrammPanel.refreshChart());
-                    dtde.dropComplete(true);
                 }
             } catch (final Exception e) {
                 LOG.error("could not drop", e); // NOI18N
@@ -271,14 +320,16 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
             if (dsde.getDropSuccess()) {
                 try {
                     final Object o = dsde.getDragSourceContext().getTransferable().getTransferData(STOFF_BEAN_FLAVOR);
-                    if (o instanceof CidsBean) {
-                        final CidsBean stoffBean = (CidsBean)o;
+                    if (o instanceof MesswerteListDnDObject) {
+                        final MesswerteListDnDObject mldo = (MesswerteListDnDObject)o;
+                        final CidsBean stoffBean = mldo.getStoffBean();
                         final DefaultListModel<CidsBean> model =
                             ((MesswerteList)dsde.getDragSourceContext().getComponent()).getModel();
                         if (model.contains(stoffBean)) {
                             model.removeElement(stoffBean);
                         }
                     }
+                    diagrammPanel.refreshChart();
                 } catch (final Exception ex) {
                     LOG.warn("could not obtain transferable data", ex); // NOI18N
                 }
@@ -332,7 +383,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
 
         //~ Instance fields ----------------------------------------------------
 
-        private final CidsBean stoffBean;
+        private final MesswerteListDnDObject stoffBean;
 
         //~ Constructors -------------------------------------------------------
 
@@ -341,7 +392,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
          *
          * @param  stoffBean  DOCUMENT ME!
          */
-        public StoffBeanTransferable(final CidsBean stoffBean) {
+        public StoffBeanTransferable(final MesswerteListDnDObject stoffBean) {
             this.stoffBean = stoffBean;
         }
 

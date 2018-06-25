@@ -21,11 +21,12 @@ import Sirius.server.newuser.User;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXDatePicker;
 
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.Frame;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -46,7 +47,6 @@ import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
-import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -70,8 +70,6 @@ import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
-import de.cismet.tools.gui.StaticSwingTools;
-
 /**
  * DOCUMENT ME!
  *
@@ -92,6 +90,8 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     private final Map<String, CidsBean> stoffMap = new HashMap<>();
 
     private final boolean editable;
+    private boolean showDiagramm = false;
+    private boolean loading = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -99,15 +99,16 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
-    private javax.swing.JButton jButton1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMesswerteDiagrammPanel
+        grundwassermessstelleMesswerteDiagrammPanel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXTable jXTable1;
+    private org.jdesktop.swingx.JXBusyLabel jxLBusyMeasure;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -129,6 +130,26 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  showDiagramm  DOCUMENT ME!
+     */
+    public void setShowDiagramm(final boolean showDiagramm) {
+        this.showDiagramm = showDiagramm;
+        refreshTabPane();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  loading  DOCUMENT ME!
+     */
+    public void setLoading(final boolean loading) {
+        this.loading = loading;
+        refreshTabPane();
+    }
 
     /**
      * DOCUMENT ME!
@@ -161,9 +182,9 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jXTable1 = new org.jdesktop.swingx.JXTable();
         jPanel3 = new javax.swing.JPanel();
@@ -172,24 +193,20 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        jButton1 = new javax.swing.JButton();
+        grundwassermessstelleMesswerteDiagrammPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMesswerteDiagrammPanel(
+                getConnectionContext());
         jPanel5 = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        jProgressBar1 = new javax.swing.JProgressBar();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+        jxLBusyMeasure = new JXBusyLabel(new Dimension(64, 64));
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
-
-        jPanel4.setOpaque(false);
-        jPanel4.setLayout(new java.awt.CardLayout());
-
-        jPanel1.setOpaque(false);
-        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new WrapLayout());
@@ -199,7 +216,13 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(jPanel2, gridBagConstraints);
+        add(jPanel2, gridBagConstraints);
+
+        jPanel4.setOpaque(false);
+        jPanel4.setLayout(new java.awt.CardLayout());
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jXTable1.setModel(new MesswerteTableModel());
         jXTable1.setOpaque(false);
@@ -211,7 +234,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -258,31 +281,14 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel1.add(jPanel3, gridBagConstraints);
         jPanel3.setVisible(editable);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
-            org.openide.util.NbBundle.getMessage(
-                GrundwassermessstelleMessungenTablePanel.class,
-                "GrundwassermessstelleMessungenTablePanel.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton1ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel1.add(jButton1, gridBagConstraints);
-
         jPanel4.add(jPanel1, "table");
+        jPanel4.add(grundwassermessstelleMesswerteDiagrammPanel1, "diagramm");
 
         jPanel5.setOpaque(false);
         jPanel5.setLayout(new java.awt.GridBagLayout());
@@ -293,26 +299,31 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel5.add(filler3, gridBagConstraints);
-
-        jProgressBar1.setIndeterminate(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel5.add(jProgressBar1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel5.add(filler2, gridBagConstraints);
 
+        jxLBusyMeasure.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jxLBusyMeasure.setBusy(true);
+        jxLBusyMeasure.setPreferredSize(new java.awt.Dimension(64, 64));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel5.add(jxLBusyMeasure, gridBagConstraints);
+
         jPanel4.add(jPanel5, "progress");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -361,33 +372,23 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        final CidsBean kategorieBean = getModel().getKategorieBean();
-        final List<CidsBean> selectedMessungBeans = new ArrayList<>();
-        for (final int rowIndex : jXTable1.getSelectedRows()) {
-            final CidsBean messungBean = getModel().getMessungBean(jXTable1.convertRowIndexToModel(rowIndex));
-            selectedMessungBeans.add(messungBean);
+    private void refreshTabPane() {
+        if (loading) {
+            ((CardLayout)jPanel4.getLayout()).show(jPanel4, "progress");
+        } else if (showDiagramm) {
+            ((CardLayout)jPanel4.getLayout()).show(jPanel4, "diagramm");
+        } else {
+            ((CardLayout)jPanel4.getLayout()).show(jPanel4, "table");
         }
-        final GrundwassermessstelleMesswerteDiagrammPanel diagrammPanel =
-            new GrundwassermessstelleMesswerteDiagrammPanel(
-                kategorieBean.getBeanCollectionProperty("stoffe"),
-                (jXTable1.getSelectedRowCount() > 0) ? selectedMessungBeans : getModel().getMessungBeans(),
-                getConnectionContext());
-        final JDialog dialog = new JDialog((Frame)null, "Messungen - Diagramm", true);
-        dialog.setContentPane(diagrammPanel);
-        dialog.pack();
-        StaticSwingTools.showDialog(dialog);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
-
+    }
     /**
      * DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     private void loadKategorien() throws Exception {
+        setLoading(true);
         kategorieMap.clear();
         stoffMap.clear();
         jPanel2.removeAll();
@@ -489,6 +490,8 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
                         setKategorie(firstKategorieBean);
                     } catch (final Exception ex) {
                         LOG.error("error while loading kategorie bean", ex);
+                    } finally {
+                        setLoading(false);
                     }
                 }
             }.execute();
@@ -529,7 +532,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      */
     private void loadMessungen() {
         if (cidsBean != null) {
-            ((CardLayout)jPanel4.getLayout()).show(jPanel4, "progress");
+            setLoading(true);
             new SwingWorker<List, Void>() {
 
                     @Override
@@ -559,14 +562,25 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
                     protected void done() {
                         try {
                             final List<CidsBean> messungBeans = get();
-                            getModel().setMessungBeans(messungBeans);
-                            ((CardLayout)jPanel4.getLayout()).show(jPanel4, "table");
+                            setMessungBeans(messungBeans);
                         } catch (final Exception ex) {
                             LOG.error("error while loading messung beans", ex);
+                        } finally {
+                            setLoading(false);
                         }
                     }
                 }.execute();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  messungBeans  DOCUMENT ME!
+     */
+    private void setMessungBeans(final List<CidsBean> messungBeans) {
+        getModel().setMessungBeans(messungBeans);
+        grundwassermessstelleMesswerteDiagrammPanel1.refreshChart();
     }
 
     @Override
@@ -582,6 +596,46 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      */
     private void setKategorie(final CidsBean kategorieBean) {
         getModel().setKategorieBean(kategorieBean);
+        grundwassermessstelleMesswerteDiagrammPanel1.setMessungBeans(getMessungBeans());
+        grundwassermessstelleMesswerteDiagrammPanel1.setStoffBeans(getKategorieBean().getBeanCollectionProperty(
+                "stoffe"));
+        grundwassermessstelleMesswerteDiagrammPanel1.refreshChart();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getKategorieBean() {
+        return getModel().getKategorieBean();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Collection<CidsBean> getMessungBeans() {
+        final List<CidsBean> selectedMessungBeans = new ArrayList<>();
+//        for (final int rowIndex : jXTable1.getSelectedRows()) {
+//            final CidsBean messungBean = getModel().getMessungBean(jXTable1.convertRowIndexToModel(rowIndex));
+//            selectedMessungBeans.add(messungBean);
+//        }
+        for (int rowIndex = 0; rowIndex < jXTable1.getRowCount(); rowIndex++) {
+            final CidsBean messungBean = getModel().getMessungBean(jXTable1.convertRowIndexToModel(rowIndex));
+            selectedMessungBeans.add(messungBean);
+        }
+        return selectedMessungBeans;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JPanel getButtonPanel() {
+        return jPanel2;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -958,8 +1012,6 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
                 final boolean isSelected,
                 final int rowIndex,
                 final int columnIndex) {
-            final CidsBean stoffBean = getModel().getStoffBean(columnIndex);
-
             final NumberFormatter formatter = new NumberFormatter(new DecimalFormat()) {
 
                     @Override
