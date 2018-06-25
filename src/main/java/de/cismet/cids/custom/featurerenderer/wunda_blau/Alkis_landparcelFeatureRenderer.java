@@ -10,7 +10,7 @@ package de.cismet.cids.custom.featurerenderer.wunda_blau;
 import java.awt.Color;
 import java.awt.Paint;
 
-import de.cismet.cids.custom.utils.alkisconstants.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
@@ -31,7 +31,7 @@ public class Alkis_landparcelFeatureRenderer extends CustomCidsFeatureRenderer {
 
     static {
         try {
-            final String rgbValueStr = AlkisConstants.COMMONS.LANDPARCEL_FEATURE_RENDERER_COLOR;
+            final String rgbValueStr = ClientAlkisConf.getInstance().getLandparcelFeatureRendererColor();
             int rgbValue;
             if (rgbValueStr != null) {
                 rgbValue = Integer.parseInt(rgbValueStr, 16);
