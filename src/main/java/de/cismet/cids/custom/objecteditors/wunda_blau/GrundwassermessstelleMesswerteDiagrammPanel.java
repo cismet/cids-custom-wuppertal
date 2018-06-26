@@ -22,6 +22,7 @@ import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
@@ -306,12 +307,9 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      * @return  DOCUMENT ME!
      */
     private Shape getShape(final String schluessel) {
-        final int indexLeft = getIndex(schluessel, stoffBeans);
-        final int indexRight = getIndex(schluessel, stoffBeans);
-        if (indexLeft >= 0) {
-            return shapes[indexLeft % shapes.length];
-        } else if (indexRight >= 0) {
-            return shapes[shapes.length - (indexRight % shapes.length) - 1];
+        final int index = getIndex(schluessel, stoffBeans);
+        if (index >= 0) {
+            return shapes[index % shapes.length];
         } else {
             return null;
         }
@@ -325,12 +323,9 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      * @return  DOCUMENT ME!
      */
     public Paint getColor(final String schluessel) {
-        final int indexLeft = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel4.getStoffBeans());
-        final int indexRight = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel5.getStoffBeans());
-        if (indexLeft >= 0) {
-            return colors[indexLeft % colors.length];
-        } else if (indexRight >= 0) {
-            return colors[shapes.length - (indexRight % colors.length) - 1];
+        final int index = getIndex(schluessel, stoffBeans);
+        if (index >= 0) {
+            return colors[index % colors.length];
         } else {
             return null;
         }
@@ -405,6 +400,7 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
 //        }
 
         plot.setDataset(0, dataSetLeft);
+        plot.setRenderer(0, new StandardXYItemRenderer(StandardXYItemRenderer.SHAPES));
 
         plot.setRangeAxis(0, plot.getRangeAxis());
         plot.mapDatasetToRangeAxis(0, 0);
@@ -423,9 +419,17 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         if (dataSetRight != null) {
             plot.setDataset(1, dataSetRight);
 
+            plot.setRenderer(1, new StandardXYItemRenderer(StandardXYItemRenderer.SHAPES));
+
             final NumberAxis numberAxis = new NumberAxis(); // String.join(", ", einheitenRight));
             plot.setRangeAxis(1, numberAxis);
             plot.mapDatasetToRangeAxis(1, 1);
+            for (int index = 0; index < dataSetRight.getSeriesCount(); index++) {
+                final String schluessel = (String)dataSetRight.getSeries(index).getKey();
+                renderer.setSeriesShape(index, getShape(schluessel));
+                renderer.setSeriesPaint(index, getColor(schluessel));
+            }
+
 //            final XYItemRenderer rendererRight = plot.getRendererForDataset(dataSetRight);
 //            final LegendTitle legendRight = new LegendTitle(rendererRight);
 //            legendRight.setPosition(RectangleEdge.RIGHT);

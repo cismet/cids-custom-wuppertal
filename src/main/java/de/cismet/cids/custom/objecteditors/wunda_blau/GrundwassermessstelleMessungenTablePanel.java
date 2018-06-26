@@ -327,7 +327,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(jPanel4, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 

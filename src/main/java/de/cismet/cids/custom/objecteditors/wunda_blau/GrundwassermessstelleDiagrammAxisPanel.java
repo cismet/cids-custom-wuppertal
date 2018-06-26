@@ -194,6 +194,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
                     disabledStoffBeans.add(stoffBean);
                 }
                 diagrammPanel.refreshChart();
+                list.repaint();
             }
         }
     }                                                                      //GEN-LAST:event_jList1MouseClicked
@@ -245,7 +246,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
                     list,
                     value,
                     index,
-                    isSelected,
+                    false,
                     cellHasFocus);
             final CidsBean stoffBean = (CidsBean)value;
             final String schluessel = (String)stoffBean.getProperty("schluessel");
