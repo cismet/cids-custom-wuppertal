@@ -251,13 +251,6 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         txtTitle1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         panFooter = new javax.swing.JPanel();
-        panButtons = new javax.swing.JPanel();
-        panFooterLeft = new javax.swing.JPanel();
-        lblBack = new javax.swing.JLabel();
-        btnBack = new javax.swing.JButton();
-        panFooterRight = new javax.swing.JPanel();
-        btnForward = new javax.swing.JButton();
-        lblForw = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -375,6 +368,13 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panMessungenBody = new javax.swing.JPanel();
         grundwassermessstelleTablePanel1 =
             new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMessungenTablePanel(editable);
+        panButtons = new javax.swing.JPanel();
+        panFooterLeft = new javax.swing.JPanel();
+        lblBack = new javax.swing.JLabel();
+        btnBack = new javax.swing.JButton();
+        panFooterRight = new javax.swing.JPanel();
+        btnForward = new javax.swing.JButton();
+        lblForw = new javax.swing.JLabel();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -421,104 +421,6 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
-
-        panButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 6, 0));
-        panButtons.setOpaque(false);
-        panButtons.setLayout(new java.awt.GridBagLayout());
-
-        panFooterLeft.setMaximumSize(new java.awt.Dimension(124, 40));
-        panFooterLeft.setMinimumSize(new java.awt.Dimension(124, 40));
-        panFooterLeft.setOpaque(false);
-        panFooterLeft.setPreferredSize(new java.awt.Dimension(124, 40));
-        panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 5));
-
-        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));  // NOI18N
-        lblBack.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblBack,
-            org.openide.util.NbBundle.getMessage(
-                GrundwassermessstelleEditor.class,
-                "GrundwassermessstelleEditor.lblBack.text")); // NOI18N
-        lblBack.setEnabled(false);
-        lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblBackMouseClicked(evt);
-                }
-            });
-        panFooterLeft.add(lblBack);
-
-        btnBack.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png")));         // NOI18N
-        btnBack.setBorder(null);
-        btnBack.setBorderPainted(false);
-        btnBack.setContentAreaFilled(false);
-        btnBack.setEnabled(false);
-        btnBack.setFocusPainted(false);
-        btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
-        btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnBack.setPressedIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
-        btnBack.setRolloverIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png")));     // NOI18N
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnBackActionPerformed(evt);
-                }
-            });
-        panFooterLeft.add(btnBack);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panButtons.add(panFooterLeft, gridBagConstraints);
-
-        panFooterRight.setMaximumSize(new java.awt.Dimension(124, 40));
-        panFooterRight.setOpaque(false);
-        panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
-
-        btnForward.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
-        btnForward.setBorder(null);
-        btnForward.setBorderPainted(false);
-        btnForward.setContentAreaFilled(false);
-        btnForward.setFocusPainted(false);
-        btnForward.setMaximumSize(new java.awt.Dimension(30, 30));
-        btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnForward.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnForwardActionPerformed(evt);
-                }
-            });
-        panFooterRight.add(btnForward);
-
-        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));  // NOI18N
-        lblForw.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblForw,
-            org.openide.util.NbBundle.getMessage(
-                GrundwassermessstelleEditor.class,
-                "GrundwassermessstelleEditor.lblForw.text")); // NOI18N
-        lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblForwMouseClicked(evt);
-                }
-            });
-        panFooterRight.add(lblForw);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panButtons.add(panFooterRight, gridBagConstraints);
-
-        panFooter.add(panButtons, new java.awt.GridBagConstraints());
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -1525,6 +1427,110 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panMessungenBody.add(grundwassermessstelleTablePanel1, gridBagConstraints);
+
+        panButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 6, 0));
+        panButtons.setOpaque(false);
+        panButtons.setLayout(new java.awt.GridBagLayout());
+
+        panFooterLeft.setMaximumSize(new java.awt.Dimension(134, 30));
+        panFooterLeft.setMinimumSize(new java.awt.Dimension(134, 30));
+        panFooterLeft.setOpaque(false);
+        panFooterLeft.setPreferredSize(new java.awt.Dimension(134, 30));
+        panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
+
+        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBack,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblBack.text")); // NOI18N
+        lblBack.setEnabled(false);
+        lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblBackMouseClicked(evt);
+                }
+            });
+        panFooterLeft.add(lblBack);
+
+        btnBack.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png")));         // NOI18N
+        btnBack.setBorder(null);
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setEnabled(false);
+        btnBack.setFocusPainted(false);
+        btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnBack.setPressedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png")));     // NOI18N
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBackActionPerformed(evt);
+                }
+            });
+        panFooterLeft.add(btnBack);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        panButtons.add(panFooterLeft, gridBagConstraints);
+
+        panFooterRight.setMaximumSize(new java.awt.Dimension(134, 30));
+        panFooterRight.setMinimumSize(new java.awt.Dimension(134, 30));
+        panFooterRight.setOpaque(false);
+        panFooterRight.setPreferredSize(new java.awt.Dimension(134, 30));
+        panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
+
+        btnForward.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setBorder(null);
+        btnForward.setBorderPainted(false);
+        btnForward.setContentAreaFilled(false);
+        btnForward.setFocusPainted(false);
+        btnForward.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnForward.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnForwardActionPerformed(evt);
+                }
+            });
+        panFooterRight.add(btnForward);
+
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblForw,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblForw.text")); // NOI18N
+        lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblForwMouseClicked(evt);
+                }
+            });
+        panFooterRight.add(lblForw);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        panButtons.add(panFooterRight, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        panMessungenBody.add(panButtons, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

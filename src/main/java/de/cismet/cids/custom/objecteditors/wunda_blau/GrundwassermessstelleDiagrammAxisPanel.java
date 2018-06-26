@@ -210,6 +210,16 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
             final CidsBean stoffBean = model.getElementAt(index);
             stoffBeans.add(stoffBean);
         }
+        return stoffBeans;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<CidsBean> getEnabledStoffBeans() {
+        final List<CidsBean> stoffBeans = getStoffBeans();
         stoffBeans.removeAll(disabledStoffBeans);
         return stoffBeans;
     }
@@ -240,9 +250,13 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
             final CidsBean stoffBean = (CidsBean)value;
             final String schluessel = (String)stoffBean.getProperty("schluessel");
 
-            label.setEnabled(!disabledStoffBeans.contains(stoffBean));
-            label.setIcon(diagrammPanel.createIconForAxis(schluessel, GrundwassermessstelleDiagrammAxisPanel.this));
-
+            final boolean enabled = !disabledStoffBeans.contains(stoffBean);
+            label.setEnabled(enabled);
+            if (enabled) {
+                label.setIcon(diagrammPanel.createIcon(schluessel));
+            } else {
+                label.setDisabledIcon(diagrammPanel.createIcon(null));
+            }
             final String name = (String)stoffBean.getProperty("name");
             final String einheit = (String)stoffBean.getProperty("einheit");
 

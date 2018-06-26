@@ -32,11 +32,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.image.BufferedImage;
 
 import java.text.SimpleDateFormat;
 
@@ -86,10 +84,10 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
             Color.BLACK,
             Color.YELLOW,
             Color.CYAN,
-            Color.WHITE,
             Color.PINK,
             Color.GREEN
         };
+    private List<CidsBean> stoffBeans;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleDiagrammAxisPanel
@@ -152,7 +150,8 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      *
      * @param  stoffBeans  DOCUMENT ME!
      */
-    public void setStoffBeans(final Collection<CidsBean> stoffBeans) {
+    public void setStoffBeans(final List<CidsBean> stoffBeans) {
+        this.stoffBeans = stoffBeans;
         grundwassermessstelleDiagrammAxisPanel4.setStoffBeans(stoffBeans);
         grundwassermessstelleDiagrammAxisPanel5.setStoffBeans(null);
     }
@@ -241,7 +240,7 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
     private TimeSeriesCollection createDataSet(final GrundwassermessstelleDiagrammAxisPanel axisPanel) {
         final TimeSeriesCollection dataset = new TimeSeriesCollection();
 
-        for (final CidsBean stoffBean : axisPanel.getStoffBeans()) {
+        for (final CidsBean stoffBean : axisPanel.getEnabledStoffBeans()) {
             final String einheit = (String)stoffBean.getProperty("einheit");
             final String name = (String)stoffBean.getProperty("name");
             final TimeSeries series = new TimeSeries(name + ((einheit != null) ? (" (" + einheit + ")") : ""));
@@ -267,15 +266,12 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      * DOCUMENT ME!
      *
      * @param   schluessel  DOCUMENT ME!
-     * @param   axis        DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public Icon createIconForAxis(final String schluessel, final GrundwassermessstelleDiagrammAxisPanel axis) {
-        final Shape shape = axis.equals(grundwassermessstelleDiagrammAxisPanel4) ? getShapeForLeft(schluessel)
-                                                                                 : getShapeForRight(schluessel);
-        final Paint color = axis.equals(grundwassermessstelleDiagrammAxisPanel4) ? getColorForLeft(schluessel)
-                                                                                 : getColorForRight(schluessel);
+    public Icon createIcon(final String schluessel) {
+        final Shape shape = getShape(schluessel);
+        final Paint color = getColor(schluessel);
         final Icon icon = new ShapeIcon(shape, color, 18, 18);
         return icon;
     }
@@ -289,9 +285,14 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      * @return  DOCUMENT ME!
      */
     public int getIndex(final String schluessel, final List<CidsBean> stoffBeans) {
-        for (final CidsBean stoffBean : stoffBeans) {
-            if (schluessel.equals(stoffBean.getProperty("schluessel"))) {
-                return stoffBeans.indexOf(stoffBean);
+        if (schluessel == null) {
+            return -1;
+        }
+        if (stoffBeans != null) {
+            for (final CidsBean stoffBean : stoffBeans) {
+                if (schluessel.equals(stoffBean.getProperty("schluessel"))) {
+                    return stoffBeans.indexOf(stoffBean);
+                }
             }
         }
         return -1;
@@ -304,10 +305,13 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      *
      * @return  DOCUMENT ME!
      */
-    public Shape getShapeForLeft(final String schluessel) {
-        final int index = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel4.getStoffBeans());
-        if (index >= 0) {
-            return shapes[index % shapes.length];
+    private Shape getShape(final String schluessel) {
+        final int indexLeft = getIndex(schluessel, stoffBeans);
+        final int indexRight = getIndex(schluessel, stoffBeans);
+        if (indexLeft >= 0) {
+            return shapes[indexLeft % shapes.length];
+        } else if (indexRight >= 0) {
+            return shapes[shapes.length - (indexRight % shapes.length) - 1];
         } else {
             return null;
         }
@@ -320,42 +324,13 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      *
      * @return  DOCUMENT ME!
      */
-    public Paint getColorForLeft(final String schluessel) {
-        final int index = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel4.getStoffBeans());
-        if (index >= 0) {
-            return colors[index % colors.length];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   schluessel  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public Shape getShapeForRight(final String schluessel) {
-        final int index = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel5.getStoffBeans());
-        if (index >= 0) {
-            return shapes[shapes.length - (index % shapes.length) - 1];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   schluessel  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public Paint getColorForRight(final String schluessel) {
-        final int index = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel5.getStoffBeans());
-        if (index >= 0) {
-            return colors[shapes.length - (index % colors.length) - 1];
+    public Paint getColor(final String schluessel) {
+        final int indexLeft = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel4.getStoffBeans());
+        final int indexRight = getIndex(schluessel, grundwassermessstelleDiagrammAxisPanel5.getStoffBeans());
+        if (indexLeft >= 0) {
+            return colors[indexLeft % colors.length];
+        } else if (indexRight >= 0) {
+            return colors[shapes.length - (indexRight % colors.length) - 1];
         } else {
             return null;
         }
@@ -368,7 +343,9 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
      */
     public JFreeChart createChartPanel() {
         final TimeSeriesCollection dataSetLeft = createDataSet(grundwassermessstelleDiagrammAxisPanel4);
-        final TimeSeriesCollection dataSetRight = (!grundwassermessstelleDiagrammAxisPanel5.getStoffBeans().isEmpty())
+
+        final TimeSeriesCollection dataSetRight =
+            (!grundwassermessstelleDiagrammAxisPanel5.getEnabledStoffBeans().isEmpty())
             ? createDataSet(grundwassermessstelleDiagrammAxisPanel5) : null;
 
 //        final Set<String> einheitenLeft = new HashSet<>();
@@ -431,12 +408,12 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
 
         plot.setRangeAxis(0, plot.getRangeAxis());
         plot.mapDatasetToRangeAxis(0, 0);
-        final XYItemRenderer renderer = plot.getRendererForDataset(dataSetLeft);
+        final XYItemRenderer renderer = plot.getRenderer();
 
         for (int index = 0; index < dataSetLeft.getSeriesCount(); index++) {
             final String schluessel = (String)dataSetLeft.getSeries(index).getKey();
-            renderer.setSeriesShape(index, getShapeForLeft(schluessel));
-            renderer.setSeriesPaint(index, getColorForLeft(schluessel));
+            renderer.setSeriesShape(index, getShape(schluessel));
+            renderer.setSeriesPaint(index, getColor(schluessel));
         }
 
 //        final LegendTitle legendLeft = new LegendTitle(rendererLeft);
@@ -475,7 +452,7 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         //~ Instance fields ----------------------------------------------------
 
         private final Shape shape;
-        private Paint paint;
+        private final Paint paint;
         private final int width;
         private final int height;
 
@@ -511,11 +488,15 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         @Override
         public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
             final Graphics2D g2 = (Graphics2D)g;
-            g2.setPaint(paint);
-            g2.translate(width / 2, height / 2);
-            g2.draw(shape);
-            g2.fill(shape);
-            g2.translate(-width / 2, -height / 2);
+            if (paint != null) {
+                g2.setPaint(paint);
+            }
+            if (shape != null) {
+                g2.translate(width / 2, height / 2);
+                g2.draw(shape);
+                g2.fill(shape);
+                g2.translate(-width / 2, -height / 2);
+            }
         }
     }
 }
