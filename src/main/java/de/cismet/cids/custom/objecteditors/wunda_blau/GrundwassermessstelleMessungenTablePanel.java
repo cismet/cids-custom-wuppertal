@@ -209,7 +209,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         setLayout(new java.awt.GridBagLayout());
 
         jPanel2.setOpaque(false);
-        jPanel2.setLayout(new WrapLayout());
+        jPanel2.setLayout(new WrapLayout(WrapLayout.LEFT));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
