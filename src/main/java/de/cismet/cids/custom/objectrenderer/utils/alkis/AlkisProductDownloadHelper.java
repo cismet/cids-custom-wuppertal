@@ -620,6 +620,9 @@ public class AlkisProductDownloadHelper {
                     new ServerActionParameter(AlkisProductServerAction.Parameter.X.toString(), info.getX()),
                     new ServerActionParameter(AlkisProductServerAction.Parameter.Y.toString(), info.getY()),
                     new ServerActionParameter(
+                        AlkisProductServerAction.Parameter.MASSSTAB.toString(),
+                        info.getMassstab()),
+                    new ServerActionParameter(
                         AlkisProductServerAction.Parameter.MASSSTAB_MIN.toString(),
                         info.getMassstabMin()),
                     new ServerActionParameter(
@@ -664,6 +667,7 @@ public class AlkisProductDownloadHelper {
         @JsonProperty private final String auftragsnummer;
         @JsonProperty private final String fertigungsvermerk;
         @JsonProperty private final String zusatz;
+        @JsonProperty private final String massstab;
         @JsonProperty private final String massstabMin;
         @JsonProperty private final String massstabMax;
         @JsonProperty private final int winkel;
@@ -680,6 +684,7 @@ public class AlkisProductDownloadHelper {
          * @param  auftragsnummer     DOCUMENT ME!
          * @param  fertigungsvermerk  DOCUMENT ME!
          * @param  zusatz             DOCUMENT ME!
+         * @param  massstab           DOCUMENT ME!
          * @param  massstabMin        DOCUMENT ME!
          * @param  massstabMax        DOCUMENT ME!
          * @param  winkel             DOCUMENT ME!
@@ -691,6 +696,7 @@ public class AlkisProductDownloadHelper {
                 @JsonProperty("auftragsnummer") final String auftragsnummer,
                 @JsonProperty("fertigungsvermerk") final String fertigungsvermerk,
                 @JsonProperty("zusatz") final String zusatz,
+                @JsonProperty("massstab") final String massstab,
                 @JsonProperty("massstabMin") final String massstabMin,
                 @JsonProperty("massstabMax") final String massstabMax,
                 @JsonProperty("winkel") final int winkel,
@@ -701,6 +707,7 @@ public class AlkisProductDownloadHelper {
             this.auftragsnummer = auftragsnummer;
             this.fertigungsvermerk = fertigungsvermerk;
             this.zusatz = zusatz;
+            this.massstab = massstab;
             this.massstabMin = massstabMin;
             this.massstabMax = massstabMax;
             this.winkel = winkel;
