@@ -107,7 +107,8 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMessungenTablePanel grundwassermessstelleTablePanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMessungenTablePanel
+        grundwassermessstelleTablePanel1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -294,7 +295,9 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         lblBemerkung = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtBemerkung = new javax.swing.JTextArea();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel7 = new javax.swing.JPanel();
         lblEigentuemer = new javax.swing.JLabel();
         cboEigentuemer = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
@@ -306,9 +309,15 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         chbUnterdruecken = new javax.swing.JCheckBox();
         lblName1 = new javax.swing.JLabel();
         jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
         panLage = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle = new javax.swing.JLabel();
@@ -318,15 +327,23 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         cboStrasse = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         lblGeometrie = new javax.swing.JLabel();
         cbGeometrie = new de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel5 = new javax.swing.JPanel();
         lblHausnummer = new javax.swing.JLabel();
         txtHausnummer = new javax.swing.JTextField();
         lblEingemessen = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
         panMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
         panMessstellenausbau = new de.cismet.tools.gui.RoundedPanel();
         panMessstellenausbauTitle = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -339,7 +356,9 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         txtNummer1 = new javax.swing.JTextField();
         lblNummer3 = new javax.swing.JLabel();
         txtNummer2 = new javax.swing.JTextField();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel8 = new javax.swing.JPanel();
         lblNummer4 = new javax.swing.JLabel();
         cboProjekt2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
@@ -347,7 +366,9 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         cboProjekt3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         lblNummer6 = new javax.swing.JLabel();
         cboProjekt4 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel9 = new javax.swing.JPanel();
         lblNummer7 = new javax.swing.JLabel();
         txtNummer3 = new javax.swing.JTextField();
@@ -355,15 +376,24 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         txtNummer4 = new javax.swing.JTextField();
         lblNummer9 = new javax.swing.JLabel();
         txtNummer5 = new javax.swing.JTextField();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
-        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
+        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
         panMessungen = new de.cismet.tools.gui.RoundedPanel();
         panMessungenTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblMessungenTitle = new javax.swing.JLabel();
         panMessungenBody = new javax.swing.JPanel();
-        grundwassermessstelleTablePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMessungenTablePanel(editable);
+        grundwassermessstelleTablePanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMessungenTablePanel(editable);
         panButtons = new javax.swing.JPanel();
         panFooterLeft = new javax.swing.JPanel();
         lblBack = new javax.swing.JLabel();
@@ -378,7 +408,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         txtTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
         txtTitle.setForeground(new java.awt.Color(255, 255, 255));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${title}"), txtTitle, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${title}"),
+                txtTitle,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -389,7 +424,11 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
         txtTitle1.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
         txtTitle1.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(txtTitle1, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.txtTitle1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            txtTitle1,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.txtTitle1.text"));     // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -431,7 +470,11 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panBeschreibungTitle.setLayout(new java.awt.GridBagLayout());
 
         lblBeschreibungTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblBeschreibungTitle, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblBeschreibungTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBeschreibungTitle,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblBeschreibungTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -449,8 +492,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        lblProjekt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblProjekt, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblProjekt.text")); // NOI18N
+        lblProjekt.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblProjekt,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblProjekt.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -459,7 +506,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel2.add(lblProjekt, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.projekt}"), cboProjekt, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.projekt}"),
+                cboProjekt,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -469,8 +521,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel2.add(cboProjekt, gridBagConstraints);
 
-        lblNummer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer.text")); // NOI18N
+        lblNummer.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -479,7 +535,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel2.add(lblNummer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"), txtNummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
+                txtNummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -489,9 +550,15 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel2.add(txtNummer, gridBagConstraints);
 
-        lblName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblName, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblName.text")); // NOI18N
-        lblName.setToolTipText(org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblName.toolTipText")); // NOI18N
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 11));         // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblName,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblName.text"));        // NOI18N
+        lblName.setToolTipText(org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblName.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -500,7 +567,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel2.add(lblName, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                txtName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -510,9 +582,15 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel2.add(txtName, gridBagConstraints);
 
-        lblBemerkung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblBemerkung, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblBemerkung.text")); // NOI18N
-        lblBemerkung.setToolTipText(org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblBemerkung.toolTipText")); // NOI18N
+        lblBemerkung.setFont(new java.awt.Font("Tahoma", 1, 11));         // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBemerkung,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblBemerkung.text"));        // NOI18N
+        lblBemerkung.setToolTipText(org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblBemerkung.toolTipText")); // NOI18N
         lblBemerkung.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -527,7 +605,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         txtBemerkung.setRows(3);
         txtBemerkung.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"), txtBemerkung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                txtBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(txtBemerkung);
@@ -556,8 +639,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel7.setOpaque(false);
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
-        lblEigentuemer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblEigentuemer, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblEigentuemer.text")); // NOI18N
+        lblEigentuemer.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblEigentuemer,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblEigentuemer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -566,7 +653,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel7.add(lblEigentuemer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eigentuemer}"), cboEigentuemer, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eigentuemer}"),
+                cboEigentuemer,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -576,8 +668,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel7.add(cboEigentuemer, gridBagConstraints);
 
-        lblBrunnennummerAlt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblBrunnennummerAlt, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblBrunnennummerAlt.text")); // NOI18N
+        lblBrunnennummerAlt.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBrunnennummerAlt,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblBrunnennummerAlt.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -586,7 +682,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel7.add(lblBrunnennummerAlt, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.brunnennummer_alt}"), txtBrunnennummerAlt, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.brunnennummer_alt}"),
+                txtBrunnennummerAlt,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -596,8 +697,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel7.add(txtBrunnennummerAlt, gridBagConstraints);
 
-        lblUeberwachung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblUeberwachung, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblUeberwachung.text")); // NOI18N
+        lblUeberwachung.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblUeberwachung,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblUeberwachung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -606,10 +711,19 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel7.add(lblUeberwachung, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(chbUeberwachung, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.chbUeberwachung.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            chbUeberwachung,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.chbUeberwachung.text")); // NOI18N
         chbUeberwachung.setContentAreaFilled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ueberwachung}"), chbUeberwachung, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ueberwachung}"),
+                chbUeberwachung,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -621,8 +735,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel7.add(chbUeberwachung, gridBagConstraints);
 
-        lblUnterduecken.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblUnterduecken, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblUnterduecken.text")); // NOI18N
+        lblUnterduecken.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblUnterduecken,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblUnterduecken.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -631,10 +749,19 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel7.add(lblUnterduecken, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(chbUnterdruecken, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.chbUnterdruecken.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            chbUnterdruecken,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.chbUnterdruecken.text")); // NOI18N
         chbUnterdruecken.setContentAreaFilled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.unterdruecken}"), chbUnterdruecken, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.unterdruecken}"),
+                chbUnterdruecken,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -646,9 +773,15 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel7.add(chbUnterdruecken, gridBagConstraints);
 
-        lblName1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblName1, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblName1.text")); // NOI18N
-        lblName1.setToolTipText(org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblName1.toolTipText")); // NOI18N
+        lblName1.setFont(new java.awt.Font("Tahoma", 1, 11));         // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblName1,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblName1.text"));        // NOI18N
+        lblName1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblName1.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -658,20 +791,36 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel7.add(lblName1, gridBagConstraints);
 
         jXHyperlink1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jXHyperlink1, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.jXHyperlink1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jXHyperlink1,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.jXHyperlink1.text"));                                                       // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ausbauplan != null}"), jXHyperlink1, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ausbauplan != null}"),
+                jXHyperlink1,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ausbauplan.name}"), jXHyperlink1, org.jdesktop.beansbinding.BeanProperty.create("name"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ausbauplan.name}"),
+                jXHyperlink1,
+                org.jdesktop.beansbinding.BeanProperty.create("name"));
         binding.setSourceNullValue("nicht vorhanden");
         binding.setSourceUnreadableValue("nicht vorhanden");
         bindingGroup.addBinding(binding);
 
         jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlink1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -722,7 +871,11 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panLageTitle.setLayout(new java.awt.GridBagLayout());
 
         lblLageTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblLageTitle, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblLageTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLageTitle,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblLageTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -740,8 +893,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        lblStrasse.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblStrasse, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblStrasse.text")); // NOI18N
+        lblStrasse.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStrasse,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblStrasse.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -750,7 +907,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel3.add(lblStrasse, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"), cboStrasse, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"),
+                cboStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -760,8 +922,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cboStrasse, gridBagConstraints);
 
-        lblGeometrie.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblGeometrie, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblGeometrie.text")); // NOI18N
+        lblGeometrie.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGeometrie,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblGeometrie.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -771,11 +937,14 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel3.add(lblGeometrie, gridBagConstraints);
 
         if (editable) {
-
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"), cbGeometrie, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"),
+                    cbGeometrie,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeometrie).getConverter());
             bindingGroup.addBinding(binding);
-
         }
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -799,8 +968,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel5.setOpaque(false);
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        lblHausnummer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblHausnummer, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblHausnummer.text")); // NOI18N
+        lblHausnummer.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblHausnummer,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblHausnummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -809,7 +982,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel5.add(lblHausnummer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"), txtHausnummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
+                txtHausnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -820,8 +998,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel5.add(txtHausnummer, gridBagConstraints);
 
-        lblEingemessen.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblEingemessen, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblEingemessen.text")); // NOI18N
+        lblEingemessen.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblEingemessen,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblEingemessen.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -830,10 +1012,19 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel5.add(lblEingemessen, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.jCheckBox1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox1,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.jCheckBox1.text")); // NOI18N
         jCheckBox1.setContentAreaFilled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingemessen}"), jCheckBox1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingemessen}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -900,7 +1091,11 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panMessstellenausbauTitle.setLayout(new java.awt.GridBagLayout());
 
         lblMessstellenausbauTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblMessstellenausbauTitle, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblMessstellenausbauTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblMessstellenausbauTitle,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblMessstellenausbauTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -918,8 +1113,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel6.setOpaque(false);
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
-        lblNummer1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer1, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer1.text")); // NOI18N
+        lblNummer1.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer1,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -928,7 +1127,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel6.add(lblNummer1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bezugshoehe}"), cboProjekt1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bezugshoehe}"),
+                cboProjekt1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -938,8 +1142,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel6.add(cboProjekt1, gridBagConstraints);
 
-        lblNummer2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer2, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer2.text")); // NOI18N
+        lblNummer2.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer2,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -948,7 +1156,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel6.add(lblNummer2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_messpunkt}"), txtNummer1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_messpunkt}"),
+                txtNummer1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -959,8 +1172,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel6.add(txtNummer1, gridBagConstraints);
 
-        lblNummer3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer3, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer3.text")); // NOI18N
+        lblNummer3.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer3,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -969,7 +1186,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel6.add(lblNummer3, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_gelaende}"), txtNummer2, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_gelaende}"),
+                txtNummer2,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -995,8 +1217,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel8.setOpaque(false);
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        lblNummer4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer4, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer4.text")); // NOI18N
+        lblNummer4.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer4,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer4.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1005,7 +1231,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel8.add(lblNummer4, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aufschlussart}"), cboProjekt2, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aufschlussart}"),
+                cboProjekt2,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1015,8 +1246,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel8.add(cboProjekt2, gridBagConstraints);
 
-        lblNummer5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer5, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer5.text")); // NOI18N
+        lblNummer5.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer5,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1025,7 +1260,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel8.add(lblNummer5, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.filter}"), cboProjekt3, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.filter}"),
+                cboProjekt3,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1035,8 +1275,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel8.add(cboProjekt3, gridBagConstraints);
 
-        lblNummer6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer6, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer6.text")); // NOI18N
+        lblNummer6.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer6,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1045,7 +1289,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel8.add(lblNummer6, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gok_ausbau}"), cboProjekt4, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gok_ausbau}"),
+                cboProjekt4,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1070,8 +1319,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         jPanel9.setOpaque(false);
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
-        lblNummer7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer7, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer7.text")); // NOI18N
+        lblNummer7.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer7,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1080,7 +1333,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel9.add(lblNummer7, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.durchmesser}"), txtNummer3, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.durchmesser}"),
+                txtNummer3,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1091,8 +1349,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel9.add(txtNummer3, gridBagConstraints);
 
-        lblNummer8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer8, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer8.text")); // NOI18N
+        lblNummer8.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer8,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer8.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1101,7 +1363,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel9.add(lblNummer8, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.endteufe}"), txtNummer4, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.endteufe}"),
+                txtNummer4,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1112,8 +1379,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel9.add(txtNummer4, gridBagConstraints);
 
-        lblNummer9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblNummer9, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblNummer9.text")); // NOI18N
+        lblNummer9.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNummer9,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblNummer9.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1122,7 +1393,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel9.add(lblNummer9, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kf_wert}"), txtNummer5, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kf_wert}"),
+                txtNummer5,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1194,7 +1470,11 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panMessungenTitle.setLayout(new java.awt.GridBagLayout());
 
         lblMessungenTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblMessungenTitle, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblMessungenTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblMessungenTitle,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblMessungenTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1213,7 +1493,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
         grundwassermessstelleTablePanel1.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"), grundwassermessstelleTablePanel1, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"),
+                grundwassermessstelleTablePanel1,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1232,17 +1517,24 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panFooterLeft.setPreferredSize(new java.awt.Dimension(164, 30));
         panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
 
-        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblBack, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblBack.text")); // NOI18N
+        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBack,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblBack.text")); // NOI18N
         lblBack.setEnabled(false);
         lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblBackMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblBackMouseClicked(evt);
+                }
+            });
         panFooterLeft.add(lblBack);
 
-        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
+        btnBack.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png")));         // NOI18N
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
@@ -1251,13 +1543,17 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
         btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
         btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnBack.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
-        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
+        btnBack.setPressedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png")));     // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBackActionPerformed(evt);
+                }
+            });
         panFooterLeft.add(btnBack);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1271,7 +1567,8 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panFooterRight.setPreferredSize(new java.awt.Dimension(164, 30));
         panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
 
-        btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
         btnForward.setBorder(null);
         btnForward.setBorderPainted(false);
         btnForward.setContentAreaFilled(false);
@@ -1280,19 +1577,27 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
         btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
         btnForward.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnForwardActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnForwardActionPerformed(evt);
+                }
+            });
         panFooterRight.add(btnForward);
 
-        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblForw, org.openide.util.NbBundle.getMessage(GrundwassermessstelleEditor.class, "GrundwassermessstelleEditor.lblForw.text")); // NOI18N
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblForw,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.lblForw.text")); // NOI18N
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblForwMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblForwMouseClicked(evt);
+                }
+            });
         panFooterRight.add(lblForw);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1334,62 +1639,62 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         add(jPanel1, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
         if (lblBack.isEnabled()) {
             btnBackActionPerformed(null);
         }
-    }//GEN-LAST:event_lblBackMouseClicked
+    }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
         grundwassermessstelleTablePanel1.setShowDiagramm(false);
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }//GEN-LAST:event_btnBackActionPerformed
+    }                                                                           //GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
         grundwassermessstelleTablePanel1.setShowDiagramm(true);
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-    }//GEN-LAST:event_btnForwardActionPerformed
+    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
         if (lblForw.isEnabled()) {
             btnForwardActionPerformed(null);
         }
-    }//GEN-LAST:event_lblForwMouseClicked
+    }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
         final Integer messstelleId = cidsBean.getPrimaryKeyValue();
         final String title = "Ausbauplan - Grundwassermessstelle " + (String)cidsBean.getProperty("name");
         final String directory = DownloadManagerDialog.getInstance().getJobName();
@@ -1405,7 +1710,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
                 extension,
                 getConnectionContext());
         DownloadManager.instance().add(download);
-    }//GEN-LAST:event_jXHyperlink1ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
