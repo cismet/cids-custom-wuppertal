@@ -88,13 +88,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>6.0.4</version>
+                <version>6.1-SNAPSHOT</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>6.0.4</version>
+                <version>6.1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -494,6 +494,13 @@
             <groupId>com.jgoodies</groupId>
             <artifactId>looks</artifactId>
             <version>2.2.2</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>        
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>10.0</version>
             <scope>compile</scope>
             <type>jar</type>
         </dependency>
