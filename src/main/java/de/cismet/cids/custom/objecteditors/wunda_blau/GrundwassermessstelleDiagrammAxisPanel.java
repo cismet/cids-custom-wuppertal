@@ -16,8 +16,6 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXList;
 
-import org.jfree.util.ShapeUtilities;
-
 import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
