@@ -33,17 +33,22 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.image.BufferedImage;
 
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.Icon;
+
+import de.cismet.cids.custom.reports.wunda_blau.GrundwassermessstellenReportBean;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -120,6 +125,47 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   axisPanel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<GrundwassermessstellenReportBean.LegendeBean> getLegendBeans(
+            final GrundwassermessstelleDiagrammAxisPanel axisPanel) {
+        final List<GrundwassermessstellenReportBean.LegendeBean> legendBeans = new ArrayList<>();
+        for (final CidsBean stoffBean : axisPanel.getEnabledStoffBeans()) {
+            final Icon icon = createIcon((String)stoffBean.getProperty("schluessel"));
+            final BufferedImage image = new BufferedImage(icon.getIconWidth(),
+                    icon.getIconHeight(),
+                    BufferedImage.TYPE_INT_RGB);
+            icon.paintIcon(null, image.getGraphics(), 0, 0);
+            final GrundwassermessstellenReportBean.LegendeBean legendBean =
+                new GrundwassermessstellenReportBean.LegendeBean(stoffBean, image);
+            legendBeans.add(legendBean);
+        }
+        return legendBeans;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<GrundwassermessstellenReportBean.LegendeBean> getLegendLeftBeans() {
+        return getLegendBeans(grundwassermessstelleDiagrammAxisPanel4);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<GrundwassermessstellenReportBean.LegendeBean> getLegendRightBeans() {
+        return getLegendBeans(grundwassermessstelleDiagrammAxisPanel5);
+    }
 
     /**
      * DOCUMENT ME!

@@ -14,7 +14,15 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import org.jfree.chart.JFreeChart;
+
+import java.awt.Component;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -22,8 +30,8 @@ import javax.swing.JComponent;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.reports.wunda_blau.GrundwassermessstellenReportBean;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.DocumentPanel;
 import de.cismet.cids.custom.wunda_blau.search.actions.GrundwassermessstellenAusbauplanDownloadAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -37,14 +45,11 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-
-import de.cismet.commons.security.WebDavClient;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
-
-import de.cismet.netutil.Proxy;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -70,7 +75,6 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             GrundwassermessstelleEditor.class);
-    private static final String PROP__NAME = "name";
     private static final int GEO_BUFFER = 25;
 
     //~ Instance fields --------------------------------------------------------
@@ -82,6 +86,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnForward;
+    javax.swing.JButton btnReport;
     private javax.swing.ButtonGroup buttonGroup1;
     private de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor cbGeometrie;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cboEigentuemer;
@@ -248,16 +253,57 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     /**
      * DOCUMENT ME!
      *
+     * @param  cidsBean           DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public void generateMesswerteReport(final CidsBean cidsBean,
+            final Component parent,
+            final ConnectionContext connectionContext) {
+        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
+            new JasperReportDownload.JasperReportDataSourceGenerator() {
+
+                @Override
+                public JRDataSource generateDataSource() {
+                    return new JRBeanCollectionDataSource(Arrays.asList(createReportBean()));
+                }
+            };
+
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
+
+            DownloadManager.instance()
+                    .add(new JasperReportDownload(
+                            "/de/cismet/cids/custom/reports/wunda_blau/grundwassermessstelle_messwerte.jasper",
+                            dataSourceGenerator,
+                            jobname,
+                            "Grundwassermessstelle - Messwerte",
+                            "gwm_messwerte"));
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    private DocumentPanel createDocumentPanel() {
-        return new de.cismet.cids.custom.utils.DocumentPanel(
-                new WebDavClient(Proxy.fromPreferences(), "test", "test", false),
-                "http://localhost:8080/",
-                "WUNDA_BLAU",
-                "grundwassermessstelle_ausbauplan",
-                "url",
-                "name");
+    private GrundwassermessstellenReportBean createReportBean() {
+        final CidsBean kategorieBean = grundwassermessstelleTablePanel1.getKategorieBean();
+        final JFreeChart chart = grundwassermessstelleTablePanel1.getChart();
+        final List<CidsBean> messungBeans = grundwassermessstelleTablePanel1.getMessungBeans();
+        final List<GrundwassermessstellenReportBean.LegendeBean> legendeLeft =
+            grundwassermessstelleTablePanel1.getDiagrammPanel().getLegendLeftBeans();
+        final List<GrundwassermessstellenReportBean.LegendeBean> legendeRight =
+            grundwassermessstelleTablePanel1.getDiagrammPanel().getLegendRightBeans();
+        final GrundwassermessstellenReportBean reportBean = new GrundwassermessstellenReportBean(
+                getCidsBean(),
+                kategorieBean,
+                messungBeans,
+                legendeLeft,
+                legendeRight,
+                chart,
+                getConnectionContext());
+        return reportBean;
     }
 
     /**
@@ -391,6 +437,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panMessungen = new de.cismet.tools.gui.RoundedPanel();
         panMessungenTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblMessungenTitle = new javax.swing.JLabel();
+        btnReport = new javax.swing.JButton();
         panMessungenBody = new javax.swing.JPanel();
         grundwassermessstelleTablePanel1 =
             new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMessungenTablePanel(editable);
@@ -1482,6 +1529,32 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panMessungenTitle.add(lblMessungenTitle, gridBagConstraints);
 
+        btnReport.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnReport,
+            org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.btnReport.text"));                       // NOI18N
+        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
+                GrundwassermessstelleEditor.class,
+                "GrundwassermessstelleEditor.btnReport.toolTipText"));                // NOI18N
+        btnReport.setBorderPainted(false);
+        btnReport.setContentAreaFilled(false);
+        btnReport.setFocusPainted(false);
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReportActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        panMessungenTitle.add(btnReport, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1711,6 +1784,15 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
                 getConnectionContext());
         DownloadManager.instance().add(download);
     }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        generateMesswerteReport(cidsBean, this, getConnectionContext());
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     @Override
     public CidsBean getCidsBean() {

@@ -24,6 +24,8 @@ import org.apache.log4j.Logger;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXDatePicker;
 
+import org.jfree.chart.JFreeChart;
+
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -576,6 +578,24 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public GrundwassermessstelleMesswerteDiagrammPanel getDiagrammPanel() {
+        return grundwassermessstelleMesswerteDiagrammPanel1;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JFreeChart getChart() {
+        return grundwassermessstelleMesswerteDiagrammPanel1.createChartPanel();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  messungBeans  DOCUMENT ME!
      */
     private void setMessungBeans(final List<CidsBean> messungBeans) {
@@ -616,7 +636,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      *
      * @return  DOCUMENT ME!
      */
-    public Collection<CidsBean> getMessungBeans() {
+    public List<CidsBean> getMessungBeans() {
         final List<CidsBean> selectedMessungBeans = new ArrayList<>();
 //        for (final int rowIndex : jXTable1.getSelectedRows()) {
 //            final CidsBean messungBean = getModel().getMessungBean(jXTable1.convertRowIndexToModel(rowIndex));
