@@ -25,6 +25,7 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
 import Sirius.navigator.ui.ComponentRegistry;
 
+import java.awt.Component;
 import java.awt.Dimension;
 
 import java.util.Collections;
@@ -33,6 +34,8 @@ import java.util.List;
 import javax.swing.JButton;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+
+import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
 
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
@@ -44,6 +47,7 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.menu.CidsUiComponent;
 
 /**
  * ToolbarComponentsProvider that delivers a Button for Alkis Print to integrate into the Navigator Toolbar.
@@ -52,7 +56,9 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProvider, ConnectionContextStore {
+public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProvider,
+    ConnectionContextStore,
+    CidsUiComponent {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -100,6 +106,20 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
     @Override
     public final ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public String getValue(final String key) {
+        if (key.equals(CidsUiComponent.CIDS_ACTION_KEY)) {
+            return "AlkisToobarPlugin";
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Component getComponent() {
+        return new AlkisPrintJButton(connectionContext);
     }
 }
 
