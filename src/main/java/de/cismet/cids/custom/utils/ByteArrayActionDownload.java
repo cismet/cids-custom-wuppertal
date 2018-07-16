@@ -32,6 +32,7 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
 
     private final String taskname;
     private final Object body;
+    private final String domain;
     private final ServerActionParameter[] params;
 
     private final ConnectionContext connectionContext;
@@ -39,15 +40,15 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new ByteArrayDownload object.
+     * Creates a new ByteArrayActionDownload object.
      *
      * @param  taskname           DOCUMENT ME!
      * @param  body               DOCUMENT ME!
      * @param  params             DOCUMENT ME!
-     * @param  title              The title of the download.
-     * @param  directory          The directory of the download.
-     * @param  filename           The name of the file to be created.
-     * @param  extension          The extension of the file to be created.
+     * @param  title              DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  filename           DOCUMENT ME!
+     * @param  extension          DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
     public ByteArrayActionDownload(final String taskname,
@@ -58,6 +59,32 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
             final String filename,
             final String extension,
             final ConnectionContext connectionContext) {
+        this("WUNDA_BLAU", taskname, body, params, title, directory, filename, extension, connectionContext);
+    }
+
+    /**
+     * Creates a new ByteArrayDownload object.
+     *
+     * @param  domain             DOCUMENT ME!
+     * @param  taskname           DOCUMENT ME!
+     * @param  body               DOCUMENT ME!
+     * @param  params             DOCUMENT ME!
+     * @param  title              The title of the download.
+     * @param  directory          The directory of the download.
+     * @param  filename           The name of the file to be created.
+     * @param  extension          The extension of the file to be created.
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public ByteArrayActionDownload(final String domain,
+            final String taskname,
+            final Object body,
+            final ServerActionParameter[] params,
+            final String title,
+            final String directory,
+            final String filename,
+            final String extension,
+            final ConnectionContext connectionContext) {
+        this.domain = domain;
         this.taskname = taskname;
         this.body = body;
         this.params = params;
@@ -85,7 +112,7 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
         try {
             ret = SessionManager.getProxy().executeTask(
                     taskname,
-                    "WUNDA_BLAU",
+                    domain,
                     body,
                     getConnectionContext(),
                     params);
