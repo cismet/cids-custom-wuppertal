@@ -11,23 +11,15 @@
  */
 package de.cismet.cids.custom.reports.wunda_blau;
 
-import com.vividsolutions.jts.geom.Geometry;
-
 import lombok.Getter;
 import lombok.Setter;
 
-import org.openide.util.NbBundle;
-
-import java.awt.Color;
 import java.awt.Image;
 
 import java.io.InputStream;
 
-import java.text.NumberFormat;
-
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.Future;
 
 import javax.imageio.ImageIO;
 
@@ -35,12 +27,6 @@ import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cismap.commons.HeadlessMapProvider;
-import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
@@ -56,7 +42,7 @@ import de.cismet.tools.PasswordEncrypter;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
+public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -65,18 +51,11 @@ public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
     private static String WEB_DAV_DIRECTORY;
     private static String WEB_DAV_USER;
     private static String WEB_DAV_PASSWORD;
-    private static String MAP_URL;
-    private static final int MAP_DPI = 300;
 
     //~ Instance fields --------------------------------------------------------
 
-    Image mapImage = null;
-    private boolean mapError = false;
-    private String masstab = "";
-    private final CidsBean cidsBean;
     private final ImageState imgState0 = new ImageState();
     private final ImageState imgState1 = new ImageState();
-    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -96,8 +75,7 @@ public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
             final String davUrlProp,
             final String mapUrl,
             final ConnectionContext connectionContext) {
-        this.cidsBean = cidsBean;
-        this.connectionContext = connectionContext;
+        super(cidsBean, geomProp, mapUrl, connectionContext);
         final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
         String pass = webDavBundle.getString("password");
 
@@ -112,47 +90,6 @@ public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
                 WEB_DAV_USER,
                 WEB_DAV_PASSWORD,
                 false);
-
-        MAP_URL = mapUrl;
-
-        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
-                    MAP_URL));
-
-        final Geometry g = (Geometry)cidsBean.getProperty(geomProp);
-        if (g == null) {
-            mapError = true;
-            LOG.info("Geometry is null. Can not create a map for the mauer katasterblatt report");
-        } else {
-            final DefaultStyledFeature dsf = new DefaultStyledFeature();
-            dsf.setGeometry(g);
-            dsf.setLineWidth(5);
-            dsf.setLinePaint(Color.RED);
-            dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
-
-            final HeadlessMapProvider mapProvider = new HeadlessMapProvider();
-            mapProvider.addLayer(s);
-            mapProvider.addFeature(dsf);
-            mapProvider.setMinimumScaleDenomimator(750);
-            mapProvider.setRoundScaleTo(HeadlessMapProvider.RoundingPrecision.HUNDRETH);
-            mapProvider.setCenterMapOnResize(true);
-
-            final int height = Integer.parseInt(NbBundle.getMessage(
-                        ReportBeanWithMapAndImages.class,
-                        "MauernReportBeanWithMapAndImages.mapHeight"));
-            final int width = Integer.parseInt(NbBundle.getMessage(
-                        ReportBeanWithMapAndImages.class,
-                        "MauernReportBeanWithMapAndImages.mapWidth"));
-            final XBoundingBox boundingBox = new XBoundingBox(g);
-            mapProvider.setBoundingBox(boundingBox);
-            final Future<Image> f = mapProvider.getImage(72, MAP_DPI, width, height);
-            try {
-                final Image img = f.get();
-                masstab = "1:" + NumberFormat.getIntegerInstance().format(mapProvider.getImageScaleDenominator());
-                mapImage = img;
-            } catch (final Exception ex) {
-                mapError = true;
-            }
-        }
 
         final List<CidsBean> images = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, imgsProp);
         final StringBuilder url0Builder = new StringBuilder();
@@ -212,15 +149,6 @@ public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
      *
      * @return  DOCUMENT ME!
      */
-    public CidsBean getCidsBean() {
-        return cidsBean;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     public Image getImg0() {
         return imgState0.getImg();
     }
@@ -257,51 +185,10 @@ public class ReportBeanWithMapAndImages implements ConnectionContextProvider {
      *
      * @return  DOCUMENT ME!
      */
-    public Image getMapImage() {
-        return mapImage;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  mapImage  DOCUMENT ME!
-     */
-    public void setMapImage(final Image mapImage) {
-        this.mapImage = mapImage;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getMasstab() {
-        return masstab;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  masstab  DOCUMENT ME!
-     */
-    public void setMasstab(final String masstab) {
-        this.masstab = masstab;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public boolean isReadyToProceed() {
-        return (cidsBean != null) && ((mapImage != null) || mapError)
-                    && ((imgState0.getImg() != null) || imgState0.isError())
-                    && ((imgState1.getImg() != null) || imgState1.isError());
-    }
-
     @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
+    public boolean isReadyToProceed() {
+        return super.isReadyToProceed() && ((imgState0.getImg() != null) || imgState0.isError())
+                    && ((imgState1.getImg() != null) || imgState1.isError());
     }
 
     //~ Inner Classes ----------------------------------------------------------
