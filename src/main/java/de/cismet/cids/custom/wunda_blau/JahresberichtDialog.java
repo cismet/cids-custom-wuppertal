@@ -395,7 +395,6 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
                                 fromDate_tillDate[1] = stichtag;
                                 final int year = (Integer)spnYear.getValue();
                                 final PrintJahresberichtReport report = new PrintJahresberichtReport(
-                                        year,
                                         fromDate_tillDate,
                                         billings,
                                         getConnectionContext());

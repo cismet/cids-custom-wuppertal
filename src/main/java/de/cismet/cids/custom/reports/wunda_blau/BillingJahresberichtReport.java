@@ -14,6 +14,7 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import java.text.SimpleDateFormat;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -33,16 +34,11 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
 
     private static final String REPORT_URL = "/de/cismet/cids/custom/reports/wunda_blau/BezReg_JB.jasper";
 
-    //~ Instance fields --------------------------------------------------------
-
-    protected final int year;
-
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new BillingJahresberichtReport object.
      *
-     * @param  year                             DOCUMENT ME!
      * @param  billingBeans                     DOCUMENT ME!
      * @param  from                             DOCUMENT ME!
      * @param  till                             DOCUMENT ME!
@@ -59,12 +55,11 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
      * @param  amountWithCostsWiederver         DOCUMENT ME!
      * @param  amountWiederverkaeufe            DOCUMENT ME!
      * @param  amountWiederverkaeufeGB          DOCUMENT ME!
-     * @param  amountGDZ                        DOCUMENT ME!
      * @param  earningsWithCostsVU              DOCUMENT ME!
      * @param  earningsWithCostsWiederver       DOCUMENT ME!
      * @param  connectionContext                DOCUMENT ME!
      */
-    public BillingJahresberichtReport(final int year,
+    public BillingJahresberichtReport(
             final Collection<CidsBean> billingBeans,
             final Date from,
             final Date till,
@@ -104,7 +99,6 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
             earningsWithCostsVU,
             earningsWithCostsWiederver,
             connectionContext);
-        this.year = year;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -112,7 +106,7 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
     @Override
     protected BillingStatisticsDataSourceAccumulation createDataSourceAccumulation() {
         final BillingStatisticsDataSourceAccumulation dataSourceAccumulation =
-            new BillingJahresberichtDataSourceAccumulation(billingBeans, year, getConnectionContext());
+            new BillingJahresberichtDataSourceAccumulation(billingBeans, from, till, getConnectionContext());
         dataSourceAccumulation.fetchSearchResults();
         return dataSourceAccumulation;
     }
@@ -125,11 +119,17 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
     protected String getFilename() {
         final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         final boolean fullYear = false;
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(from);
+        final int year = calendar.get(Calendar.YEAR);
         return ((fullYear) ? ("BezReg_JB_" + year) : ("BezReg_JB_" + year + "_bis_" + format.format(till)));
     }
 
     @Override
     protected String getTitle() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(from);
+        final int year = calendar.get(Calendar.YEAR);
         return "Jahresbericht für Bezirksregierung " + year;
     }
 }

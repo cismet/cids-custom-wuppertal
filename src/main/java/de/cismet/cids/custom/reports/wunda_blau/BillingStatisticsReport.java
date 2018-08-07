@@ -90,7 +90,6 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
      * @param  amountWithCostsWiederver         DOCUMENT ME!
      * @param  amountWiederverkaeufe            DOCUMENT ME!
      * @param  amountWiederverkaeufeGB          DOCUMENT ME!
-     * @param  amountGDZ                        DOCUMENT ME!
      * @param  earningsWithCostsVU              DOCUMENT ME!
      * @param  earningsWithCostsWiederver       DOCUMENT ME!
      * @param  connectionContext                DOCUMENT ME!
