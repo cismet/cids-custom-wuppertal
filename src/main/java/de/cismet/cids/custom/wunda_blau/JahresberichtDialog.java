@@ -19,8 +19,6 @@ import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
-import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -59,13 +57,15 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
     private SwingWorker worker;
 
     private final ConnectionContext connectionContext = ConnectionContext.createDummy();
+    private Date fromDate = null;
+    private Date stichtag = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
+    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;
@@ -74,6 +74,7 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
     private javax.swing.JLabel lblNoBillingsText;
     private javax.swing.JLabel lblNoBillingsTitle;
     private javax.swing.JSpinner spnYear;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -88,6 +89,24 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stichtag  DOCUMENT ME!
+     */
+    public void setStichtag(final Date stichtag) {
+        this.stichtag = stichtag;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Date getStichtag() {
+        return stichtag;
+    }
 
     /**
      * DOCUMENT ME!
@@ -115,6 +134,7 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         lblNoBillingsText = new javax.swing.JLabel();
         lblNoBillingsTitle = new javax.swing.JLabel();
@@ -123,12 +143,12 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         spnYear = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnCancel = new javax.swing.JButton();
         btnOk = new javax.swing.JButton();
         jProgressBar1 = new javax.swing.JProgressBar();
+        defaultBindableDateChooser1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        jLabel4 = new javax.swing.JLabel();
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblNoBillingsText,
@@ -173,34 +193,16 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
         spnYear.setEditor(new javax.swing.JSpinner.NumberEditor(spnYear, "#"));
         spnYear.setMinimumSize(new java.awt.Dimension(70, 28));
         spnYear.setPreferredSize(new java.awt.Dimension(70, 28));
+        spnYear.addChangeListener(new javax.swing.event.ChangeListener() {
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    spnYearStateChanged(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(spnYear, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
-            org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel2.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
-        jPanel1.add(jLabel2, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel3,
-            org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel3.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
-        jPanel1.add(jLabel3, gridBagConstraints);
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
@@ -231,7 +233,7 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel1.add(jPanel2, gridBagConstraints);
@@ -241,11 +243,34 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
                 "JahresberichtDialog.jProgressBar1.string")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         jPanel1.add(jProgressBar1, gridBagConstraints);
+
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${stichtag}"),
+                defaultBindableDateChooser1,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        jPanel1.add(defaultBindableDateChooser1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel4,
+            org.openide.util.NbBundle.getMessage(JahresberichtDialog.class, "JahresberichtDialog.jLabel4.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel1.add(jLabel4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -253,6 +278,8 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jPanel1, gridBagConstraints);
+
+        bindingGroup.bind();
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
@@ -276,31 +303,6 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
      * @param  evt  DOCUMENT ME!
      */
     private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
-        final int year = (Integer)spnYear.getValue();
-        final Date now = new Date();
-
-        final Calendar calendar = Calendar.getInstance();
-        calendar.clear();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.MONTH, Calendar.JANUARY);
-        calendar.set(Calendar.YEAR, year);
-        final Date fromDate = calendar.getTime();
-
-        calendar.clear();
-        calendar.set(Calendar.DAY_OF_MONTH, 31);
-        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-        calendar.set(Calendar.YEAR, year);
-        Date tmpTillDate = calendar.getTime();
-
-        final boolean fullYear;
-        if (now.before(tmpTillDate)) {
-            tmpTillDate = now;
-            fullYear = false;
-        } else {
-            fullYear = true;
-        }
-        final Date tillDate = tmpTillDate;
-
         jProgressBar1.setString(org.openide.util.NbBundle.getMessage(
                 JahresberichtDialog.class,
                 "JahresberichtDialog.jProgressBar1.string"));
@@ -318,7 +320,7 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
                     final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement();
 
                     cidsBillingSearchStatement.setAbrechnungsdatumFrom(fromDate);
-                    cidsBillingSearchStatement.setAbrechnungsdatumTill(tillDate);
+                    cidsBillingSearchStatement.setAbrechnungsdatumTill(stichtag);
                     cidsBillingSearchStatement.setKostentyp(CidsBillingSearchStatement.Kostentyp.KOSTENPFLICHTIG);
                     cidsBillingSearchStatement.setShowAbgerechneteBillings(null);
 
@@ -390,11 +392,8 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
                             } else {
                                 final Date[] fromDate_tillDate = new Date[2];
                                 fromDate_tillDate[0] = fromDate;
-                                fromDate_tillDate[1] = tillDate;
-
-                                final SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
-                                final String fileName = (fullYear)
-                                    ? ("BezReg_JB_" + year) : ("BezReg_JB_" + year + "_bis_" + format1.format(now));
+                                fromDate_tillDate[1] = stichtag;
+                                final int year = (Integer)spnYear.getValue();
                                 final PrintJahresberichtReport report = new PrintJahresberichtReport(
                                         year,
                                         fromDate_tillDate,
@@ -422,6 +421,41 @@ public class JahresberichtDialog extends javax.swing.JDialog implements Connecti
             };
         worker.execute();
     } //GEN-LAST:event_btnOkActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void spnYearStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_spnYearStateChanged
+        final int year = (Integer)spnYear.getValue();
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.MONTH, Calendar.JANUARY);
+        calendar.set(Calendar.YEAR, year);
+        fromDate = calendar.getTime();
+
+        calendar.clear();
+        calendar.set(Calendar.DAY_OF_MONTH, 31);
+        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+        calendar.set(Calendar.YEAR, year);
+        Date tmpTillDate = calendar.getTime();
+
+        final Date now = new Date();
+        final boolean fullYear;
+        if (now.before(tmpTillDate)) {
+            tmpTillDate = now;
+            fullYear = false;
+        } else {
+            fullYear = true;
+        }
+        defaultBindableDateChooser1.setEnabled(!fullYear);
+        bindingGroup.unbind();
+        stichtag = tmpTillDate;
+        bindingGroup.bind();
+    } //GEN-LAST:event_spnYearStateChanged
 
     @Override
     public final ConnectionContext getConnectionContext() {
