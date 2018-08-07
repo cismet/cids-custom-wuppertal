@@ -57,10 +57,11 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
      * @param  amountVUsonstigeGB               DOCUMENT ME!
      * @param  amountWithCostsVU                DOCUMENT ME!
      * @param  amountWithCostsWiederver         DOCUMENT ME!
-     * @param  earningsWithCostsVU              DOCUMENT ME!
-     * @param  earningsWithCostsWiederver       DOCUMENT ME!
      * @param  amountWiederverkaeufe            DOCUMENT ME!
      * @param  amountWiederverkaeufeGB          DOCUMENT ME!
+     * @param  amountGDZ                        DOCUMENT ME!
+     * @param  earningsWithCostsVU              DOCUMENT ME!
+     * @param  earningsWithCostsWiederver       DOCUMENT ME!
      * @param  connectionContext                DOCUMENT ME!
      */
     public BillingJahresberichtReport(final int year,
@@ -78,10 +79,10 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
             final int amountVUsonstigeGB,
             final int amountWithCostsVU,
             final int amountWithCostsWiederver,
-            final double earningsWithCostsVU,
-            final double earningsWithCostsWiederver,
             final int amountWiederverkaeufe,
             final int amountWiederverkaeufeGB,
+            final double earningsWithCostsVU,
+            final double earningsWithCostsWiederver,
             final ConnectionContext connectionContext) {
         super(
             billingBeans,
@@ -98,10 +99,10 @@ public class BillingJahresberichtReport extends BillingStatisticsReport {
             amountVUsonstigeGB,
             amountWithCostsVU,
             amountWithCostsWiederver,
-            earningsWithCostsVU,
-            earningsWithCostsWiederver,
             amountWiederverkaeufe,
             amountWiederverkaeufeGB,
+            earningsWithCostsVU,
+            earningsWithCostsWiederver,
             connectionContext);
         this.year = year;
     }

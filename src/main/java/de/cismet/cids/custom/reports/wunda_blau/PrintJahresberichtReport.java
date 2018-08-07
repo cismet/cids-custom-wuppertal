@@ -69,10 +69,10 @@ public class PrintJahresberichtReport extends PrintStatisticsReport {
                 amountVUsonstigeGBs.size(),
                 amountWithCostsVU,
                 amountWithCostsWiederver,
-                earningsWithCostsVU,
-                earningsWithCostsWiederver,
                 amountWiederverkaeufe,
                 amountWiederverkaeufeGBs.size(),
+                earningsWithCostsVU,
+                earningsWithCostsWiederver,
                 getConnectionContext());
     }
 }
