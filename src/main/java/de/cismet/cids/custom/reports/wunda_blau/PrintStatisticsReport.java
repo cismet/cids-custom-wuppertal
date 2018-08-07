@@ -34,7 +34,7 @@ public class PrintStatisticsReport implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
-    protected final HashMap<String, Integer> productInformation = new HashMap<String, Integer>();
+    protected final HashMap<String, Integer> productInformation = new HashMap<>();
     protected final Date[] fromDate_tillDate;
     protected final Collection<CidsBean> billingsBeans;
     protected int amountTotalDownloads = 0;
@@ -45,13 +45,13 @@ public class PrintStatisticsReport implements ConnectionContextProvider {
     protected int amountVUsonstige = 0;
     protected int amountWithCostsVU = 0;
     protected int amountWithCostsWiederver = 0;
+    protected int amountWiederverkaeufe = 0;
     protected double earningsWithCostsVU = 0;
     protected double earningsWithCostsWiederver = 0;
-    protected int amountWiederverkaeufe = 0;
-    protected final Set<String> amountWiederverkaeufeGBs = new HashSet<String>();
-    protected final Set<String> amountVUamtlicherLageplanGBs = new HashSet<String>();
-    protected final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<String>();
-    protected final Set<String> amountVUsonstigeGBs = new HashSet<String>();
+    protected final Set<String> amountWiederverkaeufeGBs = new HashSet<>();
+    protected final Set<String> amountVUamtlicherLageplanGBs = new HashSet<>();
+    protected final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<>();
+    protected final Set<String> amountVUsonstigeGBs = new HashSet<>();
     private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
@@ -147,10 +147,10 @@ public class PrintStatisticsReport implements ConnectionContextProvider {
                 amountVUsonstigeGBs.size(),
                 amountWithCostsVU,
                 amountWithCostsWiederver,
-                earningsWithCostsVU,
-                earningsWithCostsWiederver,
                 amountWiederverkaeufe,
                 amountWiederverkaeufeGBs.size(),
+                earningsWithCostsVU,
+                earningsWithCostsWiederver,
                 getConnectionContext());
     }
 

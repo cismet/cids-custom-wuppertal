@@ -15,6 +15,7 @@ package de.cismet.cids.custom.reports.wunda_blau;
 import net.sf.jasperreports.engine.JRDataSource;
 
 import java.util.Collection;
+import java.util.Date;
 
 import de.cismet.cids.custom.wunda_blau.search.server.BillingJahresberichtReportServerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportServerSearch;
@@ -35,7 +36,8 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
 
     //~ Instance fields --------------------------------------------------------
 
-    private final int year;
+    private final Date from;
+    private final Date till;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -43,15 +45,18 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
      * Creates a new BillingJahresberichtDataSourceAccumulation object.
      *
      * @param  billingBeans       DOCUMENT ME!
-     * @param  year               DOCUMENT ME!
+     * @param  from               year DOCUMENT ME!
+     * @param  till               DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
     public BillingJahresberichtDataSourceAccumulation(final Collection<CidsBean> billingBeans,
-            final int year,
+            final Date from,
+            final Date till,
             final ConnectionContext connectionContext) {
         super(billingBeans, connectionContext);
 
-        this.year = year;
+        this.from = from;
+        this.till = till;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -149,6 +154,6 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
 
     @Override
     protected BillingStatisticsReportServerSearch createServerSearch() {
-        return new BillingJahresberichtReportServerSearch(joinCidsBeanIds(billingBeans, ", "), year);
+        return new BillingJahresberichtReportServerSearch(joinCidsBeanIds(billingBeans, ", "), from, till);
     }
 }

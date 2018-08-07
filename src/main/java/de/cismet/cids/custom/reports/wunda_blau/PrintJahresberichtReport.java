@@ -27,26 +27,20 @@ import de.cismet.connectioncontext.ConnectionContext;
  */
 public class PrintJahresberichtReport extends PrintStatisticsReport {
 
-    //~ Instance fields --------------------------------------------------------
-
-    private final int year;
-
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new PrintJahresberichtReport object.
      *
-     * @param  year               DOCUMENT ME!
      * @param  fromDate_tillDate  DOCUMENT ME!
      * @param  billingsBeans      DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public PrintJahresberichtReport(final int year,
+    public PrintJahresberichtReport(
             final Date[] fromDate_tillDate,
             final Collection<CidsBean> billingsBeans,
             final ConnectionContext connectionContext) {
         super(fromDate_tillDate, billingsBeans, connectionContext);
-        this.year = year;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -54,7 +48,6 @@ public class PrintJahresberichtReport extends PrintStatisticsReport {
     @Override
     protected BillingJahresberichtReport createReport() {
         return new BillingJahresberichtReport(
-                year,
                 billingsBeans,
                 fromDate_tillDate[0],
                 fromDate_tillDate[1],
@@ -69,10 +62,10 @@ public class PrintJahresberichtReport extends PrintStatisticsReport {
                 amountVUsonstigeGBs.size(),
                 amountWithCostsVU,
                 amountWithCostsWiederver,
-                earningsWithCostsVU,
-                earningsWithCostsWiederver,
                 amountWiederverkaeufe,
                 amountWiederverkaeufeGBs.size(),
+                earningsWithCostsVU,
+                earningsWithCostsWiederver,
                 getConnectionContext());
     }
 }
