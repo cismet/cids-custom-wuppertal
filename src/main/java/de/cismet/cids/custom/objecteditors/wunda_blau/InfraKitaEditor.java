@@ -159,6 +159,8 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     private JCheckBox chInklusion;
     private JCheckBox chOnline;
     private JDialog dlgChangeKitaName;
+    private JLabel jLabel1;
+    private JTextField jTextField1;
     private JLabel lblAdresse;
     private JLabel lblAlter;
     private JLabel lblBemerkung;
@@ -277,6 +279,8 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         txtAdresse = new JTextField();
         lblAdresse = new JLabel();
         lblInspire = new JLabel();
+        jLabel1 = new JLabel();
+        jTextField1 = new JTextField();
         panDaten = new JPanel();
         txtTelefon = new JTextField();
         txtPlz = new JTextField();
@@ -425,7 +429,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
         panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+                GroupLayout.Alignment.LEADING).addGap(0, 590, Short.MAX_VALUE));
         panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
                 GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
@@ -520,6 +524,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panAdresse.add(lblName, gridBagConstraints);
@@ -529,6 +534,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panAdresse.add(lblGeom, gridBagConstraints);
@@ -569,6 +575,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 2;
+            gridBagConstraints.gridwidth = 3;
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.weightx = 1.0;
             gridBagConstraints.insets = new Insets(2, 4, 2, 2);
@@ -588,6 +595,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 4, 2, 2);
@@ -598,6 +606,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panAdresse.add(lblAdresse, gridBagConstraints);
@@ -605,11 +614,34 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         lblInspire.setIcon(inspired);
         lblInspire.setToolTipText("Der Datensatz ist inspired.");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panAdresse.add(lblInspire, gridBagConstraints);
+
+        jLabel1.setFont(new Font("Tahoma", 1, 11));
+        jLabel1.setText("eindeutiger Kurzname:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        panAdresse.add(jLabel1, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.eindeutiger_kurzname}"),
+                jTextField1,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 4, 2, 2);
+        panAdresse.add(jTextField1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -771,7 +803,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         panFiller.setLayout(panFillerLayout);
         panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
                 0,
-                0,
+                20,
                 Short.MAX_VALUE));
         panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
                 0,
