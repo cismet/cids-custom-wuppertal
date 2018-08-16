@@ -2090,7 +2090,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlistePdfActionPerformed
         try {
-            if (BillingPopup.doBilling("pktlstpdf", "no.yet", (Geometry)null, new ProductGroupAmount("eafifty", 1))) {
+            if (BillingPopup.doBilling("pktlstpdf", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
                 downloadProduct(ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_PDF));
             }
         } catch (Exception e) {

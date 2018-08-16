@@ -1397,10 +1397,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 } else {
                     downloadURL = documentURLs[currentDocument];
                 }
+                final String productGroupExt = (String)cidsBean.getProperty("format.productgroup_ext");
                 final String priceGroup = (String)cidsBean.getProperty("format.pricegroup");
                 if (currentDocument == VERMESSUNGSRISS) {
                     if (BillingPopup.doBilling(
-                                    "vrpdf",
+                                    "vrpdf"
+                                    + ((productGroupExt != null) ? productGroupExt : ""),
                                     downloadURL.toExternalForm(),
                                     (Geometry)null,
                                     new ProductGroupAmount(priceGroup, 1))) {
@@ -1408,7 +1410,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     }
                 } else {
                     if (BillingPopup.doBilling(
-                                    "doklapdf",
+                                    "doklapdf"
+                                    + ((productGroupExt != null) ? productGroupExt : ""),
                                     downloadURL.toExternalForm(),
                                     (Geometry)null,
                                     new ProductGroupAmount(priceGroup, 1))) {
