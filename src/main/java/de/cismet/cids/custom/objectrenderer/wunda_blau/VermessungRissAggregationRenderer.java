@@ -405,10 +405,20 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     if (typeObj instanceof String) {
                         type = (String)typeObj;
 
-                        final HashMap<String, Integer> pricegroups = new HashMap<String, Integer>();
-
+                        final HashMap<String, Map> productGroupExts = new HashMap<>();
                         try {
                             for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
+                                final String productGroupExt = (String)selectedVermessungsriss.getProperty(
+                                        "format.productgroup_ext");
+
+                                final Map<String, Integer> priceGroups;
+                                if (productGroupExts.containsKey(productGroupExt)) {
+                                    priceGroups = productGroupExts.get(productGroupExt);
+                                } else {
+                                    priceGroups = new HashMap<>();
+                                    productGroupExts.put(productGroupExt, priceGroups);
+                                }
+
                                 final boolean isDocumentAvailable;
                                 if (type.equalsIgnoreCase(VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE)) {
                                     isDocumentAvailable = hasVermessungsriss(selectedVermessungsriss);
@@ -421,45 +431,60 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 if (isDocumentAvailable) {
                                     final String pricegroup = (String)selectedVermessungsriss.getProperty(
                                             "format.pricegroup");
-                                    final Integer amount = pricegroups.get(pricegroup);
+                                    final Integer amount = priceGroups.get(pricegroup);
                                     if (amount == null) {
-                                        pricegroups.put(pricegroup, 1);
+                                        priceGroups.put(pricegroup, 1);
                                     } else {
                                         final Integer newAmount = amount + 1;
-                                        pricegroups.put(pricegroup, newAmount);
+                                        priceGroups.put(pricegroup, newAmount);
                                     }
                                 }
                             }
-                            final Set<String> keys = pricegroups.keySet();
-                            final ProductGroupAmount[] amounts = new ProductGroupAmount[keys.size()];
-                            int i = 0;
-                            for (final String k : keys) {
-                                amounts[i] = new ProductGroupAmount(k, pricegroups.get(k));
-                                i++;
-                            }
 
-                            if (type.equalsIgnoreCase(VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE)) {
-                                if (BillingPopup.doBilling(
-                                                "vrpdf",
-                                                "no.yet",
-                                                (Geometry)null,
-                                                amounts)) {
-                                    downloadProducts(
-                                        selectedVermessungsrisse,
-                                        type,
-                                        ClientAlkisConf.getInstance().getVermessungHostBilder());
+                            if (productGroupExts.size() > 1) {
+                                JOptionPane.showMessageDialog(
+                                    VermessungRissAggregationRenderer.this,
+                                    "<html>Es wurden Produkte zum Download ausgewählt,"
+                                            + "<br>die auf unterschiedliche Weise abgerechnet werden."
+                                            + "<br>Daher werden nun mehrere Download-Protokolle erzeugt.",
+                                    "Mehrere Download-Protokolle",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            }
+                            for (final String productGroupExt : productGroupExts.keySet()) {
+                                final Map<String, Integer> priceGroups = productGroupExts.get(productGroupExt);
+                                final Set<String> keys = priceGroups.keySet();
+                                final ProductGroupAmount[] amounts = new ProductGroupAmount[keys.size()];
+                                int i = 0;
+                                for (final String k : keys) {
+                                    amounts[i] = new ProductGroupAmount(k, priceGroups.get(k));
+                                    i++;
                                 }
-                            } else if (type.equalsIgnoreCase(
-                                            VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
-                                if (BillingPopup.doBilling(
-                                                "doklapdf",
-                                                "no.yet",
-                                                (Geometry)null,
-                                                amounts)) {
-                                    downloadProducts(
-                                        selectedVermessungsrisse,
-                                        type,
-                                        ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften());
+
+                                if (type.equalsIgnoreCase(VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE)) {
+                                    if (BillingPopup.doBilling(
+                                                    "vrpdf"
+                                                    + ((productGroupExt != null) ? productGroupExt : ""),
+                                                    "no.yet",
+                                                    (Geometry)null,
+                                                    amounts)) {
+                                        downloadProducts(
+                                            selectedVermessungsrisse,
+                                            type,
+                                            ClientAlkisConf.getInstance().getVermessungHostBilder());
+                                    }
+                                } else if (type.equalsIgnoreCase(
+                                                VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                    if (BillingPopup.doBilling(
+                                                    "doklapdf"
+                                                    + ((productGroupExt != null) ? productGroupExt : ""),
+                                                    "no.yet",
+                                                    (Geometry)null,
+                                                    amounts)) {
+                                        downloadProducts(
+                                            selectedVermessungsrisse,
+                                            type,
+                                            ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften());
+                                    }
                                 }
                             }
                         } catch (Exception e) {
@@ -485,7 +510,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     private Collection<URL> identifyAdditionalFiles(final Collection<CidsBean> selectedVermessungsrisse,
             final String host) {
-        final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
+        final Collection<URL> additionalFilesToDownload = new LinkedList<>();
         for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
             final String schluessel;
             final Integer gemarkung;
@@ -576,23 +601,23 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                     @Override
                     public Collection<? extends Download> fetchDownloads() throws Exception {
-                        final Collection<MetaObjectNode> mons = new ArrayList<MetaObjectNode>(
+                        final Collection<MetaObjectNode> mons = new ArrayList<>(
                                 selectedVermessungsrisse.size());
                         for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
                             mons.add(new MetaObjectNode(selectedVermessungsriss));
                         }
 
                         final ServerActionParameter[] saps = new ServerActionParameter[] {
-                                new ServerActionParameter<Collection>(
+                                new ServerActionParameter<>(
                                     VermessungsrissReportServerAction.Parameter.RISSE_MONS.toString(),
                                     mons),
-                                new ServerActionParameter<String>(
+                                new ServerActionParameter<>(
                                     VermessungsrissReportServerAction.Parameter.JOB_NUMBER.toString(),
                                     txtJobnumber.getText()),
-                                new ServerActionParameter<String>(
+                                new ServerActionParameter<>(
                                     VermessungsrissReportServerAction.Parameter.PROJECT_NAME.toString(),
                                     txtProjectname.getText()),
-                                new ServerActionParameter<String>(
+                                new ServerActionParameter<>(
                                     VermessungsrissReportServerAction.Parameter.HOST.toString(),
                                     host)
                             };
@@ -609,7 +634,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 ".pdf",
                                 getConnectionContext());
 
-                        final Collection<Download> downloads = new ArrayList<Download>();
+                        final Collection<Download> downloads = new ArrayList<>();
                         downloads.add(serverActionDownload);
 
                         final Collection<URL> additionalFilesToDownload = identifyAdditionalFiles(
@@ -671,14 +696,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      * @return  DOCUMENT ME!
      */
     protected Collection<CidsBean> getSelectedVermessungsrisse() {
-        final Collection<CidsBean> result = new LinkedList<CidsBean>();
-        final List<Integer> selectedIndexes = new ArrayList<Integer>();
+        final Collection<CidsBean> result = new LinkedList<>();
+        final List<Integer> selectedIndexes = new ArrayList<>();
 
         final TableModel tableModel = tblRisse.getModel();
         for (int i = 0; i < tableModel.getRowCount(); ++i) {
             final Object includedObj = tableModel.getValueAt(i, 0);
             if ((includedObj instanceof Boolean) && (Boolean)includedObj) {
-                selectedIndexes.add(Integer.valueOf(i));
+                selectedIndexes.add(i);
             }
         }
 
@@ -710,14 +735,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     public void setCidsBeans(final Collection<CidsBean> beans) {
         if (beans instanceof List) {
             this.cidsBeans = (List<CidsBean>)beans;
-            features = new HashMap<CidsBean, CidsFeature>(beans.size());
+            features = new HashMap<>(beans.size());
 
             initMap();
 
             boolean allowVermessungsrisseReport = false;
             boolean allowErgaenzendeDokumenteReport = false;
 
-            final List<Object[]> tableData = new ArrayList<Object[]>();
+            final List<Object[]> tableData = new ArrayList<>();
             for (final CidsBean vermessungsrissBean : cidsBeans) {
                 tableData.add(cidsBean2Row(vermessungsrissBean));
 
@@ -738,7 +763,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             }
 
             final TableRowSorter tableSorter = ObjectRendererUtils.decorateTableWithSorter(tblRisse);
-            final List<RowSorter.SortKey> sortKeys = new LinkedList<RowSorter.SortKey>();
+            final List<RowSorter.SortKey> sortKeys = new LinkedList<>();
             sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
             sortKeys.add(new RowSorter.SortKey(2, SortOrder.ASCENDING));
             sortKeys.add(new RowSorter.SortKey(3, SortOrder.ASCENDING));
@@ -851,7 +876,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      * @return  DOCUMENT ME!
      */
     protected XBoundingBox boundingBoxFromPointList(final Collection<CidsBean> vermessungsrisse) {
-        final List<Geometry> geometries = new LinkedList<Geometry>();
+        final List<Geometry> geometries = new LinkedList<>();
 
         for (final CidsBean vermessungsriss : vermessungsrisse) {
             try {
