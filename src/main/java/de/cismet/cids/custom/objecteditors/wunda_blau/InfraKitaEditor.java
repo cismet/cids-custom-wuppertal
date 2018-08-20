@@ -1176,7 +1176,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             final HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("HEAD");
             final int responseCode = connection.getResponseCode();
-            return responseCode == 200;
+            return responseCode >= 200 && responseCode < 400;
         } catch (final Exception e) {
             return false;
         }
@@ -1426,6 +1426,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             txtBemerkung.setEnabled(false);
             txtLeitung.setEnabled(false);
             txtName.setEnabled(false);
+            jTextField1.setEnabled(false);
             txtPlaetze.setEnabled(false);
             txtPlz.setEnabled(false);
             jFormattedTextField1.setEnabled(false);
@@ -1554,7 +1555,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             }
 
             final Object value = (String)super.stringToValue(string);
-            
+
             matchingMatcher.reset(string);
             if (matchingMatcher.matches()) {
                 lastValid = value;
