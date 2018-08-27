@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
@@ -31,30 +30,22 @@ import java.awt.event.ActionListener;
 
 import java.net.URL;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JToggleButton;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
-import de.cismet.cids.client.tools.DevelopmentTools;
-
 import de.cismet.cids.custom.objecteditors.utils.PictureLoaderPanel;
-import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel;
-import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
@@ -65,7 +56,6 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.converters.SqlDateToStringConverter;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -91,7 +81,7 @@ import de.cismet.tools.gui.panels.LayeredAlertPanel;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements DisposableCidsBeanStore,
+public class VermessungBuchwerkEditor extends javax.swing.JPanel implements DisposableCidsBeanStore,
     TitleComponentProvider,
     FooterComponentProvider,
     BorderProvider,
@@ -101,7 +91,7 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(KatasterbuchwerkRissEditor.class);
+    private static final Logger LOG = Logger.getLogger(VermessungBuchwerkEditor.class);
     protected static final int BUCHWERK = 0;
     protected static final int NO_SELECTION = -1;
 
@@ -124,13 +114,10 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
     protected CidsBean cidsBean;
     protected Object schluessel;
     protected Object gemarkung;
-    protected Object flur;
-    protected Object blatt;
+    protected Object steuerbezirk;
+    protected Object bezeichner;
     protected boolean readOnly;
-    protected URL[] documentURLs;
-    protected JToggleButton[] documentButtons;
-    protected JToggleButton currentSelectedButton;
-    protected volatile int currentDocument = NO_SELECTION;
+    protected URL documentURL;
     protected volatile int currentPage = NO_SELECTION;
     private AlertPanel alertPanel;
     private PictureLoaderPanel pictureLoaderPanel;
@@ -139,22 +126,15 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
-    private javax.swing.ButtonGroup bgrDocument;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnOpen;
     private javax.swing.JComboBox cmbFormat;
     private javax.swing.JComboBox cmbGemarkung;
     private javax.swing.JComboBox cmbGeometrie;
     private javax.swing.JComboBox cmbGeometrieStatus;
-    private javax.swing.JComboBox cmbSchluessel;
-    private javax.swing.JFormattedTextField ftxFlur;
     private javax.swing.Box.Filler gluGapControls;
     private javax.swing.Box.Filler gluGeneralInformationGap;
-    private javax.swing.JLabel grenzNiederschriftWarnMessage;
-    private javax.swing.JLabel jLabel1;
     private org.jdesktop.swingx.JXBusyLabel jxLBusyMeasure;
-    private javax.swing.JLabel lblBlatt;
-    private javax.swing.JLabel lblFlur;
     private javax.swing.JLabel lblFormat;
     private javax.swing.JLabel lblGemarkung;
     private javax.swing.JLabel lblGeneralInformation;
@@ -162,13 +142,8 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
     private javax.swing.JLabel lblGeometrieStatus;
     private javax.swing.JLabel lblHeaderControls;
     private javax.swing.JLabel lblHeaderDocument;
-    private javax.swing.JLabel lblHeaderDocuments;
     private javax.swing.JLabel lblHeaderPages;
-    private javax.swing.JLabel lblJahr;
-    private javax.swing.JLabel lblLetzteAenderungDatum;
-    private javax.swing.JLabel lblLetzteAenderungName;
     private javax.swing.JLabel lblReducedSize;
-    private javax.swing.JLabel lblSchluessel;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstPages;
     private de.cismet.tools.gui.panels.LayeredAlertPanel measureComponentPanel;
@@ -178,12 +153,10 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
     private javax.swing.JPanel pnlBusy;
     private de.cismet.tools.gui.RoundedPanel pnlControls;
     private de.cismet.tools.gui.RoundedPanel pnlDocument;
-    private de.cismet.tools.gui.RoundedPanel pnlDocuments;
     private de.cismet.tools.gui.RoundedPanel pnlGeneralInformation;
     private javax.swing.JPanel pnlGrenzniederschriftAlert;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderControls;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderDocument;
-    private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderDocuments;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderGeneralInformation;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderPages;
     private javax.swing.JPanel pnlMeasureComp;
@@ -191,34 +164,29 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
     private de.cismet.tools.gui.RoundedPanel pnlPages;
     private javax.swing.JPanel pnlTitle;
     private javax.swing.JPanel pnlUmleitungHeader;
-    private javax.swing.JLabel rissWarnMessage;
     private javax.swing.JScrollPane scpPages;
     private javax.swing.Box.Filler strFooter;
-    private javax.swing.JToggleButton togBild;
     private javax.swing.JToggleButton togPan;
     private javax.swing.JToggleButton togZoom;
-    private javax.swing.JTextField txtBlatt;
-    private javax.swing.JTextField txtJahr;
-    private javax.swing.JTextField txtLetzteaenderungDatum;
-    private javax.swing.JTextField txtLetzteaenderungName;
+    private javax.swing.JLabel warnMessage;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new VermessungRissEditor object.
+     * Creates a new VermessungBuchwerkEditor object.
      */
-    public KatasterbuchwerkRissEditor() {
+    public VermessungBuchwerkEditor() {
         this(false);
     }
 
     /**
-     * Creates new form VermessungRissEditor.
+     * Creates new form VermessungBuchwerkEditor.
      *
      * @param  readOnly  DOCUMENT ME!
      */
-    public KatasterbuchwerkRissEditor(final boolean readOnly) {
+    public VermessungBuchwerkEditor(final boolean readOnly) {
         this.readOnly = readOnly;
     }
 
@@ -229,39 +197,19 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         this.connectionContext = connectionContext;
         this.pictureLoaderPanel = new PictureLoaderPanel(this, connectionContext);
 
-        documentURLs = new URL[1];
-        documentButtons = new JToggleButton[documentURLs.length];
+        documentURL = null;
         initComponents();
-        alertPanel = new AlertPanel(
-                AlertPanel.TYPE.DANGER,
-                grenzNiederschriftWarnMessage,
-                true);
-        documentButtons[BUCHWERK] = togBild;
-        currentSelectedButton = togBild;
+        alertPanel = new AlertPanel(AlertPanel.TYPE.DANGER, warnMessage, true);
         initAlertPanel();
         lblReducedSize.setVisible(false);
         if (readOnly) {
-            lblSchluessel.setVisible(false);
-            cmbSchluessel.setVisible(false);
             lblGemarkung.setVisible(false);
             cmbGemarkung.setVisible(false);
-            lblFlur.setVisible(false);
-            ftxFlur.setVisible(false);
-            lblBlatt.setVisible(false);
-            txtBlatt.setVisible(false);
-            txtJahr.setEditable(false);
             cmbFormat.setEditable(false);
             cmbFormat.setEnabled(false);
             cmbGeometrieStatus.setEditable(false);
             cmbGeometrieStatus.setEnabled(false);
             lblGeometrie.setVisible(false);
-        } else {
-            if (txtBlatt.getDocument() instanceof AbstractDocument) {
-                ((AbstractDocument)txtBlatt.getDocument()).setDocumentFilter(new DocumentSizeFilter());
-            }
-            if (ftxFlur.getDocument() instanceof AbstractDocument) {
-                ((AbstractDocument)ftxFlur.getDocument()).setDocumentFilter(new DocumentSizeFilter());
-            }
         }
     }
 
@@ -281,15 +229,13 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         pnlTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         bgrControls = new javax.swing.ButtonGroup();
-        bgrDocument = new javax.swing.ButtonGroup();
         pnlMeasureComponentWrapper = new javax.swing.JPanel();
         pnlBusy = new javax.swing.JPanel();
         jxLBusyMeasure = new JXBusyLabel(new Dimension(64, 64));
         pnlMeasureComp = new javax.swing.JPanel();
         measuringComponent = pictureLoaderPanel.getMeasuringComponent();
         pnlGrenzniederschriftAlert = new javax.swing.JPanel();
-        grenzNiederschriftWarnMessage = new javax.swing.JLabel();
-        rissWarnMessage = new javax.swing.JLabel();
+        warnMessage = new javax.swing.JLabel();
         panLeft = new javax.swing.JPanel();
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -300,14 +246,8 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
         lblGeneralInformation = new javax.swing.JLabel();
-        lblJahr = new javax.swing.JLabel();
-        txtJahr = new javax.swing.JTextField();
         lblFormat = new javax.swing.JLabel();
         cmbFormat = new DefaultBindableReferenceCombo();
-        lblLetzteAenderungName = new javax.swing.JLabel();
-        txtLetzteaenderungName = new javax.swing.JTextField();
-        lblLetzteAenderungDatum = new javax.swing.JLabel();
-        txtLetzteaenderungDatum = new javax.swing.JTextField();
         lblGeometrie = new javax.swing.JLabel();
         if (!readOnly) {
             cmbGeometrie = new DefaultCismapGeometryComboBoxEditor();
@@ -317,14 +257,8 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
                 new java.awt.Dimension(0, 32767));
         lblGeometrieStatus = new javax.swing.JLabel();
         cmbGeometrieStatus = new DefaultBindableReferenceCombo();
-        lblSchluessel = new javax.swing.JLabel();
-        cmbSchluessel = new javax.swing.JComboBox();
         lblGemarkung = new javax.swing.JLabel();
         cmbGemarkung = new DefaultBindableReferenceCombo();
-        lblFlur = new javax.swing.JLabel();
-        lblBlatt = new javax.swing.JLabel();
-        txtBlatt = new javax.swing.JTextField();
-        ftxFlur = new javax.swing.JFormattedTextField();
         panRight = new javax.swing.JPanel();
         pnlControls = new de.cismet.tools.gui.RoundedPanel();
         togPan = new javax.swing.JToggleButton();
@@ -333,11 +267,6 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         pnlHeaderControls = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderControls = new javax.swing.JLabel();
         btnOpen = new javax.swing.JButton();
-        pnlDocuments = new de.cismet.tools.gui.RoundedPanel();
-        pnlHeaderDocuments = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblHeaderDocuments = new javax.swing.JLabel();
-        togBild = new javax.swing.JToggleButton();
-        jLabel1 = new javax.swing.JLabel();
         pnlPages = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderPages = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderPages = new javax.swing.JLabel();
@@ -353,8 +282,8 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTitle.setForeground(java.awt.Color.white);
         lblTitle.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblTitle.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblTitle.text"));   // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -383,13 +312,9 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         pnlGrenzniederschriftAlert.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         pnlGrenzniederschriftAlert.setLayout(new java.awt.BorderLayout());
 
-        grenzNiederschriftWarnMessage.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.grenzNiederschriftWarnMessage.text")); // NOI18N
-
-        rissWarnMessage.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.rissWarnMessage.text")); // NOI18N
+        warnMessage.setText(org.openide.util.NbBundle.getMessage(
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.warnMessage.text")); // NOI18N
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -401,8 +326,8 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
         lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblReducedSize.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblReducedSize.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -413,8 +338,8 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         lblHeaderDocument.setForeground(java.awt.Color.white);
         lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblHeaderDocument.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblHeaderDocument.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -448,58 +373,30 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         lblGeneralInformation.setForeground(new java.awt.Color(255, 255, 255));
         lblGeneralInformation.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblGeneralInformation.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblGeneralInformation.text")); // NOI18N
         pnlHeaderGeneralInformation.add(lblGeneralInformation);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         pnlGeneralInformation.add(pnlHeaderGeneralInformation, gridBagConstraints);
 
-        lblJahr.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblJahr.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-        pnlGeneralInformation.add(lblJahr, gridBagConstraints);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr}"),
-                txtJahr,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
-        pnlGeneralInformation.add(txtJahr, gridBagConstraints);
-
         lblFormat.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblFormat.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblFormat.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlGeneralInformation.add(lblFormat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.format}"),
@@ -509,82 +406,19 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         pnlGeneralInformation.add(cmbFormat, gridBagConstraints);
 
-        lblLetzteAenderungName.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblLetzteAenderungName.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 7, 5, 5);
-        pnlGeneralInformation.add(lblLetzteAenderungName, gridBagConstraints);
-
-        txtLetzteaenderungName.setEditable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.letzteaenderung_name}"),
-                txtLetzteaenderungName,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        pnlGeneralInformation.add(txtLetzteaenderungName, gridBagConstraints);
-
-        lblLetzteAenderungDatum.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblLetzteAenderungDatum.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 7, 5, 5);
-        pnlGeneralInformation.add(lblLetzteAenderungDatum, gridBagConstraints);
-
-        txtLetzteaenderungDatum.setEditable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.letzteaenderung_datum}"),
-                txtLetzteaenderungDatum,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setConverter(new SqlDateToStringConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        pnlGeneralInformation.add(txtLetzteaenderungDatum, gridBagConstraints);
-
         lblGeometrie.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblGeometrie.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblGeometrie.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -603,7 +437,7 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         if (!readOnly) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 5;
+            gridBagConstraints.gridy = 2;
             gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
             gridBagConstraints.weightx = 0.5;
@@ -612,18 +446,18 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         }
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         pnlGeneralInformation.add(gluGeneralInformationGap, gridBagConstraints);
 
         lblGeometrieStatus.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblGeometrieStatus.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblGeometrieStatus.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlGeneralInformation.add(lblGeometrieStatus, gridBagConstraints);
@@ -647,55 +481,23 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         pnlGeneralInformation.add(cmbGeometrieStatus, gridBagConstraints);
-
-        lblSchluessel.setLabelFor(cmbSchluessel);
-        lblSchluessel.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblSchluessel.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
-        pnlGeneralInformation.add(lblSchluessel, gridBagConstraints);
-
-        cmbSchluessel.setModel(new javax.swing.DefaultComboBoxModel(
-                new String[] { "501", "502", "503", "504", "505", "506", "507", "508", "600", "605" }));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
-                cmbSchluessel,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
-        pnlGeneralInformation.add(cmbSchluessel, gridBagConstraints);
 
         lblGemarkung.setLabelFor(cmbGemarkung);
         lblGemarkung.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblGemarkung.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblGemarkung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlGeneralInformation.add(lblGemarkung, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -709,73 +511,11 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
-        pnlGeneralInformation.add(cmbGemarkung, gridBagConstraints);
-
-        lblFlur.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblFlur.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-        pnlGeneralInformation.add(lblFlur, gridBagConstraints);
-
-        lblBlatt.setLabelFor(txtBlatt);
-        lblBlatt.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblBlatt.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlGeneralInformation.add(lblBlatt, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.blatt}"),
-                txtBlatt,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        pnlGeneralInformation.add(txtBlatt, gridBagConstraints);
-
-        ftxFlur.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("000"))));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flur}"),
-                ftxFlur,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlGeneralInformation.add(ftxFlur, gridBagConstraints);
+        pnlGeneralInformation.add(cmbGemarkung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -802,11 +542,11 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
         togPan.setSelected(true);
         togPan.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.togPan.text"));                                // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.togPan.text"));                                  // NOI18N
         togPan.setToolTipText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.togPan.toolTipText"));                         // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.togPan.toolTipText"));                           // NOI18N
         togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togPan.addActionListener(new java.awt.event.ActionListener() {
@@ -827,11 +567,11 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         togZoom.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
         togZoom.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.togZoom.text"));                                // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.togZoom.text"));                                  // NOI18N
         togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.togZoom.toolTipText"));                         // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.togZoom.toolTipText"));                           // NOI18N
         togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togZoom.addActionListener(new java.awt.event.ActionListener() {
@@ -851,11 +591,11 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         btnHome.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
         btnHome.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.btnHome.text"));                                // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.btnHome.text"));                                  // NOI18N
         btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.btnHome.toolTipText"));                         // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.btnHome.toolTipText"));                           // NOI18N
         btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome.addActionListener(new java.awt.event.ActionListener() {
@@ -877,8 +617,8 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         lblHeaderControls.setForeground(new java.awt.Color(255, 255, 255));
         lblHeaderControls.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblHeaderControls.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblHeaderControls.text")); // NOI18N
         pnlHeaderControls.add(lblHeaderControls);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -889,11 +629,11 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         btnOpen.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
         btnOpen.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.btnOpen.text"));                                        // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.btnOpen.text"));                                          // NOI18N
         btnOpen.setToolTipText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.btnOpen.toolTipText"));                                 // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.btnOpen.toolTipText"));                                   // NOI18N
         btnOpen.setFocusPainted(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
@@ -912,77 +652,19 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         panRight.add(pnlControls, gridBagConstraints);
-
-        pnlDocuments.setLayout(new java.awt.GridBagLayout());
-
-        pnlHeaderDocuments.setBackground(new java.awt.Color(51, 51, 51));
-        pnlHeaderDocuments.setLayout(new java.awt.FlowLayout());
-
-        lblHeaderDocuments.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeaderDocuments.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblHeaderDocuments.text")); // NOI18N
-        pnlHeaderDocuments.add(lblHeaderDocuments);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.1;
-        pnlDocuments.add(pnlHeaderDocuments, gridBagConstraints);
-
-        bgrDocument.add(togBild);
-        togBild.setSelected(true);
-        togBild.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.togBild.text")); // NOI18N
-        togBild.setFocusPainted(false);
-        togBild.setMaximumSize(new java.awt.Dimension(49, 32));
-        togBild.setMinimumSize(new java.awt.Dimension(49, 32));
-        togBild.setPreferredSize(new java.awt.Dimension(152, 32));
-        togBild.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togBildActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 2, 10);
-        pnlDocuments.add(togBild, gridBagConstraints);
-
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.jLabel1.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        pnlDocuments.add(jLabel1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
-        panRight.add(pnlDocuments, gridBagConstraints);
 
         pnlHeaderPages.setBackground(new java.awt.Color(51, 51, 51));
         pnlHeaderPages.setLayout(new java.awt.FlowLayout());
 
         lblHeaderPages.setForeground(new java.awt.Color(255, 255, 255));
         lblHeaderPages.setText(org.openide.util.NbBundle.getMessage(
-                KatasterbuchwerkRissEditor.class,
-                "KatasterbuchwerkRissEditor.lblHeaderPages.text")); // NOI18N
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblHeaderPages.text")); // NOI18N
         pnlHeaderPages.add(lblHeaderPages);
 
         pnlPages.add(pnlHeaderPages, java.awt.BorderLayout.PAGE_START);
@@ -1000,14 +682,14 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         panRight.add(pnlPages, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         panRight.add(gluGapControls, gridBagConstraints);
@@ -1025,85 +707,69 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
+    }//GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
+    }//GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
-        if ((currentDocument != NO_SELECTION) && (documentURLs[currentDocument] != null)) {
-            try {
-                final URL downloadURL;
-                if (documentURLs[currentDocument].toExternalForm().contains(
-                                VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE)) {
-                    final String url = documentURLs[currentDocument].toExternalForm()
-                                .replaceAll(
-                                    VermessungsrissWebAccessPictureFinder.getInstance().SUFFIX_REDUCED_SIZE,
-                                    "");
-                    downloadURL = new URL(url);
-                } else {
-                    downloadURL = documentURLs[currentDocument];
-                }
-                final String priceGroup = (String)cidsBean.getProperty("format.pricegroup");
-                if (currentDocument == BUCHWERK) {
-                    if (BillingPopup.doBilling(
-                                    "vrpdf",
-                                    downloadURL.toExternalForm(),
-                                    (Geometry)null,
-                                    new ProductGroupAmount(priceGroup, 1))) {
-                        downloadProduct(downloadURL, true);
-                    }
-                } else {
-                    if (BillingPopup.doBilling(
-                                    "doklapdf",
-                                    downloadURL.toExternalForm(),
-                                    (Geometry)null,
-                                    new ProductGroupAmount(priceGroup, 1))) {
-                        downloadProduct(downloadURL, false);
-                    }
-                }
-            } catch (Exception e) {
-                LOG.error("Error when trying to produce a alkis product", e);
-                // Hier noch ein Fehlerdialog
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+        try {
+            final URL downloadURL;
+            if (documentURL.toExternalForm().contains(VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE)) {
+                final String url = documentURL.toExternalForm()
+                            .replaceAll(VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE, "");
+                downloadURL = new URL(url);
+            } else {
+                downloadURL = documentURL;
             }
+            final String priceGroup = (String)cidsBean.getProperty("format.pricegroup");
+            if (BillingPopup.doBilling(
+                            "vrpdf",
+                            downloadURL.toExternalForm(),
+                            (Geometry)null,
+                            new ProductGroupAmount(priceGroup, 1))) {
+                downloadProduct(downloadURL);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
         }
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  url                DOCUMENT ME!
-     * @param  isVermessungsriss  DOCUMENT ME!
+     * @param  url  DOCUMENT ME!
      */
-    private void downloadProduct(final URL url, final boolean isVermessungsriss) {
+    private void downloadProduct(final URL url) {
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
                 public void run() {
                     if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
-                                    KatasterbuchwerkRissEditor.this)) {
+                                    VermessungBuchwerkEditor.this)) {
                         final String urlString = url.toExternalForm();
                         final String filename = urlString.substring(urlString.lastIndexOf("/") + 1);
 
@@ -1113,33 +779,20 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
                                         url,
                                         "",
                                         DownloadManagerDialog.getInstance().getJobName(),
-                                        (currentDocument == BUCHWERK) ? "Vermessungsriss" : "Ergänzende Dokumente",
+                                        "Buchwerk",
                                         filename.substring(0, filename.lastIndexOf(".")),
                                         filename.substring(filename.lastIndexOf("."))));
                     }
                 }
             });
-    } //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togBildActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togBildActionPerformed
-        currentSelectedButton = togBild;
-        alertPanel.setContent(rissWarnMessage);
-        alertPanel.repaint();
-        loadBuchwerk();
-        checkLinkInTitle();
-    }                                                                           //GEN-LAST:event_togBildActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmbGeometrieStatusActionPerformed
+    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGeometrieStatusActionPerformed
         if (cmbGeometrieStatus.getSelectedItem() instanceof CidsBean) {
             final CidsBean geometrieStatus = (CidsBean)cmbGeometrieStatus.getSelectedItem();
 
@@ -1148,17 +801,15 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
                         (Integer)geometrieStatus.getProperty("id")));
             }
         }
-    } //GEN-LAST:event_cmbGeometrieStatusActionPerformed
+    }//GEN-LAST:event_cmbGeometrieStatusActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     private void initAlertPanel() {
-        if (currentSelectedButton == togBild) {
-            rissWarnMessage.setForeground(AlertPanel.dangerMessageColor);
-            alertPanel.setContent(rissWarnMessage);
-            alertPanel.repaint();
-        }
+        warnMessage.setForeground(AlertPanel.dangerMessageColor);
+        alertPanel.setContent(warnMessage);
+        alertPanel.repaint();
         alertPanel.setPreferredSize(new Dimension(500, 50));
         alertPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // To change body of generated methods,
         // choose Tools | Templates.
@@ -1214,11 +865,7 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         // this means it is editable
         if (!readOnly) {
             alertPanel.setType(AlertPanel.TYPE.DANGER);
-            if (currentSelectedButton == togBild) {
-                alertPanel.setContent(rissWarnMessage);
-            } else {
-                alertPanel.setContent(grenzNiederschriftWarnMessage);
-            }
+            alertPanel.setContent(warnMessage);
             alertPanel.setVisible(show);
             alertPanel.repaint();
         }
@@ -1231,24 +878,19 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
      */
     private String getDocumentFilename() {
         final Integer gemarkung = getGemarkungOfCurrentCidsBean();
-        final String flur = getSimplePropertyOfCurrentCidsBean("flur");
-        final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
-        final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
-        if (currentSelectedButton == togBild) {
-            return VermessungsrissWebAccessPictureFinder.getInstance()
-                        .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
-        } else {
-            return VermessungsrissWebAccessPictureFinder.getInstance()
-                        .getGrenzniederschriftFilename(schluessel, gemarkung, flur, blatt);
-        }
+        final String schluessel = (String)cidsBean.getProperty("schluessel");
+        final Integer steuerbezirk = (Integer)cidsBean.getProperty("steuerbezirk");
+        final String bezeichner = (String)cidsBean.getProperty("bezeichner");
+        final boolean historisch = Boolean.TRUE.equals(cidsBean.getProperty("historisch"));
+        return VermessungsrissWebAccessPictureFinder.getInstance()
+                    .getVermessungsbuchwerkPictureFilename(schluessel, gemarkung, steuerbezirk, bezeichner, historisch);
     }
 
     /**
      * DOCUMENT ME!
      */
     private void checkLinkInTitle() {
-        final URL fileUrl = documentURLs[currentDocument];
-        checkLinkInTitle(fileUrl);
+        checkLinkInTitle(documentURL);
     }
 
     /**
@@ -1276,41 +918,13 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         if (!readOnly && isUmleitung) {
             lblHeaderDocument.setText(NbBundle.getMessage(
-                    KatasterbuchwerkRissEditor.class,
-                    "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss_umleitung"));
+                    VermessungBuchwerkEditor.class,
+                    "VermessungBuchwerkEditor.lblHeaderDocument.text.buchwerk_umleitung"));
         } else {
-            if (currentDocument == BUCHWERK) {
-                lblHeaderDocument.setText(NbBundle.getMessage(
-                        KatasterbuchwerkRissEditor.class,
-                        "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss"));
-            } else {
-                lblHeaderDocument.setText(NbBundle.getMessage(
-                        KatasterbuchwerkRissEditor.class,
-                        "VermessungRissEditor.lblHeaderDocument.text.ergaenzendeDokumente"));
-            }
+            lblHeaderDocument.setText(NbBundle.getMessage(
+                    VermessungBuchwerkEditor.class,
+                    "VermessungBuchwerkEditor.lblHeaderDocument.text.buchwerk"));
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   url  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private String extractFilenameofUrl(final URL url) {
-        final String urlString = url.toString();
-        if (urlString.contains(VermessungUmleitungPanel.PLATZHALTER_PREFIX)) {
-            return urlString.substring(urlString.indexOf(VermessungUmleitungPanel.PLATZHALTER_PREFIX),
-                    urlString.length()
-                            - 4);
-        }
-        final String[] splittedUrl = url.toString().split("/");
-        String s = splittedUrl[splittedUrl.length - 1];
-        final int startPos = s.indexOf("_") + 1;
-        final int endPos = startPos + 21;
-        s = s.substring(startPos, endPos);
-        return s;
     }
 
     /**
@@ -1378,17 +992,6 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
 
-            final List<CidsBean> flurstuecksvermessung = cidsBean.getBeanCollectionProperty("flurstuecksvermessung");
-            if ((flurstuecksvermessung != null) && !flurstuecksvermessung.isEmpty()) {
-                Collections.sort(flurstuecksvermessung, AlphanumComparator.getInstance());
-                try {
-                    cidsBean.setProperty("flurstuecksvermessung", flurstuecksvermessung);
-                } catch (final Exception ex) {
-                    LOG.info("Couldn't sort the linked landparcels. Plausibility check of landparcels will fail.", ex);
-                    // TODO: User feedback?
-                }
-            }
-
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 this.cidsBean,
@@ -1405,8 +1008,8 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
             schluessel = cidsBean.getProperty("schluessel");
             gemarkung = (cidsBean.getProperty("gemarkung") != null) ? cidsBean.getProperty("gemarkung.id") : null;
-            flur = cidsBean.getProperty("flur");
-            blatt = cidsBean.getProperty("blatt");
+            steuerbezirk = cidsBean.getProperty("steuerbezirk");
+            bezeichner = cidsBean.getProperty("bezeichner");
         }
 
         setCurrentDocumentNull();
@@ -1478,50 +1081,15 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
     }
 
     /**
-     * Creates URLs based on the arguments. The arguments are given to <code>MessageFormat.format()</code>, where <code>
-     * host</code> is the pattern, this call create a base URL. Different suffixes (.tif, .TIFF,...) are appended to
-     * that base URL to create one URL for each suffix. Furthermore for each of this URLs an alternative with the <code>
-     * SUFFIX_REDUCED_SIZE</code> is created.<br>
-     * The return value is a Map where the key is a URL with a suffix and the value is the corresponding URL with the
-     * additional <code>SUFFIX_REDUCED_SIZE</code>.
-     *
-     * @param   property  host DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   property  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    protected String getSimplePropertyOfCurrentCidsBean(final String property) {
-        String result = "";
-
-        if (cidsBean != null) {
-            if (cidsBean.getProperty(property) != null) {
-                result = (String)cidsBean.getProperty(property).toString();
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     protected String generateTitle() {
-        if (cidsBean == null) {
-            return "Bitte wählen Sie einen Vermessungsriss.";
-        }
-
         final StringBuilder result = new StringBuilder();
         final Object schluessel = cidsBean.getProperty("schluessel");
-        final Object flur = cidsBean.getProperty("flur");
-        final Object blatt = cidsBean.getProperty("blatt");
+        final Object steuerbezirk = cidsBean.getProperty("steuerbezirk");
+        final Object bezeichner = cidsBean.getProperty("bezeichner");
 
         result.append("Schlüssel ");
         if ((schluessel instanceof String) && (((String)schluessel).trim().length() > 0)) {
@@ -1544,17 +1112,17 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
         result.append(gemarkung);
         result.append(" - ");
 
-        result.append("Flur ");
-        if ((flur instanceof String) && (((String)flur).trim().length() > 0)) {
-            result.append(flur);
+        result.append("Steuerbezirk ");
+        if (steuerbezirk instanceof Integer) {
+            result.append(steuerbezirk);
         } else {
             result.append("unbekannt");
         }
         result.append(" - ");
 
-        result.append("Blatt ");
-        if ((blatt instanceof String) && (((String)blatt).trim().length() > 0)) {
-            result.append(blatt);
+        result.append("Bezeichner ");
+        if ((bezeichner instanceof String) && (((String)bezeichner).trim().length() > 0)) {
+            result.append(bezeichner);
         } else {
             result.append("unbekannt");
         }
@@ -1587,18 +1155,15 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
      */
     protected void loadBuchwerk() {
         showMeasureIsLoading();
-        currentSelectedButton = togBild;
-        currentDocument = BUCHWERK;
         checkLinkInTitle();
         showAlert(false);
-        pictureLoaderPanel.setUrl(documentURLs[currentDocument]);
+        pictureLoaderPanel.setUrl(documentURL);
     }
 
     /**
      * DOCUMENT ME!
      */
     protected void setCurrentDocumentNull() {
-        currentDocument = NO_SELECTION;
         setCurrentPageNull();
     }
 
@@ -1607,27 +1172,6 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
      */
     protected void setCurrentPageNull() {
         currentPage = NO_SELECTION;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  args  DOCUMENT ME!
-     */
-    public static void main(final String[] args) {
-        try {
-            DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
-                "WUNDA_BLAU",
-                "Administratoren",
-                "admin",
-                "kif",
-                "vermessung_riss",
-                69681,
-                1200,
-                1200);
-        } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
-        }
     }
 
     /**
@@ -1716,12 +1260,13 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
             final List[] result = new List[1];
 
             final Integer gemarkung = getGemarkungOfCurrentCidsBean();
-            final String flur = getSimplePropertyOfCurrentCidsBean("flur");
-            final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
-            final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
+            final String schluessel = (String)cidsBean.getProperty("schluessel");
+            final Integer steuerbezirk = (Integer)cidsBean.getProperty("steuerbezirk");
+            final String bezeichner = (String)cidsBean.getProperty("bezeichner");
+            final boolean historisch = Boolean.TRUE.equals(cidsBean.getProperty("historisch"));
 
             result[BUCHWERK] = VermessungsrissWebAccessPictureFinder.getInstance()
-                        .findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
+                        .findVermessungsbuchwerkPicture(schluessel, gemarkung, steuerbezirk, bezeichner, historisch);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Textblätter:" + result[BUCHWERK]);
             }
@@ -1748,7 +1293,7 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
                                     }
                                     collisionLists.append(current);
                                 }
-                                documentURLs[i] = current.get(0);
+                                documentURL = current.get(0);
                             }
                         }
                     }
@@ -1763,89 +1308,15 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
                         LOG.info(collisionWarning);
                     }
                 }
-            } catch (InterruptedException ex) {
+            } catch (final InterruptedException ex) {
                 LOG.warn("Was interrupted while refreshing document.", ex);
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 LOG.warn("There was an exception while refreshing document.", ex);
             } finally {
                 if (refreshMeasuringComponent) {
-                    if (currentSelectedButton == togBild) {
-                        loadBuchwerk();
-                    }
+                    loadBuchwerk();
                 }
             }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    protected class HighlightReferencingFlurstueckeCellRenderer extends JLabel implements ListCellRenderer {
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param   list          DOCUMENT ME!
-         * @param   value         DOCUMENT ME!
-         * @param   index         DOCUMENT ME!
-         * @param   isSelected    DOCUMENT ME!
-         * @param   cellHasFocus  DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        @Override
-        public Component getListCellRendererComponent(final JList list,
-                final Object value,
-                final int index,
-                final boolean isSelected,
-                final boolean cellHasFocus) {
-            setOpaque(true);
-
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-
-            final String errorWhileLoading = "Fehler beim Laden des Flurstücks";
-
-            final StringBuilder result = new StringBuilder();
-            if (value instanceof CidsBean) {
-                final CidsBean vermessung = (CidsBean)value;
-
-                if (vermessung.getProperty("flurstueck") instanceof CidsBean) {
-                    final CidsBean flurstueck = (CidsBean)vermessung.getProperty("flurstueck");
-
-                    if (flurstueck.getProperty("flurstueck") instanceof CidsBean) {
-                        if (isSelected) {
-                            setBackground(list.getSelectionBackground());
-                            setForeground(list.getSelectionForeground());
-                        } else {
-                            setBackground(list.getBackground());
-                            setForeground(Color.blue);
-                        }
-                    }
-                } else if (vermessung.getProperty("tmp_lp_orig") instanceof CidsBean) {
-                    if (isSelected) {
-                        setBackground(list.getSelectionBackground());
-                        setForeground(list.getSelectionForeground());
-                    } else {
-                        setBackground(list.getBackground());
-                        setForeground(Color.red);
-                    }
-                }
-                result.append(value.toString());
-                setText(result.toString());
-            } else {
-                result.append(errorWhileLoading);
-            }
-            return this;
         }
     }
 
@@ -1858,7 +1329,7 @@ public class KatasterbuchwerkRissEditor extends javax.swing.JPanel implements Di
 
         //~ Instance fields ----------------------------------------------------
 
-        private ListCellRenderer originalRenderer;
+        private final ListCellRenderer originalRenderer;
 
         //~ Constructors -------------------------------------------------------
 
