@@ -1060,27 +1060,27 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkNameActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkNameActionPerformed
+    private void btnMenOkNameActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkNameActionPerformed
         dlgChangeKitaName.setVisible(false);
-    }//GEN-LAST:event_btnMenOkNameActionPerformed
+    }                                                                 //GEN-LAST:event_btnMenOkNameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jFormattedTextField1FocusLost(final FocusEvent evt) {//GEN-FIRST:event_jFormattedTextField1FocusLost
+    private void jFormattedTextField1FocusLost(final FocusEvent evt) { //GEN-FIRST:event_jFormattedTextField1FocusLost
         refreshValidTel();
-    }//GEN-LAST:event_jFormattedTextField1FocusLost
+    }                                                                  //GEN-LAST:event_jFormattedTextField1FocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jFormattedTextField1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
+    private void jFormattedTextField1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jFormattedTextField1ActionPerformed
         refreshValidTel();
-    }//GEN-LAST:event_jFormattedTextField1ActionPerformed
+    }                                                                         //GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1176,7 +1176,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             final HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("HEAD");
             final int responseCode = connection.getResponseCode();
-            return responseCode >= 200 && responseCode < 400;
+            return (responseCode >= 200) && (responseCode < 400);
         } catch (final Exception e) {
             return false;
         }
