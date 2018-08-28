@@ -707,34 +707,34 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }//GEN-LAST:event_togPanActionPerformed
+    }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }//GEN-LAST:event_togZoomActionPerformed
+    }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }//GEN-LAST:event_btnHomeActionPerformed
+    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         try {
             final URL downloadURL;
             if (documentURL.toExternalForm().contains(VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE)) {
@@ -785,14 +785,14 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                     }
                 }
             });
-    }//GEN-LAST:event_btnOpenActionPerformed
+    } //GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGeometrieStatusActionPerformed
+    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmbGeometrieStatusActionPerformed
         if (cmbGeometrieStatus.getSelectedItem() instanceof CidsBean) {
             final CidsBean geometrieStatus = (CidsBean)cmbGeometrieStatus.getSelectedItem();
 
@@ -801,7 +801,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                         (Integer)geometrieStatus.getProperty("id")));
             }
         }
-    }//GEN-LAST:event_cmbGeometrieStatusActionPerformed
+    } //GEN-LAST:event_cmbGeometrieStatusActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -877,7 +877,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * @return  DOCUMENT ME!
      */
     private String getDocumentFilename() {
-        final Integer gemarkung = getGemarkungOfCurrentCidsBean();
+        final CidsBean gemarkung = (CidsBean)cidsBean.getProperty("gemarkung");
         final String schluessel = (String)cidsBean.getProperty("schluessel");
         final Integer steuerbezirk = (Integer)cidsBean.getProperty("steuerbezirk");
         final String bezeichner = (String)cidsBean.getProperty("bezeichner");
@@ -1259,7 +1259,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         protected List[] doInBackground() throws Exception {
             final List[] result = new List[1];
 
-            final Integer gemarkung = getGemarkungOfCurrentCidsBean();
+            final CidsBean gemarkung = (CidsBean)cidsBean.getProperty("gemarkung");
             final String schluessel = (String)cidsBean.getProperty("schluessel");
             final Integer steuerbezirk = (Integer)cidsBean.getProperty("steuerbezirk");
             final String bezeichner = (String)cidsBean.getProperty("bezeichner");
