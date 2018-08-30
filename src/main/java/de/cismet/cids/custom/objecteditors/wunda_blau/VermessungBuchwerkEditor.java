@@ -34,9 +34,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
@@ -99,6 +101,12 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                 PrecisionModel.FLOATING),
             CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().getSrsService()));
     protected static final Map<Integer, Color> COLORS_GEOMETRIE_STATUS = new HashMap<Integer, Color>();
+    private static final ListModel MODEL_LOAD = new DefaultListModel() {
+
+            {
+                add(0, "Wird geladen...");
+            }
+        };
 
     static {
         COLORS_GEOMETRIE_STATUS.put(new Integer(1), Color.green);
@@ -118,7 +126,6 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     protected Object bezeichner;
     protected boolean readOnly;
     protected URL documentURL;
-    protected volatile int currentPage = NO_SELECTION;
     private AlertPanel alertPanel;
     private PictureLoaderPanel pictureLoaderPanel;
 
@@ -261,9 +268,9 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         cmbGemarkung = new DefaultBindableReferenceCombo();
         panRight = new javax.swing.JPanel();
         pnlControls = new de.cismet.tools.gui.RoundedPanel();
-        togPan = new javax.swing.JToggleButton();
-        togZoom = new javax.swing.JToggleButton();
-        btnHome = new javax.swing.JButton();
+        togPan = pictureLoaderPanel.getTogPan();
+        togZoom = pictureLoaderPanel.getTogZoom();
+        btnHome = pictureLoaderPanel.getBtnHome();
         pnlHeaderControls = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderControls = new javax.swing.JLabel();
         btnOpen = new javax.swing.JButton();
@@ -271,7 +278,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         pnlHeaderPages = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderPages = new javax.swing.JLabel();
         scpPages = new javax.swing.JScrollPane();
-        lstPages = new javax.swing.JList();
+        lstPages = pictureLoaderPanel.getLstPages();
         gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -931,7 +938,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * DOCUMENT ME!
      */
     public void successAlert() {
-        setCurrentPageNull();
+        pictureLoaderPanel.setCurrentPageNull();
         alertPanel.setType(AlertPanel.TYPE.SUCCESS);
         pnlMeasureComponentWrapper.invalidate();
         pnlMeasureComponentWrapper.validate();
@@ -1164,21 +1171,14 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * DOCUMENT ME!
      */
     protected void setCurrentDocumentNull() {
-        setCurrentPageNull();
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    protected void setCurrentPageNull() {
-        currentPage = NO_SELECTION;
+        pictureLoaderPanel.setCurrentPageNull();
     }
 
     /**
      * DOCUMENT ME!
      */
     public void warnAlert() {
-        setCurrentPageNull();
+        pictureLoaderPanel.setCurrentPageNull();
         alertPanel.setType(AlertPanel.TYPE.WARNING);
         pnlMeasureComponentWrapper.invalidate();
         pnlMeasureComponentWrapper.validate();
@@ -1189,7 +1189,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * DOCUMENT ME!
      */
     public void handleRissDoesNotExists() {
-        setCurrentPageNull();
+        pictureLoaderPanel.setCurrentPageNull();
         alertPanel.setType(AlertPanel.TYPE.DANGER);
         pnlMeasureComponentWrapper.invalidate();
         pnlMeasureComponentWrapper.validate();
@@ -1239,6 +1239,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         public RefreshDocumentWorker(final boolean refreshMeasuringComponent) {
             this.refreshMeasuringComponent = refreshMeasuringComponent;
             if (this.refreshMeasuringComponent) {
+                lstPages.setModel(MODEL_LOAD);
 //                setCurrentDocumentNull();
 
                 showMeasureIsLoading();
