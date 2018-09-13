@@ -365,10 +365,12 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
     private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
         final String imageNumber = (String)stadtbildserieProvider.getSelectedStadtbild().getProperty("bildnummer");
         try {
-            if (BillingPopup.doBilling(
+            if (
+                BillingPopup.doBilling(
                             "stb",
                             "not.yet",
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", 1))
                         && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 final String jobname = DownloadManagerDialog.getInstance().getJobName();
