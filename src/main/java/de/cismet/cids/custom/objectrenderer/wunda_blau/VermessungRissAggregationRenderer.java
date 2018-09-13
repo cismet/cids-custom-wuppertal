@@ -466,6 +466,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                                     + ((productGroupExt != null) ? productGroupExt : ""),
                                                     "no.yet",
                                                     (Geometry)null,
+                                                    getConnectionContext(),
                                                     amounts)) {
                                         downloadProducts(
                                             selectedVermessungsrisse,
@@ -479,6 +480,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                                     + ((productGroupExt != null) ? productGroupExt : ""),
                                                     "no.yet",
                                                     (Geometry)null,
+                                                    getConnectionContext(),
                                                     amounts)) {
                                         downloadProducts(
                                             selectedVermessungsrisse,

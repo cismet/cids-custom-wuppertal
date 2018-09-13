@@ -1327,6 +1327,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                                     + ((productGroupExt != null) ? productGroupExt : ""),
                                     downloadURL.toExternalForm(),
                                     (Geometry)null,
+                                    getConnectionContext(),
                                     new ProductGroupAmount(priceGroup, 1))) {
                         downloadProduct(downloadURL, true);
                     }
@@ -1336,6 +1337,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                                     + ((productGroupExt != null) ? productGroupExt : ""),
                                     downloadURL.toExternalForm(),
                                     (Geometry)null,
+                                    getConnectionContext(),
                                     new ProductGroupAmount(priceGroup, 1))) {
                         downloadProduct(downloadURL, false);
                     }

@@ -369,6 +369,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 "appdf",
                                 "no.yet",
                                 (Geometry)null,
+                                getConnectionContext(),
                                 new ProductGroupAmount("ea", numOfPoints))) {
                     generateAPMapReport(selectedAlkisPoints);
                 }
@@ -400,6 +401,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "pktlstpdf",
                                     "no.yet",
                                     (Geometry)null,
+                                    getConnectionContext(),
                                     new ProductGroupAmount("ea", 1))) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
@@ -419,6 +421,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "pktlsttxt",
                                     "no.yet",
                                     (Geometry)null,
+                                    getConnectionContext(),
                                     groupAmounts)) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
@@ -432,6 +435,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "appdf",
                                     "no.yet",
                                     (Geometry)null,
+                                    getConnectionContext(),
                                     new ProductGroupAmount("ea", numOfPoints))) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }

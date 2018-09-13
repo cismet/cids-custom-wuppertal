@@ -1063,6 +1063,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "stb",
                                         "not.yet",
                                         (Geometry)null,
+                                        getConnectionContext(),
                                         new ProductGroupAmount("ea", amountDownloads))
                                     && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
@@ -1135,6 +1136,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "stb",
                                         "not.yet",
                                         (Geometry)null,
+                                        getConnectionContext(),
                                         new ProductGroupAmount("ea", amountDownloads))
                                     && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
