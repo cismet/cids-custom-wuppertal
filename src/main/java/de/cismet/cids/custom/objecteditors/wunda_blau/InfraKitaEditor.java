@@ -31,6 +31,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.Exceptions;
@@ -90,6 +91,8 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
+
+import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -173,6 +176,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     private JFormattedTextField jFormattedTextField1;
     private JLabel jLabel1;
     private JTextField jTextField1;
+    private JXHyperlink jXHyperlink1;
     private JLabel lblAdresse;
     private JLabel lblAlter;
     private JLabel lblBemerkung;
@@ -319,6 +323,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         lblBemerkung = new JLabel();
         lblUrl = new JLabel();
         panUrl = new JPanel();
+        jXHyperlink1 = new JXHyperlink();
         txtUrl = new JTextField();
         lblUrlCheck = new JLabel();
         cbTraegertyp = new DefaultBindableReferenceCombo(true);
@@ -894,6 +899,31 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 ELProperty.create("${cidsBean.url}"),
+                jXHyperlink1,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jXHyperlink1.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    jXHyperlink1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 4, 2, 2);
+        panUrl.add(jXHyperlink1, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.url}"),
                 txtUrl,
                 BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -1081,6 +1111,28 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     private void jFormattedTextField1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jFormattedTextField1ActionPerformed
         refreshValidTel();
     }                                                                         //GEN-LAST:event_jFormattedTextField1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+        try {
+            BrowserLauncher.openURL(jXHyperlink1.getText());
+        } catch (final Exception e) {
+            LOG.fatal("Problem during opening url", e);
+            final ErrorInfo ei = new ErrorInfo(
+                    "Fehler beim Aufrufen der Url",
+                    "Beim Aufrufen der Url ist ein Fehler aufgetreten",
+                    null,
+                    null,
+                    e,
+                    Level.SEVERE,
+                    null);
+            JXErrorPane.showDialog(this, ei);
+        }
+    }                                                                 //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1433,6 +1485,8 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             txtUrl.setEnabled(false);
             lblGeom.setVisible(false);
         }
+        jXHyperlink1.setVisible(!isEditor);
+        txtUrl.setVisible(isEditor);
     }
 
     /**
