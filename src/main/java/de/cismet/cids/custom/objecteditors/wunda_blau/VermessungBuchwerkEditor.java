@@ -961,26 +961,6 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     /**
      * DOCUMENT ME!
      *
-     * @param  url  DOCUMENT ME!
-     */
-    public void reloadPictureFromUrl(final URL url) {
-        showMeasureIsLoading();
-        pictureLoaderPanel.setUrl(url);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  flag  DOCUMENT ME!
-     */
-    public void reloadDocuments(final boolean flag) {
-        final RefreshDocumentWorker worker = new RefreshDocumentWorker(flag);
-        worker.execute();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
     @Override
