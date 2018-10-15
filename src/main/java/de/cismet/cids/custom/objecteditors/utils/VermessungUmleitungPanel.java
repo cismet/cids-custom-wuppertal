@@ -326,12 +326,12 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
      * @param  createUmleitung  DOCUMENT ME!
      */
     private void checkIfLinkDocumentExists(final boolean createUmleitung) {
-        final SwingWorker<URL, Void> worker = new SwingWorker<URL, Void>() {
+        final SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
 
                 @Override
                 protected void done() {
                     try {
-                        final URL file = get();
+                        final String document = get();
                         if (createUmleitung) {
                             VermessungUmleitungPanel.this.createLinkFile();
                             return;
@@ -339,10 +339,11 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         jXBusyLabel1.setBusy(false);
                         final CardLayout cl = (CardLayout)pnlControls.getLayout();
                         cl.show(pnlControls, "card3");
-                        if (file != null) {
-                            lastCheckedURL = file;
+                        if (document != null) {
+                            lastCheckedURL = VermessungsrissWebAccessPictureFinder.getInstance()
+                                        .getUrlForDocument(document);
                             editor.successAlert();
-                            editor.reloadPictureFromUrl(file);
+                            editor.reloadPictureFromUrl(lastCheckedURL);
                         } else {
                             // no file exists we need to show a warning...
                             lastCheckedURL = new URL(VermessungsrissWebAccessPictureFinder.getInstance().getObjectPath(
@@ -360,7 +361,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                 }
 
                 @Override
-                protected URL doInBackground() throws Exception {
+                protected String doInBackground() throws Exception {
                     final String input = getLinkDocument();
 //                if (!isNummerConsistent(input)) {
 //                    return null;
@@ -370,34 +371,32 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         return null;
                     }
                     if (isPlatzhalter) {
-                        return new URL(VermessungsrissWebAccessPictureFinder.getInstance().getObjectPath(
-                                    mode
-                                            == MODE.GRENZNIEDERSCHRIFT,
-                                    input) + ".jpg");
+                        return VermessungsrissWebAccessPictureFinder.getInstance()
+                                    .getObjectPath(mode == MODE.GRENZNIEDERSCHRIFT, input) + ".jpg";
                     } else {
-                        final List<URL> res;
+                        final List<String> documents;
                         final String[] props = parsePropertiesFromLink(input);
 
                         // check if we need to format the flur and the blatt
                         if (mode == MODE.VERMESSUNGSRISS) {
-                            res = VermessungsrissWebAccessPictureFinder.getInstance()
+                            documents = VermessungsrissWebAccessPictureFinder.getInstance()
                                         .findVermessungsrissPicture(
                                                 props[0],
                                                 Integer.parseInt(props[1]),
                                                 props[2],
                                                 props[3]);
                         } else {
-                            res = VermessungsrissWebAccessPictureFinder.getInstance()
+                            documents = VermessungsrissWebAccessPictureFinder.getInstance()
                                         .findGrenzniederschriftPicture(
                                                 props[0],
                                                 Integer.parseInt(props[1]),
                                                 props[2],
                                                 props[3]);
                         }
-                        if ((res == null) || res.isEmpty()) {
+                        if ((documents == null) || documents.isEmpty()) {
                             return null;
                         }
-                        return res.get(0);
+                        return documents.get(0);
                     }
                 }
             };

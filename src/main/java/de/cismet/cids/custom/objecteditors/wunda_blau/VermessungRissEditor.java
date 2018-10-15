@@ -72,7 +72,6 @@ import javax.swing.text.DocumentFilter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objecteditors.utils.PictureLoaderPanel;
 import de.cismet.cids.custom.objecteditors.utils.VermessungRissUtils;
 import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
@@ -101,6 +100,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -130,7 +130,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     RequestsFullSizeComponent,
     EditorSaveListener,
     ConnectionContextStore,
-    PictureLoaderPanel.Listener {
+    RasterfariDocumentLoaderPanel.Listener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -173,7 +173,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private JToggleButton currentSelectedButton;
     private VermessungFlurstueckSelectionDialog flurstueckDialog;
     private volatile int currentDocument = NO_SELECTION;
-    private PictureLoaderPanel pictureLoaderPanel;
+    private RasterfariDocumentLoaderPanel pictureLoaderPanel;
     private AlertPanel alertPanel;
     private VermessungUmleitungPanel umleitungsPanel;
     private boolean umleitungChangedFlag = false;
@@ -283,7 +283,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
-        this.pictureLoaderPanel = new PictureLoaderPanel(this, connectionContext);
+        this.pictureLoaderPanel = new RasterfariDocumentLoaderPanel(
+                "http://localhost:8081/rasterfariWMS?REQUEST=GetMap&SERVICE=WMS&SRS=EPSG:25832&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&LAYERS=<rastafari:document>",
+                this,
+                connectionContext);
 
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
@@ -1308,17 +1311,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if ((currentDocument != NO_SELECTION) && (documentURLs[currentDocument] != null)) {
             try {
-                final URL downloadURL;
-                if (documentURLs[currentDocument].toExternalForm().contains(
-                                VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE)) {
-                    final String url = documentURLs[currentDocument].toExternalForm()
-                                .replaceAll(
-                                    VermessungsrissWebAccessPictureFinder.getInstance().SUFFIX_REDUCED_SIZE,
-                                    "");
-                    downloadURL = new URL(url);
-                } else {
-                    downloadURL = documentURLs[currentDocument];
-                }
+                final URL downloadURL = documentURLs[currentDocument];
                 final String productGroupExt = (String)cidsBean.getProperty("format.productgroup_ext");
                 final String priceGroup = (String)cidsBean.getProperty("format.pricegroup");
                 if (currentDocument == VERMESSUNGSRISS) {
@@ -1667,7 +1660,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     showUmleitung = true;
-                    pictureLoaderPanel.cancelPictureWorkers();
                     final String editedLink = umleitungsPanel.getLinkDocument();
                     if ((jxlUmleitung.getText() == null) || jxlUmleitung.getText().isEmpty()) {
                         lstPages.setModel(new DefaultListModel());
@@ -1675,7 +1667,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
                                 @Override
                                 public void run() {
-                                    measuringComponent.reset();
+                                    pictureLoaderPanel.reset();
                                     showAlert(true);
                                     pnlMeasureComponentWrapper.invalidate();
                                     pnlMeasureComponentWrapper.revalidate();
@@ -1919,10 +1911,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * DOCUMENT ME!
      */
     public void handleNoDocumentFound() {
-        pictureLoaderPanel.cancelPictureWorkers();
         alertPanel.setType(AlertPanel.TYPE.DANGER);
         umleitungsPanel.setTextColor(AlertPanel.dangerMessageColor);
-        measuringComponent.removeAllFeatures();
+        pictureLoaderPanel.reset();
         this.invalidate();
         this.validate();
         this.repaint();
@@ -1935,7 +1926,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     public void reloadPictureFromUrl(final URL url) {
         showMeasureIsLoading();
-        pictureLoaderPanel.setUrl(url);
+        pictureLoaderPanel.setDocument("");
     }
 
     /**
@@ -1988,7 +1979,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     public void handleUmleitungDeleted() {
         showAlert(true);
         documentURLs[currentDocument] = null;
-        measuringComponent.removeAllFeatures();
+        pictureLoaderPanel.reset();
         umleitungChangedFlag = true;
         this.jxlUmleitung.setText("");
         this.showLinkInTitle(false);
@@ -1999,8 +1990,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * DOCUMENT ME!
      */
     public void handleEscapePressed() {
-        pictureLoaderPanel.cancelPictureWorkers();
-        measuringComponent.removeAllFeatures();
+        pictureLoaderPanel.reset();
     }
 
     /**
@@ -2071,6 +2061,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     public void dispose() {
         bindingGroup.unbind();
         // dispose panels here if necessary
+        pictureLoaderPanel.reset();
         measuringComponent.dispose();
         if (flurstueckDialog != null) {
             flurstueckDialog.dispose();
@@ -2440,7 +2431,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             showMeasurePanel();
             return;
         } else {
-            pictureLoaderPanel.setUrl(url);
+            pictureLoaderPanel.setDocument("docs/test.pdf[0]");
         }
     }
 
@@ -2467,7 +2458,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             showMeasurePanel();
             return;
         } else {
-            pictureLoaderPanel.setUrl(url);
+            pictureLoaderPanel.setDocument("docs/test.png");
         }
     }
 

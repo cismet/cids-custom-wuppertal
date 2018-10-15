@@ -58,6 +58,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsrissReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -533,33 +534,32 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 continue;
             }
 
-            final List<URL> urlList;
+            final List<String> documents;
             // we search for reduced size images, since we need the reduced size image for the report
             if (host.equals(ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften())) {
-                urlList = VermessungsrissWebAccessPictureFinder.getInstance()
+                documents = VermessungsrissWebAccessPictureFinder.getInstance()
                             .findGrenzniederschriftPicture(
-                                    true,
                                     schluessel,
                                     gemarkung,
                                     flur,
                                     blatt);
             } else {
-                urlList = VermessungsrissWebAccessPictureFinder.getInstance()
+                documents = VermessungsrissWebAccessPictureFinder.getInstance()
                             .findVermessungsrissPicture(
-                                    true,
                                     schluessel,
                                     gemarkung,
                                     flur,
                                     blatt);
             }
 
-            if ((urlList == null) || urlList.isEmpty()) {
+            if ((documents == null) || documents.isEmpty()) {
                 LOG.info("No document URLS found for the Vermessungsriss report");
             }
             boolean isOfReducedSize = false;
-            if (urlList != null) {
-                for (final URL url : urlList) {
+            if (documents != null) {
+                for (final String document : documents) {
                     try {
+                        final URL url = VermessungsrissWebAccessPictureFinder.getInstance().getUrlForDocument(document);
                         if (url.toString().contains("_rs")) {
                             isOfReducedSize = true;
                         }
@@ -571,7 +571,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         }
                         break;
                     } catch (final Exception ex) {
-                        LOG.warn("Could not read document from URL '" + url.toExternalForm()
+                        LOG.warn("Could not read document from URL '" + document
                                     + "'. Skipping this url.",
                             ex);
                     }
@@ -843,14 +843,19 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
             final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
-                    box.getX1(),
-                    box.getY1(),
-                    box.getX2(),
-                    box.getY2(),
+                    -0.5,
+                    -0.5,
+                    0.5,
+                    0.5,
+                    /*box.getX1(),
+                     * box.getY1(), box.getX2(),box.getY2(),*/
                     ClientAlkisConf.getInstance().getSrsService(),
                     true));
+            // final SimpleWMS swms = new SimpleWMS(new
+            // SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().getMapCallString()));
             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                        ClientAlkisConf.getInstance().getMapCallString()));
+                        "http://localhost:8081/rasterfariWMS?REQUEST=GetMap&SERVICE=WMS&SRS=EPSG:25832&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&LAYERS=docs/test.png"));
+
             swms.setName("Vermessung_Riss");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -938,21 +943,25 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             final Integer gemarkung,
             final String flur,
             final String blatt) {
-        final List<URL> validURLs;
+        final List<String> validDocuments;
         if (host.equals(ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften())) {
-            validURLs = VermessungsrissWebAccessPictureFinder.getInstance()
+            validDocuments = VermessungsrissWebAccessPictureFinder.getInstance()
                         .findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
         } else {
-            validURLs = VermessungsrissWebAccessPictureFinder.getInstance()
+            validDocuments = VermessungsrissWebAccessPictureFinder.getInstance()
                         .findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
         }
 
         boolean imageAvailable = false;
-        for (final URL urls : validURLs) {
-            final URL url = urls;
-            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
-                imageAvailable = true;
-                break;
+        for (final String document : validDocuments) {
+            try {
+                final URL url = VermessungsrissWebAccessPictureFinder.getInstance().getUrlForDocument(document);
+                if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                    imageAvailable = true;
+                    break;
+                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
             }
         }
         return imageAvailable;
