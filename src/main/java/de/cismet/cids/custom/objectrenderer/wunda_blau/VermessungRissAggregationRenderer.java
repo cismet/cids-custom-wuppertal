@@ -854,7 +854,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             // final SimpleWMS swms = new SimpleWMS(new
             // SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().getMapCallString()));
             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                        "http://localhost:8081/rasterfariWMS?REQUEST=GetMap&SERVICE=WMS&SRS=EPSG:25832&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&LAYERS=docs/test.png"));
+                        ClientAlkisConf.getInstance().getVermessungHost()));
 
             swms.setName("Vermessung_Riss");
             mappingModel.addLayer(swms);

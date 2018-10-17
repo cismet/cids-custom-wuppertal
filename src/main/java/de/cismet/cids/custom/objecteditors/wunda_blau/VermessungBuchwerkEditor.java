@@ -51,6 +51,7 @@ import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictur
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.alkis.AlkisConf;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -202,7 +203,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         this.pictureLoaderPanel = new RasterfariDocumentLoaderPanel(
-                "http://localhost:8081/rasterfariWMS",
+                ClientAlkisConf.getInstance().getVermessungHost(),
                 this,
                 connectionContext);
 
@@ -1271,7 +1272,6 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                 LOG.warn("There was an exception while refreshing document.", ex);
             } finally {
                 if (refreshMeasuringComponent) {
-                    LOG.fatal("LOAD BUCHWERK");
                     loadBuchwerk();
                 }
             }

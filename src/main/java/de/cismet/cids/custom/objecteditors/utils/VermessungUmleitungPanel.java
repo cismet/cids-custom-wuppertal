@@ -171,7 +171,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     private long lastChange = 0;
     private WebDavHelper webDavHelper;
     private boolean firstDocumentChange = true;
-    private URL lastCheckedURL;
+    private String lastCheckedDocument;
     private String escapeText;
 
     private final ConnectionContext connectionContext;
@@ -340,15 +340,15 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         final CardLayout cl = (CardLayout)pnlControls.getLayout();
                         cl.show(pnlControls, "card3");
                         if (document != null) {
-                            lastCheckedURL = VermessungsrissWebAccessPictureFinder.getInstance()
-                                        .getUrlForDocument(document);
+                            lastCheckedDocument = document;
                             editor.successAlert();
-                            editor.reloadPictureFromUrl(lastCheckedURL);
+                            editor.reloadDocument(lastCheckedDocument);
                         } else {
                             // no file exists we need to show a warning...
-                            lastCheckedURL = new URL(VermessungsrissWebAccessPictureFinder.getInstance().getObjectPath(
-                                        true,
-                                        getLinkDocument()));
+                            lastCheckedDocument = VermessungsrissWebAccessPictureFinder.getInstance()
+                                        .getObjectPath(
+                                                true,
+                                                getLinkDocument());
                             editor.warnAlert();
                         }
                     } catch (InterruptedException ex) {
@@ -559,7 +559,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                             showError();
                             return;
                         }
-                        editor.handleUmleitungCreated(lastCheckedURL);
+                        editor.handleUmleitungCreated(lastCheckedDocument);
                     } catch (InterruptedException ex) {
                         LOG.error("Create Link File Worker was interrupted.", ex);
                     } catch (Exception ex) {
