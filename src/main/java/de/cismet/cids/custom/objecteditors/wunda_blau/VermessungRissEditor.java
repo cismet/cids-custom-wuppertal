@@ -283,7 +283,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         this.pictureLoaderPanel = new RasterfariDocumentLoaderPanel(
-                ClientAlkisConf.getInstance().getVermessungHost(),
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
                 this,
                 connectionContext);
 

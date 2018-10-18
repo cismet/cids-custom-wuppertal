@@ -58,7 +58,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsrissReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -559,7 +558,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             if (documents != null) {
                 for (final String document : documents) {
                     try {
-                        final URL url = VermessungsrissWebAccessPictureFinder.getInstance().getUrlForDocument(document);
+                        final URL url = ClientAlkisConf.getInstance().getUrlForDocument(document);
                         if (url.toString().contains("_rs")) {
                             isOfReducedSize = true;
                         }
@@ -854,7 +853,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             // final SimpleWMS swms = new SimpleWMS(new
             // SimpleWmsGetMapUrl(ClientAlkisConf.getInstance().getMapCallString()));
             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                        ClientAlkisConf.getInstance().getVermessungHost()));
+                        ClientAlkisConf.getInstance().getRasterfariUrl()));
 
             swms.setName("Vermessung_Riss");
             mappingModel.addLayer(swms);
@@ -955,7 +954,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         boolean imageAvailable = false;
         for (final String document : validDocuments) {
             try {
-                final URL url = VermessungsrissWebAccessPictureFinder.getInstance().getUrlForDocument(document);
+                final URL url = ClientAlkisConf.getInstance().getUrlForDocument(document);
                 if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
                     imageAvailable = true;
                     break;
