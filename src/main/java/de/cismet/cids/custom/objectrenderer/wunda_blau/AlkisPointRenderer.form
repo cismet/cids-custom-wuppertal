@@ -1534,7 +1534,7 @@
                 </Container>
                 <Component class="de.cismet.cismap.commons.gui.measuring.MeasuringComponent" name="measuringComponent">
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new MeasuringComponent(INITIAL_BOUNDINGBOX, CRS)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="rasterfariLoader.getMeasuringComponent()"/>
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

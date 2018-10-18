@@ -558,7 +558,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             if (documents != null) {
                 for (final String document : documents) {
                     try {
-                        final URL url = ClientAlkisConf.getInstance().getUrlForDocument(document);
+                        final URL url = ClientAlkisConf.getInstance().getDownloadUrlForDocument(document);
                         if (url.toString().contains("_rs")) {
                             isOfReducedSize = true;
                         }
@@ -954,7 +954,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         boolean imageAvailable = false;
         for (final String document : validDocuments) {
             try {
-                final URL url = ClientAlkisConf.getInstance().getUrlForDocument(document);
+                final URL url = ClientAlkisConf.getInstance().getDownloadUrlForDocument(document);
                 if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
                     imageAvailable = true;
                     break;
