@@ -1008,6 +1008,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                             "nivppdf",
                             urlOfDocument,
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", 1))) {
                 openDoc(urlOfDocument);
             }
@@ -1105,6 +1106,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                             "nivppdf",
                             "no.yet",
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", 1))) {
                 NivellementPunktAggregationRenderer.downloadReport(Arrays.asList(cidsBean),
                     "",

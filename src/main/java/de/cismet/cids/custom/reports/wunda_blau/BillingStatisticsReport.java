@@ -60,10 +60,10 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
     protected int amountVUsonstigeGB = 0;
     protected int amountWithCostsVU = 0;
     protected int amountWithCostsWiederver = 0;
-    protected double earningsWithCostsVU = 0;
-    protected double earningsWithCostsWiederver = 0;
     protected int amountWiederverkaeufe = 0;
     protected int amountWiederverkaeufeGB = 0;
+    protected double earningsWithCostsVU = 0;
+    protected double earningsWithCostsWiederver = 0;
 
     SwingWorker<JasperPrint, Void> downloadWorker;
     Collection<CidsBean> billingBeans;
@@ -88,10 +88,10 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
      * @param  amountVUsonstigeGB               DOCUMENT ME!
      * @param  amountWithCostsVU                DOCUMENT ME!
      * @param  amountWithCostsWiederver         DOCUMENT ME!
-     * @param  earningsWithCostsVU              DOCUMENT ME!
-     * @param  earningsWithCostsWiederver       DOCUMENT ME!
      * @param  amountWiederverkaeufe            DOCUMENT ME!
      * @param  amountWiederverkaeufeGB          DOCUMENT ME!
+     * @param  earningsWithCostsVU              DOCUMENT ME!
+     * @param  earningsWithCostsWiederver       DOCUMENT ME!
      * @param  connectionContext                DOCUMENT ME!
      */
     public BillingStatisticsReport(final Collection<CidsBean> billingBeans,
@@ -108,10 +108,10 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
             final int amountVUsonstigeGB,
             final int amountWithCostsVU,
             final int amountWithCostsWiederver,
-            final double earningsWithCostsVU,
-            final double earningsWithCostsWiederver,
             final int amountWiederverkaeufe,
             final int amountWiederverkaeufeGB,
+            final double earningsWithCostsVU,
+            final double earningsWithCostsWiederver,
             final ConnectionContext connectionContext) {
         this.billingBeans = billingBeans;
         this.from = from;
@@ -127,10 +127,10 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
         this.amountVUsonstigeGB = amountVUsonstigeGB;
         this.amountWithCostsVU = amountWithCostsVU;
         this.amountWithCostsWiederver = amountWithCostsWiederver;
-        this.earningsWithCostsVU = earningsWithCostsVU;
-        this.earningsWithCostsWiederver = earningsWithCostsWiederver;
         this.amountWiederverkaeufe = amountWiederverkaeufe;
         this.amountWiederverkaeufeGB = amountWiederverkaeufeGB;
+        this.earningsWithCostsVU = earningsWithCostsVU;
+        this.earningsWithCostsWiederver = earningsWithCostsWiederver;
         this.connectionContext = connectionContext;
     }
 
@@ -239,9 +239,6 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
         params.put("amountWithCostsVU", amountWithCostsVU);
         params.put("amountWithCostsWiederver", amountWithCostsWiederver);
 
-        params.put("earningsWithCostsVU", earningsWithCostsVU);
-        params.put("earningsWithCostsWiederver", earningsWithCostsWiederver);
-
         params.put("amountVUamtlicherLageplan", amountVUamtlicherLageplan);
         params.put("amountVUamtlicherLageplanGB", amountVUamtlicherLageplanGB);
         params.put("amountVUhoheitlicheVermessung", amountVUhoheitlicheVermessung);
@@ -250,6 +247,9 @@ public class BillingStatisticsReport implements ConnectionContextProvider {
         params.put("amountVUsonstigeGB", amountVUsonstigeGB);
         params.put("amountWiederverkaeufe", amountWiederverkaeufe);
         params.put("amountWiederverkaeufeGB", amountWiederverkaeufeGB);
+
+        params.put("earningsWithCostsVU", earningsWithCostsVU);
+        params.put("earningsWithCostsWiederver", earningsWithCostsWiederver);
 
         return params;
     }

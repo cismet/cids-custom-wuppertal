@@ -362,6 +362,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                             "nivppdf",
                             "no.yet",
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", selectedNivellementPunkte.size()))) {
                 downloadReport(
                     selectedNivellementPunkte,

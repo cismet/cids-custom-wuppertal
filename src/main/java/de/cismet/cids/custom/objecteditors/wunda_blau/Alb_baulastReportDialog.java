@@ -276,6 +276,7 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog implements Conn
                             "bla",
                             "no.yet",
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea_bla", beans.size()))) {
                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                     String projectname = projektbezeichnung;

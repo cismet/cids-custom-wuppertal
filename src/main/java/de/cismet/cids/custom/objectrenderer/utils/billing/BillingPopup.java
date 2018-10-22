@@ -221,7 +221,29 @@ public class BillingPopup extends javax.swing.JDialog {
             final String request,
             final Geometry geom,
             final ProductGroupAmount... amounts) throws Exception {
-        return doBilling(product, request, (Map)null, geom, ConnectionContext.createDeprecated(), amounts);
+        return doBilling(product, request, geom, ConnectionContext.createDeprecated(), amounts);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product            DOCUMENT ME!
+     * @param   request            DOCUMENT ME!
+     * @param   geom               DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     * @param   amounts            DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static boolean doBilling(
+            final String product,
+            final String request,
+            final Geometry geom,
+            final ConnectionContext connectionContext,
+            final ProductGroupAmount... amounts) throws Exception {
+        return doBilling(product, request, (Map)null, geom, connectionContext, amounts);
     }
 
     /**
@@ -1376,6 +1398,7 @@ public class BillingPopup extends javax.swing.JDialog {
                 "fsnw",
                 "request",
                 null,
+                ConnectionContext.createDummy(),
                 new ProductGroupAmount("ea", 2),
                 new ProductGroupAmount("ea", 1),
                 new ProductGroupAmount("ea", 1),
