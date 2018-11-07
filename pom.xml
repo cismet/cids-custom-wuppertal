@@ -434,11 +434,7 @@
             <groupId>de.aedsicad</groupId>
             <artifactId>aaaweb-soap-connector</artifactId>
             <version>6.4-pre-release-2</version>
-<<<<<<< HEAD
         </dependency>        
-=======
-        </dependency>  
->>>>>>> feature/469-migration-6.4
         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jcommon</artifactId>
