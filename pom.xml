@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.9.4-aaaweb-6.4-pre-release-1</version>
+                <version>6.9.4-aaaweb-6.4-pre-release-2</version>
                 <type>jar</type>
             </dependency>
             
@@ -434,7 +434,11 @@
             <groupId>de.aedsicad</groupId>
             <artifactId>aaaweb-soap-connector</artifactId>
             <version>6.4-pre-release-2</version>
+<<<<<<< HEAD
         </dependency>        
+=======
+        </dependency>  
+>>>>>>> feature/469-migration-6.4
         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jcommon</artifactId>

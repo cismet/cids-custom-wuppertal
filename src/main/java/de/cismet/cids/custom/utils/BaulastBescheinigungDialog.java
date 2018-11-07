@@ -1138,8 +1138,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             if (buchungsblatt == null) {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
-                    buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                            AlkisUtils.fixBuchungslattCode(buchungsblattcode),
+                    buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisUtils.fixBuchungslattCode(
+                                buchungsblattcode),
                             getConnectionContext());
                     BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);
                 }

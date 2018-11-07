@@ -70,6 +70,7 @@ import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSoapUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
@@ -623,8 +624,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
                     if (!demoMode) {
-                        buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                                AlkisUtils.fixBuchungslattCode(buchungsblattcode),
+                        buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisUtils
+                                        .fixBuchungslattCode(buchungsblattcode),
                                 getConnectionContext());
                     } else {
                         final Owner o = new Owner();
@@ -2017,7 +2018,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (title == null) {
             title = "<Error>";
         } else {
-            title = AlkisUtils.prettyPrintLandparcelCode(title);
+            title = AlkisSoapUtils.prettyPrintLandparcelCode(title);
         }
         this.title = title;
         lblTitle.setText(this.title);
@@ -2076,7 +2077,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                             stelle.getFraction();
                         }
                     }
-                    currentInfoText.append(AlkisUtils.buchungsblattToString(
+                    currentInfoText.append(AlkisSoapUtils.buchungsblattToHtml(
                             AlkisLandparcelRenderer.this.cidsBean,
                             buchungsblatt,
                             buchungsblattBean));
