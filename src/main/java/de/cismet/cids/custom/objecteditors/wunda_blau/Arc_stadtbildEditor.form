@@ -294,7 +294,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fotograf}" target="bcbFotograf" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;FOTOGRAF&quot;})  "/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;FOTOGRAF&quot;}, getConnectionContext())  "/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)bcbFotograf).setSorted(true);"/>
           </AuxValues>
           <Constraints>
@@ -368,7 +368,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.ort}" target="bcbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;select s.id,s.name,o.stadtteil from arc_strasse s left outer join arc_stadtteil o on s.stadtteil = o.id&quot;, strasseFormater, new String[]{&quot;NAME&quot;,&quot;STADTTEIL&quot;}) "/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;select s.id,s.name,o.stadtteil from arc_strasse s left outer join arc_stadtteil o on s.stadtteil = o.id&quot;, strasseFormater, new String[]{&quot;NAME&quot;,&quot;STADTTEIL&quot;}, getConnectionContext()) "/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)bcbStrasse).setSorted(true);"/>
           </AuxValues>
           <Constraints>
@@ -393,7 +393,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.auftraggeber}" target="bcbAuftraggeber" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;AUFTRAGGEBER&quot;}) "/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;AUFTRAGGEBER&quot;}, getConnectionContext()) "/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)bcbAuftraggeber).setSorted(true);"/>
           </AuxValues>
           <Constraints>
@@ -479,7 +479,6 @@
         <Component class="javax.swing.JCheckBox" name="chkAuswahl">
           <Properties>
             <Property name="text" type="java.lang.String" value="Auswahl"/>
-            <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.auswahl}" target="chkAuswahl" targetPath="selected" updateStrategy="0" immediately="false">
@@ -499,7 +498,6 @@
         <Component class="javax.swing.JCheckBox" name="chkLager">
           <Properties>
             <Property name="text" type="java.lang.String" value="Lager"/>
-            <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.lager}" target="chkLager" targetPath="selected" updateStrategy="0" immediately="false">
@@ -519,7 +517,6 @@
         <Component class="javax.swing.JCheckBox" name="chkPruefen">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pr&#xfc;fen"/>
-            <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.pruefen}" target="chkPruefen" targetPath="selected" updateStrategy="0" immediately="false">
@@ -552,7 +549,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.filmart}" target="bcbFilmart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;FILMART&quot;})"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;FILMART&quot;}, getConnectionContext())"/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)bcbFilmart).setSorted(true);"/>
           </AuxValues>
           <Constraints>

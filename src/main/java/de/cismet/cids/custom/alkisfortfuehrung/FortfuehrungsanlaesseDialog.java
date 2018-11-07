@@ -47,6 +47,9 @@ import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.BrowserLauncher;
 
 /**
@@ -55,7 +58,7 @@ import de.cismet.tools.BrowserLauncher;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
+public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -68,6 +71,8 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
     private boolean lockDateButtons = false;
     private final WKTReader wktreader = new WKTReader();
     private final MultiMap geomsMap = new MultiMap();
+
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCloseDialog;
@@ -104,11 +109,15 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
     /**
      * Creates new form FortfuehrungsanlaesseDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    protected FortfuehrungsanlaesseDialog(final Frame parent, final boolean modal) {
+    protected FortfuehrungsanlaesseDialog(final Frame parent,
+            final boolean modal,
+            final ConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
 
         initComponents();
 
@@ -885,7 +894,9 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
                     final CidsServerSearch itemSearch = createFortfuehrungItemSearch(dpiFrom.getDate(),
                             dpiTo.getDate());
                     final Collection<Object[]> rawItems = (Collection<Object[]>)SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), itemSearch);
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                        itemSearch,
+                                        getConnectionContext());
                     final Map<Integer, FortfuehrungItem> ffnMap = new HashMap<>();
                     for (final Object[] rawItem : rawItems) {
                         final FortfuehrungItem item = createFortfuehrungItem(rawItem);
@@ -958,6 +969,11 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog {
      * @param  enabled  DOCUMENT ME!
      */
     protected abstract void setDetailEnabled(final boolean enabled);
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     //~ Inner Classes ----------------------------------------------------------
 

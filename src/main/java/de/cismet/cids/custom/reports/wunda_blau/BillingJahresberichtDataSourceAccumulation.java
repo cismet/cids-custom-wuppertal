@@ -15,11 +15,14 @@ package de.cismet.cids.custom.reports.wunda_blau;
 import net.sf.jasperreports.engine.JRDataSource;
 
 import java.util.Collection;
+import java.util.Date;
 
 import de.cismet.cids.custom.wunda_blau.search.server.BillingJahresberichtReportServerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportServerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.joinCidsBeanIds;
 
@@ -33,20 +36,27 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
 
     //~ Instance fields --------------------------------------------------------
 
-    private final int year;
+    private final Date from;
+    private final Date till;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new BillingJahresberichtDataSourceAccumulation object.
      *
-     * @param  billingBeans  DOCUMENT ME!
-     * @param  year          DOCUMENT ME!
+     * @param  billingBeans       DOCUMENT ME!
+     * @param  from               year DOCUMENT ME!
+     * @param  till               DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public BillingJahresberichtDataSourceAccumulation(final Collection<CidsBean> billingBeans, final int year) {
-        super(billingBeans);
+    public BillingJahresberichtDataSourceAccumulation(final Collection<CidsBean> billingBeans,
+            final Date from,
+            final Date till,
+            final ConnectionContext connectionContext) {
+        super(billingBeans, connectionContext);
 
-        this.year = year;
+        this.from = from;
+        this.till = till;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -84,6 +94,36 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
      *
      * @return  DOCUMENT ME!
      */
+    public JRDataSource getAnzahlGeschaeftsbuchnummernKostenpflichtigLiegenschaftskataster() {
+        return getResource(
+                BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_GESCHAEFTSBUCHNUMMERN_KOSTENPFLICHTIG_LK);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlGeschaeftsbuchnummernKostenpflichtigBaulasten() {
+        return getResource(
+                BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_GESCHAEFTSBUCHNUMMERN_KOSTENPFLICHTIG_BL);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlGeschaeftsbuchnummernKostenpflichtigKummunal() {
+        return getResource(
+                BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_GESCHAEFTSBUCHNUMMERN_KOSTENPFLICHTIG_KO);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public JRDataSource getAnzahlGeschaeftsbuchnummernKostenfrei() {
         return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_GESCHAEFTSBUCHNUMMERN_KOSTENFREI);
     }
@@ -93,8 +133,61 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
      *
      * @return  DOCUMENT ME!
      */
+    public JRDataSource getAnzahlGeschaeftsbuchnummernKostenfreiLiegenschaftskataster() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_GESCHAEFTSBUCHNUMMERN_KOSTENFREI_LK);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlGeschaeftsbuchnummernKostenfreiBaulasten() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_GESCHAEFTSBUCHNUMMERN_KOSTENFREI_BL);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlGeschaeftsbuchnummernKostenfreiKommunal() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_GESCHAEFTSBUCHNUMMERN_KOSTENFREI_KO);
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public JRDataSource getAnzahlDownloadsKostenpflichtig() {
         return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_DOWNLOADS_KOSTENPFLICHTIG);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlDownloadsKostenpflichtigLiegenschaftskataster() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_DOWNLOADS_KOSTENPFLICHTIG_LK);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlDownloadsKostenpflichtigBaulasten() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_DOWNLOADS_KOSTENPFLICHTIG_BL);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlDownloadsKostenpflichtigKommunal() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_DOWNLOADS_KOSTENPFLICHTIG_KO);
     }
 
     /**
@@ -111,6 +204,32 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
      *
      * @return  DOCUMENT ME!
      */
+    public JRDataSource getAnzahlDownloadsKostenfreiLiegenschaftskataster() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_DOWNLOADS_KOSTENFREI_LK);
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlDownloadsKostenfreiBaulasten() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_DOWNLOADS_KOSTENFREI_BL);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlDownloadsKostenfreiKommunal() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_DOWNLOADS_KOSTENFREI_KO);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public JRDataSource getSummeEinnahmenProVerwendungszweck() {
         return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_SUMME_EINNAHMEN);
     }
@@ -120,8 +239,61 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
      *
      * @return  DOCUMENT ME!
      */
+    public JRDataSource getSummeEinnahmenProVerwendungszweckLiegenschaftskataster() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_SUMME_EINNAHMEN_LK);
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getSummeEinnahmenProVerwendungszweckBaulasten() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_SUMME_EINNAHMEN_BL);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getSummeEinnahmenProVerwendungszweckKommunal() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_SUMME_EINNAHMEN_KO);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public JRDataSource getAnzahlProVerwendungszweck() {
         return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_ANZAHL);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlProVerwendungszweckLiegenschaftskataster() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_ANZAHL_LK);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlProVerwendungszweckBaulasten() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_ANZAHL_BL);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JRDataSource getAnzahlProVerwendungszweckKommunal() {
+        return getResource(BillingJahresberichtReportServerSearch.VERWENDUNGSZWECK_ANZAHL_KO);
     }
 
     /**
@@ -144,6 +316,6 @@ public class BillingJahresberichtDataSourceAccumulation extends BillingStatistic
 
     @Override
     protected BillingStatisticsReportServerSearch createServerSearch() {
-        return new BillingJahresberichtReportServerSearch(joinCidsBeanIds(billingBeans, ", "), year);
+        return new BillingJahresberichtReportServerSearch(joinCidsBeanIds(billingBeans, ", "), from, till);
     }
 }

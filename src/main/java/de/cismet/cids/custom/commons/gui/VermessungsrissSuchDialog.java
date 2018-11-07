@@ -22,13 +22,16 @@ import de.cismet.cids.custom.wunda_blau.search.VermessungRissWindowSearch;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class VermessungsrissSuchDialog extends javax.swing.JDialog {
+public class VermessungsrissSuchDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -36,6 +39,7 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog {
     private de.cismet.cids.custom.wunda_blau.search.VermessungRissWindowSearch vermessungRissWindowSearch1;
     // End of variables declaration//GEN-END:variables
 
+    private final ConnectionContext connectionContext;
     private VermessungRissWindowSearch vermSearch =
         new de.cismet.cids.custom.wunda_blau.search.VermessungRissWindowSearch() {
 
@@ -65,7 +69,8 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog {
                                         ComponentRegistry.getRegistry().getSearchResultsTree().setSelectionRow(0);
                                     }
                                 }
-                            });
+                            },
+                            getConnectionContext());
                     }
                 }
             }
@@ -76,14 +81,17 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog {
     /**
      * Creates new form NewJDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public VermessungsrissSuchDialog(final java.awt.Frame parent, final boolean modal) {
+    public VermessungsrissSuchDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
+        vermSearch.initWithConnectionContext(connectionContext);
         initComponents();
-
-//        vermSearch.ad
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -154,7 +162,8 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog {
                 public void run() {
                     final VermessungsrissSuchDialog dialog = new VermessungsrissSuchDialog(
                             new javax.swing.JFrame(),
-                            true);
+                            true,
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -165,5 +174,10 @@ public class VermessungsrissSuchDialog extends javax.swing.JDialog {
                     dialog.setVisible(true);
                 }
             });
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

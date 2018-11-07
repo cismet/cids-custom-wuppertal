@@ -23,6 +23,8 @@ import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -42,10 +44,12 @@ public class FlurstueckNodesSearchCreateSearchGeometryListener extends NodesSear
      *
      * @param  mc                  DOCUMENT ME!
      * @param  propChangeListener  DOCUMENT ME!
+     * @param  connectionContext   DOCUMENT ME!
      */
     public FlurstueckNodesSearchCreateSearchGeometryListener(final MappingComponent mc,
-            final PropertyChangeListener propChangeListener) {
-        super(mc, propChangeListener);
+            final PropertyChangeListener propChangeListener,
+            final ConnectionContext connectionContext) {
+        super(mc, propChangeListener, connectionContext);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -59,7 +63,10 @@ public class FlurstueckNodesSearchCreateSearchGeometryListener extends NodesSear
     public CidsServerSearch getCidsServerSearch(final Geometry geometry) {
         final BufferingGeosearch search = new BufferingGeosearch();
         try {
-            final MetaClass mc = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "alkis_landparcel");
+            final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "alkis_landparcel",
+                    getConnectionContext());
             search.setValidClasses(Arrays.asList(mc));
             search.setGeometry(geometry);
             return search;

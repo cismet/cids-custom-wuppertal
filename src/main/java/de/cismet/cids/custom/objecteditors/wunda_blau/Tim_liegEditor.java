@@ -36,6 +36,8 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -46,9 +48,10 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
     BeanInitializerProvider,
     PropertyChangeListener {
 
-    //~ Instance fields --------------------------------------------------------
+    //~ Static fields/initializers ---------------------------------------------
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Tim_liegEditor.class);
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBodenschaetzung_ueb_von;
     private javax.swing.JButton btnSchlusspruefung_von;
@@ -252,12 +255,18 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
      * Creates new form Tim_liegEditor.
      */
     public Tim_liegEditor() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        super.initWithConnectionContext(connectionContext);
+
         initComponents();
         scpKartographie.getVerticalScrollBar().setUnitIncrement(26);
         scpStadtgrundkarte.getVerticalScrollBar().setUnitIncrement(26);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -3012,7 +3021,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("kart");
         } catch (Exception e) {
-            log.error("Error beim Erzeugen eines Kart Objektes", e);
+            LOG.error("Error beim Erzeugen eines Kart Objektes", e);
         }
     }                                                                              //GEN-LAST:event_cmdAddKartActionPerformed
 
@@ -3025,7 +3034,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("alkis");
         } catch (Exception e) {
-            log.error("Error beim Erzeugen eines Alkis Objektes", e);
+            LOG.error("Error beim Erzeugen eines Alkis Objektes", e);
         }
     }                                                                             //GEN-LAST:event_cmdAddSgkActionPerformed
 
@@ -3144,8 +3153,8 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
 
     @Override
     public BeanInitializer getBeanInitializer() {
-        log.fatal("getBeanInitializer");
-        return new CompleteBeanInitializer(cidsBean);
+        LOG.fatal("getBeanInitializer");
+        return new CompleteBeanInitializer(cidsBean, getConnectionContext());
     }
 
     @Override
@@ -3185,10 +3194,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
         /**
          * Creates a new CompleteBeanInitializer object.
          *
-         * @param  template  DOCUMENT ME!
+         * @param  template           DOCUMENT ME!
+         * @param  connectionContext  DOCUMENT ME!
          */
-        public CompleteBeanInitializer(final CidsBean template) {
-            super(template);
+        public CompleteBeanInitializer(final CidsBean template, final ConnectionContext connectionContext) {
+            super(template, connectionContext);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -3198,10 +3208,12 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
                 final String propertyName,
                 final CidsBean complexValueToProcess) throws Exception {
             if (complexValueToProcess != null) {
-                final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(complexValueToProcess);
+                final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(
+                        complexValueToProcess,
+                        getConnectionContext());
                 final CidsBean newBean = complexValueToProcess.getMetaObject()
                             .getMetaClass()
-                            .getEmptyInstance()
+                            .getEmptyInstance(getConnectionContext())
                             .getBean();
                 subInitializer.initializeBean(newBean);
                 beanToInit.setProperty(propertyName, newBean);

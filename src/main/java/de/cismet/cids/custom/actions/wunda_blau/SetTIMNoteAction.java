@@ -62,6 +62,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -71,7 +74,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CommonFeatureAction.class)
-public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAction {
+public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAction, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -83,6 +86,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
     private boolean isCurrentUserAllowedToSetHint;
     private MetaClass timLiegMetaClass;
 
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -92,10 +97,16 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
         super(NbBundle.getMessage(SetTIMNoteAction.class, "SetTIMNoteAction.name"),
             new javax.swing.ImageIcon(
                 SetTIMNoteAction.class.getResource("/de/cismet/cids/custom/actions/wunda_blau/tag_blue_add.png")));
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             final MetaClassCacheService classcache = Lookup.getDefault().lookup(MetaClassCacheService.class);
-            timLiegMetaClass = classcache.getMetaClass("WUNDA_BLAU", "tim_lieg");
+            timLiegMetaClass = classcache.getMetaClass("WUNDA_BLAU", "tim_lieg", getConnectionContext());
             isCurrentUserAllowedToSetHint = timLiegMetaClass.getPermissions()
                         .hasWritePermission(SessionManager.getSession().getUser());
         } catch (Exception e) {
@@ -105,8 +116,6 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
             setEnabled(false);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     @Override
     public void actionPerformed(final ActionEvent e) {
@@ -142,8 +151,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
         CidsBean persistedHint = null;
         CidsBean geometry = null;
         try {
-            hint = CidsBeanSupport.createNewCidsBeanFromTableName("tim_lieg");
-            geometry = CidsBeanSupport.createNewCidsBeanFromTableName("geom");
+            hint = CidsBeanSupport.createNewCidsBeanFromTableName("tim_lieg", getConnectionContext());
+            geometry = CidsBeanSupport.createNewCidsBeanFromTableName("geom", getConnectionContext());
 
             hint.setProperty("ein_beab", usr.getName());
             hint.setProperty("ein_dat", new java.sql.Timestamp(System.currentTimeMillis()));
@@ -153,7 +162,7 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
             geometry.setProperty("geo_field", feature.getGeometry());
             hint.setProperty("georeferenz", geometry);
 
-            persistedHint = hint.persist();
+            persistedHint = hint.persist(getConnectionContext());
         } catch (Exception ex) {
             LOG.error("Could not persist new entity for table 'tim_lieg'.", ex);
             JOptionPane.showMessageDialog(
@@ -194,7 +203,8 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
 
         RootTreeNode rootTreeNode = null;
         try {
-            rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+            rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(getConnectionContext()),
+                    getConnectionContext());
         } catch (ConnectionException ex) {
             LOG.error("Updating catalogue tree after successful insertion of 'tim_lieg' entity failed.", ex);
             return;
@@ -245,5 +255,10 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
     @Override
     public int getSorter() {
         return 10;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

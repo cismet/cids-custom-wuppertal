@@ -40,7 +40,7 @@ import javax.swing.JOptionPane;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.Disposable;
@@ -65,6 +65,9 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -78,7 +81,8 @@ import de.cismet.tools.gui.StaticSwingTools;
 public abstract class BodenAbstractEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     EditorSaveListener,
     RequestsFullSizeComponent,
-    Disposable {
+    Disposable,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -87,14 +91,15 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
 
     //~ Instance fields --------------------------------------------------------
 
-    final Collection<Feature> editorSupportingFeatures = new ArrayList<Feature>();
+    final Collection<Feature> editorSupportingFeatures = new ArrayList<>();
     private Collection<MetaObject> allSelectedObjects;
     private final boolean editable;
     private final Collection<JComponent> editableComponents;
-    private final FlurstueckSelectionDialoge fsDialoge;
-    private final MappingComponent map;
+    private FlurstueckSelectionDialoge fsDialoge;
+    private MappingComponent map;
     private String title;
     private CidsBean cidsBean;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField aktenzeichen;
@@ -137,7 +142,14 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
      */
     public BodenAbstractEditor(final boolean editable) {
         this.editable = editable;
-        this.editableComponents = new ArrayList<JComponent>();
+        this.editableComponents = new ArrayList<>();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         initEditableComponents();
 
@@ -150,10 +162,8 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
             this.remove(panMap);
             ((DefaultCismapGeometryComboBoxEditor)cbHinweisGeom).setLocalRenderFeatureString("hinweisgeometrie");
         }
-        fsDialoge = new FlurstueckSelectionDialoge();
+        fsDialoge = new FlurstueckSelectionDialoge(getConnectionContext());
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -751,11 +761,12 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
         try {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.unbind();
             if (cidsBean != null) {
                 final int[] flstIdx = lstFlurstuecke.getSelectedIndices();
-                final Collection<MetaObject> selObj = new ArrayList<MetaObject>(1);
+                final Collection<MetaObject> selObj = new ArrayList<>(1);
                 selObj.add(cidsBean.getMetaObject());
                 setAllSelectedMetaObjects(selObj);
                 this.cidsBean = cidsBean;
@@ -843,17 +854,17 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
 
             if (geoObj instanceof Geometry) {
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
 
                 final Runnable mapRunnable = new Runnable() {
 
                         @Override
                         public void run() {
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                             mappingModel.addHome(getBoundingBox());
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                        AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                        ClientAlkisConf.getInstance().getMapCallString()));
                             swms.setName("Flurstueck");
 
                             final Collection<MetaObject> selObj = new ArrayList<MetaObject>(1);
@@ -915,16 +926,17 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
             if (flurstueck.getProperty(getFlurstueckReferenzGeometryPropertyName()) instanceof Geometry) {
                 final Geometry geometry = CrsTransformer.transformToGivenCrs((Geometry)flurstueck.getProperty(
                             getFlurstueckReferenzGeometryPropertyName()),
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
 
                 if (result == null) {
-                    result = new XBoundingBox(geometry.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER),
-                            AlkisConstants.COMMONS.SRS_SERVICE,
+                    result = new XBoundingBox(geometry.getEnvelope().buffer(
+                                ClientAlkisConf.getInstance().getGeoBuffer()),
+                            ClientAlkisConf.getInstance().getSrsService(),
                             true);
                 } else {
                     final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                AlkisConstants.COMMONS.GEO_BUFFER));
-                    temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                                ClientAlkisConf.getInstance().getGeoBuffer()));
+                    temp.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     temp.setMetric(true);
 
                     if (temp.getX1() < result.getX1()) {
@@ -945,5 +957,10 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
         }
 
         return result;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

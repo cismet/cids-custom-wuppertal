@@ -30,13 +30,16 @@ import javax.swing.SwingWorker;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.nas.NasProduct;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class NasFeePreviewPanel extends javax.swing.JPanel {
+public class NasFeePreviewPanel extends javax.swing.JPanel implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -45,14 +48,15 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
 
     //~ Instance fields --------------------------------------------------------
 
-    private boolean isPointType;
     private NasProduct nasProduct;
     private Geometry geom;
     private int pointAmount = 0;
     private int gebaeudeAmount = 0;
     private int flurstueckAmount = 0;
-    private DecimalFormat formatter = new DecimalFormat("#,###,##0.00 \u00A4\u00A4");
+    private final DecimalFormat formatter = new DecimalFormat("#,###,##0.00 \u00A4\u00A4");
     private double discount;
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAnzahlTitle;
@@ -83,18 +87,22 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
 
     /**
      * Creates a new NasFeePreviewPanel object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public NasFeePreviewPanel() {
-        this(new NasProduct("ohne_eigentuemer"));
+    public NasFeePreviewPanel(final ConnectionContext connectionContext) {
+        this(new NasProduct("ohne_eigentuemer"), connectionContext);
         this.nasProduct.setBillingKey(PK_NASOEIG);
     }
 
     /**
      * Creates new form NasFeePreviewPanel.
      *
-     * @param  nasProduct  isPointType DOCUMENT ME!
+     * @param  nasProduct         isPointType DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public NasFeePreviewPanel(final NasProduct nasProduct) {
+    public NasFeePreviewPanel(final NasProduct nasProduct, final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         this.nasProduct = nasProduct;
         this.discount = 1;
         initComponents();
@@ -229,7 +237,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                     final String nasBillingKey = nasProduct.getBillingKey();
                     if ((nasProduct != null) && nasProduct.getKey().equalsIgnoreCase("punkte")) {
                         final ArrayList<String> values = new ArrayList<String>();
-                        pointAmount = NasFeeCalculator.getPointAmount(geom);
+                        pointAmount = NasFeeCalculator.getPointAmount(geom, getConnectionContext());
                         values.add("" + pointAmount);
                         final double pointFee = NasFeeCalculator.getFeeForPoints(pointAmount, nasBillingKey) * discount;
                         totalFee += pointFee;
@@ -238,7 +246,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                     } else {
                         final ArrayList<String> flurstueckValues = new ArrayList<String>();
                         final ArrayList<String> gebaeudeValues = new ArrayList<String>();
-                        flurstueckAmount = NasFeeCalculator.getFlurstueckAmount(geom);
+                        flurstueckAmount = NasFeeCalculator.getFlurstueckAmount(geom, getConnectionContext());
                         flurstueckValues.add("" + flurstueckAmount);
                         final double flurstueckFee =
                             NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount, nasBillingKey)
@@ -258,7 +266,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                         }
                         flurstueckValues.add(formatter.format(flurstueckFee));
                         result.put("flurstuecke", flurstueckValues);
-                        gebaeudeAmount = NasFeeCalculator.getGebaeudeAmount(geom);
+                        gebaeudeAmount = NasFeeCalculator.getGebaeudeAmount(geom, getConnectionContext());
                         gebaeudeValues.add("" + gebaeudeAmount);
                         final double gebaeudeFee = NasFeeCalculator.getFeeForGebaeude(gebaeudeAmount, nasBillingKey)
                                     * discount;
@@ -759,4 +767,9 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         lblBusy.setPreferredSize(new java.awt.Dimension(140, 60));
         add(lblBusy, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 }

@@ -13,14 +13,12 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
-import Sirius.navigator.plugin.PluginRegistry;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
-import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
-import Sirius.server.newuser.UserGroup;
 import Sirius.server.newuser.permission.PermissionHolder;
 
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -41,7 +39,6 @@ import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +66,8 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -189,11 +188,7 @@ public class ObjectRendererUtils {
      * DOCUMENT ME!
      */
     public static void switchToCismapMap() {
-        PluginRegistry.getRegistry()
-                .getPluginDescriptor(CISMAP_PLUGIN_NAME)
-                .getUIDescriptor(CISMAP_PLUGIN_NAME)
-                .getView()
-                .makeVisible();
+        ComponentRegistry.getRegistry().showComponent("map");
     }
 
     /**
@@ -253,27 +248,32 @@ public class ObjectRendererUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   tabName  DOCUMENT ME!
-     * @param   fields   DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName, final String[] fields) {
-        return getLightweightMetaObjectsForTable(tabName, fields, null);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   tabName    DOCUMENT ME!
-     * @param   fields     DOCUMENT ME!
-     * @param   formatter  DOCUMENT ME!
+     * @param   tabName            DOCUMENT ME!
+     * @param   fields             DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName,
             final String[] fields,
-            AbstractAttributeRepresentationFormater formatter) {
+            final ConnectionContext connectionContext) {
+        return getLightweightMetaObjectsForTable(tabName, fields, null, connectionContext);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   tabName            DOCUMENT ME!
+     * @param   fields             DOCUMENT ME!
+     * @param   formatter          DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName,
+            final String[] fields,
+            AbstractAttributeRepresentationFormater formatter,
+            final ConnectionContext connectionContext) {
         if (formatter == null) {
             formatter = new AbstractAttributeRepresentationFormater() {
 
@@ -289,8 +289,16 @@ public class ObjectRendererUtils {
         }
         try {
             final User user = SessionManager.getSession().getUser();
-            final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabName);
-            return SessionManager.getProxy().getAllLightweightMetaObjectsForClass(mc.getID(), user, fields, formatter);
+            final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    tabName,
+                    connectionContext);
+            return SessionManager.getProxy()
+                        .getAllLightweightMetaObjectsForClass(mc.getID(),
+                            user,
+                            fields,
+                            formatter,
+                            connectionContext);
         } catch (Exception ex) {
             log.error(ex, ex);
         }
@@ -428,14 +436,17 @@ public class ObjectRendererUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   tagToCheck  DOCUMENT ME!
+     * @param   tagToCheck         DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean checkActionTag(final String tagToCheck) {
+    public static boolean checkActionTag(final String tagToCheck,
+            final ConnectionContext connectionContext) {
         boolean result;
         try {
-            result = SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), tagToCheck)
+            result = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), tagToCheck, connectionContext)
                         != null;
         } catch (ConnectionException ex) {
             log.error("Can not check ActionTag!", ex);
@@ -544,13 +555,15 @@ public class ObjectRendererUtils {
      * @param   mcTableName        DOCUMENT ME!
      * @param   domain             DOCUMENT ME!
      * @param   permissionToCheck  DOCUMENT ME!
+     * @param   connecitonContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static boolean hasCurrentUserPermissionOnMetaClass(final String mcTableName,
             final String domain,
-            final PermissionType permissionToCheck) {
-        final MetaClass mc = ClassCacheMultiple.getMetaClass(domain, mcTableName);
+            final PermissionType permissionToCheck,
+            final ConnectionContext connecitonContext) {
+        final MetaClass mc = ClassCacheMultiple.getMetaClass(domain, mcTableName, connecitonContext);
         return hasCurrentUserPermissionOnMetaClass(mc, permissionToCheck);
     }
 

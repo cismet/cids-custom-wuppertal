@@ -40,10 +40,10 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.NivPReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -60,6 +60,9 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -75,7 +78,8 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @version  $Revision$, $Date$
  */
 public class NivellementPunktAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -110,6 +114,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
@@ -128,21 +133,26 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form NivellementPunktAggregationRenderer.
+     * Creates a new NivellementPunktAggregationRenderer object.
      */
     public NivellementPunktAggregationRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         scpPunkte.getViewport().setOpaque(false);
         tblPunkte.getSelectionModel().addListSelectionListener(new TableSelectionListener());
         tableComparator = new TableModelIndexConvertingToViewIndexComparator((tblPunkte));
 
-        final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf", getConnectionContext());
 
         btnGenerateReport.setEnabled(billingAllowed);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -352,8 +362,13 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                             "nivppdf",
                             "no.yet",
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", selectedNivellementPunkte.size()))) {
-                downloadReport(selectedNivellementPunkte, txtJobnumber.getText(), txtProjectname.getText());
+                downloadReport(
+                    selectedNivellementPunkte,
+                    txtJobnumber.getText(),
+                    txtProjectname.getText(),
+                    getConnectionContext());
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -364,13 +379,15 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     /**
      * DOCUMENT ME!
      *
-     * @param  nivPoints    DOCUMENT ME!
-     * @param  jobnumber    DOCUMENT ME!
-     * @param  projectname  DOCUMENT ME!
+     * @param  nivPoints          DOCUMENT ME!
+     * @param  jobnumber          DOCUMENT ME!
+     * @param  projectname        DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
     public static void downloadReport(final Collection<CidsBean> nivPoints,
             final String jobnumber,
-            final String projectname) {
+            final String projectname,
+            final ConnectionContext connectionContext) {
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         ComponentRegistry.getRegistry().getDescriptionPane())) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -399,7 +416,8 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                                 ? ((nivPoints.size() == 1) ? "Nivellement-Punkt" : "Nivellement-Punkte") : projectname,
                             jobname,
                             "nivp",
-                            ".pdf"));
+                            ".pdf",
+                            connectionContext));
         }
     }
 
@@ -532,7 +550,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     protected void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
 
             final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
@@ -540,9 +558,10 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    AlkisConstants.COMMONS.SRS_SERVICE,
+                    ClientAlkisConf.getInstance().getSrsService(),
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Nivellement_Punkte");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -585,7 +604,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                     new Geometry[geometries.size()]),
                 new GeometryFactory());
 
-        return new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
     }
 
     /**
@@ -611,6 +630,11 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         }
 
         return new Object[0];
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -640,15 +664,19 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                         if ((modelIdx > -1) && (modelIdx < cidsBeans.size())) {
                             final CidsBean selectedBean = cidsBeans.get(modelIdx);
                             final XBoundingBox boxToGoto = new XBoundingBox(features.get(selectedBean).getGeometry()
-                                            .getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                                            .getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
                             boxToGoto.setX1(boxToGoto.getX1()
-                                        - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getWidth()));
                             boxToGoto.setX2(boxToGoto.getX2()
-                                        + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getWidth()));
                             boxToGoto.setY1(boxToGoto.getY1()
-                                        - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getHeight()));
                             boxToGoto.setY2(boxToGoto.getY2()
-                                        + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getHeight()));
                             mappingComponent.gotoBoundingBox(boxToGoto, false, true, 500);
                             break;
                         }

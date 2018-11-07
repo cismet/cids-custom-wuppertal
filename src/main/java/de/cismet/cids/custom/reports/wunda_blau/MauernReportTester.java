@@ -20,6 +20,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -52,10 +54,10 @@ public class MauernReportTester {
                 1);
 
         System.out.println("Anzahl:" + beans.length);
-        final MauernReportBeanWithMapAndImages[] mauern = new MauernReportBeanWithMapAndImages[beans.length];
+        final MauernReportBean[] mauern = new MauernReportBean[beans.length];
         int i = 0;
         for (final CidsBean b : beans) {
-            final MauernReportBeanWithMapAndImages x = new MauernReportBeanWithMapAndImages(b);
+            final MauernReportBean x = new MauernReportBean(b, ConnectionContext.createDeprecated());
             mauern[i++] = x;
             LOG.fatal(b.getMOString());
         }

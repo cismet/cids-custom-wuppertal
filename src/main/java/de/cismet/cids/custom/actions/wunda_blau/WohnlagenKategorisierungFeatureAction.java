@@ -63,6 +63,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.custom.attributerule.WohnlageRuleSet;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -73,41 +76,21 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @ServiceProvider(service = CommonFeatureAction.class)
 public class WohnlagenKategorisierungFeatureAction extends AbstractAction implements CommonFeatureAction,
-    FeaturesProvider {
+    FeaturesProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             WohnlagenKategorisierungFeatureAction.class);
 
-    private static final boolean IS_ACTIVE;
-    private static final MetaClass META_CLASS;
-
-    static {
-        MetaClass metaClass = null;
-        try {
-            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "WOHNLAGE");
-        } catch (final Exception ex) {
-            LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
-        }
-        META_CLASS = metaClass;
-
-        boolean isActive = false;
-        try {
-            isActive = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "csa://"
-                                + WohnlagenKategorisierungServerAction.TASK_NAME)
-                        != null;
-        } catch (final Exception ex) {
-            LOG.error("Could not validate action tag (custom.wohnlage.kategorisierung_featureaction)!", ex);
-        }
-        IS_ACTIVE = isActive;
-    }
-
     //~ Instance fields --------------------------------------------------------
 
+    private boolean isActive;
+    private MetaClass metaClass;
+
     private List<Feature> features = null;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -121,6 +104,35 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
+        MetaClass metaClass = null;
+        try {
+            metaClass = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "WOHNLAGE",
+                    getConnectionContext());
+        } catch (final Exception ex) {
+            LOG.error("Could get MetaClass (WOHNLAGE)!", ex);
+        }
+        this.metaClass = metaClass;
+
+        boolean isActive = false;
+        try {
+            isActive = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://"
+                                + WohnlagenKategorisierungServerAction.TASK_NAME,
+                                getConnectionContext())
+                        != null;
+        } catch (final Exception ex) {
+            LOG.error("Could not validate action tag (custom.wohnlage.kategorisierung_featureaction)!", ex);
+        }
+        this.isActive = isActive;
+    }
+
+    @Override
     public int getSorter() {
         return 1;
     }
@@ -132,7 +144,7 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
 
     @Override
     public boolean isActive() {
-        return IS_ACTIVE;
+        return isActive;
     }
 
     @Override
@@ -156,13 +168,14 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
         final WohnlagenKategorisierungDialog dialog = new WohnlagenKategorisierungDialog(
                 frame,
                 cidsLayerFeatures,
-                allSameKategorie ? kategorie : null);
+                allSameKategorie ? kategorie : null,
+                getConnectionContext());
         StaticSwingTools.showDialog(dialog);
     }
 
     @Override
     public boolean isResponsibleFor(final Feature feature) {
-        if ((META_CLASS != null) && (feature instanceof CidsLayerFeature)) {
+        if ((metaClass != null) && (feature instanceof CidsLayerFeature)) {
             final CidsLayerFeature cidsLayerFeature = (CidsLayerFeature)feature;
             return cidsLayerFeature.getLayerProperties().getAttributeTableRuleSet() instanceof WohnlageRuleSet;
         } else {
@@ -185,5 +198,10 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
     @Override
     public List<Feature> getSourceFeatures() {
         return features;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

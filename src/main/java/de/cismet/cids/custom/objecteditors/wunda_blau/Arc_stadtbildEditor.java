@@ -21,7 +21,6 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.Cursor;
@@ -48,6 +47,8 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -143,6 +144,13 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
      * Creates new form Arc_stadtbildEditor.
      */
     public Arc_stadtbildEditor() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        super.initWithConnectionContext(connectionContext);
         initComponents();
 //        final MetaClass swClass = ClassCacheMultiple.getMetaClass(domain, "ARC_S");
         suchwortModelProvider.setSorted(true);
@@ -178,8 +186,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 //        filter.setStrict(false);
         dlgAddSuchwort.pack();
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -227,7 +233,9 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
                 "select s.id,s.name,o.stadtteil from arc_strasse s left outer join arc_stadtteil o on s.stadtteil = o.id",
                 strasseFormater,
                 new String[] { "NAME", "STADTTEIL" });
-        bcbAuftraggeber = new FastBindableReferenceCombo("%1$2s", new String[] { "AUFTRAGGEBER" });
+        bcbAuftraggeber = new FastBindableReferenceCombo(
+                "%1$2s",
+                new String[] { "AUFTRAGGEBER" });
         lblSuchworte = new javax.swing.JLabel();
         lblHauptsuchwort = new javax.swing.JLabel();
         lblContentStadtteil = new javax.swing.JLabel();
@@ -487,7 +495,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(lblStrasse, gridBagConstraints);
 
         txtAInfo.setColumns(7);
-        txtAInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtAInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtAInfo.setRows(5);
         txtAInfo.setMaximumSize(new java.awt.Dimension(150, 20));
         txtAInfo.setMinimumSize(new java.awt.Dimension(150, 20));
@@ -621,7 +629,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(lblAufnahmeDatum, gridBagConstraints);
 
         chkAuswahl.setText("Auswahl");
-        chkAuswahl.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -643,7 +650,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(chkAuswahl, gridBagConstraints);
 
         chkLager.setText("Lager");
-        chkLager.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -665,7 +671,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(chkLager, gridBagConstraints);
 
         chkPruefen.setText("Prüfen");
-        chkPruefen.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -913,7 +918,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
-        ClassCacheMultiple.addInstance(CidsBeanSupport.DOMAIN_NAME);
+        ClassCacheMultiple.addInstance(CidsBeanSupport.DOMAIN_NAME, getConnectionContext());
         suchwortModelProvider.setMetaClassFromTableName(CidsBeanSupport.DOMAIN_NAME, SUCHWORT_TABNAME);
         setNewPicture();
     }
@@ -1076,10 +1081,13 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         if ((suchwort != null) && (suchwort.trim().length() > 0)) {
             MetaClass suchwortMC = suchwortModelProvider.getMetaClass();
             if (suchwortMC == null) {
-                suchwortMC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, SUCHWORT_TABNAME);
+                suchwortMC = ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        SUCHWORT_TABNAME,
+                        getConnectionContext());
             }
             if (suchwortMC != null) {
-                final CidsBean newSuchwortBean = suchwortMC.getEmptyInstance().getBean();
+                final CidsBean newSuchwortBean = suchwortMC.getEmptyInstance(getConnectionContext()).getBean();
                 newSuchwortBean.setProperty("suchwort", suchwort);
                 return newSuchwortBean;
             } else {

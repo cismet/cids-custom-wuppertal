@@ -54,7 +54,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.KompensationskatasterBeanTable;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.wunda_blau.search.server.GemeindeByGeometrySearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -84,6 +84,11 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.SemiRoundedPanel;
 
@@ -96,24 +101,39 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements DisposableCidsBeanStore,
     BorderProvider,
     RequestsFullSizeComponent,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(KkVerfahrenKompensationEditor.class);
-    private static final MetaClass MASSNAHMEN_MC = ClassCacheMultiple.getMetaClass(
-            CidsBeanSupport.DOMAIN_NAME,
-            "kk_massnahme");
-    private static final MetaClass BIOTOP_MC = ClassCacheMultiple.getMetaClass(
-            CidsBeanSupport.DOMAIN_NAME,
-            "kk_biotop");
-    private static final MetaClass AUSGANGS_BIOTOP_MC = ClassCacheMultiple.getMetaClass(
-            CidsBeanSupport.DOMAIN_NAME,
-            "kk_ausgangsbiotop");
+    private static final MetaClass MASSNAHMEN_MC;
+    private static final MetaClass BIOTOP_MC;
+    private static final MetaClass AUSGANGS_BIOTOP_MC;
+
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                Category.STATIC,
+                KkVerfahrenKompensationEditor.class.getSimpleName());
+
+        MASSNAHMEN_MC = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                "kk_massnahme",
+                connectionContext);
+        BIOTOP_MC = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                "kk_biotop",
+                connectionContext);
+        AUSGANGS_BIOTOP_MC = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                "kk_ausgangsbiotop",
+                connectionContext);
+    }
+
     private static final String[] MASSNAHMEN_COL_NAMES = new String[] {
             "Kompensationsmaßnahme",
             "Möglich",
-            "Festgesetzt"
+            "Festgesetzt",
         };
     private static final String[] MASSNAHMEN_PROP_NAMES = new String[] { "massnahme", "moeglich", "festgesetzt" };
     private static final Class[] MASSNAHMEN_PROP_TYPES = new Class[] { CidsBean.class, Boolean.class, Boolean.class };
@@ -165,7 +185,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private final boolean editable;
     private MappingComponent previewMap;
     private CardLayout tabPaneCardLayout;
-    private List<KeyListener> keyListener = new ArrayList<KeyListener>();
+    private final List<KeyListener> keyListener = new ArrayList<>();
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddBioAus;
@@ -253,6 +274,13 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
      */
     public KkVerfahrenKompensationEditor(final boolean editable) {
         this.editable = editable;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         final KeyAdapter ka = new KeyAdapter() {
 
@@ -311,8 +339,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             RendererTools.makeReadOnly(btnRemMass);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * Does not remove the border in difference to the RendererTools.
@@ -1389,7 +1415,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
      */
     private void addObjectToTable(final JXTable table, final String tableClass) {
         try {
-            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(tableClass);
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(tableClass, getConnectionContext());
 
             ((KompensationskatasterBeanTable)table.getModel()).addBean(bean);
         } catch (Exception e) {
@@ -1426,7 +1452,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             }
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
+                cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
         } else {
             if (editable) {
@@ -1516,12 +1543,11 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
             if (geoObj instanceof Geometry) {
                 pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + ClientAlkisConf.getInstance().getGeoBuffer());
                 }
-                box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                            AlkisConstants.COMMONS.GEO_BUFFER));
+                box = new XBoundingBox(pureGeom.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
                 diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
                                 + (box.getHeight() * box.getHeight()));
                 if (LOG.isDebugEnabled()) {
@@ -1539,7 +1565,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
 
                     if (bufferedBox != null) {
                         mappingModel.addHome(new XBoundingBox(
@@ -1547,10 +1573,10 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                                 bufferedBox.getY1(),
                                 bufferedBox.getX2(),
                                 bufferedBox.getY2(),
-                                AlkisConstants.COMMONS.SRS_SERVICE,
+                                ClientAlkisConf.getInstance().getSrsService(),
                                 true));
                         final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                    AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                    ClientAlkisConf.getInstance().getMapCallString()));
                         swms.setName("Stadtbildserie");
 
                         // add the raster layer to the model
@@ -1561,7 +1587,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                                 1,
                                 2,
                                 2,
-                                AlkisConstants.COMMONS.SRS_SERVICE,
+                                ClientAlkisConf.getInstance().getSrsService(),
                                 true));
                     }
                     // set the model
@@ -1617,7 +1643,9 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                                 final CidsServerSearch gemeindeSearch = new GemeindeByGeometrySearch(geom.toText());
 
                                 final List gemeinde = (List)SessionManager.getProxy()
-                                            .customServerSearch(SessionManager.getSession().getUser(), gemeindeSearch);
+                                            .customServerSearch(SessionManager.getSession().getUser(),
+                                                    gemeindeSearch,
+                                                    getConnectionContext());
 
                                 if ((gemeinde != null) && (gemeinde.size() > 0)) {
                                     labGem.setText(String.valueOf(gemeinde.get(0)));
@@ -1687,6 +1715,11 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         if (evt.getPropertyName().equals("geometrie")) {
             initMap();
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -12,8 +12,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.alkis.AlkisConf;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.VermessungsRissReportHelper;
 
 /**
@@ -58,7 +58,7 @@ public class VermessungsRissWebAccessReportHelper extends VermessungsRissReportH
         //~ Static fields/initializers -----------------------------------------
 
         private static final VermessungsRissWebAccessReportHelper INSTANCE = new VermessungsRissWebAccessReportHelper(
-                AlkisConstants.COMMONS);
+                ClientAlkisConf.getInstance());
 
         //~ Constructors -------------------------------------------------------
 

@@ -13,11 +13,10 @@ import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -34,7 +33,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
- * @version  $Revision$, $Date$
+ * @version  $Revision$, $Date$ Sandra Simmert 12.2.2018: Parameter GEO_BUFFER und MAP_CALL_STRING von außen steuerbar.
  */
 public class DefaultPreviewMapPanel extends javax.swing.JPanel {
 
@@ -45,7 +44,7 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
     //~ Instance fields --------------------------------------------------------
 
     final StyledFeature previewGeometry = new DefaultStyledFeature();
-    private MappingComponent previewMap;
+    private final MappingComponent previewMap;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -76,20 +75,26 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
      *
      * @param  cidsBean               DOCUMENT ME!
      * @param  geometryAttributeName  DOCUMENT ME!
+     * @param  geoBuffer              DOCUMENT ME!
+     * @param  mapURL                 DOCUMENT ME!
      */
-    public void initMap(final CidsBean cidsBean, final String geometryAttributeName) {
+    public void initMap(final CidsBean cidsBean,
+            final String geometryAttributeName,
+            final double geoBuffer,
+            final String mapURL) {
         boolean showMap = false;
         if (cidsBean != null) {
             final Object geoObj = cidsBean.getProperty(geometryAttributeName);
             if (geoObj instanceof Geometry) {
                 showMap = true;
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                    LOG.debug("ClientAlkisConf.getInstance().GeoBUffer: "
+                                + ClientAlkisConf.getInstance().getGeoBuffer());
                 }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                            AlkisConstants.COMMONS.GEO_BUFFER));
+                            geoBuffer));
                 final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
                                 + (box.getHeight() * box.getHeight()));
                 if (LOG.isDebugEnabled()) {
@@ -101,16 +106,16 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
                         @Override
                         public void run() {
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                             mappingModel.addHome(new XBoundingBox(
                                     bufferedBox.getX1(),
                                     bufferedBox.getY1(),
                                     bufferedBox.getX2(),
                                     bufferedBox.getY2(),
-                                    AlkisConstants.COMMONS.SRS_SERVICE,
+                                    ClientAlkisConf.getInstance().getSrsService(),
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                        AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                        mapURL));
                             swms.setName(cidsBean.getClass().getSimpleName());
 
                             previewGeometry.setGeometry(pureGeom);
@@ -141,6 +146,9 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
                                     }
                                 });
                             previewMap.setInteractionMode("MUTE");
+                            if (previewMap.getFeatureCollection().contains(previewGeometry)) {
+                                previewMap.getFeatureCollection().removeFeature(previewGeometry);
+                            }
                             previewMap.getFeatureCollection().addFeature(previewGeometry);
                             previewMap.setAnimationDuration(duration);
                         }
@@ -153,6 +161,31 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
             }
         }
         showMap(showMap);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean               DOCUMENT ME!
+     * @param  geometryAttributeName  DOCUMENT ME!
+     * @param  geoBuffer              DOCUMENT ME!
+     */
+    public void initMap(final CidsBean cidsBean, final String geometryAttributeName, final double geoBuffer) {
+        initMap(cidsBean, geometryAttributeName, geoBuffer, ClientAlkisConf.getInstance().getMapCallString());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean               DOCUMENT ME!
+     * @param  geometryAttributeName  DOCUMENT ME!
+     */
+    public void initMap(final CidsBean cidsBean, final String geometryAttributeName) {
+        initMap(
+            cidsBean,
+            geometryAttributeName,
+            ClientAlkisConf.getInstance().getGeoBuffer(),
+            ClientAlkisConf.getInstance().getMapCallString());
     }
 
     /**

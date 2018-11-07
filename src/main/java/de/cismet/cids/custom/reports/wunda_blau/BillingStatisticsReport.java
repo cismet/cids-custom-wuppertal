@@ -24,6 +24,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
@@ -33,7 +36,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingStatisticsReport {
+public class BillingStatisticsReport implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -57,13 +60,14 @@ public class BillingStatisticsReport {
     protected int amountVUsonstigeGB = 0;
     protected int amountWithCostsVU = 0;
     protected int amountWithCostsWiederver = 0;
-    protected double earningsWithCostsVU = 0;
-    protected double earningsWithCostsWiederver = 0;
     protected int amountWiederverkaeufe = 0;
     protected int amountWiederverkaeufeGB = 0;
+    protected double earningsWithCostsVU = 0;
+    protected double earningsWithCostsWiederver = 0;
 
     SwingWorker<JasperPrint, Void> downloadWorker;
     Collection<CidsBean> billingBeans;
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -84,10 +88,11 @@ public class BillingStatisticsReport {
      * @param  amountVUsonstigeGB               DOCUMENT ME!
      * @param  amountWithCostsVU                DOCUMENT ME!
      * @param  amountWithCostsWiederver         DOCUMENT ME!
-     * @param  earningsWithCostsVU              DOCUMENT ME!
-     * @param  earningsWithCostsWiederver       DOCUMENT ME!
      * @param  amountWiederverkaeufe            DOCUMENT ME!
      * @param  amountWiederverkaeufeGB          DOCUMENT ME!
+     * @param  earningsWithCostsVU              DOCUMENT ME!
+     * @param  earningsWithCostsWiederver       DOCUMENT ME!
+     * @param  connectionContext                DOCUMENT ME!
      */
     public BillingStatisticsReport(final Collection<CidsBean> billingBeans,
             final Date from,
@@ -103,10 +108,11 @@ public class BillingStatisticsReport {
             final int amountVUsonstigeGB,
             final int amountWithCostsVU,
             final int amountWithCostsWiederver,
+            final int amountWiederverkaeufe,
+            final int amountWiederverkaeufeGB,
             final double earningsWithCostsVU,
             final double earningsWithCostsWiederver,
-            final int amountWiederverkaeufe,
-            final int amountWiederverkaeufeGB) {
+            final ConnectionContext connectionContext) {
         this.billingBeans = billingBeans;
         this.from = from;
         this.till = till;
@@ -121,10 +127,11 @@ public class BillingStatisticsReport {
         this.amountVUsonstigeGB = amountVUsonstigeGB;
         this.amountWithCostsVU = amountWithCostsVU;
         this.amountWithCostsWiederver = amountWithCostsWiederver;
-        this.earningsWithCostsVU = earningsWithCostsVU;
-        this.earningsWithCostsWiederver = earningsWithCostsWiederver;
         this.amountWiederverkaeufe = amountWiederverkaeufe;
         this.amountWiederverkaeufeGB = amountWiederverkaeufeGB;
+        this.earningsWithCostsVU = earningsWithCostsVU;
+        this.earningsWithCostsWiederver = earningsWithCostsWiederver;
+        this.connectionContext = connectionContext;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -204,7 +211,7 @@ public class BillingStatisticsReport {
      */
     protected BillingStatisticsDataSourceAccumulation createDataSourceAccumulation() {
         final BillingStatisticsDataSourceAccumulation dataSourceAccumulation =
-            new BillingStatisticsDataSourceAccumulation(billingBeans);
+            new BillingStatisticsDataSourceAccumulation(billingBeans, getConnectionContext());
         dataSourceAccumulation.fetchSearchResults();
         return dataSourceAccumulation;
     }
@@ -232,9 +239,6 @@ public class BillingStatisticsReport {
         params.put("amountWithCostsVU", amountWithCostsVU);
         params.put("amountWithCostsWiederver", amountWithCostsWiederver);
 
-        params.put("earningsWithCostsVU", earningsWithCostsVU);
-        params.put("earningsWithCostsWiederver", earningsWithCostsWiederver);
-
         params.put("amountVUamtlicherLageplan", amountVUamtlicherLageplan);
         params.put("amountVUamtlicherLageplanGB", amountVUamtlicherLageplanGB);
         params.put("amountVUhoheitlicheVermessung", amountVUhoheitlicheVermessung);
@@ -243,6 +247,9 @@ public class BillingStatisticsReport {
         params.put("amountVUsonstigeGB", amountVUsonstigeGB);
         params.put("amountWiederverkaeufe", amountWiederverkaeufe);
         params.put("amountWiederverkaeufeGB", amountWiederverkaeufeGB);
+
+        params.put("earningsWithCostsVU", earningsWithCostsVU);
+        params.put("earningsWithCostsWiederver", earningsWithCostsWiederver);
 
         return params;
     }
@@ -266,5 +273,10 @@ public class BillingStatisticsReport {
             sb.append(item.getPrimaryKeyValue());
         }
         return sb.toString();
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -25,6 +25,8 @@ import de.cismet.cids.dynamics.CidsBeanStore;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -70,9 +72,13 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     /**
      * Creates a new Sb_stadtbildserieGridObject object.
      *
-     * @param  model  DOCUMENT ME!
+     * @param  model              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_stadtbildserieGridObject(final DefaultListModel model) {
+    public Sb_stadtbildserieGridObject(final DefaultListModel model,
+            final ConnectionContext connectionContext) {
+        super(connectionContext);
+
         this.gridModel = model;
     }
 
@@ -129,7 +135,10 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public void setMarker(final boolean marker) {
         if (marker) {
-            Sb_stadtbildUtils.cacheImagesForStadtbilder(getStadtbildserie(), imagesToShow);
+            Sb_stadtbildUtils.cacheImagesForStadtbilder(
+                getStadtbildserie(),
+                imagesToShow,
+                getConnectionContext());
         }
         this.marker = marker;
     }
@@ -457,7 +466,10 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
 
     @Override
     protected boolean isPreviewAllowed() {
-        return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
+        return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
+                    stadtbildserie,
+                    getConnectionContext())
+                    .isPreviewAllowed();
     }
 
     /**
@@ -474,7 +486,8 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
                     @Override
                     protected Sb_RestrictionLevelUtils.BulletPointSettings doInBackground() throws Exception {
                         return Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(Sb_stadtbildserieGridObject.this
-                                        .getCidsBean());
+                                        .getCidsBean(),
+                                getConnectionContext());
                     }
 
                     @Override

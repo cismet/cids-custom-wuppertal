@@ -40,9 +40,11 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -53,7 +55,8 @@ import de.cismet.cids.dynamics.CidsBean;
 public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.JPanel implements ListSelectionListener,
     TableModelListener,
     Sb_StadtbildserieProvider,
-    Sb_stadtbildserieGridObjectListener {
+    Sb_stadtbildserieGridObjectListener,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -68,6 +71,8 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private Sb_stadtbildserieAggregationRenderer aggregationRenderer;
     private RestrictionLevel restrictedLevel = new Sb_RestrictionLevelUtils.RestrictionLevel();
     private Sb_stadtbildserieGridObject gridObject;
+
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInvertSelection;
@@ -94,13 +99,29 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Sb_stadtbildserieAggregationRendererInfoPanel.
+     * Creates a new Sb_stadtbildserieAggregationRendererInfoPanel object.
      */
     public Sb_stadtbildserieAggregationRendererInfoPanel() {
+        this(ConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates new form Sb_stadtbildserieAggregationRendererInfoPanel.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public Sb_stadtbildserieAggregationRendererInfoPanel(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -112,7 +133,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         java.awt.GridBagConstraints gridBagConstraints;
 
         roundedPanel2 = new de.cismet.tools.gui.RoundedPanel();
-        previewImage = new de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage();
+        previewImage = new de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage(getConnectionContext());
         roundedPanel3 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -470,7 +491,9 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private void setStadtbildserie(final CidsBean stadtbildserie) {
         if (stadtbildserie != null) {
             this.stadtbildserie = stadtbildserie;
-            restrictedLevel = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
+            restrictedLevel = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
+                    stadtbildserie,
+                    getConnectionContext());
             previewImage.setStadtbildserieProvider(this);
             refillTable(gridObject.getStadtbildUnderMarker());
 

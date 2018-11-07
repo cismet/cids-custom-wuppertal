@@ -37,13 +37,16 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class FSAttachBillingForProduktDialog extends javax.swing.JDialog {
+public class FSAttachBillingForProduktDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -54,6 +57,8 @@ public class FSAttachBillingForProduktDialog extends javax.swing.JDialog {
 
     private final CidsBean cidsBean;
     private boolean autoRefreshEnabled = false;
+
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -67,10 +72,13 @@ public class FSAttachBillingForProduktDialog extends javax.swing.JDialog {
     /**
      * Creates new form ReloadDialog.
      *
-     * @param  cidsBean  DOCUMENT ME!
+     * @param  cidsBean           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public FSAttachBillingForProduktDialog(final CidsBean cidsBean) {
+    public FSAttachBillingForProduktDialog(final CidsBean cidsBean, final ConnectionContext connectionContext) {
         super((Frame)null, true);
+        this.connectionContext = connectionContext;
+
         initComponents();
 
         this.cidsBean = cidsBean;
@@ -188,7 +196,8 @@ public class FSAttachBillingForProduktDialog extends javax.swing.JDialog {
                                 .executeTask(SessionManager.getSession().getUser(),
                                     FormSolutionServerNewStuffAvailableAction.TASK_NAME,
                                     "WUNDA_BLAU",
-                                    null,
+                                    (Object)null,
+                                    getConnectionContext(),
                                     paramMon,
                                     paramStep,
                                     singleStep);
@@ -217,7 +226,9 @@ public class FSAttachBillingForProduktDialog extends javax.swing.JDialog {
         final TreePath selectionPath = currentTree.getSelectionPath();
         if ((selectionPath != null) && (selectionPath.getPath().length > 0)) {
             try {
-                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots(
+                            getConnectionContext()),
+                        getConnectionContext());
 
                 final Runnable r = new Runnable() {
 
@@ -237,5 +248,10 @@ public class FSAttachBillingForProduktDialog extends javax.swing.JDialog {
             } catch (ConnectionException ex) {
             }
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

@@ -25,6 +25,9 @@ import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportSer
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.joinCidsBeanIds;
 
 /**
@@ -35,7 +38,7 @@ import static de.cismet.cids.custom.reports.wunda_blau.BillingStatisticsReport.j
  * @version  $Revision$, $Date$
  * @see      BillingStatisticsReportServerSearch
  */
-public class BillingStatisticsDataSourceAccumulation {
+public class BillingStatisticsDataSourceAccumulation implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -48,15 +51,20 @@ public class BillingStatisticsDataSourceAccumulation {
 
     private HashMap<String, Collection> searchResults;
 
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new DataSourceCollection object.
      *
-     * @param  billingBeans  DOCUMENT ME!
+     * @param  billingBeans       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public BillingStatisticsDataSourceAccumulation(final Collection<CidsBean> billingBeans) {
+    public BillingStatisticsDataSourceAccumulation(final Collection<CidsBean> billingBeans,
+            final ConnectionContext connectionContext) {
         this.billingBeans = billingBeans;
+        this.connectionContext = connectionContext;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -160,12 +168,19 @@ public class BillingStatisticsDataSourceAccumulation {
         try {
             final BillingStatisticsReportServerSearch search = createServerSearch();
             final Collection searchResultsCol = SessionManager.getConnection()
-                        .customServerSearch(SessionManager.getSession().getUser(), search);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                            search,
+                            getConnectionContext());
             // get the HashMap from the search results, it is supposed that it is the only result.
             searchResults = (HashMap<String, Collection>)searchResultsCol.iterator().next();
         } catch (ConnectionException ex) {
             LOG.error("Could not fetch the data for the report.", ex);
             searchResults = null;
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

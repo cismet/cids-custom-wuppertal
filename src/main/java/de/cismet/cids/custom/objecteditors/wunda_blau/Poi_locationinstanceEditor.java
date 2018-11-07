@@ -58,6 +58,8 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
@@ -71,17 +73,24 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final ImageIcon STATUS_RED = new javax.swing.ImageIcon(
+            Poi_locationinstanceEditor.class.getResource(
+                "/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
+    private static final ImageIcon STATUS_GREEN = new javax.swing.ImageIcon(
+            Poi_locationinstanceEditor.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
+    private static final ImageIcon STATUS_GREY = new javax.swing.ImageIcon(
+            Poi_locationinstanceEditor.class.getResource(
+                "/de/cismet/cids/custom/objecteditors/wunda_blau/status-offline.png"));
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Poi_locationinstanceEditor.class);
+
     //~ Instance fields --------------------------------------------------------
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String title = "";
 
-    private ImageIcon statusRed = new javax.swing.ImageIcon(
-            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
-    private ImageIcon statusGreen = new javax.swing.ImageIcon(
-            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
-    private ImageIcon statusGrey = new javax.swing.ImageIcon(
-            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-offline.png"));
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddThema;
     private javax.swing.JButton btnAddZusNamen;
@@ -165,9 +174,16 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Poi_locationinstanceEditor.
+     * Creates a new Poi_locationinstanceEditor object.
      */
     public Poi_locationinstanceEditor() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        super.initWithConnectionContext(connectionContext);
         initComponents();
         dlgAddLocationType.pack();
         dlgAddZusNamen.pack();
@@ -214,8 +230,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             });
     }
 
-    //~ Methods ----------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -231,7 +245,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
                             @Override
                             public void run() {
-                                indicator.setIcon(statusGrey);
+                                indicator.setIcon(STATUS_GREY);
                                 indicator.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                             }
                         });
@@ -244,14 +258,14 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                     try {
                         check = get();
                         if (check) {
-                            indicator.setIcon(statusGreen);
+                            indicator.setIcon(STATUS_GREEN);
                             indicator.setCursor(new Cursor(Cursor.HAND_CURSOR));
                         } else {
-                            indicator.setIcon(statusRed);
+                            indicator.setIcon(STATUS_RED);
                             indicator.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                         }
                     } catch (Exception e) {
-                        indicator.setIcon(statusRed);
+                        indicator.setIcon(STATUS_RED);
                         indicator.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     }
                 }
@@ -309,7 +323,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 try {
                     bean.delete();
                 } catch (Exception ex) {
-                    log.error(ex, ex);
+                    LOG.error(ex, ex);
                 }
             } else {
                 final Object coll = cidsBean.getProperty(propertyName);
@@ -339,7 +353,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panAddLocationType = new javax.swing.JPanel();
         lblAuswaehlen = new javax.swing.JLabel();
         final MetaObject[] locationtypes = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
-                    .getLightweightMetaObjectsForTable("poi_locationtype", new String[] { "identification" });
+                    .getLightweightMetaObjectsForTable(
+                        "poi_locationtype",
+                        new String[] { "identification" },
+                        getConnectionContext());
         if (locationtypes != null) {
             Arrays.sort(locationtypes);
             cbTypes = new javax.swing.JComboBox(locationtypes);
@@ -736,7 +753,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         txtaInfo.setColumns(5);
         txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtaInfo.setLineWrap(true);
         txtaInfo.setRows(5);
+        txtaInfo.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -940,7 +959,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panContent2.setLayout(new java.awt.GridBagLayout());
 
         lblMainLocationType.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblMainLocationType.setText("Haupthema:");
+        lblMainLocationType.setText("Hauptthema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -1393,7 +1412,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 addBeanToCollection("locationtypes", ((MetaObject)selItem).getBean());
             }
         } catch (Exception ex) {
-            log.error(ex, ex);
+            LOG.error(ex, ex);
         } finally {
             dlgAddLocationType.setVisible(false);
         }
@@ -1462,14 +1481,15 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             if (addName.length() > 0) {
                 final MetaClass alternativeGeoIdentifierMC = ClassCacheMultiple.getMetaClass(SessionManager.getSession()
                                 .getUser().getDomain(),
-                        "poi_alternativegeographicidentifier");
-                final MetaObject newAGI = alternativeGeoIdentifierMC.getEmptyInstance();
+                        "poi_alternativegeographicidentifier",
+                        getConnectionContext());
+                final MetaObject newAGI = alternativeGeoIdentifierMC.getEmptyInstance(getConnectionContext());
                 final CidsBean newAGIBean = newAGI.getBean();
                 newAGIBean.setProperty("alternativegeographicidentifier", addName);
                 addBeanToCollection("alternativegeographicidentifier", newAGIBean);
             }
         } catch (Exception ex) {
-            log.error(ex, ex);
+            LOG.error(ex, ex);
         } finally {
             txtZusNamen.setText("");
             dlgAddZusNamen.setVisible(false);
@@ -1522,13 +1542,14 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 final Geometry pos_geometry = ((Geometry)geom_pos.getProperty("geo_field")).buffer(250).getEnvelope();
                 final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
                         CidsBeanSupport.DOMAIN_NAME,
-                        "geom");
-                final CidsBean newGeom = geomMetaClass.getEmptyInstance().getBean();
+                        "geom",
+                        getConnectionContext());
+                final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
                 newGeom.setProperty("geo_field", pos_geometry);
                 cidsBean.setProperty("geom_area", newGeom);
             }
         } catch (Exception e) {
-            log.fatal("Problem during setting the area geom", e);
+            LOG.fatal("Problem during setting the area geom", e);
         }
     } //GEN-LAST:event_btnCreateAreaFromPointActionPerformed
 
@@ -1544,7 +1565,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 BrowserLauncher.openURL(foto);
             } catch (Exception ex) {
                 final String message = "Fehler beim Öffnen des Fotos.";
-                log.error(message, ex);
+                LOG.error(message, ex);
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                     message,
                     "Fehler",
@@ -1565,7 +1586,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 BrowserLauncher.openURL(foto);
             } catch (Exception ex) {
                 final String message = "Fehler beim Öffnen der Fotostrecke.";
-                log.error(message, ex);
+                LOG.error(message, ex);
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                     message,
                     "Fehler",
@@ -1588,13 +1609,13 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                     final Collection<CidsBean> col = (Collection)o;
                     for (final CidsBean bean : col) {
                         if (newTypeBean.equals(bean)) {
-                            log.info("Bean " + newTypeBean + " already present in " + propName + "!");
+                            LOG.info("Bean " + newTypeBean + " already present in " + propName + "!");
                             return;
                         }
                     }
                     col.add(newTypeBean);
                 } catch (Exception ex) {
-                    log.error(ex, ex);
+                    LOG.error(ex, ex);
                 }
             }
         }

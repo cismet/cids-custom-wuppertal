@@ -37,6 +37,9 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -51,7 +54,8 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    CidsBeanAggregationRenderer {
+    CidsBeanAggregationRenderer,
+    ConnectionContextStore {
 
     //~ Enums ------------------------------------------------------------------
 
@@ -71,6 +75,8 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
 
     private Mode mode;
 
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastAggregationRendererPanel
         alb_baulastAggregationRendererPanel1;
@@ -80,13 +86,24 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alb_baulastAggregationRenderer.
+     * Creates a new Alb_baulastAggregationRenderer object.
      */
     public Alb_baulastAggregationRenderer() {
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+        alb_baulastblattRenderer1.initWithConnectionContext(getConnectionContext());
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -96,7 +113,8 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         alb_baulastAggregationRendererPanel1 =
-            new de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastAggregationRendererPanel();
+            new de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastAggregationRendererPanel(
+                getConnectionContext());
         alb_baulastblattRenderer1 = new de.cismet.cids.custom.objectrenderer.wunda_blau.Alb_baulastblattRenderer();
 
         setLayout(new java.awt.CardLayout());
@@ -216,12 +234,16 @@ public class Alb_baulastAggregationRenderer extends javax.swing.JPanel implement
             try {
                 final BaulastSearchInfo bsi = new BaulastSearchInfo();
                 bsi.setBlattnummer(blattnummer);
-                final MetaClass mcBaulastBlatt = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULASTBLATT");
+                final MetaClass mcBaulastBlatt = ClassCacheMultiple.getMetaClass(
+                        "WUNDA_BLAU",
+                        "ALB_BAULASTBLATT",
+                        getConnectionContext());
 
                 final String query = "select " + mcBaulastBlatt.getID() + ", " + mcBaulastBlatt.getPrimaryKey()
                             + " from "
                             + mcBaulastBlatt.getTableName() + " where blattnummer ilike '" + blattnummer + "'"; // NOI18N
-                final MetaObject[] res = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+                final MetaObject[] res = SessionManager.getProxy()
+                            .getMetaObjectByQuery(query, 0, getConnectionContext());
 
                 if ((res != null) && (res.length > 0)) {
                     final CidsBean cidsBean = res[0].getBean();

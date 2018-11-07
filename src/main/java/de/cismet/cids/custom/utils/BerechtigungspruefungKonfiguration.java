@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 
+import org.apache.log4j.Logger;
+
 import java.io.StringReader;
 
 import java.util.Collection;
@@ -27,7 +29,9 @@ import java.util.List;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
-import static de.cismet.cids.custom.utils.BaulastBescheinigungDialog.LOG;
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
+
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -46,6 +50,8 @@ public class BerechtigungspruefungKonfiguration {
 
     //~ Static fields/initializers ---------------------------------------------
 
+    public static final Logger LOG = Logger.getLogger(BerechtigungspruefungKonfiguration.class);
+
     public static BerechtigungspruefungKonfiguration INSTANCE;
 
     static {
@@ -56,7 +62,10 @@ public class BerechtigungspruefungKonfiguration {
                         .executeTask(SessionManager.getSession().getUser(),
                             GetServerResourceServerAction.TASK_NAME,
                             "WUNDA_BLAU",
-                            WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON.getValue());
+                            WundaBlauServerResources.BERECHTIGUNGSPRUEFUNG_CONF_JSON.getValue(),
+                            ConnectionContext.create(
+                                Category.STATIC,
+                                BerechtigungspruefungKonfiguration.class.getSimpleName()));
             if (ret instanceof Exception) {
                 throw (Exception)ret;
             }

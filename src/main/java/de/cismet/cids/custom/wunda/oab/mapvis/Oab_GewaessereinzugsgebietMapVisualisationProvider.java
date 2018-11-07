@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda.oab.mapvis;
 
-import Sirius.navigator.plugin.PluginRegistry;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import java.awt.event.ActionEvent;
 
@@ -50,11 +50,7 @@ public class Oab_GewaessereinzugsgebietMapVisualisationProvider implements MapVi
                 public void actionPerformed(final ActionEvent e) {
                     final Feature feature = new CidsFeature(bean.getMetaObject());
                     CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeature(feature);
-                    PluginRegistry.getRegistry()
-                            .getPluginDescriptor("cismap")
-                            .getUIDescriptor("cismap")
-                            .getView()
-                            .makeVisible();
+                    ComponentRegistry.getRegistry().showComponent("map");
                     CismapBroker.getInstance()
                             .getMappingComponent()
                             .zoomToAFeatureCollection(Arrays.asList(feature), true, false);

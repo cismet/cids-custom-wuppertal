@@ -22,9 +22,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.text.DateFormat;
@@ -44,9 +42,8 @@ import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
 
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
 import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
@@ -63,6 +60,9 @@ import de.cismet.cismap.commons.interaction.events.StatusEvent;
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 import de.cismet.commons.gui.progress.BusyLoggingTextPane.Styles;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -71,7 +71,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class PointNumberReservationPanel extends javax.swing.JPanel {
+public class PointNumberReservationPanel extends javax.swing.JPanel implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -90,6 +90,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
     private ArrayList<String> nbz = new ArrayList<String>();
     private int maxNbz = 4;
     private boolean anzahlWarnVisible = false;
+
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnErstellen;
@@ -120,16 +122,19 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      * Creates a new PointNumberReservationPanel object.
      */
     public PointNumberReservationPanel() {
-        this(null);
+        this(null, ConnectionContext.createDeprecated());
     }
 
     /**
      * Creates new form PointNumberReservationPanel.
      *
-     * @param  pnrDialog  DOCUMENT ME!
+     * @param  pnrDialog          DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public PointNumberReservationPanel(final PointNumberDialog pnrDialog) {
+    public PointNumberReservationPanel(final PointNumberDialog pnrDialog,
+            final ConnectionContext connectionContext) {
         this.pnrDialog = pnrDialog;
+        this.connectionContext = connectionContext;
         final Properties props = new Properties();
         try {
             props.load(PointNumberReservationPanel.class.getResourceAsStream("pointNumberSettings.properties"));
@@ -239,8 +244,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         nbz = new ArrayList<String>();
         final MappingComponent mapC = CismapBroker.getInstance().getMappingComponent();
         Geometry g = ((XBoundingBox)mapC.getCurrentBoundingBoxFromCamera()).getGeometry();
-        if (!CrsTransformer.createCrsFromSrid(g.getSRID()).equals(AlkisConstants.COMMONS.SRS_SERVICE)) {
-            g = CrsTransformer.transformToGivenCrs(g, AlkisConstants.COMMONS.SRS_SERVICE);
+        if (!CrsTransformer.createCrsFromSrid(g.getSRID()).equals(ClientAlkisConf.getInstance().getSrsService())) {
+            g = CrsTransformer.transformToGivenCrs(g, ClientAlkisConf.getInstance().getSrsService());
         }
         final XBoundingBox bb = new XBoundingBox(g);
         final int lowerX = ((Double)Math.floor(bb.getX1())).intValue() / 1000;
@@ -647,7 +652,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        null,
+                                        (Object)null,
+                                        getConnectionContext(),
                                         action,
                                         prefix,
                                         aNummer,
@@ -746,7 +752,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                 .executeTask(
                                         SEVER_ACTION,
                                         "WUNDA_BLAU",
-                                        null,
+                                        (Object)null,
+                                        getConnectionContext(),
                                         action,
                                         prefix,
                                         aNummer);
@@ -912,5 +919,10 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 lblAnzWarnAnzahl.setVisible(false);
             }
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

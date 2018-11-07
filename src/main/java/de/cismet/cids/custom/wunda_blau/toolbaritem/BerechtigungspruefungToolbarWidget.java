@@ -24,6 +24,8 @@ import org.apache.log4j.Logger;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import java.awt.Component;
+
 import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
@@ -40,7 +42,11 @@ import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.menu.CidsUiComponent;
 
 /**
  * DOCUMENT ME!
@@ -49,7 +55,9 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsClientToolbarItem.class)
-public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel implements CidsClientToolbarItem {
+public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel implements CidsClientToolbarItem,
+    ConnectionContextStore,
+    CidsUiComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -69,6 +77,8 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
     private final BerechtigungspruefungMessageNotifierListener notifierListener =
         new BerechtigungspruefungToolbarWidget.MessageListener();
 
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -80,6 +90,14 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
      * Creates new form BerechtigungspruefungToolbarWidget.
      */
     public BerechtigungspruefungToolbarWidget() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         if (isVisible()) {
             initComponents();
             updateAnfragen();
@@ -87,8 +105,6 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
             BerechtigungspruefungMessageNotifier.getInstance().addListener(notifierListener);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -155,9 +171,10 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                                             SessionManager.getSession().getUser(),
                                             BerechtigungspruefungFreigabeServerAction.TASK_NAME,
                                             SessionManager.getSession().getUser().getDomain(),
-                                            BerechtigungspruefungMessageNotifier.getInstance()
-                                                .getAeltesteOffeneAnfrage(),
-                                            new ServerActionParameter<String>(
+                                            BerechtigungspruefungMessageNotifier.getInstance().getAeltesteOffeneAnfrage(
+                                                getConnectionContext()),
+                                            getConnectionContext(),
+                                            new ServerActionParameter<>(
                                                 BerechtigungspruefungFreigabeServerAction.ParameterType.MODUS
                                                     .toString(),
                                                 BerechtigungspruefungFreigabeServerAction.MODUS_PRUEFUNG));
@@ -174,7 +191,8 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                         ret = get();
                         if (ret.equals(
                                         BerechtigungspruefungFreigabeServerAction.ReturnType.OK)) {
-                            gotoPruefung(BerechtigungspruefungMessageNotifier.getInstance().getAeltesteOffeneAnfrage());
+                            gotoPruefung(BerechtigungspruefungMessageNotifier.getInstance().getAeltesteOffeneAnfrage(
+                                    getConnectionContext()));
                         } else {
                             final String title = "Fehler beim Sperren.";
                             final String message =
@@ -231,7 +249,8 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                 protected MetaObjectNode doInBackground() throws Exception {
                     final MetaClass mcBerechtigungspruefung = CidsBean.getMetaClassFromTableName(
                             "WUNDA_BLAU",
-                            "berechtigungspruefung");
+                            "berechtigungspruefung",
+                            getConnectionContext());
 
                     final String pruefungQuery = "SELECT DISTINCT " + mcBerechtigungspruefung.getID() + ", "
                                 + mcBerechtigungspruefung.getTableName() + "." + mcBerechtigungspruefung.getPrimaryKey()
@@ -241,7 +260,8 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
                                 + "' "
                                 + "LIMIT 1;";
 
-                    final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(pruefungQuery, 0);
+                    final MetaObject[] mos = SessionManager.getProxy()
+                                .getMetaObjectByQuery(pruefungQuery, 0, getConnectionContext());
                     final CidsBean cidsBean = mos[0].getBean();
                     return new MetaObjectNode(cidsBean);
                 }
@@ -265,7 +285,9 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
         int anzahlAnfragen;
 
         try {
-            anzahlAnfragen = BerechtigungspruefungMessageNotifier.getInstance().getOffeneAnfragen().size();
+            anzahlAnfragen = BerechtigungspruefungMessageNotifier.getInstance()
+                        .getOffeneAnfragen(getConnectionContext())
+                        .size();
         } catch (final Exception ex) {
             LOG.error("Fehler bei der Abfrage der offenen Anfragen", ex);
             anzahlAnfragen = -1;
@@ -298,6 +320,25 @@ public class BerechtigungspruefungToolbarWidget extends javax.swing.JPanel imple
         jButton1.setText(name);
         jLabel1.setToolTipText(name);
         jLabel1.setIcon(icon);
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public String getValue(final String key) {
+        if (key.equals(CidsUiComponent.CIDS_ACTION_KEY)) {
+            return "BerechtigungspruefungToolbarWidget";
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Component getComponent() {
+        return this;
     }
 
     //~ Inner Classes ----------------------------------------------------------

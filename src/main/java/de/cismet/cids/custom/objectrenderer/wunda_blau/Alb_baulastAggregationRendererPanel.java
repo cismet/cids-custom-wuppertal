@@ -53,9 +53,9 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -68,6 +68,9 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -82,7 +85,8 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @version  $Revision$, $Date$
  */
 public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -141,6 +145,9 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     private BaulastblattTableModel tableModel;
     private MultiMap featuresMM;
     private final Comparator<Integer> tableComparator;
+
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
     private javax.swing.JComboBox cmbType;
@@ -164,8 +171,12 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
 
     /**
      * Creates a new Alb_baulastblattAggregationRenderer object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Alb_baulastAggregationRendererPanel() {
+    public Alb_baulastAggregationRendererPanel(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
         initComponents();
 
         scpRisse.getViewport().setOpaque(false);
@@ -175,6 +186,11 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * DOCUMENT ME!
@@ -401,6 +417,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                             "bla",
                                             "no.yet",
                                             (Geometry)null,
+                                            getConnectionContext(),
                                             new ProductGroupAmount("ea_bla", selectedBaulasten.size()))) {
                                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                                 Alb_baulastAggregationRendererPanel.this)) {
@@ -412,7 +429,8 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                             type,
                                             selectedBaulasten,
                                             txtJobnumber.getText(),
-                                            projectname);
+                                            projectname,
+                                            getConnectionContext());
                                     DownloadManager.instance().add(download);
                                 }
                             }
@@ -498,14 +516,17 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         tableSorter.setSortKeys(sortKeys);
 
         final Collection<BaulastenReportGenerator.Type> items = new ArrayList<BaulastenReportGenerator.Type>();
-        final boolean billingAllowed = BillingPopup.isBillingAllowed("bla");
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT) && billingAllowed) {
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("bla", getConnectionContext());
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_BLATT, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT);
         }
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN) && billingAllowed) {
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_PLAN, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN);
         }
-        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER) && billingAllowed) {
+        if (!ObjectRendererUtils.checkActionTag(REPORT_ACTION_TAG_RASTER, getConnectionContext())
+                    && billingAllowed) {
             items.add(BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER);
         }
         final boolean enabled = billingAllowed && !items.isEmpty();
@@ -563,7 +584,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     protected void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
 
             final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
@@ -571,9 +592,10 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    AlkisConstants.COMMONS.SRS_SERVICE,
+                    ClientAlkisConf.getInstance().getSrsService(),
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Alb_Baulast");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -665,7 +687,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                     new Geometry[geometries.size()]),
                 new GeometryFactory());
 
-        return new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
     }
 
     /**
@@ -774,15 +796,15 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                 }
                 final GeometryCollection geoCollection = new GeometryCollection(geometries, new GeometryFactory());
                 final XBoundingBox boxToGoto = new XBoundingBox(geoCollection.getEnvelope().buffer(
-                            AlkisConstants.COMMONS.GEO_BUFFER));
+                            ClientAlkisConf.getInstance().getGeoBuffer()));
                 boxToGoto.setX1(boxToGoto.getX1()
-                            - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                            - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
                 boxToGoto.setX2(boxToGoto.getX2()
-                            + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                            + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
                 boxToGoto.setY1(boxToGoto.getY1()
-                            - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                            - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
                 boxToGoto.setY2(boxToGoto.getY2()
-                            + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                            + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
                 mappingComponent.gotoBoundingBox(boxToGoto, false, true, 500);
             } else {
                 mappingComponent.gotoInitialBoundingBox();

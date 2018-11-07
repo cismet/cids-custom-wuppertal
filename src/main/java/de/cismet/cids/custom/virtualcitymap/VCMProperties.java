@@ -22,6 +22,8 @@ import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -45,7 +47,6 @@ public class VCMProperties extends Properties {
      * Creates a new VCMProperties object.
      */
     private VCMProperties() {
-        load();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -97,14 +98,17 @@ public class VCMProperties extends Properties {
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public final void load() {
+    public final void load(final ConnectionContext connectionContext) {
         try {
             final String propertiesString = (String)SessionManager.getSession().getConnection()
                         .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                WundaBlauServerResources.VCM_PROPERTIES.getValue());
+                                WundaBlauServerResources.VCM_PROPERTIES.getValue(),
+                                connectionContext);
             super.load(new StringReader(propertiesString));
         } catch (final Exception ex) {
             LOG.warn("could not load properties.", ex);

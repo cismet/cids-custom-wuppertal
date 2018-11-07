@@ -70,6 +70,9 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -85,21 +88,21 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
     public static final Color COLOR_TXT_BACK = new Color(230, 230, 230);
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Wbf_gebaeudeEditor.class);
+
     //~ Instance fields --------------------------------------------------------
 
     MyLockableUI luiGeb;
     MyLockableUI luiVorg;
     JXLayer lVorg;
-
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String domain = "";
 //    ImageIcon warn = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/warn.png"));
-    private HashMap<String, Collection<String>> validationDependencies = new HashMap<String, Collection<String>>();
+    private final HashMap<String, Collection<String>> validationDependencies = new HashMap<>();
     private final DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
     private boolean editable;
     private String title = "";
-    private final List<PropertyChangeListener> strongReferencesToWeakListeners =
-        new ArrayList<PropertyChangeListener>();
+    private final List<PropertyChangeListener> strongReferencesToWeakListeners = new ArrayList<>();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbEinkommensgruppe;
     private javax.swing.JComboBox cbMassnahmenkategorisierung;
@@ -179,8 +182,14 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
      * @param  editable  DOCUMENT ME!
      */
     public Wbf_gebaeudeEditor(final boolean editable) {
-//        editable=true;
         this.editable = editable;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        super.initWithConnectionContext(connectionContext);
         initComponents();
 
         panVorgangX.setOpaque(false);
@@ -295,8 +304,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                 @Override
                 public void syncFailed(final Binding binding, final SyncFailure failure) {
                     if (Wbf_gebaeudeEditor.this.editable) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("syncFailed");
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("syncFailed");
                         }
                         final Object target = binding.getTargetObject();
                         if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
@@ -308,7 +317,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                             } catch (Exception skip) {
                             }
                         } else {
-                            log.error("keine JCOmponent");
+                            LOG.error("keine JCOmponent");
                         }
                     }
                 }
@@ -316,8 +325,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                 @Override
                 public void syncWarning(final Binding binding, final SyncFailure failure) {
                     if (Wbf_gebaeudeEditor.this.editable) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("synWarning " + failure);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("synWarning " + failure);
                         }
                         final Object target = binding.getTargetObject();
                         if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
@@ -325,7 +334,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                             c.setForeground(Color.magenta);
                             c.setToolTipText(failure.getValidationResult().getDescription());
                         } else {
-                            log.error("keine JCOmponent");
+                            LOG.error("keine JCOmponent");
                         }
                     }
                 }
@@ -333,8 +342,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                 @Override
                 public void synced(final Binding binding) {
                     if (Wbf_gebaeudeEditor.this.editable) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("sync");
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("sync");
                         }
                         final Object target = binding.getTargetObject();
                         if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
@@ -342,15 +351,15 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                             c.setForeground(Color.black);
                             c.setToolTipText(null);
                         } else {
-                            log.error("keine JCOmponent");
+                            LOG.error("keine JCOmponent");
                         }
 
                         final String bindingName = binding.getName();
                         if (bindingName != null) {
                             final Collection<String> additionalValidationBindings = validationDependencies.get(
                                     binding.getName());
-                            if (log.isDebugEnabled()) {
-                                log.debug(
+                            if (LOG.isDebugEnabled()) {
+                                LOG.debug(
                                     "for binding "
                                             + bindingName
                                             + "-->> dependencies: "
@@ -360,8 +369,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                                 for (final String name : additionalValidationBindings) {
                                     final Binding b = bindingGroup.getBinding(name);
                                     if (b != null) {
-                                        if (log.isDebugEnabled()) {
-                                            log.debug("CheckAgain: " + name);
+                                        if (LOG.isDebugEnabled()) {
+                                            LOG.debug("CheckAgain: " + name);
                                         }
                                         b.saveAndNotify();
                                     }
@@ -432,13 +441,9 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
             });
     }
 
-    //~ Methods ----------------------------------------------------------------
-
     /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
-     * content of this method is always regenerated by the Form Editor.
+     * DOCUMENT ME!
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -511,7 +516,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         panGebaeude.setPreferredSize(new java.awt.Dimension(400, 250));
         panGebaeude.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Gebäude");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
@@ -520,7 +525,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
         panGebaeude.add(jLabel1, gridBagConstraints);
 
-        lblNutzungsart.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblNutzungsart.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblNutzungsart.setText("Nutzungsart");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -529,7 +534,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeude.add(lblNutzungsart, gridBagConstraints);
 
-        lblAnschriftGebaeude.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblAnschriftGebaeude.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAnschriftGebaeude.setText("Anschrift Gebäude");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -538,7 +543,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeude.add(lblAnschriftGebaeude, gridBagConstraints);
 
-        lblAnschriftEigentuemer.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblAnschriftEigentuemer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAnschriftEigentuemer.setText("Anschrift Eigentümer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -547,7 +552,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeude.add(lblAnschriftEigentuemer, gridBagConstraints);
 
-        lblAnzahlWohneinheiten.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblAnzahlWohneinheiten.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAnzahlWohneinheiten.setText("Anzahl Wohneinheiten");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -670,7 +675,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeude.add(jScrollPane3, gridBagConstraints);
 
-        lblNameEigentuemer.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblNameEigentuemer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblNameEigentuemer.setText("Eigentümer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -679,7 +684,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeude.add(lblNameEigentuemer, gridBagConstraints);
 
-        lblGeom.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblGeom.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblGeom.setText("Geometrie");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -748,7 +753,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         panVorgangsauswahl.add(jPanel1, gridBagConstraints);
 
-        lblVorgangsliste.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblVorgangsliste.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblVorgangsliste.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblVorgangsliste.setText("Vorgänge");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -856,7 +861,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         jScrollPane4.setOpaque(false);
 
         txtBemerkungen.setColumns(15);
-        txtBemerkungen.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtBemerkungen.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtBemerkungen.setLineWrap(true);
         txtBemerkungen.setRows(4);
         txtBemerkungen.setBorder(null);
@@ -894,7 +899,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.weighty = 0.1;
         panVorgangX.add(jPanel6, gridBagConstraints);
 
-        lblSachbearbeiterVerw.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblSachbearbeiterVerw.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSachbearbeiterVerw.setText("Sachbearbeiter Verwaltung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -903,7 +908,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblSachbearbeiterVerw, gridBagConstraints);
 
-        lblSachbearbeiterTech.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblSachbearbeiterTech.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSachbearbeiterTech.setText("Sachbearbeiter Technik");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -912,7 +917,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblSachbearbeiterTech, gridBagConstraints);
 
-        lblBemerkungen.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBemerkungen.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBemerkungen.setText("Bemerkungen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -921,7 +926,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBemerkungen, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Vorgang");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -969,7 +974,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(txtSachbearbeiterVerwaltung, gridBagConstraints);
 
-        lblUebergabedatum.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblUebergabedatum.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblUebergabedatum.setText("Übergabedatum");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -994,7 +999,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(jXDatePicker1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Maßnahme");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1003,7 +1008,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         panVorgangX.add(jLabel2, gridBagConstraints);
 
-        lblMassnahmetyp.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblMassnahmetyp.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblMassnahmetyp.setText("Maßnahmenkategorisierung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1012,7 +1017,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblMassnahmetyp, gridBagConstraints);
 
-        lblBetroffeneWohneinheiten.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBetroffeneWohneinheiten.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBetroffeneWohneinheiten.setText("Betroffene Wohneinheiten");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1021,7 +1026,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBetroffeneWohneinheiten, gridBagConstraints);
 
-        lblBeschreibung1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBeschreibung1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBeschreibung1.setText("Maßnahmenbeschreibung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1072,7 +1077,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         jScrollPane6.setOpaque(false);
 
         txtMassnahmenbeschreibung.setColumns(15);
-        txtMassnahmenbeschreibung.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtMassnahmenbeschreibung.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtMassnahmenbeschreibung.setLineWrap(true);
         txtMassnahmenbeschreibung.setRows(4);
         txtMassnahmenbeschreibung.setBorder(null);
@@ -1095,7 +1100,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         panVorgangX.add(jScrollPane6, gridBagConstraints);
         jScrollPane3.getViewport().setOpaque(false);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Kredit");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1104,7 +1109,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         panVorgangX.add(jLabel3, gridBagConstraints);
 
-        lblBindungsdauer.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBindungsdauer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBindungsdauer.setText("Bindung bis");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1113,7 +1118,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBindungsdauer, gridBagConstraints);
 
-        lblHoeheMietpreisbindung.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblHoeheMietpreisbindung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblHoeheMietpreisbindung.setText("Höhe Mietpreisbindung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1122,7 +1127,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblHoeheMietpreisbindung, gridBagConstraints);
 
-        lblBewilligungsNr.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBewilligungsNr.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBewilligungsNr.setText("Bewilligungsnr.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1131,7 +1136,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBewilligungsNr, gridBagConstraints);
 
-        lblBewilligungsdatum.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBewilligungsdatum.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBewilligungsdatum.setText("Bewilligungsdatum");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1291,9 +1296,9 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
      * @param  evt  DOCUMENT ME!
      */
     private void cmdAddVorgangActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddVorgangActionPerformed
-        final MetaClass vorgangMC = ClassCacheMultiple.getMetaClass(domain, "WBF_VORGANG");
+        final MetaClass vorgangMC = ClassCacheMultiple.getMetaClass(domain, "WBF_VORGANG", getConnectionContext());
         if (vorgangMC != null) {
-            final MetaObject mo = vorgangMC.getEmptyInstance();
+            final MetaObject mo = vorgangMC.getEmptyInstance(getConnectionContext());
             final CidsBean vorgangBean = mo.getBean();
             final PropertyChangeListener pcl = new PropertyChangeListener() {
 
@@ -1307,7 +1312,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
             ((ObservableList)cidsBean.getProperty("vorgaenge")).add(vorgangBean);
         } else {
-            log.error("MetaClass von Vorgang war NULL");
+            LOG.error("MetaClass von Vorgang war NULL");
         }
     } //GEN-LAST:event_cmdAddVorgangActionPerformed
 
@@ -1386,18 +1391,22 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
             vorgBean.addPropertyChangeListener(WeakListeners.propertyChange(pcl, vorgBean));
         }
 
-        ClassCacheMultiple.addInstance(domain);
+        ClassCacheMultiple.addInstance(domain, getConnectionContext());
         try {
-            final MetaClass massnahmenClass = ClassCacheMultiple.getMetaClass(domain, "wbf_massnahme");
+            final MetaClass massnahmenClass = ClassCacheMultiple.getMetaClass(
+                    domain,
+                    "wbf_massnahme",
+                    getConnectionContext());
             final DefaultComboBoxModel result = DefaultBindableReferenceCombo.getModelByMetaClass(
                     massnahmenClass,
-                    true);
+                    true,
+                    getConnectionContext());
             cbMassnahmenkategorisierung.setModel(result);
 
 //            ((DefaultBindableReferenceCombo)cbMassnahmenkategorisierung).setMetaClass(massnahmenClass);
 
         } catch (Exception e) {
-            log.error("Fehler beim fuellen der MassnahmenComboBox", e);
+            LOG.error("Fehler beim fuellen der MassnahmenComboBox", e);
         }
         super.setCidsBean(cidsBean);
     }
@@ -1561,8 +1570,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
             if (nutzungsart != null) {
                 String gueltigeMassnahmen = null;
                 gueltigeMassnahmen = (String)nutzungsart.getProperty("massnahmen_gueltig");
-                if (log.isDebugEnabled()) {
-                    log.debug("ist kuerzel:" + kuerzel + " in " + gueltigeMassnahmen + " ?");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("ist kuerzel:" + kuerzel + " in " + gueltigeMassnahmen + " ?");
                 }
                 if ((kuerzel != null) && (gueltigeMassnahmen != null) && gueltigeMassnahmen.contains(kuerzel)) {
                     return null;

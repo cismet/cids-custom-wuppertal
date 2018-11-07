@@ -49,8 +49,8 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -69,6 +69,9 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -86,7 +89,8 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  */
 public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -121,6 +125,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private String title;
     private CidsBean cidsBean;
     private MetaObjectNode flurstueckMon;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdAttachBilling;
@@ -203,15 +209,19 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Fs_BestellungRenderer.
+     * Creates a new Fs_bestellungRenderer object.
      */
     public Fs_bestellungRenderer() {
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+    }
 
     /**
      * DOCUMENT ME!
@@ -225,20 +235,20 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 public void run() {
                     final Geometry pureGeom = CrsTransformer.transformToGivenCrs(
                             geom,
-                            AlkisConstants.COMMONS.SRS_SERVICE);
+                            ClientAlkisConf.getInstance().getSrsService());
                     final de.cismet.cismap.commons.XBoundingBox box = new de.cismet.cismap.commons.XBoundingBox(
-                            pureGeom.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                            pureGeom.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     mappingModel.addHome(new XBoundingBox(
                             box.getX1(),
                             box.getY1(),
                             box.getX2(),
                             box.getY2(),
-                            AlkisConstants.COMMONS.SRS_SERVICE,
+                            ClientAlkisConf.getInstance().getSrsService(),
                             true));
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                ClientAlkisConf.getInstance().getMapCallString()));
                     swms.setName("Flurstueck");
                     final StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(pureGeom);
@@ -1423,7 +1433,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                                     + title,
                             path,
                             pureName,
-                            ext);
+                            ext,
+                            getConnectionContext());
                     DownloadManager.instance().add(download);
                 }
             } catch (final Exception ex) {
@@ -1470,7 +1481,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      * @param  evt  DOCUMENT ME!
      */
     private void cmdReloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdReloadActionPerformed
-        StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean));
+        StaticSwingTools.showDialog(new FSReloadProduktDialog(cidsBean, getConnectionContext()));
     }                                                                             //GEN-LAST:event_cmdReloadActionPerformed
 
     /**
@@ -1493,7 +1504,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
      * @param  evt  DOCUMENT ME!
      */
     private void cmdAttachBillingActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAttachBillingActionPerformed
-        StaticSwingTools.showDialog(new FSAttachBillingForProduktDialog(cidsBean));
+        StaticSwingTools.showDialog(new FSAttachBillingForProduktDialog(cidsBean, getConnectionContext()));
     }                                                                                    //GEN-LAST:event_cmdAttachBillingActionPerformed
 
     /**
@@ -1523,7 +1534,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                                     + title,
                             path,
                             fileName,
-                            ".pdf");
+                            ".pdf",
+                            getConnectionContext());
                     DownloadManager.instance().add(download);
                 }
             } catch (final Exception ex) {
@@ -1627,7 +1639,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                                 landparcelcode,
                                 null);
                         final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                        search,
+                                        getConnectionContext());
                         if (!mons.isEmpty()) {
                             return mons.iterator().next();
                         } else {
@@ -1703,6 +1717,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

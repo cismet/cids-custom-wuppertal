@@ -21,17 +21,20 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 /**
  * PrintStatisticsReport gets Billing-CidsBean and evaluates them to generate a BillingStatisticsReport.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class PrintStatisticsReport {
+public class PrintStatisticsReport implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 
-    protected final HashMap<String, Integer> productInformation = new HashMap<String, Integer>();
+    protected final HashMap<String, Integer> productInformation = new HashMap<>();
     protected final Date[] fromDate_tillDate;
     protected final Collection<CidsBean> billingsBeans;
     protected int amountTotalDownloads = 0;
@@ -42,13 +45,14 @@ public class PrintStatisticsReport {
     protected int amountVUsonstige = 0;
     protected int amountWithCostsVU = 0;
     protected int amountWithCostsWiederver = 0;
+    protected int amountWiederverkaeufe = 0;
     protected double earningsWithCostsVU = 0;
     protected double earningsWithCostsWiederver = 0;
-    protected int amountWiederverkaeufe = 0;
-    protected final Set<String> amountWiederverkaeufeGBs = new HashSet<String>();
-    protected final Set<String> amountVUamtlicherLageplanGBs = new HashSet<String>();
-    protected final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<String>();
-    protected final Set<String> amountVUsonstigeGBs = new HashSet<String>();
+    protected final Set<String> amountWiederverkaeufeGBs = new HashSet<>();
+    protected final Set<String> amountVUamtlicherLageplanGBs = new HashSet<>();
+    protected final Set<String> amountVUhoheitlicheVermessungGBs = new HashSet<>();
+    protected final Set<String> amountVUsonstigeGBs = new HashSet<>();
+    private final ConnectionContext connectionContext;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -57,10 +61,14 @@ public class PrintStatisticsReport {
      *
      * @param  fromDate_tillDate  DOCUMENT ME!
      * @param  billingsBeans      DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public PrintStatisticsReport(final Date[] fromDate_tillDate, final Collection<CidsBean> billingsBeans) {
+    public PrintStatisticsReport(final Date[] fromDate_tillDate,
+            final Collection<CidsBean> billingsBeans,
+            final ConnectionContext connectionContext) {
         this.fromDate_tillDate = fromDate_tillDate;
         this.billingsBeans = billingsBeans;
+        this.connectionContext = connectionContext;
         for (final CidsBean billingBean : billingsBeans) {
             setCountersDependingOnVerwendungszweck(billingBean);
             addProductInformation(billingBean);
@@ -98,7 +106,8 @@ public class PrintStatisticsReport {
 
         final PrintStatisticsReport printStatisticsReport = new PrintStatisticsReport(
                 new Date[] { start, end },
-                list);
+                list,
+                ConnectionContext.createDeprecated());
         final BillingStatisticsReport report = printStatisticsReport.createReport();
         final Map params = report.generateParamters();
         DevelopmentTools.showReportForBeans(
@@ -138,10 +147,11 @@ public class PrintStatisticsReport {
                 amountVUsonstigeGBs.size(),
                 amountWithCostsVU,
                 amountWithCostsWiederver,
+                amountWiederverkaeufe,
+                amountWiederverkaeufeGBs.size(),
                 earningsWithCostsVU,
                 earningsWithCostsWiederver,
-                amountWiederverkaeufe,
-                amountWiederverkaeufeGBs.size());
+                getConnectionContext());
     }
 
     /**
@@ -219,5 +229,10 @@ public class PrintStatisticsReport {
         } else {
             productInformation.put(verwendungszweck, 1);
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

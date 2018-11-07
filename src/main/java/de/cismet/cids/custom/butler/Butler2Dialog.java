@@ -20,8 +20,6 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -59,9 +57,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 
@@ -74,6 +72,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -85,7 +86,9 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler2Dialog extends javax.swing.JDialog implements DocumentListener, ListSelectionListener {
+public class Butler2Dialog extends javax.swing.JDialog implements DocumentListener,
+    ListSelectionListener,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -121,6 +124,8 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private PredefinedBoxes feldVergleichBox500 = null;
     private PredefinedBoxes feldVergleichBox1000 = null;
     private boolean isEtrsRahmenkarte = false;
+    private final ConnectionContext connectionContext;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
@@ -156,11 +161,15 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     /**
      * Creates new form Butler2Dialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Butler2Dialog(final java.awt.Frame parent, final boolean modal) {
+    public Butler2Dialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ConnectionContext connectionContext) {
         super(parent, modal);
+        this.connectionContext = connectionContext;
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
         formatSymbols.setDecimalSeparator('.');
         coordFormatter.setDecimalFormatSymbols(formatSymbols);
@@ -321,7 +330,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
         pnlProductSettings = new javax.swing.JPanel();
         tbpProducts = new javax.swing.JTabbedPane();
-        butler2ProductPanel1 = new de.cismet.cids.custom.butler.Butler2ProductPanel();
+        butler2ProductPanel1 = new de.cismet.cids.custom.butler.Butler2ProductPanel(getConnectionContext());
         pnlMapSettings = new javax.swing.JPanel();
         lblLowerPosition = new javax.swing.JLabel();
         lblSize = new javax.swing.JLabel();
@@ -808,7 +817,8 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                                 isEtrsRahmenkarte,
                                 box.getKey(),
                                 middleX,
-                                middleY);
+                                middleY,
+                                getConnectionContext());
                         String productKey = "";
                         if ((format != null) && format.getKey().equals("dxf")) {
                             productKey = DXF_BILLING_KEY;
@@ -819,7 +829,13 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                         final ArrayList<ProductGroupAmount> list = productPanel.getProductGroupAmounts();
                         final ProductGroupAmount[] groupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
                         try {
-                            if (BillingPopup.doBilling(productKey, "butler 2", requestNr, null, groupAmounts)) {
+                            if (BillingPopup.doBilling(
+                                            productKey,
+                                            "butler 2",
+                                            requestNr,
+                                            null,
+                                            getConnectionContext(),
+                                            groupAmounts)) {
                                 downloads.add(download);
                             }
                         } catch (Exception ex) {
@@ -875,11 +891,11 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     mappingModel.addHome(getBoundingBox());
 
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                AlkisConstants.COMMONS.MAP_CALL_STRING));
+                                ClientAlkisConf.getInstance().getMapCallString()));
                     swms.setName("butler-background");
 
                     // add the raster layer to the model
@@ -903,7 +919,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
                     final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
-                            AlkisConstants.COMMONS.SRS_SERVICE);
+                            ClientAlkisConf.getInstance().getSrsService());
                     final XBoundingBox result = new XBoundingBox(transformedGeom.buffer(20));
 
                     return result;
@@ -1057,7 +1073,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         final int number = tbpProducts.getTabCount();
         final String title = "Produkt " + number;
         final int tabPos = tbpProducts.getTabCount() - 1;
-        final Butler2ProductPanel productPan = new Butler2ProductPanel();
+        final Butler2ProductPanel productPan = new Butler2ProductPanel(getConnectionContext());
         productPan.addProductListSelectionListener(this);
         if ((rectangleFeature != null) && (rectangleFeature.getGeometry() != null)) {
 //            productPan.setGeometry(rectangleFeature.getGeometry());
@@ -1244,7 +1260,10 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
                 @Override
                 public void run() {
-                    final Butler2Dialog dialog = new Butler2Dialog(new javax.swing.JFrame(), true);
+                    final Butler2Dialog dialog = new Butler2Dialog(
+                            new javax.swing.JFrame(),
+                            true,
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -1353,6 +1372,11 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             };
 
         worker.execute();
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

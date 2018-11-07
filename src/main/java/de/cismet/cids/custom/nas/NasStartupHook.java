@@ -17,14 +17,14 @@ import Sirius.navigator.exception.ConnectionException;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.util.HashMap;
-import java.util.HashSet;
-
-import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.utils.nas.NasProductInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.configuration.StartupHook;
 
@@ -37,17 +37,24 @@ import de.cismet.tools.gui.downloadmanager.DownloadManager;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = StartupHook.class)
-public class NasStartupHook implements StartupHook {
+public class NasStartupHook implements StartupHook, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static String SEVER_ACTION = "nasDataQuery";
+    private static final String SEVER_ACTION = "nasDataQuery";
 
     //~ Instance fields --------------------------------------------------------
 
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     @Override
     public void applicationStarted() {
@@ -58,7 +65,10 @@ public class NasStartupHook implements StartupHook {
                     boolean hasNasAccess = false;
                     try {
                         hasNasAccess = SessionManager.getConnection()
-                                    .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery") != null;
+                                    .getConfigAttr(
+                                            SessionManager.getSession().getUser(),
+                                            "csa://nasDataQuery",
+                                            getConnectionContext()) != null;
                     } catch (ConnectionException ex) {
                         log.error("Could not validate action tag for NAS!", ex);
                     }
@@ -69,11 +79,13 @@ public class NasStartupHook implements StartupHook {
                         HashMap<String, NasProductInfo> openOrderIds = null;
                         try {
                             openOrderIds = (HashMap<String, NasProductInfo>)SessionManager
-                                        .getProxy().executeTask(
-                                        SEVER_ACTION,
-                                        "WUNDA_BLAU",
-                                        null,
-                                        paramMethod);
+                                        .getProxy()
+                                        .executeTask(
+                                                SEVER_ACTION,
+                                                "WUNDA_BLAU",
+                                                (Object)null,
+                                                getConnectionContext(),
+                                                paramMethod);
                         } catch (Exception ex) {
                             log.error("error while getting the list of undelivered nas orders from server", ex);
                         }
@@ -95,11 +107,17 @@ public class NasStartupHook implements StartupHook {
                                     orderId,
                                     pInfo.isIsSplittet(),
                                     pInfo.isDxf(),
-                                    pInfo.getRequestName());
+                                    pInfo.getRequestName(),
+                                    getConnectionContext());
                             DownloadManager.instance().add(download);
                         }
                     }
                 }
             }).start();
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

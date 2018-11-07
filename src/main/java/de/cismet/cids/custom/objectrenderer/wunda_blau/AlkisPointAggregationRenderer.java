@@ -42,8 +42,6 @@ import org.openide.util.NbBundle;
 import java.awt.EventQueue;
 import java.awt.geom.Rectangle2D;
 
-import java.net.URL;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -70,13 +68,13 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
-import de.cismet.cids.custom.utils.alkis.AlkisPointReportBean;
-import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisPointReportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -92,16 +90,17 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
-import de.cismet.security.WebAccessManager;
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -110,7 +109,8 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  * @version  $Revision$, $Date$
  */
 public final class AlkisPointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -147,6 +147,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnRelease;
@@ -163,9 +166,16 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Alkis_pointAggregationRenderer.
+     * Creates a new AlkisPointAggregationRenderer object.
      */
     public AlkisPointAggregationRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         scpAggregationTable.getViewport().setOpaque(false);
         tblAggregation.getSelectionModel().addListSelectionListener(new TableSelectionListener());
@@ -174,14 +184,19 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
 
-        final boolean billingAllowed = BillingPopup.isBillingAllowed("appdf")
-                    || BillingPopup.isBillingAllowed("pktlsttxt");
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("appdf", getConnectionContext())
+                    || BillingPopup.isBillingAllowed("pktlsttxt", getConnectionContext());
 
         btnCreate.setEnabled(billingAllowed
-                    && ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE));
+                    && ObjectRendererUtils.checkActionTag(
+                        AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE,
+                        getConnectionContext()));
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -320,7 +335,10 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * @param  evt  DOCUMENT ME!
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
-        if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE,
+                        getConnectionContext())) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
             return;
@@ -351,6 +369,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 "appdf",
                                 "no.yet",
                                 (Geometry)null,
+                                getConnectionContext(),
                                 new ProductGroupAmount("ea", numOfPoints))) {
                     generateAPMapReport(selectedAlkisPoints);
                 }
@@ -382,7 +401,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "pktlstpdf",
                                     "no.yet",
                                     (Geometry)null,
-                                    new ProductGroupAmount("eafifty", 1 + (int)Math.floor(numOfPoints / 50f)))) {
+                                    getConnectionContext(),
+                                    new ProductGroupAmount("ea", 1))) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
                 } catch (Exception e) {
@@ -401,6 +421,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "pktlsttxt",
                                     "no.yet",
                                     (Geometry)null,
+                                    getConnectionContext(),
                                     groupAmounts)) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
@@ -414,6 +435,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "appdf",
                                     "no.yet",
                                     (Geometry)null,
+                                    getConnectionContext(),
                                     new ProductGroupAmount("ea", numOfPoints))) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
@@ -579,7 +601,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             if (punktListeString.length() > 0) {
                 punktListeString.append(",");
             }
-            punktListeString.append(AlkisUtils.PRODUCTS.getPointDataForProduct(alkisPoint));
+            punktListeString.append(ClientAlkisProducts.getInstance().getPointDataForProduct(alkisPoint));
         }
 
         return punktListeString.toString();
@@ -660,7 +682,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
             final ArrayList<String> comboBoxContent = new ArrayList<String>();
             comboBoxContent.add(PDF);
-            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess()) {
+            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext())) {
                 comboBoxContent.add(HTML);
             }
             comboBoxContent.add(TEXT);
@@ -707,16 +729,17 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
             final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
                     box.getX1(),
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    AlkisConstants.COMMONS.SRS_SERVICE,
+                    ClientAlkisConf.getInstance().getSrsService(),
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -791,7 +814,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     new Geometry[allGeomList.size()]),
                 new GeometryFactory());
 
-        return new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+        return new XBoundingBox(geoCollection.getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
     }
 
     /**
@@ -851,7 +874,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                             "AP-Karten",
                             jobname,
                             "apkarten",
-                            ".pdf"));
+                            ".pdf",
+                            getConnectionContext()));
         }
     }
 
@@ -882,15 +906,19 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                         if ((modelIdx > -1) && (modelIdx < cidsBeans.size())) {
                             final CidsBean selectedBean = cidsBeans.get(modelIdx);
                             final XBoundingBox boxToGoto = new XBoundingBox(features.get(selectedBean).getGeometry()
-                                            .getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                                            .getEnvelope().buffer(ClientAlkisConf.getInstance().getGeoBuffer()));
                             boxToGoto.setX1(boxToGoto.getX1()
-                                        - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getWidth()));
                             boxToGoto.setX2(boxToGoto.getX2()
-                                        + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getWidth()));
                             boxToGoto.setY1(boxToGoto.getY1()
-                                        - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getHeight()));
                             boxToGoto.setY2(boxToGoto.getY2()
-                                        + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier()
+                                            * boxToGoto.getHeight()));
                             mappingComponent.gotoBoundingBox(boxToGoto, false, true, 500);
                             break;
                         }
@@ -985,63 +1013,52 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         @Override
         public void run() {
             final String punktListenString = getPunktlistenStringForChosenPoints(alkisPoints);
-            final String code;
+            final String product;
             final String extension;
 
             if (PDF.equals(format)) {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_PDF;
+                product = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_PDF);
                 extension = ".pdf";
             } else if (HTML.equals(format)) {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_HTML;
+                product = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_HTML);
                 extension = ".html";
             } else {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_TXT;
+                product = ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_TXT);
                 extension = ".plst";
             }
 
             if (punktListenString.length() > 3) {
-                if ((code != null) && (code.length() > 0)) {
+                if ((product != null) && (product.length() > 0)) {
                     try {
-                        final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
-                        if ((url != null) && (url.trim().length() > 0)) {
-                            if (
-                                !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
-                                            AlkisPointAggregationRenderer.this)) {
-                                return;
-                            }
+                        final String title = "Punktnachweis";
+                        final String filename = product;
+                        final String directory = DownloadManagerDialog.getInstance().getJobName();
+                        final Download download = new ByteArrayActionDownload(
+                                AlkisProductServerAction.TASK_NAME,
+                                AlkisProductServerAction.Body.LISTENNACHWEIS,
+                                new ServerActionParameter[] {
+                                    new ServerActionParameter(
+                                        AlkisProductServerAction.Parameter.PRODUKT.toString(),
+                                        product),
+                                    new ServerActionParameter(
+                                        AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                                        punktListenString)
+                                },
+                                title,
+                                directory,
+                                filename,
+                                extension,
+                                connectionContext);
 
-                            HttpDownload download = null;
-                            final int parameterPosition = url.indexOf('?');
-
-                            if (parameterPosition < 0) {
-                                download = new HttpDownload(
-                                        new URL(url),
-                                        "",
-                                        DownloadManagerDialog.getInstance().getJobName(),
-                                        "Punktnachweis",
-                                        code,
-                                        extension);
-                            } else {
-                                final String parameters = url.substring(parameterPosition + 1);
-                                download = new HttpDownload(
-                                        new URL(url.substring(0, parameterPosition)),
-                                        parameters,
-                                        AlkisProducts.POST_HEADER,
-                                        DownloadManagerDialog.getInstance().getJobName(),
-                                        "Punktnachweis",
-                                        code,
-                                        extension);
-                            }
-
-                            DownloadManager.instance().add(download);
-                        }
+                        DownloadManager.instance().add(download);
+                        DownloadManager.instance().add(download);
                     } catch (Exception ex) {
                         ObjectRendererUtils.showExceptionWindowToUser(
                             "Fehler beim Aufruf des Produkts: "
-                                    + code,
+                                    + product,
                             ex,
                             AlkisPointAggregationRenderer.this);
-                        log.error("The URL to download product '" + code + "' (actionTag: "
+                        log.error("The URL to download product '" + product + "' (actionTag: "
                                     + AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.",
                             ex);
                     }

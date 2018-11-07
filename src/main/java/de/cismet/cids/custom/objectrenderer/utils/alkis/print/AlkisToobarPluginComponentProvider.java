@@ -25,6 +25,7 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
 import Sirius.navigator.ui.ComponentRegistry;
 
+import java.awt.Component;
 import java.awt.Dimension;
 
 import java.util.Collections;
@@ -34,13 +35,19 @@ import javax.swing.JButton;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 
+import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
+
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.menu.CidsUiComponent;
 
 /**
  * ToolbarComponentsProvider that delivers a Button for Alkis Print to integrate into the Navigator Toolbar.
@@ -49,12 +56,15 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
-public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProvider {
+public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProvider,
+    ConnectionContextStore,
+    CidsUiComponent {
 
     //~ Instance fields --------------------------------------------------------
 
     private final List<ToolbarComponentDescription> toolbarComponents;
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -65,7 +75,7 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
         final List<ToolbarComponentDescription> preparationList = TypeSafeCollections.newArrayList();
         final ToolbarComponentDescription description = new ToolbarComponentDescription(
                 "tlbMain",
-                new AlkisPrintJButton(),
+                new AlkisPrintJButton(connectionContext),
                 ToolbarPositionHint.AFTER,
                 "cmdPrint");
         preparationList.add(description);
@@ -75,8 +85,13 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    @Override
     public List<ToolbarComponentDescription> getToolbarComponents() {
-        if (AlkisUtils.validateUserHasAlkisPrintAccess()) {
+        if (AlkisUtils.validateUserHasAlkisPrintAccess(getConnectionContext())) {
             return toolbarComponents;
         } else {
             return Collections.emptyList();
@@ -86,6 +101,25 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
     @Override
     public String getPluginName() {
         return "ALKIS";
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    @Override
+    public String getValue(final String key) {
+        if (key.equals(CidsUiComponent.CIDS_ACTION_KEY)) {
+            return "AlkisToobarPlugin";
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Component getComponent() {
+        return new AlkisPrintJButton(connectionContext);
     }
 }
 
@@ -110,11 +144,16 @@ final class AlkisPrintJButton extends JButton {
     /**
      * Creates a new AlkisPrintJButton object.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @throws  RuntimeException  DOCUMENT ME!
      */
-    public AlkisPrintJButton() {
+    public AlkisPrintJButton(final ConnectionContext connectionContext) {
         try {
-            this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());
+            this.printWidget = new AlkisPrintingSettingsWidget(
+                    false,
+                    CismapBroker.getInstance().getMappingComponent(),
+                    connectionContext);
 //            printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
             // printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
             printWidget.setLocationRelativeTo(ComponentRegistry.getRegistry().getCatalogueTree());

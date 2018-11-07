@@ -15,6 +15,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -69,6 +70,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -79,7 +83,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
  */
 public class BillingKundeAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -95,10 +100,13 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
     //~ Instance fields --------------------------------------------------------
 
+    private SwingWorker<List<CidsBean>, Integer> worker;
     private Collection<CidsBean> cidsBeans = null;
     private Collection<Object[]> tableData;
     private List<CidsBean> filteredBillingBeans;
     private Date[] fromDate_tillDate;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnBuchungsbeleg;
@@ -111,6 +119,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JCheckBox cboKostenfrei;
     private javax.swing.JCheckBox cboKostenpflichtig;
     private javax.swing.JCheckBox cboNichtAbgerechnet;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -121,6 +130,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAgrTitle;
     private javax.swing.JLabel lblFilterResult;
@@ -141,16 +151,26 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form BillingKundeAggregationRenderer.
+     * Creates a new BillingKundeAggregationRenderer object.
      */
     public BillingKundeAggregationRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         setFilterActionInExternalPanels();
         final AggregatedBillingTableModel tableModel = new AggregatedBillingTableModel(new Object[0][],
                 AGR_COMLUMN_NAMES);
         tblCustomers.setModel(tableModel);
 
-        if (!ObjectRendererUtils.checkActionTag(BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT)) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT,
+                        getConnectionContext())) {
             btnRechnungsanlage.setEnabled(false);
             cboHideFreeDownloadsRechnungsanlage.setEnabled(false);
 
@@ -159,8 +179,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             cboAbgerechnet.setVisible(false);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -196,9 +214,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         cboHideFreeDownloadsBuchungsbeleg = new javax.swing.JCheckBox();
         cboHideFreeDownloadsRechnungsanlage = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
-        btnRechnungsanlage = new BillingRestrictedReportJButton();
+        btnRechnungsanlage = new BillingRestrictedReportJButton(getConnectionContext());
         btnBuchungsbeleg = new javax.swing.JButton();
-        btnGeschaeftsstatistik = new BillingRestrictedReportJButton();
+        btnGeschaeftsstatistik = new BillingRestrictedReportJButton(getConnectionContext());
         jPanel7 = new javax.swing.JPanel();
         lblFilterResult = new javax.swing.JLabel();
         pnlTable = new javax.swing.JPanel();
@@ -207,6 +225,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         tblCustomers = new javax.swing.JTable();
         pnlBusyLable = new javax.swing.JPanel();
         blblBusy = new org.jdesktop.swingx.JXBusyLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jButton1 = new javax.swing.JButton();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.BorderLayout());
@@ -570,7 +590,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
         pnlTable.add(pnlFilterResults, "table");
 
-        pnlBusyLable.setLayout(new java.awt.BorderLayout());
+        pnlBusyLable.setLayout(new java.awt.GridBagLayout());
 
         blblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -578,7 +598,42 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
                 "BillingKundeAggregationRenderer.blblBusy.text")); // NOI18N
-        pnlBusyLable.add(blblBusy, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        pnlBusyLable.add(blblBusy, gridBagConstraints);
+
+        jProgressBar1.setString(org.openide.util.NbBundle.getMessage(
+                BillingKundeAggregationRenderer.class,
+                "BillingKundeAggregationRenderer.jProgressBar1.string")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        pnlBusyLable.add(jProgressBar1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeAggregationRenderer.class,
+                "BillingKundeAggregationRenderer.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        pnlBusyLable.add(jButton1, gridBagConstraints);
 
         pnlTable.add(pnlBusyLable, "busy");
 
@@ -669,7 +724,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                         public void billingDone(final boolean isDone) {
                             filterBuchungen();
                         }
-                    }).print();
+                    },
+                    getConnectionContext()).print();
             }
         }
     } //GEN-LAST:event_btnBuchungsbelegActionPerformed
@@ -731,7 +787,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                         true,
                         this,
                         retrieveShowBillingWithoutCostInReport(evt),
-                        null);
+                        null,
+                        getConnectionContext());
 
                 // refresh the table after the report was successfully created and the billings were marked
                 printBillingReportForCustomer.setDownloadFinishedObserver(printBillingReportForCustomer.new DownloadFinishedObserver() {
@@ -765,7 +822,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                     "BillingKundeAggregationRenderer.btnGeschaeftsstatistikActionPerformed().dialog.title"),
                 JOptionPane.ERROR_MESSAGE);
         } else {
-            new PrintStatisticsReport(fromDate_tillDate, billings).print();
+            new PrintStatisticsReport(fromDate_tillDate, billings, getConnectionContext()).print();
         }
     }                                                                                          //GEN-LAST:event_btnGeschaeftsstatistikActionPerformed
 
@@ -819,6 +876,17 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        if (worker != null) {
+            worker.cancel(true);
+        }
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void setFilterActionInExternalPanels() {
         final Action filterAction = new AbstractAction() {
@@ -850,6 +918,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
     @Override
     public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
+        if (worker != null) {
+            worker.cancel(true);
+        }
         this.cidsBeans = cidsBeans;
         setTitle(null);
     }
@@ -868,9 +939,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         for (final CidsBean kundeBean : cidsBeans) {
             kundenMetaObjects.add(kundeBean.getMetaObject());
         }
-        final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement(
-                SessionManager.getSession().getUser(),
-                kundenMetaObjects);
+        final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement(kundenMetaObjects);
 
         // set filters
         cidsBillingSearchStatement.setVerwendungszweckKeys(
@@ -909,36 +978,81 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         btnRechnungsanlage.setEnabled(false);
         btnShowResults.setEnabled(false);
         btnGeschaeftsstatistik.setEnabled(false);
-        final SwingWorker<Collection<MetaObject>, Void> swingWorker = new SwingWorker<Collection<MetaObject>, Void>() {
+
+        jProgressBar1.setString(org.openide.util.NbBundle.getMessage(
+                BillingKundeAggregationRenderer.class,
+                "BillingKundeAggregationRenderer.jProgressBar1.string"));
+        jProgressBar1.setIndeterminate(true);
+        jProgressBar1.setStringPainted(true);
+
+        if (worker != null) {
+            worker.cancel(true);
+        }
+        worker = new SwingWorker<List<CidsBean>, Integer>() {
 
                 @Override
-                protected Collection<MetaObject> doInBackground() throws Exception {
-                    // return cidsBillingSearchStatement.performServerSearch();
-                    return SessionManager.getProxy()
+                protected List<CidsBean> doInBackground() throws Exception {
+                    final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),
-                                    cidsBillingSearchStatement);
-                }
+                                    cidsBillingSearchStatement,
+                                    getConnectionContext());
+                    publish(mons.size());
 
+                    final List<CidsBean> beans;
+                    if (mons != null) {
+                        beans = new ArrayList<>(mons.size());
+                        for (final MetaObjectNode mon : mons) {
+                            if (isCancelled()) {
+                                break;
+                            }
+                            if (mon != null) {
+                                publish(beans.size() + 1);
+                                final MetaObject mo = SessionManager.getProxy()
+                                            .getMetaObject(mon.getObjectId(),
+                                                mon.getClassId(),
+                                                mon.getDomain(),
+                                                getConnectionContext());
+                                final CidsBean bean = (mo != null) ? mo.getBean() : null;
+                                beans.add(bean);
+                            }
+                        }
+                    } else {
+                        beans = null;
+                    }
+                    return beans;
+                }
+                @Override
+                protected void process(final List<Integer> chunks) {
+                    for (final Integer chunk : chunks) {
+                        if (jProgressBar1.isIndeterminate()) {
+                            jProgressBar1.setIndeterminate(false);
+                            jProgressBar1.setMaximum(chunk);
+                            jProgressBar1.setValue(0);
+                        } else {
+                            final String string = "Lade Buchung " + chunk + " von " + jProgressBar1.getMaximum();
+                            jProgressBar1.setValue(chunk);
+                            jProgressBar1.setString(string);
+                        }
+                    }
+                }
                 @Override
                 protected void done() {
                     try {
-                        final Collection<MetaObject> metaObjects = get();
+                        if (!isCancelled()) {
+                            final List<CidsBean> billingBeans = get();
 
-                        if (metaObjects == null) {
-                            LOG.error("Billing metaobjects was null.");
-                        } else if (metaObjects.isEmpty()) {
-                            LOG.info("No Billing metaobjects found.");
-                            filteredBillingBeans = new ArrayList<CidsBean>();
-                            fillCustomerTable(filteredBillingBeans);
-                            lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
-                        } else {
-                            final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.size());
-                            for (final MetaObject mo : metaObjects) {
-                                billingBeans.add(mo.getBean());
+                            if (billingBeans == null) {
+                                LOG.error("Billing metaobjects was null.");
+                            } else if (billingBeans.isEmpty()) {
+                                LOG.info("No Billing metaobjects found.");
+                                filteredBillingBeans = new ArrayList<CidsBean>();
+                                fillCustomerTable(filteredBillingBeans);
+                                lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
+                            } else {
+                                fillCustomerTable(billingBeans);
+                                filteredBillingBeans = billingBeans;
+                                lblFilterResult.setText(generateFilterResultText(billingBeans));
                             }
-                            fillCustomerTable(billingBeans);
-                            filteredBillingBeans = billingBeans;
-                            lblFilterResult.setText(generateFilterResultText(billingBeans));
                         }
                     } catch (InterruptedException ex) {
                         LOG.error("Error while filtering the billings.", ex);
@@ -951,10 +1065,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                         btnShowResults.setEnabled(true);
                         btnGeschaeftsstatistik.setEnabled(true);
                         blblBusy.setBusy(false);
+                        jProgressBar1.setMaximum(0);
+                        jProgressBar1.setValue(0);
+                        jProgressBar1.setStringPainted(false);
+                        jProgressBar1.setIndeterminate(false);
                     }
                 }
             };
-        swingWorker.execute();
+        worker.execute();
     }
 
     /**
@@ -1172,6 +1290,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
     @Override
     public void dispose() {
+        if (worker != null) {
+            worker.cancel(true);
+        }
     }
 
     @Override
@@ -1225,6 +1346,11 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

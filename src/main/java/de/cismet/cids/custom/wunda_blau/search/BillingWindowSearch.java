@@ -36,7 +36,6 @@ import javax.swing.JComponent;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
-import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesBillingSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -45,6 +44,9 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -55,7 +57,8 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     SearchControlListener,
-    ActionTagProtected {
+    ActionTagProtected,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -66,6 +69,8 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     private SearchControlPanel pnlSearchCancel;
     private ImageIcon icon;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cboAbgerechnet;
     private javax.swing.JComboBox cboAbrechnungsturnus;
@@ -106,9 +111,16 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * Creates new form BillingWindowSearch.
      */
     public BillingWindowSearch() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             initComponents();
-            if (ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+            if (ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext())) {
                 // do only if really needed because this is time consuming
                 setAbrechnungsturnusIntoComboBox();
                 setUsersIntoComboBox();
@@ -125,7 +137,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                 icon = new ImageIcon(new byte[] {});
             }
 
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -143,8 +155,6 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             LOG.warn("Error in Constructor of BillingWindowSearch. Search will not work properly.", e);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -648,57 +658,56 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     @Override
     public MetaObjectNodeServerSearch getServerSearch() {
-        final MetaObjectNodesBillingSearchStatement metaObjectNodesBillingSearchStatement =
-            new MetaObjectNodesBillingSearchStatement(SessionManager.getSession().getUser(),
-                txtCustomerName.getText().trim());
+        final CidsBillingSearchStatement billingSearch = new CidsBillingSearchStatement(txtCustomerName.getText()
+                        .trim());
 
         final Object abrechnungsturnus = cboAbrechnungsturnus.getSelectedItem();
         String abrechnungsturnusID = "";
         if (abrechnungsturnus instanceof CidsBean) {
             abrechnungsturnusID = ((CidsBean)abrechnungsturnus).getProperty("id").toString();
         }
-        metaObjectNodesBillingSearchStatement.setAbrechnungsturnusID(abrechnungsturnusID);
+        billingSearch.setAbrechnungsturnusID(abrechnungsturnusID);
 
-        metaObjectNodesBillingSearchStatement.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
-        metaObjectNodesBillingSearchStatement.setProjekt(txtProjekt.getText());
+        billingSearch.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
+        billingSearch.setProjekt(txtProjekt.getText());
 
         final Object user = cboBenutzer.getSelectedItem();
         String userID = "";
         if (user instanceof CidsBean) {
             userID = ((CidsBean)user).getProperty("id").toString();
         }
-        metaObjectNodesBillingSearchStatement.setUserID(userID);
+        billingSearch.setUserID(userID);
 
         final Date[] fromDate_tillDate = pnlTimeFilters.chooseDates();
-        metaObjectNodesBillingSearchStatement.setFrom(fromDate_tillDate[0]);
-        metaObjectNodesBillingSearchStatement.setTill(fromDate_tillDate[1]);
+        billingSearch.setFrom(fromDate_tillDate[0]);
+        billingSearch.setTill(fromDate_tillDate[1]);
 
-        metaObjectNodesBillingSearchStatement.setVerwendungszweckKeys(
+        billingSearch.setVerwendungszweckKeys(
             pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
 
-        metaObjectNodesBillingSearchStatement.setKostentyp(chooseKostentyp());
+        billingSearch.setKostentyp(chooseKostentyp());
 
         if ((cboAbgerechnet.isSelected() && cboNichtAbgerechnet.isSelected())) {
-            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(null);
+            billingSearch.setShowAbgerechneteBillings(null);
         } else if (cboAbgerechnet.isSelected()) {
-            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(true);
+            billingSearch.setShowAbgerechneteBillings(true);
         } else if (cboNichtAbgerechnet.isSelected()) {
-            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(false);
+            billingSearch.setShowAbgerechneteBillings(false);
         } else {
-            metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(null);
+            billingSearch.setShowAbgerechneteBillings(null);
         }
 
         if ((cboStorniert.isSelected() && cboNichtStorniert.isSelected())) {
-            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(null);
+            billingSearch.setShowStornierteBillings(null);
         } else if (cboStorniert.isSelected()) {
-            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(true);
+            billingSearch.setShowStornierteBillings(true);
         } else if (cboNichtStorniert.isSelected()) {
-            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(false);
+            billingSearch.setShowStornierteBillings(false);
         } else {
-            metaObjectNodesBillingSearchStatement.setShowStornierteBillings(null);
+            billingSearch.setShowStornierteBillings(null);
         }
 
-        return metaObjectNodesBillingSearchStatement;
+        return billingSearch;
     }
 
     @Override
@@ -733,10 +742,14 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      */
     private void setAbrechnungsturnusIntoComboBox() {
         try {
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_abrechnungsturnus");
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "billing_abrechnungsturnus",
+                    getConnectionContext());
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " \n";
             query += "FROM " + MB_MC.getTableName();
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query.toString(), 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query.toString(), 0, getConnectionContext());
             for (final MetaObject abrechnungsturnus : metaObjects) {
                 cboAbrechnungsturnus.addItem(abrechnungsturnus.getBean());
             }
@@ -752,10 +765,14 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      */
     private void setUsersIntoComboBox() {
         try {
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "billing_kunden_logins",
+                    getConnectionContext());
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " \n";
             query += "FROM " + MB_MC.getTableName();
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(query, 0, getConnectionContext());
             for (final MetaObject abrechnungsturnus : metaObjects) {
                 cboBenutzer.addItem(abrechnungsturnus.getBean());
             }
@@ -788,6 +805,11 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

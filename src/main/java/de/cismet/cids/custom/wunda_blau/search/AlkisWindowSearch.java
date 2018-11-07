@@ -57,6 +57,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 /**
  * DOCUMENT ME!
  *
@@ -67,27 +70,29 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisWindowSearch.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlkisWindowSearch.class);
     private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     //~ Instance fields --------------------------------------------------------
 
-    private ObjectMapper mapper = new ObjectMapper();
     private MetaClass mc = null;
     private ImageIcon icon = null;
     private SearchControlPanel pnlSearchCancel = null;
-    private ParcelInputFieldConfig parcelInputFieldConfig;
+    private final ParcelInputFieldConfig parcelInputFieldConfig;
     private GrundbuchblattInputFieldConfig grundbuchblattInputFieldConfig;
     private boolean fallbackConfigParcel = false;
     private boolean fallbackConfigGrundbuchblatt = false;
-    private final String PROP_FALLBACK_CONFIG = "fallbackConfig";
     private GeoSearchButton btnGeoSearch;
     private MappingComponent mappingComponent;
     private boolean geoSearchEnabled;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
@@ -140,16 +145,24 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      * Creates new form BaulastWindowSearch.
      */
     public AlkisWindowSearch() {
+        ParcelInputFieldConfig parcelInputFieldConfig = null;
         try {
-            parcelInputFieldConfig = mapper.readValue(AlkisWindowSearch.class.getResourceAsStream(
+            parcelInputFieldConfig = MAPPER.readValue(AlkisWindowSearch.class.getResourceAsStream(
                         "/de/cismet/cids/custom/wunda_blau/res/alkis/ParcelInputFieldConfig.json"),
                     ParcelInputFieldConfig.class);
         } catch (IOException ex) {
-            log.warn("ParcelInputFieldConfig could not be loaded, use fallback configuration.", ex);
+            LOG.warn("ParcelInputFieldConfig could not be loaded, use fallback configuration.", ex);
             parcelInputFieldConfig = ParcelInputFieldConfig.FallbackConfig;
             fallbackConfigParcel = true;
         }
+        this.parcelInputFieldConfig = parcelInputFieldConfig;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         try {
             grundbuchblattInputFieldConfig =
                 new ObjectMapper().readValue(GrundbuchblattInputWindow.class.getResourceAsStream(
@@ -157,17 +170,20 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                     GrundbuchblattInputFieldConfig.class);
             System.out.println(grundbuchblattInputFieldConfig.getDelimiter1AsString());
         } catch (IOException ex) {
-            log.warn("GrundbuchblattInputFieldConfig could not be loaded, use fallback configuration.", ex);
+            LOG.warn("GrundbuchblattInputFieldConfig could not be loaded, use fallback configuration.", ex);
             grundbuchblattInputFieldConfig = GrundbuchblattInputFieldConfig.FallbackConfig;
             fallbackConfigGrundbuchblatt = true;
         }
 
         try {
-            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
+            mc = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "ALKIS_LANDPARCEL",
+                    getConnectionContext());
             icon = new ImageIcon(mc.getIconData());
             initComponents();
             ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
-            pnlSearchCancel = new SearchControlPanel(this);
+            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
             final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -208,11 +224,14 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 lblFallbackGrundbuchblatt.setVisible(false);
             }
         } catch (Exception e) {
-            log.warn("Error in Constructor of AlkisWindowSearch", e);
+            LOG.warn("Error in Constructor of AlkisWindowSearch", e);
         }
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -848,18 +867,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      */
     @Override
     public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
-//    @Override
-//    public boolean checkActionTag() {
-//        try {
-//            return SessionManager.getConnection()
-//                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.search") != null;
-//        } catch (ConnectionException ex) {
-//            log.error("Can not validate ActionTag for Alkis Suche!", ex);
-//            return false;
-//        }
-//    }
 
     /**
      * DOCUMENT ME!
@@ -914,7 +923,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         if (AlkisCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
     }

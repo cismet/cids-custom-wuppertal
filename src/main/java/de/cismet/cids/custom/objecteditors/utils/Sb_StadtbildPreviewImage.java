@@ -38,6 +38,9 @@ import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
@@ -49,7 +52,7 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor.adjustS
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
+public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -67,6 +70,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
     private String bildnummer;
     private BufferedImage image;
     private CidsBean fotoCidsBean;
+    private final ConnectionContext connectionContext;
     private final PropertyChangeListener listRepaintListener = new PropertyChangeListener() {
 
             @Override
@@ -96,8 +100,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
 
     /**
      * Creates new form Sb_StadtbildPreviewImage.
+     *
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public Sb_StadtbildPreviewImage() {
+    public Sb_StadtbildPreviewImage(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         timer = new Timer(300, new ActionListener() {
@@ -358,10 +365,12 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
     private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
         final String imageNumber = (String)stadtbildserieProvider.getSelectedStadtbild().getProperty("bildnummer");
         try {
-            if (BillingPopup.doBilling(
+            if (
+                BillingPopup.doBilling(
                             "stb",
                             "not.yet",
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", 1))
                         && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -374,7 +383,8 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                                 "stadtbild_"
                                 + imageNumber,
                                 imageNumber,
-                                "1"));
+                                "1",
+                                getConnectionContext()));
             }
         } catch (Exception ex) {
             LOG.error("Error when trying to download an high res image", ex);
@@ -594,6 +604,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      */
     public void setTbtnIsPreviewImageVisible(final boolean visible) {
         tbtnIsPreviewImage.setVisible(visible);
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------

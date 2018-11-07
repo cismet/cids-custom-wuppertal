@@ -31,6 +31,9 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.utils.interfaces.CidsBeanAction;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.ext.CExtContext;
 import de.cismet.ext.CExtProvider;
 
@@ -40,7 +43,7 @@ import de.cismet.ext.CExtProvider;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = CExtProvider.class)
-public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
+public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -49,6 +52,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
     //~ Instance fields --------------------------------------------------------
 
     private final String ifaceClass;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -60,6 +64,11 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
 
     @Override
     public Collection<? extends CidsBeanAction> provideExtensions(final CExtContext context) {
@@ -93,7 +102,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
                 final PureTreeNode ptn = (PureTreeNode)ctxObject;
                 final TreeNode parent = ptn.getParent();
                 if ((parent instanceof RootTreeNode) && (ptn.getID() == 281001105)) {
-                    actions.add(new FsReloadBestellungenAction(ptn));
+                    actions.add(new FsReloadBestellungenAction(ptn, getConnectionContext()));
                 }
             } else {
                 final MetaClass mc;
@@ -114,7 +123,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
                             && (ctxBean.getProperty("fehler") == null)
                             && ((Boolean)ctxBean.getProperty("postweg"))
                             && !((Boolean)ctxBean.getProperty("erledigt"))) {
-                    final CidsBeanAction action1 = new FsStatusBearbeitetAction();
+                    final CidsBeanAction action1 = new FsStatusBearbeitetAction(getConnectionContext());
                     action1.setCidsBean(ctxBean);
                     actions.add(action1);
                 }
@@ -133,5 +142,10 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction> {
         final String cName = c.getCanonicalName();
 
         return (cName == null) ? false : (ifaceClass.equals(cName));
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

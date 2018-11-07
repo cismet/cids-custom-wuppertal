@@ -43,10 +43,11 @@ import javax.swing.table.TableColumn;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
@@ -63,6 +64,9 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.RoundedPanel;
 
 /**
@@ -72,7 +76,8 @@ import de.cismet.tools.gui.RoundedPanel;
  * @version  $Revision$, $Date$
  */
 public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -91,10 +96,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     //~ Instance fields --------------------------------------------------------
 
     private List<CidsBeanWrapper> cidsBeanWrappers;
-    private LandparcelTableModel tableModel;
+    private final LandparcelTableModel tableModel;
     private MappingComponent map;
     private CidsBeanWrapper selectedCidsBeanWrapper;
     private Thread mapThread;
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink jxlBaulastBescheinigung;
@@ -117,10 +124,17 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form AlkisLandparcelAggregationRenderer.
+     * Creates a new AlkisLandparcelAggregationRenderer object.
      */
     public AlkisLandparcelAggregationRenderer() {
         tableModel = new LandparcelTableModel();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         map = new MappingComponent();
@@ -142,7 +156,10 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             });
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -389,7 +406,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlFlurstuecksnachweisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlFlurstuecksnachweisActionPerformed
-        downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF, true);
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF),
+            true);
     }                                                                                          //GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
 
     /**
@@ -398,7 +417,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlNachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisNRWActionPerformed
-        downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF, true);
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF),
+            true);
     }                                                                                  //GEN-LAST:event_jxlNachweisNRWActionPerformed
 
     /**
@@ -407,7 +428,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlNachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalActionPerformed
-        downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF, true);
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF),
+            true);
     }                                                                                       //GEN-LAST:event_jxlNachweisKommunalActionPerformed
 
     /**
@@ -416,7 +439,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlNachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalInternActionPerformed
-        downloadEinzelnachweisProduct(AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF, true);
+        downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
+                ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF),
+            true);
     }                                                                                             //GEN-LAST:event_jxlNachweisKommunalInternActionPerformed
 
     /**
@@ -449,19 +474,19 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 //            return;
 //        }
 
-        final Collection<CidsBean> selectedFlurstuecke = new ArrayList<CidsBean>();
+        final Collection<CidsBean> selectedFlurstuecke = new ArrayList<>();
         for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
             if (cidsBeanWrapper.isSelected()) {
                 selectedFlurstuecke.add(cidsBeanWrapper.getCidsBean());
             }
         }
 
-        BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, this);
+        BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, this, getConnectionContext());
     } //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
-        final Collection<CidsBean> result = new LinkedList<CidsBean>();
+        final Collection<CidsBean> result = new LinkedList<>();
 
         for (final CidsBeanWrapper wrapper : cidsBeanWrappers) {
             result.add(wrapper.getCidsBean());
@@ -474,7 +499,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
         if (cidsBeans != null) {
             int colorIndex = 0;
-            cidsBeanWrappers = new LinkedList<CidsBeanWrapper>();
+            cidsBeanWrappers = new LinkedList<>();
 
             for (final CidsBean cidsBean : cidsBeans) {
                 cidsBeanWrappers.add(new CidsBeanWrapper(cidsBean, true));
@@ -568,29 +593,38 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  enable  DOCUMENT ME!
      */
     private void changeButtonAvailability(final boolean enable) {
-        final boolean billingAllowedFsueKom = BillingPopup.isBillingAllowed("fsuekom");
-        final boolean billingAllowedFsueNw = BillingPopup.isBillingAllowed("fsuenw");
-        final boolean billingAllowedFsNw = BillingPopup.isBillingAllowed("fsnw");
-        final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be");
+        final boolean billingAllowedFsueKom = BillingPopup.isBillingAllowed("fsuekom", getConnectionContext());
+        final boolean billingAllowedFsueNw = BillingPopup.isBillingAllowed("fsuenw", getConnectionContext());
+        final boolean billingAllowedFsNw = BillingPopup.isBillingAllowed("fsnw", getConnectionContext());
+        final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be", getConnectionContext());
 
-        jxlKarte.setEnabled(enable && ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE));
+        jxlKarte.setEnabled(enable
+                    && ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE,
+                        getConnectionContext()));
         jxlFlurstuecksnachweis.setEnabled(enable
-                    && ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
+                    && ObjectRendererUtils.checkActionTag(
+                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS,
+                        getConnectionContext())
                     && billingAllowedFsNw);
         jxlNachweisKommunal.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && billingAllowedFsueKom);
+                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM,
+                        getConnectionContext()) && billingAllowedFsueKom);
         jxlNachweisKommunalIntern.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
+                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN,
+                        getConnectionContext()));
         jxlNachweisNRW.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && billingAllowedFsueNw);
+                        AlkisUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW,
+                        getConnectionContext()) && billingAllowedFsueNw);
         jxlBaulastBescheinigung.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED)
+                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
+                        getConnectionContext())
                     && !ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED) && billingAllowedBlab_be);
+                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
+                        getConnectionContext()) && billingAllowedBlab_be);
     }
 
     /**
@@ -600,7 +634,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  berechtigungspruefung  DOCUMENT ME!
      */
     private void downloadEinzelnachweisProduct(final String product, final boolean berechtigungspruefung) {
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product))) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product), getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
@@ -613,7 +647,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         }
 
         try {
-            final List<String> parcelCodes = new ArrayList<String>(cidsBeanWrappers.size());
+            final List<String> parcelCodes = new ArrayList<>(cidsBeanWrappers.size());
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
                 if (!cidsBeanWrapper.isSelected()) {
                     continue;
@@ -630,10 +664,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                             "no.yet",
                             (Geometry)null,
                             (berechtigungspruefung
-                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(downloadInfo.getProduktTyp()))
-                                ? downloadInfo : null,
+                                && AlkisProductDownloadHelper.checkBerechtigungspruefung(
+                                    downloadInfo.getProduktTyp(),
+                                    getConnectionContext())) ? downloadInfo : null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", stueck))) {
-                AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo);
+                AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo, getConnectionContext());
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -645,12 +681,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * DOCUMENT ME!
      */
     private void downloadKarteProduct() {
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE)) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE, getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
 
-        final List<String> parcelCodes = new ArrayList<String>(cidsBeanWrappers.size());
+        final List<String> parcelCodes = new ArrayList<>(cidsBeanWrappers.size());
         for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
             if (!cidsBeanWrapper.isSelected()) {
                 continue;
@@ -660,7 +696,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
         final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisProductDownloadHelper
                     .createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
-        AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo);
+        AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo, getConnectionContext());
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -796,10 +832,11 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             initialisedMap = false;
 
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+            mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
             mappingModel.addHome(getBoundingBox());
 
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                        ClientAlkisConf.getInstance().getMapCallString()));
             swms.setName("Flurstueck");
 
             // add the raster layer to the model
@@ -836,13 +873,14 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                 final Geometry geometry = cidsBeanWrapper.getGeometry();
 
                 if (result == null) {
-                    result = new XBoundingBox(geometry.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
-                    result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    result = new XBoundingBox(geometry.getEnvelope().buffer(
+                                ClientAlkisConf.getInstance().getGeoBuffer()));
+                    result.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     result.setMetric(true);
                 } else {
                     final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                AlkisConstants.COMMONS.GEO_BUFFER));
-                    temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                                ClientAlkisConf.getInstance().getGeoBuffer()));
+                    temp.setSrs(ClientAlkisConf.getInstance().getSrsService());
                     temp.setMetric(true);
 
                     if (temp.getX1() < result.getX1()) {
@@ -876,11 +914,15 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         @Override
         public void run() {
             final XBoundingBox boxToGoto = new XBoundingBox(selectedCidsBeanWrapper.getGeometry().getEnvelope().buffer(
-                        AlkisConstants.COMMONS.GEO_BUFFER));
-            boxToGoto.setX1(boxToGoto.getX1() - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-            boxToGoto.setX2(boxToGoto.getX2() + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-            boxToGoto.setY1(boxToGoto.getY1() - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
-            boxToGoto.setY2(boxToGoto.getY2() + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                        ClientAlkisConf.getInstance().getGeoBuffer()));
+            boxToGoto.setX1(boxToGoto.getX1()
+                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
+            boxToGoto.setX2(boxToGoto.getX2()
+                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getWidth()));
+            boxToGoto.setY1(boxToGoto.getY1()
+                        - (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
+            boxToGoto.setY2(boxToGoto.getY2()
+                        + (ClientAlkisConf.getInstance().getGeoBufferMultiplier() * boxToGoto.getHeight()));
             map.gotoBoundingBox(boxToGoto, false, true, 500);
         }
     }
@@ -950,7 +992,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             if (cidsBean.getProperty("geometrie.geo_field") instanceof Geometry) {
                 this.geometry = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                             "geometrie.geo_field"),
-                        AlkisConstants.COMMONS.SRS_SERVICE);
+                        ClientAlkisConf.getInstance().getSrsService());
             }
 
             final StyledFeature dsf = new DefaultStyledFeature();

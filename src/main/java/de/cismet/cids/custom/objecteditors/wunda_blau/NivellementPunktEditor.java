@@ -41,11 +41,11 @@ import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.NivellementPunktAggregationRenderer;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -62,6 +62,9 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.security.WebAccessManager;
 
@@ -91,7 +94,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     FooterComponentProvider,
     BorderProvider,
     RequestsFullSizeComponent,
-    EditorSaveListener {
+    EditorSaveListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -102,12 +106,12 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             5682507.032498134d,
             2584022.9413952776d,
             5682742.852810634d,
-            AlkisConstants.COMMONS.SRS_SERVICE,
+            ClientAlkisConf.getInstance().getSrsService(),
             true);
     protected static Crs CRS = new Crs(
-            AlkisConstants.COMMONS.SRS_SERVICE,
-            AlkisConstants.COMMONS.SRS_SERVICE,
-            AlkisConstants.COMMONS.SRS_SERVICE,
+            ClientAlkisConf.getInstance().getSrsService(),
+            ClientAlkisConf.getInstance().getSrsService(),
+            ClientAlkisConf.getInstance().getSrsService(),
             true,
             true);
 
@@ -122,6 +126,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     protected String oldLaufendeNummer;
     protected String urlOfDocument;
     protected RefreshDocumentWorker currentRefreshDocumentWorker;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
     private javax.swing.JButton btnHome;
@@ -191,7 +197,13 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      */
     public NivellementPunktEditor(final boolean readOnly) {
         this.readOnly = readOnly;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
         setOpaque(false);
 
@@ -215,8 +227,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             chkHistorisch.setEnabled(false);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -998,6 +1008,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                             "nivppdf",
                             urlOfDocument,
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", 1))) {
                 openDoc(urlOfDocument);
             }
@@ -1095,8 +1106,12 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                             "nivppdf",
                             "no.yet",
                             (Geometry)null,
+                            getConnectionContext(),
                             new ProductGroupAmount("ea", 1))) {
-                NivellementPunktAggregationRenderer.downloadReport(Arrays.asList(cidsBean), "", "");
+                NivellementPunktAggregationRenderer.downloadReport(Arrays.asList(cidsBean),
+                    "",
+                    "",
+                    getConnectionContext());
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -1169,7 +1184,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean);
+                this.cidsBean,
+                getConnectionContext());
             bindingGroup.bind();
 
             final String dgkBlattnummer = (String)cidsBean.getProperty("dgk_blattnummer");
@@ -1359,6 +1375,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 //            768);
     }
 
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1379,8 +1400,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
-            final Collection<URL> validURLs = AlkisUtils.PRODUCTS.getCorrespondingNivPURLs(txtDGKBlattnummer.getText(),
-                    txtLaufendeNummer.getText());
+            final Collection<URL> validURLs = ClientAlkisProducts.getInstance()
+                        .getCorrespondingNivPURLs(txtDGKBlattnummer.getText(),
+                            txtLaufendeNummer.getText());
 
             InputStream streamToReadFrom = null;
             for (final URL url : validURLs) {
@@ -1454,7 +1476,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
             measuringComponent.reset();
             if ((document != null) && !isCancelled()) {
-                final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf");
+                final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf", getConnectionContext());
                 measuringComponent.setVisible(true);
                 lblMissingRasterdocument.setVisible(false);
                 measuringComponent.addImage(document);

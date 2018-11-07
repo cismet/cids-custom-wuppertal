@@ -53,7 +53,7 @@
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox(lebenslagen)"/>
-                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="final MetaObject[] lebenslagen = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils.getLightweightMetaObjectsForTable(&quot;poi_spatialreferencesystemusinggeographicidentifiers&quot;, new String[]{&quot;theme&quot;});&#xa;if(lebenslagen != null) {&#xa;Arrays.sort(lebenslagen);"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="final MetaObject[] lebenslagen = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils.getLightweightMetaObjectsForTable(&quot;poi_spatialreferencesystemusinggeographicidentifiers&quot;, new String[]{&quot;theme&quot;}, getConnectionContext());&#xa;if(lebenslagen != null) {&#xa;Arrays.sort(lebenslagen);"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="}"/>
               </AuxValues>
               <Constraints>
@@ -295,7 +295,7 @@
                 </BindingProperty>
               </BindingProperties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;definition&quot;, &quot;filename&quot;})"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;definition&quot;, &quot;filename&quot;}, getConnectionContext())"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cbSignatur.setRenderer(new SignaturListCellRenderer());"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)cbSignatur).setSorted(true);"/>
               </AuxValues>

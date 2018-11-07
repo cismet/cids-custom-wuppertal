@@ -76,6 +76,9 @@ import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -94,7 +97,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     FooterComponentProvider,
     TitleComponentProvider,
     ListDataListener,
-    Sb_stadtbildserieGridObjectListener {
+    Sb_stadtbildserieGridObjectListener,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -130,9 +134,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private boolean wasInfoPanelVisibleBeforeSwitch = true;
 
     private Collection<CidsBean> cidsBeans = null;
-    private HashSet<String> highResStadtbilder = new HashSet<String>();
-    private HashSet<String> selectedStadtbilder = new HashSet<String>();
-    private HashSet<String> vorschauStadtbilder = new HashSet<String>();
+    private HashSet<String> highResStadtbilder = new HashSet<>();
+    private HashSet<String> selectedStadtbilder = new HashSet<>();
+    private HashSet<String> vorschauStadtbilder = new HashSet<>();
+
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBin;
@@ -174,7 +180,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Sb_stadtbildserieAggregationRenderer.
+     * Creates a new Sb_stadtbildserieAggregationRenderer object.
      */
     public Sb_stadtbildserieAggregationRenderer() {
         vorauswahlReportAction = new AbstractAction(
@@ -187,13 +193,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     reportVorauswahl();
                 }
             };
-        vorauswahlReportAction.putValue(
-            Action.SHORT_DESCRIPTION,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.actionVorauswahlReport.toolTipText"));
-        vorauswahlReportAction.setEnabled(true);
-
         vorauswahlDownloadAction = new AbstractAction(
                 null,
                 new javax.swing.ImageIcon(
@@ -214,13 +213,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     reportWarenkorb();
                 }
             };
-        warenkorbReportAction.putValue(
-            Action.SHORT_DESCRIPTION,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.actionWarenkorbReport.toolTipText"));
-        warenkorbReportAction.setEnabled(false);
-
         warenkorbDownloadAction = new AbstractAction(
                 null,
                 new javax.swing.ImageIcon(
@@ -231,6 +223,26 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     downladWarenkorb();
                 }
             };
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        vorauswahlReportAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.actionVorauswahlReport.toolTipText"));
+        vorauswahlReportAction.setEnabled(true);
+
+        warenkorbReportAction.putValue(
+            Action.SHORT_DESCRIPTION,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.actionWarenkorbReport.toolTipText"));
+        warenkorbReportAction.setEnabled(false);
 
         initComponents();
 
@@ -247,8 +259,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         sldSize.setValue(grdStadtbildserien.getFixedCellDimension());
         switchToSerie();
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -277,7 +287,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnBinRecycle = new javax.swing.JButton();
         pnlLeuchtkasten = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        grdWarenkorb = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_SingleStadtbildJGrid();
+        grdWarenkorb = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_SingleStadtbildJGrid(
+                getConnectionContext());
         jScrollPane2 = new javax.swing.JScrollPane();
         grdBin = new PictureSelectionJGrid();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -291,9 +302,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         pnlInfoPanels = new javax.swing.JPanel();
-        infoPanel = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
+        infoPanel = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel(
+                getConnectionContext());
         infoNotAvailable =
-            new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
+            new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel(
+                getConnectionContext());
         lblSubtitle = new javax.swing.JLabel();
 
         panFooter.setOpaque(false);
@@ -823,7 +836,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         final String bildnummer = (String)stadtbild.getProperty("bildnummer");
                         final boolean previewAllowed = Sb_RestrictionLevelUtils
                                     .determineRestrictionLevelForStadtbildserie(
-                                        stadtbildserie).isPreviewAllowed();
+                                            stadtbildserie,
+                                            getConnectionContext()).isPreviewAllowed();
                         Image image;
                         if (previewAllowed) {
                             try {
@@ -901,7 +915,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         final Set<CidsBean> stadtbilder = gridObject.getSelectedBildnummernOfSerie();
                         final boolean previewAllowed = Sb_RestrictionLevelUtils
                                     .determineRestrictionLevelForStadtbildserie(
-                                        stadtbildserie).isPreviewAllowed();
+                                            stadtbildserie,
+                                            getConnectionContext()).isPreviewAllowed();
                         for (final CidsBean stadtbild : stadtbilder) {
                             final String bildnummer = (String)stadtbild.getProperty("bildnummer");
                             Image image;
@@ -1016,7 +1031,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
                         final boolean downloadAllowed = Sb_RestrictionLevelUtils
                                     .determineRestrictionLevelForStadtbildserie(
-                                        stadtbildserie).isDownloadAllowed();
+                                            stadtbildserie,
+                                            getConnectionContext()).isDownloadAllowed();
                         if (downloadAllowed) {
                             final CidsBean stadtbild = (CidsBean)gridObject.getStadtbildserie()
                                         .getProperty("vorschaubild");
@@ -1029,7 +1045,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "stadtbild_"
                                                 + imageNumber,
                                         stadtbild.toString(),
-                                        "1"));
+                                        "1",
+                                        getConnectionContext()));
                             }
                         }
                     }
@@ -1046,6 +1063,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "stb",
                                         "not.yet",
                                         (Geometry)null,
+                                        getConnectionContext(),
                                         new ProductGroupAmount("ea", amountDownloads))
                                     && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
@@ -1086,7 +1104,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
                         final boolean downloadAllowed = Sb_RestrictionLevelUtils
                                     .determineRestrictionLevelForStadtbildserie(
-                                        stadtbildserie).isDownloadAllowed();
+                                            stadtbildserie,
+                                            getConnectionContext()).isDownloadAllowed();
                         if (downloadAllowed) {
                             for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
                                 final String imageNumber = (String)stadtbild.getProperty("bildnummer");
@@ -1098,7 +1117,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                             "stadtbild_"
                                                     + imageNumber,
                                             stadtbild.toString(),
-                                            "1"));
+                                            "1",
+                                            getConnectionContext()));
                                 }
                             }
                         }
@@ -1116,6 +1136,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "stb",
                                         "not.yet",
                                         (Geometry)null,
+                                        getConnectionContext(),
                                         new ProductGroupAmount("ea", amountDownloads))
                                     && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
@@ -1274,14 +1295,19 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             infoPanel.setAggregationRenderer(this);
             final DefaultListModel model = (DefaultListModel)grdStadtbildserien.getModel();
             for (final CidsBean bean : beans) {
-                final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject(model);
+                final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject(
+                        model,
+                        getConnectionContext());
                 gridObject.setCidsBean(bean);
                 gridObject.addStadtbildChosenListener((Sb_stadtbildserieGridObjectListener)grdWarenkorb);
                 gridObject.addStadtbildChosenListener(infoPanel);
                 gridObject.addStadtbildChosenListener(this);
                 model.addElement(gridObject);
 
-                Sb_stadtbildUtils.cacheImagesForStadtbilder(bean, bean.getBeanCollectionProperty("stadtbilder_arr"));
+                Sb_stadtbildUtils.cacheImagesForStadtbilder(
+                    bean,
+                    bean.getBeanCollectionProperty("stadtbilder_arr"),
+                    getConnectionContext());
             }
             updateFooterLabels();
             setTitle("");
@@ -1572,6 +1598,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         return tooltipText;
     }
 
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1607,7 +1638,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
             final String imageNumber = (String)stadtbild.getProperty("bildnummer");
             if (stadtbildSerie == null) {
-                final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, "sb_serie_bild_array");
+                final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                        DOMAIN,
+                        "sb_serie_bild_array",
+                        getConnectionContext());
                 String query = "SELECT "
                             + mc.getID()
                             + ", sb_serie_bild_array."
@@ -1618,9 +1652,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                             + " stadtbild= " + stadtbild.getProperty("id").toString();
                 try {
                     final MetaObject[] metaObjects = SessionManager.getProxy()
-                                .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+                                .getMetaObjectByQuery(SessionManager.getSession().getUser(),
+                                    query,
+                                    getConnectionContext());
                     final CidsBean array = metaObjects[0].getBean();
-                    final MetaClass mcSerie = ClassCacheMultiple.getMetaClass(DOMAIN, "sb_stadtbildserie");
+                    final MetaClass mcSerie = ClassCacheMultiple.getMetaClass(
+                            DOMAIN,
+                            "sb_stadtbildserie",
+                            getConnectionContext());
                     query = "SELECT "
                                 + mcSerie.getID()
                                 + ",sb_stadtbildserie."
@@ -1630,7 +1669,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                 + " WHERE "
                                 + " id= " + array.getProperty("sb_stadtbildserie_reference").toString();
                     final MetaObject[] serieMetaObjects = SessionManager.getProxy()
-                                .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+                                .getMetaObjectByQuery(SessionManager.getSession().getUser(),
+                                    query,
+                                    getConnectionContext());
                     stadtbildSerie = serieMetaObjects[0].getBean();
                 } catch (ConnectionException ex) {
                     LOG.error("Could not determine the Stadtbildserie of Stadtbild " + stadtbild.toString(), ex);
@@ -1639,7 +1680,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             }
 
             final boolean downloadAllowed = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
-                    stadtbildSerie)
+                        stadtbildSerie,
+                        getConnectionContext())
                         .isDownloadAllowed();
             if (downloadAllowed) {
                 if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {

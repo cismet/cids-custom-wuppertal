@@ -72,6 +72,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -82,7 +85,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class PointNumberDialog extends javax.swing.JDialog {
+public class PointNumberDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -115,6 +118,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
     private String protokollAnrPrefix = null;
     private String protokollAnr = null;
+
+    private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeSelectAll;
@@ -180,11 +185,16 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * Creates new form PointNumberDialog.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
+     * @param  parent             DOCUMENT ME!
+     * @param  modal              DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public PointNumberDialog(final java.awt.Frame parent, final boolean modal) {
+    public PointNumberDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final ConnectionContext connectionContext) {
         super(parent, modal);
+
+        this.connectionContext = connectionContext;
 
         vnrComperator = new Comparator<VermessungsStellenSearchResult>() {
 
@@ -324,7 +334,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void configureFreigebenTab() throws ConnectionException {
         // if user does not have the right to do freigaben, remove the tab
         hasFreigabeAccess = SessionManager.getConnection()
-                    .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
+                    .getConfigAttr(SessionManager.getSession().getUser(),
+                            "custom.nas.punktNummernFreigabe",
+                            getConnectionContext())
                     != null;
         if (!hasFreigabeAccess) {
             tbpModus.remove(pnlFreigeben);
@@ -339,7 +351,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void configureVerlaengernTab() throws ConnectionException {
         // if user does not have the right to do freigaben, remove the tab
         hasVerlaengernAccess = SessionManager.getConnection()
-                    .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernVerlaengern")
+                    .getConfigAttr(SessionManager.getSession().getUser(),
+                            "custom.nas.punktNummernVerlaengern",
+                            getConnectionContext())
                     != null;
         if (!hasVerlaengernAccess) {
             tbpModus.remove(pnlVerlaengern);
@@ -532,8 +546,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlLeft = new javax.swing.JPanel();
         lblAntragsnummer = new javax.swing.JLabel();
         tbpModus = new javax.swing.JTabbedPane();
-        pnlReservieren = new PointNumberReservationPanel(this);
-        pnlErgaenzen = new PointNumberReservationPanel(this);
+        pnlReservieren = new PointNumberReservationPanel(this, getConnectionContext());
+        pnlErgaenzen = new PointNumberReservationPanel(this, getConnectionContext());
         pnlFreigeben = new javax.swing.JPanel();
         pnlWait = new javax.swing.JPanel();
         jxFreigebenWaitLabel = new org.jdesktop.swingx.JXBusyLabel();
@@ -1366,7 +1380,10 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
                 @Override
                 public void run() {
-                    final PointNumberDialog dialog = new PointNumberDialog(new javax.swing.JFrame(), true);
+                    final PointNumberDialog dialog = new PointNumberDialog(
+                            new javax.swing.JFrame(),
+                            true,
+                            ConnectionContext.createDeprecated());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                             @Override
@@ -1507,7 +1524,19 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
                 getAnrPrefix());
 
-        return (List<String>)SessionManager.getProxy().executeTask(SEVER_ACTION, "WUNDA_BLAU", null, action, prefix);
+        return (List<String>)SessionManager.getProxy()
+                    .executeTask(
+                            SEVER_ACTION,
+                            "WUNDA_BLAU",
+                            (Object)null,
+                            getConnectionContext(),
+                            action,
+                            prefix);
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1606,13 +1635,15 @@ public class PointNumberDialog extends javax.swing.JDialog {
                         PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
                         PointNumberReserverationServerAction.ACTION_TYPE.GET_POINT_NUMBERS);
                 final Collection<PointNumberReservation> pointNumbers = (Collection<PointNumberReservation>)
-                    SessionManager.getProxy().executeTask(
-                        SEVER_ACTION,
-                        "WUNDA_BLAU",
-                        null,
-                        action,
-                        prefix,
-                        aNummer);
+                    SessionManager.getProxy()
+                            .executeTask(
+                                    SEVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    (Object)null,
+                                    getConnectionContext(),
+                                    action,
+                                    prefix,
+                                    aNummer);
 
                 dontReloadPnrsForThisAnr = anrPrefix + anr;
                 return pointNumbers;
@@ -1727,7 +1758,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
         protected Collection doInBackground() throws Exception {
             final CidsServerSearch search = new VermessungsStellenNummerSearch(user);
             final Collection res = SessionManager.getProxy()
-                        .customServerSearch(SessionManager.getSession().getUser(), search);
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                            search,
+                            getConnectionContext());
             if ((res == null) || res.isEmpty()) {
             }
             return res;
@@ -1824,7 +1857,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
                             .executeTask(
                                     SEVER_ACTION,
                                     "WUNDA_BLAU",
-                                    null,
+                                    (Object)null,
+                                    getConnectionContext(),
                                     action,
                                     prefix,
                                     aNummer,
@@ -1988,7 +2022,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
                         .executeTask(
                                 SEVER_ACTION,
                                 "WUNDA_BLAU",
-                                null,
+                                (Object)null,
+                                getConnectionContext(),
                                 allSaps.toArray(new ServerActionParameter[0]));
             if ((result != null) && !result.isSuccessfull()) {
                 res.setSuccessful(false);

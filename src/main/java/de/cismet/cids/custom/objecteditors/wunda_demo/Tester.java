@@ -42,6 +42,9 @@ import de.cismet.cids.editors.CidsObjectEditorFactory;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -50,7 +53,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class Tester extends javax.swing.JFrame {
+public class Tester extends javax.swing.JFrame implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -73,17 +76,22 @@ public class Tester extends javax.swing.JFrame {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
+    private final ConnectionContext connectionContext;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates new form Tester.
      *
+     * @param   connectionContext  DOCUMENT ME!
+     *
      * @throws  Exception  DOCUMENT ME!
      */
-    public Tester() throws Exception {
+    public Tester(final ConnectionContext connectionContext) throws Exception {
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         // rmi registry lokaliseren
 
+        this.connectionContext = connectionContext;
         // ich weiss, dass die server von callserver implementiert werden
 
         rmiRegistry = LocateRegistry.getRegistry(1099);
@@ -107,18 +115,26 @@ public class Tester extends javax.swing.JFrame {
         connectionInfo.setUsername("demo");
 
         final Connection connection = ConnectionFactory.getFactory()
-                    .createConnection("Sirius.navigator.connection.RMIConnection", connectionInfo.getCallserverURL());
+                    .createConnection(
+                        "Sirius.navigator.connection.RMIConnection",
+                        connectionInfo.getCallserverURL(),
+                        false,
+                        getConnectionContext());
 
-        session = ConnectionFactory.getFactory().createSession(connection, connectionInfo, true);
+        session = ConnectionFactory.getFactory()
+                    .createSession(connection, connectionInfo, true, getConnectionContext());
         proxy = ConnectionFactory.getFactory()
-                    .createProxy("Sirius.navigator.connection.proxy.DefaultConnectionProxyHandler", session);
+                    .createProxy(
+                            "Sirius.navigator.connection.proxy.DefaultConnectionProxyHandler",
+                            session,
+                            getConnectionContext());
         SessionManager.init(proxy);
 
-        ClassCacheMultiple.setInstance(domain); // , meta, u);
+        ClassCacheMultiple.setInstance(domain, getConnectionContext()); // , meta, u);
 
         initComponents();
 
-        final MetaObject mo = meta.getMetaObject(u, 2, AAPERSON_CLASSID, domain);
+        final MetaObject mo = meta.getMetaObject(u, 2, AAPERSON_CLASSID, domain, getConnectionContext());
         final JComponent c = CidsObjectEditorFactory.getInstance().getEditor(mo);
         getContentPane().add(c, BorderLayout.CENTER);
     }
@@ -149,12 +165,17 @@ public class Tester extends javax.swing.JFrame {
                 @Override
                 public void run() {
                     try {
-                        new Tester().setVisible(true);
+                        new Tester(ConnectionContext.createDeprecated()).setVisible(true);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
+    }
+
+    @Override
+    public final ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
