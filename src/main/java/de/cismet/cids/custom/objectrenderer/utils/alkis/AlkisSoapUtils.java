@@ -81,7 +81,6 @@ public class AlkisSoapUtils {
         if ((bean != null) && (description != null)) {
             final int objectID = bean.getMetaObject().getId();
             final StringBuilder result = new StringBuilder("<a href=\"");
-//            result.append(bean.getMetaObject().getMetaClass().getID()).append(LINK_SEPARATOR_TOKEN).append(objectID);
             result.append(bean.getMetaObject().getMetaClass().getID()).append(LINK_SEPARATOR_TOKEN).append(objectID);
             result.append("\">");
             result.append(description);
@@ -120,12 +119,14 @@ public class AlkisSoapUtils {
         if ((owners != null) && (owners.size() > 0)) {
             final StringBuilder sb = new StringBuilder();
             sb.append(
-                "<table border=\"1px solid black\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
+                "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
 //            infoBuilder.append("<tr><td width=\"200\"><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></td><td>");
-            sb.append("<tr><td width=\"200\">Nr. " + pos + " auf  <b>")
+            sb.append("<tr><td width=\"200\">Nr. ")
+                    .append(pos)
+                    .append(" auf  <b>")
                     .append(generateLinkFromCidsBean(buchungsblattBean, buchungsblatt.getBuchungsblattCode()))
                     .append("</b></td><td>");
-            final Iterator<Owner> ownerIterator = owners.iterator();
+//            final Iterator<Owner> ownerIterator = owners.iterator();
 //            if (ownerIterator.hasNext()) {
 //                infoBuilder.append(ownerToString(ownerIterator.next(), ""));
 //            }
@@ -322,21 +323,26 @@ public class AlkisSoapUtils {
      */
     public static String prettyPrintLandparcelCode(final String fullLandparcelCode) {
         final String[] tiles = fullLandparcelCode.split("-");
-        if (tiles.length == 1) {
-            final String flurstueck = tiles[0];
-            return _prettyPrintLandparcelCode(flurstueck);
-        } else if (tiles.length == 2) {
-            final String flurstueck = tiles[1];
-            final String flur = tiles[0];
-            final String result = _prettyPrintLandparcelCode(flurstueck, flur);
-            return result;
-        } else if (tiles.length == 3) {
-            final String flurstueck = tiles[2];
-            final String flur = tiles[1];
-            final String gemarkung = tiles[0];
-            return _prettyPrintLandparcelCode(flurstueck, flur, gemarkung);
-        } else {
-            return fullLandparcelCode;
+        switch (tiles.length) {
+            case 1: {
+                final String flurstueck = tiles[0];
+                return _prettyPrintLandparcelCode(flurstueck);
+            }
+            case 2: {
+                final String flurstueck = tiles[1];
+                final String flur = tiles[0];
+                final String result = _prettyPrintLandparcelCode(flurstueck, flur);
+                return result;
+            }
+            case 3: {
+                final String flurstueck = tiles[2];
+                final String flur = tiles[1];
+                final String gemarkung = tiles[0];
+                return _prettyPrintLandparcelCode(flurstueck, flur, gemarkung);
+            }
+            default: {
+                return fullLandparcelCode;
+            }
         }
     }
 
@@ -379,101 +385,128 @@ public class AlkisSoapUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   namensnummerUuids  DOCUMENT ME!
+     * @param   namensnummernMap   DOCUMENT ME!
+     * @param   ownerHashMap       DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String buchungsblattOwnersToHtml(final List<String> namensnummerUuids,
+            final HashMap<String, Namensnummer> namensnummernMap,
+            final HashMap<String, Owner> ownerHashMap) {
+        final StringBuffer sb = new StringBuffer(
+                "<table cellspacing=\"10\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
+
+        final NamensnummerComparator nnComparator = new NamensnummerComparator(namensnummernMap);
+
+        for (final String uuid : namensnummerUuids) {
+            final Namensnummer namensnummer = namensnummernMap.get(uuid);
+            if (namensnummer.getArtRechtsgemeinschaft() != null) {
+                sb.append("<tr><td>-</td><td><b>")
+                        .append(namensnummer.getArtRechtsgemeinschaft().trim())
+                        .append(":</b> ")
+                        .append((namensnummer.getBeschriebRechtsgemeinschaft() != null)
+                                    ? namensnummer.getBeschriebRechtsgemeinschaft() : "")
+                        .append(NEWLINE);
+
+                final List<String> einzelGemeinschaftsUuids = Arrays.asList(namensnummer.getNamensnummernUUIds());
+                Collections.sort(einzelGemeinschaftsUuids, nnComparator);
+
+                sb.append(NEWLINE)
+                        .append(buchungsblattOwnersToHtml(einzelGemeinschaftsUuids, namensnummernMap, ownerHashMap));
+
+                sb.append("</td><td width=\"30\"></td><td>");
+                if ((namensnummer.getZaehler() != null) && (namensnummer.getNenner() != null)) {
+                    final String part = namensnummer.getZaehler().intValue() + "/"
+                                + namensnummer.getNenner().intValue();
+                    sb.append("<nobr>").append("zu ").append(part).append("</nobr>");
+                }
+                sb.append("</td></tr>");
+            } else {
+                final Owner owner = ownerHashMap.get(namensnummer.getEigentuemerUUId());
+                sb.append("<tr>")
+                        .append(buchungsblattOwnerToHtml(namensnummer, owner))
+                        .append("<td width=\"30\"></td><td>");
+                if ((namensnummer.getZaehler() != null) && (namensnummer.getNenner() != null)) {
+                    final String part = namensnummer.getZaehler().intValue() + "/"
+                                + namensnummer.getNenner().intValue();
+                    sb.append("<nobr>").append("zu ").append(part).append("</nobr>");
+                }
+                sb.append("</td></tr>");
+            }
+        }
+
+        sb.append("</table>");
+        return sb.toString();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   buchungsblatt  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static String buchungsblattOwnersToHtml(final Buchungsblatt buchungsblatt) {
-        final HashMap<String, Owner> ownerHashMap = new HashMap<>();
-        for (final Owner o : buchungsblatt.getOwners()) {
-            ownerHashMap.put(o.getOwnerId(), o);
-        }
+        final HashMap<String, Owner> ownersMap = extractOwnersMap(buchungsblatt);
+        final HashMap<String, Namensnummer> namensnummernMap = extractNamensnummernMap(buchungsblatt);
+        final List<String> rootUuids = getSortedRootUuids(namensnummernMap);
 
-        final HashMap<String, Namensnummer> namensnummernMap = new HashMap<>();
-        final List<String> gemeinschaftsUuids = new ArrayList<>();
-        for (final Namensnummer namensnummer : buchungsblatt.getNamensnummern()) {
+        return buchungsblattOwnersToHtml(rootUuids, namensnummernMap, ownersMap);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   buchungsblatt  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static HashMap<String, Owner> extractOwnersMap(final Buchungsblatt buchungsblatt) {
+        final HashMap<String, Owner> ownersMap = new HashMap<>();
+        for (final Owner owner : buchungsblatt.getOwners()) {
+            ownersMap.put(owner.getOwnerId(), owner);
+        }
+        return ownersMap;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   namensnummernMap  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static List<String> getSortedRootUuids(final HashMap<String, Namensnummer> namensnummernMap) {
+        final List<String> redirectedUuids = new ArrayList<>();
+        for (final Namensnummer namensnummer : namensnummernMap.values()) {
             final String uuid = namensnummer.getUUId();
             namensnummernMap.put(uuid, namensnummer);
-            if ((namensnummer.getArtRechtsgemeinschaft() != null) && (namensnummer.getNamensnummernUUIds() != null)) {
-                gemeinschaftsUuids.add(uuid);
+            final String[] namensnummerUuids = namensnummer.getNamensnummernUUIds();
+            if (namensnummerUuids != null) {
+                redirectedUuids.addAll(Arrays.asList(namensnummerUuids));
             }
         }
-        final List<String> einzelUuids = new ArrayList<>(namensnummernMap.keySet());
-        for (final String gemeinschaftsUuid : gemeinschaftsUuids) {
-            einzelUuids.remove(gemeinschaftsUuid);
-            final Namensnummer gemeinschaftsNn = namensnummernMap.get(gemeinschaftsUuid);
-            for (final String einzelUuid : gemeinschaftsNn.getNamensnummernUUIds()) {
-                einzelUuids.remove(einzelUuid);
-            }
+
+        final List<String> rootUuids = new ArrayList<>(namensnummernMap.keySet());
+        rootUuids.removeAll(redirectedUuids);
+        Collections.sort(rootUuids, new NamensnummerComparator(namensnummernMap));
+        return rootUuids;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   buchungsblatt  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static HashMap<String, Namensnummer> extractNamensnummernMap(final Buchungsblatt buchungsblatt) {
+        final HashMap<String, Namensnummer> namensnummernMap = new HashMap<>();
+        for (final Namensnummer namensnummer : buchungsblatt.getNamensnummern()) {
+            namensnummernMap.put(namensnummer.getUUId(), namensnummer);
         }
-        Collections.sort(einzelUuids, new Comparator<String>() {
-
-                @Override
-                public int compare(final String einzelUuid1, final String einzelUuid2) {
-                    final Namensnummer n1 = namensnummernMap.get(einzelUuid1);
-                    final Namensnummer n2 = namensnummernMap.get(einzelUuid2);
-                    return n1.getLaufendeNummer().compareTo(n2.getLaufendeNummer());
-                }
-            });
-
-        final StringBuffer sb = new StringBuffer(
-                "<table cellspacing=\"10\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
-
-        for (final String uuidGemeinschaft : gemeinschaftsUuids) {
-            final Namensnummer namensnummer = namensnummernMap.get(uuidGemeinschaft);
-
-            sb.append("<tr><td>-</td><td><b>")
-                    .append(namensnummer.getArtRechtsgemeinschaft().trim())
-                    .append(":</b> ")
-                    .append((namensnummer.getBeschriebRechtsgemeinschaft() != null)
-                                ? namensnummer.getBeschriebRechtsgemeinschaft() : "")
-                    .append(NEWLINE);
-
-            final List<String> einzelGemeinschaftsUuids = Arrays.asList(namensnummer.getNamensnummernUUIds());
-            Collections.sort(einzelGemeinschaftsUuids, new Comparator<String>() {
-
-                    @Override
-                    public int compare(final String einzelUuid1, final String einzelUuid2) {
-                        final Namensnummer n1 = namensnummernMap.get(einzelUuid1);
-                        final Namensnummer n2 = namensnummernMap.get(einzelUuid2);
-                        return n1.getLaufendeNummer().compareTo(n2.getLaufendeNummer());
-                    }
-                });
-
-            sb.append(NEWLINE)
-                    .append("<table cellspacing=\"10\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
-            for (final String einzelUuid : einzelGemeinschaftsUuids) {
-                final Namensnummer nnEinzel = namensnummernMap.get(einzelUuid);
-                final Owner owner = ownerHashMap.get(nnEinzel.getEigentuemerUUId());
-                sb.append("<tr>").append(buchungsblattOwnerToHtml(nnEinzel, owner)).append("</tr>");
-            }
-            sb.append("</table>");
-
-            sb.append("</td><td width=\"30\"></td><td>");
-            if ((namensnummer.getZaehler() != null) && (namensnummer.getNenner() != null)) {
-                final String part = namensnummer.getZaehler().intValue() + "/" + namensnummer.getNenner()
-                            .intValue();
-                sb.append("<nobr>").append("zu ").append(part).append("</nobr>");
-            }
-            sb.append("</td></tr>");
-        }
-
-        for (final String einzelUuid : einzelUuids) {
-            final Namensnummer namensnummer = namensnummernMap.get(einzelUuid);
-            final Owner owner = ownerHashMap.get(namensnummer.getEigentuemerUUId());
-            sb.append("<tr>")
-                    .append(buchungsblattOwnerToHtml(namensnummer, owner))
-                    .append("<td width=\"30\"></td><td>");
-            if ((namensnummer.getZaehler() != null) && (namensnummer.getNenner() != null)) {
-                final String part = namensnummer.getZaehler().intValue() + "/" + namensnummer.getNenner()
-                            .intValue();
-                sb.append("<nobr>").append("zu ").append(part).append("</nobr>");
-            }
-            sb.append("</td></tr>");
-        }
-
-        sb.append("</table>");
-        return sb.toString();
+        return namensnummernMap;
     }
 
     /**
@@ -659,7 +692,7 @@ public class AlkisSoapUtils {
      * @return  DOCUMENT ME!
      */
     public static boolean isListOfSameBuchungsart(final List<Buchungsstelle> buchungsstellen) {
-        final Set<String> set = new HashSet<String>();
+        final Set<String> set = new HashSet<>();
         for (final Buchungsstelle o : buchungsstellen) {
             if (set.isEmpty()) {
                 set.add(o.getBuchungsart());
@@ -718,6 +751,43 @@ public class AlkisSoapUtils {
             return buchungsblattCodeSB.toString();
         } else {
             return "";
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class NamensnummerComparator implements Comparator<String> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final HashMap<String, Namensnummer> namensnummernMap;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new NnComparator object.
+         *
+         * @param  namensnummernMap  DOCUMENT ME!
+         */
+        public NamensnummerComparator(final HashMap<String, Namensnummer> namensnummernMap) {
+            this.namensnummernMap = namensnummernMap;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public int compare(final String einzelUuid1, final String einzelUuid2) {
+            final Namensnummer n1 = namensnummernMap.get(einzelUuid1);
+            final Namensnummer n2 = namensnummernMap.get(einzelUuid2);
+
+            final String lfd1 = ((n1 == null) || (n1.getLaufendeNummer() == null)) ? "" : n1.getLaufendeNummer();
+            final String lfd2 = ((n2 == null) || (n2.getLaufendeNummer() == null)) ? "" : n2.getLaufendeNummer();
+            return lfd1.compareTo(lfd2);
         }
     }
 }
