@@ -119,7 +119,7 @@ public class AlkisSoapUtils {
         if ((owners != null) && (owners.size() > 0)) {
             final StringBuilder sb = new StringBuilder();
             sb.append(
-                "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
+                "<table cellspacing=\"0\" cellpadding=\"10\" border=\"0\" align=\"left\" valign=\"top\">");
 //            infoBuilder.append("<tr><td width=\"200\"><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></td><td>");
             sb.append("<tr><td width=\"200\">Nr. ")
                     .append(pos)
@@ -385,25 +385,44 @@ public class AlkisSoapUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   level              DOCUMENT ME!
      * @param   namensnummerUuids  DOCUMENT ME!
      * @param   namensnummernMap   DOCUMENT ME!
      * @param   ownerHashMap       DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private static String buchungsblattOwnersToHtml(final List<String> namensnummerUuids,
+    private static String buchungsblattOwnersToHtml(final int level,
+            final List<String> namensnummerUuids,
             final HashMap<String, Namensnummer> namensnummernMap,
             final HashMap<String, Owner> ownerHashMap) {
+        final String style;
+//        if (level > 0) {
+//            style = "style=\"border-left: 1px solid black\"";
+//        } else {
+        style = "";
+//        }
         final StringBuffer sb = new StringBuffer(
-                "<table cellspacing=\"10\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
+                "<table cellspacing=\"0\" "
+                        + style
+                        + " cellpadding=\"10\" border=\"0\" align=\"left\" valign=\"top\">");
 
         final NamensnummerComparator nnComparator = new NamensnummerComparator(namensnummernMap);
 
         for (final String uuid : namensnummerUuids) {
             final Namensnummer namensnummer = namensnummernMap.get(uuid);
+
+            sb.append("<tr>");
+//            if (level > 0) {
+//                sb.append("<td style=\"padding-left:0px; padding-right:0px;\">↳</td>");
+//            }
             if (namensnummer.getArtRechtsgemeinschaft() != null) {
-                sb.append("<tr><td>-</td><td><b>")
-                        .append(namensnummer.getArtRechtsgemeinschaft().trim())
+                final String artRechtsgemeinschaft = namensnummer.getArtRechtsgemeinschaft().trim();
+                sb.append("<td width=\"80\">")
+                        .append("ohne Nr.")
+                        .append("</td><td><b>")
+                        .append(artRechtsgemeinschaft.equals("Sonstiges") ? "Rechtsgemeinschaft"
+                                                                          : artRechtsgemeinschaft)
                         .append(":</b> ")
                         .append((namensnummer.getBeschriebRechtsgemeinschaft() != null)
                                     ? namensnummer.getBeschriebRechtsgemeinschaft() : "")
@@ -413,27 +432,25 @@ public class AlkisSoapUtils {
                 Collections.sort(einzelGemeinschaftsUuids, nnComparator);
 
                 sb.append(NEWLINE)
-                        .append(buchungsblattOwnersToHtml(einzelGemeinschaftsUuids, namensnummernMap, ownerHashMap));
-
-                sb.append("</td><td width=\"30\"></td><td>");
-                if ((namensnummer.getZaehler() != null) && (namensnummer.getNenner() != null)) {
-                    final String part = namensnummer.getZaehler().intValue() + "/"
-                                + namensnummer.getNenner().intValue();
-                    sb.append("<nobr>").append("zu ").append(part).append("</nobr>");
-                }
-                sb.append("</td></tr>");
+                        .append(buchungsblattOwnersToHtml(
+                                    level
+                                    + 1,
+                                    einzelGemeinschaftsUuids,
+                                    namensnummernMap,
+                                    ownerHashMap))
+                        .append("</td>");
             } else {
                 final Owner owner = ownerHashMap.get(namensnummer.getEigentuemerUUId());
-                sb.append("<tr>")
-                        .append(buchungsblattOwnerToHtml(namensnummer, owner))
-                        .append("<td width=\"30\"></td><td>");
-                if ((namensnummer.getZaehler() != null) && (namensnummer.getNenner() != null)) {
-                    final String part = namensnummer.getZaehler().intValue() + "/"
-                                + namensnummer.getNenner().intValue();
-                    sb.append("<nobr>").append("zu ").append(part).append("</nobr>");
-                }
-                sb.append("</td></tr>");
+                sb.append(buchungsblattOwnerToHtml(namensnummer, owner));
             }
+
+            sb.append("<td style=\"padding-left: 30px\">");
+            if ((namensnummer.getZaehler() != null) && (namensnummer.getNenner() != null)) {
+                final String part = namensnummer.getZaehler().intValue() + "/"
+                            + namensnummer.getNenner().intValue();
+                sb.append("<nobr>").append("zu ").append(part).append("</nobr>");
+            }
+            sb.append("</td></tr>");
         }
 
         sb.append("</table>");
@@ -452,7 +469,7 @@ public class AlkisSoapUtils {
         final HashMap<String, Namensnummer> namensnummernMap = extractNamensnummernMap(buchungsblatt);
         final List<String> rootUuids = getSortedRootUuids(namensnummernMap);
 
-        return buchungsblattOwnersToHtml(rootUuids, namensnummernMap, ownersMap);
+        return buchungsblattOwnersToHtml(0, rootUuids, namensnummernMap, ownersMap);
     }
 
     /**
@@ -519,19 +536,19 @@ public class AlkisSoapUtils {
      */
     public static String buchungsblattOwnerToHtml(final Namensnummer namensnummer, final Owner owner) {
         final StringBuffer sb = new StringBuffer();
-        sb.append("<td width=\"50\">");
+        sb.append("<td width=\"60\">");
         if (owner.getNameNumber() != null) {
             sb.append(normalizeNameNumber(namensnummer.getLaufendeNummer()));
         }
         sb.append("</td><td><p>");
+        if (owner.getSalutation() != null) {
+            sb.append(owner.getSalutation()).append(" ");
+        }
         if (owner.getForeName() != null) {
             sb.append(owner.getForeName()).append(" ");
         }
         if (owner.getSurName() != null) {
             sb.append(owner.getSurName());
-        }
-        if (owner.getSalutation() != null) {
-            sb.append(", ").append(owner.getSalutation());
         }
         if (owner.getDateOfBirth() != null) {
             Date date;
