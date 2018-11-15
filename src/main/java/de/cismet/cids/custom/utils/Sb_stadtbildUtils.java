@@ -12,6 +12,7 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -299,7 +300,7 @@ public class Sb_stadtbildUtils {
         final String locationOfPreviewImage = "VB/" + firstCharacter + "/VB_" + imageNumber;
         for (final String fileEnding : IMAGE_FILE_FORMATS) {
             try {
-                final String urlName = "http://Sw0040/archivar/" + locationOfPreviewImage + "." + fileEnding;
+                final String urlName = StaticProperties.ARCHIVAR_URL_PREFIX + locationOfPreviewImage + "." + fileEnding;
                 final URL url = new URL(urlName);
                 final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
                 if (accessible) {
