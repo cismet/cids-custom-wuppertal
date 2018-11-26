@@ -31,6 +31,7 @@ import de.aedsicad.aaaweb.service.util.Namensnummer;
 import de.aedsicad.aaaweb.service.util.Owner;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -397,11 +398,11 @@ public class AlkisSoapUtils {
             final HashMap<String, Namensnummer> namensnummernMap,
             final HashMap<String, Owner> ownerHashMap) {
         final String style;
-//        if (level > 0) {
-//            style = "style=\"border-left: 1px solid black\"";
-//        } else {
-        style = "";
-//        }
+        if (level > 0) {
+            style = "style=\"border-left: 1px solid black\"";
+        } else {
+            style = "";
+        }
         final StringBuffer sb = new StringBuffer(
                 "<table cellspacing=\"0\" "
                         + style
@@ -802,9 +803,31 @@ public class AlkisSoapUtils {
             final Namensnummer n1 = namensnummernMap.get(einzelUuid1);
             final Namensnummer n2 = namensnummernMap.get(einzelUuid2);
 
-            final String lfd1 = ((n1 == null) || (n1.getLaufendeNummer() == null)) ? "" : n1.getLaufendeNummer();
-            final String lfd2 = ((n2 == null) || (n2.getLaufendeNummer() == null)) ? "" : n2.getLaufendeNummer();
-            return lfd1.compareTo(lfd2);
+            final String tmp1 = ((n1 == null) || (n1.getLaufendeNummer() == null)) ? "ZZZ" : n1.getLaufendeNummer();
+            final String tmp2 = ((n2 == null) || (n2.getLaufendeNummer() == null)) ? "ZZZ" : n2.getLaufendeNummer();
+            final String[] lfds1 = tmp1.split("\\.");
+            final String[] lfds2 = tmp2.split("\\.");
+
+            LOG.fatal("compare " + tmp1 + " to " + tmp2);
+            for (int i = 0; i < Math.max(lfds1.length, lfds2.length); i++) {
+                String lfd1 = (i < lfds1.length) ? lfds1[i] : StringUtils.repeat("0", lfds2[i].length());
+                String lfd2 = (i < lfds2.length) ? lfds2[i] : StringUtils.repeat("0", lfds1[i].length());
+
+                if (lfd1.length() < lfd2.length()) {
+                    lfd1 = StringUtils.repeat("0", lfd2.length() - lfd1.length()) + lfd1;
+                } else {
+                    lfd2 = StringUtils.repeat("0", lfd1.length() - lfd2.length()) + lfd2;
+                }
+
+                final int compare = lfd1.compareTo(lfd2);
+                LOG.fatal("   " + lfd1 + " and " + lfd2 + " => " + compare);
+
+                if (compare != 0) {
+                    return compare;
+                }
+            }
+
+            return 0;
         }
     }
 }
