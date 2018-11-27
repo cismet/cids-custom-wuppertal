@@ -1495,6 +1495,9 @@
               </SubComponents>
             </Container>
             <Container class="de.cismet.tools.gui.RoundedPanel" name="pnlAPMap">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="gridBagConstraints = new java.awt.GridBagConstraints();&#xa;gridBagConstraints.gridx = 0;&#xa;gridBagConstraints.gridy = 1;&#xa;gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;&#xa;gridBagConstraints.weighty = 0.1;&#xa;pnlAPMap.add(rasterfariLoader, gridBagConstraints);"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
                   <CardConstraints cardName="apmap"/>
@@ -1532,16 +1535,6 @@
                     </Component>
                   </SubComponents>
                 </Container>
-                <Component class="de.cismet.cismap.commons.gui.measuring.MeasuringComponent" name="measuringComponent">
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="rasterfariLoader.getMeasuringComponent()"/>
-                  </AuxValues>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.1"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
                 <Component class="javax.swing.JLabel" name="lblMissingAPMap">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">

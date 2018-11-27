@@ -105,10 +105,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     private String oldLaufendeNummer;
     private String urlOfDocument;
     private RefreshDocumentWorker currentRefreshDocumentWorker;
-    private final RasterfariDocumentLoaderPanel rasterfariLoader = new RasterfariDocumentLoaderPanel(
-            ClientAlkisConf.getInstance().getRasterfariUrl(),
-            this,
-            getConnectionContext());
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -141,12 +137,12 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     private javax.swing.JLabel lblPunktnummerWUP;
     private javax.swing.JLabel lblPunktnummerWUPSeparator;
     private javax.swing.JLabel lblTitle;
-    private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measuringComponent;
     private de.cismet.tools.gui.RoundedPanel pnlControls;
     private de.cismet.tools.gui.RoundedPanel pnlDocument;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderDocument;
     private de.cismet.tools.gui.RoundedPanel pnlSimpleAttributes;
     private javax.swing.JPanel pnlTitle;
+    private de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private javax.swing.JScrollPane scpBemerkung;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
     private javax.swing.Box.Filler strFooter;
@@ -267,8 +263,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderDocument = new javax.swing.JLabel();
-        measuringComponent = rasterfariLoader.getMeasuringComponent();
         lblMissingRasterdocument = new javax.swing.JLabel();
+        rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
+                this,
+                getConnectionContext());
         pnlControls = new de.cismet.tools.gui.RoundedPanel();
         togPan = new javax.swing.JToggleButton();
         togZoom = new javax.swing.JToggleButton();
@@ -766,12 +765,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
         pnlDocument.add(pnlHeaderDocument, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        pnlDocument.add(measuringComponent, gridBagConstraints);
 
         lblMissingRasterdocument.setBackground(java.awt.Color.white);
         lblMissingRasterdocument.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -786,6 +779,12 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         pnlDocument.add(lblMissingRasterdocument, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        pnlDocument.add(rasterfariDocumentLoaderPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -959,7 +958,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
-        measuringComponent.actionPan();
+        rasterfariDocumentLoaderPanel1.actionPan();
     }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
@@ -968,7 +967,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
-        measuringComponent.actionZoom();
+        rasterfariDocumentLoaderPanel1.actionZoom();
     }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
@@ -977,7 +976,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
-        measuringComponent.actionOverview();
+        rasterfariDocumentLoaderPanel1.actionOverview();
     }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
@@ -1168,7 +1167,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     public void dispose() {
         bindingGroup.unbind();
         // dispose panels here if necessary
-        measuringComponent.dispose();
+        rasterfariDocumentLoaderPanel1.dispose();
         if (!readOnly) {
             ((DefaultCismapGeometryComboBoxEditor)cmbGeometrie).dispose();
         }
@@ -1404,19 +1403,19 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 LOG.warn("There was an exception while refreshing document.", ex);
             }
 
-            rasterfariLoader.reset();
+            rasterfariDocumentLoaderPanel1.reset();
             if ((document != null) && !isCancelled()) {
                 final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf", getConnectionContext());
-                measuringComponent.setVisible(true);
+                rasterfariDocumentLoaderPanel1.setVisible(true);
                 lblMissingRasterdocument.setVisible(false);
-                rasterfariLoader.setDocument(document);
+                rasterfariDocumentLoaderPanel1.setDocument(document);
                 btnHome.setEnabled(true);
                 btnOpen.setEnabled(billingAllowed);
                 btnReport.setEnabled(billingAllowed);
                 togPan.setEnabled(true);
                 togZoom.setEnabled(true);
             } else {
-                measuringComponent.setVisible(false);
+                rasterfariDocumentLoaderPanel1.setVisible(false);
                 lblMissingRasterdocument.setVisible(true);
                 btnHome.setEnabled(false);
                 btnOpen.setEnabled(false);

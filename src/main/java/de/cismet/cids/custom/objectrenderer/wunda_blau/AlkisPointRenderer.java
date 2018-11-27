@@ -429,7 +429,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private javax.swing.JLabel lblTxtPunktart;
     private javax.swing.JLabel lblTxtPunktkennung;
     private javax.swing.JLabel lblTxtRechtswert;
-    private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measuringComponent;
     private javax.swing.JPanel panButtons;
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panFooterLeft;
@@ -734,7 +733,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         pnlAPMap = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderAPMap = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderAPMap = new javax.swing.JLabel();
-        measuringComponent = rasterfariLoader.getMeasuringComponent();
         lblMissingAPMap = new javax.swing.JLabel();
         gluFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -1905,12 +1903,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
         pnlAPMap.add(pnlHeaderAPMap, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        pnlAPMap.add(measuringComponent, gridBagConstraints);
 
         lblMissingAPMap.setBackground(java.awt.Color.white);
         lblMissingAPMap.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1926,6 +1918,12 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         pnlAPMap.add(lblMissingAPMap, gridBagConstraints);
 
         pnlContent.add(pnlAPMap, "apmap");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        pnlAPMap.add(rasterfariLoader, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridheight = 5;
@@ -2151,7 +2149,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
-        measuringComponent.actionPan();
+        rasterfariLoader.actionPan();
     }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
@@ -2160,7 +2158,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
-        measuringComponent.actionZoom();
+        rasterfariLoader.actionZoom();
     }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
@@ -2169,7 +2167,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
-        measuringComponent.actionOverview();
+        rasterfariLoader.actionOverview();
     }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
@@ -2697,15 +2695,15 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
             rasterfariLoader.reset();
             if ((document != null) && !isCancelled()) {
-                measuringComponent.setVisible(true);
+                rasterfariLoader.setVisible(true);
                 lblMissingAPMap.setVisible(false);
-                rasterfariLoader.setDocument(CARD_1);
+                rasterfariLoader.setDocument(document);
                 btnHome.setEnabled(true);
                 btnOpen.setEnabled(true);
                 togPan.setEnabled(true);
                 togZoom.setEnabled(true);
             } else {
-                measuringComponent.setVisible(false);
+                rasterfariLoader.setVisible(false);
                 lblMissingAPMap.setVisible(true);
                 btnHome.setEnabled(false);
                 btnOpen.setEnabled(false);
