@@ -60,6 +60,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -391,7 +392,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         jxLBusyMeasure = new JXBusyLabel(new Dimension(64, 64));
         pnlMeasureComp = new javax.swing.JPanel();
         rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
-                BaulastenPictureFinder.PATH,
+                StaticProperties.ALB_BAULAST_URL_PREFIX,
                 this,
                 HOMEBB,
                 CRS,

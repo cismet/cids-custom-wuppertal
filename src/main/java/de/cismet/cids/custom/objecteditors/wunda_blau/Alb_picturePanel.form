@@ -123,7 +123,7 @@
           <SubComponents>
             <Component class="de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel" name="rasterfariDocumentLoaderPanel1">
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RasterfariDocumentLoaderPanel(&#xa;            BaulastenPictureFinder.PATH,&#xa;            this,&#xa;            HOMEBB,&#xa;            CRS,&#xa;            getConnectionContext())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RasterfariDocumentLoaderPanel(&#xa;    StaticProperties.ALB_BAULAST_URL_PREFIX,&#xa;    this,&#xa;    HOMEBB,&#xa;    CRS,&#xa;    getConnectionContext())"/>
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
