@@ -15,10 +15,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 
+import org.openide.util.NbBundle;
+
 import java.awt.Image;
-import java.awt.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
     private final List<CidsBean> messungBeans = new ArrayList<>();
     private final List<LegendeBean> legendeLeft = new ArrayList<>();
     private final List<LegendeBean> legendeRight = new ArrayList<>();
+    private final Image chartImage;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -75,6 +78,10 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
         this.legendeLeft.addAll(legendeLeft);
         this.legendeRight.addAll(legendeRight);
         this.chart = chart;
+
+        final int width = 459 * 3;
+        final int height = 242 * 3;
+        this.chartImage = chart.createBufferedImage(width, height, new ChartRenderingInfo());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -82,21 +89,9 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
     /**
      * DOCUMENT ME!
      *
-     * @param   width   DOCUMENT ME!
-     * @param   heigth  DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
-    public Image getChartImage(final int width, final int heigth) {
-        return chart.createBufferedImage(width, heigth);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public CidsBean getMessstelleBean() {
+    public CidsBean getGwms() {
         return getCidsBean();
     }
 
