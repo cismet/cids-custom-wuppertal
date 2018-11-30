@@ -140,8 +140,8 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
             final Icon icon = createIcon((String)stoffBean.getProperty("schluessel"));
             final BufferedImage image = new BufferedImage(icon.getIconWidth(),
                     icon.getIconHeight(),
-                    BufferedImage.TYPE_INT_RGB);
-            icon.paintIcon(null, image.getGraphics(), 0, 0);
+                    BufferedImage.TYPE_INT_ARGB);
+            icon.paintIcon(null, image.createGraphics(), 0, 0);
             final GrundwassermessstellenReportBean.LegendeBean legendBean =
                 new GrundwassermessstellenReportBean.LegendeBean(stoffBean, image);
             legendBeans.add(legendBean);
