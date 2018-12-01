@@ -445,6 +445,9 @@
                                 <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ueberwachung}" target="chbUeberwachung" targetPath="selected" updateStrategy="0" immediately="false">
                                   <Property name="nullValue" type="boolean" value="false"/>
                                   <Property name="incompletePathValue" type="boolean" value="false"/>
+                                  <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                    <Connection code="new StringToBooleanConverter()" type="code"/>
+                                  </Property>
                                 </BindingProperty>
                               </BindingProperties>
                               <Constraints>
@@ -479,6 +482,9 @@
                                 <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.unterdruecken}" target="chbUnterdruecken" targetPath="selected" updateStrategy="0" immediately="false">
                                   <Property name="nullValue" type="boolean" value="false"/>
                                   <Property name="incompletePathValue" type="boolean" value="false"/>
+                                  <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                    <Connection code="new StringToBooleanConverter()" type="code"/>
+                                  </Property>
                                 </BindingProperty>
                               </BindingProperties>
                               <Constraints>
@@ -773,6 +779,9 @@
                                 <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.eingemessen}" target="jCheckBox1" targetPath="selected" updateStrategy="0" immediately="false">
                                   <Property name="nullValue" type="boolean" value="false"/>
                                   <Property name="incompletePathValue" type="boolean" value="false"/>
+                                  <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                    <Connection code="new StringToBooleanConverter()" type="code"/>
+                                  </Property>
                                 </BindingProperty>
                               </BindingProperties>
                               <Constraints>

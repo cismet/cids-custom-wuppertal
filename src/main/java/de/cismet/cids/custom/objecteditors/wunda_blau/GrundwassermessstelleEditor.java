@@ -17,7 +17,11 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.jdesktop.beansbinding.Converter;
+
 import org.jfree.chart.JFreeChart;
+
+import org.openide.util.Exceptions;
 
 import java.awt.Component;
 
@@ -241,6 +245,8 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+        panButtons.setVisible(!editable);
+        btnReport.setVisible(!editable);
         this.grundwassermessstelleTablePanel1.initWithConnectionContext(connectionContext);
 
         if (!editable) {
@@ -773,6 +779,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
+        binding.setConverter(new StringToBooleanConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -811,6 +818,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
+        binding.setConverter(new StringToBooleanConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1074,6 +1082,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
+        binding.setConverter(new StringToBooleanConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1719,55 +1728,55 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
         if (lblBack.isEnabled()) {
             btnBackActionPerformed(null);
         }
-    }                                                                       //GEN-LAST:event_lblBackMouseClicked
+    }//GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         grundwassermessstelleTablePanel1.setShowDiagramm(false);
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }                                                                           //GEN-LAST:event_btnBackActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         grundwassermessstelleTablePanel1.setShowDiagramm(true);
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
+    }//GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
         if (lblForw.isEnabled()) {
             btnForwardActionPerformed(null);
         }
-    }                                                                       //GEN-LAST:event_lblForwMouseClicked
+    }//GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         final Integer messstelleId = cidsBean.getPrimaryKeyValue();
         final String title = "Ausbauplan - Grundwassermessstelle " + (String)cidsBean.getProperty("name");
         final String directory = DownloadManagerDialog.getInstance().getJobName();
@@ -1783,16 +1792,16 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
                 extension,
                 getConnectionContext());
         DownloadManager.instance().add(download);
-    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         generateMesswerteReport(cidsBean, this, getConnectionContext());
-    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -1804,6 +1813,9 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
+            if (editable) {
+                cidsBean.setArtificialChangeFlag(true);
+            }
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 cidsBean,
@@ -1846,6 +1858,13 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
     @Override
     public boolean prepareForSave() {
+        for (final CidsBean messungBean : grundwassermessstelleTablePanel1.getMessungBeans()) {
+            try {
+                messungBean.persist(getConnectionContext());
+            } catch (Exception ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
         return true;
     }
 
@@ -1862,5 +1881,27 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class StringToBooleanConverter extends Converter<String, Boolean> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public String convertReverse(final Boolean s) {
+            return Boolean.TRUE.equals(s) ? "t" : "f";
+        }
+
+        @Override
+        public Boolean convertForward(final String t) {
+            return "t".equalsIgnoreCase(t);
+        }
     }
 }
