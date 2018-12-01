@@ -18,12 +18,11 @@ import lombok.Setter;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 
-import org.openide.util.NbBundle;
-
 import java.awt.Image;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -37,6 +36,11 @@ import de.cismet.connectioncontext.ConnectionContext;
  */
 @Getter
 public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(
+            "de/cismet/cids/custom/reports/wunda_blau/GwmsReport");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -70,8 +74,7 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
         super(
             messstelleBean,
             "geometrie.geo_field",
-            java.util.ResourceBundle.getBundle("de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString(
-                "map_url"),
+            RESOURCE_BUNDLE.getString("map_url"),
             connectionContext);
         this.kategorieBean = kategorieBean;
         this.messungBeans.addAll(messungBeans);
@@ -79,9 +82,10 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
         this.legendeRight.addAll(legendeRight);
         this.chart = chart;
 
-        final int width = 459 * 3;
-        final int height = 242 * 3;
-        this.chartImage = chart.createBufferedImage(width, height, new ChartRenderingInfo());
+        final int dpi = Integer.parseInt(RESOURCE_BUNDLE.getString("chart_dpi"));
+        final int width = (int)(Integer.parseInt(RESOURCE_BUNDLE.getString("chart_width")) * (dpi / 72d));
+        final int height = (int)(Integer.parseInt(RESOURCE_BUNDLE.getString("chart_height")) * (dpi / 72d));
+        this.chartImage = chart.createBufferedImage(width, height);
     }
 
     //~ Methods ----------------------------------------------------------------

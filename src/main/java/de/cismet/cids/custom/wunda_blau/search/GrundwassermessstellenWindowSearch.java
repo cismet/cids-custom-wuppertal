@@ -287,7 +287,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlNoten.add(lblStuetzmauern, gridBagConstraints);
 
         lblNotenFrom6.setText(org.openide.util.NbBundle.getMessage(
@@ -298,7 +298,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlNoten.add(lblNotenFrom6, gridBagConstraints);
 
         lblNotenBis4.setText(org.openide.util.NbBundle.getMessage(
@@ -309,7 +309,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
         pnlNoten.add(lblNotenBis4, gridBagConstraints);
 
         defaultBindableReferenceCombo1.addActionListener(new java.awt.event.ActionListener() {
@@ -324,6 +324,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(defaultBindableReferenceCombo1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -331,7 +332,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 0);
         pnlNoten.add(fastBindableReferenceCombo1, gridBagConstraints);
 
         jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
@@ -354,6 +355,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(jFormattedTextField1, gridBagConstraints);
 
         jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
@@ -376,6 +378,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         pnlNoten.add(jFormattedTextField2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -452,7 +455,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlMessung.add(lblPruefVon, gridBagConstraints);
 
         lblPruefTil.setText(org.openide.util.NbBundle.getMessage(
@@ -461,21 +464,21 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         pnlMessung.add(lblPruefTil, gridBagConstraints);
 
         dcPruefVon.setPreferredSize(new java.awt.Dimension(124, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         pnlMessung.add(dcPruefVon, gridBagConstraints);
 
         dcPruefBis.setPreferredSize(new java.awt.Dimension(124, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         pnlMessung.add(dcPruefBis, gridBagConstraints);
 
         lblFiller.setText(org.openide.util.NbBundle.getMessage(
@@ -486,6 +489,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlMessung.add(lblFiller, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -538,10 +542,10 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void defaultBindableReferenceCombo1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_defaultBindableReferenceCombo1ActionPerformed
+    private void defaultBindableReferenceCombo1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultBindableReferenceCombo1ActionPerformed
         refreshMaterialTyp();
         fastBindableReferenceCombo1.setSelectedItem(null);
-    }                                                                                                  //GEN-LAST:event_defaultBindableReferenceCombo1ActionPerformed
+    }//GEN-LAST:event_defaultBindableReferenceCombo1ActionPerformed
 
     /**
      * DOCUMENT ME!

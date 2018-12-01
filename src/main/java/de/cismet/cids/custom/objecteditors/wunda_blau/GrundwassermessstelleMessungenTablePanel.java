@@ -38,6 +38,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
@@ -55,6 +56,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
 import javax.swing.RowFilter;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
@@ -338,12 +341,13 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         try {
             final CidsBean messungBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
                     "grundwassermessstelle_messung",
                     getConnectionContext());
+            messungBean.setProperty("messstelle_id", cidsBean.getProperty("id"));
             if (getModel().getKategorieBean() != null) {
                 messungBean.setProperty(
                     "kategorie_schluessel",
@@ -356,21 +360,21 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         } catch (final Exception ex) {
             LOG.error("error while creating new messung", ex);
         }
-    }                                                                          //GEN-LAST:event_btnAddActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final int rowIndex = (jXTable1.getSelectedRow() >= 0)
             ? jXTable1.convertRowIndexToModel(jXTable1.getSelectedRow()) : -1;
         if ((rowIndex >= 0)) {
             final CidsBean messungBean = getModel().getMessungBean(rowIndex);
             getModel().removeMessung(messungBean);
         }
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -601,6 +605,9 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     private void setMessungBeans(final List<CidsBean> messungBeans) {
         getModel().setMessungBeans(messungBeans);
         grundwassermessstelleMesswerteDiagrammPanel1.refreshChart();
+        if (jXTable1.getRowSorter().getSortKeys().isEmpty()) {
+            jXTable1.getRowSorter().setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+        }
     }
 
     @Override
@@ -620,6 +627,9 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         grundwassermessstelleMesswerteDiagrammPanel1.setStoffBeans(getKategorieBean().getBeanCollectionProperty(
                 "stoffe"));
         grundwassermessstelleMesswerteDiagrammPanel1.refreshChart();
+        if (jXTable1.getRowSorter().getSortKeys().isEmpty()) {
+            jXTable1.getRowSorter().setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+        }
     }
 
     /**
