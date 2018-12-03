@@ -184,7 +184,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList1MouseClicked
         final JList list = (JList)evt.getSource();
         if (evt.getClickCount() == 2) {
             final int index = list.locationToIndex(evt.getPoint());
@@ -199,7 +199,7 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
                 list.repaint();
             }
         }
-    }//GEN-LAST:event_jList1MouseClicked
+    }                                                                      //GEN-LAST:event_jList1MouseClicked
 
     /**
      * DOCUMENT ME!

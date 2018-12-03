@@ -542,10 +542,10 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void defaultBindableReferenceCombo1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultBindableReferenceCombo1ActionPerformed
+    private void defaultBindableReferenceCombo1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_defaultBindableReferenceCombo1ActionPerformed
         refreshMaterialTyp();
         fastBindableReferenceCombo1.setSelectedItem(null);
-    }//GEN-LAST:event_defaultBindableReferenceCombo1ActionPerformed
+    }                                                                                                  //GEN-LAST:event_defaultBindableReferenceCombo1ActionPerformed
 
     /**
      * DOCUMENT ME!
