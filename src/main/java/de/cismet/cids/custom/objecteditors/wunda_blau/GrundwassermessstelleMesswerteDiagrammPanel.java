@@ -91,11 +91,12 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
 //            Color.CYAN,
 //            Color.PINK,
 //            Color.GREEN
-            new Color(247, 150, 70, 192),
-            new Color(155, 187, 89, 192),
-            new Color(128, 100, 162, 192),
-            new Color(75, 172, 198, 192),
-            new Color(192, 80, 77, 192)
+            new Color(247, 150, 70, 255),
+            new Color(155, 187, 89, 255),
+            new Color(128, 100, 162, 255),
+            new Color(75, 172, 198, 255),
+            new Color(192, 80, 77, 255),
+            new Color(155, 100, 162, 255)
         };
     private List<CidsBean> stoffBeans;
 

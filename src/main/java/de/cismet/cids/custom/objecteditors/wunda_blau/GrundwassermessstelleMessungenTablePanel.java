@@ -341,7 +341,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
         try {
             final CidsBean messungBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
@@ -360,21 +360,21 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         } catch (final Exception ex) {
             LOG.error("error while creating new messung", ex);
         }
-    }//GEN-LAST:event_btnAddActionPerformed
+    }                                                                          //GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
         final int rowIndex = (jXTable1.getSelectedRow() >= 0)
             ? jXTable1.convertRowIndexToModel(jXTable1.getSelectedRow()) : -1;
         if ((rowIndex >= 0)) {
             final CidsBean messungBean = getModel().getMessungBean(rowIndex);
             getModel().removeMessung(messungBean);
         }
-    }//GEN-LAST:event_btnRemoveActionPerformed
+    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
