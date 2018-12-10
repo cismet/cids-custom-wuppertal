@@ -239,7 +239,7 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel3.setBorder(null);
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
@@ -251,7 +251,6 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(jPanel2, gridBagConstraints);
 
         grundwassermessstelleDiagrammAxisPanel4.setAxisName(null);
@@ -263,7 +262,6 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(grundwassermessstelleDiagrammAxisPanel4, gridBagConstraints);
 
         grundwassermessstelleDiagrammAxisPanel5.setAxisName(null);
@@ -275,7 +273,6 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(grundwassermessstelleDiagrammAxisPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
