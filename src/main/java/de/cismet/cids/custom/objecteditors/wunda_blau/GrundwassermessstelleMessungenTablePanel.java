@@ -59,6 +59,7 @@ import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -67,6 +68,7 @@ import javax.swing.table.TableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.GrundwassermessstelleMessungenSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -95,8 +97,8 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     private final Map<String, CidsBean> stoffMap = new HashMap<>();
 
     private final boolean editable;
-    private boolean showDiagramm = false;
     private boolean loading = true;
+    private boolean messungenEnabled = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -139,11 +141,10 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @param  showDiagramm  DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
-    public void setShowDiagramm(final boolean showDiagramm) {
-        this.showDiagramm = showDiagramm;
-        refreshTabPane();
+    public boolean isMessungenEnabled() {
+        return messungenEnabled;
     }
 
     /**
@@ -154,6 +155,15 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     public void setLoading(final boolean loading) {
         this.loading = loading;
         refreshTabPane();
+        SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (!loading) {
+                        getDiagrammPanel().refreshChart();
+                    }
+                }
+            });
     }
 
     /**
@@ -187,6 +197,9 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        grundwassermessstelleMesswerteDiagrammPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMesswerteDiagrammPanel(
+                getConnectionContext());
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -198,9 +211,6 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        grundwassermessstelleMesswerteDiagrammPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMesswerteDiagrammPanel(
-                getConnectionContext());
         jPanel5 = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -293,7 +303,6 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         jPanel3.setVisible(editable);
 
         jPanel4.add(jPanel1, "table");
-        jPanel4.add(grundwassermessstelleMesswerteDiagrammPanel1, "diagramm");
 
         jPanel5.setOpaque(false);
         jPanel5.setLayout(new java.awt.GridBagLayout());
@@ -382,8 +391,6 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     private void refreshTabPane() {
         if (loading) {
             ((CardLayout)jPanel4.getLayout()).show(jPanel4, "progress");
-        } else if (showDiagramm) {
-            ((CardLayout)jPanel4.getLayout()).show(jPanel4, "diagramm");
         } else {
             ((CardLayout)jPanel4.getLayout()).show(jPanel4, "table");
         }
@@ -506,11 +513,23 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
-        initComponents();
         try {
-            loadKategorien();
-        } catch (Exception ex) {
-            LOG.error("error while initializing context", ex);
+            messungenEnabled = ObjectRendererUtils.hasUserPermissionOnMetaClass(CidsBean.getMetaClassFromTableName(
+                        "WUNDA_BLAU",
+                        "GRUNDWASSERMESSSTELLE_MESSUNG",
+                        getConnectionContext()),
+                    SessionManager.getSession().getUser(),
+                    ObjectRendererUtils.PermissionType.READ);
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+        initComponents();
+        if (messungenEnabled) {
+            try {
+                loadKategorien();
+            } catch (Exception ex) {
+                LOG.error("error while initializing context", ex);
+            }
         }
     }
 

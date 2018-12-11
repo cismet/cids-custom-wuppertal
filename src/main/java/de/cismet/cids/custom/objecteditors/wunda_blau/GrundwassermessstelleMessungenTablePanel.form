@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMesswerteDiagrammPanel" name="grundwassermessstelleMesswerteDiagrammPanel1">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMesswerteDiagrammPanel(getConnectionContext())"/>
+      </AuxValues>
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="opaque" type="boolean" value="false"/>
   </Properties>
@@ -150,16 +157,6 @@
             </Container>
           </SubComponents>
         </Container>
-        <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMesswerteDiagrammPanel" name="grundwassermessstelleMesswerteDiagrammPanel1">
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMesswerteDiagrammPanel(getConnectionContext())"/>
-          </AuxValues>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="diagramm"/>
-            </Constraint>
-          </Constraints>
-        </Component>
         <Container class="javax.swing.JPanel" name="jPanel5">
           <Properties>
             <Property name="opaque" type="boolean" value="false"/>
