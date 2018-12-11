@@ -68,6 +68,7 @@ import javax.swing.table.TableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.GrundwassermessstelleMessungenSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -97,6 +98,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
 
     private final boolean editable;
     private boolean loading = true;
+    private boolean messungenEnabled = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -135,6 +137,15 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isMessungenEnabled() {
+        return messungenEnabled;
+    }
 
     /**
      * DOCUMENT ME!
@@ -502,11 +513,23 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
-        initComponents();
         try {
-            loadKategorien();
-        } catch (Exception ex) {
-            LOG.error("error while initializing context", ex);
+            messungenEnabled = ObjectRendererUtils.hasUserPermissionOnMetaClass(CidsBean.getMetaClassFromTableName(
+                        "WUNDA_BLAU",
+                        "GRUNDWASSERMESSSTELLE_MESSUNG",
+                        getConnectionContext()),
+                    SessionManager.getSession().getUser(),
+                    ObjectRendererUtils.PermissionType.READ);
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+        initComponents();
+        if (messungenEnabled) {
+            try {
+                loadKategorien();
+            } catch (Exception ex) {
+                LOG.error("error while initializing context", ex);
+            }
         }
     }
 

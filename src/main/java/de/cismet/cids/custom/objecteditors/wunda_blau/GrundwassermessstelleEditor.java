@@ -19,8 +19,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.jfree.chart.JFreeChart;
 
-import org.openide.util.Exceptions;
-
 import java.awt.CardLayout;
 import java.awt.Component;
 
@@ -99,13 +97,10 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     de.cismet.cids.editors.DefaultBindableReferenceCombo cboStrasse;
     private javax.swing.JCheckBox chbUeberwachung;
     private javax.swing.JCheckBox chbUnterdruecken;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler12;
     private javax.swing.Box.Filler filler13;
     private javax.swing.Box.Filler filler14;
-    private javax.swing.Box.Filler filler16;
-    private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
@@ -192,7 +187,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     private javax.swing.JTextField txtNummer5;
     private javax.swing.JLabel txtTitle;
     private javax.swing.JLabel txtTitle1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPicturePanel webDavPicturePanel11;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel webDavPicturePanel11;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -246,6 +241,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
+
         this.grundwassermessstelleTablePanel.initWithConnectionContext(connectionContext);
         initComponents();
         btnReport2.setVisible(!editable);
@@ -255,6 +251,10 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
             cbGeometrie.setVisible(false);
             RendererTools.makeReadOnly(bindingGroup, "cidsBean");
         }
+
+        btnForward.setEnabled(grundwassermessstelleTablePanel.isMessungenEnabled());
+        lblForw.setEnabled(grundwassermessstelleTablePanel.isMessungenEnabled());
+        panFooter.setVisible(grundwassermessstelleTablePanel.isMessungenEnabled());
     }
 
     /**
@@ -368,15 +368,6 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         panLage = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle = new javax.swing.JLabel();
-        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
         panLageBody = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         lblStrasse = new javax.swing.JLabel();
@@ -444,14 +435,14 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
-        webDavPicturePanel11 = new de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPicturePanel(
+        webDavPicturePanel11 = new de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel(
                 false,
                 "http://localhost:8080",
                 "test",
                 "test",
-                "dolumente",
+                "dokumente",
                 "GRUNDWASSERMESSSTELLE_DOKUMENT",
-                "name",
+                "dateiname",
                 getConnectionContext());
         jPanel11 = new javax.swing.JPanel();
         panDiagramm = new de.cismet.tools.gui.RoundedPanel();
@@ -1004,25 +995,6 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panLageTitle.add(lblLageTitle, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 4.0;
-        panLageTitle.add(filler16, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panLageTitle.add(filler17, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panLageTitle.add(filler1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1221,7 +1193,6 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
@@ -1593,7 +1564,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         jPanel10.add(panMessstellenausbau, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1603,11 +1574,11 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.weighty = 1.0;
         jPanel10.add(filler9, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 6, 0, 0);
         jPanel10.add(webDavPicturePanel11, gridBagConstraints);
 
         add(jPanel10, "grunddaten");
@@ -1827,7 +1798,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
-            if (editable) {
+            if (editable && grundwassermessstelleTablePanel.isMessungenEnabled()) {
                 cidsBean.setArtificialChangeFlag(true);
             }
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
@@ -1873,11 +1844,15 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
     @Override
     public boolean prepareForSave() {
+        if (!grundwassermessstelleTablePanel.isMessungenEnabled()) {
+            return true;
+        }
         for (final CidsBean messungBean : grundwassermessstelleTablePanel1.getMessungBeans()) {
             try {
                 messungBean.persist(getConnectionContext());
-            } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+                return false;
             }
         }
         return true;
