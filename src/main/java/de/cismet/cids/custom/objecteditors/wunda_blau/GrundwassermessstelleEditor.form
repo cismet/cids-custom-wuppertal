@@ -659,7 +659,7 @@
         <Container class="de.cismet.tools.gui.RoundedPanel" name="panLage">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="2" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="5" insetsBottom="5" insetsRight="0" anchor="11" weightX="0.0" weightY="0.0"/>
+              <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="5" insetsBottom="5" insetsRight="0" anchor="11" weightX="0.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
 
@@ -696,51 +696,6 @@
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                       <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.Box$Filler" name="filler16">
-                  <Properties>
-                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[32767, 0]"/>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
-                  </AuxValues>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="4.0" weightY="0.0"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.Box$Filler" name="filler17">
-                  <Properties>
-                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[32767, 0]"/>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
-                  </AuxValues>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="2" gridY="1" gridWidth="3" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="1.0" weightY="0.0"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.Box$Filler" name="filler1">
-                  <Properties>
-                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[32767, 0]"/>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
-                  </AuxValues>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="2" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="1.0" weightY="0.0"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -979,7 +934,7 @@
         <Container class="de.cismet.tools.gui.RoundedPanel" name="panMessstellenausbau">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="0" insetsBottom="5" insetsRight="5" anchor="11" weightX="1.0" weightY="0.0"/>
+              <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="0" insetsBottom="0" insetsRight="5" anchor="11" weightX="1.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
 
@@ -1411,13 +1366,13 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPicturePanel" name="webDavPicturePanel11">
+        <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel" name="webDavPicturePanel11">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPicturePanel(&#xa;    false, &quot;http://localhost:8080&quot;, &quot;test&quot;, &quot;test&quot;, &quot;dolumente&quot;, &quot;GRUNDWASSERMESSSTELLE_DOKUMENT&quot;, &quot;name&quot;, getConnectionContext()&#xa;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel(&#xa;    false, &quot;http://localhost:8080&quot;, &quot;test&quot;, &quot;test&quot;, &quot;dokumente&quot;, &quot;GRUNDWASSERMESSSTELLE_DOKUMENT&quot;, &quot;dateiname&quot;, getConnectionContext()&#xa;)"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="0" gridY="2" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
+              <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="2" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="6" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
         </Component>
