@@ -70,6 +70,7 @@ import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.actions.WebDavTunnelAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -82,8 +83,6 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-
-import de.cismet.netutil.Proxy;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -241,7 +240,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 5);
         jPanel2.add(jPanel1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -275,7 +274,11 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         FormListener() {
         }
 
-        @Override
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  evt  DOCUMENT ME!
+         */
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnAddImg) {
                 SimpleWebDavPanel.this.btnAddImgActionPerformed(evt);
@@ -284,30 +287,54 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
             }
         }
 
-        @Override
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  evt  DOCUMENT ME!
+         */
         public void mouseClicked(final MouseEvent evt) {
             if (evt.getSource() == lstFotos) {
                 SimpleWebDavPanel.this.lstFotosMouseClicked(evt);
             }
         }
 
-        @Override
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  evt  DOCUMENT ME!
+         */
         public void mouseEntered(final MouseEvent evt) {
         }
 
-        @Override
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  evt  DOCUMENT ME!
+         */
         public void mouseExited(final MouseEvent evt) {
         }
 
-        @Override
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  evt  DOCUMENT ME!
+         */
         public void mousePressed(final MouseEvent evt) {
         }
 
-        @Override
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  evt  DOCUMENT ME!
+         */
         public void mouseReleased(final MouseEvent evt) {
         }
 
-        @Override
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  evt  DOCUMENT ME!
+         */
         public void valueChanged(final ListSelectionEvent evt) {
             if (evt.getSource() == lstFotos) {
                 SimpleWebDavPanel.this.lstFotosValueChanged(evt);
@@ -318,7 +345,6 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
     //~ Instance fields --------------------------------------------------------
 
     private final WebDavHelper webdavHelper;
-    private final String webdavDirectory;
     private final String beanCollProp;
     private final String nameProp;
     private final String bildClassName;
@@ -345,30 +371,25 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
      * Creates a new WebDavPicturePanel object.
      */
     public SimpleWebDavPanel() {
-        this(true, "http://localhost:8080", "user", "pass", "dokumente", "dokumentClass", "name", null);
+        this(true, "dokumente", "dokumentClass", "name", WebDavTunnelAction.TASK_NAME, ConnectionContext.createDummy());
     }
 
     /**
      * Creates new form WebDavPicturePanel.
      *
      * @param  editable           DOCUMENT ME!
-     * @param  webdavDirectory    urlProp DOCUMENT ME!
-     * @param  user               geoFieldProp DOCUMENT ME!
-     * @param  pass               DOCUMENT ME!
      * @param  beanCollProp       DOCUMENT ME!
      * @param  bildClassName      DOCUMENT ME!
      * @param  nameProp           DOCUMENT ME!
+     * @param  tunnelAction       webdavDirectory urlProp DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
     public SimpleWebDavPanel(final boolean editable,
-            final String webdavDirectory,
-            final String user,
-            final String pass,
             final String beanCollProp,
             final String bildClassName,
             final String nameProp,
+            final String tunnelAction,
             final ConnectionContext connectionContext) {
-        this.webdavDirectory = webdavDirectory;
         this.beanCollProp = beanCollProp;
         this.bildClassName = bildClassName;
         this.nameProp = nameProp;
@@ -376,7 +397,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
 
         WebDavHelper webdavHelper = null;
         try {
-            webdavHelper = new WebDavHelper(Proxy.fromPreferences(), user, pass, false);
+            webdavHelper = new WebDavHelper(tunnelAction);
         } catch (final Exception ex) {
             final String message = "Fehler beim Initialisieren der Bilderablage.";
             LOG.error(message, ex);
@@ -488,7 +509,6 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                     for (final Object toDeleteObj : removeList) {
                         if (toDeleteObj instanceof CidsBean) {
                             final CidsBean fotoToDelete = (CidsBean)toDeleteObj;
-                            final String file = String.valueOf(fotoToDelete.getProperty("url.object_name"));
                             removedFotoBeans.add(fotoToDelete);
                         }
                     }
@@ -517,6 +537,11 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
             final CidsBean dokumentBean = (CidsBean)lstFotos.getSelectedValue();
             final Download download = new AbstractDownload() {
 
+                    {
+                        status = State.WAITING;
+                        fileToSaveTo = new File((String)dokumentBean.getProperty("dateiname"));
+                    }
+
                     @Override
                     public void run() {
                         try {
@@ -525,7 +550,6 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
 
                             final InputStream is = webdavHelper.getFileFromWebDAV((String)dokumentBean.getProperty(
                                         nameProp),
-                                    webdavDirectory,
                                     getConnectionContext());
                             try(final OutputStream os = new FileOutputStream(fileToSaveTo)) {
                                 IOUtils.copy(is, os);
@@ -615,7 +639,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                 final String fileName = (String)deleteBean.getProperty(nameProp);
 
                 try {
-                    webdavHelper.deleteFileFromWebDAV(fileName, webdavDirectory, getConnectionContext());
+                    webdavHelper.deleteFileFromWebDAV(fileName, getConnectionContext());
                     deleteBean.delete();
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
@@ -625,7 +649,12 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         } else {
             for (final CidsBean deleteBean : removeNewAddedFotoBean) {
                 final String fileName = (String)deleteBean.getProperty(nameProp);
-                webdavHelper.deleteFileFromWebDAV(fileName, webdavDirectory, getConnectionContext());
+                try {
+                    webdavHelper.deleteFileFromWebDAV(fileName, getConnectionContext());
+                } catch (final Exception ex) {
+                    LOG.error(ex, ex);
+                    showExceptionToUser(ex, this);
+                }
             }
         }
     }
@@ -680,7 +709,6 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
             for (final File dokument : dokumente) {
                 webdavHelper.uploadFileToWebDAV(dokument.getName(),
                     dokument,
-                    webdavDirectory,
                     SimpleWebDavPanel.this,
                     getConnectionContext());
 

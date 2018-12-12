@@ -1366,9 +1366,9 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel" name="webDavPicturePanel11">
+        <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel" name="simpleWebDavPicturePanel1">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel(&#xa;    false, &quot;http://localhost:8080&quot;, &quot;test&quot;, &quot;test&quot;, &quot;dokumente&quot;, &quot;GRUNDWASSERMESSSTELLE_DOKUMENT&quot;, &quot;dateiname&quot;, getConnectionContext()&#xa;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel(&#xa;    editable, &quot;dokumente&quot;, &quot;GRUNDWASSERMESSSTELLE_DOKUMENT&quot;, &quot;dateiname&quot;, GrundwassermessstellenWebDavTunnelAction.TASK_NAME, getConnectionContext()&#xa;)"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

@@ -27,6 +27,9 @@ import java.io.UnsupportedEncodingException;
 
 import java.net.URLEncoder;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.swing.ProgressMonitorInputStream;
 
 import de.cismet.cids.custom.wunda_blau.search.actions.WebDavTunnelAction;
@@ -47,17 +50,53 @@ public class WebDavHelper {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static Logger LOG = Logger.getLogger(WebDavHelper.class);
-    public static final String WEBDAV_OVER_TUNNEL = "webDavTunnelAction";
+    private static final Logger LOG = Logger.getLogger(WebDavHelper.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    final Proxy proxy;
-    final String username;
-    final String password;
-    final boolean useNtAuth;
+    private final Proxy proxy;
+    private final String username;
+    private final String password;
+    private final Boolean useNtAuth;
+    private final String actionName;
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new WebDavHelper object.
+     */
+    public WebDavHelper() {
+        this(WebDavTunnelAction.TASK_NAME);
+    }
+
+    /**
+     * Creates a new WebDavHelper object.
+     *
+     * @param  actionName  DOCUMENT ME!
+     */
+    public WebDavHelper(final String actionName) {
+        this(actionName, Proxy.fromPreferences(), null, null, false);
+    }
+
+    /**
+     * Creates a new WebDavHelper object.
+     *
+     * @param  proxy      DOCUMENT ME!
+     * @param  useNtAuth  DOCUMENT ME!
+     */
+    public WebDavHelper(final Proxy proxy, final Boolean useNtAuth) {
+        this(WebDavTunnelAction.TASK_NAME, proxy);
+    }
+
+    /**
+     * Creates a new WebDavHelper object.
+     *
+     * @param  actionName  DOCUMENT ME!
+     * @param  proxy       DOCUMENT ME!
+     */
+    public WebDavHelper(final String actionName, final Proxy proxy) {
+        this(actionName, proxy, null, null, null);
+    }
 
     /**
      * Creates a new WebDavHelper object.
@@ -67,11 +106,29 @@ public class WebDavHelper {
      * @param  password   DOCUMENT ME!
      * @param  useNtAuth  DOCUMENT ME!
      */
-    public WebDavHelper(final Proxy proxy, final String username, final String password, final boolean useNtAuth) {
+    public WebDavHelper(final Proxy proxy, final String username, final String password, final Boolean useNtAuth) {
+        this(WebDavTunnelAction.TASK_NAME, proxy, username, password, useNtAuth);
+    }
+
+    /**
+     * Creates a new WebDavHelper object.
+     *
+     * @param  actionName  DOCUMENT ME!
+     * @param  proxy       DOCUMENT ME!
+     * @param  username    DOCUMENT ME!
+     * @param  password    DOCUMENT ME!
+     * @param  useNtAuth   DOCUMENT ME!
+     */
+    public WebDavHelper(final String actionName,
+            final Proxy proxy,
+            final String username,
+            final String password,
+            final Boolean useNtAuth) {
         this.proxy = proxy;
         this.username = username;
         this.password = password;
         this.useNtAuth = useNtAuth;
+        this.actionName = actionName;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -97,6 +154,54 @@ public class WebDavHelper {
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<ServerActionParameter> createParams() {
+        final Collection<ServerActionParameter> params = new ArrayList<>();
+        if (proxy != null) {
+            params.add(new ServerActionParameter<>(
+                    WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(),
+                    proxy));
+        }
+        if (username != null) {
+            params.add(new ServerActionParameter<>(
+                    WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(),
+                    username));
+        }
+        if (password != null) {
+            params.add(new ServerActionParameter<>(
+                    WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(),
+                    password));
+        }
+        if (useNtAuth != null) {
+            params.add(new ServerActionParameter<>(
+                    WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(),
+                    useNtAuth));
+        }
+
+        return params;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fileName           DOCUMENT ME!
+     * @param   toUpload           DOCUMENT ME!
+     * @param   parent             DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public void uploadFileToWebDAV(final String fileName,
+            final File toUpload,
+            final Component parent,
+            final ConnectionContext connectionContext) throws Exception {
+        uploadFileToWebDAV(fileName, toUpload, null, parent, connectionContext);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   fileName           DOCUMENT ME!
      * @param   toUpload           DOCUMENT ME!
      * @param   webDavDirectory    DOCUMENT ME!
@@ -116,37 +221,37 @@ public class WebDavHelper {
                     new FileInputStream(toUpload)));
         final byte[] bytes = IOUtils.toByteArray(bfis);
         try {
-            final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(
-                    WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(),
-                    proxy);
-            final ServerActionParameter usernameSAP = new ServerActionParameter<String>(
-                    WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(),
-                    username);
-            final ServerActionParameter passwordSAP = new ServerActionParameter<String>(
-                    WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(),
-                    password);
-            final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(
-                    WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(),
-                    useNtAuth);
+            final Collection<ServerActionParameter> params = createParams();
 
-            final ServerActionParameter putSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PUT
-                            .toString(),
-                    webDavDirectory
-                            + encodeURL(fileName));
+            params.add(new ServerActionParameter<>(
+                    WebDavTunnelAction.PARAMETER_TYPE.PUT.toString(),
+                    ((webDavDirectory != null) ? webDavDirectory : "")
+                            + encodeURL(fileName)));
             SessionManager.getProxy()
                     .executeTask(
-                        WEBDAV_OVER_TUNNEL,
+                        actionName,
                         "WUNDA_BLAU",
                         bytes,
                         connectionContext,
-                        putSAP,
-                        proxySAP,
-                        usernameSAP,
-                        passwordSAP,
-                        ntAuthSAP);
+                        params.toArray(new ServerActionParameter[0]));
         } finally {
             IOUtils.closeQuietly(bfis);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fileName           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public boolean deleteFileFromWebDAV(final String fileName, final ConnectionContext connectionContext)
+            throws Exception {
+        return deleteFileFromWebDAV(fileName, null, connectionContext);
     }
 
     /**
@@ -157,46 +262,44 @@ public class WebDavHelper {
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
      */
     public boolean deleteFileFromWebDAV(final String fileName,
             final String webDavDirectory,
-            final ConnectionContext connectionContext) {
+            final ConnectionContext connectionContext) throws Exception {
         if ((fileName != null) && (fileName.length() > 0)) {
-            try {
-                final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(
-                        WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(),
-                        proxy);
-                final ServerActionParameter usernameSAP = new ServerActionParameter<String>(
-                        WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(),
-                        username);
-                final ServerActionParameter passwordSAP = new ServerActionParameter<String>(
-                        WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(),
-                        password);
-                final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(
-                        WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(),
-                        useNtAuth);
+            final Collection<ServerActionParameter> params = createParams();
 
-                final ServerActionParameter deleteSAP = new ServerActionParameter<String>(
-                        WebDavTunnelAction.PARAMETER_TYPE.DELETE.toString(),
-                        webDavDirectory
-                                + encodeURL(fileName));
-                SessionManager.getProxy()
-                        .executeTask(
-                            WEBDAV_OVER_TUNNEL,
-                            "WUNDA_BLAU",
-                            (Object)null,
-                            connectionContext,
-                            deleteSAP,
-                            proxySAP,
-                            usernameSAP,
-                            passwordSAP,
-                            ntAuthSAP);
-                return true;
-            } catch (Exception ex) {
-                LOG.error(ex, ex);
-            }
+            params.add(new ServerActionParameter<>(
+                    WebDavTunnelAction.PARAMETER_TYPE.DELETE.toString(),
+                    (webDavDirectory != null) ? webDavDirectory : (""
+                                + encodeURL(fileName))));
+            SessionManager.getProxy()
+                    .executeTask(
+                        actionName,
+                        "WUNDA_BLAU",
+                        (Object)null,
+                        connectionContext,
+                        params.toArray(new ServerActionParameter[0]));
+            return true;
         }
         return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fileName           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public InputStream getFileFromWebDAV(final String fileName,
+            final ConnectionContext connectionContext) throws Exception {
+        return getFileFromWebDAV(fileName, null, connectionContext);
     }
 
     /**
@@ -213,48 +316,21 @@ public class WebDavHelper {
     public InputStream getFileFromWebDAV(final String fileName,
             final String webDavDirectory,
             final ConnectionContext connectionContext) throws Exception {
-        final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY
-                        .toString(),
-                proxy);
-        final ServerActionParameter usernameSAP = new ServerActionParameter<String>(
-                WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(),
-                username);
-        final ServerActionParameter passwordSAP = new ServerActionParameter<String>(
-                WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(),
-                password);
-        final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(
-                WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(),
-                useNtAuth);
+        final Collection<ServerActionParameter> params = createParams();
 
         final String encodedFileName = WebDavHelper.encodeURL(fileName);
-        final ServerActionParameter getSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.GET
-                        .toString(),
-                webDavDirectory
-                        + encodedFileName);
+        params.add(new ServerActionParameter<>(
+                WebDavTunnelAction.PARAMETER_TYPE.GET.toString(),
+                (webDavDirectory != null) ? webDavDirectory : (""
+                            + encodedFileName)));
         final byte[] result = (byte[])SessionManager.getProxy()
                     .executeTask(
-                            WebDavHelper.WEBDAV_OVER_TUNNEL,
+                            actionName,
                             "WUNDA_BLAU",
                             (Object)null,
                             connectionContext,
-                            getSAP,
-                            proxySAP,
-                            usernameSAP,
-                            passwordSAP,
-                            ntAuthSAP);
+                            params.toArray(new ServerActionParameter[0]));
         return new ByteArrayInputStream(result);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   fileName  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String getFilenameFromUrl(final String fileName) {
-        final String[] splittedFileName = fileName.split("/");
-        return splittedFileName[splittedFileName.length - 1];
     }
 
     /**
