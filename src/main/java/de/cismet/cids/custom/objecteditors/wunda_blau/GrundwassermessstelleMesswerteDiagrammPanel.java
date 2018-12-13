@@ -304,7 +304,9 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
                     if ((schluessel != null)
                                 && schluessel.equals((String)messwertBean.getProperty("stoff_schluessel"))) {
                         if (series.getDataItem(new Day(datum)) == null) {
-                            series.add(new Day(datum), (Double)messwertBean.getProperty("wert"));
+                            series.add(new Day(datum),
+                                (messwertBean.getProperty("wert") != null)
+                                    ? Math.abs((Double)messwertBean.getProperty("wert")) : null);
                         }
                     }
                 }

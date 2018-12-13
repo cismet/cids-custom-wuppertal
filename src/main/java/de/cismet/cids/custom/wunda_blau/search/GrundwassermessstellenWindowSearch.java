@@ -29,14 +29,19 @@ import java.beans.PropertyChangeListener;
 
 import java.net.URL;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
+import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -102,6 +107,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
     private final GrundwassermessstelleStoffeByKategorieLightweightSearch stoffeByKategorieSearch;
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbMapSearch;
@@ -323,6 +329,7 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(defaultBindableReferenceCombo1, gridBagConstraints);
@@ -336,11 +343,13 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         pnlNoten.add(fastBindableReferenceCombo1, gridBagConstraints);
 
         jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.##########"))));
+                new MesswertNumberFormatter()));
         jFormattedTextField1.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         jFormattedTextField1.setText(org.openide.util.NbBundle.getMessage(
                 GrundwassermessstellenWindowSearch.class,
                 "GrundwassermessstellenWindowSearch.jFormattedTextField1.text")); // NOI18N
+        jFormattedTextField1.setMinimumSize(new java.awt.Dimension(100, 24));
+        jFormattedTextField1.setPreferredSize(new java.awt.Dimension(100, 24));
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -354,16 +363,17 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(jFormattedTextField1, gridBagConstraints);
 
         jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.##########"))));
+                new MesswertNumberFormatter()));
         jFormattedTextField2.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         jFormattedTextField2.setText(org.openide.util.NbBundle.getMessage(
                 GrundwassermessstellenWindowSearch.class,
                 "GrundwassermessstellenWindowSearch.jFormattedTextField2.text")); // NOI18N
+        jFormattedTextField2.setMinimumSize(new java.awt.Dimension(100, 24));
+        jFormattedTextField2.setPreferredSize(new java.awt.Dimension(100, 24));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -377,7 +387,6 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         pnlNoten.add(jFormattedTextField2, gridBagConstraints);
 
@@ -467,14 +476,16 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         pnlMessung.add(lblPruefTil, gridBagConstraints);
 
-        dcPruefVon.setPreferredSize(new java.awt.Dimension(124, 20));
+        dcPruefVon.setMinimumSize(new java.awt.Dimension(134, 24));
+        dcPruefVon.setPreferredSize(new java.awt.Dimension(134, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         pnlMessung.add(dcPruefVon, gridBagConstraints);
 
-        dcPruefBis.setPreferredSize(new java.awt.Dimension(124, 20));
+        dcPruefBis.setMinimumSize(new java.awt.Dimension(134, 24));
+        dcPruefBis.setPreferredSize(new java.awt.Dimension(134, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -682,6 +693,36 @@ public class GrundwassermessstellenWindowSearch extends javax.swing.JPanel imple
             }
         }
     }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class MesswertNumberFormatter extends NumberFormatter {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new MesswertNumberFormatter object.
+         */
+        public MesswertNumberFormatter() {
+            super(NumberFormat.getNumberInstance(Locale.GERMAN));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Object stringToValue(final String string) throws ParseException {
+            if ((string == null) || string.trim().isEmpty()) {
+                return null;
+            }
+            return super.stringToValue(string);
+        }
+    }
+
 //
 //    /**
 //     * DOCUMENT ME!
