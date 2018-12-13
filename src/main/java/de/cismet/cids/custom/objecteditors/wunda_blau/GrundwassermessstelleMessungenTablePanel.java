@@ -31,6 +31,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 
 import java.text.DecimalFormat;
@@ -50,10 +52,12 @@ import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
@@ -61,6 +65,8 @@ import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
@@ -99,6 +105,17 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
     private final boolean editable;
     private boolean loading = true;
     private boolean messungenEnabled = false;
+
+    private final ListSelectionListener listSelectionListener = new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(final ListSelectionEvent evt) {
+                if (evt.getValueIsAdjusting()) {
+                    return;
+                }
+                jXTable1.requestFocusInWindow();
+            }
+        };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -242,10 +259,28 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         jXTable1.setModel(new MesswerteTableModel());
         jXTable1.setOpaque(false);
         jXTable1.setRowFilter(new MesswertRowFilter());
+        jXTable1.setTerminateEditOnFocusLost(false);
+        jXTable1.addFocusListener(new java.awt.event.FocusAdapter() {
+
+                @Override
+                public void focusGained(final java.awt.event.FocusEvent evt) {
+                    jXTable1FocusGained(evt);
+                }
+            });
+        jXTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+
+                @Override
+                public void keyTyped(final java.awt.event.KeyEvent evt) {
+                    jXTable1KeyTyped(evt);
+                }
+            });
         jScrollPane1.setViewportView(jXTable1);
         jXTable1.setDefaultRenderer(Double.class, new MesswertTableCellRenderer());
         jXTable1.setDefaultEditor(Date.class, new DatumTableCellEditor());
         jXTable1.setDefaultEditor(Double.class, new MesswertTableCellEditor());
+
+        jXTable1.getSelectionModel().addListSelectionListener(listSelectionListener);
+        jXTable1.getColumnModel().getSelectionModel().addListSelectionListener(listSelectionListener);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -384,6 +419,66 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
             getModel().removeMessung(messungBean);
         }
     }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXTable1FocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_jXTable1FocusGained
+        final int row = jXTable1.getSelectedRow();
+        final int col = jXTable1.getSelectedColumn();
+
+        jXTable1.changeSelection(row, col, false, false);
+        jXTable1.editCellAt(row, col);
+
+        if (jXTable1.getCellEditor() instanceof MesswertTableCellEditor) {
+            final MesswertTableCellEditor editor = (MesswertTableCellEditor)jXTable1.getCellEditor();
+            final JTextField textField = editor.getFormattedTextField();
+            textField.requestFocusInWindow();
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        textField.selectAll();
+                    }
+                });
+        } else if (jXTable1.getCellEditor() instanceof DatumTableCellEditor) {
+            final DatumTableCellEditor editor = (DatumTableCellEditor)jXTable1.getCellEditor();
+            final JTextField textField = editor.getDatePicker().getEditor();
+            textField.requestFocusInWindow();
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        textField.selectAll();
+                    }
+                });
+        } else if (jXTable1.getCellEditor() instanceof DefaultCellEditor) {
+            final DefaultCellEditor editor = (DefaultCellEditor)jXTable1.getCellEditor();
+            final JTextField textField = (JTextField)editor.getComponent();
+            textField.requestFocusInWindow();
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        textField.selectAll();
+                    }
+                });
+        }
+    } //GEN-LAST:event_jXTable1FocusGained
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXTable1KeyTyped(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_jXTable1KeyTyped
+//        final TableCellEditor cellEditor = jXTable1.getCellEditor();
+//        if ((KeyEvent.VK_TAB == evt.getKeyCode()) && (cellEditor != null)) {
+//            cellEditor.stopCellEditing();
+//        }
+    } //GEN-LAST:event_jXTable1KeyTyped
 
     /**
      * DOCUMENT ME!
@@ -1087,8 +1182,21 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
 
         @Override
         public Object getCellEditorValue() {
+            try {
+                formattedTextField.commitEdit();
+            } catch (final ParseException ex) {
+            }
             return (formattedTextField.getValue() != null) ? ((Number)formattedTextField.getValue()).doubleValue()
                                                            : null;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public JFormattedTextField getFormattedTextField() {
+            return formattedTextField;
         }
     }
 
@@ -1102,6 +1210,21 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
         //~ Instance fields ----------------------------------------------------
 
         final JXDatePicker datePicker = new JXDatePicker();
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DatumTableCellEditor object.
+         */
+        public DatumTableCellEditor() {
+            datePicker.getEditor().addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        stopCellEditing();
+                    }
+                });
+        }
 
         //~ Methods ------------------------------------------------------------
 
@@ -1118,6 +1241,10 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
 
         @Override
         public Object getCellEditorValue() {
+            try {
+                datePicker.commitEdit();
+            } catch (ParseException ex) {
+            }
             return datePicker.getDate();
         }
 
@@ -1127,6 +1254,15 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
                 return ((MouseEvent)anEvent).getClickCount() >= 2;
             }
             return true;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public JXDatePicker getDatePicker() {
+            return datePicker;
         }
     }
 }
