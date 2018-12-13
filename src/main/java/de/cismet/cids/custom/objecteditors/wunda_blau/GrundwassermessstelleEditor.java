@@ -32,6 +32,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.reports.wunda_blau.GrundwassermessstellenReportBean;
+import de.cismet.cids.custom.wunda_blau.search.actions.GrundwassermessstellenWebDavTunnelAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -175,6 +176,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     private javax.swing.JPanel panMessungenBody;
     private de.cismet.tools.gui.SemiRoundedPanel panMessungenTitle;
     private javax.swing.JPanel panTitle;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel simpleWebDavPicturePanel1;
     private javax.swing.JTextArea txtBemerkung;
     private javax.swing.JTextField txtBrunnennummerAlt;
     private javax.swing.JTextField txtHausnummer;
@@ -187,7 +189,6 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     private javax.swing.JTextField txtNummer5;
     private javax.swing.JLabel txtTitle;
     private javax.swing.JLabel txtTitle1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel webDavPicturePanel11;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -435,14 +436,12 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
-        webDavPicturePanel11 = new de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel(
-                false,
-                "http://localhost:8080",
-                "test",
-                "test",
+        simpleWebDavPicturePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.SimpleWebDavPanel(
+                editable,
                 "dokumente",
                 "GRUNDWASSERMESSSTELLE_DOKUMENT",
                 "dateiname",
+                GrundwassermessstellenWebDavTunnelAction.TASK_NAME,
                 getConnectionContext());
         jPanel11 = new javax.swing.JPanel();
         panDiagramm = new de.cismet.tools.gui.RoundedPanel();
@@ -1579,7 +1578,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 6, 0, 0);
-        jPanel10.add(webDavPicturePanel11, gridBagConstraints);
+        jPanel10.add(simpleWebDavPicturePanel1, gridBagConstraints);
 
         add(jPanel10, "grunddaten");
 
@@ -1808,7 +1807,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
             panMap.initMap(cidsBean, "geometrie.geo_field", GEO_BUFFER);
             bindingGroup.bind();
         }
-        webDavPicturePanel11.setCidsBean(cidsBean);
+        simpleWebDavPicturePanel1.setCidsBean(cidsBean);
     }
 
     @Override
@@ -1840,6 +1839,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
+        simpleWebDavPicturePanel1.editorClosed(ece);
     }
 
     @Override

@@ -86,9 +86,14 @@
                     <Property name="rowFilter" type="javax.swing.RowFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new MesswertRowFilter()" type="code"/>
                     </Property>
+                    <Property name="terminateEditOnFocusLost" type="boolean" value="false"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jXTable1FocusGained"/>
+                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jXTable1KeyTyped"/>
+                  </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jXTable1.setDefaultRenderer(Double.class, new MesswertTableCellRenderer());&#xa;jXTable1.setDefaultEditor(Date.class, new DatumTableCellEditor());&#xa;jXTable1.setDefaultEditor(Double.class, new MesswertTableCellEditor());"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jXTable1.setDefaultRenderer(Double.class, new MesswertTableCellRenderer());&#xa;jXTable1.setDefaultEditor(Date.class, new DatumTableCellEditor());&#xa;jXTable1.setDefaultEditor(Double.class, new MesswertTableCellEditor());&#xa;&#xa;jXTable1.getSelectionModel().addListSelectionListener(listSelectionListener);&#xa;jXTable1.getColumnModel().getSelectionModel().addListSelectionListener(listSelectionListener);"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
