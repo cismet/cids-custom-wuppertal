@@ -33,7 +33,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
-import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -71,7 +70,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
+import javax.swing.text.NumberFormatter;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.GrundwassermessstelleMessungenTablePanel.MesswertTableCellEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.GrundwassermessstelleMessungenSearch;
 
@@ -1167,14 +1168,43 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
             final String newSource;
             if (source == null) {
                 newSource = null;
-            } else if (source.startsWith("< ")) {
-                newSource = source.replaceFirst("< ", "-");
-            } else if (source.startsWith("<")) {
-                newSource = source.replaceFirst("<", "-");
+            } else if (source.trim().startsWith("< ")) {
+                newSource = source.trim().replaceFirst("< ", "-");
+            } else if (source.trim().startsWith("<")) {
+                newSource = source.trim().replaceFirst("<", "-");
+            } else if (source.trim().isEmpty()) {
+                return null;
             } else {
-                newSource = source;
+                newSource = source.trim();
             }
             return NumberFormat.getNumberInstance(Locale.GERMAN).parse(newSource, parsePosition);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class MesswertNumberFormatter extends NumberFormatter {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new MesswertNumberFormatter object.
+         */
+        public MesswertNumberFormatter() {
+            super(new MesswertNumberFormat());
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Object stringToValue(final String string) throws ParseException {
+            if ((string == null) || string.trim().isEmpty()) {
+                return null;
+            }
+            return super.stringToValue(string);
         }
     }
 
@@ -1195,7 +1225,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
          * Creates a new MesswertTableCellEditor object.
          */
         public MesswertTableCellEditor() {
-            formattedTextField = new JFormattedTextField(new MesswertNumberFormat());
+            formattedTextField = new JFormattedTextField(new MesswertNumberFormatter());
             formattedTextField.setHorizontalAlignment(JFormattedTextField.RIGHT);
             formattedTextField.addActionListener(new ActionListener() {
 
