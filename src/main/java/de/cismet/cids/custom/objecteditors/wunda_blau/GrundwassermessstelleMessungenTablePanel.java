@@ -31,13 +31,13 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 
 import java.text.DecimalFormat;
+import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,8 +71,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.GrundwassermessstelleMessungenSearch;
@@ -1066,6 +1064,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
                         }
                     }
                 }
+                getDiagrammPanel().refreshChart();
             } catch (final Exception ex) {
                 LOG.warn("could not update value", ex);
             }
@@ -1104,10 +1103,8 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
             for (final CidsBean messwertBean : messungBean.getBeanCollectionProperty("messwerte")) {
                 if (stoffBean.equals(getStoffBean((String)messwertBean.getProperty("stoff_schluessel")))) {
                     final Double wert = (Double)messwertBean.getProperty("wert");
-                    final int nachkommastellen = (Integer)stoffBean.getProperty("nachkommastellen");
-                    final DecimalFormat format = new DecimalFormat();
-                    format.setMinimumFractionDigits(nachkommastellen);
-                    format.setMaximumFractionDigits(nachkommastellen);
+                    final MesswertNumberFormat format = new MesswertNumberFormat((Integer)stoffBean.getProperty(
+                                "nachkommastellen"));
                     label.setHorizontalAlignment(SwingConstants.TRAILING);
                     final String einheit = (String)stoffBean.getProperty("einheit");
                     label.setText((wert != null) ? (format.format(wert) + ((einheit != null) ? (" " + einheit) : ""))
@@ -1124,12 +1121,73 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      *
      * @version  $Revision$, $Date$
      */
+    class MesswertNumberFormat extends NumberFormat {
+
+        //~ Instance fields ----------------------------------------------------
+
+        final NumberFormat nf = NumberFormat.getNumberInstance(Locale.GERMAN);
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new MesswertNumberFormat object.
+         */
+        MesswertNumberFormat() {
+            this(null);
+        }
+
+        /**
+         * Creates a new MesswertNumberFormat object.
+         *
+         * @param  nachkommastellen  DOCUMENT ME!
+         */
+        MesswertNumberFormat(final Integer nachkommastellen) {
+            if (nachkommastellen != null) {
+                nf.setMinimumFractionDigits(nachkommastellen);
+                nf.setMaximumFractionDigits(nachkommastellen);
+            }
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public StringBuffer format(final double number, final StringBuffer toAppendTo, final FieldPosition pos) {
+            return new StringBuffer(NumberFormat.getNumberInstance(Locale.GERMAN).format(number, toAppendTo, pos)
+                            .toString().replaceFirst("-", "< "));
+        }
+
+        @Override
+        public StringBuffer format(final long number, final StringBuffer toAppendTo, final FieldPosition pos) {
+            return new StringBuffer(NumberFormat.getNumberInstance(Locale.GERMAN).format(number, toAppendTo, pos)
+                            .toString().replaceFirst("-", "< "));
+        }
+
+        @Override
+        public Number parse(final String source, final ParsePosition parsePosition) {
+            final String newSource;
+            if (source == null) {
+                newSource = null;
+            } else if (source.startsWith("< ")) {
+                newSource = source.replaceFirst("< ", "-");
+            } else if (source.startsWith("<")) {
+                newSource = source.replaceFirst("<", "-");
+            } else {
+                newSource = source;
+            }
+            return NumberFormat.getNumberInstance(Locale.GERMAN).parse(newSource, parsePosition);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class MesswertTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
         //~ Instance fields ----------------------------------------------------
 
-        private final JFormattedTextField formattedTextField = new JFormattedTextField(NumberFormat.getNumberInstance(
-                    Locale.GERMAN));
+        private final JFormattedTextField formattedTextField;
 
         //~ Constructors -------------------------------------------------------
 
@@ -1137,8 +1195,8 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
          * Creates a new MesswertTableCellEditor object.
          */
         public MesswertTableCellEditor() {
+            formattedTextField = new JFormattedTextField(new MesswertNumberFormat());
             formattedTextField.setHorizontalAlignment(JFormattedTextField.RIGHT);
-
             formattedTextField.addActionListener(new ActionListener() {
 
                     @Override
@@ -1156,18 +1214,6 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
                 final boolean isSelected,
                 final int rowIndex,
                 final int columnIndex) {
-            final NumberFormatter formatter = new NumberFormatter(new DecimalFormat()) {
-
-                    @Override
-                    public Object stringToValue(final String text) throws ParseException {
-                        if ((text == null) || text.trim().isEmpty()) {
-                            return null;
-                        } else {
-                            return super.stringToValue(text);
-                        }
-                    }
-                };
-            formattedTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
             formattedTextField.setValue((value != null) ? ((Number)value).doubleValue() : null);
             return formattedTextField;
         }
