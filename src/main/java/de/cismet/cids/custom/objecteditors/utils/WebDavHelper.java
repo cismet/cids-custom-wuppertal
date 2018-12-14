@@ -273,8 +273,8 @@ public class WebDavHelper {
 
             params.add(new ServerActionParameter<>(
                     WebDavTunnelAction.PARAMETER_TYPE.DELETE.toString(),
-                    (webDavDirectory != null) ? webDavDirectory : (""
-                                + encodeURL(fileName))));
+                    ((webDavDirectory != null) ? webDavDirectory : "")
+                            + encodeURL(fileName)));
             SessionManager.getProxy()
                     .executeTask(
                         actionName,
@@ -321,8 +321,8 @@ public class WebDavHelper {
         final String encodedFileName = WebDavHelper.encodeURL(fileName);
         params.add(new ServerActionParameter<>(
                 WebDavTunnelAction.PARAMETER_TYPE.GET.toString(),
-                (webDavDirectory != null) ? webDavDirectory : (""
-                            + encodedFileName)));
+                ((webDavDirectory != null) ? webDavDirectory : "")
+                        + encodedFileName));
         final byte[] result = (byte[])SessionManager.getProxy()
                     .executeTask(
                             actionName,
