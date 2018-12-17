@@ -278,8 +278,8 @@ public class BaulastBescheinigungUtils {
         for (final CidsBean art : baulast.getBeanCollectionProperty("art")) {
             if (!first) {
                 sb.append(", ");
-                first = false;
             }
+            first = false;
             sb.append(art.getProperty("baulast_art"));
         }
         final String arten = sb.toString();

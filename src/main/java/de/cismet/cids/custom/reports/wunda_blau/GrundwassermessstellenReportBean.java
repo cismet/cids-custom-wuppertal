@@ -15,13 +15,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 
 import java.awt.Image;
-import java.awt.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -36,6 +37,11 @@ import de.cismet.connectioncontext.ConnectionContext;
 @Getter
 public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(
+            "de/cismet/cids/custom/reports/wunda_blau/GwmsReport");
+
     //~ Instance fields --------------------------------------------------------
 
     private final JFreeChart chart;
@@ -43,6 +49,7 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
     private final List<CidsBean> messungBeans = new ArrayList<>();
     private final List<LegendeBean> legendeLeft = new ArrayList<>();
     private final List<LegendeBean> legendeRight = new ArrayList<>();
+    private final Image chartImage;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -67,14 +74,18 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
         super(
             messstelleBean,
             "geometrie.geo_field",
-            java.util.ResourceBundle.getBundle("de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString(
-                "map_url"),
+            RESOURCE_BUNDLE.getString("map_url"),
             connectionContext);
         this.kategorieBean = kategorieBean;
         this.messungBeans.addAll(messungBeans);
         this.legendeLeft.addAll(legendeLeft);
         this.legendeRight.addAll(legendeRight);
         this.chart = chart;
+
+        final int dpi = Integer.parseInt(RESOURCE_BUNDLE.getString("chart_dpi"));
+        final int width = (int)(Integer.parseInt(RESOURCE_BUNDLE.getString("chart_width")) * (dpi / 72d));
+        final int height = (int)(Integer.parseInt(RESOURCE_BUNDLE.getString("chart_height")) * (dpi / 72d));
+        this.chartImage = chart.createBufferedImage(width, height);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -82,21 +93,9 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
     /**
      * DOCUMENT ME!
      *
-     * @param   width   DOCUMENT ME!
-     * @param   heigth  DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
-    public Image getChartImage(final int width, final int heigth) {
-        return chart.createBufferedImage(width, heigth);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public CidsBean getMessstelleBean() {
+    public CidsBean getGwms() {
         return getCidsBean();
     }
 

@@ -50,6 +50,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -299,7 +301,7 @@ public class Sb_stadtbildUtils {
         final String locationOfPreviewImage = "VB/" + firstCharacter + "/VB_" + imageNumber;
         for (final String fileEnding : IMAGE_FILE_FORMATS) {
             try {
-                final String urlName = "http://Sw0040/archivar/" + locationOfPreviewImage + "." + fileEnding;
+                final String urlName = StaticProperties.ARCHIVAR_URL_PREFIX + locationOfPreviewImage + "." + fileEnding;
                 final URL url = new URL(urlName);
                 final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
                 if (accessible) {

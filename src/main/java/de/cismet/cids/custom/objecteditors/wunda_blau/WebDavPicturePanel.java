@@ -1011,8 +1011,13 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
                 fileDir.append(deleteBean.getProperty("url.url_base_id.prot_prefix").toString());
                 fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
                 fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
-                webdavHelper.deleteFileFromWebDAV(fileName,
-                    fileDir.toString(), getConnectionContext());
+                try {
+                    webdavHelper.deleteFileFromWebDAV(fileName,
+                        fileDir.toString(), getConnectionContext());
+                } catch (final Exception ex) {
+                    LOG.error(ex, ex);
+                    showExceptionToUser(ex, this);
+                }
             }
         }
     }
