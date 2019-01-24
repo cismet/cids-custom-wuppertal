@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -65,12 +66,14 @@ import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cismap.commons.Crs;
+import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.FeatureCollectionEvent;
 import de.cismet.cismap.commons.features.PureNewFeature;
 import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.MessenGeometryListener;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
@@ -1736,20 +1739,43 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * @param  pageNumber  DOCUMENT ME!
      */
     public void refreshMessenForPage(final int pageNumber) {
+        final int defaultSrid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getName());
+
         final Geometry pageGeom = pageGeometries.get(pageNumber);
+
         final XBoundingBox bb;
         if (pageGeom != null) {
-            bb = new XBoundingBox(pageGeom);
-        } else {
-            bb = HOMEBB;
-        }
+            int srid = pageGeom.getSRID();
+            if (srid == CismapBroker.getInstance().getDefaultCrsAlias()) {
+                srid = defaultSrid;
+            }
 
-        rasterfariDocumentLoaderPanel1.setMainDocumentGeometry(pageGeom);
-        rasterfariDocumentLoaderPanel1.setScaleAndOffsets(Math.min(bb.getWidth(), bb.getHeight()),
-            bb.getX1()
-                    + (bb.getWidth() / 2),
-            -bb.getY1()
-                    - (bb.getHeight() / 2));
+            bb = new XBoundingBox((srid != defaultSrid) ? CrsTransformer.transformToDefaultCrs(pageGeom) : pageGeom);
+            rasterfariDocumentLoaderPanel1.setMainDocumentGeometry(pageGeom);
+            rasterfariDocumentLoaderPanel1.setScaleAndOffsets(Math.max(bb.getWidth(), bb.getHeight()),
+                bb.getX1()
+                        + (bb.getWidth() / 2),
+                -bb.getY1()
+                        - (bb.getHeight() / 2));
+        } else {
+            final Coordinate centroid = HOMEBB.getGeometry().getCentroid().getCoordinate();
+            bb = new XBoundingBox(centroid.x - (1656 / 2),
+                    centroid.y
+                            - (2339 / 2),
+                    centroid.x
+                            + (1656 / 2),
+                    centroid.y
+                            + (2339 / 2),
+                    SRS,
+                    true);
+            rasterfariDocumentLoaderPanel1.setMainDocumentGeometry(bb.getGeometry(defaultSrid));
+            rasterfariDocumentLoaderPanel1.setScaleAndOffsets(
+                Math.max(bb.getWidth(), bb.getHeight()),
+                bb.getX1()
+                        + (bb.getWidth() / 2),
+                -bb.getY1()
+                        - (bb.getHeight() / 2));
+        }
 
         togPan.setSelected(true);
         resetMeasureDataLabels();

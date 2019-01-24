@@ -905,9 +905,9 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
                   <SubComponents>
-                    <Component class="de.cismet.cismap.commons.gui.measuring.MeasuringComponent" name="measuringComponent1">
+                    <Component class="de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel" name="rasterfariDocumentLoaderPanel1">
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cismap.commons.gui.measuring.MeasuringComponent(INITIAL_BOUNDINGBOX, CRS)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel(&#xa;    PROPERTIES.getRasterfariUrl(),&#xa;    this,&#xa;    getConnectionContext()&#xa;)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -1061,9 +1061,9 @@
                     <Property name="selectionMode" type="int" value="0"/>
                     <Property name="fixedCellWidth" type="int" value="75"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstPagesValueChanged"/>
-                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="rasterfariDocumentLoaderPanel1.getLstPages()"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>

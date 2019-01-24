@@ -52,7 +52,7 @@ public class FileWithoutSuffix {
         if (number == null) {
             return file.toUpperCase();
         } else {
-            return getFolder(number) + BaulastenPictureFinder.SEP + file.toUpperCase();
+            return getFolder(number) + BaulastenPictureFinder.SEP + file;
         }
     }
 
