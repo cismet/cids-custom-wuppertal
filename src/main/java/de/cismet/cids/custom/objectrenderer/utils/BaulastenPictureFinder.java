@@ -34,7 +34,6 @@ public final class BaulastenPictureFinder {
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(BaulastenPictureFinder.class);
     private static final String[] SUFFIXE = new String[] { "tif", "jpg", "tiff", "jpeg" };
     private static final String LINKEXTENSION = "txt";
-    public static final String EXTENSION_REDUCED_SIZE = "jpg";
 
     private static final String DOWNLOAD_TEMPLATE =
         "<rasterfari:url>?REQUEST=GetMap&SERVICE=WMS&customDocumentInfo=download&LAYERS=<rasterfari:document>";
