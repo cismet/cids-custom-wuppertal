@@ -52,6 +52,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConf;
+import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -150,6 +151,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     private javax.swing.JLabel lblHeaderControls;
     private javax.swing.JLabel lblHeaderDocument;
     private javax.swing.JLabel lblHeaderPages;
+    private javax.swing.JLabel lblReducedSize;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstPages;
     private de.cismet.tools.gui.panels.LayeredAlertPanel measureComponentPanel;
@@ -206,6 +208,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         initComponents();
         alertPanel = new AlertPanel(AlertPanel.TYPE.DANGER, warnMessage, true);
         initAlertPanel();
+        lblReducedSize.setVisible(false);
         if (readOnly) {
             lblGemarkung.setVisible(false);
             cmbGemarkung.setVisible(false);
@@ -248,6 +251,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
         pnlUmleitungHeader = new javax.swing.JPanel();
         lblHeaderDocument = new javax.swing.JLabel();
+        lblReducedSize = new javax.swing.JLabel();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -346,6 +350,15 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         pnlHeaderDocument.add(pnlUmleitungHeader, gridBagConstraints);
+
+        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
+        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblReducedSize.text_1")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
 
         pnlDocument.add(pnlHeaderDocument, java.awt.BorderLayout.NORTH);
 
@@ -734,7 +747,15 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         try {
             final String priceGroup = "ea";
-            final URL documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl();
+            final URL documentUrl;
+            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl(document.replace(
+                            VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                            ""));
+            } else {
+                documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl();
+            }
+
             if (BillingPopup.doBilling(
                             "fsuekom",
                             documentUrl.toExternalForm(),
@@ -890,7 +911,11 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      */
     private void checkLinkInTitle(final String document) {
         boolean isUmleitung = false;
+        lblReducedSize.setVisible(false);
         if (document != null) {
+            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                lblReducedSize.setVisible(true);
+            }
             final String filename = getDocumentFilename();
 
             if (!document.contains(filename)) {

@@ -61,6 +61,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
+import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -174,6 +175,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     private javax.swing.JLabel lblArea;
     private javax.swing.JLabel lblCurrentViewTitle;
     private javax.swing.JLabel lblDistance;
+    private javax.swing.JLabel lblReducedSize;
     private javax.swing.JLabel lblTxtArea;
     private javax.swing.JLabel lblTxtDistance;
     private javax.swing.JLabel lblUmleitung;
@@ -240,6 +242,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         documentDocuments = new String[2];
         documentButtons = new JToggleButton[2];
         initComponents();
+        lblReducedSize.setVisible(false);
         alert.setPreferredSize(new Dimension(500, 50));
         alert.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // To change body of generated methods,
         // choose Tools | Templates.
@@ -441,6 +444,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblCurrentViewTitle = new javax.swing.JLabel();
         pnlUmleitungLink = new javax.swing.JPanel();
+        lblReducedSize = new javax.swing.JLabel();
         measureComponentPanel = new de.cismet.tools.gui.panels.LayeredAlertPanel(pnlMeasureComponentWrapper, pnlAlert);
 
         pnlLink.setOpaque(false);
@@ -901,24 +905,51 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         add(panPicNavigation, java.awt.BorderLayout.WEST);
 
         panCenter.setOpaque(false);
-        panCenter.setLayout(new java.awt.BorderLayout());
+        panCenter.setLayout(new java.awt.GridBagLayout());
 
         semiRoundedPanel1.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblCurrentViewTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblCurrentViewTitle.setText("Keine Auswahl");
-        semiRoundedPanel1.add(lblCurrentViewTitle, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        semiRoundedPanel1.add(lblCurrentViewTitle, gridBagConstraints);
 
         pnlUmleitungLink.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         semiRoundedPanel1.add(pnlUmleitungLink, gridBagConstraints);
 
-        panCenter.add(semiRoundedPanel1, java.awt.BorderLayout.NORTH);
-        panCenter.add(measureComponentPanel, java.awt.BorderLayout.CENTER);
+        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
+        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
+                Alb_picturePanel.class,
+                "VermessungBuchwerkEditor.lblReducedSize.text_1")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
+        semiRoundedPanel1.add(lblReducedSize, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panCenter.add(semiRoundedPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panCenter.add(measureComponentPanel, gridBagConstraints);
 
         add(panCenter, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
@@ -987,22 +1018,30 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * @param  evt  DOCUMENT ME!
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
-        final String current = rasterfariDocumentLoaderPanel1.getCurrentDocument();
-
-        if (current == null) {
+        final String document = rasterfariDocumentLoaderPanel1.getCurrentDocument();
+        if (document == null) {
             return;
+        }
+
+        final URL documentUrl;
+        if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+            documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl(document.replace(
+                        VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                        ""));
+        } else {
+            documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl();
         }
 
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
                 public void run() {
-                    final String filename = current.substring(current.lastIndexOf("/") + 1);
+                    final String filename = document.substring(document.lastIndexOf("/") + 1);
                     if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(Alb_picturePanel.this)) {
                         DownloadManager.instance()
                                 .add(
                                     new HttpDownload(
-                                        rasterfariDocumentLoaderPanel1.getDocumentUrl(current),
+                                        documentUrl,
                                         "",
                                         DownloadManagerDialog.getInstance().getJobName(),
                                         "Baulast",
@@ -1277,12 +1316,20 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      */
     private void checkLinkInTitle(final String document) {
         showLinkInTitle(false);
-        jxlUmleitung.setText("");
-        final String filename = getDocumentFilename();
-        if ((document != null) && !document.contains(filename)) {
-            jxlUmleitung.setText(extractFilenameofUrl(document));
-            showLinkInTitle(true);
-            this.repaint();
+
+        lblReducedSize.setVisible(false);
+        if (document != null) {
+            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                lblReducedSize.setVisible(true);
+            }
+            final String filename = getDocumentFilename();
+
+            jxlUmleitung.setText("");
+            if (!document.contains(filename)) {
+                jxlUmleitung.setText(extractFilenameofUrl(document));
+                showLinkInTitle(true);
+                this.repaint();
+            }
         }
     }
 

@@ -82,6 +82,7 @@ import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictur
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
@@ -216,6 +217,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JLabel lblJahr;
     private javax.swing.JLabel lblLetzteAenderungDatum;
     private javax.swing.JLabel lblLetzteAenderungName;
+    private javax.swing.JLabel lblReducedSize;
     private javax.swing.JLabel lblSchluessel;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstLandparcels;
@@ -298,6 +300,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         currentSelectedButton = togBild;
         initAlertPanel();
         jxlUmleitung.setClickedColor(new Color(204, 204, 204));
+        lblReducedSize.setVisible(false);
         if (readOnly) {
             lblSchluessel.setVisible(false);
             cmbSchluessel.setVisible(false);
@@ -390,6 +393,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlUmleitungHeader = new javax.swing.JPanel();
         lblHeaderDocument = new javax.swing.JLabel();
         jxlUmleitung = new org.jdesktop.swingx.JXHyperlink();
+        lblReducedSize = new javax.swing.JLabel();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -538,6 +542,15 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         pnlHeaderDocument.add(pnlUmleitungHeader, gridBagConstraints);
+
+        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
+        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.lblReducedSize.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
 
         pnlDocument.add(pnlHeaderDocument, java.awt.BorderLayout.NORTH);
 
@@ -1298,7 +1311,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if ((currentDocument != NO_SELECTION) && (documents[currentDocument] != null)) {
             try {
-                final String document = documents[currentDocument];
+                final String document;
+                if (documents[currentDocument].contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                    document = documents[currentDocument].replace(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE, "");
+                } else {
+                    document = documents[currentDocument];
+                }
                 final URL url = rasterfariDocumentLoaderPanel1.getDocumentUrl(document);
                 final String productGroupExt = (String)cidsBean.getProperty("format.productgroup_ext");
                 final String priceGroup = (String)cidsBean.getProperty("format.pricegroup");
@@ -1824,7 +1842,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private void checkLinkInTitle(final String document) {
         showLinkInTitle(false);
         boolean isUmleitung = false;
+        lblReducedSize.setVisible(false);
         if (document != null) {
+            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                lblReducedSize.setVisible(true);
+            }
             jxlUmleitung.setText("");
             final String filename = getDocumentFilename();
 
