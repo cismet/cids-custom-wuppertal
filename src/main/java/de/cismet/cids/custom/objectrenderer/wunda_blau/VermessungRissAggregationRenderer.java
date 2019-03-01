@@ -7,6 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObjectNode;
@@ -51,7 +52,6 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsRissWebAccessReportHelper;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
@@ -130,7 +130,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
-    private PrintingWaitDialog printingWaitDialog;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -168,8 +167,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         tblRisse.getSelectionModel().addListSelectionListener(new TableSelectionListener());
 
         tableComparator = new TableModelIndexConvertingToViewIndexComparator(tblRisse);
-
-        printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
     }
 
     /**
@@ -370,17 +367,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -441,7 +438,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 }
                             }
 
-                            if (productGroupExts.size() > 1) {
+                            if ((productGroupExts.size() > 1)
+                                        && (SessionManager.getConnection().getConfigAttr(
+                                                SessionManager.getSession().getUser(),
+                                                BillingPopup.MODE_CONFIG_ATTR,
+                                                getConnectionContext()) != null)) {
                                 JOptionPane.showMessageDialog(
                                     VermessungRissAggregationRenderer.this,
                                     "<html>Es wurden Produkte zum Download ausgewählt,"
@@ -450,6 +451,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     "Mehrere Download-Protokolle",
                                     JOptionPane.INFORMATION_MESSAGE);
                             }
+                            boolean downloadBilder = false;
+                            boolean downloadGrenzniederschriften = false;
                             for (final String productGroupExt : productGroupExts.keySet()) {
                                 final Map<String, Integer> priceGroups = productGroupExts.get(productGroupExt);
                                 final Set<String> keys = priceGroups.keySet();
@@ -468,10 +471,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                                     (Geometry)null,
                                                     getConnectionContext(),
                                                     amounts)) {
-                                        downloadProducts(
-                                            selectedVermessungsrisse,
-                                            type,
-                                            ClientAlkisConf.getInstance().getVermessungHostBilder());
+                                        downloadBilder = true;
                                     }
                                 } else if (type.equalsIgnoreCase(
                                                 VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
@@ -482,12 +482,22 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                                     (Geometry)null,
                                                     getConnectionContext(),
                                                     amounts)) {
-                                        downloadProducts(
-                                            selectedVermessungsrisse,
-                                            type,
-                                            ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften());
+                                        downloadGrenzniederschriften = true;
                                     }
                                 }
+                            }
+
+                            if (downloadBilder) {
+                                downloadProducts(
+                                    selectedVermessungsrisse,
+                                    type,
+                                    ClientAlkisConf.getInstance().getVermessungHostBilder());
+                            }
+                            if (downloadGrenzniederschriften) {
+                                downloadProducts(
+                                    selectedVermessungsrisse,
+                                    type,
+                                    ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften());
                             }
                         } catch (Exception e) {
                             LOG.error("Error when trying to produce a alkis product", e);
@@ -500,7 +510,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     return null;
                 }
             }.execute();
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -671,7 +681,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -690,7 +700,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
