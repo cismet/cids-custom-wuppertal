@@ -156,6 +156,10 @@ public class GrundwassermessstelleDiagrammAxisPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         add(jLabel1, gridBagConstraints);
 
+        jScrollPane3.setBorder(null);
+        jScrollPane3.setViewportBorder(null);
+
+        jList1.setBorder(null);
         jList1.setCellRenderer(new MesswerteListCellRenderer());
         jList1.addMouseListener(new java.awt.event.MouseAdapter() {
 
