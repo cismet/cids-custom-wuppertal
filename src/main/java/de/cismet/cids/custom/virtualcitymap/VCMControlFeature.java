@@ -344,7 +344,9 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         final double camPosX = groundPosX;
         final double camPosY = groundPosY;
         final double camPosZ = groundPosZ + distance;
-        final int epsg = 25832;
+        final int currentSrid = CrsTransformer.extractSridFromCrs(mappingComponent.getMappingModel().getSrs()
+                        .getCode());
+        final int epsg = currentSrid;
 
         final String url = String.format(
                 properties.getUrlTemplate(),
