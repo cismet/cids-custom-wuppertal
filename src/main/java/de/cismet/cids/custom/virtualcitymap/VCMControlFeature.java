@@ -333,7 +333,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         }
 
         final Point point = getGeometry().getCentroid();
-        final double distance = getGeometry().getEnvelopeInternal().getHeight()
+        final double distance = CrsTransformer.transformToMetricCrs(getGeometry()).getEnvelopeInternal().getHeight()
                     * 1.10;
         final String user = properties.getUser();
         final String password = properties.getPassword();
