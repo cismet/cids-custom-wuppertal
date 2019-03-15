@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -34,7 +35,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -46,8 +46,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import javax.swing.DefaultListModel;
@@ -55,7 +53,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
-import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
@@ -64,6 +61,8 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
+import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -73,8 +72,9 @@ import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.FeatureCollectionEvent;
 import de.cismet.cismap.commons.features.PureNewFeature;
-import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.MessenGeometryListener;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
@@ -83,12 +83,10 @@ import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.StaticDecimalTools;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.WebAccessMultiPagePictureReader;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import de.cismet.tools.gui.panels.AlertPanel;
-import de.cismet.tools.gui.panels.LayeredAlertPanel;
 
 /**
  * DOCUMENT ME!
@@ -96,7 +94,8 @@ import de.cismet.tools.gui.panels.LayeredAlertPanel;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionContextProvider {
+public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionContextProvider,
+    RasterfariDocumentLoaderPanel.Listener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -116,22 +115,16 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     private static final int TEXTBLATT_DOCUMENT = 1;
     private static final int NO_SELECTION = -1;
     private static final Color KALIBRIERUNG_VORHANDEN = new Color(120, 255, 190);
-    //
-    private static final ListModel LADEN_MODEL = new DefaultListModel() {
-
-            {
-                add(0, "Wird geladen...");
-            }
-        };
-
-    private static final ListModel FEHLER_MODEL = new DefaultListModel() {
-
-            {
-                add(0, "Lesefehler.");
-            }
-        };
-
     private static boolean alreadyWarnedAboutPermissionProblem = false;
+    private static final String SRS = "EPSG:25832";
+    private static final Crs CRS = new Crs(SRS, SRS, SRS, true, true);
+    private static final XBoundingBox HOMEBB = new XBoundingBox(
+            2583621.251964098d,
+            5682507.032498134d,
+            2584022.9413952776d,
+            5682742.852810634d,
+            SRS,
+            true);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -141,31 +134,18 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
             AlertPanel.TYPE.DANGER,
             alertWarnMessage,
             true);
-    private XBoundingBox initialBoundingBox = new XBoundingBox(
-            2583621.251964098d,
-            5682507.032498134d,
-            2584022.9413952776d,
-            5682742.852810634d,
-            "EPSG:31466",
-            true);
-    private Crs crs = new Crs("EPSG:31466", "EPSG:31466", "EPSG:31466", true, true);
-    MeasuringComponent measureComponent = new MeasuringComponent(initialBoundingBox, crs);
-    private PictureSelectWorker currentPictureSelectWorker = null;
-    private WebAccessMultiPagePictureReader pictureReader;
     private CidsBean cidsBean;
-    private URL[] documentURLs;
+    private String[] documentDocuments;
     private JToggleButton[] documentButtons;
     private transient PropertyChangeListener updatePicturePathListener = null;
     private final MessenFeatureCollectionListener messenListener = new MessenFeatureCollectionListener();
-    private volatile int currentDocument = NO_SELECTION;
-    private volatile int currentPage = NO_SELECTION;
+    private int currentDocument = NO_SELECTION;
     private boolean pathsChanged = false;
     private final Map<Integer, Geometry> pageGeometries = new HashMap<>();
     private String collisionWarning = "";
     private final boolean selfPersisting;
     private boolean isErrorMessageVisible = true;
     private Alb_baulastUmleitungPanel umleitungsPanel;
-    private PictureReaderWorker pictureReaderWorker;
     private boolean umleitungChangedFlag = false;
     private boolean showUmleitung = true;
     private boolean showDocTypePanelEnabled = true;
@@ -195,6 +175,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     private javax.swing.JLabel lblArea;
     private javax.swing.JLabel lblCurrentViewTitle;
     private javax.swing.JLabel lblDistance;
+    private javax.swing.JLabel lblReducedSize;
     private javax.swing.JLabel lblTxtArea;
     private javax.swing.JLabel lblTxtDistance;
     private javax.swing.JLabel lblUmleitung;
@@ -210,6 +191,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     private javax.swing.JPanel pnlMeasureComp;
     private javax.swing.JPanel pnlMeasureComponentWrapper;
     private javax.swing.JPanel pnlUmleitungLink;
+    private de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private de.cismet.tools.gui.RoundedPanel rpControls;
     private de.cismet.tools.gui.RoundedPanel rpMessdaten;
     private de.cismet.tools.gui.RoundedPanel rpSeiten;
@@ -257,10 +239,10 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
                 Alb_baulastUmleitungPanel.MODE.TEXTBLATT,
                 this,
                 getConnectionContext());
-        documentURLs = new URL[2];
-        documentButtons = new JToggleButton[documentURLs.length];
+        documentDocuments = new String[2];
+        documentButtons = new JToggleButton[2];
         initComponents();
-        pnlMeasureComp.add(measureComponent, BorderLayout.CENTER);
+        lblReducedSize.setVisible(false);
         alert.setPreferredSize(new Dimension(500, 50));
         alert.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // To change body of generated methods,
         // choose Tools | Templates.
@@ -269,10 +251,12 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         jxlUmleitung.setClickedColor(new Color(204, 204, 204));
         documentButtons[LAGEPLAN_DOCUMENT] = btnPlan;
         documentButtons[TEXTBLATT_DOCUMENT] = btnTextblatt;
-        measureComponent.getFeatureCollection().addFeatureCollectionListener(messenListener);
-//        expectedMD5Values = new String[2];
-//        measureComponentPanel.setTopOffset(5);
-//        measureComponentPanel.setOffset(5);
+        rasterfariDocumentLoaderPanel1.getFeatureCollection().addFeatureCollectionListener(messenListener);
+        rasterfariDocumentLoaderPanel1.setScaleAndOffsets(Math.min(HOMEBB.getWidth(), HOMEBB.getHeight()),
+            HOMEBB.getX1()
+                    + (HOMEBB.getWidth() / 2),
+            -HOMEBB.getY1()
+                    - (HOMEBB.getHeight() / 2));
         alert.setVisible(false);
         alert.addMouseListener(new MouseAdapter() {
 
@@ -286,7 +270,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     showUmleitung = true;
-                    cancelPictureWorkers();
+//                    cancelPictureWorkers();
                     final String editedLink = umleitungsPanel.getLinkDocument();
                     if ((jxlUmleitung.getText() == null) || jxlUmleitung.getText().isEmpty()) {
                         lstPictures.setModel(new DefaultListModel());
@@ -339,16 +323,9 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * DOCUMENT ME!
      */
     public void dispose() {
-        measureComponent.getFeatureCollection().removeFeatureCollectionListener(messenListener);
-        measureComponent.dispose();
+        rasterfariDocumentLoaderPanel1.getFeatureCollection().removeFeatureCollectionListener(messenListener);
+        rasterfariDocumentLoaderPanel1.dispose();
         updatePicturePathListener = null;
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void zoomToFeatureCollection() {
-        measureComponent.zoomToFeatureCollection();
     }
 
     /**
@@ -376,10 +353,10 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * @param  cidsBean  the cidsBean to set
      */
     public void setCidsBean(final CidsBean cidsBean) {
-        documentURLs = new URL[2];
+        documentDocuments = new String[2];
         umleitungChangedFlag = false;
         lstPictures.setModel(new DefaultListModel());
-        measureComponent.removeAllFeatures();
+        rasterfariDocumentLoaderPanel1.removeAllFeatures();
         setEnabled(false);
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
@@ -420,6 +397,12 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         pnlBusy = new javax.swing.JPanel();
         jxLBusyMeasure = new JXBusyLabel(new Dimension(64, 64));
         pnlMeasureComp = new javax.swing.JPanel();
+        rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
+                StaticProperties.ALB_BAULAST_URL_PREFIX,
+                this,
+                HOMEBB,
+                CRS,
+                getConnectionContext());
         panPicNavigation = new javax.swing.JPanel();
         panBlattberichte = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel6 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -436,16 +419,16 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         btnTextblatt = new javax.swing.JToggleButton();
         rpSeiten = new de.cismet.tools.gui.RoundedPanel();
         scpPictureList = new javax.swing.JScrollPane();
-        lstPictures = new javax.swing.JList();
+        lstPictures = rasterfariDocumentLoaderPanel1.getLstPages();
         semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
         rpControls = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        btnHome = new javax.swing.JButton();
-        togPan = new javax.swing.JToggleButton();
-        togZoom = new javax.swing.JToggleButton();
+        btnHome = rasterfariDocumentLoaderPanel1.getBtnHome();
+        togPan = rasterfariDocumentLoaderPanel1.getTogPan();
+        togZoom = rasterfariDocumentLoaderPanel1.getTogZoom();
         togMessenLine = new javax.swing.JToggleButton();
         togMessenPoly = new javax.swing.JToggleButton();
         togCalibrate = new javax.swing.JToggleButton();
@@ -458,10 +441,11 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel6 = new javax.swing.JLabel();
         panCenter = new javax.swing.JPanel();
-        measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlAlert);
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblCurrentViewTitle = new javax.swing.JLabel();
         pnlUmleitungLink = new javax.swing.JPanel();
+        lblReducedSize = new javax.swing.JLabel();
+        measureComponentPanel = new de.cismet.tools.gui.panels.LayeredAlertPanel(pnlMeasureComponentWrapper, pnlAlert);
 
         pnlLink.setOpaque(false);
         pnlLink.setLayout(new java.awt.GridBagLayout());
@@ -511,6 +495,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         pnlMeasureComponentWrapper.add(pnlBusy, "busyCard");
 
         pnlMeasureComp.setLayout(new java.awt.BorderLayout());
+        pnlMeasureComp.add(rasterfariDocumentLoaderPanel1, java.awt.BorderLayout.CENTER);
+
         pnlMeasureComponentWrapper.add(pnlMeasureComp, "measureCard");
 
         setMinimumSize(new java.awt.Dimension(800, 700));
@@ -750,13 +736,6 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome.setMinimumSize(new java.awt.Dimension(89, 29));
-        btnHome.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnHomeActionPerformed(evt);
-                }
-            });
         jPanel3.add(btnHome);
 
         buttonGrpMode.add(togPan);
@@ -768,13 +747,6 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togPan.setMinimumSize(new java.awt.Dimension(89, 29));
-        togPan.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togPanActionPerformed(evt);
-                }
-            });
         jPanel3.add(togPan);
 
         buttonGrpMode.add(togZoom);
@@ -785,13 +757,6 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togZoom.setMinimumSize(new java.awt.Dimension(89, 29));
-        togZoom.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togZoomActionPerformed(evt);
-                }
-            });
         jPanel3.add(togZoom);
 
         buttonGrpMode.add(togMessenLine);
@@ -940,24 +905,51 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         add(panPicNavigation, java.awt.BorderLayout.WEST);
 
         panCenter.setOpaque(false);
-        panCenter.setLayout(new java.awt.BorderLayout());
-        panCenter.add(measureComponentPanel, java.awt.BorderLayout.CENTER);
+        panCenter.setLayout(new java.awt.GridBagLayout());
 
         semiRoundedPanel1.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblCurrentViewTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblCurrentViewTitle.setText("Keine Auswahl");
-        semiRoundedPanel1.add(lblCurrentViewTitle, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        semiRoundedPanel1.add(lblCurrentViewTitle, gridBagConstraints);
 
         pnlUmleitungLink.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         semiRoundedPanel1.add(pnlUmleitungLink, gridBagConstraints);
 
-        panCenter.add(semiRoundedPanel1, java.awt.BorderLayout.NORTH);
+        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
+        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
+                Alb_picturePanel.class,
+                "VermessungBuchwerkEditor.lblReducedSize.text_1")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
+        semiRoundedPanel1.add(lblReducedSize, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panCenter.add(semiRoundedPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panCenter.add(measureComponentPanel, gridBagConstraints);
 
         add(panCenter, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
@@ -967,17 +959,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
-        measureComponent.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void togMessenPolyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togMessenPolyActionPerformed
-        measureComponent.actionMeasurePolygon();
+        rasterfariDocumentLoaderPanel1.actionMeasurePolygon();
     }                                                                                 //GEN-LAST:event_togMessenPolyActionPerformed
 
     /**
@@ -985,17 +968,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
-        measureComponent.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void togMessenLineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togMessenLineActionPerformed
-        measureComponent.actionMeasureLine();
+        rasterfariDocumentLoaderPanel1.actionMeasureLine();
     }                                                                                 //GEN-LAST:event_togMessenLineActionPerformed
 
     /**
@@ -1004,14 +978,16 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * @param  evt  DOCUMENT ME!
      */
     private void togCalibrateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togCalibrateActionPerformed
-        if (currentPage != NO_SELECTION) {
+        if (rasterfariDocumentLoaderPanel1.getCurrentPage() != NO_SELECTION) {
             final Double distance = askForDistanceValue();
             if (distance != null) {
                 if (distance > 0d) {
-                    measureComponent.actionCalibrate(distance);
-                    final Geometry documentGeom = measureComponent.getMainDocumentGeometry();
+                    rasterfariDocumentLoaderPanel1.calibrate(distance);
+
                     try {
-                        registerGeometryForPage(documentGeom, currentDocument, currentPage);
+                        registerGeometryForPage(rasterfariDocumentLoaderPanel1.getMainDocumentGeometry(),
+                            currentDocument,
+                            rasterfariDocumentLoaderPanel1.getCurrentPage());
                     } catch (Exception ex) {
                         LOG.error(ex, ex);
                         final ErrorInfo ei = new ErrorInfo(
@@ -1034,16 +1010,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
             }
             togPan.setSelected(true);
         }
-    }                                                                                //GEN-LAST:event_togCalibrateActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
-        measureComponent.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    } //GEN-LAST:event_togCalibrateActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1051,32 +1018,30 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * @param  evt  DOCUMENT ME!
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
-        if ((currentDocument == NO_SELECTION) || (documentURLs == null) || (currentDocument >= documentURLs.length)
-                    || (currentDocument < 0)) {
+        final String document = rasterfariDocumentLoaderPanel1.getCurrentDocument();
+        if (document == null) {
             return;
         }
 
-        final URL current = documentURLs[currentDocument];
-
-        if (current == null) {
-            return;
+        final URL documentUrl;
+        if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+            documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl(document.replaceAll(
+                        VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                        ""));
+        } else {
+            documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl();
         }
-
-        final String path = current.toExternalForm();
-
-        final URL url;
-        url = current;
 
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
                 public void run() {
-                    final String filename = path.substring(path.lastIndexOf("/") + 1);
+                    final String filename = document.substring(document.lastIndexOf("/") + 1);
                     if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(Alb_picturePanel.this)) {
                         DownloadManager.instance()
                                 .add(
                                     new HttpDownload(
-                                        url,
+                                        documentUrl,
                                         "",
                                         DownloadManagerDialog.getInstance().getJobName(),
                                         "Baulast",
@@ -1098,7 +1063,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
                 this,
                 getConnectionContext());
         showUmleitung = true;
-        loadPlan();
+        showPlan();
         checkLinkInTitle();
     }                                                                           //GEN-LAST:event_btnPlanActionPerformed
 
@@ -1113,7 +1078,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
                 this,
                 getConnectionContext());
         showUmleitung = true;
-        loadTextBlatt();
+        showTextBlatt();
         checkLinkInTitle();
     }                                                                                //GEN-LAST:event_btnTextblattActionPerformed
 
@@ -1188,20 +1153,9 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * @param  evt  DOCUMENT ME!
      */
     private void lstPicturesValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstPicturesValueChanged
-        if (!evt.getValueIsAdjusting()) {
-            final Object selObj = lstPictures.getSelectedValue();
-            if (selObj instanceof Integer) {
-                final int pageNo = (Integer)selObj;
-                final PictureSelectWorker oldWorkerTest = currentPictureSelectWorker;
-                if (oldWorkerTest != null) {
-                    oldWorkerTest.cancel(true);
-                }
-                currentPictureSelectWorker = new PictureSelectWorker(pageNo - 1);
-                // page -> offset
-                CismetThreadPool.execute(currentPictureSelectWorker);
-            }
-        }
-    } //GEN-LAST:event_lstPicturesValueChanged
+        final int page = lstPictures.getSelectedIndex();
+        refreshMessenForPage(page);
+    }                                                                                      //GEN-LAST:event_lstPicturesValueChanged
 
     /**
      * DOCUMENT ME!
@@ -1277,7 +1231,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     /**
      * DOCUMENT ME!
      */
-    private void showMeasureIsLoading() {
+    @Override
+    public void showMeasureIsLoading() {
         jxLBusyMeasure.setBusy(true);
         final CardLayout cl = (CardLayout)pnlMeasureComponentWrapper.getLayout();
         cl.show(pnlMeasureComponentWrapper, "busyCard");
@@ -1286,7 +1241,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     /**
      * DOCUMENT ME!
      */
-    private void showMeasurePanel() {
+    @Override
+    public void showMeasurePanel() {
         jxLBusyMeasure.setBusy(false);
         final CardLayout cl = (CardLayout)pnlMeasureComponentWrapper.getLayout();
         cl.show(pnlMeasureComponentWrapper, "measureCard");
@@ -1295,90 +1251,85 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     /**
      * DOCUMENT ME!
      */
-    private void loadPlan() {
-        showMeasureIsLoading();
-        if (pictureReaderWorker != null) {
-            pictureReaderWorker.cancel(true);
-        }
-        if (currentPictureSelectWorker != null) {
-            currentPictureSelectWorker.cancel(true);
-        }
+    private void showPlan() {
         lblCurrentViewTitle.setText("Lageplan");
         currentDocument = LAGEPLAN_DOCUMENT;
-        checkLinkInTitle();
-        lstPictures.setEnabled(true);
-        showAlert(false);
-        lstPictures.setModel(new DefaultListModel());
-        measureComponent.removeAllFeatures();
-        if (documentURLs[currentDocument] == null) {
-            showAlert(true);
-            showMeasurePanel();
-        } else {
-            final String filename = BaulastenPictureFinder.getPlanPictureFilename(getCidsBean()).toString();
-            pictureReaderWorker = new PictureReaderWorker(documentURLs[currentDocument]);
-            CismetThreadPool.execute(pictureReaderWorker);
-        }
+        showDocument(currentDocument);
     }
 
     /**
      * DOCUMENT ME!
      */
-    private void cancelPictureWorkers() {
-        if (pictureReaderWorker != null) {
-            pictureReaderWorker.cancel(true);
-        }
-        if (currentPictureSelectWorker != null) {
-            currentPictureSelectWorker.cancel(true);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void loadTextBlatt() {
-        showMeasureIsLoading();
-        cancelPictureWorkers();
+    private void showTextBlatt() {
         lblCurrentViewTitle.setText("Textblatt");
         currentDocument = TEXTBLATT_DOCUMENT;
-        checkLinkInTitle();
-        lstPictures.setEnabled(true);
-        showAlert(false);
-        lstPictures.setModel(new DefaultListModel());
-        measureComponent.removeAllFeatures();
-        if (documentURLs[currentDocument] == null) {
-            showAlert(true);
-            showMeasurePanel();
-            return;
-        } else {
-//            final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-//            final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
-//            final String filename = BaulastenPictureFinder.getTextblattPictureFilename(blattnummer, lfdNummer);
-            pictureReaderWorker = new PictureReaderWorker(documentURLs[currentDocument]);
-            CismetThreadPool.execute(pictureReaderWorker);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void checkLinkInTitle() {
-        final URL fileUrl = documentURLs[currentDocument];
-        checkLinkInTitle(fileUrl);
+        showDocument(currentDocument);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  url  DOCUMENT ME!
+     * @param  currentDocument  DOCUMENT ME!
      */
-    private void checkLinkInTitle(final URL url) {
+    private void showDocument(final int currentDocument) {
+        showMeasureIsLoading();
+        checkLinkInTitle();
+        showAlert(false);
+        if (documentDocuments[currentDocument] == null) {
+            showAlert(true);
+        } else {
+            rasterfariDocumentLoaderPanel1.setDocument(documentDocuments[currentDocument]);
+            readPageGeometriesIntoMap(getPages());
+        }
+        showMeasurePanel();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  pageGeoms  DOCUMENT ME!
+     */
+    private void readPageGeometriesIntoMap(final Collection<CidsBean> pageGeoms) {
+        pageGeometries.clear();
+        if (pageGeoms != null) {
+            for (final CidsBean bean : pageGeoms) {
+                final Object pageNumberObj = bean.getProperty("page_number");
+                final Object geometryObj = bean.getProperty("geometry");
+                if ((pageNumberObj instanceof Integer) && (geometryObj instanceof Geometry)) {
+                    pageGeometries.put((Integer)pageNumberObj, (Geometry)geometryObj);
+                }
+            }
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     */
+    private void checkLinkInTitle() {
+        final String document = documentDocuments[currentDocument];
+        checkLinkInTitle(document);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  document  DOCUMENT ME!
+     */
+    private void checkLinkInTitle(final String document) {
         showLinkInTitle(false);
-        jxlUmleitung.setText("");
-        final String filename = getDocumentFilename();
-        if ((url != null) && !url.toString().contains(filename)) {
-            jxlUmleitung.setText(extractFilenameofUrl(url));
-            showLinkInTitle(true);
-            this.repaint();
+
+        lblReducedSize.setVisible(false);
+        if (document != null) {
+            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                lblReducedSize.setVisible(true);
+            }
+            final String filename = getDocumentFilename();
+
+            jxlUmleitung.setText("");
+            if (!document.contains(filename)) {
+                jxlUmleitung.setText(extractFilenameofUrl(document));
+                showLinkInTitle(true);
+                this.repaint();
+            }
         }
     }
 
@@ -1398,12 +1349,12 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     /**
      * DOCUMENT ME!
      *
-     * @param   url  DOCUMENT ME!
+     * @param   document  url DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private String extractFilenameofUrl(final URL url) {
-        final String[] splittedUrl = url.toString().split("/");
+    private String extractFilenameofUrl(final String document) {
+        final String[] splittedUrl = document.split("/");
         final String s = splittedUrl[splittedUrl.length - 1];
         return s.substring(0, s.indexOf("."));
     }
@@ -1415,7 +1366,6 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * DOCUMENT ME!
      */
     private void setCurrentDocumentNull() {
-        currentDocument = NO_SELECTION;
         pageGeometries.clear();
         setCurrentPageNull();
     }
@@ -1424,18 +1374,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * DOCUMENT ME!
      */
     private void setCurrentPageNull() {
-        currentPage = NO_SELECTION;
         rpMessdaten.setBackground(Color.WHITE);
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void closeReader() {
-        if (pictureReader != null) {
-            pictureReader.close();
-            pictureReader = null;
-        }
     }
 
     /**
@@ -1561,7 +1500,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
                         lblArea.setText(StaticDecimalTools.round(area) + " m²");
                     } else {
                         if (MessenGeometryListener.POLYGON.equals(
-                                        measureComponent.getMessenInputListener().getMode())) {
+                                        rasterfariDocumentLoaderPanel1.getMessenInputListener().getMode())) {
                             // reduce polygon line length to one way
                             umfang *= 0.5;
                         }
@@ -1624,9 +1563,9 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
             if (showUmleitung) {
                 showUmleitung = false;
                 final Alb_baulastUmleitungPanel.MODE mode;
-                final URL fileUrl = documentURLs[currentDocument];
+                final String document = documentDocuments[currentDocument];
                 final String filename = getDocumentFilename();
-                if (!((fileUrl != null) && !fileUrl.toString().contains(filename))) {
+                if (!((document != null) && !document.contains(filename))) {
                     umleitungsPanel.reset();
                     if (currentDocument == Alb_picturePanel.LAGEPLAN_DOCUMENT) {
                         mode = Alb_baulastUmleitungPanel.MODE.LAGEPLAN;
@@ -1664,10 +1603,10 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * DOCUMENT ME!
      */
     public void handleNoDocumentFound() {
-        cancelPictureWorkers();
+//        cancelPictureWorkers();
         alert.setType(AlertPanel.TYPE.DANGER);
         umleitungsPanel.setTextColor(AlertPanel.dangerMessageColor);
-        measureComponent.removeAllFeatures();
+        rasterfariDocumentLoaderPanel1.removeAllFeatures();
         this.invalidate();
         this.validate();
         this.repaint();
@@ -1679,10 +1618,10 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * @param  url  DOCUMENT ME!
      */
     public void reloadPictureFromUrl(final URL url) {
-        cancelPictureWorkers();
+//        cancelPictureWorkers();
         showMeasureIsLoading();
-        pictureReaderWorker = new PictureReaderWorker(url);
-        pictureReaderWorker.execute();
+//        pictureReaderWorker = new PictureReaderWorker(url);
+//        pictureReaderWorker.execute();
     }
 
     /**
@@ -1714,12 +1653,12 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     /**
      * DOCUMENT ME!
      *
-     * @param  url  DOCUMENT ME!
+     * @param  document  url DOCUMENT ME!
      */
-    public void handleUmleitungCreated(final URL url) {
+    public void handleUmleitungCreated(final String document) {
         showAlert(false);
         umleitungChangedFlag = true;
-        checkLinkInTitle(url);
+        checkLinkInTitle(document);
         final FileSearchWorker worker = new FileSearchWorker(false);
         worker.execute();
     }
@@ -1729,8 +1668,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      */
     public void handleUmleitungDeleted() {
         showAlert(true);
-        documentURLs[currentDocument] = null;
-        measureComponent.removeAllFeatures();
+        rasterfariDocumentLoaderPanel1.removeAllFeatures();
         umleitungChangedFlag = true;
         this.jxlUmleitung.setText("");
         this.showLinkInTitle(false);
@@ -1741,20 +1679,20 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      * DOCUMENT ME!
      */
     public void handleEscapePressed() {
-        cancelPictureWorkers();
-        measureComponent.removeAllFeatures();
+//        cancelPictureWorkers();
+        rasterfariDocumentLoaderPanel1.removeAllFeatures();
     }
-
-    //~ Inner Classes ----------------------------------------------------------
 
     /**
      * DOCUMENT ME!
+     *
+     * @param    pageNumber  DOCUMENT ME!
      *
      * @version  $Revision$, $Date$
      */
 
     //J-
-    final class FileSearchWorker extends SwingWorker<List[], Void> {
+    final class FileSearchWorker extends SwingWorker<List<String>[], Void> {
 
         //~ Constructors -------------------------------------------------------
         /**
@@ -1769,7 +1707,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         public FileSearchWorker(final boolean reloadMeasuringComponent) {
             this.reloadMeasurementComp = reloadMeasuringComponent;
             if (reloadMeasurementComp) {
-                measureComponent.reset();
+                rasterfariDocumentLoaderPanel1.reset();
                 togPan.setSelected(true);
                 resetMeasureDataLabels();
             }
@@ -1777,27 +1715,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
 
         //~ Methods ------------------------------------------------------------
         @Override
-        protected List[] doInBackground() throws Exception {
-            final List[] result = new List[2];
-//            if (!StaticDebuggingTools.checkHomeForFile("BAULASTENHTTPDOCPREVIEW")) {
-//                final Object blattObj = getCidsBean().getProperty(TEXTBLATT_PROPERTY);
-//                final Object planObj = getCidsBean().getProperty(LAGEPLAN_PROPERTY);
-//                log.info("Found blatt property " + blattObj);
-//                log.info("Found plan property " + planObj);
-//                if (blattObj != null) {
-//                    result[TEXTBLATT_DOCUMENT] =
-//                            BaulastenPictureFinder.findTextblattPicture(
-//                            blattObj.toString().replaceAll("\\\\", "/"));
-//                }
-//                if (planObj != null) {
-//                    result[LAGEPLAN_DOCUMENT] =
-//                            BaulastenPictureFinder.findPlanPicture(
-//                            planObj.toString().replaceAll("\\\\", "/"));
-//                }
-//
-//            }
-//            else {
-
+        protected List<String>[] doInBackground() throws Exception {
+            final List<String>[] result = new List[2];
             result[TEXTBLATT_DOCUMENT] = BaulastenPictureFinder.findTextblattPicture(getCidsBean());
             result[LAGEPLAN_DOCUMENT] = BaulastenPictureFinder.findPlanPicture(getCidsBean());
 
@@ -1810,11 +1729,11 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         @Override
         protected void done() {
             try {
-                final List[] result = get();
+                final List<String>[] result = get();
                 final StringBuffer collisionLists = new StringBuffer();
                 for (int i = 0; i < result.length; ++i) {
                     //cast!
-                    final List<URL> current = result[i];
+                    final List<String> current = result[i];
                     if (current != null) {
                         if (current.size() > 0) {
                             if (current.size() > 1) {
@@ -1823,7 +1742,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
                                 }
                                 collisionLists.append(current);
                             }
-                            documentURLs[i] = current.get(0);
+                            documentDocuments[i] = current.get(0);
                         }
                     }
                 }
@@ -1847,12 +1766,12 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
                     pathsChanged = false;
                     setEnabled(true);
                     if (btnTextblatt.isSelected()) {
-                        loadTextBlatt();
+                        showTextBlatt();
                     } else if (btnPlan.isSelected()) {
-                        loadPlan();
+                        showPlan();
                     } else {
                         lstPictures.setModel(new DefaultListModel());
-                        measureComponent.removeAllFeatures();
+                        rasterfariDocumentLoaderPanel1.removeAllFeatures();
                         setEnabled(false);
                     }
                 }
@@ -1864,181 +1783,59 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @param  pageNumber  DOCUMENT ME!
      */
-    final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
+    public void refreshMessenForPage(final int pageNumber) {
+        final int defaultSrid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getName());
 
-        //~ Instance fields ----------------------------------------------------
+        final Geometry pageGeom = pageGeometries.get(pageNumber);
 
-        private final URL pictureURL;
-//        private boolean md5OK = false;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new PictureReaderWorker object.
-         *
-         * @param  pictureURL  DOCUMENT ME!
-         */
-        public PictureReaderWorker(final URL pictureURL) {
-            this.pictureURL = pictureURL;
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("prepare picture reader for file " + this.pictureURL);
+        final XBoundingBox bb;
+        if (pageGeom != null) {
+            int srid = pageGeom.getSRID();
+            if (srid == CismapBroker.getInstance().getDefaultCrsAlias()) {
+                srid = defaultSrid;
             }
-            lstPictures.setModel(LADEN_MODEL);
-            measureComponent.removeAllFeatures();
+
+            bb = new XBoundingBox((srid != defaultSrid) ? CrsTransformer.transformToDefaultCrs(pageGeom) : pageGeom);
+            rasterfariDocumentLoaderPanel1.setMainDocumentGeometry(pageGeom);
+            rasterfariDocumentLoaderPanel1.setScaleAndOffsets(Math.max(bb.getWidth(), bb.getHeight()),
+                bb.getX1()
+                        + (bb.getWidth() / 2),
+                -bb.getY1()
+                        - (bb.getHeight() / 2));
+        } else {
+            final Coordinate centroid = HOMEBB.getGeometry().getCentroid().getCoordinate();
+            bb = new XBoundingBox(centroid.x - (1656 / 2),
+                    centroid.y
+                            - (2339 / 2),
+                    centroid.x
+                            + (1656 / 2),
+                    centroid.y
+                            + (2339 / 2),
+                    SRS,
+                    true);
+            rasterfariDocumentLoaderPanel1.setMainDocumentGeometry(bb.getGeometry(defaultSrid));
+            rasterfariDocumentLoaderPanel1.setScaleAndOffsets(
+                Math.max(bb.getWidth(), bb.getHeight()),
+                bb.getX1()
+                        + (bb.getWidth() / 2),
+                -bb.getY1()
+                        - (bb.getHeight() / 2));
         }
 
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * private void updateMD5() throws Exception { expectedMD5Values[currentDocument] = currentActualDocumentMD5;
-         * cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5); log.debug("saving md5
-         * value " + currentActualDocumentMD5); persistBean(); }.
-         *
-         * @return  DOCUMENT ME!
-         *
-         * @throws  Exception  DOCUMENT ME!
-         */
-        @Override
-        protected ListModel doInBackground() throws Exception {
-            final DefaultListModel model = new DefaultListModel();
-            readPageGeometriesIntoMap(getPages());
-
-            closeReader();
-            pictureReader = new WebAccessMultiPagePictureReader(pictureURL);
-//            pictureReader.setCaching(false);
-            final int numberOfPages = pictureReader.getNumberOfPages();
-            for (int i = 0; i < numberOfPages; ++i) {
-                model.addElement(i + 1);
-            }
-            return model;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  pageGeoms  DOCUMENT ME!
-         */
-        private void readPageGeometriesIntoMap(final Collection<CidsBean> pageGeoms) {
-            pageGeometries.clear();
-            if (pageGeoms != null) {
-                for (final CidsBean bean : pageGeoms) {
-                    final Object pageNumberObj = bean.getProperty("page_number");
-                    final Object geometryObj = bean.getProperty("geometry");
-                    if ((pageNumberObj instanceof Integer) && (geometryObj instanceof Geometry)) {
-                        pageGeometries.put((Integer)pageNumberObj, (Geometry)geometryObj);
-                    }
-                }
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        @Override
-        protected void done() {
-            try {
-                final ListModel model = get();
-                lstPictures.setModel(model);
-                if (model.getSize() > 0) {
-                    lstPictures.setSelectedIndex(0);
-                } else {
-                    showAlert(true);
-                    lstPictures.setModel(new DefaultListModel());
-                }
-            } catch (InterruptedException ex) {
-                setCurrentDocumentNull();
-                lstPictures.setModel(FEHLER_MODEL);
-                LOG.warn(ex, ex);
-            } catch (ExecutionException ex) {
-                lstPictures.setModel(FEHLER_MODEL);
-                setCurrentDocumentNull();
-                LOG.error(ex, ex);
-            } catch (CancellationException ex) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(ex, ex);
-                }
-            } finally {
-            }
+        togPan.setSelected(true);
+        resetMeasureDataLabels();
+        if (pageGeom != null) {
+            rpMessdaten.setBackground(KALIBRIERUNG_VORHANDEN);
+            rpMessdaten.setAlpha(120);
+        } else {
+            rpMessdaten.setBackground(Color.WHITE);
+            rpMessdaten.setAlpha(60);
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private final int pageNumber;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new PictureSelectWorker object.
-         *
-         * @param  pageNumber  DOCUMENT ME!
-         */
-        public PictureSelectWorker(final int pageNumber) {
-            this.pageNumber = pageNumber;
-            setCurrentPageNull();
-            measureComponent.reset();
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         *
-         * @throws  Exception              DOCUMENT ME!
-         * @throws  IllegalStateException  DOCUMENT ME!
-         */
-        @Override
-        protected BufferedImage doInBackground() throws Exception {
-            if (pictureReader != null) {
-                return pictureReader.loadPage(pageNumber);
-            }
-            throw new IllegalStateException("PictureReader is null!!");
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        @Override
-        protected void done() {
-            try {
-                if (!isCancelled()) {
-                    final Geometry pageGeom = pageGeometries.get(pageNumber);
-                    currentPage = pageNumber;
-                    measureComponent.addImage(get(), pageGeom, CrsTransformer.extractSridFromCrs(crs.getCode()));
-                    togPan.setSelected(true);
-                    resetMeasureDataLabels();
-                    if (pageGeom != null) {
-                        rpMessdaten.setBackground(KALIBRIERUNG_VORHANDEN);
-                        rpMessdaten.setAlpha(120);
-                    } else {
-                        rpMessdaten.setBackground(Color.WHITE);
-                        rpMessdaten.setAlpha(60);
-                    }
-                    measureComponent.zoomToFeatureCollection();
-                }
-            } catch (InterruptedException ex) {
-                setCurrentPageNull();
-                LOG.warn(ex, ex);
-            } catch (Exception ex) {
-                setCurrentPageNull();
-                LOG.error(ex, ex);
-            } finally {
-                currentPictureSelectWorker = null;
-                showMeasurePanel();
-            }
-        }
-    }
+    //~ Inner Classes ----------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -2057,7 +1854,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         @Override
         public void featuresAdded(final FeatureCollectionEvent fce) {
             if (!togCalibrate.isEnabled()) {
-                for (final Feature f : measureComponent.getFeatureCollection().getAllFeatures()) {
+                for (final Feature f : rasterfariDocumentLoaderPanel1.getFeatureCollection().getAllFeatures()) {
                     if ((f instanceof PureNewFeature) && !(f.getGeometry() instanceof Point)) {
                         // messgeometrie gefunden
                         togCalibrate.setEnabled(true);
@@ -2075,7 +1872,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         @Override
         public void featuresRemoved(final FeatureCollectionEvent fce) {
             if (togCalibrate.isEnabled()) {
-                for (final Feature f : measureComponent.getFeatureCollection().getAllFeatures()) {
+                for (final Feature f : rasterfariDocumentLoaderPanel1.getFeatureCollection().getAllFeatures()) {
                     if ((f instanceof PureNewFeature) && !(f.getGeometry() instanceof Point)) {
                         // messgeometrie gefunden.
                         return;
