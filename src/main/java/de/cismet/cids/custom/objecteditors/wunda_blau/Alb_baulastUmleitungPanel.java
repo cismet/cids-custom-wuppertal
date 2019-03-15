@@ -29,8 +29,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
-import java.net.URL;
-
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
@@ -136,7 +134,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
             WEB_DAV_PASSWORD,
             false);
     private boolean firstDocumentChange = true;
-    private URL lastCheckedURL;
+    private String lastCheckedDocument;
     private String escapeText;
 
     private final ConnectionContext connectionContext;
@@ -238,17 +236,17 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      * DOCUMENT ME!
      */
     private void checkIfLinkDocumentExists() {
-        final SwingWorker<URL, Void> worker = new SwingWorker<URL, Void>() {
+        final SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
 
                 @Override
                 protected void done() {
                     try {
-                        final URL file = get();
+                        final String document = get();
                         jXBusyLabel1.setBusy(false);
-                        if (file != null) {
+                        if (document != null) {
                             picturePan.successAlert();
-                            picturePan.reloadPictureFromUrl(file);
-                            lastCheckedURL = file;
+                            // picturePan.reloadPictureFromUrl(document);
+                            lastCheckedDocument = document;
                             final CardLayout cl = (CardLayout)pnlControls.getLayout();
                             cl.show(pnlControls, "card3");
                         } else {
@@ -264,7 +262,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                 }
 
                 @Override
-                protected URL doInBackground() throws Exception {
+                protected String doInBackground() throws Exception {
                     final String input = getLinkDocument();
                     if (!isNummerConsistent(input)) {
                         return null;
@@ -272,7 +270,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                     final String blattnummer = input.contains("-") ? input.substring(0, input.indexOf("-"))
                                                                    : input.substring(0, 7);
                     final String lfdNummer = input.substring(input.length() - 2, input.length());
-                    final List<URL> res;
+                    final List<String> res;
                     if (mode == MODE.LAGEPLAN) {
                         res = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
                     } else {
@@ -400,7 +398,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                 protected void done() {
                     try {
                         get();
-                        picturePan.handleUmleitungCreated(lastCheckedURL);
+//                        picturePan.handleUmleitungCreated(lastCheckedDocument);
                     } catch (InterruptedException ex) {
                         LOG.error("Create Link File Worker was interrupted.", ex);
                     } catch (ExecutionException ex) {
