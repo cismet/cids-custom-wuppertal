@@ -34,11 +34,28 @@ public final class BaulastenPictureFinder {
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(BaulastenPictureFinder.class);
     private static final String[] SUFFIXE = new String[] { "tif", "jpg", "tiff", "jpeg" };
     private static final String LINKEXTENSION = "txt";
-
+    public static final String SUFFIX_REDUCED_SIZE = "_rs";
+    public static final String EXTENSION_REDUCED_SIZE = "jpg";
     private static final String DOWNLOAD_TEMPLATE =
         "<rasterfari:url>?REQUEST=GetMap&SERVICE=WMS&customDocumentInfo=download&LAYERS=<rasterfari:document>";
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean          DOCUMENT ME!
+     * @param   checkReducedSize  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<String> findPlanPicture(final CidsBean cidsBean, final boolean checkReducedSize) {
+        final FileWithoutSuffix picturePath = getPlanPictureFilename(cidsBean);
+        if (log.isDebugEnabled()) {
+            log.debug("findPlanPicture: " + picturePath);
+        }
+        return probeWebserverForRightSuffix(picturePath, checkReducedSize);
+    }
 
     /**
      * DOCUMENT ME!
@@ -48,11 +65,26 @@ public final class BaulastenPictureFinder {
      * @return  DOCUMENT ME!
      */
     public static List<String> findPlanPicture(final CidsBean cidsBean) {
-        final FileWithoutSuffix picturePath = getPlanPictureFilename(cidsBean);
+        return findPlanPicture(cidsBean, false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   blattnummer       DOCUMENT ME!
+     * @param   laufendeNummer    DOCUMENT ME!
+     * @param   checkReducedSize  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<String> findPlanPicture(final String blattnummer,
+            final String laufendeNummer,
+            final boolean checkReducedSize) {
+        final FileWithoutSuffix picturePath = getPlanPictureFilename(blattnummer, laufendeNummer);
         if (log.isDebugEnabled()) {
-            log.debug("findPlanPicture: " + picturePath);
+            log.debug("findPlanPicture: " + picturePath.toString());
         }
-        return probeWebserverForRightSuffix(picturePath);
+        return probeWebserverForRightSuffix(picturePath, checkReducedSize);
     }
 
     /**
@@ -64,11 +96,23 @@ public final class BaulastenPictureFinder {
      * @return  DOCUMENT ME!
      */
     public static List<String> findPlanPicture(final String blattnummer, final String laufendeNummer) {
-        final FileWithoutSuffix picturePath = getPlanPictureFilename(blattnummer, laufendeNummer);
+        return findPlanPicture(blattnummer, laufendeNummer, false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean          DOCUMENT ME!
+     * @param   checkReducedSize  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<String> findTextblattPicture(final CidsBean cidsBean, final boolean checkReducedSize) {
+        final FileWithoutSuffix picturePath = getTextblattPictureFilename(cidsBean);
         if (log.isDebugEnabled()) {
-            log.debug("findPlanPicture: " + picturePath.toString());
+            log.debug("findTextblattPicture: " + picturePath.toString());
         }
-        return probeWebserverForRightSuffix(picturePath);
+        return probeWebserverForRightSuffix(picturePath, checkReducedSize);
     }
 
     /**
@@ -79,11 +123,7 @@ public final class BaulastenPictureFinder {
      * @return  DOCUMENT ME!
      */
     public static List<String> findTextblattPicture(final CidsBean cidsBean) {
-        final FileWithoutSuffix picturePath = getTextblattPictureFilename(cidsBean);
-        if (log.isDebugEnabled()) {
-            log.debug("findTextblattPicture: " + picturePath.toString());
-        }
-        return probeWebserverForRightSuffix(picturePath);
+        return findTextblattPicture(cidsBean, false);
     }
 
     /**
@@ -104,17 +144,32 @@ public final class BaulastenPictureFinder {
     /**
      * DOCUMENT ME!
      *
-     * @param   blattnummer     picture DOCUMENT ME!
+     * @param   blattnummer       picture DOCUMENT ME!
+     * @param   laufendeNummer    DOCUMENT ME!
+     * @param   checkReducedSize  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<String> findTextblattPicture(final String blattnummer,
+            final String laufendeNummer,
+            final boolean checkReducedSize) {
+        final FileWithoutSuffix picturePath = getTextblattPictureFilename(blattnummer, laufendeNummer);
+        if (log.isDebugEnabled()) {
+            log.debug("findTextblattPicture: " + picturePath.toString());
+        }
+        return probeWebserverForRightSuffix(picturePath, checkReducedSize);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   blattnummer     DOCUMENT ME!
      * @param   laufendeNummer  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static List<String> findTextblattPicture(final String blattnummer, final String laufendeNummer) {
-        final FileWithoutSuffix picturePath = getTextblattPictureFilename(blattnummer, laufendeNummer);
-        if (log.isDebugEnabled()) {
-            log.debug("findTextblattPicture: " + picturePath.toString());
-        }
-        return probeWebserverForRightSuffix(picturePath);
+        return findTextblattPicture(blattnummer, laufendeNummer, false);
     }
 
     /**
@@ -315,11 +370,13 @@ public final class BaulastenPictureFinder {
      * DOCUMENT ME!
      *
      * @param   fileWithoutSuffix  DOCUMENT ME!
+     * @param   checkReducedSize   DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private static List<String> probeWebserverForRightSuffix(final FileWithoutSuffix fileWithoutSuffix) {
-        return probeWebserverForRightSuffix(fileWithoutSuffix, 0);
+    private static List<String> probeWebserverForRightSuffix(final FileWithoutSuffix fileWithoutSuffix,
+            final boolean checkReducedSize) {
+        return probeWebserverForRightSuffix(fileWithoutSuffix, 0, checkReducedSize);
     }
 
     /**
@@ -327,26 +384,50 @@ public final class BaulastenPictureFinder {
      *
      * @param   fileWithoutSuffix  DOCUMENT ME!
      * @param   recursionDepth     DOCUMENT ME!
+     * @param   checkReducedSize   DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static List<String> probeWebserverForRightSuffix(final FileWithoutSuffix fileWithoutSuffix,
-            final int recursionDepth) {
+            final int recursionDepth,
+            final boolean checkReducedSize) {
         final String fileWithoutSuffixString = fileWithoutSuffix.toString();
         if (log.isDebugEnabled()) {
             log.debug("Searching for picture: " + fileWithoutSuffixString + "xxx");
         }
         final List<String> results = new ArrayList<>();
 
-        for (final String suffix : SUFFIXE) {
-            try {
-                final String fileWithSuffix = fileWithoutSuffixString + suffix;
-                final URL objectURL = getUrlForDocument(fileWithSuffix);
-                if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
-                    results.add(fileWithSuffix);
+        if (checkReducedSize) {
+            int counter = 1;
+            boolean picfound = true;
+            while (picfound) {
+                final String fileWithSuffix = fileWithoutSuffixString.substring(
+                        0,
+                        fileWithoutSuffixString.lastIndexOf("."))
+                            + SUFFIX_REDUCED_SIZE + String.format("%02d", counter) + "." + EXTENSION_REDUCED_SIZE;
+                try {
+                    final URL objectURL = getUrlForDocument(fileWithSuffix);
+                    picfound = WebAccessManager.getInstance().checkIfURLaccessible(objectURL);
+                    if (picfound) {
+                        results.add(fileWithSuffix);
+                    }
+                } catch (Exception ex) {
+                    log.error("Problem occured, during checking for " + fileWithSuffix, ex);
+                    picfound = false;
                 }
-            } catch (Exception ex) {
-                log.error("Problem occured, during checking for " + fileWithoutSuffixString + suffix, ex);
+                counter++;
+            }
+        } else {
+            for (final String suffix : SUFFIXE) {
+                try {
+                    final String fileWithSuffix = fileWithoutSuffixString + suffix;
+                    final URL objectURL = getUrlForDocument(fileWithSuffix);
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
+                        results.add(fileWithSuffix);
+                    }
+                } catch (Exception ex) {
+                    log.error("Problem occured, during checking for " + fileWithoutSuffixString + suffix, ex);
+                }
             }
         }
 
@@ -360,7 +441,10 @@ public final class BaulastenPictureFinder {
                     if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
                         final String link = IOUtils.toString(WebAccessManager.getInstance().doRequest(objectURL),
                                 "UTF-8");
-                        return probeWebserverForRightSuffix(getObjectPath(link.trim()), recursionDepth + 1);
+                        return probeWebserverForRightSuffix(getObjectPath(link.trim()),
+                                recursionDepth
+                                        + 1,
+                                checkReducedSize);
                     }
                 } catch (Exception ex) {
                     log.error(ex, ex);

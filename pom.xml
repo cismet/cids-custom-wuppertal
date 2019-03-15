@@ -60,13 +60,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>6.4</version>
+                <version>6.4.3</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>6.4</version>
+                <version>6.4.3</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -116,21 +116,21 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.10.1-RasterfariDocumentLoaderPanel-prerelease-4</version>
+                <version>6.11</version>
                 <type>jar</type>
             </dependency>
             
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>6.2.16</version>
+                <version>6.2.19</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>6.2.16</version>
+                <version>6.2.19</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -138,7 +138,7 @@
             <dependency>
                 <groupId>de.cismet.cismap</groupId>
                 <artifactId>cismap-plugin</artifactId>
-                <version>6.1.5</version>
+                <version>6.1.6</version>
                 <type>jar</type>
             </dependency>
             
@@ -598,10 +598,3 @@
         </profile>
     </profiles>  
 </project>
-
-
-
-
-
-
-
