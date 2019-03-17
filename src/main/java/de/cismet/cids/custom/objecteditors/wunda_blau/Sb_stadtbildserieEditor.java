@@ -2775,7 +2775,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     Level.WARNING,
                     null);
             JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Sb_stadtbildserieEditor.this), ei);
-            chbPruefen.setEnabled(true);
             btnSavePruefhinweis.setEnabled(true);
             txtaPruefhinweis.setEnabled(true);
         }

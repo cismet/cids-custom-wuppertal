@@ -36,7 +36,7 @@ public final class StaticProperties {
     public static final String FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
 
     public static final String ALB_BAULAST_URL_PREFIX;
-    public static final String ALB_BAULAST_RS_URL_PREFIX;
+    public static final String ALB_BAULAST_DOCUMENT_PATH;
 
     // --------------
     static {
@@ -50,7 +50,7 @@ public final class StaticProperties {
         POI_LOCATIONTYPE_URL_SUFFIX = PROP_READER.getProperty("poi_locationtype_url_suffix");
         FORTFUEHRUNGSNACHWEISE_URL_PREFIX = PROP_READER.getProperty("fortfuehrungsnachweise_url_prefix");
         ALB_BAULAST_URL_PREFIX = PROP_READER.getProperty("baulasten_dokumenten_url_prefix");
-        ALB_BAULAST_RS_URL_PREFIX = PROP_READER.getProperty("baulasten_rs_dokumenten_url_prefix");
+        ALB_BAULAST_DOCUMENT_PATH = PROP_READER.getProperty("baulasten_dokumenten_pfad");
     }
 
     //~ Constructors -----------------------------------------------------------

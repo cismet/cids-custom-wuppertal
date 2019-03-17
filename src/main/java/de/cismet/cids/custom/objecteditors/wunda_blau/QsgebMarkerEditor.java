@@ -47,15 +47,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.io.IOException;
 import java.io.StringReader;
-
-import java.net.URL;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -63,14 +59,9 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -101,7 +92,7 @@ import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -110,7 +101,6 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.WebAccessMultiPagePictureReader;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 
@@ -125,7 +115,8 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     FooterComponentProvider,
     BindingGroupStore,
     PropertyChangeListener,
-    RequestsFullSizeComponent {
+    RequestsFullSizeComponent,
+    RasterfariDocumentLoaderPanel.Listener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -204,8 +195,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     private String pruefdatumAttribute;
     private String bearbeitungsdatumAttribute;
     private QsgebStatusLightweightSearch statusSearch;
-    private final Map<Integer, BufferedImage> imageMap = new HashMap<>();
-    private WebAccessMultiPagePictureReader pictureReader;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnImages;
@@ -259,7 +248,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     private JLabel lblReducedSize;
     private JLabel lblStatus_txt;
     private JList lstPages;
-    private MeasuringComponent measuringComponent1;
     private JPanel panBild;
     private JPanel panContent;
     private JPanel panDaten;
@@ -272,6 +260,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     private SemiRoundedPanel pnlHeaderDocument;
     private SemiRoundedPanel pnlHeaderPages;
     private RoundedPanel pnlPages;
+    private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private RoundedPanel rpInfo;
     private RoundedPanel rpKarte;
     private JScrollPane scpPages;
@@ -301,6 +290,17 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void showMeasureIsLoading() {
+        showDocumentCard(DocumentCard.BUSY);
+    }
+
+    @Override
+    public void showMeasurePanel() {
+        showDocumentCard(DocumentCard.DOCUMENT);
+        btnImages.setEnabled(true);
+    }
 
     /**
      * DOCUMENT ME!
@@ -416,7 +416,10 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         lblReducedSize = new JLabel();
         pnlBild = new JPanel();
         jPanel1 = new JPanel();
-        measuringComponent1 = new MeasuringComponent(INITIAL_BOUNDINGBOX, CRS);
+        rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
+                PROPERTIES.getRasterfariUrl(),
+                this,
+                getConnectionContext());
         jPanel2 = new JPanel();
         jxLBusy = new JXBusyLabel(new Dimension(64, 64));
         jPanel3 = new JPanel();
@@ -427,7 +430,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         pnlHeaderPages = new SemiRoundedPanel();
         lblHeaderPages = new JLabel();
         scpPages = new JScrollPane();
-        lstPages = new JList();
+        lstPages = rasterfariDocumentLoaderPanel1.getLstPages();
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new GridBagLayout());
@@ -1121,7 +1124,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         pnlBild.setLayout(new CardLayout());
 
         jPanel1.setLayout(new BorderLayout());
-        jPanel1.add(measuringComponent1, BorderLayout.CENTER);
+        jPanel1.add(rasterfariDocumentLoaderPanel1, BorderLayout.CENTER);
 
         pnlBild.add(jPanel1, "DOCUMENT");
 
@@ -1179,13 +1182,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
         lstPages.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstPages.setFixedCellWidth(75);
-        lstPages.addListSelectionListener(new ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final ListSelectionEvent evt) {
-                    lstPagesValueChanged(evt);
-                }
-            });
         scpPages.setViewportView(lstPages);
 
         pnlPages.add(scpPages, BorderLayout.CENTER);
@@ -1203,21 +1199,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void lstPagesValueChanged(final ListSelectionEvent evt) { //GEN-FIRST:event_lstPagesValueChanged
-        if (!evt.getValueIsAdjusting()) {
-            final Object page = lstPages.getSelectedIndex();
-
-            if (page instanceof Integer) {
-                setDocument(((Integer)page));
-            }
-        }
-    } //GEN-LAST:event_lstPagesValueChanged
 
     /**
      * DOCUMENT ME!
@@ -1400,87 +1381,8 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      * DOCUMENT ME!
      */
     private void loadDocument() {
-        imageMap.clear();
-        final DefaultListModel modelPictures = new DefaultListModel();
-        lstPages.setModel(modelPictures);
-        lstPages.setEnabled(false);
         btnImages.setEnabled(false);
-        showDocumentCard(DocumentCard.BUSY);
-        measuringComponent1.reset();
-        measuringComponent1.removeAllFeatures();
-
-        new SwingWorker<Integer, Integer>() {
-
-                @Override
-                protected Integer doInBackground() throws Exception {
-                    try {
-                        try {
-                            pictureReader = new WebAccessMultiPagePictureReader(new URL(getPictureUrl()), false, true);
-                        } catch (final IOException ex) {
-                            LOG.warn("Document not produced.", ex);
-                            return -1;
-                        }
-                        final int numberOfPages = pictureReader.getNumberOfPages();
-                        for (int i = 0; i < numberOfPages; i++) {
-                            publish(i);
-                        }
-                        for (int page = 0; page < numberOfPages; page++) {
-                            imageMap.put(page, pictureReader.loadPage(page));
-                        }
-                        return numberOfPages;
-                    } finally {
-                        if (pictureReader != null) {
-                            pictureReader.close();
-                        }
-                    }
-                }
-
-                @Override
-                protected void process(final List<Integer> chunks) {
-                    btnImages.setEnabled(true);
-                    for (final Integer chunk : chunks) {
-                        modelPictures.add(chunk, "Seite " + (chunk + 1));
-                    }
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        final Integer numOfPictures = get();
-                        if (numOfPictures < 0) {
-                            showDocumentCard(DocumentCard.NO_DOCUMENT);
-                            btnImages.setEnabled(false);
-                            btnInfo.setEnabled(false);
-                            lblImages.setEnabled(false);
-                            lblImages.setText("Kein Dokument vorhanden");
-                            lblInfo.setEnabled(false);
-                        } else {
-                            lstPages.setSelectedIndex(0);
-                        }
-                    } catch (final Exception ex) {
-                        LOG.warn("Document not available.", ex);
-                        showDocumentCard(DocumentCard.ERROR);
-                    } finally {
-                        lstPages.setEnabled(true);
-                    }
-                }
-            }.execute();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  pagenr  DOCUMENT ME!
-     */
-    private void setDocument(final int pagenr) {
-        if (imageMap.containsKey(pagenr)) {
-            final BufferedImage pageImage = imageMap.get(pagenr);
-            measuringComponent1.removeAllFeatures();
-            measuringComponent1.addImage(pageImage);
-            measuringComponent1.zoomToFeatureCollection();
-            measuringComponent1.actionPan();
-            showDocumentCard(DocumentCard.DOCUMENT);
-        }
+        rasterfariDocumentLoaderPanel1.setDocument(getPictureUrl());
     }
 
     /**
@@ -1489,13 +1391,11 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      * @return  DOCUMENT ME!
      */
     private String getPictureUrl() {
-        final String serverUrl = PROPERTIES.getPictureServer();
         final Date datum = (Date)cidsBean.getProperty(FIELD__DATUM_ANGELEGT);
-
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         final String jahr = String.valueOf(sdf.format(datum));
         final String id = cidsBean.getProperty(FIELD__ID).toString();
-        return serverUrl + jahr + "/qsgeb_" + jahr + "_" + id + ".tif";
+        return PROPERTIES.getRasterfariPath() + "/" + jahr + "/qsgeb_" + jahr + "_" + id + ".tif";
     }
 
     /**
@@ -1863,7 +1763,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     @Override
     public void dispose() {
         super.dispose();
-        measuringComponent1.dispose();
+        rasterfariDocumentLoaderPanel1.dispose();
         if (this.isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
         }
@@ -1955,7 +1855,8 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
         private final Properties properties;
 
-        private final String pictureServer;
+        private final String rasterfariUrl;
+        private final String rasterfariPath;
 
         //~ Constructors -------------------------------------------------------
 
@@ -1967,7 +1868,8 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         public QsGebProperties(final Properties properties) {
             this.properties = properties;
 
-            pictureServer = readProperty("PICTURE_SERVER", null);
+            rasterfariUrl = readProperty("PICTURE_SERVER", null);
+            rasterfariPath = readProperty("PICTURE_PATH", null);
         }
 
         //~ Methods ------------------------------------------------------------

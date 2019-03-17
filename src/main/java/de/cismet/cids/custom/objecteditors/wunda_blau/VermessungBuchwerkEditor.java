@@ -47,11 +47,12 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
-import de.cismet.cids.custom.objecteditors.utils.PictureLoaderPanel;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.alkis.AlkisConf;
+import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -62,6 +63,7 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -89,7 +91,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     BorderProvider,
     RequestsFullSizeComponent,
     ConnectionContextStore,
-    PictureLoaderPanel.Listener {
+    RasterfariDocumentLoaderPanel.Listener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -125,9 +127,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     protected Object steuerbezirk;
     protected Object bezeichner;
     protected boolean readOnly;
-    protected URL documentURL;
+    protected String document;
     private AlertPanel alertPanel;
-    private PictureLoaderPanel pictureLoaderPanel;
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
@@ -154,7 +155,6 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstPages;
     private de.cismet.tools.gui.panels.LayeredAlertPanel measureComponentPanel;
-    private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measuringComponent;
     private javax.swing.JPanel panLeft;
     private javax.swing.JPanel panRight;
     private javax.swing.JPanel pnlBusy;
@@ -171,6 +171,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     private de.cismet.tools.gui.RoundedPanel pnlPages;
     private javax.swing.JPanel pnlTitle;
     private javax.swing.JPanel pnlUmleitungHeader;
+    private de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private javax.swing.JScrollPane scpPages;
     private javax.swing.Box.Filler strFooter;
     private javax.swing.JToggleButton togPan;
@@ -202,9 +203,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
-        this.pictureLoaderPanel = new PictureLoaderPanel(this, connectionContext);
 
-        documentURL = null;
+        document = null;
         initComponents();
         alertPanel = new AlertPanel(AlertPanel.TYPE.DANGER, warnMessage, true);
         initAlertPanel();
@@ -240,15 +240,18 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         pnlBusy = new javax.swing.JPanel();
         jxLBusyMeasure = new JXBusyLabel(new Dimension(64, 64));
         pnlMeasureComp = new javax.swing.JPanel();
-        measuringComponent = pictureLoaderPanel.getMeasuringComponent();
+        rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
+                this,
+                connectionContext);
         pnlGrenzniederschriftAlert = new javax.swing.JPanel();
         warnMessage = new javax.swing.JLabel();
         panLeft = new javax.swing.JPanel();
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblReducedSize = new javax.swing.JLabel();
         pnlUmleitungHeader = new javax.swing.JPanel();
         lblHeaderDocument = new javax.swing.JLabel();
+        lblReducedSize = new javax.swing.JLabel();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -268,9 +271,9 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         cmbGemarkung = new DefaultBindableReferenceCombo();
         panRight = new javax.swing.JPanel();
         pnlControls = new de.cismet.tools.gui.RoundedPanel();
-        togPan = pictureLoaderPanel.getTogPan();
-        togZoom = pictureLoaderPanel.getTogZoom();
-        btnHome = pictureLoaderPanel.getBtnHome();
+        togPan = rasterfariDocumentLoaderPanel1.getTogPan();
+        togZoom = rasterfariDocumentLoaderPanel1.getTogZoom();
+        btnHome = rasterfariDocumentLoaderPanel1.getBtnHome();
         pnlHeaderControls = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderControls = new javax.swing.JLabel();
         btnOpen = new javax.swing.JButton();
@@ -278,7 +281,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         pnlHeaderPages = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderPages = new javax.swing.JLabel();
         scpPages = new javax.swing.JScrollPane();
-        lstPages = pictureLoaderPanel.getLstPages();
+        lstPages = rasterfariDocumentLoaderPanel1.getLstPages();
         gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -311,7 +314,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         pnlMeasureComponentWrapper.add(pnlBusy, "busyCard");
 
         pnlMeasureComp.setLayout(new java.awt.BorderLayout());
-        pnlMeasureComp.add(measuringComponent, java.awt.BorderLayout.CENTER);
+        pnlMeasureComp.add(rasterfariDocumentLoaderPanel1, java.awt.BorderLayout.CENTER);
 
         pnlMeasureComponentWrapper.add(pnlMeasureComp, "measureCard");
 
@@ -331,15 +334,6 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         pnlHeaderDocument.setBackground(java.awt.Color.darkGray);
         pnlHeaderDocument.setLayout(new java.awt.GridBagLayout());
 
-        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
-        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblReducedSize.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
-
         pnlUmleitungHeader.setOpaque(false);
         pnlUmleitungHeader.setLayout(new java.awt.GridBagLayout());
 
@@ -356,6 +350,15 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         pnlHeaderDocument.add(pnlUmleitungHeader, gridBagConstraints);
+
+        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
+        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
+                VermessungBuchwerkEditor.class,
+                "VermessungBuchwerkEditor.lblReducedSize.text_1")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
 
         pnlDocument.add(pnlHeaderDocument, java.awt.BorderLayout.NORTH);
 
@@ -715,7 +718,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * @param  evt  DOCUMENT ME!
      */
     private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
-        measuringComponent.actionPan();
+        rasterfariDocumentLoaderPanel1.actionPan();
     }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
@@ -724,7 +727,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * @param  evt  DOCUMENT ME!
      */
     private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
-        measuringComponent.actionZoom();
+        rasterfariDocumentLoaderPanel1.actionZoom();
     }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
@@ -733,7 +736,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * @param  evt  DOCUMENT ME!
      */
     private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
-        measuringComponent.actionOverview();
+        rasterfariDocumentLoaderPanel1.actionOverview();
     }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
@@ -743,22 +746,23 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         try {
-            final URL downloadURL;
-            if (documentURL.toExternalForm().contains(VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE)) {
-                final String url = documentURL.toExternalForm()
-                            .replaceAll(VermessungsrissWebAccessPictureFinder.SUFFIX_REDUCED_SIZE, "");
-                downloadURL = new URL(url);
-            } else {
-                downloadURL = documentURL;
-            }
             final String priceGroup = "ea";
+            final URL documentUrl;
+            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl(document.replaceAll(
+                            VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                            ""));
+            } else {
+                documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl();
+            }
+
             if (BillingPopup.doBilling(
                             "fsuekom",
-                            downloadURL.toExternalForm(),
+                            documentUrl.toExternalForm(),
                             (Geometry)null,
                             getConnectionContext(),
                             new ProductGroupAmount(priceGroup, 1))) {
-                downloadProduct(downloadURL);
+                downloadProduct(documentUrl);
             }
         } catch (Exception e) {
             LOG.error("Error when trying to produce a alkis product", e);
@@ -828,12 +832,11 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    pictureLoaderPanel.cancelPictureWorkers();
                     SwingUtilities.invokeLater(new Runnable() {
 
                             @Override
                             public void run() {
-                                measuringComponent.reset();
+                                rasterfariDocumentLoaderPanel1.reset();
                                 showAlert(true);
                                 pnlMeasureComponentWrapper.invalidate();
                                 pnlMeasureComponentWrapper.revalidate();
@@ -898,28 +901,25 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * DOCUMENT ME!
      */
     private void checkLinkInTitle() {
-        checkLinkInTitle(documentURL);
+        checkLinkInTitle(document);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  url  DOCUMENT ME!
+     * @param  document  url DOCUMENT ME!
      */
-    private void checkLinkInTitle(final URL url) {
+    private void checkLinkInTitle(final String document) {
         boolean isUmleitung = false;
         lblReducedSize.setVisible(false);
-        if (url != null) {
-            if (url.toString().contains("_rs")) {
+        if (document != null) {
+            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
                 lblReducedSize.setVisible(true);
             }
             final String filename = getDocumentFilename();
 
-            if (!url.toString().contains(filename)) {
+            if (!document.contains(filename)) {
                 isUmleitung = true;
-                if (url.toString().contains("_rs")) {
-                    lblReducedSize.setVisible(true);
-                }
                 pnlHeaderDocument.repaint();
             }
         }
@@ -939,7 +939,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * DOCUMENT ME!
      */
     public void successAlert() {
-        pictureLoaderPanel.setCurrentPageNull();
+        rasterfariDocumentLoaderPanel1.setCurrentPageNull();
         alertPanel.setType(AlertPanel.TYPE.SUCCESS);
         pnlMeasureComponentWrapper.invalidate();
         pnlMeasureComponentWrapper.validate();
@@ -950,9 +950,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * DOCUMENT ME!
      */
     public void handleNoDocumentFound() {
-        pictureLoaderPanel.cancelPictureWorkers();
         alertPanel.setType(AlertPanel.TYPE.DANGER);
-        measuringComponent.removeAllFeatures();
+        rasterfariDocumentLoaderPanel1.removeAllFeatures();
         this.invalidate();
         this.validate();
         this.repaint();
@@ -1012,7 +1011,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     public void dispose() {
         bindingGroup.unbind();
         // dispose panels here if necessary
-        measuringComponent.dispose();
+        rasterfariDocumentLoaderPanel1.dispose();
         if (!readOnly) {
             ((DefaultCismapGeometryComboBoxEditor)cmbGeometrie).dispose();
         }
@@ -1145,21 +1144,21 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         showMeasureIsLoading();
         checkLinkInTitle();
         showAlert(false);
-        pictureLoaderPanel.setUrl(documentURL);
+        rasterfariDocumentLoaderPanel1.setDocument(document);
     }
 
     /**
      * DOCUMENT ME!
      */
     protected void setCurrentDocumentNull() {
-        pictureLoaderPanel.setCurrentPageNull();
+        rasterfariDocumentLoaderPanel1.setCurrentPageNull();
     }
 
     /**
      * DOCUMENT ME!
      */
     public void warnAlert() {
-        pictureLoaderPanel.setCurrentPageNull();
+        rasterfariDocumentLoaderPanel1.setCurrentPageNull();
         alertPanel.setType(AlertPanel.TYPE.WARNING);
         pnlMeasureComponentWrapper.invalidate();
         pnlMeasureComponentWrapper.validate();
@@ -1170,7 +1169,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * DOCUMENT ME!
      */
     public void handleRissDoesNotExists() {
-        pictureLoaderPanel.setCurrentPageNull();
+        rasterfariDocumentLoaderPanel1.setCurrentPageNull();
         alertPanel.setType(AlertPanel.TYPE.DANGER);
         pnlMeasureComponentWrapper.invalidate();
         pnlMeasureComponentWrapper.validate();
@@ -1266,7 +1265,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                     final StringBuffer collisionLists = new StringBuffer();
                     for (int i = 0; i < result.length; ++i) {
                         // cast!
-                        final List<URL> current = result[i];
+                        final List<String> current = result[i];
                         if (current != null) {
                             if (current.size() > 0) {
                                 if (current.size() > 1) {
@@ -1275,7 +1274,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                                     }
                                     collisionLists.append(current);
                                 }
-                                documentURL = current.get(0);
+                                document = current.get(0);
                             }
                         }
                     }

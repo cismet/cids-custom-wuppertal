@@ -12,8 +12,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils;
 
-import static de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder.PATH;
-import static de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder.PATH_RS;
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 /**
  * DOCUMENT ME!
@@ -27,58 +26,44 @@ public class FileWithoutSuffix {
 
     Integer number;
     String file;
-    boolean checkReducedSize;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new FileWithoutSuffix object.
      *
-     * @param  number            DOCUMENT ME!
-     * @param  checkReducedSize  DOCUMENT ME!
-     * @param  file              DOCUMENT ME!
+     * @param  number  DOCUMENT ME!
+     * @param  file    DOCUMENT ME!
      */
-    public FileWithoutSuffix(final Integer number, final boolean checkReducedSize, final String file) {
+    public FileWithoutSuffix(final Integer number, final String file) {
         this.number = number;
         this.file = file;
-        this.checkReducedSize = checkReducedSize;
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return toString(checkReducedSize);
-    }
-
     /**
      * DOCUMENT ME!
      *
-     * @param   reducedSize  DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
-    public String toString(final boolean reducedSize) {
+    @Override
+    public String toString() {
         if (number == null) {
-            if (reducedSize) { // file.toUpperCase bacuase of cismet/wupp#942
-                return BaulastenPictureFinder.PATH_RS + BaulastenPictureFinder.SEP + file.toUpperCase();
-            } else {
-                return BaulastenPictureFinder.PATH + BaulastenPictureFinder.SEP + file.toUpperCase();
-            }
+            return file.toUpperCase();
         } else {
-            return getFolder(number, reducedSize) + BaulastenPictureFinder.SEP + file.toUpperCase();
+            return getFolder(number) + BaulastenPictureFinder.SEP + file;
         }
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   number       DOCUMENT ME!
-     * @param   reducedSize  DOCUMENT ME!
+     * @param   number  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private String getFolder(final int number, final boolean reducedSize) {
+    private String getFolder(final int number) {
         int modulo = (number % 1000);
         if (modulo == 0) {
             modulo = 1000;
@@ -91,6 +76,10 @@ public class FileWithoutSuffix {
 
         final String lb = String.format("%06d", lowerBorder);
         final String hb = String.format("%06d", higherBorder);
-        return new StringBuffer(reducedSize ? PATH_RS : PATH).append(lb).append("-").append(hb).toString();
+        return new StringBuffer(StaticProperties.ALB_BAULAST_DOCUMENT_PATH).append("/")
+                    .append(lb)
+                    .append("-")
+                    .append(hb)
+                    .toString();
     }
 }

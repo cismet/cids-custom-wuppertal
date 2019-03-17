@@ -33,7 +33,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.datatransfer.DataFlavor;
@@ -85,13 +84,19 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         };
 
     private final Paint[] colors = new Paint[] {
-            Color.RED,
-            Color.BLUE,
-            Color.BLACK,
-            Color.YELLOW,
-            Color.CYAN,
-            Color.PINK,
-            Color.GREEN
+//            Color.RED,
+//            Color.BLUE,
+//            Color.BLACK,
+//            Color.YELLOW,
+//            Color.CYAN,
+//            Color.PINK,
+//            Color.GREEN
+            new Color(247, 150, 70, 255),
+            new Color(155, 187, 89, 255),
+            new Color(128, 100, 162, 255),
+            new Color(75, 172, 198, 255),
+            new Color(192, 80, 77, 255),
+            new Color(155, 100, 162, 255)
         };
     private List<CidsBean> stoffBeans;
 
@@ -140,8 +145,11 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
             final Icon icon = createIcon((String)stoffBean.getProperty("schluessel"));
             final BufferedImage image = new BufferedImage(icon.getIconWidth(),
                     icon.getIconHeight(),
-                    BufferedImage.TYPE_INT_RGB);
-            icon.paintIcon(null, image.getGraphics(), 0, 0);
+                    BufferedImage.TYPE_INT_ARGB);
+            final Graphics2D g2d = image.createGraphics();
+            g2d.setColor(Color.WHITE);
+            g2d.drawRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+            icon.paintIcon(null, g2d, 0, 0);
             final GrundwassermessstellenReportBean.LegendeBean legendBean =
                 new GrundwassermessstellenReportBean.LegendeBean(stoffBean, image);
             legendBeans.add(legendBean);
@@ -231,10 +239,10 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
+        jPanel3.setBorder(null);
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -243,31 +251,28 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(jPanel2, gridBagConstraints);
 
         grundwassermessstelleDiagrammAxisPanel4.setAxisName(null);
-        grundwassermessstelleDiagrammAxisPanel4.setMinimumSize(new java.awt.Dimension(200, 152));
+        grundwassermessstelleDiagrammAxisPanel4.setMinimumSize(new java.awt.Dimension(215, 43));
         grundwassermessstelleDiagrammAxisPanel4.setOpaque(false);
-        grundwassermessstelleDiagrammAxisPanel4.setPreferredSize(new java.awt.Dimension(200, 152));
+        grundwassermessstelleDiagrammAxisPanel4.setPreferredSize(new java.awt.Dimension(215, 150));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(grundwassermessstelleDiagrammAxisPanel4, gridBagConstraints);
 
         grundwassermessstelleDiagrammAxisPanel5.setAxisName(null);
-        grundwassermessstelleDiagrammAxisPanel5.setMinimumSize(new java.awt.Dimension(200, 152));
+        grundwassermessstelleDiagrammAxisPanel5.setMinimumSize(new java.awt.Dimension(215, 43));
         grundwassermessstelleDiagrammAxisPanel5.setOpaque(false);
-        grundwassermessstelleDiagrammAxisPanel5.setPreferredSize(new java.awt.Dimension(200, 152));
+        grundwassermessstelleDiagrammAxisPanel5.setPreferredSize(new java.awt.Dimension(215, 150));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(grundwassermessstelleDiagrammAxisPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -299,7 +304,9 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
                     if ((schluessel != null)
                                 && schluessel.equals((String)messwertBean.getProperty("stoff_schluessel"))) {
                         if (series.getDataItem(new Day(datum)) == null) {
-                            series.add(new Day(datum), (Double)messwertBean.getProperty("wert"));
+                            series.add(new Day(datum),
+                                (messwertBean.getProperty("wert") != null)
+                                    ? Math.abs((Double)messwertBean.getProperty("wert")) : null);
                         }
                     }
                 }
@@ -408,6 +415,9 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
                 false);
 
         final XYPlot plot = chart.getXYPlot();
+//        plot.setDomainGridlinePaint(Color.BLACK);
+        plot.setRangeGridlinePaint(Color.BLACK);
+        plot.setBackgroundPaint(Color.WHITE);
 
         final DateAxis dateAxis = new DateAxis();
         dateAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);
@@ -450,12 +460,12 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
 
         plot.setRangeAxis(0, plot.getRangeAxis());
         plot.mapDatasetToRangeAxis(0, 0);
-        final XYItemRenderer renderer = plot.getRenderer();
+        final XYItemRenderer leftRenderer = plot.getRenderer();
 
         for (int index = 0; index < dataSetLeft.getSeriesCount(); index++) {
             final String schluessel = (String)dataSetLeft.getSeries(index).getKey();
-            renderer.setSeriesShape(index, getShape(schluessel));
-            renderer.setSeriesPaint(index, getColor(schluessel));
+            leftRenderer.setSeriesShape(index, getShape(schluessel));
+            leftRenderer.setSeriesPaint(index, getColor(schluessel));
         }
 
 //        final LegendTitle legendLeft = new LegendTitle(rendererLeft);
@@ -465,21 +475,17 @@ public class GrundwassermessstelleMesswerteDiagrammPanel extends javax.swing.JPa
         if (dataSetRight != null) {
             plot.setDataset(1, dataSetRight);
 
-            plot.setRenderer(1, new StandardXYItemRenderer(StandardXYItemRenderer.SHAPES));
+            final XYItemRenderer rightRenderer = new StandardXYItemRenderer(StandardXYItemRenderer.SHAPES);
+            plot.setRenderer(1, rightRenderer);
 
             final NumberAxis numberAxis = new NumberAxis(); // String.join(", ", einheitenRight));
             plot.setRangeAxis(1, numberAxis);
             plot.mapDatasetToRangeAxis(1, 1);
             for (int index = 0; index < dataSetRight.getSeriesCount(); index++) {
                 final String schluessel = (String)dataSetRight.getSeries(index).getKey();
-                renderer.setSeriesShape(index, getShape(schluessel));
-                renderer.setSeriesPaint(index, getColor(schluessel));
+                rightRenderer.setSeriesShape(index, getShape(schluessel));
+                rightRenderer.setSeriesPaint(index, getColor(schluessel));
             }
-
-//            final XYItemRenderer rendererRight = plot.getRendererForDataset(dataSetRight);
-//            final LegendTitle legendRight = new LegendTitle(rendererRight);
-//            legendRight.setPosition(RectangleEdge.RIGHT);
-//            chart.addLegend(legendRight);
         }
 
         return chart;
