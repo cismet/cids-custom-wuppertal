@@ -61,7 +61,6 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
-import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -959,25 +958,25 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togMessenPolyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togMessenPolyActionPerformed
+    private void togMessenPolyActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togMessenPolyActionPerformed
         rasterfariDocumentLoaderPanel1.actionMeasurePolygon();
-    }                                                                                 //GEN-LAST:event_togMessenPolyActionPerformed
+    }//GEN-LAST:event_togMessenPolyActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togMessenLineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togMessenLineActionPerformed
+    private void togMessenLineActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togMessenLineActionPerformed
         rasterfariDocumentLoaderPanel1.actionMeasureLine();
-    }                                                                                 //GEN-LAST:event_togMessenLineActionPerformed
+    }//GEN-LAST:event_togMessenLineActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togCalibrateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togCalibrateActionPerformed
+    private void togCalibrateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togCalibrateActionPerformed
         if (rasterfariDocumentLoaderPanel1.getCurrentPage() != NO_SELECTION) {
             final Double distance = askForDistanceValue();
             if (distance != null) {
@@ -1010,23 +1009,23 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
             }
             togPan.setSelected(true);
         }
-    } //GEN-LAST:event_togCalibrateActionPerformed
+    }//GEN-LAST:event_togCalibrateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         final String document = rasterfariDocumentLoaderPanel1.getCurrentDocument();
         if (document == null) {
             return;
         }
 
         final URL documentUrl;
-        if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+        if (document.contains(BaulastenPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
             documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl(document.replaceAll(
-                        VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                        BaulastenPictureFinder.SUFFIX_REDUCED_SIZE,
                         ""));
         } else {
             documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl();
@@ -1050,14 +1049,14 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
                     }
                 }
             });
-    } //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPlanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPlanActionPerformed
+    private void btnPlanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlanActionPerformed
         umleitungsPanel = new Alb_baulastUmleitungPanel(
                 Alb_baulastUmleitungPanel.MODE.LAGEPLAN,
                 this,
@@ -1065,14 +1064,14 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         showUmleitung = true;
         showPlan();
         checkLinkInTitle();
-    }                                                                           //GEN-LAST:event_btnPlanActionPerformed
+    }//GEN-LAST:event_btnPlanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnTextblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnTextblattActionPerformed
+    private void btnTextblattActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTextblattActionPerformed
         umleitungsPanel = new Alb_baulastUmleitungPanel(
                 Alb_baulastUmleitungPanel.MODE.TEXTBLATT,
                 this,
@@ -1080,14 +1079,14 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         showUmleitung = true;
         showTextBlatt();
         checkLinkInTitle();
-    }                                                                                //GEN-LAST:event_btnTextblattActionPerformed
+    }//GEN-LAST:event_btnTextblattActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlUmleitungActionPerformed
+    private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlUmleitungActionPerformed
         umleitungsPanel.reset();
         alert.setType(AlertPanel.TYPE.SUCCESS);
         umleitungsPanel.setTextColor(AlertPanel.successMessageColor);
@@ -1106,56 +1105,56 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         this.invalidate();
         this.validate();
         this.repaint();
-    } //GEN-LAST:event_jxlUmleitungActionPerformed
+    }//GEN-LAST:event_jxlUmleitungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink3ActionPerformed
+    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink3ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(
                     BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER,
                     Arrays.asList(new CidsBean[] { cidsBean }),
                     this);
-    }                                                                                //GEN-LAST:event_jXHyperlink3ActionPerformed
+    }//GEN-LAST:event_jXHyperlink3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(
                     BaulastenReportGenerator.Type.TEXTBLATT,
                     Arrays.asList(new CidsBean[] { cidsBean }),
                     this);
-    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
+    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink2ActionPerformed
         Alb_baulastReportDialog.getInstance()
                 .showAndDoDownload(
                     BaulastenReportGenerator.Type.TEXTBLATT_PLAN,
                     Arrays.asList(new CidsBean[] { cidsBean }),
                     this);
-    }                                                                                //GEN-LAST:event_jXHyperlink2ActionPerformed
+    }//GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstPicturesValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstPicturesValueChanged
+    private void lstPicturesValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPicturesValueChanged
         final int page = lstPictures.getSelectedIndex();
         refreshMessenForPage(page);
-    }                                                                                      //GEN-LAST:event_lstPicturesValueChanged
+    }//GEN-LAST:event_lstPicturesValueChanged
 
     /**
      * DOCUMENT ME!
@@ -1319,7 +1318,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
 
         lblReducedSize.setVisible(false);
         if (document != null) {
-            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+            if (document.contains(BaulastenPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
                 lblReducedSize.setVisible(true);
             }
             final String filename = getDocumentFilename();
