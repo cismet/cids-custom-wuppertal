@@ -2179,7 +2179,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         if (documentOfAPMap != null) {
             final URL url;
             try {
-                url = ClientAlkisConf.getInstance().getDownloadUrlForDocument(documentOfAPMap);
+                url = new URL(documentOfAPMap);
             } catch (final Exception ex) {
                 LOG.info("Couldn't download AP map from '" + documentOfAPMap + "'.", ex);
                 return;
