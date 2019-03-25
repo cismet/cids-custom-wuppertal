@@ -18,7 +18,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -135,7 +135,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public void setMarker(final boolean marker) {
         if (marker) {
-            Sb_stadtbildUtils.cacheImagesForStadtbilder(
+            StadtbilderUtils.cacheImagesForStadtbilder(
                 getStadtbildserie(),
                 imagesToShow,
                 getConnectionContext());
@@ -330,7 +330,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * @return  DOCUMENT ME!
      */
     @Override
-    protected Sb_stadtbildUtils.StadtbildInfo getStadtbildInfo() {
+    protected StadtbilderUtils.StadtbildInfo getStadtbildInfo() {
         CidsBean stadtbild;
         if (!imagesToShow.isEmpty() && (index < imagesToShow.size()) && (index != 0)) {
             stadtbild = (CidsBean)imagesToShow.get(index);
@@ -340,16 +340,16 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
         } else {
             stadtbild = (CidsBean)stadtbildserie.getProperty("vorschaubild");
         }
-        return new Sb_stadtbildUtils.StadtbildInfo(stadtbildserie, stadtbild);
+        return new StadtbilderUtils.StadtbildInfo(stadtbildserie, stadtbild);
     }
 
     @Override
     protected int getDownloadPrority() {
         int priority;
         if (marker) {
-            priority = Sb_stadtbildUtils.HIGH_PRIORITY;
+            priority = StadtbilderUtils.HIGH_PRIORITY;
         } else {
-            priority = Sb_stadtbildUtils.LOW_PRIORITY;
+            priority = StadtbilderUtils.LOW_PRIORITY;
         }
         return priority;
     }

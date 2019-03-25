@@ -33,7 +33,7 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -383,14 +383,13 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
                 final CidsBean stadtbild = stadtbildserieProvider.getSelectedStadtbild();
                 final String imageNumber = (String)stadtbild.getProperty("bildnummer");
                 DownloadManager.instance()
-                        .add(
-                            new TifferDownload(
+                        .add(new TifferDownload(
                                 jobname,
                                 "Stadtbild "
                                 + imageNumber,
                                 "stadtbild_"
                                 + imageNumber,
-                                new Sb_stadtbildUtils.StadtbildInfo(stadtbildSerie, stadtbild),
+                                new StadtbilderUtils.StadtbildInfo(stadtbildSerie, stadtbild),
                                 "1",
                                 getConnectionContext()));
             }
@@ -434,7 +433,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
      *
      * @param  stadtbildInfo  bildnummer DOCUMENT ME!
      */
-    public void setStadtbildInfo(final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo) {
+    public void setStadtbildInfo(final StadtbilderUtils.StadtbildInfo stadtbildInfo) {
         if (stadtbildInfo.getBildnummer() != null) {
             new CheckAccessibilityOfHighResImage(stadtbildInfo).execute();
             loadPhoto();
@@ -471,7 +470,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
             if (stadtbild instanceof CidsBean) {
                 fotoCidsBean = (CidsBean)stadtbild;
                 fotoCidsBean.addPropertyChangeListener(listRepaintListener);
-                final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(
+                final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
                         stadtbildserieProvider.getStadtbildserie(),
                         fotoCidsBean);
                 new Sb_StadtbildPreviewImage.LoadSelectedImageWorker(stadtbildInfo).execute();
@@ -523,7 +522,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
      * @param  tooltip  DOCUMENT ME!
      */
     private void indicateError(final String tooltip) {
-        lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
+        lblPicture.setIcon(new ImageIcon(StadtbilderUtils.ERROR_IMAGE));
         lblPicture.setText("<html>Fehler beim Übertragen des Bildes!</html>");
         lblPicture.setToolTipText(tooltip);
         showWait(false);
@@ -537,7 +536,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
     public void indicateNotAvailable(final String tooltip) {
         indicateNotAvailable(
             tooltip,
-            new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE),
+            new ImageIcon(StadtbilderUtils.ERROR_IMAGE),
             "<html>Kein Vorschaubild vorhanden.</html>");
     }
 
@@ -559,7 +558,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
      * DOCUMENT ME!
      */
     private void indicateInternalUsage() {
-        lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
+        lblPicture.setIcon(new ImageIcon(StadtbilderUtils.ERROR_IMAGE));
         lblPicture.setText("<html>Bild ist nicht zur Publikation freigegeben!</html>");
         lblPicture.setToolTipText("");
         showWait(false);
@@ -704,7 +703,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
 
         //~ Instance fields ----------------------------------------------------
 
-        private final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo;
+        private final StadtbilderUtils.StadtbildInfo stadtbildInfo;
 
         //~ Constructors -------------------------------------------------------
 
@@ -713,11 +712,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
          *
          * @param  stadtbildInfo  DOCUMENT ME!
          */
-        public LoadSelectedImageWorker(final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo) {
+        public LoadSelectedImageWorker(final StadtbilderUtils.StadtbildInfo stadtbildInfo) {
             this.stadtbildInfo = stadtbildInfo;
             lblPicture.setText("");
             lblPicture.setToolTipText(null);
-            showWait(!Sb_stadtbildUtils.isBildnummerInCacheOrFailed(stadtbildInfo));
+            showWait(!StadtbilderUtils.isBildnummerInCacheOrFailed(stadtbildInfo));
         }
 
         //~ Methods ------------------------------------------------------------
@@ -732,7 +731,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
         @Override
         protected BufferedImage doInBackground() throws Exception {
             if (stadtbildInfo != null) {
-                return Sb_stadtbildUtils.downloadImageForBildnummer(stadtbildInfo);
+                return StadtbilderUtils.downloadImageForBildnummer(stadtbildInfo);
             }
             return null;
         }
@@ -777,7 +776,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
 
         //~ Instance fields ----------------------------------------------------
 
-        private final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo;
+        private final StadtbilderUtils.StadtbildInfo stadtbildInfo;
 
         //~ Constructors -------------------------------------------------------
 
@@ -786,7 +785,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
          *
          * @param  stadtbildInfo  imageNumber DOCUMENT ME!
          */
-        public CheckAccessibilityOfHighResImage(final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo) {
+        public CheckAccessibilityOfHighResImage(final StadtbilderUtils.StadtbildInfo stadtbildInfo) {
             this.stadtbildInfo = stadtbildInfo;
             btnDownloadHighResImage.setEnabled(false);
         }
@@ -803,7 +802,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
         @Override
         protected Boolean doInBackground() throws Exception {
             if (stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed()) {
-                return Sb_stadtbildUtils.getFormatOfHighResPicture(stadtbildInfo)
+                return StadtbilderUtils.getFormatOfHighResPicture(stadtbildInfo)
                             != null;
             } else {
                 return false;

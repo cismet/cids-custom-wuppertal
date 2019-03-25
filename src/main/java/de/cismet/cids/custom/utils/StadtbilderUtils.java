@@ -53,8 +53,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
-
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -70,20 +68,19 @@ import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
+import static de.cismet.cids.custom.utils.stadtbilder.StadtbilderConf.IMAGE_NUMBER;
+
 /**
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildUtils {
+public class StadtbilderUtils {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            Sb_stadtbildUtils.class);
-
-    private static final String[] IMAGE_FILE_FORMATS = { "jpg", "tiff" };
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(StadtbilderUtils.class);
 
     public static BufferedImage ERROR_IMAGE;
     public static BufferedImage PLACEHOLDER_IMAGE;
@@ -91,11 +88,9 @@ public class Sb_stadtbildUtils {
     private static CidsBean WUPPERTAL;
     private static CidsBean R102;
 
-    private static final int CACHE_SIZE = 100;
-
     /** A cache whose key is a bildnummer and the value is the corresponding image. */
     private static final ConcurrentLRUCache<StadtbildInfo, SoftReference<BufferedImage>> IMAGE_CACHE =
-        new ConcurrentLRUCache<>(CACHE_SIZE);
+        new ConcurrentLRUCache<>(ClientStadtbilderConf.getInstance().getCacheSize());
     /** A map with bildnummern (image numbers) which could not be loaded. */
     private static final ConcurrentHashMap<StadtbildInfo, String> FAILED_IMAGES = new ConcurrentHashMap<>();
 
@@ -106,14 +101,14 @@ public class Sb_stadtbildUtils {
 
     static {
         try {
-            ERROR_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResourceAsStream(
+            ERROR_IMAGE = ImageIO.read(StadtbilderUtils.class.getResourceAsStream(
                         "/de/cismet/cids/custom/objecteditors/wunda_blau/no_image.png"));
         } catch (IOException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
         }
 
         try {
-            PLACEHOLDER_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResourceAsStream(
+            PLACEHOLDER_IMAGE = ImageIO.read(StadtbilderUtils.class.getResourceAsStream(
                         "/de/cismet/cids/custom/objecteditors/wunda_blau/wait_image.png"));
         } catch (IOException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
@@ -164,6 +159,18 @@ public class Sb_stadtbildUtils {
         for (final StadtbildInfo key : keys) {
             IMAGE_CACHE.get(key).clear();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getArcUrlPath(final String bildnummer) {
+        return ClientStadtbilderConf.getInstance().getPreviewUrlBase()
+                    + ClientStadtbilderConf.getInstance().getArcLocationTemplate().replace(IMAGE_NUMBER, bildnummer);
     }
 
     /**
@@ -300,25 +307,14 @@ public class Sb_stadtbildUtils {
      * @return  DOCUMENT ME!
      */
     public static URL getURLOfLowResPicture(final StadtbildInfo stadtbildInfo) {
-        final String imageNumber = stadtbildInfo.bildnummer;
-        final String locationOfImage;
-        if ("Reihenschrägluftbilder".equals(stadtbildInfo.getArt())) {
-            locationOfImage = "VB/va/" + stadtbildInfo.getJahr() + "/" + stadtbildInfo.getBlickrichtung() + "/"
-                        + imageNumber;
-        } else {
-            final char firstCharacter = imageNumber.charAt(0);
-            locationOfImage = "VB/" + firstCharacter + "/VB_" + imageNumber;
-        }
-        for (final String fileEnding : IMAGE_FILE_FORMATS) {
-            try {
-                final String urlName = StaticProperties.ARCHIVAR_URL_PREFIX + locationOfImage + "." + fileEnding;
-                final URL url = new URL(urlName);
-                final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
-                if (accessible) {
-                    return url;
-                }
-            } catch (MalformedURLException ex) {
-                LOG.warn(ex, ex);
+        for (final URL url
+                    : ClientStadtbilderConf.getInstance().getPreviewPictureUrls(
+                        stadtbildInfo.getBildnummer(),
+                        stadtbildInfo.getArt(),
+                        stadtbildInfo.getJahr(),
+                        stadtbildInfo.getBlickrichtung())) {
+            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                return url;
             }
         }
         return null;
@@ -334,25 +330,14 @@ public class Sb_stadtbildUtils {
      * @return  if a high-res image exists, then its file ending. Otherwise null.
      */
     public static String getFormatOfHighResPicture(final StadtbildInfo stadtbildInfo) {
-        final String imageNumber = stadtbildInfo.getBildnummer();
-        final String locationOfImage;
-        if ("Reihenschrägluftbilder".equals(stadtbildInfo.getArt())) {
-            locationOfImage = "SB/va/" + stadtbildInfo.getJahr() + "/" + stadtbildInfo.getBlickrichtung() + "/"
-                        + imageNumber;
-        } else {
-            final char firstCharacter = imageNumber.charAt(0);
-            locationOfImage = "SB/" + firstCharacter + "/SB_" + imageNumber;
-        }
-        for (final String fileEnding : IMAGE_FILE_FORMATS) {
-            try {
-                final String urlName = "http://Sw0040/archivar/" + locationOfImage + "." + fileEnding;
-                final URL url = new URL(urlName);
-                final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
-                if (accessible) {
-                    return fileEnding;
-                }
-            } catch (MalformedURLException ex) {
-                LOG.warn(ex, ex);
+        for (final URL url
+                    : ClientStadtbilderConf.getInstance().getHighresPictureUrls(
+                        stadtbildInfo.getBildnummer(),
+                        stadtbildInfo.getArt(),
+                        stadtbildInfo.getJahr(),
+                        stadtbildInfo.getBlickrichtung())) {
+            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                return url.toString().substring(url.toString().lastIndexOf(".") + 1);
             }
         }
         return null;
@@ -379,7 +364,7 @@ public class Sb_stadtbildUtils {
             }
         }
 
-        final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(stadtbildInfo);
+        final URL urlLowResImage = StadtbilderUtils.getURLOfLowResPicture(stadtbildInfo);
         if (urlLowResImage != null) {
             InputStream is = null;
             try {
@@ -493,7 +478,7 @@ public class Sb_stadtbildUtils {
     public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie,
             final List<CidsBean> stadtbilder,
             final ConnectionContext connectionContext) {
-        for (int i = 0; (i < CACHE_SIZE) && (i < stadtbilder.size()); i++) {
+        for (int i = 0; (i < ClientStadtbilderConf.getInstance().getCacheSize()) && (i < stadtbilder.size()); i++) {
             final CidsBean stadtbild = stadtbilder.get(i);
             try {
                 final StadtbildInfo stadtbildInfo = new StadtbildInfo(stadtbildserie, stadtbild);
@@ -695,7 +680,7 @@ public class Sb_stadtbildUtils {
                 }
             }
 
-            final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(stadtbildInfo);
+            final URL urlLowResImage = StadtbilderUtils.getURLOfLowResPicture(stadtbildInfo);
             if (urlLowResImage != null) {
                 InputStream is = null;
                 try {

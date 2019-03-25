@@ -62,7 +62,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -837,16 +837,16 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                     .determineRestrictionLevelForStadtbildserie(
                                             stadtbildserie,
                                             getConnectionContext()).isPreviewAllowed();
-                        final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(
+                        final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
                                 stadtbildserie,
                                 stadtbild);
                         Image image;
                         if (previewAllowed) {
                             try {
-                                image = Sb_stadtbildUtils.downloadImageForBildnummer(stadtbildInfo);
+                                image = StadtbilderUtils.downloadImageForBildnummer(stadtbildInfo);
                             } catch (Exception ex) {
                                 LOG.error("Image could not be fetched.", ex);
-                                image = Sb_stadtbildUtils.ERROR_IMAGE;
+                                image = StadtbilderUtils.ERROR_IMAGE;
                             }
                             stadtbilderReportBeans.add(new SerienReportBean(stadtbildserie, image));
                         }
@@ -920,19 +920,19 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                             stadtbildserie,
                                             getConnectionContext()).isPreviewAllowed();
                         for (final CidsBean stadtbild : stadtbilder) {
-                            final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(
+                            final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
                                     stadtbildserie,
                                     stadtbild);
                             Image image;
                             if (previewAllowed) {
                                 try {
-                                    image = Sb_stadtbildUtils.downloadImageForBildnummer(stadtbildInfo);
+                                    image = StadtbilderUtils.downloadImageForBildnummer(stadtbildInfo);
                                 } catch (Exception ex) {
                                     LOG.error("Image could not be fetched.", ex);
-                                    image = Sb_stadtbildUtils.ERROR_IMAGE;
+                                    image = StadtbilderUtils.ERROR_IMAGE;
                                 }
                             } else {
-                                image = Sb_stadtbildUtils.ERROR_IMAGE;
+                                image = StadtbilderUtils.ERROR_IMAGE;
                             }
                             stadtbilderReportBeans.add(new StadtbildReportBean(stadtbildserie, stadtbild, image));
                         }
@@ -1040,8 +1040,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         if (downloadAllowed) {
                             final CidsBean stadtbild = (CidsBean)gridObject.getStadtbildserie()
                                         .getProperty("vorschaubild");
-                            final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = gridObject.getStadtbildInfo();
-                            if (Sb_stadtbildUtils.getFormatOfHighResPicture(stadtbildInfo) != null) {
+                            final StadtbilderUtils.StadtbildInfo stadtbildInfo = gridObject.getStadtbildInfo();
+                            if (StadtbilderUtils.getFormatOfHighResPicture(stadtbildInfo) != null) {
                                 final String imageNumber = stadtbildInfo.getBildnummer();
                                 downloads.add(new TifferDownload(
                                         jobname,
@@ -1113,9 +1113,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                             getConnectionContext()).isDownloadAllowed();
                         if (downloadAllowed) {
                             for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
-                                final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo =
-                                    new Sb_stadtbildUtils.StadtbildInfo(stadtbildserie, stadtbild);
-                                if (Sb_stadtbildUtils.getFormatOfHighResPicture(stadtbildInfo) != null) {
+                                final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
+                                        stadtbildserie,
+                                        stadtbild);
+                                if (StadtbilderUtils.getFormatOfHighResPicture(stadtbildInfo) != null) {
                                     final String imageNumber = (String)stadtbild.getProperty("bildnummer");
                                     downloads.add(new TifferDownload(
                                             jobname,
@@ -1311,7 +1312,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 gridObject.addStadtbildChosenListener(this);
                 model.addElement(gridObject);
 
-                Sb_stadtbildUtils.cacheImagesForStadtbilder(
+                StadtbilderUtils.cacheImagesForStadtbilder(
                     bean,
                     bean.getBeanCollectionProperty("stadtbilder_arr"),
                     getConnectionContext());
@@ -1691,8 +1692,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         .isDownloadAllowed();
             if (downloadAllowed) {
                 if (
-                    Sb_stadtbildUtils.getFormatOfHighResPicture(
-                                new Sb_stadtbildUtils.StadtbildInfo(stadtbildSerie, stadtbild))
+                    StadtbilderUtils.getFormatOfHighResPicture(
+                                new StadtbilderUtils.StadtbildInfo(stadtbildSerie, stadtbild))
                             != null) {
                     return true;
                 }
@@ -1883,16 +1884,16 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         if (selectedObject.size() == 1) {
                             final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)
                                 selectedObject.get(0);
-                            final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = gridObject.getStadtbildInfo();
-                            if (Sb_stadtbildUtils.isBildnummerInFailedSet(stadtbildInfo)) {
+                            final StadtbilderUtils.StadtbildInfo stadtbildInfo = gridObject.getStadtbildInfo();
+                            if (StadtbilderUtils.isBildnummerInFailedSet(stadtbildInfo)) {
                                 if (LOG.isDebugEnabled()) {
                                     LOG.debug(
                                         "The image "
                                                 + stadtbildInfo.getBildnummer()
                                                 + " could not be loaded the last time because:\n"
-                                                + Sb_stadtbildUtils.getErrorMessageForFailedImage(stadtbildInfo));
+                                                + StadtbilderUtils.getErrorMessageForFailedImage(stadtbildInfo));
                                 }
-                                Sb_stadtbildUtils.removeBildnummerFromFailedSet(stadtbildInfo);
+                                StadtbilderUtils.removeBildnummerFromFailedSet(stadtbildInfo);
                                 gridObject.clearLastShownImage();
                             }
                         }

@@ -79,7 +79,7 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 import de.cismet.cids.custom.wunda_blau.search.actions.Sb_stadtbildserieUpdatePruefhinweisAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1834,7 +1834,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private void dbcOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_dbcOrtItemStateChanged
         final Object selectedItem = dbcOrt.getSelectedItem();
         if (editable) {
-            if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWuppertal(getConnectionContext()))) {
+            if ((selectedItem != null) && selectedItem.equals(StadtbilderUtils.getWuppertal(getConnectionContext()))) {
                 // inside of Wuppertal
                 bcbStrasse.setEnabled(true);
                 lblDescStrasse.setEnabled(true);
@@ -1874,7 +1874,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private void lstBildnummernValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBildnummernValueChanged
         if (!evt.getValueIsAdjusting()) {
             if (!lstBildnummern.isSelectionEmpty()) {
-                final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(
+                final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
                         cidsBean,
                         (CidsBean)lstBildnummern.getSelectedValue());
                 previewImage.setStadtbildInfo(stadtbildInfo);
@@ -1915,10 +1915,10 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     if (fotos != null) {
                         fotos.remove(cidesBeanToRemove);
                     }
-                    final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(
+                    final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
                             cidsBean,
                             cidesBeanToRemove);
-                    Sb_stadtbildUtils.removeBildnummerFromImageCacheAndFailedSet(stadtbildInfo);
+                    StadtbilderUtils.removeBildnummerFromImageCacheAndFailedSet(stadtbildInfo);
                 } catch (Exception e) {
                     LOG.error(e, e);
                     final ErrorInfo ei = new ErrorInfo(
@@ -2451,12 +2451,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     private void setDefaultValuesForNewCidsBean() {
         try {
-            cidsBean.setProperty("ort", Sb_stadtbildUtils.getWuppertal(getConnectionContext()));
+            cidsBean.setProperty("ort", StadtbilderUtils.getWuppertal(getConnectionContext()));
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
         try {
-            cidsBean.setProperty("lager", Sb_stadtbildUtils.getR102(getConnectionContext()));
+            cidsBean.setProperty("lager", StadtbilderUtils.getR102(getConnectionContext()));
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
@@ -2624,7 +2624,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                             if (icon instanceof ImageIcon) {
                                 params.put("image", ((ImageIcon)icon).getImage());
                             } else {
-                                params.put("image", Sb_stadtbildUtils.ERROR_IMAGE);
+                                params.put("image", StadtbilderUtils.ERROR_IMAGE);
                             }
 
                             params.put("bildnummer", lstBildnummern.getSelectedValue());
@@ -2643,12 +2643,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 LOG.error(ex, ex);
             }
 
-            Image vorschaubild = Sb_stadtbildUtils.ERROR_IMAGE;
+            Image vorschaubild = StadtbilderUtils.ERROR_IMAGE;
             try {
-                final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(
+                final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
                         cidsBean,
                         (CidsBean)cidsBean.getProperty("vorschaubild"));
-                vorschaubild = Sb_stadtbildUtils.downloadImageForBildnummer(stadtbildInfo);
+                vorschaubild = StadtbilderUtils.downloadImageForBildnummer(stadtbildInfo);
             } catch (Exception ex) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(ex, ex);
