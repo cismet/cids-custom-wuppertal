@@ -40,6 +40,7 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -705,9 +706,10 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             if (rowView >= 0) {
                 final int rowModel = tblStadtbilder.convertRowIndexToModel(rowView);
                 final CidsBean stadtbild = (CidsBean)tblStadtbilder.getModel().getValueAt(rowModel, 1);
-                final String bildnummer = (String)stadtbild.getProperty(
-                        "bildnummer");
-                previewImage.setBildnummer(bildnummer);
+                final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(
+                        stadtbildserie,
+                        stadtbild);
+                previewImage.setStadtbildInfo(stadtbildInfo);
 
                 tblStadtbilder.scrollRectToVisible(tblStadtbilder.getCellRect(rowView, 1, true));
             } else {

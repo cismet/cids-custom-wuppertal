@@ -85,13 +85,16 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
      * DOCUMENT ME!
      */
     void startThreadToDetermineIfHighResImageAvailable() {
-        final String imageNumber = (String)stadtbild.getProperty("bildnummer");
         highResAvailableThreadPool.submit(new Runnable() {
 
                 @Override
                 public void run() {
+                    final CidsBean stadtbildSerie = locationOfStadtbild.getStadtbildserie();
+                    final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(
+                            stadtbildSerie,
+                            stadtbild);
                     imageAvailableInHighRes.set(
-                        Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
+                        Sb_stadtbildUtils.getFormatOfHighResPicture(stadtbildInfo)
                                 != null);
                     Sb_SingleStadtbildGridObject.this.notifyModel();
                 }
@@ -108,8 +111,9 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
     }
 
     @Override
-    protected String getBildnummer() {
-        return (String)stadtbild.getProperty("bildnummer");
+    protected Sb_stadtbildUtils.StadtbildInfo getStadtbildInfo() {
+        final Sb_stadtbildUtils.StadtbildInfo stadtbildInfo = new Sb_stadtbildUtils.StadtbildInfo(null, stadtbild);
+        return stadtbildInfo;
     }
 
     @Override

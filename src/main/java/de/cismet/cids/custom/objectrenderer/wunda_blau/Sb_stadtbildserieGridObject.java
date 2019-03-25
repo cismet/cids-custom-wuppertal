@@ -330,17 +330,17 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * @return  DOCUMENT ME!
      */
     @Override
-    protected String getBildnummer() {
-        String bildnummer;
+    protected Sb_stadtbildUtils.StadtbildInfo getStadtbildInfo() {
+        CidsBean stadtbild;
         if (!imagesToShow.isEmpty() && (index < imagesToShow.size()) && (index != 0)) {
-            bildnummer = (String)imagesToShow.get(index).getProperty("bildnummer");
-            if (bildnummer.equals((String)stadtbildserie.getProperty("vorschaubild.bildnummer"))) {
-                bildnummer = (String)imagesToShow.get(0).getProperty("bildnummer");
+            stadtbild = (CidsBean)imagesToShow.get(index);
+            if (stadtbild.equals(stadtbildserie.getProperty("vorschaubild"))) {
+                stadtbild = (CidsBean)imagesToShow.get(0);
             }
         } else {
-            bildnummer = (String)stadtbildserie.getProperty("vorschaubild.bildnummer");
+            stadtbild = (CidsBean)stadtbildserie.getProperty("vorschaubild");
         }
-        return bildnummer;
+        return new Sb_stadtbildUtils.StadtbildInfo(stadtbildserie, stadtbild);
     }
 
     @Override
