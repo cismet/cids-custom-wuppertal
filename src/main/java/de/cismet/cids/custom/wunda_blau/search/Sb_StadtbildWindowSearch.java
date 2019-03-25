@@ -139,6 +139,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JCheckBox chboBodennaheAufnahme;
     private javax.swing.JCheckBox chboLuftbildschraegaufnahme;
     private javax.swing.JCheckBox chboLuftbildsenkrechtaufnahme;
+    private javax.swing.JCheckBox chboReihenschraegluftbilder;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -293,6 +294,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         chboLuftbildschraegaufnahme = new javax.swing.JCheckBox();
         chboLuftbildsenkrechtaufnahme = new javax.swing.JCheckBox();
         chboBodennaheAufnahme = new javax.swing.JCheckBox();
+        chboReihenschraegluftbilder = new javax.swing.JCheckBox();
         tabBildnummern = new javax.swing.JTabbedPane();
         pnlBildnummer = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -410,8 +412,23 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         pnlKindOfImage.add(chboBodennaheAufnahme, gridBagConstraints);
+
+        chboReihenschraegluftbilder.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            chboReihenschraegluftbilder,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.chboReihenschraegluftbilder.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        pnlKindOfImage.add(chboReihenschraegluftbilder, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1035,6 +1052,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         chboBodennaheAufnahme.setSelected(true);
         chboLuftbildschraegaufnahme.setSelected(true);
         chboLuftbildsenkrechtaufnahme.setSelected(true);
+        chboReihenschraegluftbilder.setSelected(true);
         txtImageNrFrom.setText("");
         txtImageNrTo.setText("");
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
@@ -1178,8 +1196,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             return null;
         }
 
-        final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtyp =
-            new ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp>();
+        final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtyp = new ArrayList<>();
         if (chboBodennaheAufnahme.isSelected()) {
             bildtyp.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.BODENNAH);
         }
@@ -1188,6 +1205,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         }
         if (chboLuftbildsenkrechtaufnahme.isSelected()) {
             bildtyp.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.LUFTSENK);
+        }
+        if (chboReihenschraegluftbilder.isSelected()) {
+            bildtyp.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.REIHENSCHRAEG);
         }
         stadtbildSerieSearchStatement.setBildtypen(bildtyp);
 
