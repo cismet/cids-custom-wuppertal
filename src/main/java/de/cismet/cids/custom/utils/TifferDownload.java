@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.wunda_blau.search.actions.ImageAnnotator;
 import de.cismet.cids.custom.wunda_blau.search.actions.TifferAction;
+import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
@@ -79,7 +80,8 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
 
         status = State.WAITING;
 
-        format = "Reihenschrägluftbilder".equals(stadtbildInfo.getArt())
+        format =
+            (MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.REIHENSCHRAEG.getId() == stadtbildInfo.getBildtypId())
             ? "jpg" : StadtbilderUtils.getFormatOfHighResPicture(stadtbildInfo);
         if (format != null) {
             determineDestinationFile(filename, "." + format.toLowerCase());
@@ -106,7 +108,7 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
         stateChanged();
 
         final String imageNumber = stadtbildInfo.getBildnummer();
-        final String art = stadtbildInfo.getArt();
+        final Integer bildtypId = stadtbildInfo.getBildtypId();
         final String blickrichtung = stadtbildInfo.getBlickrichtung();
         final Integer jahr = stadtbildInfo.getJahr();
         final char firstCharacter = imageNumber.charAt(0);
@@ -125,8 +127,8 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
                 TifferAction.ParameterType.SUBDIR.toString(),
                 subdir);
         final ServerActionParameter paramArt = new ServerActionParameter(
-                TifferAction.ParameterType.ART.toString(),
-                art);
+                TifferAction.ParameterType.BILDTYP_ID.toString(),
+                bildtypId);
         final ServerActionParameter paramJahr = new ServerActionParameter(
                 TifferAction.ParameterType.JAHR.toString(),
                 jahr);

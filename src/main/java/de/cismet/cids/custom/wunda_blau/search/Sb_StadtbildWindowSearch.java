@@ -379,10 +379,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.chboLuftbildschraegaufnahme.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         pnlKindOfImage.add(chboLuftbildschraegaufnahme, gridBagConstraints);
 
         chboLuftbildsenkrechtaufnahme.setSelected(true);
@@ -408,11 +410,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 "Sb_StadtbildWindowSearch.chboBodennaheAufnahme.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         pnlKindOfImage.add(chboBodennaheAufnahme, gridBagConstraints);
 
         chboReihenschraegluftbilder.setSelected(true);
@@ -423,11 +425,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 "Sb_StadtbildWindowSearch.chboReihenschraegluftbilder.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         pnlKindOfImage.add(chboReihenschraegluftbilder, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1196,22 +1198,22 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             return null;
         }
 
-        final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtyp = new ArrayList<>();
+        final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtypList = new ArrayList<>();
         if (chboBodennaheAufnahme.isSelected()) {
-            bildtyp.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.BODENNAH);
+            bildtypList.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.BODENNAH);
         }
         if (chboLuftbildschraegaufnahme.isSelected()) {
-            bildtyp.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.LUFTSCHRAEG);
+            bildtypList.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.LUFTSCHRAEG);
         }
         if (chboLuftbildsenkrechtaufnahme.isSelected()) {
-            bildtyp.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.LUFTSENK);
+            bildtypList.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.LUFTSENK);
         }
         if (chboReihenschraegluftbilder.isSelected()) {
-            bildtyp.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.REIHENSCHRAEG);
+            bildtypList.add(MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.REIHENSCHRAEG);
         }
-        stadtbildSerieSearchStatement.setBildtypen(bildtyp);
+        stadtbildSerieSearchStatement.setBildtypen(bildtypList);
 
-        final ArrayList<Integer> nutzungseinschraenkungenIDs = new ArrayList<Integer>();
+        final ArrayList<Integer> nutzungseinschraenkungenIDs = new ArrayList<>();
         if (chbInternalAndExternal.isSelected()) {
             nutzungseinschraenkungenIDs.addAll(GREEN_NUTZUNGSEINSCHRAENKUNGEN);
         }

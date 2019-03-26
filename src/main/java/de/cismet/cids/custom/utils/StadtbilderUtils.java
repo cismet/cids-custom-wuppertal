@@ -25,7 +25,6 @@ import java.io.InputStream;
 
 import java.lang.ref.SoftReference;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.Calendar;
@@ -310,7 +309,7 @@ public class StadtbilderUtils {
         for (final URL url
                     : ClientStadtbilderConf.getInstance().getPreviewPictureUrls(
                         stadtbildInfo.getBildnummer(),
-                        stadtbildInfo.getArt(),
+                        stadtbildInfo.getBildtypId(),
                         stadtbildInfo.getJahr(),
                         stadtbildInfo.getBlickrichtung())) {
             if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
@@ -333,7 +332,7 @@ public class StadtbilderUtils {
         for (final URL url
                     : ClientStadtbilderConf.getInstance().getHighresPictureUrls(
                         stadtbildInfo.getBildnummer(),
-                        stadtbildInfo.getArt(),
+                        stadtbildInfo.getBildtypId(),
                         stadtbildInfo.getJahr(),
                         stadtbildInfo.getBlickrichtung())) {
             if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
@@ -975,7 +974,7 @@ public class StadtbilderUtils {
         //~ Instance fields ----------------------------------------------------
 
         private String bildnummer;
-        private String art;
+        private Integer bildtypId;
         private Integer jahr;
         private String blickrichtung;
 
@@ -989,13 +988,13 @@ public class StadtbilderUtils {
          */
         public StadtbildInfo(final CidsBean stadtbildserie, final CidsBean stadtbild) {
             final String bildnummer = (String)stadtbild.getProperty("bildnummer");
-            final String art = (String)stadtbildserie.getProperty("bildtyp.name");
+            final Integer bildtypId = (Integer)stadtbildserie.getProperty("bildtyp.id");
             final Calendar calendar = Calendar.getInstance();
-            calendar.setTime((Date)stadtbildserie.getProperty("aufnahmedatum"));
+            calendar.setTime(stadtbildserie.getProperty("aufnahmedatum") != null ? (Date)stadtbildserie.getProperty("aufnahmedatum") : null);
             final Integer jahr = calendar.get(Calendar.YEAR);
 
             this.bildnummer = bildnummer;
-            this.art = art;
+            this.bildtypId = bildtypId;
             this.jahr = jahr;
             this.blickrichtung = (String)stadtbildserie.getProperty("blickrichtung.schluessel");
         }
@@ -1016,8 +1015,8 @@ public class StadtbilderUtils {
          *
          * @return  DOCUMENT ME!
          */
-        public String getArt() {
-            return art;
+        public Integer getBildtypId() {
+            return bildtypId;
         }
 
         /**
@@ -1059,7 +1058,7 @@ public class StadtbilderUtils {
             if (!Objects.equals(this.bildnummer, other.bildnummer)) {
                 return false;
             }
-            if (!Objects.equals(this.art, other.art)) {
+            if (!Objects.equals(this.bildtypId, other.bildtypId)) {
                 return false;
             }
             if (!Objects.equals(this.jahr, other.jahr)) {
