@@ -16,9 +16,17 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+
+import lombok.Getter;
+
 import org.apache.log4j.Logger;
 
 import java.awt.Cursor;
+
+import java.io.StringReader;
+
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -28,10 +36,16 @@ import javax.swing.border.Border;
 
 import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -49,15 +63,20 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    BorderProvider {
+    BorderProvider,
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
     private final Logger log = Logger.getLogger(this.getClass());
     private CidsBean cidsBean;
     private String title;
+    private ConnectionContext connectionContext;
+    private PoiConfProperties properties;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink jXHyperlinkImage;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlinkImage1;
     private org.jdesktop.swingx.JXHyperlink jXHyperlinkWebsite;
     private javax.swing.JLabel lblAdresse;
     private javax.swing.JLabel lblAdresseDesc;
@@ -70,6 +89,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
     private javax.swing.JLabel lblHaupttypDesc;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblInfoDesc;
+    private javax.swing.JLabel lblInfoDesc1;
     private javax.swing.JLabel lblMail;
     private javax.swing.JLabel lblSignatur;
     private javax.swing.JLabel lblSignatur1;
@@ -97,6 +117,16 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
      * Creates new form Poi_locationinstanceRenderer.
      */
     public Poi_locationinstanceRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
+        this.properties = new PoiConfProperties(connectionContext);
+
         initComponents();
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
             lblMail,
@@ -108,7 +138,10 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
             Cursor.DEFAULT_CURSOR);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -151,6 +184,8 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblSignatur3 = new javax.swing.JLabel();
         lblSonst1 = new javax.swing.JLabel();
         lblAuthor = new javax.swing.JLabel();
+        lblInfoDesc1 = new javax.swing.JLabel();
+        jXHyperlinkImage1 = new org.jdesktop.swingx.JXHyperlink();
 
         panTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         panTitle.setOpaque(false);
@@ -276,7 +311,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblInfoDesc, gridBagConstraints);
@@ -285,7 +320,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblAlternativnamenDesc.setText("Zusätzliche Namen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblAlternativnamenDesc, gridBagConstraints);
@@ -294,7 +329,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblHaupttypDesc.setText("Hauptthema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblHaupttypDesc, gridBagConstraints);
@@ -303,7 +338,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblSonstigeTypenDesc.setText("Themen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblSonstigeTypenDesc, gridBagConstraints);
@@ -370,7 +405,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -393,7 +428,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -411,7 +446,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -430,7 +465,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -440,7 +475,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblSignatur.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblSignatur, gridBagConstraints);
@@ -449,7 +484,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblSignaturIcon.setText("---");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
@@ -465,7 +500,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panContent.add(jXHyperlinkWebsite, gridBagConstraints);
@@ -480,7 +515,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panContent.add(jXHyperlinkImage, gridBagConstraints);
@@ -489,7 +524,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblSignatur1.setText("Bild URL:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblSignatur1, gridBagConstraints);
@@ -498,7 +533,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblSignatur2.setText("Webseite des Bildes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblSignatur2, gridBagConstraints);
@@ -507,13 +542,13 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblSignatur3.setText("Urheber:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblSignatur3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -529,11 +564,35 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panContent.add(lblAuthor, gridBagConstraints);
+
+        lblInfoDesc1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblInfoDesc1.setText("Wuppertal-Live URL:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
+        panContent.add(lblInfoDesc1, gridBagConstraints);
+
+        jXHyperlinkImage1.setText("-");
+        jXHyperlinkImage1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlinkImage1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panContent.add(jXHyperlinkImage1, gridBagConstraints);
 
         add(panContent, java.awt.BorderLayout.CENTER);
 
@@ -617,6 +676,27 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlinkImage1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlinkImage1ActionPerformed
+        final Integer wupLiveId = (Integer)cidsBean.getProperty("wup_live_id");
+        if (wupLiveId != null) {
+            try {
+                BrowserLauncher.openURL(String.format(properties.getWupLiveIdUrlTemplate(), wupLiveId));
+            } catch (Exception ex) {
+                final String message = "Fehler beim Öffnen der Wuppertal-Live ID.";
+                log.error(message, ex);
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    message,
+                    "Fehler",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }                                                                                     //GEN-LAST:event_jXHyperlinkImage1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     @Override
@@ -632,16 +712,27 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
      *
      * @return  DOCUMENT ME!
      */
-    String getStartOfProperty(final String property, final int maxLength) {
+    private String getStartOfProperty(final String property, final int maxLength) {
         try {
-            final String s = (String)cidsBean.getProperty(property);
-            if (s.length() > maxLength) {
-                return s.substring(0, maxLength) + "...";
-            } else {
-                return s;
-            }
-        } catch (Exception e) {
+            return getStartOfString((String)cidsBean.getProperty(property), maxLength);
+        } catch (final Exception e) {
             return "-";
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   s          DOCUMENT ME!
+     * @param   maxLength  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getStartOfString(final String s, final int maxLength) {
+        if (s.length() > maxLength) {
+            return s.substring(0, maxLength) + "...";
+        } else {
+            return s;
         }
     }
 
@@ -650,7 +741,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
      *
      * @return  DOCUMENT ME!
      */
-    String getImageUrlStart() {
+    private String getImageUrlStart() {
         return getStartOfProperty("foto", 120);
     }
     /**
@@ -658,7 +749,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
      *
      * @return  DOCUMENT ME!
      */
-    String getSiteUrlStart() {
+    private String getSiteUrlStart() {
         return getStartOfProperty("fotostrecke", 120);
     }
 
@@ -688,6 +779,15 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
             jXHyperlinkImage.setText(getImageUrlStart());
             jXHyperlinkWebsite.setText(getSiteUrlStart());
+
+            final Integer wupLiveId = (Integer)cidsBean.getProperty("wup_live_id");
+            final String wupLiveIdUrl;
+            if (wupLiveId == null) {
+                wupLiveIdUrl = "-";
+            } else {
+                wupLiveIdUrl = String.format(properties.getWupLiveIdUrlTemplate(), wupLiveId);
+            }
+            jXHyperlinkImage1.setText(wupLiveIdUrl);
         }
     }
 
@@ -771,5 +871,49 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
     @Override
     public void dispose() {
         bindingGroup.unbind();
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @Getter
+    static class PoiConfProperties {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final String wupLiveIdUrlTemplate;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new VermessungsunterlagenProperties object.
+         *
+         * @param  connectionContext  properties DOCUMENT ME!
+         */
+        public PoiConfProperties(final ConnectionContext connectionContext) {
+            String wupLiveIdUrlTemplate = null;
+            try {
+                final Object ret = SessionManager.getSession()
+                            .getConnection()
+                            .executeTask(SessionManager.getSession().getUser(),
+                                GetServerResourceServerAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                WundaBlauServerResources.POI_CONF_PROPERTIES.getValue(),
+                                connectionContext);
+                if (ret instanceof Exception) {
+                    throw (Exception)ret;
+                }
+                final Properties properties = new Properties();
+                properties.load(new StringReader((String)ret));
+
+                wupLiveIdUrlTemplate = properties.getProperty("WUP_LIVE_ID_URL_TEMPLATE", null);
+            } catch (final Exception ex) {
+            }
+            this.wupLiveIdUrlTemplate = wupLiveIdUrlTemplate;
+        }
     }
 }
