@@ -99,9 +99,7 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer,
                 if (btyp.equals("N")) {
                     path = "bplaene/nicht_rechtsk";
                 }
-                final String[] gruppeItems = ((String)cidsBean.getProperty("gruppe")).split("-");
-                final String gruppe = Integer.parseInt(gruppeItems[0]) + "-" + Integer.parseInt(gruppeItems[1]);
-                final String document = path + "/" + gruppe + "/" + plan + "_TEXT.gif";
+                final String document = path + "/" + plan + "_TEXT.gif";
                 rasterfariDocumentLoaderPanel1.setDocument(document);
             } catch (Exception ex) {
                 LOG.error(ex, ex);
