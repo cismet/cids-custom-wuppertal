@@ -16,9 +16,17 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+
+import lombok.Getter;
+
 import org.apache.log4j.Logger;
 
 import java.awt.Cursor;
+
+import java.io.StringReader;
+
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -28,10 +36,16 @@ import javax.swing.border.Border;
 
 import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -49,17 +63,17 @@ import de.cismet.tools.gui.TitleComponentProvider;
 public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
-    BorderProvider {
-
-    //~ Static fields/initializers ---------------------------------------------
-
-    private static final String WUP_LIVE_ID_URL_TEMPLATE = "https://www.wuppertal-live.de/Ort/%d";
+    BorderProvider,
+    ConnectionContextStore {
 
     //~ Instance fields --------------------------------------------------------
 
     private final Logger log = Logger.getLogger(this.getClass());
     private CidsBean cidsBean;
     private String title;
+    private ConnectionContext connectionContext;
+    private PoiConfProperties properties;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink jXHyperlinkImage;
     private org.jdesktop.swingx.JXHyperlink jXHyperlinkImage1;
@@ -103,6 +117,16 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
      * Creates new form Poi_locationinstanceRenderer.
      */
     public Poi_locationinstanceRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+
+        this.properties = new PoiConfProperties(connectionContext);
+
         initComponents();
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
             lblMail,
@@ -114,7 +138,10 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
             Cursor.DEFAULT_CURSOR);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -655,7 +682,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         final Integer wupLiveId = (Integer)cidsBean.getProperty("wup_live_id");
         if (wupLiveId != null) {
             try {
-                BrowserLauncher.openURL(String.format(WUP_LIVE_ID_URL_TEMPLATE, wupLiveId));
+                BrowserLauncher.openURL(String.format(properties.getWupLiveIdUrlTemplate(), wupLiveId));
             } catch (Exception ex) {
                 final String message = "Fehler beim Öffnen der Wuppertal-Live ID.";
                 log.error(message, ex);
@@ -758,7 +785,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
             if (wupLiveId == null) {
                 wupLiveIdUrl = "-";
             } else {
-                wupLiveIdUrl = String.format(WUP_LIVE_ID_URL_TEMPLATE, wupLiveId);
+                wupLiveIdUrl = String.format(properties.getWupLiveIdUrlTemplate(), wupLiveId);
             }
             jXHyperlinkImage1.setText(wupLiveIdUrl);
         }
@@ -844,5 +871,49 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
     @Override
     public void dispose() {
         bindingGroup.unbind();
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    @Getter
+    static class PoiConfProperties {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final String wupLiveIdUrlTemplate;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new VermessungsunterlagenProperties object.
+         *
+         * @param  connectionContext  properties DOCUMENT ME!
+         */
+        public PoiConfProperties(final ConnectionContext connectionContext) {
+            String wupLiveIdUrlTemplate = null;
+            try {
+                final Object ret = SessionManager.getSession()
+                            .getConnection()
+                            .executeTask(SessionManager.getSession().getUser(),
+                                GetServerResourceServerAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                WundaBlauServerResources.POI_CONF_PROPERTIES.getValue(),
+                                connectionContext);
+                if (ret instanceof Exception) {
+                    throw (Exception)ret;
+                }
+                final Properties properties = new Properties();
+                properties.load(new StringReader((String)ret));
+
+                wupLiveIdUrlTemplate = properties.getProperty("WUP_LIVE_ID_URL_TEMPLATE", null);
+            } catch (final Exception ex) {
+            }
+            this.wupLiveIdUrlTemplate = wupLiveIdUrlTemplate;
+        }
     }
 }
