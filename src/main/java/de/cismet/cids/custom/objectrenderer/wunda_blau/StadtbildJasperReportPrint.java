@@ -20,7 +20,7 @@ import javax.swing.ImageIcon;
 
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -66,17 +66,16 @@ public class StadtbildJasperReportPrint extends AbstractJasperReportPrint {
 
     @Override
     public Map generateReportParam(final CidsBean current) {
-        final Map<String, Object> params = new HashMap<String, Object>();
+        final Map<String, Object> params = new HashMap<>();
         params.put("wupperwurm", WUPPERWURM.getImage());
         if (current != null) {
-            final Object bnr = current.getProperty("bildnummer");
+            final String bnr = (String)current.getProperty("bildnummer");
             if (bnr != null) {
                 try {
-                    final String imageURL = StaticProperties.ARCHIVAR_URL_PREFIX + bnr
-                                + StaticProperties.ARCHIVAR_URL_SUFFIX;
-                    log.fatal(imageURL);
+                    final String imageURL = StadtbilderUtils.getArcUrlPath(bnr);
+                    log.info(imageURL);
                     final ImageIcon ii = ObjectRendererUtils.loadPicture(imageURL, 300, 300, 0);
-                    log.fatal(ii);
+                    log.info(ii);
                     if (ii != null) {
                         params.put("image", ii.getImage());
                     }

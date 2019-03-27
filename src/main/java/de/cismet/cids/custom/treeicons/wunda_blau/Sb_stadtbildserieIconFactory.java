@@ -45,14 +45,14 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
 
     //~ Instance fields --------------------------------------------------------
 
-    final WeakHashMap<ObjectTreeNode, ExecutorService> listOfRetrievingObjectWorkers =
-        new WeakHashMap<ObjectTreeNode, ExecutorService>();
-    final WeakHashMap<ObjectTreeNode, Icon> iconMap = new WeakHashMap<ObjectTreeNode, Icon>();
+    final WeakHashMap<ObjectTreeNode, ExecutorService> listOfRetrievingObjectWorkers = new WeakHashMap<>();
+    final WeakHashMap<ObjectTreeNode, Icon> iconMap = new WeakHashMap<>();
 
     private final ImageIcon WARNING_ICON;
     private final ImageIcon BODENNAH_ICON;
     private final ImageIcon PREVIEW_ICON;
     private final ImageIcon SCHRAEG_ICON;
+    private final ImageIcon REIHENSCHRAEG_ICON;
     private final ImageIcon SENKRECHT_ICON;
     private final String PRUEFEN_SUBTREE_NODE_NAME = "Prüfen";
     private final String OK_SUBTREE_NODE_NAME = "Ok";
@@ -71,6 +71,8 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
         this.PREVIEW_ICON = new ImageIcon(getClass().getResource(
                     "/de/cismet/cids/custom/objecteditors/wunda_blau/Stadtbildserie_Preview.png"));
         this.SCHRAEG_ICON = new ImageIcon(getClass().getResource(
+                    "/de/cismet/cids/custom/objecteditors/wunda_blau/Stadtbildserie_Schraeg.png"));
+        this.REIHENSCHRAEG_ICON = new ImageIcon(getClass().getResource(
                     "/de/cismet/cids/custom/objecteditors/wunda_blau/Stadtbildserie_Schraeg.png"));
         this.SENKRECHT_ICON = new ImageIcon(getClass().getResource(
                     "/de/cismet/cids/custom/objecteditors/wunda_blau/Stadtbildserie_Senkrecht.png"));
@@ -225,12 +227,28 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
                 final CidsBean bildtypBean = (CidsBean)stadtbildserieBean.getProperty(
                         "bildtyp");
                 if (bildtypBean != null) {
-                    if (bildtypBean.getPrimaryKeyValue() == 0) {
-                        result = SCHRAEG_ICON;
-                    } else if (bildtypBean.getPrimaryKeyValue() == 1) {
-                        result = SENKRECHT_ICON;
-                    } else if (bildtypBean.getPrimaryKeyValue() == 2) {
-                        result = BODENNAH_ICON;
+                    if (null != bildtypBean.getPrimaryKeyValue()) {
+                        switch (bildtypBean.getPrimaryKeyValue()) {
+                            case 0: {
+                                result = REIHENSCHRAEG_ICON;
+                                break;
+                            }
+                            case 3: {
+                                result = SCHRAEG_ICON;
+                                break;
+                            }
+                            case 1: {
+                                result = SENKRECHT_ICON;
+                                break;
+                            }
+                            case 2: {
+                                result = BODENNAH_ICON;
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
+                        }
                     }
                 }
 

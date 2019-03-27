@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 /**
  * A JGrid renderer for a Stadtbildserie. It is used in the Vorschau and Bin panel of the
@@ -237,8 +237,8 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         if (image != null) {
             pnlImage.setImage(image);
         } else {
-            final Image scaledErrorImage = Sb_stadtbildUtils.scaleImage(
-                    Sb_stadtbildUtils.ERROR_IMAGE,
+            final Image scaledErrorImage = StadtbilderUtils.scaleImage(
+                    StadtbilderUtils.ERROR_IMAGE,
                     grid.getFixedCellDimension(),
                     false);
             image = scaledErrorImage;

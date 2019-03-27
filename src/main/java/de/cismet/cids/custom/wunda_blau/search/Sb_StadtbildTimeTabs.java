@@ -74,6 +74,13 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel implements Connecti
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new Sb_StadtbildTimeTabs object.
+     */
+    public Sb_StadtbildTimeTabs() {
+        this(ConnectionContext.createDummy());
+    }
+
+    /**
      * Creates new form Sb_StadtbildTimeTabs.
      *
      * @param  connectionContext  DOCUMENT ME!

@@ -21,7 +21,7 @@ import java.awt.Paint;
 
 import java.text.SimpleDateFormat;
 
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -205,21 +205,20 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
     public void assign() {
         cidsBean = metaObject.getBean();
         if (cidsBean != null) {
-            Object o = cidsBean.getProperty("bildnummer");
-            if (o != null) {
-                final String url = StaticProperties.ARCHIVAR_URL_PREFIX + o + StaticProperties.ARCHIVAR_URL_SUFFIX;
+            final String bnr = (String)cidsBean.getProperty("bildnummer");
+            if (bnr != null) {
+                final String url = StadtbilderUtils.getArcUrlPath(bnr);
                 lblPicture.setPictureURL(url);
             }
-            o = cidsBean.getProperty("ort");
-            if (o instanceof CidsBean) {
-                final CidsBean b = (CidsBean)o;
+            final CidsBean ort = (CidsBean)cidsBean.getProperty("ort");
+            if (ort != null) {
+                final CidsBean b = (CidsBean)ort;
                 String street = String.valueOf(b.getProperty("name"));
                 final String hn = String.valueOf(cidsBean.getProperty("hausnummer"));
                 if (!hn.equalsIgnoreCase("null") && !(hn.length() < 1)) {
                     street += " " + hn;
                 }
-                final String ort = street + ", " + b.getProperty("stadtteil");
-                lblOrt.setText(PREFIX + ort + SUFFIX);
+                lblOrt.setText(PREFIX + street + ", " + b.getProperty("stadtteil") + SUFFIX);
             }
             lblBildnummer.setText(PREFIX + cidsBean.getProperty("bildnummer") + SUFFIX);
             lblAuftraggeber.setText(PREFIX + cidsBean.getProperty("auftraggeber") + SUFFIX);
