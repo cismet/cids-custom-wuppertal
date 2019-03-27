@@ -18,7 +18,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -135,7 +135,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public void setMarker(final boolean marker) {
         if (marker) {
-            Sb_stadtbildUtils.cacheImagesForStadtbilder(
+            StadtbilderUtils.cacheImagesForStadtbilder(
                 getStadtbildserie(),
                 imagesToShow,
                 getConnectionContext());
@@ -330,26 +330,26 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * @return  DOCUMENT ME!
      */
     @Override
-    protected String getBildnummer() {
-        String bildnummer;
+    protected StadtbilderUtils.StadtbildInfo getStadtbildInfo() {
+        CidsBean stadtbild;
         if (!imagesToShow.isEmpty() && (index < imagesToShow.size()) && (index != 0)) {
-            bildnummer = (String)imagesToShow.get(index).getProperty("bildnummer");
-            if (bildnummer.equals((String)stadtbildserie.getProperty("vorschaubild.bildnummer"))) {
-                bildnummer = (String)imagesToShow.get(0).getProperty("bildnummer");
+            stadtbild = (CidsBean)imagesToShow.get(index);
+            if (stadtbild.equals(stadtbildserie.getProperty("vorschaubild"))) {
+                stadtbild = (CidsBean)imagesToShow.get(0);
             }
         } else {
-            bildnummer = (String)stadtbildserie.getProperty("vorschaubild.bildnummer");
+            stadtbild = (CidsBean)stadtbildserie.getProperty("vorschaubild");
         }
-        return bildnummer;
+        return new StadtbilderUtils.StadtbildInfo(stadtbildserie, stadtbild);
     }
 
     @Override
     protected int getDownloadPrority() {
         int priority;
         if (marker) {
-            priority = Sb_stadtbildUtils.HIGH_PRIORITY;
+            priority = StadtbilderUtils.HIGH_PRIORITY;
         } else {
-            priority = Sb_stadtbildUtils.LOW_PRIORITY;
+            priority = StadtbilderUtils.LOW_PRIORITY;
         }
         return priority;
     }

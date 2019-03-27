@@ -41,7 +41,7 @@ import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.XMLPropertyParser;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -369,9 +369,9 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
                     return null;
                 }
                 ImageIcon ii = null;
-                final Object o = b.getProperty("bildnummer");
-                if (o != null) {
-                    final String url = StaticProperties.ARCHIVAR_URL_PREFIX + o + StaticProperties.ARCHIVAR_URL_SUFFIX;
+                final String bnr = (String)b.getProperty("bildnummer");
+                if (bnr != null) {
+                    final String url = StadtbilderUtils.getArcUrlPath(bnr);
                     urls[++j] = url;
                     ii = ObjectRendererUtils.loadPicture(url, 300, 300, 4);
                 }
