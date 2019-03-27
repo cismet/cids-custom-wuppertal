@@ -990,7 +990,8 @@ public class StadtbilderUtils {
             final String bildnummer = (String)stadtbild.getProperty("bildnummer");
             final Integer bildtypId = (Integer)stadtbildserie.getProperty("bildtyp.id");
             final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(stadtbildserie.getProperty("aufnahmedatum") != null ? (Date)stadtbildserie.getProperty("aufnahmedatum") : null);
+            calendar.setTime((stadtbildserie.getProperty("aufnahmedatum") != null)
+                    ? (Date)stadtbildserie.getProperty("aufnahmedatum") : null);
             final Integer jahr = calendar.get(Calendar.YEAR);
 
             this.bildnummer = bildnummer;
