@@ -111,7 +111,9 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
 
     @Override
     protected StadtbilderUtils.StadtbildInfo getStadtbildInfo() {
-        final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(null, stadtbild);
+        final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
+                locationOfStadtbild.getStadtbildserie(),
+                stadtbild);
         return stadtbildInfo;
     }
 
