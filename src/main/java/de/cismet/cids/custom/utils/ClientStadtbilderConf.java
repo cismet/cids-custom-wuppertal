@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objectrenderer.utils.alkis;
+package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
 
@@ -18,8 +18,7 @@ import java.io.StringReader;
 
 import java.util.Properties;
 
-import de.cismet.cids.custom.utils.WundaBlauServerResources;
-import de.cismet.cids.custom.utils.alkis.AlkisConf;
+import de.cismet.cids.custom.utils.stadtbilder.StadtbilderConf;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
@@ -32,7 +31,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class ClientAlkisConf extends AlkisConf {
+public class ClientStadtbilderConf extends StadtbilderConf {
 
     //~ Constructors -----------------------------------------------------------
 
@@ -43,7 +42,7 @@ public class ClientAlkisConf extends AlkisConf {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private ClientAlkisConf(final Properties properties) throws Exception {
+    private ClientStadtbilderConf(final Properties properties) throws Exception {
         super(properties);
     }
 
@@ -54,7 +53,7 @@ public class ClientAlkisConf extends AlkisConf {
      *
      * @return  DOCUMENT ME!
      */
-    public static ClientAlkisConf getInstance() {
+    public static ClientStadtbilderConf getInstance() {
         return LazyInitialiser.INSTANCE;
     }
 
@@ -69,19 +68,19 @@ public class ClientAlkisConf extends AlkisConf {
 
         //~ Static fields/initializers -----------------------------------------
 
-        private static final ClientAlkisConf INSTANCE;
+        private static final ClientStadtbilderConf INSTANCE;
 
         static {
             try {
                 final ConnectionContext connectionContext = ConnectionContext.create(
                         AbstractConnectionContext.Category.STATIC,
-                        ClientAlkisConf.class.getSimpleName());
+                        ClientStadtbilderConf.class.getSimpleName());
                 final Object ret = SessionManager.getSession()
                             .getConnection()
                             .executeTask(SessionManager.getSession().getUser(),
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                WundaBlauServerResources.ALKIS_CONF.getValue(),
+                                WundaBlauServerResources.STADTBILDER_CONF_PROPERTIES.getValue(),
                                 connectionContext);
                 if (ret instanceof Exception) {
                     throw (Exception)ret;
@@ -90,9 +89,9 @@ public class ClientAlkisConf extends AlkisConf {
                 final Properties properties = new Properties();
                 properties.load(new StringReader((String)ret));
 
-                INSTANCE = new ClientAlkisConf(properties);
+                INSTANCE = new ClientStadtbilderConf(properties);
             } catch (final Exception ex) {
-                throw new RuntimeException("Exception while initializing ClientAlkisConf", ex);
+                throw new RuntimeException("Exception while initializing ClientStadtbilderConf", ex);
             }
         }
 

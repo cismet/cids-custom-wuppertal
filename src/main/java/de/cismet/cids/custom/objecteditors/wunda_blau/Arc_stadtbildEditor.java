@@ -37,7 +37,7 @@ import javax.swing.SwingWorker;
 import de.cismet.cids.custom.objectrenderer.converter.BooleanConverter;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -1015,8 +1015,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
      */
     private void setNewPicture() {
         if ((latestPicture == null) || !latestPicture.equals(txtBildnummer.getText())) {
-            final String pictureURL = StaticProperties.ARCHIVAR_URL_PREFIX + txtBildnummer.getText()
-                        + StaticProperties.ARCHIVAR_URL_SUFFIX;
+            final String pictureURL = StadtbilderUtils.getArcUrlPath(txtBildnummer.getText());
             lblPicture.setPictureURL(pictureURL);
         }
     }

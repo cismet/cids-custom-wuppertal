@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.wunda_blau.search.actions.ImageAnnotator;
 import de.cismet.cids.custom.wunda_blau.search.actions.TifferAction;
+import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
@@ -30,8 +31,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
-
-import static de.cismet.cids.custom.wunda_blau.search.actions.TifferAction.ParameterType.*;
 
 /**
  * A download which uses TifferAction to annotate an image.
@@ -49,7 +48,7 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
 
     //~ Instance fields --------------------------------------------------------
 
-    private final String imageNumber;
+    private final StadtbilderUtils.StadtbildInfo stadtbildInfo;
     private final String scale;
     private final String format;
 
@@ -63,17 +62,17 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
      * @param  directory          DOCUMENT ME!
      * @param  title              DOCUMENT ME!
      * @param  filename           DOCUMENT ME!
-     * @param  imageNumber        DOCUMENT ME!
+     * @param  stadtbildInfo      DOCUMENT ME!
      * @param  scale              DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
     public TifferDownload(final String directory,
             final String title,
             final String filename,
-            final String imageNumber,
+            final StadtbilderUtils.StadtbildInfo stadtbildInfo,
             final String scale,
             final ConnectionContext connectionContext) {
-        this.imageNumber = imageNumber;
+        this.stadtbildInfo = stadtbildInfo;
         this.directory = directory;
         this.title = title;
         this.scale = scale;
@@ -81,7 +80,9 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
 
         status = State.WAITING;
 
-        format = Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber);
+        format =
+            (MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp.REIHENSCHRAEG.getId() == stadtbildInfo.getBildtypId())
+            ? "jpg" : StadtbilderUtils.getFormatOfHighResPicture(stadtbildInfo);
         if (format != null) {
             determineDestinationFile(filename, "." + format.toLowerCase());
         }
@@ -106,17 +107,34 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
 
         stateChanged();
 
+        final String imageNumber = stadtbildInfo.getBildnummer();
+        final Integer bildtypId = stadtbildInfo.getBildtypId();
+        final String blickrichtung = stadtbildInfo.getBlickrichtung();
+        final Integer jahr = stadtbildInfo.getJahr();
+        final char firstCharacter = imageNumber.charAt(0);
+        final String subdir = "SB/" + firstCharacter + "/" + "SB_";
+
         final ServerActionParameter paramNummer = new ServerActionParameter(
-                BILDNUMMER.toString(),
+                TifferAction.ParameterType.BILDNUMMER.toString(),
                 imageNumber);
         final ServerActionParameter paramScale = new ServerActionParameter(
-                SCALE.toString(),
+                TifferAction.ParameterType.SCALE.toString(),
                 scale);
         final ServerActionParameter paramFormat = new ServerActionParameter(
-                FORMAT.toString(),
+                TifferAction.ParameterType.FORMAT.toString(),
                 format);
-
-        final ServerActionParameter paramSubdir = createSubDirForURL(imageNumber);
+        final ServerActionParameter paramSubdir = new ServerActionParameter(
+                TifferAction.ParameterType.SUBDIR.toString(),
+                subdir);
+        final ServerActionParameter paramArt = new ServerActionParameter(
+                TifferAction.ParameterType.BILDTYP_ID.toString(),
+                bildtypId);
+        final ServerActionParameter paramJahr = new ServerActionParameter(
+                TifferAction.ParameterType.JAHR.toString(),
+                jahr);
+        final ServerActionParameter paramBlickrichtung = new ServerActionParameter(
+                TifferAction.ParameterType.BLICKRICHTUNG.toString(),
+                blickrichtung);
 
         try {
             final byte[] result = (byte[])SessionManager.getProxy()
@@ -128,7 +146,10 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
                                 paramNummer,
                                 paramScale,
                                 paramFormat,
-                                paramSubdir);
+                                paramSubdir,
+                                paramArt,
+                                paramJahr,
+                                paramBlickrichtung);
             if (result != null) {
                 final RenderedImage image = ImageIO.read(
                         new ByteArrayInputStream(result));
@@ -149,24 +170,6 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
             status = State.COMPLETED;
             stateChanged();
         }
-    }
-
-    /**
-     * The URL later on used by Tiffer consists of the parts base, subdir, filename (prefix and image number) and file
-     * extension. The subdir will be the kind of file (VB (Vorschaubild, low res. image) or SB (Stadtbild, high res.
-     * image)). In this case SB is always used.
-     *
-     * @param   imageNumber  DOCUMENT ME!
-     *
-     * @return  the subdir for an imageNumber as ServerActionParameter
-     */
-    private ServerActionParameter createSubDirForURL(final String imageNumber) {
-        final char firstCharacter = imageNumber.charAt(0);
-        final String subdir = "SB/" + firstCharacter + "/" + "SB_";
-
-        return new ServerActionParameter(
-                SUBDIR.toString(),
-                subdir);
     }
 
     @Override

@@ -333,7 +333,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         }
 
         final Point point = getGeometry().getCentroid();
-        final double distance = getGeometry().getEnvelopeInternal().getHeight()
+        final double distance = CrsTransformer.transformToMetricCrs(getGeometry()).getEnvelopeInternal().getHeight()
                     * 1.10;
         final String user = properties.getUser();
         final String password = properties.getPassword();
@@ -344,7 +344,9 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         final double camPosX = groundPosX;
         final double camPosY = groundPosY;
         final double camPosZ = groundPosZ + distance;
-        final int epsg = 25832;
+        final int currentSrid = CrsTransformer.extractSridFromCrs(mappingComponent.getMappingModel().getSrs()
+                        .getCode());
+        final int epsg = currentSrid;
 
         final String url = String.format(
                 properties.getUrlTemplate(),
