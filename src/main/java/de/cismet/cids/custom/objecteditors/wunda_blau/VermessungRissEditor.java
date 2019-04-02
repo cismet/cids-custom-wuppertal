@@ -2430,8 +2430,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         showAlert(false);
         final String document = documents[currentDocument];
         if (document == null) {
-            showAlert(true);
+            final String link = VermessungsrissWebAccessPictureFinder.getInstance()
+                        .getLinkFromLinkDocument(false, getDocumentFilename());
+            if ((link != null) && !link.isEmpty()) {
+                jxlUmleitung.setText(link);
+                showLinkInTitle(true);
+                pnlHeaderDocument.repaint();
+            } else {
+                showAlert(true);
+            }
             showMeasurePanel();
+            return;
         } else {
             rasterfariDocumentLoaderPanel1.setDocument(document);
         }
@@ -2449,7 +2458,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         final String document = documents[currentDocument];
         if (document == null) {
             final String link = VermessungsrissWebAccessPictureFinder.getInstance()
-                        .getLinkFromLinkDocument(readOnly, getDocumentFilename());
+                        .getLinkFromLinkDocument(true, getDocumentFilename());
             if ((link != null) && !link.isEmpty()) {
                 jxlUmleitung.setText(link);
                 showLinkInTitle(true);
