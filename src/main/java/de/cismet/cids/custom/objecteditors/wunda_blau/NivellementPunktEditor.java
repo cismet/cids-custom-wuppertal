@@ -19,19 +19,12 @@ import org.jdesktop.beansbinding.Converter;
 
 import org.openide.util.NbBundle;
 
-import java.awt.image.BufferedImage;
-
-import java.io.IOException;
-import java.io.InputStream;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
-
-import javax.imageio.ImageIO;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -59,9 +52,7 @@ import de.cismet.cids.editors.converters.DoubleToStringConverter;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
-import de.cismet.cismap.commons.Crs;
-import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -95,37 +86,25 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ConnectionContextStore {
+    ConnectionContextStore,
+    RasterfariDocumentLoaderPanel.Listener {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(NivellementPunktEditor.class);
-    public static final String[] SUFFIXES = new String[] { "tif", "jpg", "tiff", "jpeg" };
-    protected static XBoundingBox INITIAL_BOUNDINGBOX = new XBoundingBox(
-            2583621.251964098d,
-            5682507.032498134d,
-            2584022.9413952776d,
-            5682742.852810634d,
-            ClientAlkisConf.getInstance().getSrsService(),
-            true);
-    protected static Crs CRS = new Crs(
-            ClientAlkisConf.getInstance().getSrsService(),
-            ClientAlkisConf.getInstance().getSrsService(),
-            ClientAlkisConf.getInstance().getSrsService(),
-            true,
-            true);
+    private static final String[] SUFFIXES = new String[] { "tif", "jpg", "tiff", "jpeg" };
 
-    protected static final Converter<Double, String> CONVERTER_HOEHE = new DoubleToStringConverter();
+    private static final Converter<Double, String> CONVERTER_HOEHE = new DoubleToStringConverter();
 
     //~ Instance fields --------------------------------------------------------
 
-    protected CidsBean cidsBean;
-    protected boolean readOnly;
+    private CidsBean cidsBean;
+    private boolean readOnly;
 
-    protected String oldDgkBlattnummer;
-    protected String oldLaufendeNummer;
-    protected String urlOfDocument;
-    protected RefreshDocumentWorker currentRefreshDocumentWorker;
+    private String oldDgkBlattnummer;
+    private String oldLaufendeNummer;
+    private String urlOfDocument;
+    private RefreshDocumentWorker currentRefreshDocumentWorker;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -158,12 +137,12 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     private javax.swing.JLabel lblPunktnummerWUP;
     private javax.swing.JLabel lblPunktnummerWUPSeparator;
     private javax.swing.JLabel lblTitle;
-    private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measuringComponent;
     private de.cismet.tools.gui.RoundedPanel pnlControls;
     private de.cismet.tools.gui.RoundedPanel pnlDocument;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderDocument;
     private de.cismet.tools.gui.RoundedPanel pnlSimpleAttributes;
     private javax.swing.JPanel pnlTitle;
+    private de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private javax.swing.JScrollPane scpBemerkung;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
     private javax.swing.Box.Filler strFooter;
@@ -284,8 +263,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderDocument = new javax.swing.JLabel();
-        measuringComponent = new MeasuringComponent(INITIAL_BOUNDINGBOX, CRS);
         lblMissingRasterdocument = new javax.swing.JLabel();
+        rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
+                this,
+                getConnectionContext());
         pnlControls = new de.cismet.tools.gui.RoundedPanel();
         togPan = new javax.swing.JToggleButton();
         togZoom = new javax.swing.JToggleButton();
@@ -783,12 +765,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
         pnlDocument.add(pnlHeaderDocument, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        pnlDocument.add(measuringComponent, gridBagConstraints);
 
         lblMissingRasterdocument.setBackground(java.awt.Color.white);
         lblMissingRasterdocument.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -803,6 +779,12 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         pnlDocument.add(lblMissingRasterdocument, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        pnlDocument.add(rasterfariDocumentLoaderPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -976,7 +958,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
-        measuringComponent.actionPan();
+        rasterfariDocumentLoaderPanel1.actionPan();
     }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
@@ -985,7 +967,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
-        measuringComponent.actionZoom();
+        rasterfariDocumentLoaderPanel1.actionZoom();
     }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
@@ -994,7 +976,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
-        measuringComponent.actionOverview();
+        rasterfariDocumentLoaderPanel1.actionOverview();
     }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
@@ -1121,24 +1103,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
     /**
      * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static Crs getCrs() {
-        return CRS;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static XBoundingBox getInitialBoundingBox() {
-        return INITIAL_BOUNDINGBOX;
-    }
-
-    /**
-     * DOCUMENT ME!
      */
     protected void refreshImage() {
         if ((currentRefreshDocumentWorker != null) && !currentRefreshDocumentWorker.isDone()) {
@@ -1203,7 +1167,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     public void dispose() {
         bindingGroup.unbind();
         // dispose panels here if necessary
-        measuringComponent.dispose();
+        rasterfariDocumentLoaderPanel1.dispose();
         if (!readOnly) {
             ((DefaultCismapGeometryComboBoxEditor)cmbGeometrie).dispose();
         }
@@ -1339,19 +1303,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @throws  Exception  DOCUMENT ME!
      */
     public static void main(final String[] args) throws Exception {
-//        final CidsBean cb = DevelopmentTools.createCidsBeanFromRMIConnectionOnLocalhost(
-//                "WUNDA_BLAU",
-//                "Administratoren",
-//                "admin",
-//                "sb",
-//                "GEOM",
-//                83318655);
-//
-//        System.out.println(cb.getProperty("geo_field"));
-//        cb.setProperty("geo_field", null);
-//        System.out.println("fertich");
-//        System.exit(0);
-
         DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
             "WUNDA_BLAU",
             "Administratoren",
@@ -1362,22 +1313,19 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             // 6833,
             1024,
             768);
-
-//        DevelopmentTools.createRendererInFrameFromRMIConnectionOnLocalhost(
-//            "WUNDA_BLAU",
-//            "Administratoren",
-//            "admin",
-//            "sb",
-//            "nivellement_punkt",
-//            4349,
-//            "Renderer",
-//            1024,
-//            768);
     }
 
     @Override
     public final ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public void showMeasureIsLoading() {
+    }
+
+    @Override
+    public void showMeasurePanel() {
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1387,7 +1335,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      *
      * @version  $Revision$, $Date$
      */
-    class RefreshDocumentWorker extends SwingWorker<BufferedImage, Object> {
+    class RefreshDocumentWorker extends SwingWorker<String, Object> {
 
         //~ Methods ------------------------------------------------------------
 
@@ -1399,63 +1347,44 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
          * @throws  Exception  DOCUMENT ME!
          */
         @Override
-        protected BufferedImage doInBackground() throws Exception {
-            final Collection<URL> validURLs = ClientAlkisProducts.getInstance()
+        protected String doInBackground() throws Exception {
+            final Collection<String> validDocuments = ClientAlkisProducts.getInstance()
                         .getCorrespondingNivPURLs(txtDGKBlattnummer.getText(),
                             txtLaufendeNummer.getText());
 
-            InputStream streamToReadFrom = null;
-            for (final URL url : validURLs) {
+            String document = null;
+            for (final String validDocument : validDocuments) {
                 try {
+                    final URL url = ClientAlkisConf.getInstance().getDownloadUrlForDocument(validDocument);
                     if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
-                        streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
+                        document = validDocument;
                         urlOfDocument = url.toExternalForm();
-                        if (streamToReadFrom != null) {
-                            break;
-                        }
+                        break;
                     }
                 } catch (MissingArgumentException ex) {
-                    LOG.warn("Could not read document from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
+                    LOG.warn("Could not read document from URL '" + validDocument + "'. Skipping this url.", ex);
                 } catch (AccessMethodIsNotSupportedException ex) {
-                    LOG.warn("Can't access document URL '" + url.toExternalForm()
+                    LOG.warn("Can't access document URL '" + validDocument
                                 + "' with default access method. Skipping this url.",
                         ex);
                 } catch (RequestFailedException ex) {
-                    LOG.warn("Requesting document from URL '" + url.toExternalForm() + "' failed. Skipping this url.",
+                    LOG.warn("Requesting document from URL '" + validDocument + "' failed. Skipping this url.",
                         ex);
                 } catch (NoHandlerForURLException ex) {
-                    LOG.warn("Can't handle URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
+                    LOG.warn("Can't handle URL '" + validDocument + "'. Skipping this url.", ex);
                 } catch (Exception ex) {
-                    LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
+                    LOG.warn("An exception occurred while opening URL '" + validDocument
                                 + "'. Skipping this url.",
                         ex);
                 }
             }
 
-            BufferedImage result = null;
-            if (streamToReadFrom == null) {
+            if (document == null) {
                 LOG.error("Couldn't get a connection to associated document.");
                 urlOfDocument = null;
-            } else if (LOG.isDebugEnabled()) {
-                LOG.debug("Loading '" + urlOfDocument + "'.");
             }
 
-            try {
-                result = ImageIO.read(streamToReadFrom);
-            } catch (IOException ex) {
-                LOG.warn("Could not read image.", ex);
-                urlOfDocument = null;
-            } finally {
-                try {
-                    if (streamToReadFrom != null) {
-                        streamToReadFrom.close();
-                    }
-                } catch (IOException ex) {
-                    LOG.warn("Couldn't close the stream.", ex);
-                }
-            }
-
-            return result;
+            return document;
         }
 
         /**
@@ -1463,7 +1392,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
          */
         @Override
         protected void done() {
-            BufferedImage document = null;
+            String document = null;
             try {
                 if (!isCancelled()) {
                     document = get();
@@ -1474,20 +1403,19 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 LOG.warn("There was an exception while refreshing document.", ex);
             }
 
-            measuringComponent.reset();
+            rasterfariDocumentLoaderPanel1.reset();
             if ((document != null) && !isCancelled()) {
                 final boolean billingAllowed = BillingPopup.isBillingAllowed("nivppdf", getConnectionContext());
-                measuringComponent.setVisible(true);
+                rasterfariDocumentLoaderPanel1.setVisible(true);
                 lblMissingRasterdocument.setVisible(false);
-                measuringComponent.addImage(document);
-                measuringComponent.zoomToFeatureCollection();
+                rasterfariDocumentLoaderPanel1.setDocument(document);
                 btnHome.setEnabled(true);
                 btnOpen.setEnabled(billingAllowed);
                 btnReport.setEnabled(billingAllowed);
                 togPan.setEnabled(true);
                 togZoom.setEnabled(true);
             } else {
-                measuringComponent.setVisible(false);
+                rasterfariDocumentLoaderPanel1.setVisible(false);
                 lblMissingRasterdocument.setVisible(true);
                 btnHome.setEnabled(false);
                 btnOpen.setEnabled(false);

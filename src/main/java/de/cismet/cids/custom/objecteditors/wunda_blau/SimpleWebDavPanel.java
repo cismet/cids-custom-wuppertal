@@ -279,6 +279,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
          *
          * @param  evt  DOCUMENT ME!
          */
+        @Override
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnAddImg) {
                 SimpleWebDavPanel.this.btnAddImgActionPerformed(evt);
@@ -292,6 +293,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
          *
          * @param  evt  DOCUMENT ME!
          */
+        @Override
         public void mouseClicked(final MouseEvent evt) {
             if (evt.getSource() == lstFotos) {
                 SimpleWebDavPanel.this.lstFotosMouseClicked(evt);
@@ -303,6 +305,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
          *
          * @param  evt  DOCUMENT ME!
          */
+        @Override
         public void mouseEntered(final MouseEvent evt) {
         }
 
@@ -311,6 +314,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
          *
          * @param  evt  DOCUMENT ME!
          */
+        @Override
         public void mouseExited(final MouseEvent evt) {
         }
 
@@ -319,6 +323,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
          *
          * @param  evt  DOCUMENT ME!
          */
+        @Override
         public void mousePressed(final MouseEvent evt) {
         }
 
@@ -327,6 +332,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
          *
          * @param  evt  DOCUMENT ME!
          */
+        @Override
         public void mouseReleased(final MouseEvent evt) {
         }
 
@@ -335,6 +341,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
          *
          * @param  evt  DOCUMENT ME!
          */
+        @Override
         public void valueChanged(final ListSelectionEvent evt) {
             if (evt.getSource() == lstFotos) {
                 SimpleWebDavPanel.this.lstFotosValueChanged(evt);

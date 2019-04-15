@@ -268,21 +268,21 @@ public class BaulastenReportGenerator {
                 "Bericht aus dem Baulastenverzeichnis",
                 connectionContext));
 
-        final Collection<URL> additionalFilesToDownload = new LinkedSet<>();
+        final Collection<String> additionalFilesToDownload = new LinkedSet<>();
         for (final CidsBean selectedBaulast : selectedBaulasten) {
-            final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
+            final List<String> documentListRasterdaten = BaulastenPictureFinder.findPlanPicture(
                     selectedBaulast);
-            additionalFilesToDownload.addAll(urlListRasterdaten);
+            additionalFilesToDownload.addAll(documentListRasterdaten);
         }
 
-        for (final URL additionalFileToDownload : additionalFilesToDownload) {
-            final String file = additionalFileToDownload.getFile()
-                        .substring(additionalFileToDownload.getFile().lastIndexOf('/') + 1);
+        for (final String additionalFileToDownload : additionalFilesToDownload) {
+            final URL url = BaulastenPictureFinder.getUrlForDocument(additionalFileToDownload);
+            final String file = url.getFile().substring(url.getFile().lastIndexOf('/') + 1);
             final String filename = file.substring(0, file.lastIndexOf('.'));
             final String extension = file.substring(file.lastIndexOf('.'));
 
             downloads.add(new HttpDownload(
-                    additionalFileToDownload,
+                    url,
                     null,
                     jobname,
                     file,
@@ -401,13 +401,12 @@ public class BaulastenReportGenerator {
                         if (Type.TEXTBLATT_PLAN_RASTER.equals(type)) {
                             int rasterPages = 0;
                             for (final CidsBean selectedBaulast : sortedBaulasten) {
-                                final List<URL> urlListRasterdaten = BaulastenPictureFinder.findPlanPicture(
+                                final List<String> documentListRasterdaten = BaulastenPictureFinder.findPlanPicture(
                                         selectedBaulast);
 
-                                for (final URL url : urlListRasterdaten) {
-//
-//                                final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(new File(
-//                                            "/home/jruiz/Downloads/000509-02p.tif"));
+                                for (final String document : documentListRasterdaten) {
+                                    final URL url = BaulastenPictureFinder.getUrlForDocument(document);
+
                                     final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(
                                             url,
                                             false,
@@ -490,10 +489,10 @@ public class BaulastenReportGenerator {
                         int startingPage = 2 + (int)(tileTableRows / 37);
 
                         for (final CidsBean selectedBaulast : sortedBaulasten) {
-                            final List<URL> urlListTextblatt = new ArrayList<>();
-                            final List<URL> urlListLageplan = new ArrayList<>();
+                            final List<String> documentListTextblatt = new ArrayList<>();
+                            final List<String> documentListLageplan = new ArrayList<>();
                             try {
-                                urlListTextblatt.addAll(BaulastenPictureFinder.findReducedTextblattPicture(
+                                documentListTextblatt.addAll(BaulastenPictureFinder.findTextblattPicture(
                                         selectedBaulast));
                             } catch (final Exception ex) {
                                 // TODO: User feedback?
@@ -505,18 +504,17 @@ public class BaulastenReportGenerator {
                             }
 
                             if (Type.TEXTBLATT_PLAN.equals(type) || Type.TEXTBLATT_PLAN_RASTER.equals(type)) {
-                                urlListLageplan.addAll(BaulastenPictureFinder.findReducedPlanPicture(selectedBaulast));
+                                documentListLageplan.addAll(BaulastenPictureFinder.findPlanPicture(selectedBaulast));
                             }
-                            if (urlListTextblatt.isEmpty()) {
+                            if (documentListTextblatt.isEmpty()) {
                                 LOG.info("No document URLS found for the Baulasten report");
                             }
                             int pageCount = 0;
-                            final List<URL> urlList = new ArrayList<>(urlListTextblatt);
-                            urlList.addAll(urlListLageplan);
-                            for (final URL url : urlList) {
+                            final List<String> documentList = new ArrayList<>(documentListTextblatt);
+                            documentList.addAll(documentListLageplan);
+                            for (final String document : documentList) {
                                 try {
-//                                final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(new File(
-//                                            "/home/jruiz/Downloads/000509-02p.tif"));
+                                    final URL url = BaulastenPictureFinder.getUrlForDocument(document);
                                     final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(
                                             url,
                                             false,
@@ -528,18 +526,13 @@ public class BaulastenReportGenerator {
                                     }
                                     pageCount += reader.getNumberOfPages();
                                 } catch (final Exception ex) {
-                                    LOG.warn("Could not read document from URL '" + url.toExternalForm()
-                                                + "'. Skipping this url.",
+                                    LOG.warn("Could not read document '" + document + "'. Skipping this url.",
                                         ex);
                                 }
                             }
 
                             imageAvailable.put(selectedBaulast.getProperty("id"), pageCount > 0);
 
-//                        if (reader == null) {
-//                            // Couldn't open any image.
-//                            continue;
-//                        }
                             final String startingPageString = Integer.toString(startingPage);
 
                             startingPages.put(selectedBaulast.getProperty("id"), startingPageString);

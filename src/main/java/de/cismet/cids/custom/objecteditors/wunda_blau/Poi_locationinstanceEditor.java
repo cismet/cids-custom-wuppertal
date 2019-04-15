@@ -23,6 +23,7 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
@@ -110,6 +111,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JCheckBox chkVeroeffentlicht;
     private javax.swing.JDialog dlgAddLocationType;
     private javax.swing.JDialog dlgAddZusNamen;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblArt;
@@ -135,6 +137,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JLabel lblTelefon;
     private javax.swing.JLabel lblUrl;
+    private javax.swing.JLabel lblUrl1;
     private javax.swing.JLabel lblUrlCheckImage;
     private javax.swing.JLabel lblUrlCheckWebsite;
     private javax.swing.JLabel lblVeroeffentlicht;
@@ -400,6 +403,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             lblGeomPoint1 = new javax.swing.JLabel();
             cbInfoArt = new DefaultBindableReferenceCombo(true);
             btnCreateAreaFromPoint = new javax.swing.JButton();
+            lblUrl1 = new javax.swing.JLabel();
+            jFormattedTextField1 = new javax.swing.JFormattedTextField();
             panContent2 = new RoundedPanel();
             lblMainLocationType = new javax.swing.JLabel();
             lblLocationTypes = new javax.swing.JLabel();
@@ -620,7 +625,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblInfo.setText("Info:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
         panContent.add(lblInfo, gridBagConstraints);
@@ -638,7 +643,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblArt.setText("Art der Info:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblArt, gridBagConstraints);
@@ -771,7 +776,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -783,8 +788,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.url}"),
                 txtUrl,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -826,7 +829,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panSpacing1.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -844,7 +847,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblGeomPoint.setText("Flächengeometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeomPoint, gridBagConstraints);
@@ -860,7 +863,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -879,7 +882,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -890,7 +893,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblGeomPoint1.setText("Punktgeometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeomPoint1, gridBagConstraints);
@@ -916,7 +919,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -941,9 +944,44 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panContent.add(btnCreateAreaFromPoint, gridBagConstraints);
+
+        lblUrl1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblUrl1.setText("Wuppertal-Live ID:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(lblUrl1, gridBagConstraints);
+
+        try {
+            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                    new javax.swing.text.MaskFormatter("****")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.wup_live_id}"),
+                jFormattedTextField1,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(new WupLiveIdConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(jFormattedTextField1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1655,5 +1693,35 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             return bean.getMetaObject().getMetaClass().getName();
         }
         return "Point of Interest (POI)";
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    static class WupLiveIdConverter extends Converter<Integer, String> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public String convertForward(final Integer l) {
+            return (l == null) ? "" : String.valueOf(l);
+        }
+
+        @Override
+        public Integer convertReverse(final String s) {
+            if ((s == null) || s.isEmpty()) {
+                return null;
+            } else {
+                try {
+                    return Integer.parseInt(s.trim());
+                } catch (final Exception ex) {
+                    return null;
+                }
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>6.10-SNAPSHOT</version>
+    <version>6.12-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal} [${project.version}]</name>
@@ -60,13 +60,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>6.4</version>
+                <version>6.4.3</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>6.4</version>
+                <version>6.4.3</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -74,13 +74,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>6.2.2</version>
+                <version>6.2.3</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>6.2.2</version>
+                <version>6.2.3</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -88,13 +88,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>6.2</version>
+                <version>6.2.5</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>6.2</version>
+                <version>6.2.5</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -116,21 +116,21 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.10.1-aaaweb-6.4-pre-release-1</version>
+                <version>6.13.1-aaaweb-6.4-pre-release-1</version>
                 <type>jar</type>
             </dependency>
             
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>6.2.16</version>
+                <version>6.2.20</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>6.2.16</version>
+                <version>6.2.20</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -138,7 +138,7 @@
             <dependency>
                 <groupId>de.cismet.cismap</groupId>
                 <artifactId>cismap-plugin</artifactId>
-                <version>6.1.5</version>
+                <version>6.1.6</version>
                 <type>jar</type>
             </dependency>
             
@@ -267,12 +267,6 @@
             <scope>compile</scope>
             <type>jar</type>
         </dependency>
-                <dependency>
-            <groupId>jai</groupId>
-            <artifactId>jai-core</artifactId>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -320,13 +314,7 @@
             <artifactId>xml-apis</artifactId>
             <scope>compile</scope>
             <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>jai</groupId>
-            <artifactId>jai-codec</artifactId>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
+        </dependency>        
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
@@ -609,10 +597,3 @@
         </profile>
     </profiles>  
 </project>
-
-
-
-
-
-
-

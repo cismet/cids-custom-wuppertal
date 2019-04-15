@@ -62,7 +62,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -824,7 +824,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    final ArrayList<SerienReportBean> stadtbilderReportBeans = new ArrayList<SerienReportBean>();
+                    final ArrayList<SerienReportBean> stadtbilderReportBeans = new ArrayList<>();
 
                     final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel())
                                 .elements();
@@ -833,18 +833,20 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
                         final CidsBean stadtbild = (CidsBean)stadtbildserie.getProperty("vorschaubild");
-                        final String bildnummer = (String)stadtbild.getProperty("bildnummer");
                         final boolean previewAllowed = Sb_RestrictionLevelUtils
                                     .determineRestrictionLevelForStadtbildserie(
                                             stadtbildserie,
                                             getConnectionContext()).isPreviewAllowed();
+                        final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
+                                stadtbildserie,
+                                stadtbild);
                         Image image;
                         if (previewAllowed) {
                             try {
-                                image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
+                                image = StadtbilderUtils.downloadImageForBildnummer(stadtbildInfo);
                             } catch (Exception ex) {
                                 LOG.error("Image could not be fetched.", ex);
-                                image = Sb_stadtbildUtils.ERROR_IMAGE;
+                                image = StadtbilderUtils.ERROR_IMAGE;
                             }
                             stadtbilderReportBeans.add(new SerienReportBean(stadtbildserie, image));
                         }
@@ -861,7 +863,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             final String filename = "Stadtbilder_Serienauszug";
             final String downloadTitle = "Stadtbilder Serienauszug";
 
-            final ArrayList<Download> downloads = new ArrayList<Download>(2);
+            final ArrayList<Download> downloads = new ArrayList<>(2);
 
             String resourceName = REPORT_STADTBILDVORSCHAU_URL;
             final JasperReportDownload download = new JasperReportDownload(
@@ -904,7 +906,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    final ArrayList<StadtbildReportBean> stadtbilderReportBeans = new ArrayList<StadtbildReportBean>();
+                    final ArrayList<StadtbildReportBean> stadtbilderReportBeans = new ArrayList<>();
 
                     final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel())
                                 .elements();
@@ -918,17 +920,19 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                             stadtbildserie,
                                             getConnectionContext()).isPreviewAllowed();
                         for (final CidsBean stadtbild : stadtbilder) {
-                            final String bildnummer = (String)stadtbild.getProperty("bildnummer");
+                            final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
+                                    stadtbildserie,
+                                    stadtbild);
                             Image image;
                             if (previewAllowed) {
                                 try {
-                                    image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
+                                    image = StadtbilderUtils.downloadImageForBildnummer(stadtbildInfo);
                                 } catch (Exception ex) {
                                     LOG.error("Image could not be fetched.", ex);
-                                    image = Sb_stadtbildUtils.ERROR_IMAGE;
+                                    image = StadtbilderUtils.ERROR_IMAGE;
                                 }
                             } else {
-                                image = Sb_stadtbildUtils.ERROR_IMAGE;
+                                image = StadtbilderUtils.ERROR_IMAGE;
                             }
                             stadtbilderReportBeans.add(new StadtbildReportBean(stadtbildserie, stadtbild, image));
                         }
@@ -945,7 +949,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             final String filename = "Stadtbilder_Einzelbilderauszug";
             final String downloadTitle = "Stadtbilder Einzelbilderauszug";
 
-            final ArrayList<Download> downloads = new ArrayList<Download>(2);
+            final ArrayList<Download> downloads = new ArrayList<>(2);
 
             String resourceName = REPORT_STADTBILDSERIE_URL;
             final JasperReportDownload download = new JasperReportDownload(
@@ -1021,7 +1025,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         // high resolution. this is done via a network connection and therefore might freeze the GUI otherwise.
         new SwingWorker<Void, Void>() {
 
-                final ArrayList<Download> downloads = new ArrayList<Download>();
+                final ArrayList<Download> downloads = new ArrayList<>();
 
                 @Override
                 protected Void doInBackground() throws Exception {
@@ -1036,15 +1040,16 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         if (downloadAllowed) {
                             final CidsBean stadtbild = (CidsBean)gridObject.getStadtbildserie()
                                         .getProperty("vorschaubild");
-                            final String imageNumber = (String)stadtbild.getProperty("bildnummer");
-                            if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
+                            final StadtbilderUtils.StadtbildInfo stadtbildInfo = gridObject.getStadtbildInfo();
+                            if (StadtbilderUtils.getFormatOfHighResPicture(stadtbildInfo) != null) {
+                                final String imageNumber = stadtbildInfo.getBildnummer();
                                 downloads.add(new TifferDownload(
                                         jobname,
                                         "Stadtbild "
                                                 + imageNumber,
                                         "stadtbild_"
                                                 + imageNumber,
-                                        stadtbild.toString(),
+                                        stadtbildInfo,
                                         "1",
                                         getConnectionContext()));
                             }
@@ -1094,7 +1099,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         // high resolution. this is done via a network connection and therefore might freeze the GUI otherwise.
         new SwingWorker<Void, Void>() {
 
-                final ArrayList<Download> downloads = new ArrayList<Download>();
+                final ArrayList<Download> downloads = new ArrayList<>();
 
                 @Override
                 protected Void doInBackground() throws Exception {
@@ -1108,15 +1113,18 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                             getConnectionContext()).isDownloadAllowed();
                         if (downloadAllowed) {
                             for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
-                                final String imageNumber = (String)stadtbild.getProperty("bildnummer");
-                                if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
+                                final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
+                                        stadtbildserie,
+                                        stadtbild);
+                                if (StadtbilderUtils.getFormatOfHighResPicture(stadtbildInfo) != null) {
+                                    final String imageNumber = (String)stadtbild.getProperty("bildnummer");
                                     downloads.add(new TifferDownload(
                                             jobname,
                                             "Stadtbild "
                                                     + imageNumber,
                                             "stadtbild_"
                                                     + imageNumber,
-                                            stadtbild.toString(),
+                                            stadtbildInfo,
                                             "1",
                                             getConnectionContext()));
                                 }
@@ -1304,7 +1312,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 gridObject.addStadtbildChosenListener(this);
                 model.addElement(gridObject);
 
-                Sb_stadtbildUtils.cacheImagesForStadtbilder(
+                StadtbilderUtils.cacheImagesForStadtbilder(
                     bean,
                     bean.getBeanCollectionProperty("stadtbilder_arr"),
                     getConnectionContext());
@@ -1408,7 +1416,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      * @return  DOCUMENT ME!
      */
     private Collection<CidsBean> getSelectedStadtbilder() {
-        final Set<CidsBean> selectedStadtbilder = new HashSet<CidsBean>();
+        final Set<CidsBean> selectedStadtbilder = new HashSet<>();
 
         final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel()).elements();
         while (e.hasMoreElements()) {
@@ -1636,7 +1644,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         protected Boolean doInBackground() throws Exception {
             // determine the Stadtbildserie of the stadtbild to check if the download is allowed
 
-            final String imageNumber = (String)stadtbild.getProperty("bildnummer");
             if (stadtbildSerie == null) {
                 final MetaClass mc = ClassCacheMultiple.getMetaClass(
                         DOMAIN,
@@ -1684,7 +1691,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         getConnectionContext())
                         .isDownloadAllowed();
             if (downloadAllowed) {
-                if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
+                if (
+                    StadtbilderUtils.getFormatOfHighResPicture(
+                                new StadtbilderUtils.StadtbildInfo(stadtbildSerie, stadtbild))
+                            != null) {
                     return true;
                 }
             }
@@ -1754,8 +1764,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         private void init() {
             // only Sb_stadtbildserieGridObject will be shown and they will be renderered by
             // Sb_stadtbildserieGridRenderer
-            final DefaultListModel<Sb_stadtbildserieGridObject> gridModel =
-                new DefaultListModel<Sb_stadtbildserieGridObject>();
+            final DefaultListModel<Sb_stadtbildserieGridObject> gridModel = new DefaultListModel<>();
             this.setModel(gridModel);
             this.getCellRendererManager()
                     .setDefaultRenderer(
@@ -1875,16 +1884,16 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         if (selectedObject.size() == 1) {
                             final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)
                                 selectedObject.get(0);
-                            final String bildnummer = gridObject.getBildnummer();
-                            if (Sb_stadtbildUtils.isBildnummerInFailedSet(bildnummer)) {
+                            final StadtbilderUtils.StadtbildInfo stadtbildInfo = gridObject.getStadtbildInfo();
+                            if (StadtbilderUtils.isBildnummerInFailedSet(stadtbildInfo)) {
                                 if (LOG.isDebugEnabled()) {
                                     LOG.debug(
                                         "The image "
-                                                + bildnummer
+                                                + stadtbildInfo.getBildnummer()
                                                 + " could not be loaded the last time because:\n"
-                                                + Sb_stadtbildUtils.getErrorMessageForFailedImage(bildnummer));
+                                                + StadtbilderUtils.getErrorMessageForFailedImage(stadtbildInfo));
                                 }
-                                Sb_stadtbildUtils.removeBildnummerFromFailedSet(bildnummer);
+                                StadtbilderUtils.removeBildnummerFromFailedSet(stadtbildInfo);
                                 gridObject.clearLastShownImage();
                             }
                         }
