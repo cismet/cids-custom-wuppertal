@@ -25,7 +25,7 @@ import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverte
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 import de.cismet.cids.custom.objectrenderer.utils.FixedLabel;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -671,8 +671,8 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
             bindingGroup.bind();
-            final String obj = String.valueOf(cidsBean.getProperty("bildnummer"));
-            lblPicture.setPictureURL(StaticProperties.ARCHIVAR_URL_PREFIX + obj + StaticProperties.ARCHIVAR_URL_SUFFIX);
+            final String bnr = String.valueOf(cidsBean.getProperty("bildnummer"));
+            lblPicture.setPictureURL(StadtbilderUtils.getArcUrlPath(bnr));
         }
     }
 

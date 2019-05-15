@@ -61,7 +61,6 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
-import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1024,9 +1023,9 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         }
 
         final URL documentUrl;
-        if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+        if (document.contains(BaulastenPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
             documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl(document.replaceAll(
-                        VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                        BaulastenPictureFinder.SUFFIX_REDUCED_SIZE,
                         ""));
         } else {
             documentUrl = rasterfariDocumentLoaderPanel1.getDocumentUrl();
@@ -1319,7 +1318,7 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
 
         lblReducedSize.setVisible(false);
         if (document != null) {
-            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+            if (document.contains(BaulastenPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
                 lblReducedSize.setVisible(true);
             }
             final String filename = getDocumentFilename();

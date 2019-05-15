@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.DefaultListModel;
 
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -85,13 +85,15 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
      * DOCUMENT ME!
      */
     void startThreadToDetermineIfHighResImageAvailable() {
-        final String imageNumber = (String)stadtbild.getProperty("bildnummer");
         highResAvailableThreadPool.submit(new Runnable() {
 
                 @Override
                 public void run() {
-                    imageAvailableInHighRes.set(
-                        Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
+                    final CidsBean stadtbildSerie = locationOfStadtbild.getStadtbildserie();
+                    final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
+                            stadtbildSerie,
+                            stadtbild);
+                    imageAvailableInHighRes.set(StadtbilderUtils.getFormatOfHighResPicture(stadtbildInfo)
                                 != null);
                     Sb_SingleStadtbildGridObject.this.notifyModel();
                 }
@@ -108,13 +110,16 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
     }
 
     @Override
-    protected String getBildnummer() {
-        return (String)stadtbild.getProperty("bildnummer");
+    protected StadtbilderUtils.StadtbildInfo getStadtbildInfo() {
+        final StadtbilderUtils.StadtbildInfo stadtbildInfo = new StadtbilderUtils.StadtbildInfo(
+                locationOfStadtbild.getStadtbildserie(),
+                stadtbild);
+        return stadtbildInfo;
     }
 
     @Override
     protected int getDownloadPrority() {
-        return Sb_stadtbildUtils.NORMAL_PRIORITY;
+        return StadtbilderUtils.NORMAL_PRIORITY;
     }
 
     @Override
@@ -142,7 +147,7 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
     @Override
     public Image getImage(final int cellDimension, final boolean invert) {
         final Image image = super.getImage(cellDimension, invert);
-        if (imageAvailableInHighRes.get() || (image == Sb_stadtbildUtils.PLACEHOLDER_IMAGE)) {
+        if (imageAvailableInHighRes.get() || (image == StadtbilderUtils.PLACEHOLDER_IMAGE)) {
             setPreview(false);
             return image;
         } else if (image == null) {
@@ -151,8 +156,8 @@ public class Sb_SingleStadtbildGridObject extends Sb_AbstractPictureGridObject {
                     cellDimension,
                     BufferedImage.TYPE_INT_ARGB);
             final Graphics2D g = (Graphics2D)imageToShow.getGraphics();
-            final Image scaledErrorImage = Sb_stadtbildUtils.scaleImage(
-                    Sb_stadtbildUtils.ERROR_IMAGE,
+            final Image scaledErrorImage = StadtbilderUtils.scaleImage(
+                    StadtbilderUtils.ERROR_IMAGE,
                     cellDimension,
                     invert);
             // heuristic to center the error image

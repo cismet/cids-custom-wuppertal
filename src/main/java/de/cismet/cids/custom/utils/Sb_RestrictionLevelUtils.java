@@ -44,9 +44,9 @@ public class Sb_RestrictionLevelUtils {
 
     private static CidsBean NO_RESTRICTION;
 
-    private static Image FULL_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
-    private static Image NO_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
-    private static Image MIDDLE_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
+    private static Image FULL_RESTRICTION_IMAGE = StadtbilderUtils.ERROR_IMAGE;
+    private static Image NO_RESTRICTION_IMAGE = StadtbilderUtils.ERROR_IMAGE;
+    private static Image MIDDLE_RESTRICTION_IMAGE = StadtbilderUtils.ERROR_IMAGE;
     private static String FULL_RESTRICTION_TOOLTIP = "";
     private static String NO_RESTRICTION_TOOLTIP = "";
     private static String MIDDLE_RESTRICTION_TOOLTIP = "";

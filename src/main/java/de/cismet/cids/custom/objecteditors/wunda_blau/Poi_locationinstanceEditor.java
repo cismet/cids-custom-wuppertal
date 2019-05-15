@@ -23,6 +23,7 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
@@ -36,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.logging.Level;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -93,6 +95,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddThema;
+    private javax.swing.JButton btnAddVeranstaltungsart;
     private javax.swing.JButton btnAddZusNamen;
     private javax.swing.JButton btnCreateAreaFromPoint;
     private javax.swing.JButton btnMenAbort;
@@ -100,20 +103,27 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JButton btnNamesMenAbort;
     private javax.swing.JButton btnNamesMenOk;
     private javax.swing.JButton btnRemoveThema;
+    private javax.swing.JButton btnRemoveVeranstaltungsart;
     private javax.swing.JButton btnRemoveZusNamen;
+    private javax.swing.JButton btnVeranstaltungsartAbort;
+    private javax.swing.JButton btnVeranstaltungsartOk;
     private javax.swing.JComboBox cbGeomArea;
     private javax.swing.JComboBox cbGeomPoint;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbInfoArt;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbMainLocationType;
     private javax.swing.JComboBox cbSignatur;
     private javax.swing.JComboBox cbTypes;
+    private javax.swing.JComboBox cbVeranstaltungsarten;
     private javax.swing.JCheckBox chkVeroeffentlicht;
     private javax.swing.JDialog dlgAddLocationType;
+    private javax.swing.JDialog dlgAddVeranstaltungsart;
     private javax.swing.JDialog dlgAddZusNamen;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblArt;
     private javax.swing.JLabel lblAuswaehlen;
+    private javax.swing.JLabel lblAuswaehlen1;
     private javax.swing.JLabel lblAuthor;
     private javax.swing.JLabel lblBezeichnung;
     private javax.swing.JLabel lblEmail;
@@ -135,16 +145,21 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JLabel lblTelefon;
     private javax.swing.JLabel lblUrl;
+    private javax.swing.JLabel lblUrl1;
     private javax.swing.JLabel lblUrlCheckImage;
     private javax.swing.JLabel lblUrlCheckWebsite;
+    private javax.swing.JLabel lblVeranstaltungsarten;
     private javax.swing.JLabel lblVeroeffentlicht;
     private javax.swing.JLabel lblWebsite;
     private javax.swing.JList lstLocationTypes;
+    private javax.swing.JList lstVeranstaltungsarten;
     private javax.swing.JList lstZusNamen;
     private javax.swing.JPanel panAddLocationType;
     private javax.swing.JPanel panAddName;
+    private javax.swing.JPanel panAddVeranstaltungsart;
     private javax.swing.JPanel panButtons;
     private javax.swing.JPanel panButtons1;
+    private javax.swing.JPanel panButtonsVeranstaltungsarten;
     private javax.swing.JPanel panCenter;
     private javax.swing.JPanel panContent;
     private javax.swing.JPanel panContent2;
@@ -152,7 +167,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JPanel panMenNamesButtons;
     private javax.swing.JPanel panSpacing1;
     private javax.swing.JPanel panSpacing2;
+    private javax.swing.JPanel panVeranstaltungsartButtons;
     private javax.swing.JScrollPane scpLstLocationTypes;
+    private javax.swing.JScrollPane scpLstVeranstaltungsarten;
     private javax.swing.JScrollPane scpTxtInfo;
     private javax.swing.JScrollPane scpZusNamen;
     private javax.swing.JTextField txtAuthor;
@@ -187,8 +204,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         initComponents();
         dlgAddLocationType.pack();
         dlgAddZusNamen.pack();
+        dlgAddVeranstaltungsart.pack();
         dlgAddLocationType.getRootPane().setDefaultButton(btnMenOk);
         dlgAddZusNamen.getRootPane().setDefaultButton(btnNamesMenOk);
+        dlgAddVeranstaltungsart.getRootPane().setDefaultButton(btnVeranstaltungsartOk);
 
         ((DefaultCismapGeometryComboBoxEditor)cbGeomPoint).setLocalRenderFeatureString("pos");
         ((DefaultCismapGeometryComboBoxEditor)cbGeomArea).setLocalRenderFeatureString("geom_area");
@@ -337,6 +356,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     @Override
     public synchronized void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
+        refreshVeranstaltungsartenButtons();
     }
 
     /**
@@ -370,99 +390,246 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             btnNamesMenAbort = new javax.swing.JButton();
             btnNamesMenOk = new javax.swing.JButton();
             txtZusNamen = new javax.swing.JTextField();
-            panCenter = new javax.swing.JPanel();
-            panContent = new RoundedPanel();
-            lblFax = new javax.swing.JLabel();
-            lblEmail = new javax.swing.JLabel();
-            lblUrl = new javax.swing.JLabel();
-            lblStrasse = new javax.swing.JLabel();
-            lblTelefon = new javax.swing.JLabel();
-            lblPLZ = new javax.swing.JLabel();
-            lblInfo = new javax.swing.JLabel();
-            lblStadt = new javax.swing.JLabel();
-            lblArt = new javax.swing.JLabel();
-            txtFax = new javax.swing.JTextField();
-            txtStrasse = new javax.swing.JTextField();
-            txtStadt = new javax.swing.JTextField();
-            txtPLZ = new javax.swing.JTextField();
-            txtTelefon = new javax.swing.JTextField();
-            txtEmail = new javax.swing.JTextField();
-            scpTxtInfo = new javax.swing.JScrollPane();
-            txtaInfo = new javax.swing.JTextArea();
-            txtUrl = new javax.swing.JTextField();
-            lblBezeichnung = new javax.swing.JLabel();
-            txtBezeichnung = new javax.swing.JTextField();
-            panSpacing1 = new javax.swing.JPanel();
-            lblHeader1 = new javax.swing.JLabel();
-            lblGeomPoint = new javax.swing.JLabel();
-            cbGeomPoint = new DefaultCismapGeometryComboBoxEditor();
-            cbGeomArea = new DefaultCismapGeometryComboBoxEditor();
-            lblGeomPoint1 = new javax.swing.JLabel();
-            cbInfoArt = new DefaultBindableReferenceCombo(true);
-            btnCreateAreaFromPoint = new javax.swing.JButton();
-            panContent2 = new RoundedPanel();
-            lblMainLocationType = new javax.swing.JLabel();
-            lblLocationTypes = new javax.swing.JLabel();
-            scpLstLocationTypes = new javax.swing.JScrollPane();
-            lstLocationTypes = new javax.swing.JList();
-            panButtons = new javax.swing.JPanel();
-            btnAddThema = new javax.swing.JButton();
-            btnRemoveThema = new javax.swing.JButton();
-            panButtons1 = new javax.swing.JPanel();
-            btnAddZusNamen = new javax.swing.JButton();
-            btnRemoveZusNamen = new javax.swing.JButton();
-            scpZusNamen = new javax.swing.JScrollPane();
-            lstZusNamen = new javax.swing.JList();
-            lblLocationTypes1 = new javax.swing.JLabel();
-            lblSignatur = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[] { "definition", "filename" });
-            panSpacing2 = new javax.swing.JPanel();
-            lblVeroeffentlicht = new javax.swing.JLabel();
-            chkVeroeffentlicht = new javax.swing.JCheckBox();
-            lblHeader2 = new javax.swing.JLabel();
-            cbMainLocationType = new DefaultBindableReferenceCombo(true);
-            txtAuthor = new javax.swing.JTextField();
-            lblUrlCheckImage = new javax.swing.JLabel();
-            lblUrlCheckWebsite = new javax.swing.JLabel();
-            lblHeader3 = new javax.swing.JLabel();
-            lblWebsite = new javax.swing.JLabel();
-            lblAuthor = new javax.swing.JLabel();
-            lblImageUrl = new javax.swing.JLabel();
-            jScrollPane1 = new javax.swing.JScrollPane();
-            txtaImageUrl = new javax.swing.JTextArea();
-            jScrollPane2 = new javax.swing.JScrollPane();
-            txtaWebsiteUrl = new javax.swing.JTextArea();
+            dlgAddVeranstaltungsart = new javax.swing.JDialog();
+            panAddVeranstaltungsart = new javax.swing.JPanel();
+            lblAuswaehlen1 = new javax.swing.JLabel();
+            final MetaObject[] veranstaltungsarten = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
+                        .getLightweightMetaObjectsForTable(
+                            "poi_veranstaltungsarten",
+                            new String[] { "name" },
+                            getConnectionContext());
+            if (veranstaltungsarten != null) {
+                Arrays.sort(veranstaltungsarten);
+                cbVeranstaltungsarten = new javax.swing.JComboBox(veranstaltungsarten);
+                panVeranstaltungsartButtons = new javax.swing.JPanel();
+                btnVeranstaltungsartAbort = new javax.swing.JButton();
+                btnVeranstaltungsartOk = new javax.swing.JButton();
+                panCenter = new javax.swing.JPanel();
+                panContent = new RoundedPanel();
+                lblFax = new javax.swing.JLabel();
+                lblEmail = new javax.swing.JLabel();
+                lblUrl = new javax.swing.JLabel();
+                lblStrasse = new javax.swing.JLabel();
+                lblTelefon = new javax.swing.JLabel();
+                lblPLZ = new javax.swing.JLabel();
+                lblInfo = new javax.swing.JLabel();
+                lblStadt = new javax.swing.JLabel();
+                lblArt = new javax.swing.JLabel();
+                txtFax = new javax.swing.JTextField();
+                txtStrasse = new javax.swing.JTextField();
+                txtStadt = new javax.swing.JTextField();
+                txtPLZ = new javax.swing.JTextField();
+                txtTelefon = new javax.swing.JTextField();
+                txtEmail = new javax.swing.JTextField();
+                scpTxtInfo = new javax.swing.JScrollPane();
+                txtaInfo = new javax.swing.JTextArea();
+                txtUrl = new javax.swing.JTextField();
+                lblBezeichnung = new javax.swing.JLabel();
+                txtBezeichnung = new javax.swing.JTextField();
+                panSpacing1 = new javax.swing.JPanel();
+                lblHeader1 = new javax.swing.JLabel();
+                lblGeomPoint = new javax.swing.JLabel();
+                cbGeomPoint = new DefaultCismapGeometryComboBoxEditor();
+                cbGeomArea = new DefaultCismapGeometryComboBoxEditor();
+                lblGeomPoint1 = new javax.swing.JLabel();
+                cbInfoArt = new DefaultBindableReferenceCombo(true);
+                btnCreateAreaFromPoint = new javax.swing.JButton();
+                lblUrl1 = new javax.swing.JLabel();
+                jFormattedTextField1 = new javax.swing.JFormattedTextField();
+                panContent2 = new RoundedPanel();
+                lblMainLocationType = new javax.swing.JLabel();
+                lblLocationTypes = new javax.swing.JLabel();
+                scpLstLocationTypes = new javax.swing.JScrollPane();
+                lstLocationTypes = new javax.swing.JList();
+                panButtons = new javax.swing.JPanel();
+                btnAddThema = new javax.swing.JButton();
+                btnRemoveThema = new javax.swing.JButton();
+                panButtons1 = new javax.swing.JPanel();
+                btnAddZusNamen = new javax.swing.JButton();
+                btnRemoveZusNamen = new javax.swing.JButton();
+                scpZusNamen = new javax.swing.JScrollPane();
+                lstZusNamen = new javax.swing.JList();
+                lblLocationTypes1 = new javax.swing.JLabel();
+                lblSignatur = new javax.swing.JLabel();
+                cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[] { "definition", "filename" });
+                panSpacing2 = new javax.swing.JPanel();
+                lblVeroeffentlicht = new javax.swing.JLabel();
+                chkVeroeffentlicht = new javax.swing.JCheckBox();
+                lblHeader2 = new javax.swing.JLabel();
+                cbMainLocationType = new DefaultBindableReferenceCombo(true);
+                txtAuthor = new javax.swing.JTextField();
+                lblUrlCheckImage = new javax.swing.JLabel();
+                lblUrlCheckWebsite = new javax.swing.JLabel();
+                lblHeader3 = new javax.swing.JLabel();
+                lblWebsite = new javax.swing.JLabel();
+                lblAuthor = new javax.swing.JLabel();
+                lblImageUrl = new javax.swing.JLabel();
+                jScrollPane1 = new javax.swing.JScrollPane();
+                txtaImageUrl = new javax.swing.JTextArea();
+                jScrollPane2 = new javax.swing.JScrollPane();
+                txtaWebsiteUrl = new javax.swing.JTextArea();
+                lblVeranstaltungsarten = new javax.swing.JLabel();
+                scpLstVeranstaltungsarten = new javax.swing.JScrollPane();
+                lstVeranstaltungsarten = new javax.swing.JList();
+                panButtonsVeranstaltungsarten = new javax.swing.JPanel();
+                btnAddVeranstaltungsart = new javax.swing.JButton();
+                btnRemoveVeranstaltungsart = new javax.swing.JButton();
 
-            dlgAddLocationType.setModal(true);
+                dlgAddLocationType.setTitle("Thema zuweisen");
+                dlgAddLocationType.setModal(true);
 
-            panAddLocationType.setMaximumSize(new java.awt.Dimension(180, 120));
-            panAddLocationType.setMinimumSize(new java.awt.Dimension(180, 120));
-            panAddLocationType.setPreferredSize(new java.awt.Dimension(180, 120));
-            panAddLocationType.setLayout(new java.awt.GridBagLayout());
+                panAddLocationType.setMaximumSize(new java.awt.Dimension(180, 120));
+                panAddLocationType.setMinimumSize(new java.awt.Dimension(180, 120));
+                panAddLocationType.setPreferredSize(new java.awt.Dimension(180, 120));
+                panAddLocationType.setLayout(new java.awt.GridBagLayout());
 
-            lblAuswaehlen.setText("Bitte Thema auswählen:");
+                lblAuswaehlen.setText("Bitte Thema auswählen:");
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+                panAddLocationType.add(lblAuswaehlen, gridBagConstraints);
+            }
+            cbTypes.setMaximumSize(new java.awt.Dimension(100, 20));
+            cbTypes.setMinimumSize(new java.awt.Dimension(100, 20));
+            cbTypes.setPreferredSize(new java.awt.Dimension(100, 20));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+            panAddLocationType.add(cbTypes, gridBagConstraints);
+
+            panMenButtons.setLayout(new java.awt.GridBagLayout());
+
+            btnMenAbort.setText("Abbrechen");
+            btnMenAbort.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenAbortActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+            panMenButtons.add(btnMenAbort, gridBagConstraints);
+
+            btnMenOk.setText("Ok");
+            btnMenOk.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenOkActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+            panMenButtons.add(btnMenOk, gridBagConstraints);
+
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+            panAddLocationType.add(panMenButtons, gridBagConstraints);
+
+            dlgAddLocationType.getContentPane().add(panAddLocationType, java.awt.BorderLayout.CENTER);
+
+            dlgAddZusNamen.setModal(true);
+
+            panAddName.setMaximumSize(new java.awt.Dimension(180, 120));
+            panAddName.setMinimumSize(new java.awt.Dimension(180, 120));
+            panAddName.setPreferredSize(new java.awt.Dimension(180, 120));
+            panAddName.setLayout(new java.awt.GridBagLayout());
+
+            lblNamesAuswaehlen.setText("Bitte Namen eingeben:");
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-            panAddLocationType.add(lblAuswaehlen, gridBagConstraints);
+            panAddName.add(lblNamesAuswaehlen, gridBagConstraints);
+
+            panMenNamesButtons.setLayout(new java.awt.GridBagLayout());
+
+            btnNamesMenAbort.setText("Abbrechen");
+            btnNamesMenAbort.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnNamesMenAbortActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+            panMenNamesButtons.add(btnNamesMenAbort, gridBagConstraints);
+
+            btnNamesMenOk.setText("Ok");
+            btnNamesMenOk.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnNamesMenOkActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+            panMenNamesButtons.add(btnNamesMenOk, gridBagConstraints);
+
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+            panAddName.add(panMenNamesButtons, gridBagConstraints);
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+            panAddName.add(txtZusNamen, gridBagConstraints);
+
+            dlgAddZusNamen.getContentPane().add(panAddName, java.awt.BorderLayout.CENTER);
+
+            dlgAddVeranstaltungsart.setTitle("Veranstaltungsart zuweisen");
+            dlgAddVeranstaltungsart.setModal(true);
+
+            panAddVeranstaltungsart.setMaximumSize(new java.awt.Dimension(280, 120));
+            panAddVeranstaltungsart.setMinimumSize(new java.awt.Dimension(280, 120));
+            panAddVeranstaltungsart.setPreferredSize(new java.awt.Dimension(280, 120));
+            panAddVeranstaltungsart.setLayout(new java.awt.GridBagLayout());
+
+            lblAuswaehlen1.setText("Bitte Veranstaltungsart auswählen:");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+            panAddVeranstaltungsart.add(lblAuswaehlen1, gridBagConstraints);
         }
-        cbTypes.setMaximumSize(new java.awt.Dimension(100, 20));
-        cbTypes.setMinimumSize(new java.awt.Dimension(100, 20));
-        cbTypes.setPreferredSize(new java.awt.Dimension(100, 20));
+        cbVeranstaltungsarten.setMaximumSize(new java.awt.Dimension(100, 20));
+        cbVeranstaltungsarten.setMinimumSize(new java.awt.Dimension(100, 20));
+        cbVeranstaltungsarten.setPreferredSize(new java.awt.Dimension(100, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddLocationType.add(cbTypes, gridBagConstraints);
+        panAddVeranstaltungsart.add(cbVeranstaltungsarten, gridBagConstraints);
 
-        panMenButtons.setLayout(new java.awt.GridBagLayout());
+        panVeranstaltungsartButtons.setLayout(new java.awt.GridBagLayout());
 
-        btnMenAbort.setText("Abbrechen");
-        btnMenAbort.addActionListener(new java.awt.event.ActionListener() {
+        btnVeranstaltungsartAbort.setText("Abbrechen");
+        btnVeranstaltungsartAbort.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnMenAbortActionPerformed(evt);
+                    btnVeranstaltungsartAbortActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -470,14 +637,14 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMenButtons.add(btnMenAbort, gridBagConstraints);
+        panVeranstaltungsartButtons.add(btnVeranstaltungsartAbort, gridBagConstraints);
 
-        btnMenOk.setText("Ok");
-        btnMenOk.addActionListener(new java.awt.event.ActionListener() {
+        btnVeranstaltungsartOk.setText("Ok");
+        btnVeranstaltungsartOk.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnMenOkActionPerformed(evt);
+                    btnVeranstaltungsartOkActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -485,74 +652,16 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMenButtons.add(btnMenOk, gridBagConstraints);
+        panVeranstaltungsartButtons.add(btnVeranstaltungsartOk, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddLocationType.add(panMenButtons, gridBagConstraints);
+        panAddVeranstaltungsart.add(panVeranstaltungsartButtons, gridBagConstraints);
 
-        dlgAddLocationType.getContentPane().add(panAddLocationType, java.awt.BorderLayout.CENTER);
-
-        dlgAddZusNamen.setModal(true);
-
-        panAddName.setMaximumSize(new java.awt.Dimension(180, 120));
-        panAddName.setMinimumSize(new java.awt.Dimension(180, 120));
-        panAddName.setPreferredSize(new java.awt.Dimension(180, 120));
-        panAddName.setLayout(new java.awt.GridBagLayout());
-
-        lblNamesAuswaehlen.setText("Bitte Namen eingeben:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        panAddName.add(lblNamesAuswaehlen, gridBagConstraints);
-
-        panMenNamesButtons.setLayout(new java.awt.GridBagLayout());
-
-        btnNamesMenAbort.setText("Abbrechen");
-        btnNamesMenAbort.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnNamesMenAbortActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMenNamesButtons.add(btnNamesMenAbort, gridBagConstraints);
-
-        btnNamesMenOk.setText("Ok");
-        btnNamesMenOk.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnNamesMenOkActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMenNamesButtons.add(btnNamesMenOk, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddName.add(panMenNamesButtons, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddName.add(txtZusNamen, gridBagConstraints);
-
-        dlgAddZusNamen.getContentPane().add(panAddName, java.awt.BorderLayout.CENTER);
+        dlgAddVeranstaltungsart.getContentPane().add(panAddVeranstaltungsart, java.awt.BorderLayout.CENTER);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -620,7 +729,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblInfo.setText("Info:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
         panContent.add(lblInfo, gridBagConstraints);
@@ -638,7 +747,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblArt.setText("Art der Info:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblArt, gridBagConstraints);
@@ -771,7 +880,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -783,8 +892,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.url}"),
                 txtUrl,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -826,7 +933,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panSpacing1.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -844,7 +951,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblGeomPoint.setText("Flächengeometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeomPoint, gridBagConstraints);
@@ -860,7 +967,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -879,7 +986,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -890,7 +997,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblGeomPoint1.setText("Punktgeometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeomPoint1, gridBagConstraints);
@@ -916,7 +1023,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -941,9 +1048,44 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panContent.add(btnCreateAreaFromPoint, gridBagConstraints);
+
+        lblUrl1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblUrl1.setText("Wuppertal-Live ID:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(lblUrl1, gridBagConstraints);
+
+        try {
+            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                    new javax.swing.text.MaskFormatter("****")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.wup_live_id}"),
+                jFormattedTextField1,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(new WupLiveIdConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(jFormattedTextField1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -962,7 +1104,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblMainLocationType.setText("Hauptthema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblMainLocationType, gridBagConstraints);
@@ -977,6 +1119,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panContent2.add(lblLocationTypes, gridBagConstraints);
 
         lstLocationTypes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstLocationTypes.setVisibleRowCount(6);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
                 "${cidsBean.locationtypes}");
@@ -1070,10 +1213,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(panButtons1, gridBagConstraints);
+
+        lstZusNamen.setVisibleRowCount(6);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alternativegeographicidentifier}");
         jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
@@ -1087,7 +1232,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(scpZusNamen, gridBagConstraints);
@@ -1096,7 +1241,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblLocationTypes1.setText("Zusätzliche Namen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
         panContent2.add(lblLocationTypes1, gridBagConstraints);
@@ -1105,7 +1250,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblSignatur.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblSignatur, gridBagConstraints);
@@ -1125,7 +1270,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         cbSignatur.setRenderer(new SignaturListCellRenderer());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
@@ -1196,7 +1341,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
@@ -1333,6 +1478,75 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 7, 5, 7);
         panContent2.add(jScrollPane2, gridBagConstraints);
 
+        lblVeranstaltungsarten.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblVeranstaltungsarten.setText("Veranstaltungsarten:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
+        panContent2.add(lblVeranstaltungsarten, gridBagConstraints);
+
+        lstVeranstaltungsarten.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstVeranstaltungsarten.setVisibleRowCount(6);
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_veranstaltungsarten}");
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstVeranstaltungsarten);
+        bindingGroup.addBinding(jListBinding);
+
+        scpLstVeranstaltungsarten.setViewportView(lstVeranstaltungsarten);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(scpLstVeranstaltungsarten, gridBagConstraints);
+
+        panButtonsVeranstaltungsarten.setOpaque(false);
+        panButtonsVeranstaltungsarten.setLayout(new java.awt.GridBagLayout());
+
+        btnAddVeranstaltungsart.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddVeranstaltungsart.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddVeranstaltungsartActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panButtonsVeranstaltungsarten.add(btnAddVeranstaltungsart, gridBagConstraints);
+
+        btnRemoveVeranstaltungsart.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveVeranstaltungsart.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveVeranstaltungsartActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panButtonsVeranstaltungsarten.add(btnRemoveVeranstaltungsart, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(panButtonsVeranstaltungsarten, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -1358,7 +1572,35 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationinstanceEditor.this),
             dlgAddLocationType,
             true);
+        refreshVeranstaltungsartenButtons();
     }                                                                               //GEN-LAST:event_btnAddThemaActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshVeranstaltungsartenButtons() {
+        boolean hasVeranstaltungsortType = false;
+        if (cidsBean != null) {
+            if ((cidsBean.getProperty("mainlocationtype.number") != null)
+                        && ((Integer)cidsBean.getProperty("mainlocationtype.number") == 12)) {
+                hasVeranstaltungsortType = true;
+            } else {
+                for (final CidsBean typeBean : cidsBean.getBeanCollectionProperty("locationtypes")) {
+                    final Integer number = (Integer)typeBean.getProperty("number");
+                    if ((number != null) && (number == 12)) {
+                        hasVeranstaltungsortType = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        btnAddVeranstaltungsart.setEnabled(hasVeranstaltungsortType);
+        btnRemoveVeranstaltungsart.setEnabled(hasVeranstaltungsortType);
+        if ((cidsBean != null) && !hasVeranstaltungsortType) {
+            cidsBean.getBeanCollectionProperty("arr_veranstaltungsarten").clear();
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -1389,6 +1631,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 }
             }
         }
+        refreshVeranstaltungsartenButtons();
     }                                                                                  //GEN-LAST:event_btnRemoveThemaActionPerformed
 
     /**
@@ -1598,6 +1841,75 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddVeranstaltungsartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddVeranstaltungsartActionPerformed
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationinstanceEditor.this),
+            dlgAddVeranstaltungsart,
+            true);
+    }                                                                                           //GEN-LAST:event_btnAddVeranstaltungsartActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveVeranstaltungsartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveVeranstaltungsartActionPerformed
+        final Object selection = lstVeranstaltungsarten.getSelectedValue();
+        if (selection != null) {
+            final int answer = JOptionPane.showConfirmDialog(
+                    StaticSwingTools.getParentFrame(this),
+                    "Soll die Veranstaltungsart wirklich entfernt werden?",
+                    "Veranstaltungsart entfernen",
+                    JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.YES_OPTION) {
+                try {
+                    deleteItemFromList("arr_veranstaltungsarten", selection, false);
+                } catch (Exception ex) {
+                    final ErrorInfo ei = new ErrorInfo(
+                            "Fehler beim Entfernen",
+                            "Beim Entfernen der Veranstaltungsart ist ein Fehler aufgetreten",
+                            null,
+                            null,
+                            ex,
+                            Level.SEVERE,
+                            null);
+                    JXErrorPane.showDialog(this, ei);
+                }
+            }
+        }
+    }                                                                                              //GEN-LAST:event_btnRemoveVeranstaltungsartActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnVeranstaltungsartAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnVeranstaltungsartAbortActionPerformed
+        dlgAddVeranstaltungsart.setVisible(false);
+    }                                                                                             //GEN-LAST:event_btnVeranstaltungsartAbortActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnVeranstaltungsartOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnVeranstaltungsartOkActionPerformed
+        try {
+            final Object selItem = cbVeranstaltungsarten.getSelectedItem();
+            if (selItem instanceof MetaObject) {
+                addBeanToCollection("arr_veranstaltungsarten", ((MetaObject)selItem).getBean());
+            }
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        } finally {
+            dlgAddVeranstaltungsart.setVisible(false);
+        }
+    }                                                                                          //GEN-LAST:event_btnVeranstaltungsartOkActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  propName     DOCUMENT ME!
      * @param  newTypeBean  DOCUMENT ME!
      */
@@ -1655,5 +1967,35 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             return bean.getMetaObject().getMetaClass().getName();
         }
         return "Point of Interest (POI)";
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    static class WupLiveIdConverter extends Converter<Integer, String> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public String convertForward(final Integer l) {
+            return (l == null) ? "" : String.valueOf(l);
+        }
+
+        @Override
+        public Integer convertReverse(final String s) {
+            if ((s == null) || s.isEmpty()) {
+                return null;
+            } else {
+                try {
+                    return Integer.parseInt(s.trim());
+                } catch (final Exception ex) {
+                    return null;
+                }
+            }
+        }
     }
 }

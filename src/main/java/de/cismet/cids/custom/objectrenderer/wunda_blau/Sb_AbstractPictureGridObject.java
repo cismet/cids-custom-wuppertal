@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -62,7 +62,7 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
      *
      * @return  DOCUMENT ME!
      */
-    protected abstract String getBildnummer();
+    protected abstract StadtbilderUtils.StadtbildInfo getStadtbildInfo();
     /**
      * DOCUMENT ME!
      *
@@ -99,31 +99,31 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
      * @return  DOCUMENT ME!
      */
     public Image getImage(final int cellDimension, final boolean invert) {
-        final String bildnummer = getBildnummer();
+        final StadtbilderUtils.StadtbildInfo stadtbildInfo = getStadtbildInfo();
 
-        if ((lastShownImage != null) && lastShownImage.bildnummer.equals(bildnummer)) {
+        if ((lastShownImage != null) && lastShownImage.stadtbildInfo.equals(stadtbildInfo)) {
             final Image imageToReturn = lastShownImage.image;
             if (lastShownImage.image == null) {
                 return null;
             } else {
-                return Sb_stadtbildUtils.scaleImage(imageToReturn, cellDimension, invert);
+                return StadtbilderUtils.scaleImage(imageToReturn, cellDimension, invert);
             }
         }
 
         final int priority = getDownloadPrority();
 
-        final Object mightBeAnImage = Sb_stadtbildUtils.fetchImageForBildnummer(
+        final Object mightBeAnImage = StadtbilderUtils.fetchImageForBildnummer(
                 getStadtbildserie(),
-                bildnummer,
+                stadtbildInfo,
                 priority,
                 getConnectionContext());
         if (mightBeAnImage instanceof Image) {
-            lastShownImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
+            lastShownImage = new LastShownImage(stadtbildInfo, (Image)mightBeAnImage);
             final Image toReturn = (Image)mightBeAnImage;
-            return Sb_stadtbildUtils.scaleImage(toReturn, cellDimension, invert);
+            return StadtbilderUtils.scaleImage(toReturn, cellDimension, invert);
         } else if (mightBeAnImage instanceof Future) {
-            retrieveFutureImage((Future<Image>)mightBeAnImage, bildnummer);
-            return Sb_stadtbildUtils.scaleImage(Sb_stadtbildUtils.PLACEHOLDER_IMAGE, cellDimension, invert);
+            retrieveFutureImage((Future<Image>)mightBeAnImage, stadtbildInfo);
+            return StadtbilderUtils.scaleImage(StadtbilderUtils.PLACEHOLDER_IMAGE, cellDimension, invert);
         } else {
             return null;
         }
@@ -150,10 +150,11 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
     /**
      * DOCUMENT ME!
      *
-     * @param  futureImage  DOCUMENT ME!
-     * @param  bildnummer   DOCUMENT ME!
+     * @param  futureImage    DOCUMENT ME!
+     * @param  stadtbildInfo  DOCUMENT ME!
      */
-    public void retrieveFutureImage(final Future<Image> futureImage, final String bildnummer) {
+    public void retrieveFutureImage(final Future<Image> futureImage,
+            final StadtbilderUtils.StadtbildInfo stadtbildInfo) {
         if (worker != null) {
             worker.cancel(true);
         }
@@ -170,14 +171,14 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
                     try {
                         final Image image = get();
                         if (image != null) {
-                            lastShownImage = new LastShownImage(bildnummer, image);
+                            lastShownImage = new LastShownImage(stadtbildInfo, image);
                         } else {
-                            lastShownImage = new LastShownImage(bildnummer, null);
+                            lastShownImage = new LastShownImage(stadtbildInfo, null);
                         }
                     } catch (InterruptedException ex) {
-                        lastShownImage = new LastShownImage(bildnummer, null);
+                        lastShownImage = new LastShownImage(stadtbildInfo, null);
                     } catch (ExecutionException ex) {
-                        lastShownImage = new LastShownImage(bildnummer, null);
+                        lastShownImage = new LastShownImage(stadtbildInfo, null);
                     } catch (CancellationException ex) {
                     } finally {
                         notifyModel();
@@ -193,7 +194,7 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
      */
     public void clearLastShownImage() {
         if (lastShownImage != null) {
-            lastShownImage.bildnummer = "";
+            lastShownImage.stadtbildInfo = null;
             lastShownImage.image = null;
         }
     }
@@ -209,7 +210,7 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
 
         //~ Instance fields ----------------------------------------------------
 
-        String bildnummer;
+        StadtbilderUtils.StadtbildInfo stadtbildInfo;
         Image image;
 
         //~ Constructors -------------------------------------------------------
@@ -217,11 +218,11 @@ public abstract class Sb_AbstractPictureGridObject implements ConnectionContextP
         /**
          * Creates a new LastShownImage object.
          *
-         * @param  bildnummer  DOCUMENT ME!
-         * @param  image       DOCUMENT ME!
+         * @param  stadtbildInfo  bildnummer DOCUMENT ME!
+         * @param  image          DOCUMENT ME!
          */
-        public LastShownImage(final String bildnummer, final Image image) {
-            this.bildnummer = bildnummer;
+        public LastShownImage(final StadtbilderUtils.StadtbildInfo stadtbildInfo, final Image image) {
+            this.stadtbildInfo = stadtbildInfo;
             this.image = image;
         }
     }

@@ -25,10 +25,12 @@ import java.io.InputStream;
 
 import java.lang.ref.SoftReference;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
@@ -50,8 +52,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
-
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -67,20 +67,19 @@ import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
+import static de.cismet.cids.custom.utils.stadtbilder.StadtbilderConf.IMAGE_NUMBER;
+
 /**
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildUtils {
+public class StadtbilderUtils {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            Sb_stadtbildUtils.class);
-
-    private static final String[] IMAGE_FILE_FORMATS = { "jpg", "tiff" };
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(StadtbilderUtils.class);
 
     public static BufferedImage ERROR_IMAGE;
     public static BufferedImage PLACEHOLDER_IMAGE;
@@ -88,13 +87,11 @@ public class Sb_stadtbildUtils {
     private static CidsBean WUPPERTAL;
     private static CidsBean R102;
 
-    private static final int CACHE_SIZE = 100;
-
     /** A cache whose key is a bildnummer and the value is the corresponding image. */
-    private static final ConcurrentLRUCache<String, SoftReference<BufferedImage>> IMAGE_CACHE =
-        new ConcurrentLRUCache<String, SoftReference<BufferedImage>>(CACHE_SIZE);
+    private static final ConcurrentLRUCache<StadtbildInfo, SoftReference<BufferedImage>> IMAGE_CACHE =
+        new ConcurrentLRUCache<>(ClientStadtbilderConf.getInstance().getCacheSize());
     /** A map with bildnummern (image numbers) which could not be loaded. */
-    private static final ConcurrentHashMap<String, String> FAILED_IMAGES = new ConcurrentHashMap<String, String>();
+    private static final ConcurrentHashMap<StadtbildInfo, String> FAILED_IMAGES = new ConcurrentHashMap<>();
 
     private static final PriorityExecutor unboundUEHThreadPoolExecutor;
     public static final int HIGH_PRIORITY = 1;
@@ -103,14 +100,14 @@ public class Sb_stadtbildUtils {
 
     static {
         try {
-            ERROR_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResourceAsStream(
+            ERROR_IMAGE = ImageIO.read(StadtbilderUtils.class.getResourceAsStream(
                         "/de/cismet/cids/custom/objecteditors/wunda_blau/no_image.png"));
         } catch (IOException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
         }
 
         try {
-            PLACEHOLDER_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResourceAsStream(
+            PLACEHOLDER_IMAGE = ImageIO.read(StadtbilderUtils.class.getResourceAsStream(
                         "/de/cismet/cids/custom/objecteditors/wunda_blau/wait_image.png"));
         } catch (IOException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
@@ -157,10 +154,22 @@ public class Sb_stadtbildUtils {
      * DOCUMENT ME!
      */
     public static void simulateGC() {
-        final Set<String> keys = IMAGE_CACHE.map.keySet();
-        for (final String key : keys) {
+        final Set<StadtbildInfo> keys = IMAGE_CACHE.map.keySet();
+        for (final StadtbildInfo key : keys) {
             IMAGE_CACHE.get(key).clear();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getArcUrlPath(final String bildnummer) {
+        return ClientStadtbilderConf.getInstance().getPreviewUrlBase()
+                    + ClientStadtbilderConf.getInstance().getArcLocationTemplate().replace(IMAGE_NUMBER, bildnummer);
     }
 
     /**
@@ -292,23 +301,19 @@ public class Sb_stadtbildUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   imageNumber  DOCUMENT ME!
+     * @param   stadtbildInfo  imageNumber DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static URL getURLOfLowResPicture(final String imageNumber) {
-        final char firstCharacter = imageNumber.charAt(0);
-        final String locationOfPreviewImage = "VB/" + firstCharacter + "/VB_" + imageNumber;
-        for (final String fileEnding : IMAGE_FILE_FORMATS) {
-            try {
-                final String urlName = StaticProperties.ARCHIVAR_URL_PREFIX + locationOfPreviewImage + "." + fileEnding;
-                final URL url = new URL(urlName);
-                final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
-                if (accessible) {
-                    return url;
-                }
-            } catch (MalformedURLException ex) {
-                LOG.warn(ex, ex);
+    public static URL getURLOfLowResPicture(final StadtbildInfo stadtbildInfo) {
+        for (final URL url
+                    : ClientStadtbilderConf.getInstance().getPreviewPictureUrls(
+                        stadtbildInfo.getBildnummer(),
+                        stadtbildInfo.getBildtypId(),
+                        stadtbildInfo.getJahr(),
+                        stadtbildInfo.getBlickrichtung())) {
+            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                return url;
             }
         }
         return null;
@@ -319,23 +324,19 @@ public class Sb_stadtbildUtils {
      * done by sending a HEAD-request to different URLS, whose difference is the file ending. The file endings are taken
      * from IMAGE_FILE_FORMATS.
      *
-     * @param   imageNumber  an imageNumber for a Stadtbild
+     * @param   stadtbildInfo  DOCUMENT ME!
      *
      * @return  if a high-res image exists, then its file ending. Otherwise null.
      */
-    public static String getFormatOfHighResPicture(final String imageNumber) {
-        final char firstCharacter = imageNumber.charAt(0);
-        final String locationOfPreviewImage = "SB/" + firstCharacter + "/SB_" + imageNumber;
-        for (final String fileEnding : IMAGE_FILE_FORMATS) {
-            try {
-                final String urlName = "http://Sw0040/archivar/" + locationOfPreviewImage + "." + fileEnding;
-                final URL url = new URL(urlName);
-                final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
-                if (accessible) {
-                    return fileEnding;
-                }
-            } catch (MalformedURLException ex) {
-                LOG.warn(ex, ex);
+    public static String getFormatOfHighResPicture(final StadtbildInfo stadtbildInfo) {
+        for (final URL url
+                    : ClientStadtbilderConf.getInstance().getHighresPictureUrls(
+                        stadtbildInfo.getBildnummer(),
+                        stadtbildInfo.getBildtypId(),
+                        stadtbildInfo.getJahr(),
+                        stadtbildInfo.getBlickrichtung())) {
+            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                return url.toString().substring(url.toString().lastIndexOf(".") + 1);
             }
         }
         return null;
@@ -346,15 +347,15 @@ public class Sb_stadtbildUtils {
      * cache. If this is the case the cached image is returned. If not the image corresponding to the number is
      * downloaded and returned.
      *
-     * @param   bildnummer  DOCUMENT ME!
+     * @param   stadtbildInfo  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  java.lang.Exception
      */
-    public static BufferedImage downloadImageForBildnummer(final String bildnummer) throws Exception {
-        if (isBildnummerInCacheOrFailed(bildnummer)) {
-            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+    public static BufferedImage downloadImageForBildnummer(final StadtbildInfo stadtbildInfo) throws Exception {
+        if (isBildnummerInCacheOrFailed(stadtbildInfo)) {
+            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(stadtbildInfo);
             if (cachedImageRef != null) {
                 return cachedImageRef.get();
             } else {
@@ -362,24 +363,24 @@ public class Sb_stadtbildUtils {
             }
         }
 
-        final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
+        final URL urlLowResImage = StadtbilderUtils.getURLOfLowResPicture(stadtbildInfo);
         if (urlLowResImage != null) {
             InputStream is = null;
             try {
                 is = WebAccessManager.getInstance().doRequest(urlLowResImage);
                 final BufferedImage img = ImageIO.read(is);
                 if (img != null) {
-                    IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                    IMAGE_CACHE.put(stadtbildInfo, new SoftReference<>(img));
                 } else {
                     FAILED_IMAGES.put(
-                        bildnummer,
+                        stadtbildInfo,
                         "The image for "
-                                + bildnummer
+                                + stadtbildInfo.bildnummer
                                 + " returned from the server was apparently null.");
                 }
                 return img;
             } catch (Exception ex) {
-                FAILED_IMAGES.put(bildnummer, ex.getMessage());
+                FAILED_IMAGES.put(stadtbildInfo, ex.getMessage());
                 throw ex;
             } finally {
                 if (is != null) {
@@ -400,18 +401,18 @@ public class Sb_stadtbildUtils {
      * downloaded. In that case a Future&lt;Image&gt; is returned.
      *
      * @param   statdbildserie     DOCUMENT ME!
-     * @param   bildnummer         DOCUMENT ME!
+     * @param   stadtbildInfo      bildnummer DOCUMENT ME!
      * @param   priority           DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static Object fetchImageForBildnummer(final CidsBean statdbildserie,
-            final String bildnummer,
+            final StadtbildInfo stadtbildInfo,
             final int priority,
             final ConnectionContext connectionContext) {
-        if (isBildnummerInCacheOrFailed(bildnummer)) {
-            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+        if (isBildnummerInCacheOrFailed(stadtbildInfo)) {
+            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(stadtbildInfo);
             if (cachedImageRef != null) {
                 final Object ret = cachedImageRef.get();
                 if (ret != null) {
@@ -421,7 +422,7 @@ public class Sb_stadtbildUtils {
         }
         final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(
                     statdbildserie,
-                    bildnummer,
+                    stadtbildInfo,
                     connectionContext),
                 priority);
         return futureImage;
@@ -430,37 +431,38 @@ public class Sb_stadtbildUtils {
     /**
      * Checks if the bildnummer has an entry in the image cache, or if the bildnummer could not be loaded.
      *
-     * @param   bildnummer  DOCUMENT ME!
+     * @param   stadtbildInfo  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean isBildnummerInCacheOrFailed(final String bildnummer) {
-        return (IMAGE_CACHE.containsKey(bildnummer) && (IMAGE_CACHE.get(bildnummer).get() != null))
-                    || FAILED_IMAGES.containsKey(bildnummer);
+    public static boolean isBildnummerInCacheOrFailed(final StadtbildInfo stadtbildInfo) {
+        return (stadtbildInfo != null)
+                    && ((IMAGE_CACHE.containsKey(stadtbildInfo) && (IMAGE_CACHE.get(stadtbildInfo).get() != null))
+                        || FAILED_IMAGES.containsKey(stadtbildInfo));
     }
 
     /**
      * Checks if the bildnummer could not be loaded.
      *
-     * @param   bildnummer  DOCUMENT ME!
+     * @param   stadtbildInfo  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean isBildnummerInFailedSet(final String bildnummer) {
-        return FAILED_IMAGES.containsKey(bildnummer);
+    public static boolean isBildnummerInFailedSet(final StadtbildInfo stadtbildInfo) {
+        return FAILED_IMAGES.containsKey(stadtbildInfo);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   bildnummer  DOCUMENT ME!
+     * @param   stadtbildInfo  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static String getErrorMessageForFailedImage(final String bildnummer) {
-        String message = FAILED_IMAGES.get(bildnummer);
+    public static String getErrorMessageForFailedImage(final StadtbildInfo stadtbildInfo) {
+        String message = FAILED_IMAGES.get(stadtbildInfo);
         if (StringUtils.isBlank(message)) {
-            message = "No message for image " + bildnummer;
+            message = "No message for image " + stadtbildInfo.bildnummer;
         }
         return message;
     }
@@ -475,12 +477,13 @@ public class Sb_stadtbildUtils {
     public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie,
             final List<CidsBean> stadtbilder,
             final ConnectionContext connectionContext) {
-        for (int i = 0; (i < CACHE_SIZE) && (i < stadtbilder.size()); i++) {
-            final String bildnummer = (String)stadtbilder.get(i).getProperty("bildnummer");
+        for (int i = 0; (i < ClientStadtbilderConf.getInstance().getCacheSize()) && (i < stadtbilder.size()); i++) {
+            final CidsBean stadtbild = stadtbilder.get(i);
             try {
-                fetchImageForBildnummer(stadtbildserie, bildnummer, NORMAL_PRIORITY, connectionContext);
+                final StadtbildInfo stadtbildInfo = new StadtbildInfo(stadtbildserie, stadtbild);
+                fetchImageForBildnummer(stadtbildserie, stadtbildInfo, NORMAL_PRIORITY, connectionContext);
             } catch (Exception ex) {
-                LOG.error("Problem while loading image " + bildnummer);
+                LOG.error("Problem while loading image " + (String)stadtbild.getProperty("bildnummer"));
             }
         }
     }
@@ -488,20 +491,20 @@ public class Sb_stadtbildUtils {
     /**
      * Removes a bildnummer from the image cache, and also its entry in the failed set.
      *
-     * @param  bildnummer  cidsBean DOCUMENT ME!
+     * @param  stadtbildInfo  cidsBean DOCUMENT ME!
      */
-    public static void removeBildnummerFromImageCacheAndFailedSet(final String bildnummer) {
-        IMAGE_CACHE.remove(bildnummer);
-        FAILED_IMAGES.remove(bildnummer);
+    public static void removeBildnummerFromImageCacheAndFailedSet(final StadtbildInfo stadtbildInfo) {
+        IMAGE_CACHE.remove(stadtbildInfo);
+        FAILED_IMAGES.remove(stadtbildInfo);
     }
 
     /**
      * Removes a bildnummer from the failed set.
      *
-     * @param  bildnummer  cidsBean DOCUMENT ME!
+     * @param  stadtbildInfo  DOCUMENT ME!
      */
-    public static void removeBildnummerFromFailedSet(final String bildnummer) {
-        FAILED_IMAGES.remove(bildnummer);
+    public static void removeBildnummerFromFailedSet(final StadtbildInfo stadtbildInfo) {
+        FAILED_IMAGES.remove(stadtbildInfo);
     }
 
     /**
@@ -631,7 +634,7 @@ public class Sb_stadtbildUtils {
         //~ Instance fields ----------------------------------------------------
 
         final CidsBean stadtbildserie;
-        final String bildnummer;
+        final StadtbildInfo stadtbildInfo;
         final ConnectionContext connectionContext;
 
         //~ Constructors -------------------------------------------------------
@@ -640,14 +643,14 @@ public class Sb_stadtbildUtils {
          * Creates a new PriorityCallable object.
          *
          * @param  stadtbildserie     DOCUMENT ME!
-         * @param  bildnummer         DOCUMENT ME!
+         * @param  stadtbildInfo      DOCUMENT ME!
          * @param  connectionContext  DOCUMENT ME!
          */
         public FetchImagePriorityCallable(final CidsBean stadtbildserie,
-                final String bildnummer,
+                final StadtbildInfo stadtbildInfo,
                 final ConnectionContext connectionContext) {
             this.stadtbildserie = stadtbildserie;
-            this.bildnummer = bildnummer;
+            this.stadtbildInfo = stadtbildInfo;
             this.connectionContext = connectionContext;
         }
 
@@ -659,14 +662,16 @@ public class Sb_stadtbildUtils {
                 !Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
                             stadtbildserie,
                             connectionContext).isPreviewAllowed()) {
-                FAILED_IMAGES.put(bildnummer, "The user is not allowed to see the image "
-                            + bildnummer);
+                FAILED_IMAGES.put(
+                    stadtbildInfo,
+                    "The user is not allowed to see the image "
+                            + stadtbildInfo.bildnummer);
                 return null;
             }
 
             // the image might have already been fetched by a previous thread
-            if (isBildnummerInCacheOrFailed(bildnummer)) {
-                final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+            if (isBildnummerInCacheOrFailed(stadtbildInfo)) {
+                final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(stadtbildInfo);
                 if (cachedImageRef != null) {
                     return cachedImageRef.get();
                 } else {
@@ -674,7 +679,7 @@ public class Sb_stadtbildUtils {
                 }
             }
 
-            final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
+            final URL urlLowResImage = StadtbilderUtils.getURLOfLowResPicture(stadtbildInfo);
             if (urlLowResImage != null) {
                 InputStream is = null;
                 try {
@@ -683,17 +688,17 @@ public class Sb_stadtbildUtils {
                     final BufferedImage img = ImageIO.read(is);
 
                     if (img != null) {
-                        IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                        IMAGE_CACHE.put(stadtbildInfo, new SoftReference<>(img));
                     } else {
                         FAILED_IMAGES.put(
-                            bildnummer,
+                            stadtbildInfo,
                             "The image "
-                                    + bildnummer
+                                    + stadtbildInfo.bildnummer
                                     + " returned from the server was apparently null.");
                     }
                     return img;
                 } catch (Exception ex) {
-                    FAILED_IMAGES.put(bildnummer, ex.getMessage());
+                    FAILED_IMAGES.put(stadtbildInfo, ex.getMessage());
                     throw ex;
                 } finally {
                     if (is != null) {
@@ -705,7 +710,7 @@ public class Sb_stadtbildUtils {
                     }
                 }
             }
-            FAILED_IMAGES.put(bildnummer, "No url exists to retrieve the image " + bildnummer + ".");
+            FAILED_IMAGES.put(stadtbildInfo, "No url exists to retrieve the image " + stadtbildInfo.bildnummer + ".");
             return null;
         }
     }
@@ -956,6 +961,111 @@ public class Sb_stadtbildUtils {
         @Override
         public ConnectionContext getConnectionContext() {
             return connectionContext;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class StadtbildInfo {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private String bildnummer;
+        private Integer bildtypId;
+        private Integer jahr;
+        private String blickrichtung;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new StadtbildInfo object.
+         *
+         * @param  stadtbildserie  DOCUMENT ME!
+         * @param  stadtbild       DOCUMENT ME!
+         */
+        public StadtbildInfo(final CidsBean stadtbildserie, final CidsBean stadtbild) {
+            final String bildnummer = (String)stadtbild.getProperty("bildnummer");
+            final Integer bildtypId = (Integer)stadtbildserie.getProperty("bildtyp.id");
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime((stadtbildserie.getProperty("aufnahmedatum") != null)
+                    ? (Date)stadtbildserie.getProperty("aufnahmedatum") : null);
+            final Integer jahr = calendar.get(Calendar.YEAR);
+
+            this.bildnummer = bildnummer;
+            this.bildtypId = bildtypId;
+            this.jahr = jahr;
+            this.blickrichtung = (String)stadtbildserie.getProperty("blickrichtung.schluessel");
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getBildnummer() {
+            return bildnummer;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Integer getBildtypId() {
+            return bildtypId;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Integer getJahr() {
+            return jahr;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getBlickrichtung() {
+            return blickrichtung;
+        }
+
+        @Override
+        public int hashCode() {
+            final int hash = 7;
+            return hash;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final StadtbildInfo other = (StadtbildInfo)obj;
+            if (!Objects.equals(this.bildnummer, other.bildnummer)) {
+                return false;
+            }
+            if (!Objects.equals(this.bildtypId, other.bildtypId)) {
+                return false;
+            }
+            if (!Objects.equals(this.jahr, other.jahr)) {
+                return false;
+            }
+            return true;
         }
     }
 }
