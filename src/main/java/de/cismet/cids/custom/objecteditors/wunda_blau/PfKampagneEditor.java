@@ -31,14 +31,19 @@ import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.newuser.permission.Policy;
 
 import java.awt.CardLayout;
+import java.awt.Component;
 
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListCellRenderer;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -119,7 +124,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     private javax.swing.JLabel lblGeometrie6;
     private javax.swing.JLabel lblSteckbrief;
     private javax.swing.JLabel lblVeroeffentlich;
-    private javax.swing.JList<String> lstFlaechen;
+    private javax.swing.JList<Object> lstFlaechen;
     private de.cismet.tools.gui.RoundedPanel panAllgemein;
     private javax.swing.JPanel panArtControls2;
     private javax.swing.JPanel panBeschreibungBody;
@@ -188,6 +193,37 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         this.connectionContext = connectionContext;
 
         initComponents();
+
+        lstFlaechen.setCellRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList<?> list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    final Component c = super.getListCellRendererComponent(
+                            list,
+                            value,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+
+                    if (c instanceof JLabel) {
+                        if (value instanceof CidsBean) {
+                            final CidsBean flaeche = ((CidsBean)value);
+                            String name = (String)flaeche.getProperty("bezeichnung");
+
+                            if (name == null) {
+                                name = "unbenannte Potenzialfläche";
+                            }
+                            ((JLabel)c).setText(name);
+                        }
+                    }
+
+                    return c;
+                }
+            });
 
         if (!editable) {
             RendererTools.makeReadOnly(txtBezeichnung);
@@ -509,8 +545,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         jScrollPane6.setMinimumSize(new java.awt.Dimension(254, 100));
         jScrollPane6.setPreferredSize(new java.awt.Dimension(254, 100));
 
-        lstFlaechen.setPreferredSize(new java.awt.Dimension(52, 150));
-
         final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
                 "${cidsBean.zugeordnete_flaechen}");
         final org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
@@ -674,7 +708,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
      * @param  evt  DOCUMENT ME!
      */
     private void btnRemoveArt2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveArt2ActionPerformed
-        final List<String> selection = lstFlaechen.getSelectedValuesList();
+        final List<Object> selection = lstFlaechen.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
                     StaticSwingTools.getParentFrame(this),

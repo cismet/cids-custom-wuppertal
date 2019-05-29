@@ -22,12 +22,17 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.tools.CacheException;
 import Sirius.navigator.tools.MetaObjectCache;
+import Sirius.navigator.types.treenode.ObjectTreeNode;
+import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
+
+import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -109,6 +114,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private CidsBean cidsBean;
     private CidsBean kampagneBean;
     private ConnectionContext connectionContext;
+    private Object currentTreeNode = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt2;
@@ -4095,10 +4101,33 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
+        if (ece.getStatus().equals(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS)) {
+            if ((kampagneBean != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
+                        && (currentTreeNode instanceof ObjectTreeNode)) {
+                final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
+                        kampagneBean,
+                        "zugeordnete_flaechen");
+                final MetaObject mo = ((ObjectTreeNode)currentTreeNode).getMetaObject();
+                if (!flaechen.contains(mo.getBean())) {
+                    flaechen.add(mo.getBean());
+                    try {
+                        kampagneBean.persist(getConnectionContext());
+                    } catch (Exception ex) {
+                        LOG.error("Cannot save kampagne object", ex);
+                        ObjectRendererUtils.showExceptionWindowToUser(
+                            "Kampagne konnte nicht gespeichert werden",
+                            ex,
+                            this);
+                    }
+                }
+            }
+            kampagneBean = null;
+        }
     }
 
     @Override
     public boolean prepareForSave() {
+        currentTreeNode = ComponentRegistry.getRegistry().getAttributeEditor().getTreeNode();
         return true;
     }
 
