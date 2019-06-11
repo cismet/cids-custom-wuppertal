@@ -4075,19 +4075,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 kampagneBean = lastKampagne;
                 lastKampagne = null;
                 PotenzialFlaechenPrintHelper.markUsedFields(this, kampagneBean);
-            } else {
-                try {
-                    final MetaObject kampagne = (MetaObject)SessionManager.getProxy()
-                                .executeTask(
-                                        FindKampagneAction.TASK_NAME,
-                                        "WUNDA_BLAU",
-                                        (Object)null,
-                                        getConnectionContext(),
-                                        paramId);
-                    PotenzialFlaechenPrintHelper.markUsedFields(this, kampagne.getBean());
-                } catch (Exception e) {
-                    LOG.error("Error while searching kampagne", e);
-                }
             }
         }
     }

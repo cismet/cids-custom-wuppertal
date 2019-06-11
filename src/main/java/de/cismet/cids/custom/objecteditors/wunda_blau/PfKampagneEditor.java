@@ -7,19 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.types.treenode.DefaultMetaTreeNode;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
@@ -30,11 +17,22 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.newuser.permission.Policy;
 
-import java.awt.CardLayout;
-import java.awt.Component;
+import com.vividsolutions.jts.geom.Geometry;
 
+import javafx.beans.property.StringProperty;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Image;
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
@@ -43,17 +41,16 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.ListCellRenderer;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -64,15 +61,22 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.cismap.commons.HeadlessMapProvider;
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
-import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -90,6 +94,8 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PfKampagneEditor.class);
+    private static String REPORT_POTENZIALFLAECHE_URL =
+        "/de/cismet/cids/custom/reports/wunda_blau/potenzialflaechen_full.jasper";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -104,6 +110,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt2;
     private javax.swing.JButton btnRemoveArt2;
+    private javax.swing.JButton btnReport;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbGeom;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbSteckbrief;
@@ -130,6 +137,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     private javax.swing.JPanel panBeschreibungBody;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
     private javax.swing.JPanel panMain;
+    private javax.swing.JPanel panPrintButton;
     private javax.swing.JPanel panTitle;
     private javax.swing.JTextField txtBezeichnung;
     private javax.swing.JLabel txtTitle;
@@ -249,6 +257,8 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
         txtTitle1 = new javax.swing.JLabel();
+        panPrintButton = new javax.swing.JPanel();
+        btnReport = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -308,6 +318,41 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panTitle.add(txtTitle1, gridBagConstraints);
+
+        panPrintButton.setOpaque(false);
+        panPrintButton.setLayout(new java.awt.GridBagLayout());
+
+        btnReport.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/einzelReport.png")));                    // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnReport,
+            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.btnReport.text")); // NOI18N
+        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PfKampagneEditor.class,
+                "PfKampagneEditor.btnReport.toolTipText"));                                                   // NOI18N
+        btnReport.setBorderPainted(false);
+        btnReport.setContentAreaFilled(false);
+        btnReport.setFocusPainted(false);
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReportActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        panPrintButton.add(btnReport, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panTitle.add(panPrintButton, gridBagConstraints);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -731,6 +776,47 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             }
         }
     }                                                                                 //GEN-LAST:event_btnRemoveArt2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
+            new JasperReportDownload.JasperReportDataSourceGenerator() {
+
+                @Override
+                public JRDataSource generateDataSource() {
+                    final ArrayList beans = new ArrayList<CidsBean>();
+                    beans.add(cidsBean);
+                    final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
+                    return beanArray;
+                }
+            };
+
+        final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "zugeordnete_flaechen");
+        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
+            new PotenzialFlaechenPrintHelper.PotenzialflaecheReportParameterGenerator(flaechen.get(0));
+
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
+            final String filename = "Potenzialflaeche"
+                        + flaechen.get(0).toString();
+            final String downloadTitle = "Potenzialflaeche "
+                        + flaechen.get(0).toString();
+            final String resourceName = REPORT_POTENZIALFLAECHE_URL;
+            final JasperReportDownload download = new JasperReportDownload(
+                    resourceName,
+                    parametersGenerator,
+                    dataSourceGenerator,
+                    jobname,
+                    downloadTitle,
+                    filename);
+            DownloadManager.instance().add(download);
+        }
+    } //GEN-LAST:event_btnReportActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
