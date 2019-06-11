@@ -7,20 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-import Sirius.navigator.tools.CacheException;
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
@@ -28,27 +15,20 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import org.openide.util.Exceptions;
-
 import java.awt.CardLayout;
-import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -58,15 +38,19 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper;
+import de.cismet.cids.custom.wunda_blau.search.actions.FindKampagneAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.Sb_stadtbildserieUpdatePruefhinweisAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -305,6 +289,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.tools.gui.SemiRoundedPanel panMessstellenausbauTitle;
     private de.cismet.tools.gui.RoundedPanel panNachfolgenutzung;
     private de.cismet.tools.gui.RoundedPanel panPlanungsrecht;
+    private javax.swing.JPanel panPrintButton;
     private de.cismet.tools.gui.RoundedPanel panStandortdaten;
     private javax.swing.JPanel panTitle;
     private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
@@ -483,6 +468,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
         txtTitle1 = new javax.swing.JLabel();
+        panPrintButton = new javax.swing.JPanel();
         panFooter = new javax.swing.JPanel();
         panFooterRight = new javax.swing.JPanel();
         btnForward = new javax.swing.JButton();
@@ -555,8 +541,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         txtBezeichnung = new javax.swing.JTextField();
         lblNummer = new javax.swing.JLabel();
         txtNummer = new javax.swing.JTextField();
-        lblStand = new javax.swing.JLabel();
         lblQuelle = new javax.swing.JLabel();
+        lblStand = new javax.swing.JLabel();
         txtQuelle = new javax.swing.JTextField();
         lblGeometrie5 = new javax.swing.JLabel();
         cbGeom = (!editable) ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
@@ -731,6 +717,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panTitle.add(txtTitle1, gridBagConstraints);
+
+        panPrintButton.setOpaque(false);
+        panPrintButton.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panTitle.add(panPrintButton, gridBagConstraints);
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
@@ -1480,21 +1476,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel7.add(txtNummer, gridBagConstraints);
 
-        lblStand.setFont(lblStand.getFont().deriveFont(lblStand.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblStand,
-            org.openide.util.NbBundle.getMessage(
-                PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.lblStand.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
-        jPanel7.add(lblStand, gridBagConstraints);
-
         lblQuelle.setFont(lblQuelle.getFont().deriveFont(lblQuelle.getFont().getStyle() | java.awt.Font.BOLD));
         org.openide.awt.Mnemonics.setLocalizedText(
             lblQuelle,
@@ -1503,12 +1484,27 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 "PfPotenzialflaecheEditor.lblQuelle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel7.add(lblQuelle, gridBagConstraints);
+
+        lblStand.setFont(lblStand.getFont().deriveFont(lblStand.getFont().getStyle() | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStand,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.lblStand.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
+        jPanel7.add(lblStand, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -2603,11 +2599,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        cbBfGewerbe.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbBfGewerbe,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbBfGewerbe.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbBfGewerbe.text"));   // NOI18N
         cbBfGewerbe.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2629,11 +2626,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbBfGewerbe, gridBagConstraints);
 
+        cbBfMilitaer.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbBfMilitaer,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbBfMilitaer.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbBfMilitaer.text"));   // NOI18N
         cbBfMilitaer.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2655,11 +2653,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbBfMilitaer, gridBagConstraints);
 
+        cbInfrastrukturSozial.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbInfrastrukturSozial,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbInfrastrukturSozial.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbInfrastrukturSozial.text"));   // NOI18N
         cbInfrastrukturSozial.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2681,11 +2680,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbInfrastrukturSozial, gridBagConstraints);
 
+        cbInfrastrukturTechnisch.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbInfrastrukturTechnisch,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbInfrastrukturTechnisch.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbInfrastrukturTechnisch.text"));   // NOI18N
         cbInfrastrukturTechnisch.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2707,11 +2707,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbInfrastrukturTechnisch, gridBagConstraints);
 
+        cbBfVerkehr.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbBfVerkehr,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbBfVerkehr.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbBfVerkehr.text"));   // NOI18N
         cbBfVerkehr.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2733,11 +2734,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbBfVerkehr, gridBagConstraints);
 
+        cbFbEinzelhandel.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbFbEinzelhandel,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbFbEinzelhandel.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbFbEinzelhandel.text"));   // NOI18N
         cbFbEinzelhandel.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2854,11 +2856,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody1.setOpaque(false);
         panLageBody1.setLayout(new java.awt.GridBagLayout());
 
+        cbNnGewerbeProdukt.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbNnGewerbeProdukt,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbNnGewerbeProdukt.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbNnGewerbeProdukt.text"));   // NOI18N
         cbNnGewerbeProdukt.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2880,11 +2883,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbNnGewerbeProdukt, gridBagConstraints);
 
+        cbGewerbeDienstleistung.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbGewerbeDienstleistung,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbGewerbeDienstleistung.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbGewerbeDienstleistung.text"));   // NOI18N
         cbGewerbeDienstleistung.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2906,11 +2910,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbGewerbeDienstleistung, gridBagConstraints);
 
+        cbWohnen.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbWohnen,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbWohnen.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbWohnen.text"));   // NOI18N
         cbWohnen.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2932,11 +2937,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbWohnen, gridBagConstraints);
 
+        cbFreiraum.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbFreiraum,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbFreiraum.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbFreiraum.text"));   // NOI18N
         cbFreiraum.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2958,11 +2964,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbFreiraum, gridBagConstraints);
 
+        cbFreizeit.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbFreizeit,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbFreizeit.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbFreizeit.text"));   // NOI18N
         cbFreizeit.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2984,11 +2991,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbFreizeit, gridBagConstraints);
 
+        cbEinzelhandel.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbEinzelhandel,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbEinzelhandel.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbEinzelhandel.text"));   // NOI18N
         cbEinzelhandel.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -3621,64 +3629,64 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
         if (lblBack.isEnabled()) {
             btnBackActionPerformed(null);
         }
-    }                                                                       //GEN-LAST:event_lblBackMouseClicked
+    }//GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         ((CardLayout)getLayout()).show(this, "grunddaten");
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }                                                                           //GEN-LAST:event_btnBackActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         ((CardLayout)getLayout()).show(this, "details");
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
+    }//GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
         if (lblForw.isEnabled()) {
             btnForwardActionPerformed(null);
         }
-    }                                                                       //GEN-LAST:event_lblForwMouseClicked
+    }//GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBisherigeNutzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBisherigeNutzungActionPerformed
+    private void btnAddBisherigeNutzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBisherigeNutzungActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddBisherigeNutzung, true);
-    }                                                                                          //GEN-LAST:event_btnAddBisherigeNutzungActionPerformed
+    }//GEN-LAST:event_btnAddBisherigeNutzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBisherigeNutzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveBisherigeNutzungActionPerformed
+    private void btnRemoveBisherigeNutzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveBisherigeNutzungActionPerformed
         final List<String> selection = lstBisherigeNutzung.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3699,23 +3707,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }                                                                                             //GEN-LAST:event_btnRemoveBisherigeNutzungActionPerformed
+    }//GEN-LAST:event_btnRemoveBisherigeNutzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddUmgebungsnutzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddUmgebungsnutzungActionPerformed
+    private void btnAddUmgebungsnutzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUmgebungsnutzungActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddUmgebungsnutzung, true);
-    }                                                                                          //GEN-LAST:event_btnAddUmgebungsnutzungActionPerformed
+    }//GEN-LAST:event_btnAddUmgebungsnutzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveUmgebungsnutzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveUmgebungsnutzungActionPerformed
+    private void btnRemoveUmgebungsnutzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveUmgebungsnutzungActionPerformed
         final List<String> selection = lstUmgebungsnutzung.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3736,23 +3744,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }                                                                                             //GEN-LAST:event_btnRemoveUmgebungsnutzungActionPerformed
+    }//GEN-LAST:event_btnRemoveUmgebungsnutzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddArt2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddArt2ActionPerformed
+    private void btnAddArt2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddArt2ActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddOepnv, true);
-    }                                                                              //GEN-LAST:event_btnAddArt2ActionPerformed
+    }//GEN-LAST:event_btnAddArt2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveArt2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveArt2ActionPerformed
+    private void btnRemoveArt2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveArt2ActionPerformed
         final List<String> selection = lstOepnv.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3773,43 +3781,43 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }                                                                                 //GEN-LAST:event_btnRemoveArt2ActionPerformed
+    }//GEN-LAST:event_btnRemoveArt2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlaecheActionPerformed
+    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlaecheActionPerformed
         epFlaecheDialog.setText((String)cidsBean.getProperty("beschreibung_flaeche"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgFlaeche, true);
-    }                                                                              //GEN-LAST:event_btnFlaecheActionPerformed
+    }//GEN-LAST:event_btnFlaecheActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmenActionPerformed
+    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMassnahmenActionPerformed
         epMassnahmeDialog.setText((String)cidsBean.getProperty("notwendige_massnahmen"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgMassnahme, true);
-    }                                                                                 //GEN-LAST:event_btnMassnahmenActionPerformed
+    }//GEN-LAST:event_btnMassnahmenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort1ActionPerformed
+    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort1ActionPerformed
         dlgAddBisherigeNutzung.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort1ActionPerformed
+    }//GEN-LAST:event_btnMenAbort1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk1ActionPerformed
+    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk1ActionPerformed
         final List<Object> selectedObjects = lstAlleBisherigeNutzung.getSelectedValuesList();
 
         if ((selectedObjects != null) && (selectedObjects.size() > 0)) {
@@ -3827,23 +3835,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         dlgAddBisherigeNutzung.setVisible(false);
-    } //GEN-LAST:event_btnMenOk1ActionPerformed
+    }//GEN-LAST:event_btnMenOk1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort2ActionPerformed
+    private void btnMenAbort2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort2ActionPerformed
         dlgAddUmgebungsnutzung.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort2ActionPerformed
+    }//GEN-LAST:event_btnMenAbort2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk2ActionPerformed
+    private void btnMenOk2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk2ActionPerformed
         final List<Object> selectedObjects = lstAlleUmgebungsnutzungenNutzung.getSelectedValuesList();
 
         if ((selectedObjects != null) && (selectedObjects.size() > 0)) {
@@ -3861,23 +3869,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         dlgAddUmgebungsnutzung.setVisible(false);
-    } //GEN-LAST:event_btnMenOk2ActionPerformed
+    }//GEN-LAST:event_btnMenOk2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort3ActionPerformed
+    private void btnMenAbort3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort3ActionPerformed
         dlgAddOepnv.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort3ActionPerformed
+    }//GEN-LAST:event_btnMenAbort3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk3ActionPerformed
+    private void btnMenOk3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk3ActionPerformed
         final List<Object> selectedObjects = lstAlleOepnv.getSelectedValuesList();
 
         if ((selectedObjects != null) && (selectedObjects.size() > 0)) {
@@ -3895,78 +3903,78 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         dlgAddOepnv.setVisible(false);
-    } //GEN-LAST:event_btnMenOk3ActionPerformed
+    }//GEN-LAST:event_btnMenOk3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort4ActionPerformed
+    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort4ActionPerformed
         dlgFlaeche.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort4ActionPerformed
+    }//GEN-LAST:event_btnMenAbort4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk4ActionPerformed
+    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk4ActionPerformed
         try {
             cidsBean.setProperty("beschreibung_flaeche", epFlaecheDialog.getText());
         } catch (Exception e) {
             LOG.error("Cannot save text for beschreibung_flaeche", e);
         }
         dlgFlaeche.setVisible(false);
-    }                                                                             //GEN-LAST:event_btnMenOk4ActionPerformed
+    }//GEN-LAST:event_btnMenOk4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort5ActionPerformed
+    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort5ActionPerformed
         dlgMassnahme.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort5ActionPerformed
+    }//GEN-LAST:event_btnMenAbort5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk5ActionPerformed
+    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk5ActionPerformed
         try {
             cidsBean.setProperty("notwendige_massnahmen", epMassnahmeDialog.getText());
         } catch (Exception e) {
             LOG.error("Cannot save text for notwendige_massnahmen", e);
         }
         dlgMassnahme.setVisible(false);
-    }                                                                             //GEN-LAST:event_btnMenOk5ActionPerformed
+    }//GEN-LAST:event_btnMenOk5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBezeichnungFocusLost
+    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBezeichnungFocusLost
         txtTitle.setText(getTitle());
-    }                                                                           //GEN-LAST:event_txtBezeichnungFocusLost
+    }//GEN-LAST:event_txtBezeichnungFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddRegionalplanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddRegionalplanActionPerformed
+    private void btnAddRegionalplanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRegionalplanActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddRegionalplan, true);
-    }                                                                                      //GEN-LAST:event_btnAddRegionalplanActionPerformed
+    }//GEN-LAST:event_btnAddRegionalplanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveRegionalplanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveRegionalplanActionPerformed
+    private void btnRemoveRegionalplanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRegionalplanActionPerformed
         final List<String> selection = lstRegionalplan.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3987,23 +3995,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }                                                                                         //GEN-LAST:event_btnRemoveRegionalplanActionPerformed
+    }//GEN-LAST:event_btnRemoveRegionalplanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort6ActionPerformed
+    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort6ActionPerformed
         dlgAddRegionalplan.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort6ActionPerformed
+    }//GEN-LAST:event_btnMenAbort6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk6ActionPerformed
+    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk6ActionPerformed
         final List<Object> selectedObjects = lstAlleRegionalplan.getSelectedValuesList();
 
         if ((selectedObjects != null) && (selectedObjects.size() > 0)) {
@@ -4021,16 +4029,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         dlgAddRegionalplan.setVisible(false);
-    } //GEN-LAST:event_btnMenOk6ActionPerformed
+    }//GEN-LAST:event_btnMenOk6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_cbGeomFocusLost
+    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbGeomFocusLost
         setGeometryArea();
-    }                                                                   //GEN-LAST:event_cbGeomFocusLost
+    }//GEN-LAST:event_cbGeomFocusLost
 
     @Override
     public CidsBean getCidsBean() {
@@ -4059,10 +4067,27 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             txtTitle.setText(getTitle());
 
             setGeometryArea();
+            final ServerActionParameter paramId = new ServerActionParameter(
+                    FindKampagneAction.ParameterType.ID.toString(),
+                    cidsBean.getMetaObject().getId());
 
             if (lastKampagne != null) {
                 kampagneBean = lastKampagne;
                 lastKampagne = null;
+                PotenzialFlaechenPrintHelper.markUsedFields(this, kampagneBean);
+            } else {
+                try {
+                    final MetaObject kampagne = (MetaObject)SessionManager.getProxy()
+                                .executeTask(
+                                        FindKampagneAction.TASK_NAME,
+                                        "WUNDA_BLAU",
+                                        (Object)null,
+                                        getConnectionContext(),
+                                        paramId);
+                    PotenzialFlaechenPrintHelper.markUsedFields(this, kampagne.getBean());
+                } catch (Exception e) {
+                    LOG.error("Error while searching kampagne", e);
+                }
             }
         }
     }
