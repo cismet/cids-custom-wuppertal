@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
@@ -18,12 +16,20 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import org.openide.util.Exceptions;
+
 import java.awt.CardLayout;
+import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import java.lang.reflect.Field;
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -39,8 +45,6 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper;
-import de.cismet.cids.custom.wunda_blau.search.actions.FindKampagneAction;
-import de.cismet.cids.custom.wunda_blau.search.actions.Sb_stadtbildserieUpdatePruefhinweisAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -66,6 +70,8 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+
+import static de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper.REPORT_PROPERTY_MAP;
 
 import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMetaClass;
 
@@ -96,7 +102,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     private final boolean editable;
     private CidsBean cidsBean;
-    private CidsBean kampagneBean;
     private ConnectionContext connectionContext;
     private Object currentTreeNode = null;
 
@@ -344,6 +349,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the lastKampagne
+     */
+    public static CidsBean getLastKampagne() {
+        return lastKampagne;
+    }
 
     /**
      * DOCUMENT ME!
@@ -1743,7 +1757,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         lblFlaechengroesseWert.setFont(lblFlaechengroesseWert.getFont().deriveFont(
                 lblFlaechengroesseWert.getFont().getStyle()
-                        | java.awt.Font.BOLD));
+                        & ~java.awt.Font.BOLD));
         org.openide.awt.Mnemonics.setLocalizedText(
             lblFlaechengroesseWert,
             org.openide.util.NbBundle.getMessage(
@@ -1778,7 +1792,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         lblStadtbezirkWert.setFont(lblStadtbezirkWert.getFont().deriveFont(
                 lblStadtbezirkWert.getFont().getStyle()
-                        | java.awt.Font.BOLD));
+                        & ~java.awt.Font.BOLD));
         org.openide.awt.Mnemonics.setLocalizedText(
             lblStadtbezirkWert,
             org.openide.util.NbBundle.getMessage(
@@ -3629,64 +3643,64 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
         if (lblBack.isEnabled()) {
             btnBackActionPerformed(null);
         }
-    }//GEN-LAST:event_lblBackMouseClicked
+    }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
         ((CardLayout)getLayout()).show(this, "grunddaten");
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }//GEN-LAST:event_btnBackActionPerformed
+    }                                                                           //GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
         ((CardLayout)getLayout()).show(this, "details");
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-    }//GEN-LAST:event_btnForwardActionPerformed
+    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
         if (lblForw.isEnabled()) {
             btnForwardActionPerformed(null);
         }
-    }//GEN-LAST:event_lblForwMouseClicked
+    }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBisherigeNutzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBisherigeNutzungActionPerformed
+    private void btnAddBisherigeNutzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBisherigeNutzungActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddBisherigeNutzung, true);
-    }//GEN-LAST:event_btnAddBisherigeNutzungActionPerformed
+    }                                                                                          //GEN-LAST:event_btnAddBisherigeNutzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBisherigeNutzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveBisherigeNutzungActionPerformed
+    private void btnRemoveBisherigeNutzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveBisherigeNutzungActionPerformed
         final List<String> selection = lstBisherigeNutzung.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3707,23 +3721,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBisherigeNutzungActionPerformed
+    }                                                                                             //GEN-LAST:event_btnRemoveBisherigeNutzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddUmgebungsnutzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUmgebungsnutzungActionPerformed
+    private void btnAddUmgebungsnutzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddUmgebungsnutzungActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddUmgebungsnutzung, true);
-    }//GEN-LAST:event_btnAddUmgebungsnutzungActionPerformed
+    }                                                                                          //GEN-LAST:event_btnAddUmgebungsnutzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveUmgebungsnutzungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveUmgebungsnutzungActionPerformed
+    private void btnRemoveUmgebungsnutzungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveUmgebungsnutzungActionPerformed
         final List<String> selection = lstUmgebungsnutzung.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3744,23 +3758,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveUmgebungsnutzungActionPerformed
+    }                                                                                             //GEN-LAST:event_btnRemoveUmgebungsnutzungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddArt2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddArt2ActionPerformed
+    private void btnAddArt2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddArt2ActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddOepnv, true);
-    }//GEN-LAST:event_btnAddArt2ActionPerformed
+    }                                                                              //GEN-LAST:event_btnAddArt2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveArt2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveArt2ActionPerformed
+    private void btnRemoveArt2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveArt2ActionPerformed
         final List<String> selection = lstOepnv.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3781,43 +3795,43 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveArt2ActionPerformed
+    }                                                                                 //GEN-LAST:event_btnRemoveArt2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlaecheActionPerformed
+    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlaecheActionPerformed
         epFlaecheDialog.setText((String)cidsBean.getProperty("beschreibung_flaeche"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgFlaeche, true);
-    }//GEN-LAST:event_btnFlaecheActionPerformed
+    }                                                                              //GEN-LAST:event_btnFlaecheActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMassnahmenActionPerformed
+    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmenActionPerformed
         epMassnahmeDialog.setText((String)cidsBean.getProperty("notwendige_massnahmen"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgMassnahme, true);
-    }//GEN-LAST:event_btnMassnahmenActionPerformed
+    }                                                                                 //GEN-LAST:event_btnMassnahmenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort1ActionPerformed
+    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort1ActionPerformed
         dlgAddBisherigeNutzung.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort1ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk1ActionPerformed
+    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk1ActionPerformed
         final List<Object> selectedObjects = lstAlleBisherigeNutzung.getSelectedValuesList();
 
         if ((selectedObjects != null) && (selectedObjects.size() > 0)) {
@@ -3835,23 +3849,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         dlgAddBisherigeNutzung.setVisible(false);
-    }//GEN-LAST:event_btnMenOk1ActionPerformed
+    } //GEN-LAST:event_btnMenOk1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort2ActionPerformed
+    private void btnMenAbort2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort2ActionPerformed
         dlgAddUmgebungsnutzung.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort2ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk2ActionPerformed
+    private void btnMenOk2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk2ActionPerformed
         final List<Object> selectedObjects = lstAlleUmgebungsnutzungenNutzung.getSelectedValuesList();
 
         if ((selectedObjects != null) && (selectedObjects.size() > 0)) {
@@ -3869,23 +3883,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         dlgAddUmgebungsnutzung.setVisible(false);
-    }//GEN-LAST:event_btnMenOk2ActionPerformed
+    } //GEN-LAST:event_btnMenOk2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort3ActionPerformed
+    private void btnMenAbort3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort3ActionPerformed
         dlgAddOepnv.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort3ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk3ActionPerformed
+    private void btnMenOk3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk3ActionPerformed
         final List<Object> selectedObjects = lstAlleOepnv.getSelectedValuesList();
 
         if ((selectedObjects != null) && (selectedObjects.size() > 0)) {
@@ -3903,78 +3917,78 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         dlgAddOepnv.setVisible(false);
-    }//GEN-LAST:event_btnMenOk3ActionPerformed
+    } //GEN-LAST:event_btnMenOk3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort4ActionPerformed
+    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort4ActionPerformed
         dlgFlaeche.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort4ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk4ActionPerformed
+    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk4ActionPerformed
         try {
             cidsBean.setProperty("beschreibung_flaeche", epFlaecheDialog.getText());
         } catch (Exception e) {
             LOG.error("Cannot save text for beschreibung_flaeche", e);
         }
         dlgFlaeche.setVisible(false);
-    }//GEN-LAST:event_btnMenOk4ActionPerformed
+    }                                                                             //GEN-LAST:event_btnMenOk4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort5ActionPerformed
+    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort5ActionPerformed
         dlgMassnahme.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort5ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk5ActionPerformed
+    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk5ActionPerformed
         try {
             cidsBean.setProperty("notwendige_massnahmen", epMassnahmeDialog.getText());
         } catch (Exception e) {
             LOG.error("Cannot save text for notwendige_massnahmen", e);
         }
         dlgMassnahme.setVisible(false);
-    }//GEN-LAST:event_btnMenOk5ActionPerformed
+    }                                                                             //GEN-LAST:event_btnMenOk5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBezeichnungFocusLost
+    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBezeichnungFocusLost
         txtTitle.setText(getTitle());
-    }//GEN-LAST:event_txtBezeichnungFocusLost
+    }                                                                           //GEN-LAST:event_txtBezeichnungFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddRegionalplanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRegionalplanActionPerformed
+    private void btnAddRegionalplanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddRegionalplanActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddRegionalplan, true);
-    }//GEN-LAST:event_btnAddRegionalplanActionPerformed
+    }                                                                                      //GEN-LAST:event_btnAddRegionalplanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveRegionalplanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRegionalplanActionPerformed
+    private void btnRemoveRegionalplanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveRegionalplanActionPerformed
         final List<String> selection = lstRegionalplan.getSelectedValuesList();
         if ((selection != null) && (selection.size() > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3995,23 +4009,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveRegionalplanActionPerformed
+    }                                                                                         //GEN-LAST:event_btnRemoveRegionalplanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort6ActionPerformed
+    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort6ActionPerformed
         dlgAddRegionalplan.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort6ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk6ActionPerformed
+    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk6ActionPerformed
         final List<Object> selectedObjects = lstAlleRegionalplan.getSelectedValuesList();
 
         if ((selectedObjects != null) && (selectedObjects.size() > 0)) {
@@ -4029,16 +4043,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         dlgAddRegionalplan.setVisible(false);
-    }//GEN-LAST:event_btnMenOk6ActionPerformed
+    } //GEN-LAST:event_btnMenOk6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbGeomFocusLost
+    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_cbGeomFocusLost
         setGeometryArea();
-    }//GEN-LAST:event_cbGeomFocusLost
+    }                                                                   //GEN-LAST:event_cbGeomFocusLost
 
     @Override
     public CidsBean getCidsBean() {
@@ -4067,14 +4081,74 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             txtTitle.setText(getTitle());
 
             setGeometryArea();
-            final ServerActionParameter paramId = new ServerActionParameter(
-                    FindKampagneAction.ParameterType.ID.toString(),
-                    cidsBean.getMetaObject().getId());
 
-            if (lastKampagne != null) {
-                kampagneBean = lastKampagne;
-                lastKampagne = null;
-                PotenzialFlaechenPrintHelper.markUsedFields(this, kampagneBean);
+            if ((getLastKampagne() != null) && editable) {
+                try {
+                    if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
+                        cidsBean.setProperty("kampagne", getLastKampagne());
+                        markUsedFields(
+                            this,
+                            (CidsBean)getLastKampagne().getProperty("steckbrieftemplate"));
+                    }
+                } catch (Exception ex) {
+                    LOG.error("Cannot add kampagne", ex);
+                    ObjectRendererUtils.showExceptionWindowToUser(
+                        "Kampagne konnte nicht hinzugefügt werden",
+                        ex,
+                        this);
+                }
+            } else {
+                final CidsBean kampagne = (CidsBean)cidsBean.getProperty("kampagne");
+                if (kampagne != null) {
+                    markUsedFields(
+                        this,
+                        (CidsBean)kampagne.getProperty("steckbrieftemplate"));
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  editor              DOCUMENT ME!
+     * @param  steckbrieftemplate  DOCUMENT ME!
+     */
+    private void markUsedFields(final PfPotenzialflaecheEditor editor, final CidsBean steckbrieftemplate) {
+        if (steckbrieftemplate != null) {
+            final String fields = (String)steckbrieftemplate.getProperty("verwendete_flaechenattribute");
+            final List<String> usedFields = new ArrayList<String>();
+
+            final StringTokenizer st = new StringTokenizer(fields, ",");
+
+            while (st.hasMoreTokens()) {
+                usedFields.add(st.nextToken());
+            }
+
+            Collections.sort(usedFields);
+
+            for (final String key : REPORT_PROPERTY_MAP.keySet()) {
+                final PotenzialFlaechenPrintHelper.ReportProperty rp = REPORT_PROPERTY_MAP.get(key);
+
+                if (rp.getEditorLabelName() == null) {
+                    continue;
+                }
+
+                try {
+                    final Field labelField = PfPotenzialflaecheEditor.class.getDeclaredField(rp.getEditorLabelName());
+                    final Object o = labelField.get(editor);
+
+                    if (o instanceof JComponent) {
+                        final JComponent label = (JComponent)o;
+                        if (Collections.binarySearch(usedFields, rp.getDbName()) >= 0) {
+                            label.setFont(label.getFont().deriveFont(Font.BOLD));
+                        } else {
+                            label.setFont(label.getFont().deriveFont(Font.PLAIN));
+                        }
+                    }
+                } catch (Exception ex) {
+                    LOG.error("Cannot find field " + rp.getEditorLabelName(), ex);
+                }
             }
         }
     }
@@ -4113,27 +4187,30 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
-        if (ece.getStatus().equals(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS)) {
-            if ((kampagneBean != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
-                        && (currentTreeNode instanceof ObjectTreeNode)) {
-                final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
-                        kampagneBean,
-                        "zugeordnete_flaechen");
-                final MetaObject mo = ((ObjectTreeNode)currentTreeNode).getMetaObject();
-                if (!flaechen.contains(mo.getBean())) {
-                    flaechen.add(mo.getBean());
-                    try {
-                        kampagneBean.persist(getConnectionContext());
-                    } catch (Exception ex) {
-                        LOG.error("Cannot save kampagne object", ex);
-                        ObjectRendererUtils.showExceptionWindowToUser(
-                            "Kampagne konnte nicht gespeichert werden",
-                            ex,
-                            this);
+        try {
+            if (ece.getStatus().equals(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS)) {
+                if ((getLastKampagne() != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
+                            && (currentTreeNode instanceof ObjectTreeNode)) {
+                    final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
+                            getLastKampagne(),
+                            "zugeordnete_flaechen");
+                    final MetaObject mo = ((ObjectTreeNode)currentTreeNode).getMetaObject();
+                    if (!flaechen.contains(mo.getBean())) {
+                        flaechen.add(mo.getBean());
+                        try {
+                            getLastKampagne().persist(getConnectionContext());
+                        } catch (Exception ex) {
+                            LOG.error("Cannot save kampagne object", ex);
+                            ObjectRendererUtils.showExceptionWindowToUser(
+                                "Kampagne konnte nicht gespeichert werden",
+                                ex,
+                                this);
+                        }
                     }
                 }
             }
-            kampagneBean = null;
+        } finally {
+            setLastKampagne(null);
         }
     }
 

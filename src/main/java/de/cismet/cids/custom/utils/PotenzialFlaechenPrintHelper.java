@@ -113,7 +113,7 @@ public class PotenzialFlaechenPrintHelper {
             PROP_NOTWENDIGE_MASSNAHMEN,
             new StringReportProperty(PROP_NOTWENDIGE_MASSNAHMEN, "lblNaechsteSchritte"));
         REPORT_PROPERTY_MAP.put(PROP_QUELLE, new StringReportProperty(PROP_QUELLE, "lblQuelle"));
-        REPORT_PROPERTY_MAP.put(PROP_STAND, new StringReportProperty(PROP_STAND, "lblStand"));
+        REPORT_PROPERTY_MAP.put(PROP_STAND, new ReportProperty(PROP_STAND, "lblStand"));
         REPORT_PROPERTY_MAP.put(
             PROP_FLAECHENNUTZUNGSPLAN,
             new StringReportProperty(PROP_FLAECHENNUTZUNGSPLAN, "lblFlaechennutzung"));
@@ -245,45 +245,6 @@ public class PotenzialFlaechenPrintHelper {
     public static void main(final String[] args) {
         for (final String key : REPORT_PROPERTY_MAP.keySet()) {
             System.out.print(", " + key);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  editor              DOCUMENT ME!
-     * @param  steckbrieftemplate  DOCUMENT ME!
-     */
-    public static void markUsedFields(final PfPotenzialflaecheEditor editor, final CidsBean steckbrieftemplate) {
-        final String fields = (String)steckbrieftemplate.getProperty("verwendete_flaechenattribute");
-        final List<String> usedFields = new ArrayList<String>();
-
-        final StringTokenizer st = new StringTokenizer(fields, ",");
-
-        while (st.hasMoreTokens()) {
-            usedFields.add(st.nextToken());
-        }
-
-        Collections.sort(usedFields);
-
-        for (final String key : REPORT_PROPERTY_MAP.keySet()) {
-            final ReportProperty rp = REPORT_PROPERTY_MAP.get(key);
-
-            try {
-                final Field labelField = PfPotenzialflaecheEditor.class.getField(rp.getEditorLabelName());
-                final Object o = labelField.get(editor);
-
-                if (o instanceof JComponent) {
-                    final JComponent label = (JComponent)o;
-                    if (Collections.binarySearch(usedFields, rp.getDbName()) < 0) {
-                        label.setFont(label.getFont().deriveFont(Font.BOLD));
-                    } else {
-                        label.setFont(label.getFont().deriveFont(Font.NORMAL));
-                    }
-                }
-            } catch (Exception ex) {
-                LOG.error("Cannot find field " + rp.getEditorLabelName(), ex);
-            }
         }
     }
 
