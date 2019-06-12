@@ -7,48 +7,34 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-import Sirius.navigator.tools.CacheException;
-import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import java.lang.reflect.Field;
+
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -58,15 +44,17 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -82,6 +70,8 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+
+import static de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper.REPORT_PROPERTY_MAP;
 
 import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMetaClass;
 
@@ -112,7 +102,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     private final boolean editable;
     private CidsBean cidsBean;
-    private CidsBean kampagneBean;
     private ConnectionContext connectionContext;
     private Object currentTreeNode = null;
 
@@ -305,6 +294,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.tools.gui.SemiRoundedPanel panMessstellenausbauTitle;
     private de.cismet.tools.gui.RoundedPanel panNachfolgenutzung;
     private de.cismet.tools.gui.RoundedPanel panPlanungsrecht;
+    private javax.swing.JPanel panPrintButton;
     private de.cismet.tools.gui.RoundedPanel panStandortdaten;
     private javax.swing.JPanel panTitle;
     private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
@@ -359,6 +349,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the lastKampagne
+     */
+    public static CidsBean getLastKampagne() {
+        return lastKampagne;
+    }
 
     /**
      * DOCUMENT ME!
@@ -483,6 +482,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
         txtTitle1 = new javax.swing.JLabel();
+        panPrintButton = new javax.swing.JPanel();
         panFooter = new javax.swing.JPanel();
         panFooterRight = new javax.swing.JPanel();
         btnForward = new javax.swing.JButton();
@@ -555,8 +555,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         txtBezeichnung = new javax.swing.JTextField();
         lblNummer = new javax.swing.JLabel();
         txtNummer = new javax.swing.JTextField();
-        lblStand = new javax.swing.JLabel();
         lblQuelle = new javax.swing.JLabel();
+        lblStand = new javax.swing.JLabel();
         txtQuelle = new javax.swing.JTextField();
         lblGeometrie5 = new javax.swing.JLabel();
         cbGeom = (!editable) ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
@@ -731,6 +731,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panTitle.add(txtTitle1, gridBagConstraints);
+
+        panPrintButton.setOpaque(false);
+        panPrintButton.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panTitle.add(panPrintButton, gridBagConstraints);
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
@@ -1480,21 +1490,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel7.add(txtNummer, gridBagConstraints);
 
-        lblStand.setFont(lblStand.getFont().deriveFont(lblStand.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblStand,
-            org.openide.util.NbBundle.getMessage(
-                PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.lblStand.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
-        jPanel7.add(lblStand, gridBagConstraints);
-
         lblQuelle.setFont(lblQuelle.getFont().deriveFont(lblQuelle.getFont().getStyle() | java.awt.Font.BOLD));
         org.openide.awt.Mnemonics.setLocalizedText(
             lblQuelle,
@@ -1503,12 +1498,27 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 "PfPotenzialflaecheEditor.lblQuelle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
         jPanel7.add(lblQuelle, gridBagConstraints);
+
+        lblStand.setFont(lblStand.getFont().deriveFont(lblStand.getFont().getStyle() | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStand,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.lblStand.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 5);
+        jPanel7.add(lblStand, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1747,7 +1757,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         lblFlaechengroesseWert.setFont(lblFlaechengroesseWert.getFont().deriveFont(
                 lblFlaechengroesseWert.getFont().getStyle()
-                        | java.awt.Font.BOLD));
+                        & ~java.awt.Font.BOLD));
         org.openide.awt.Mnemonics.setLocalizedText(
             lblFlaechengroesseWert,
             org.openide.util.NbBundle.getMessage(
@@ -1782,7 +1792,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         lblStadtbezirkWert.setFont(lblStadtbezirkWert.getFont().deriveFont(
                 lblStadtbezirkWert.getFont().getStyle()
-                        | java.awt.Font.BOLD));
+                        & ~java.awt.Font.BOLD));
         org.openide.awt.Mnemonics.setLocalizedText(
             lblStadtbezirkWert,
             org.openide.util.NbBundle.getMessage(
@@ -2603,11 +2613,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        cbBfGewerbe.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbBfGewerbe,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbBfGewerbe.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbBfGewerbe.text"));   // NOI18N
         cbBfGewerbe.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2629,11 +2640,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbBfGewerbe, gridBagConstraints);
 
+        cbBfMilitaer.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbBfMilitaer,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbBfMilitaer.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbBfMilitaer.text"));   // NOI18N
         cbBfMilitaer.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2655,11 +2667,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbBfMilitaer, gridBagConstraints);
 
+        cbInfrastrukturSozial.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbInfrastrukturSozial,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbInfrastrukturSozial.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbInfrastrukturSozial.text"));   // NOI18N
         cbInfrastrukturSozial.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2681,11 +2694,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbInfrastrukturSozial, gridBagConstraints);
 
+        cbInfrastrukturTechnisch.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbInfrastrukturTechnisch,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbInfrastrukturTechnisch.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbInfrastrukturTechnisch.text"));   // NOI18N
         cbInfrastrukturTechnisch.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2707,11 +2721,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbInfrastrukturTechnisch, gridBagConstraints);
 
+        cbBfVerkehr.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbBfVerkehr,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbBfVerkehr.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbBfVerkehr.text"));   // NOI18N
         cbBfVerkehr.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2733,11 +2748,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
         jPanel3.add(cbBfVerkehr, gridBagConstraints);
 
+        cbFbEinzelhandel.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbFbEinzelhandel,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbFbEinzelhandel.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbFbEinzelhandel.text"));   // NOI18N
         cbFbEinzelhandel.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2854,11 +2870,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody1.setOpaque(false);
         panLageBody1.setLayout(new java.awt.GridBagLayout());
 
+        cbNnGewerbeProdukt.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbNnGewerbeProdukt,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbNnGewerbeProdukt.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbNnGewerbeProdukt.text"));   // NOI18N
         cbNnGewerbeProdukt.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2880,11 +2897,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbNnGewerbeProdukt, gridBagConstraints);
 
+        cbGewerbeDienstleistung.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbGewerbeDienstleistung,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbGewerbeDienstleistung.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbGewerbeDienstleistung.text"));   // NOI18N
         cbGewerbeDienstleistung.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2906,11 +2924,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbGewerbeDienstleistung, gridBagConstraints);
 
+        cbWohnen.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbWohnen,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbWohnen.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbWohnen.text"));   // NOI18N
         cbWohnen.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2932,11 +2951,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbWohnen, gridBagConstraints);
 
+        cbFreiraum.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbFreiraum,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbFreiraum.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbFreiraum.text"));   // NOI18N
         cbFreiraum.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2958,11 +2978,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbFreiraum, gridBagConstraints);
 
+        cbFreizeit.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbFreizeit,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbFreizeit.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbFreizeit.text"));   // NOI18N
         cbFreizeit.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2984,11 +3005,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 0);
         panLageBody1.add(cbFreizeit, gridBagConstraints);
 
+        cbEinzelhandel.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             cbEinzelhandel,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.cbEinzelhandel.text")); // NOI18N
+                "PfPotenzialflaecheEditor.cbEinzelhandel.text"));   // NOI18N
         cbEinzelhandel.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -4060,9 +4082,73 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
             setGeometryArea();
 
-            if (lastKampagne != null) {
-                kampagneBean = lastKampagne;
-                lastKampagne = null;
+            if ((getLastKampagne() != null) && editable) {
+                try {
+                    if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
+                        cidsBean.setProperty("kampagne", getLastKampagne());
+                        markUsedFields(
+                            this,
+                            (CidsBean)getLastKampagne().getProperty("steckbrieftemplate"));
+                    }
+                } catch (Exception ex) {
+                    LOG.error("Cannot add kampagne", ex);
+                    ObjectRendererUtils.showExceptionWindowToUser(
+                        "Kampagne konnte nicht hinzugefügt werden",
+                        ex,
+                        this);
+                }
+            } else {
+                final CidsBean kampagne = (CidsBean)cidsBean.getProperty("kampagne");
+                if (kampagne != null) {
+                    markUsedFields(
+                        this,
+                        (CidsBean)kampagne.getProperty("steckbrieftemplate"));
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  editor              DOCUMENT ME!
+     * @param  steckbrieftemplate  DOCUMENT ME!
+     */
+    private void markUsedFields(final PfPotenzialflaecheEditor editor, final CidsBean steckbrieftemplate) {
+        if (steckbrieftemplate != null) {
+            final String fields = (String)steckbrieftemplate.getProperty("verwendete_flaechenattribute");
+            final List<String> usedFields = new ArrayList<String>();
+
+            final StringTokenizer st = new StringTokenizer(fields, ",");
+
+            while (st.hasMoreTokens()) {
+                usedFields.add(st.nextToken());
+            }
+
+            Collections.sort(usedFields);
+
+            for (final String key : REPORT_PROPERTY_MAP.keySet()) {
+                final PotenzialFlaechenPrintHelper.ReportProperty rp = REPORT_PROPERTY_MAP.get(key);
+
+                if (rp.getEditorLabelName() == null) {
+                    continue;
+                }
+
+                try {
+                    final Field labelField = PfPotenzialflaecheEditor.class.getDeclaredField(rp.getEditorLabelName());
+                    final Object o = labelField.get(editor);
+
+                    if (o instanceof JComponent) {
+                        final JComponent label = (JComponent)o;
+                        if (Collections.binarySearch(usedFields, rp.getDbName()) >= 0) {
+                            label.setFont(label.getFont().deriveFont(Font.BOLD));
+                        } else {
+                            label.setFont(label.getFont().deriveFont(Font.PLAIN));
+                        }
+                    }
+                } catch (Exception ex) {
+                    LOG.error("Cannot find field " + rp.getEditorLabelName(), ex);
+                }
             }
         }
     }
@@ -4101,27 +4187,30 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
-        if (ece.getStatus().equals(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS)) {
-            if ((kampagneBean != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
-                        && (currentTreeNode instanceof ObjectTreeNode)) {
-                final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
-                        kampagneBean,
-                        "zugeordnete_flaechen");
-                final MetaObject mo = ((ObjectTreeNode)currentTreeNode).getMetaObject();
-                if (!flaechen.contains(mo.getBean())) {
-                    flaechen.add(mo.getBean());
-                    try {
-                        kampagneBean.persist(getConnectionContext());
-                    } catch (Exception ex) {
-                        LOG.error("Cannot save kampagne object", ex);
-                        ObjectRendererUtils.showExceptionWindowToUser(
-                            "Kampagne konnte nicht gespeichert werden",
-                            ex,
-                            this);
+        try {
+            if (ece.getStatus().equals(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS)) {
+                if ((getLastKampagne() != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
+                            && (currentTreeNode instanceof ObjectTreeNode)) {
+                    final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
+                            getLastKampagne(),
+                            "zugeordnete_flaechen");
+                    final MetaObject mo = ((ObjectTreeNode)currentTreeNode).getMetaObject();
+                    if (!flaechen.contains(mo.getBean())) {
+                        flaechen.add(mo.getBean());
+                        try {
+                            getLastKampagne().persist(getConnectionContext());
+                        } catch (Exception ex) {
+                            LOG.error("Cannot save kampagne object", ex);
+                            ObjectRendererUtils.showExceptionWindowToUser(
+                                "Kampagne konnte nicht gespeichert werden",
+                                ex,
+                                this);
+                        }
                     }
                 }
             }
-            kampagneBean = null;
+        } finally {
+            setLastKampagne(null);
         }
     }
 
