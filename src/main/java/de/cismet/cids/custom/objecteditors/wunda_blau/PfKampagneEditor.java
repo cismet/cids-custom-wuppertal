@@ -22,6 +22,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import javafx.beans.property.StringProperty;
 
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import java.awt.Color;
@@ -48,6 +49,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -57,7 +59,11 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.cids.utils.serverresources.ServerResourcesLoader;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -94,8 +100,8 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PfKampagneEditor.class);
-    private static String REPORT_POTENZIALFLAECHE_URL =
-        "/de/cismet/cids/custom/reports/wunda_blau/potenzialflaechen_full.jasper";
+//    private static String REPORT_POTENZIALFLAECHE_URL =
+//        "/de/cismet/cids/custom/reports/wunda_blau/potenzialflaechen_full.jasper";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -806,15 +812,26 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
                         + flaechen.get(0).toString();
             final String downloadTitle = "Potenzialflaeche "
                         + flaechen.get(0).toString();
-            final String resourceName = REPORT_POTENZIALFLAECHE_URL;
-            final JasperReportDownload download = new JasperReportDownload(
-                    resourceName,
-                    parametersGenerator,
-                    dataSourceGenerator,
-                    jobname,
-                    downloadTitle,
-                    filename);
-            DownloadManager.instance().add(download);
+            try {
+                final JasperReport report = (JasperReport)SessionManager.getSession().getConnection()
+                            .executeTask(SessionManager.getSession().getUser(),
+                                    GetServerResourceServerAction.TASK_NAME,
+                                    CidsBeanSupport.DOMAIN_NAME,
+                                    WundaBlauServerResources.POTENZIALFLAECHEN_JASPER.getValue(),
+                                    connectionContext);
+
+                final JasperReportDownload download = new JasperReportDownload(
+                        report,
+                        parametersGenerator,
+                        dataSourceGenerator,
+                        jobname,
+                        downloadTitle,
+                        filename);
+                DownloadManager.instance().add(download);
+            } catch (Exception e) {
+                LOG.error("Cannot create report", e);
+                ObjectRendererUtils.showExceptionWindowToUser("Fehler Erstellen des Reports", e, this);
+            }
         }
     } //GEN-LAST:event_btnReportActionPerformed
 
