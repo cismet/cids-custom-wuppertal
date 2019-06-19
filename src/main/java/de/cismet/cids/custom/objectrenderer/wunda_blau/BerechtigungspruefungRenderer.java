@@ -50,11 +50,12 @@ import javax.swing.SwingWorker;
 import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifier;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.alkis.AlkisStaticUtils;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungHandler;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungBaulastInfo;
@@ -1963,7 +1964,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                             final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo einzelnachweisInfo =
                                 (BerechtigungspruefungAlkisEinzelnachweisDownloadInfo)downloadInfo;
                             final String alkisProdukt = einzelnachweisInfo.getAlkisProdukt();
-                            jLabel9.setText(AlkisUtils.getProductName(alkisProdukt));
+                            jLabel9.setText(ClientAlkisProducts.getInstance().getProductName(alkisProdukt));
                         } else if (downloadInfo instanceof BerechtigungspruefungAlkisKarteDownloadInfo) {
                             jLabel9.setText("Karte");
                         }

@@ -54,6 +54,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelp
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.alkis.AlkisStaticUtils;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungInfo;
@@ -946,7 +947,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             throw new InterruptedException();
                         }
                         boolean flurstueckPartOfStelle = false;
-                        final LandParcel[] landparcels = AlkisUtils.getLandparcelFromBuchungsstelle(buchungsstelle);
+                        final LandParcel[] landparcels = AlkisStaticUtils.getLandparcelFromBuchungsstelle(
+                                buchungsstelle);
                         if (landparcels != null) {
                             for (final LandParcel lp : landparcels) {
                                 if (((String)flurstueckBean.getProperty("alkis_id")).equals(
@@ -1138,9 +1140,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             if (buchungsblatt == null) {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
-                    buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                            AlkisUtils.fixBuchungslattCode(buchungsblattcode),
-                            getConnectionContext());
+                    buchungsblatt = AlkisUtils.getInstance()
+                                .getBuchungsblattFromAlkisSOAPServerAction(AlkisStaticUtils.fixBuchungslattCode(
+                                            buchungsblattcode),
+                                        getConnectionContext());
                     BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);
                 }
             }

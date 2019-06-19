@@ -67,7 +67,7 @@ import javax.swing.table.TableModel;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
@@ -682,7 +682,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
             final ArrayList<String> comboBoxContent = new ArrayList<String>();
             comboBoxContent.add(PDF);
-            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext())) {
+            if (AlkisProductDownloadHelper.validateUserHasAlkisHTMLProductAccess(getConnectionContext())) {
                 comboBoxContent.add(HTML);
             }
             comboBoxContent.add(TEXT);

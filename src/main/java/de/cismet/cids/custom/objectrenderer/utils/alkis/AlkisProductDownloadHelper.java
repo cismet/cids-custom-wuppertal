@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -32,8 +33,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.alkis.AlkisStaticUtils;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
@@ -49,6 +52,9 @@ import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
+
+import static de.cismet.cids.custom.utils.alkis.AlkisStaticUtils.ALKIS_EIGENTUEMER;
+import static de.cismet.cids.custom.utils.alkis.AlkisStaticUtils.ALKIS_HTML_PRODUCTS_ENABLED;
 
 /**
  * DOCUMENT ME!
@@ -75,8 +81,8 @@ public class AlkisProductDownloadHelper {
             final ConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
-        final String actionTag = AlkisUtils.getActionTag(product);
-        final String downloadTitle = AlkisUtils.getProductName(product);
+        final String actionTag = ClientAlkisProducts.getInstance().getActionTag(product);
+        final String downloadTitle = ClientAlkisProducts.getInstance().getProductName(product);
         final Date stichtag = downloadInfo.getDate();
 
         final List<Download> downloads = new LinkedList<>();
@@ -107,6 +113,33 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
+     * @param   usageKey           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    public static String getFertigungsVermerk(final String usageKey, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        final String fertigungsVermerk;
+        final String currentUsageKey = (BillingPopup.getInstance().getCurrentUsage() != null)
+            ? BillingPopup.getInstance().getCurrentUsage().getKey() : null;
+        if ((usageKey == null) || (usageKey.equals(currentUsageKey))) {
+            fertigungsVermerk = SessionManager.getConnection()
+                        .getConfigAttr(
+                                SessionManager.getSession().getUser(),
+                                "custom.alkis.fertigungsVermerk@WUNDA_BLAU",
+                                connectionContext);
+        } else {
+            fertigungsVermerk = null;
+        }
+        return fertigungsVermerk;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  downloadInfo       DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
@@ -115,8 +148,8 @@ public class AlkisProductDownloadHelper {
             final ConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
-        final String actionTag = AlkisUtils.getActionTag(product);
-        final String downloadTitle = AlkisUtils.getProductName(product);
+        final String actionTag = ClientAlkisProducts.getInstance().getActionTag(product);
+        final String downloadTitle = ClientAlkisProducts.getInstance().getProductName(product);
 
         if (!ObjectRendererUtils.checkActionTag(actionTag, connectionContext)) {
             showNoProductPermissionWarning(parent);
@@ -148,10 +181,10 @@ public class AlkisProductDownloadHelper {
                 continue;
             }
 
-            final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode);
+            final String queryID = AlkisStaticUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
-                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
                 final String filename = product + "."
                             + buchungsblattCode.replace("/", "--").trim().replaceAll(" +", "_");    // replace all whitespaces;
                 final Download download = new ByteArrayActionDownload(
@@ -259,9 +292,9 @@ public class AlkisProductDownloadHelper {
 
         try {
             if (completeBuchungsblattCode.length() > 0) {
-                final String alkisCode = AlkisUtils.escapeHtmlSpaces(completeBuchungsblattCode);
+                final String alkisCode = AlkisStaticUtils.escapeHtmlSpaces(completeBuchungsblattCode);
 
-                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
                 final String directory = DownloadManagerDialog.getInstance().getJobName();
                 final String filename = product + "."
                             + completeBuchungsblattCode.replace("/", "--").trim().replaceAll(" +", "_"); // replace all whitespaces
@@ -344,10 +377,13 @@ public class AlkisProductDownloadHelper {
             final ConnectionContext connectionContext) {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String product = downloadInfo.getAlkisProdukt();
-        final String actionTag = AlkisUtils.getActionTag(product);
-        final String downloadTitle = AlkisUtils.getProductName(product);
+        final String actionTag = ClientAlkisProducts.getInstance().getActionTag(product);
+        final String downloadTitle = ClientAlkisProducts.getInstance().getProductName(product);
 
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product), connectionContext)) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        ClientAlkisProducts.getInstance().getActionTag(product),
+                        connectionContext)) {
             showNoProductPermissionWarning(parent);
             return;
         }
@@ -375,7 +411,7 @@ public class AlkisProductDownloadHelper {
         for (final String alkisCode : downloadInfo.getAlkisCodes()) {
             if ((alkisCode != null) && (alkisCode.length() > 0)) {
                 try {
-                    final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                    final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
                     final String filename = product + "." + alkisCode.replace("/", "--");
                     final Download download = new ByteArrayActionDownload(
                             AlkisProductServerAction.TASK_NAME,
@@ -442,7 +478,7 @@ public class AlkisProductDownloadHelper {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String downloadTitle = "Karte";
 
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.PRODUCT_ACTION_TAG_KARTE, connectionContext)) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisStaticUtils.PRODUCT_ACTION_TAG_KARTE, connectionContext)) {
             showNoProductPermissionWarning(parent);
             return;
         }
@@ -458,7 +494,7 @@ public class AlkisProductDownloadHelper {
                 try {
                     final String filename = "LK.GDBNRW.A.F." + alkisCode.replace("/", "--");
                     final String extension = ".pdf";
-                    final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
+                    final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
 
                     final Download download = new ByteArrayActionDownload(
                             AlkisProductServerAction.TASK_NAME,
@@ -642,6 +678,86 @@ public class AlkisProductDownloadHelper {
                 extension,
                 connectionContext);
         DownloadManager.instance().add(download);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserHasAlkisPrintAccess(final ConnectionContext connectionContext) {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "navigator.alkis.print@WUNDA_BLAU",
+                                connectionContext)
+                        != null;
+        } catch (ConnectionException ex) {
+            LOG.error("Could not validate action tag for Alkis Print Dialog!", ex);
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserHasAlkisProductAccess(final ConnectionContext connectionContext) {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                "csa://alkisProduct@WUNDA_BLAU",
+                                connectionContext)
+                        != null;
+        } catch (ConnectionException ex) {
+            LOG.error("Could not validate action tag for Alkis Products!", ex);
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserHasEigentuemerAccess(final ConnectionContext connectionContext) {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                ALKIS_EIGENTUEMER,
+                                connectionContext)
+                        != null;
+        } catch (ConnectionException ex) {
+            LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserHasAlkisHTMLProductAccess(final ConnectionContext connectionContext) {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                ALKIS_HTML_PRODUCTS_ENABLED,
+                                connectionContext)
+                        != null;
+        } catch (ConnectionException ex) {
+            LOG.error("Could not validate action tag for Alkis HTML Products!", ex);
+        }
+        return false;
     }
 
     //~ Inner Classes ----------------------------------------------------------

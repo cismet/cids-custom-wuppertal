@@ -53,12 +53,12 @@ import javax.swing.ListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
+import de.cismet.cids.custom.utils.alkis.AlkisStaticUtils;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1035,7 +1035,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             if (((alkisObjectListModel.get(i) instanceof CidsBean)
                             && ((CidsBean)alkisObjectListModel.get(i)).getMetaObject().getMetaClass().getTableName()
                             .equals(ALKIS_LANDPARCEL_TABLE))) {
-                landParcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(alkisObjectListModel.get(i));
+                landParcelCode = AlkisStaticUtils.getLandparcelCodeFromParcelBeanObject(alkisObjectListModel.get(i));
                 break;
             }
         }
@@ -1073,7 +1073,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     info.getProduct(),
                     info.getLandparcelCode(),
                     info.getAuftragsnummer(),
-                    AlkisUtils.getFertigungsVermerk(null, getConnectionContext()),
+                    AlkisProductDownloadHelper.getFertigungsVermerk(null, getConnectionContext()),
                     info.getZusatz(),
                     info.getMassstab(),
                     info.getMassstabMin(),

@@ -54,13 +54,13 @@ import javax.swing.table.TableColumn;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
+import de.cismet.cids.custom.utils.alkis.AlkisStaticUtils;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -428,7 +428,10 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
     private void downloadEinzelnachweisStichtagProduct(final boolean berechtigungspruefung) {
         final String product = ClientAlkisProducts.getInstance()
                     .get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF);
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product), getConnectionContext())) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        ClientAlkisProducts.getInstance().getActionTag(product),
+                        getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
@@ -463,7 +466,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(
                     downloadInfo,
                     getConnectionContext());
-                final String billingKey = AlkisUtils.getBillingKey(product);
+                final String billingKey = ClientAlkisProducts.getInstance().getBillingKey(product);
                 if ((billingKey == null)
                             || BillingPopup.doBilling(
                                 billingKey,
@@ -671,21 +674,21 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be", getConnectionContext());
 
         jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
+                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
                 getConnectionContext())
                     && billingAllowedNw);
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
+                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
                 getConnectionContext()) && billingAllowedKom);
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
+                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
                 getConnectionContext()));
         jxlBaulastBescheinigung.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
+                        AlkisStaticUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
                         getConnectionContext())
                     && !ObjectRendererUtils.checkActionTag(
-                        AlkisUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
+                        AlkisStaticUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
                         getConnectionContext()) && billingAllowedBlab_be
                     && (selectedFlurstueckeMap != null) && !selectedFlurstueckeMap.isEmpty());
     }
@@ -697,7 +700,10 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  berechtigungspruefung  actionTag DOCUMENT ME!
      */
     private void downloadEinzelnachweisProduct(final String product, final boolean berechtigungspruefung) {
-        if (!ObjectRendererUtils.checkActionTag(AlkisUtils.getActionTag(product), getConnectionContext())) {
+        if (
+            !ObjectRendererUtils.checkActionTag(
+                        ClientAlkisProducts.getInstance().getActionTag(product),
+                        getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
@@ -710,7 +716,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         }
 
         try {
-            final List<String> buchungsblattCodes = new ArrayList<String>(cidsBeanWrappers.size());
+            final List<String> buchungsblattCodes = new ArrayList<>(cidsBeanWrappers.size());
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
                 if (!cidsBeanWrapper.isSelected()) {
                     continue;
@@ -721,7 +727,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
                         .createAlkisBuchungsblattachweisDownloadInfo(product, buchungsblattCodes);
 
-            final String billingKey = AlkisUtils.getBillingKey(product);
+            final String billingKey = ClientAlkisProducts.getInstance().getBillingKey(product);
             if ((billingKey == null)
                         || BillingPopup.doBilling(
                             billingKey,
@@ -819,14 +825,14 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         final boolean billingAllowedNw = BillingPopup.isBillingAllowed("bestnw", getConnectionContext());
         final boolean billingAllowedKom = BillingPopup.isBillingAllowed("bekom", getConnectionContext());
         jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
+                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
                 getConnectionContext())
                     && billingAllowedNw);
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
+                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
                 getConnectionContext()) && billingAllowedKom);
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
+                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
                 getConnectionContext()));
 
         final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be", getConnectionContext());
