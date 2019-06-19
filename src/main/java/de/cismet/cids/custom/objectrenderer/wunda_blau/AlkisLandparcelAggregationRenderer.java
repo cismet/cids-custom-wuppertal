@@ -47,7 +47,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.alkis.AlkisStaticUtils;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
@@ -405,70 +405,70 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlFlurstuecksnachweisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlFlurstuecksnachweisActionPerformed
+    private void jxlFlurstuecksnachweisActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlFlurstuecksnachweisActionPerformed
         downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
                 ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF),
             true);
-    }                                                                                          //GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
+    }//GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlNachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisNRWActionPerformed
+    private void jxlNachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisNRWActionPerformed
         downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
                 ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF),
             true);
-    }                                                                                  //GEN-LAST:event_jxlNachweisNRWActionPerformed
+    }//GEN-LAST:event_jxlNachweisNRWActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlNachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalActionPerformed
+    private void jxlNachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisKommunalActionPerformed
         downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
                 ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF),
             true);
-    }                                                                                       //GEN-LAST:event_jxlNachweisKommunalActionPerformed
+    }//GEN-LAST:event_jxlNachweisKommunalActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlNachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalInternActionPerformed
+    private void jxlNachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisKommunalInternActionPerformed
         downloadEinzelnachweisProduct(ClientAlkisProducts.getInstance().get(
                 ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF),
             true);
-    }                                                                                             //GEN-LAST:event_jxlNachweisKommunalInternActionPerformed
+    }//GEN-LAST:event_jxlNachweisKommunalInternActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlKarteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlKarteActionPerformed
+    private void jxlKarteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlKarteActionPerformed
         downloadKarteProduct();
-    }                                                                            //GEN-LAST:event_jxlKarteActionPerformed
+    }//GEN-LAST:event_jxlKarteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblLandparcelsFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblLandparcelsFocusLost
+    private void tblLandparcelsFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblLandparcelsFocusLost
         map.gotoInitialBoundingBox();
         tblLandparcels.clearSelection();
-    }                                                                           //GEN-LAST:event_tblLandparcelsFocusLost
+    }//GEN-LAST:event_tblLandparcelsFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
+    private void jxlBaulastBescheinigungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBaulastBescheinigungActionPerformed
 //        if (!ObjectRendererUtils.checkActionTag(actionTag)) {
 //            showNoProductPermissionWarning();
 //            return;
@@ -482,7 +482,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         }
 
         BaulastBescheinigungDialog.getInstance().show(selectedFlurstuecke, this, getConnectionContext());
-    } //GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
+    }//GEN-LAST:event_jxlBaulastBescheinigungActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
@@ -600,31 +600,31 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
         jxlKarte.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_KARTE,
+                        AlkisProducts.PRODUCT_ACTION_TAG_KARTE,
                         getConnectionContext()));
         jxlFlurstuecksnachweis.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS,
+                        AlkisProducts.PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS,
                         getConnectionContext())
                     && billingAllowedFsNw);
         jxlNachweisKommunal.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM,
+                        AlkisProducts.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM,
                         getConnectionContext()) && billingAllowedFsueKom);
         jxlNachweisKommunalIntern.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN,
+                        AlkisProducts.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN,
                         getConnectionContext()));
         jxlNachweisNRW.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW,
+                        AlkisProducts.PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW,
                         getConnectionContext()) && billingAllowedFsueNw);
         jxlBaulastBescheinigung.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
+                        AlkisProducts.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
                         getConnectionContext())
                     && !ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
+                        AlkisProducts.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
                         getConnectionContext()) && billingAllowedBlab_be);
     }
 
@@ -656,7 +656,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                 if (!cidsBeanWrapper.isSelected()) {
                     continue;
                 }
-                parcelCodes.add(AlkisStaticUtils.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
+                parcelCodes.add(AlkisProducts.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
             }
 
             final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
@@ -685,7 +685,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * DOCUMENT ME!
      */
     private void downloadKarteProduct() {
-        if (!ObjectRendererUtils.checkActionTag(AlkisStaticUtils.PRODUCT_ACTION_TAG_KARTE, getConnectionContext())) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisProducts.PRODUCT_ACTION_TAG_KARTE, getConnectionContext())) {
             AlkisProductDownloadHelper.showNoProductPermissionWarning(this);
             return;
         }
@@ -695,7 +695,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             if (!cidsBeanWrapper.isSelected()) {
                 continue;
             }
-            parcelCodes.add(AlkisStaticUtils.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
+            parcelCodes.add(AlkisProducts.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
         }
 
         final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisProductDownloadHelper

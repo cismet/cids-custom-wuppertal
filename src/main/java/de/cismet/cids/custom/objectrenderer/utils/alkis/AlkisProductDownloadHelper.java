@@ -36,7 +36,7 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.alkis.AlkisStaticUtils;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
@@ -52,9 +52,6 @@ import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
-
-import static de.cismet.cids.custom.utils.alkis.AlkisStaticUtils.ALKIS_EIGENTUEMER;
-import static de.cismet.cids.custom.utils.alkis.AlkisStaticUtils.ALKIS_HTML_PRODUCTS_ENABLED;
 
 /**
  * DOCUMENT ME!
@@ -181,7 +178,7 @@ public class AlkisProductDownloadHelper {
                 continue;
             }
 
-            final String queryID = AlkisStaticUtils.escapeHtmlSpaces(buchungsblattCode);
+            final String queryID = AlkisProducts.escapeHtmlSpaces(buchungsblattCode);
 
             try {
                 final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
@@ -292,7 +289,7 @@ public class AlkisProductDownloadHelper {
 
         try {
             if (completeBuchungsblattCode.length() > 0) {
-                final String alkisCode = AlkisStaticUtils.escapeHtmlSpaces(completeBuchungsblattCode);
+                final String alkisCode = AlkisProducts.escapeHtmlSpaces(completeBuchungsblattCode);
 
                 final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
                 final String directory = DownloadManagerDialog.getInstance().getJobName();
@@ -478,7 +475,7 @@ public class AlkisProductDownloadHelper {
         final Component parent = ComponentRegistry.getRegistry().getDescriptionPane();
         final String downloadTitle = "Karte";
 
-        if (!ObjectRendererUtils.checkActionTag(AlkisStaticUtils.PRODUCT_ACTION_TAG_KARTE, connectionContext)) {
+        if (!ObjectRendererUtils.checkActionTag(AlkisProducts.PRODUCT_ACTION_TAG_KARTE, connectionContext)) {
             showNoProductPermissionWarning(parent);
             return;
         }
@@ -731,7 +728,7 @@ public class AlkisProductDownloadHelper {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
-                                ALKIS_EIGENTUEMER,
+                                AlkisProducts.ALKIS_EIGENTUEMER,
                                 connectionContext)
                         != null;
         } catch (ConnectionException ex) {
@@ -751,7 +748,7 @@ public class AlkisProductDownloadHelper {
         try {
             return SessionManager.getConnection()
                         .getConfigAttr(SessionManager.getSession().getUser(),
-                                ALKIS_HTML_PRODUCTS_ENABLED,
+                                AlkisProducts.ALKIS_HTML_PRODUCTS_ENABLED,
                                 connectionContext)
                         != null;
         } catch (ConnectionException ex) {

@@ -60,7 +60,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
-import de.cismet.cids.custom.utils.alkis.AlkisStaticUtils;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -674,21 +674,21 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be", getConnectionContext());
 
         jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
+                AlkisProducts.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
                 getConnectionContext())
                     && billingAllowedNw);
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
+                AlkisProducts.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
                 getConnectionContext()) && billingAllowedKom);
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
+                AlkisProducts.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
                 getConnectionContext()));
         jxlBaulastBescheinigung.setEnabled(enable
                     && ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
+                        AlkisProducts.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_ENABLED,
                         getConnectionContext())
                     && !ObjectRendererUtils.checkActionTag(
-                        AlkisStaticUtils.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
+                        AlkisProducts.PRODUCT_ACTION_TAG_BAULASTBESCHEINIGUNG_DISABLED,
                         getConnectionContext()) && billingAllowedBlab_be
                     && (selectedFlurstueckeMap != null) && !selectedFlurstueckeMap.isEmpty());
     }
@@ -825,14 +825,14 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         final boolean billingAllowedNw = BillingPopup.isBillingAllowed("bestnw", getConnectionContext());
         final boolean billingAllowedKom = BillingPopup.isBillingAllowed("bekom", getConnectionContext());
         jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
+                AlkisProducts.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW,
                 getConnectionContext())
                     && billingAllowedNw);
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
+                AlkisProducts.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM,
                 getConnectionContext()) && billingAllowedKom);
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
-                AlkisStaticUtils.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
+                AlkisProducts.PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN,
                 getConnectionContext()));
 
         final boolean billingAllowedBlab_be = BillingPopup.isBillingAllowed("blab_be", getConnectionContext());
