@@ -18,7 +18,7 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.newuser.User;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -42,11 +42,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungBaulastInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungFlurstueckInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
+import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
+import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -76,9 +81,6 @@ public class BaulastBescheinigungUtils {
 
     private static final Logger LOG = Logger.getLogger(BaulastBescheinigungUtils.class);
 
-    static final Map<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean> BAULAST_CACHE =
-        new HashMap<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean>();
-
     private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_PRUEFKEY = "PRUEFKEY";
@@ -87,239 +89,136 @@ public class BaulastBescheinigungUtils {
     private static final String PARAMETER_FABRICATIONNOTICE = "FABRICATIONNOTICE";
     private static final String PARAMETER_FABRICATIONDATE = "FABRICATIONDATE";
 
+    private static final ConnectionContext CONNECTION_CONTEXT = ConnectionContext.createDummy();
+
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * Creates a new BescheinigungsGruppe object.
+     * DOCUMENT ME!
      *
-     * @param   baulastenBeguenstigt  DOCUMENT ME!
-     * @param   baulastenBelastet     DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
+     * @param  downloadInfo       DOCUMENT ME!
+     * @param  anfrageSchluessel  DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public static BerechtigungspruefungBescheinigungGruppeInfo createGruppeInfo(
-            final Collection<CidsBean> baulastenBeguenstigt,
-            final Collection<CidsBean> baulastenBelastet) {
-        return createGruppeInfo(new HashMap<CidsBean, Collection<String>>(), baulastenBeguenstigt, baulastenBelastet);
+    public static void doDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
+            final String anfrageSchluessel,
+            final ConnectionContext connectionContext) {
+        try {
+            final Download download = generateBaulastbescheinigungDownload(
+                    downloadInfo,
+                    anfrageSchluessel,
+                    connectionContext);
+            if (download != null) {
+                DownloadManager.instance().add(download);
+            }
+        } catch (final Exception ex) {
+            LOG.error("error while generating download", ex);
+        }
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   flurstuecketoGrundstueckeMap  DOCUMENT ME!
-     * @param   baulastenBeguenstigtBeans     DOCUMENT ME!
-     * @param   baulastenBelastetBeans        DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static BerechtigungspruefungBescheinigungGruppeInfo createGruppeInfo(
-            final Map<CidsBean, Collection<String>> flurstuecketoGrundstueckeMap,
-            final Collection<CidsBean> baulastenBeguenstigtBeans,
-            final Collection<CidsBean> baulastenBelastetBeans) {
-        final List<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckeInfo =
-            new ArrayList<BerechtigungspruefungBescheinigungFlurstueckInfo>();
-        for (final CidsBean flurstueck : flurstuecketoGrundstueckeMap.keySet()) {
-            flurstueckeInfo.add(createFlurstueckInfo(flurstueck, flurstuecketoGrundstueckeMap.get(flurstueck)));
-        }
-
-        final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBeguenstigtInfos =
-            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
-        for (final CidsBean baulastBeguenstigt : baulastenBeguenstigtBeans) {
-            final BerechtigungspruefungBescheinigungBaulastInfo baulastBeguenstigtInfo = createBaulastInfo(
-                    baulastBeguenstigt);
-            BAULAST_CACHE.put(baulastBeguenstigtInfo, baulastBeguenstigt);
-            baulastBeguenstigtInfos.add(baulastBeguenstigtInfo);
-        }
-
-        final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBelastetInfos =
-            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
-        for (final CidsBean baulastBelastet : baulastenBelastetBeans) {
-            final BerechtigungspruefungBescheinigungBaulastInfo baulastBelastetInfo = createBaulastInfo(
-                    baulastBelastet);
-            BAULAST_CACHE.put(baulastBelastetInfo, baulastBelastet);
-            baulastBelastetInfos.add(baulastBelastetInfo);
-        }
-
-        Collections.sort(flurstueckeInfo, new Comparator<BerechtigungspruefungBescheinigungFlurstueckInfo>() {
-
-                @Override
-                public int compare(final BerechtigungspruefungBescheinigungFlurstueckInfo o1,
-                        final BerechtigungspruefungBescheinigungFlurstueckInfo o2) {
-                    final int compareGemarkung = compareString(o1.getGemarkung(), o2.getGemarkung());
-                    if (compareGemarkung != 0) {
-                        return compareGemarkung;
-                    } else {
-                        final int compareFlur = compareString(o1.getFlur(), o2.getFlur());
-                        if (compareFlur != 0) {
-                            return compareFlur;
-                        } else {
-                            final int compareNummer = compareString(o1.getNummer(), o2.getNummer());
-                            if (compareNummer != 0) {
-                                return compareNummer;
-                            } else {
-                                return 0;
-                            }
-                        }
-                    }
-                }
-            });
-
-        final Comparator<BerechtigungspruefungBescheinigungBaulastInfo> baulastBeanComparator =
-            new Comparator<BerechtigungspruefungBescheinigungBaulastInfo>() {
-
-                @Override
-                public int compare(final BerechtigungspruefungBescheinigungBaulastInfo o1,
-                        final BerechtigungspruefungBescheinigungBaulastInfo o2) {
-                    final int compareBlattnummer = compareString(o1.getBlattnummer(), o2.getBlattnummer());
-                    if (compareBlattnummer != 0) {
-                        return compareBlattnummer;
-                    } else {
-                        final Integer lfdN1 = (o1 == null) ? -1 : Integer.parseInt((String)o1.getLaufende_nummer());
-                        final int lfdN2 = (o2 == null) ? -1 : Integer.parseInt((String)o2.getLaufende_nummer());
-                        final int compareLaufendenummer = lfdN1.compareTo(lfdN2);
-
-                        if (compareLaufendenummer != 0) {
-                            return compareLaufendenummer;
-                        } else {
-                            return 0;
-                        }
-                    }
-                }
-            };
-
-        Collections.sort(baulastBeguenstigtInfos, baulastBeanComparator);
-        Collections.sort(baulastBelastetInfos, baulastBeanComparator);
-
-        return new BerechtigungspruefungBescheinigungGruppeInfo(
-                flurstueckeInfo,
-                baulastBeguenstigtInfos,
-                baulastBelastetInfos);
-    }
-
-    /**
-     * Creates a new FlurstueckBean object.
-     *
-     * @param   flurstueck    DOCUMENT ME!
-     * @param   grundstuecke  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static BerechtigungspruefungBescheinigungFlurstueckInfo createFlurstueckInfo(final CidsBean flurstueck,
-            final Collection<String> grundstuecke) {
-        final String alkisId = (String)flurstueck.getProperty("alkis_id");
-        final String gemarkung = (String)flurstueck.getProperty("gemarkung");
-        final String flur = (String)flurstueck.getProperty("flur");
-        final String nenner = (String)flurstueck.getProperty("fstck_nenner");
-        final String zaehler = (String)flurstueck.getProperty("fstck_zaehler");
-
-        final String lage;
-        final Collection<CidsBean> adressen = flurstueck.getBeanCollectionProperty("adressen");
-        if (adressen.isEmpty()) {
-            lage = "";
-        } else {
-            final Set<String> strassen = new HashSet<String>();
-            final Map<String, Collection<String>> hausnummernMap = new HashMap<String, Collection<String>>();
-            for (final CidsBean adresse : adressen) {
-                final String strasse = (String)adresse.getProperty("strasse");
-                final String hausnummer = (String)adresse.getProperty("nummer");
-                strassen.add(strasse);
-                if (hausnummer != null) {
-                    if (!hausnummernMap.containsKey(strasse)) {
-                        hausnummernMap.put(strasse, new ArrayList<String>());
-                    }
-                    final List<String> hausnummern = (List)hausnummernMap.get(strasse);
-                    hausnummern.add(hausnummer);
-                }
-            }
-            final String strasse = strassen.iterator().next();
-            final StringBuffer sb = new StringBuffer(strasse);
-            boolean first = true;
-            final List<String> hausnummern = (List)hausnummernMap.get(strasse);
-            if (hausnummern != null) {
-                Collections.sort(hausnummern);
-                sb.append(" ");
-                for (final String hausnummer : hausnummern) {
-                    if (!first) {
-                        sb.append(", ");
-                    }
-                    sb.append(hausnummer);
-                    first = false;
-                }
-            }
-            if (strassen.size() > 1) {
-                sb.append(" u.a.");
-            }
-            lage = sb.toString();
-        }
-
-        return new BerechtigungspruefungBescheinigungFlurstueckInfo(
-                alkisId,
-                gemarkung,
-                flur,
-                zaehler,
-                nenner,
-                lage,
-                grundstuecke);
-    }
-
-    /**
-     * Creates a new BaulastBean object.
-     *
-     * @param   baulast  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static BerechtigungspruefungBescheinigungBaulastInfo createBaulastInfo(final CidsBean baulast) {
-        final String blattnummer = (String)baulast.getProperty("blattnummer");
-        final String laufende_nummer = (String)baulast.getProperty("laufende_nummer");
-
-        final StringBuffer sb = new StringBuffer();
-        boolean first = true;
-        for (final CidsBean art : baulast.getBeanCollectionProperty("art")) {
-            if (!first) {
-                sb.append(", ");
-            }
-            first = false;
-            sb.append(art.getProperty("baulast_art"));
-        }
-        final String arten = sb.toString();
-
-        return new BerechtigungspruefungBescheinigungBaulastInfo(blattnummer, laufende_nummer, arten);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   info               DOCUMENT ME!
+     * @param   downloadInfo       DOCUMENT ME!
+     * @param   anfrageSchluessel  DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
      */
-    public static CidsBean loadBaulast(final BerechtigungspruefungBescheinigungBaulastInfo info,
-            final ConnectionContext connectionContext) {
-        if (!BAULAST_CACHE.containsKey(info)) {
-            final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "alb_baulast", connectionContext);
-
-            final String query = "SELECT %d, id "
-                        + "FROM alb_baulast "
-                        + "WHERE blattnummer ILIKE '%s' "
-                        + "AND laufende_nummer ILIKE '%s'";
-            try {
-                final MetaObject[] mos = SessionManager.getProxy()
-                            .getMetaObjectByQuery(String.format(
-                                    query,
-                                    mcBaulast.getID(),
-                                    info.getBlattnummer(),
-                                    info.getLaufende_nummer()),
-                                0,
-                                connectionContext);
-                BAULAST_CACHE.put(info, mos[0].getBean());
-            } catch (ConnectionException ex) {
-                LOG.error(ex, ex);
-                return null;
-            }
+    public static Download generateBaulastbescheinigungDownload(
+            final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
+            final String anfrageSchluessel,
+            final ConnectionContext connectionContext) throws Exception {
+        if (
+            !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            return null;
         }
-        return BAULAST_CACHE.get(info);
+        final String jobname = DownloadManagerDialog.getInstance().getJobName();
+
+        final BackgroundTaskMultipleDownload.FetchDownloadsTask fetchDownloadsTask =
+            new BackgroundTaskMultipleDownload.FetchDownloadsTask() {
+
+                @Override
+                public Collection<? extends Download> fetchDownloads() throws Exception {
+                    final Collection<Download> downloads = new ArrayList<>();
+                    try {
+                        downloads.add(new TxtDownload(
+                                downloadInfo.getProtokoll(),
+                                jobname,
+                                "Baulastbescheinigung-Protokoll",
+                                "baulastbescheinigung_protokoll",
+                                ".txt"));
+
+                        if (downloadInfo.getBescheinigungsInfo() != null) {
+                            final Set<CidsBean> allBaulasten = new HashSet<>();
+
+                            // Download: Berichte für alle Bescheinigungsgruppen
+                            int number = 0;
+                            final int max = downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen().size();
+
+                            final List<BerechtigungspruefungBescheinigungGruppeInfo> sortedBescheinigungsGruppen =
+                                new ArrayList<>(
+                                    downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen());
+                            Collections.sort(
+                                sortedBescheinigungsGruppen,
+                                new Comparator<BerechtigungspruefungBescheinigungGruppeInfo>() {
+
+                                    @Override
+                                    public int compare(final BerechtigungspruefungBescheinigungGruppeInfo o1,
+                                            final BerechtigungspruefungBescheinigungGruppeInfo o2) {
+                                        final String alkisId1 = o1.getFlurstuecke().iterator().next().getAlkisId();
+                                        final String alkisId2 = o2.getFlurstuecke().iterator().next().getAlkisId();
+                                        return alkisId1.compareTo(alkisId2);
+                                    }
+                                });
+                            for (final BerechtigungspruefungBescheinigungGruppeInfo bescheinigungsGruppe
+                                        : sortedBescheinigungsGruppen) {
+                                downloads.add(createBescheinigungPdf(
+                                        bescheinigungsGruppe,
+                                        (jobname != null) ? jobname : downloadInfo.getAuftragsnummer(),
+                                        downloadInfo.getAuftragsnummer(),
+                                        downloadInfo.getProduktbezeichnung(),
+                                        anfrageSchluessel,
+                                        downloadInfo.getBescheinigungsInfo().getDatum(),
+                                        ++number,
+                                        max,
+                                        connectionContext));
+                                // alle Baulasten ermitteln
+                                for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
+                                            : bescheinigungsGruppe.getBaulastenBelastet()) {
+                                    allBaulasten.add(CachedInfoBaulastRetriever.getInstance().loadBaulast(
+                                            baulastInfo,
+                                            connectionContext));
+                                }
+                                for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
+                                            : bescheinigungsGruppe.getBaulastenBeguenstigt()) {
+                                    allBaulasten.add(CachedInfoBaulastRetriever.getInstance().loadBaulast(
+                                            baulastInfo,
+                                            connectionContext));
+                                }
+                            }
+
+                            if (!allBaulasten.isEmpty()) {
+                                // Download: Bericht für alle Baulasten
+                                downloads.addAll(BaulastenReportGenerator.generateRasterDownloads(
+                                        jobname,
+                                        allBaulasten,
+                                        downloadInfo.getAuftragsnummer(),
+                                        downloadInfo.getProduktbezeichnung(),
+                                        connectionContext));
+                            }
+                        }
+                    } catch (final Exception ex) {
+                        LOG.fatal(ex, ex);
+                    }
+
+                    return downloads;
+                }
+            };
+        return new BackgroundTaskMultipleDownload(null, jobname, fetchDownloadsTask);
     }
 
     /**
@@ -417,218 +316,351 @@ public class BaulastBescheinigungUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param  downloadInfo       DOCUMENT ME!
-     * @param  anfrageSchluessel  DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @param   flurstuecke                           DOCUMENT ME!
+     * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
+     * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
+     * @param   protocolWriter                        DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
      */
-    public static void doDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
-            final String anfrageSchluessel,
-            final ConnectionContext connectionContext) {
-        try {
-            final Download download = generateDownload(downloadInfo, anfrageSchluessel, connectionContext);
-            if (download != null) {
-                DownloadManager.instance().add(download);
-            }
-        } catch (final Exception ex) {
-            LOG.error("error while generating download", ex);
-        }
+    public static void fillFlurstueckeToBaulastenMaps(final Collection<CidsBean> flurstuecke,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap,
+            final BaulastBescheinigungDialog.ProtocolWriter protocolWriter) throws Exception {
+        protocolWriter.addMessage("\n===");
+
+        // belastete Baulasten pro Flurstück
+        flurstueckeToBaulastenBelastetMap.putAll(createFlurstueckeToBaulastenMap(flurstuecke, true, protocolWriter));
+
+        // begünstigte Baulasten pro Flurstück
+        flurstueckeToBaulastenBeguenstigtMap.putAll(createFlurstueckeToBaulastenMap(
+                flurstuecke,
+                false,
+                protocolWriter));
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   downloadInfo       DOCUMENT ME!
-     * @param   anfrageSchluessel  DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
+     * @param   flurstuecke     DOCUMENT ME!
+     * @param   belastet        DOCUMENT ME!
+     * @param   protocolWriter  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static Download generateDownload(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
-            final String anfrageSchluessel,
-            final ConnectionContext connectionContext) throws Exception {
-        if (
-            !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
-                        ComponentRegistry.getRegistry().getMainWindow())) {
-            return null;
-        }
-        final String jobname = DownloadManagerDialog.getInstance().getJobName();
+    private static Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Collection<CidsBean> flurstuecke,
+            final boolean belastet,
+            final BaulastBescheinigungDialog.ProtocolWriter protocolWriter) throws Exception {
+        final String queryBeguenstigt = "SELECT %d, alb_baulast.%s \n"
+                    + "FROM alb_baulast_flurstuecke_beguenstigt, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
+                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_beguenstigt.baulast_reference \n"
+                    + "AND alb_baulast_flurstuecke_beguenstigt.flurstueck = alb_flurstueck_kicker.id \n"
+                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
+                    + "AND flurstueck.alkis_id ilike '%s' \n"
+                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
 
-        final BackgroundTaskMultipleDownload.FetchDownloadsTask fetchDownloadsTask =
-            new BackgroundTaskMultipleDownload.FetchDownloadsTask() {
+        final String queryBelastet = "SELECT %d, alb_baulast.%s \n"
+                    + "FROM alb_baulast_flurstuecke_belastet, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
+                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_belastet.baulast_reference \n"
+                    + "AND alb_baulast_flurstuecke_belastet.flurstueck = alb_flurstueck_kicker.id \n"
+                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
+                    + "AND flurstueck.alkis_id ilike '%s' \n"
+                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
+
+        final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "alb_baulast",
+                getConnectionContext());
+
+        final String query = belastet ? queryBelastet : queryBeguenstigt;
+
+        protocolWriter.addMessage("\nSuche der " + ((belastet) ? "belastenden" : "begünstigenden") + " Baulasten von:");
+        final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenMap = new HashMap<>();
+        for (final CidsBean flurstueck : flurstuecke) {
+            protocolWriter.addMessage(" * Flurstück: " + flurstueck + " ...");
+            final Set<CidsBean> baulasten = new HashSet<>();
+            try {
+                final BaulastSearchInfo searchInfo = new BaulastSearchInfo();
+                final Integer gemarkung = Integer.parseInt(((String)flurstueck.getProperty("alkis_id")).substring(
+                            2,
+                            6));
+                final String flur = (String)flurstueck.getProperty("flur");
+                final String zaehler = Integer.toString(Integer.parseInt(
+                            (String)flurstueck.getProperty("fstck_zaehler")));
+                final String nenner = (flurstueck.getProperty("fstck_nenner") == null)
+                    ? "0" : Integer.toString(Integer.parseInt((String)flurstueck.getProperty("fstck_nenner")));
+
+                final FlurstueckInfo fsi = new FlurstueckInfo(gemarkung, flur, zaehler, nenner);
+                searchInfo.setFlurstuecke(Arrays.asList(fsi));
+                searchInfo.setResult(CidsBaulastSearchStatement.Result.BAULAST);
+                searchInfo.setBelastet(belastet);
+                searchInfo.setBeguenstigt(!belastet);
+                searchInfo.setBlattnummer("");
+                searchInfo.setArt("");
+                final CidsBaulastSearchStatement search = new CidsBaulastSearchStatement(
+                        searchInfo,
+                        mcBaulast.getId(),
+                        -1);
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+                final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                            .customServerSearch(search, getConnectionContext());
+                for (final MetaObjectNode mon : mons) {
+                    final MetaObject mo = SessionManager.getProxy()
+                                .getMetaObject(mon.getObjectId(),
+                                    mon.getClassId(),
+                                    "WUNDA_BLAU",
+                                    getConnectionContext());
+                    if ((mo.getBean() != null) && (mo.getBean() != null)
+                                && (mo.getBean().getProperty("loeschungsdatum") != null)) {
+                        continue;
+                    }
+                    if (mon.getName().startsWith("indirekt: ")) {
+                        throw new BaulastBescheinigungDialog.BaBeException(
+                            "Zu den angegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
+                    }
+                }
+
+                final String alkisId = (String)flurstueck.getProperty("alkis_id");
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+                final MetaObject[] mos = SessionManager.getProxy()
+                            .getMetaObjectByQuery(String.format(
+                                    query,
+                                    mcBaulast.getID(),
+                                    mcBaulast.getPrimaryKey(),
+                                    alkisId),
+                                0,
+                                getConnectionContext());
+                for (final MetaObject mo : mos) {
+                    final CidsBean baulast = mo.getBean();
+                    final Boolean geprueft = (Boolean)baulast.getProperty("geprueft");
+                    if ((geprueft == null) || (geprueft == false)) {
+                        throw new BaulastBescheinigungDialog.BaBeException(
+                            "Zu den angegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
+                    }
+                    protocolWriter.addMessage("   => Baulast: " + baulast);
+                    baulasten.add(baulast);
+                }
+                flurstueckeToBaulastenMap.put(flurstueck, baulasten);
+            } catch (final ConnectionException ex) {
+                LOG.fatal(ex, ex);
+            }
+        }
+        return flurstueckeToBaulastenMap;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   grundstueckeToFlurstueckeMap          flurstuecke flurstueckeToBaulastengrundstueckMap DOCUMENT ME!
+     * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
+     * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
+     * @param   protocolWriter                        DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Collection<ProductGroupAmount> createBilling(
+            final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap,
+            final BaulastBescheinigungDialog.ProtocolWriter protocolWriter) {
+        final List<String> keys = new ArrayList<>(grundstueckeToFlurstueckeMap.keySet());
+        Collections.sort(keys);
+
+        final int anzahlGrundstuecke = grundstueckeToFlurstueckeMap.size();
+        if (anzahlGrundstuecke == 1) {
+            protocolWriter.addMessage("\n===\n\nBescheinigungsart des Grundstücks:");
+        } else {
+            protocolWriter.addMessage("\n===\n\nBescheinigungsarten der " + anzahlGrundstuecke
+                        + " ermittelten Grundstücke:");
+        }
+
+        final Collection<ProductGroupAmount> prodAmounts = new ArrayList<>();
+
+        int anzahlNegativ = 0;
+        int anzahlPositiv1 = 0;
+        int anzahlPositiv2 = 0;
+        int anzahlPositiv3 = 0;
+
+        for (final String key : keys) {
+            if (grundstueckeToFlurstueckeMap.containsKey(key)) {
+                boolean first = true;
+
+                final Collection<CidsBean> flurstuecke = grundstueckeToFlurstueckeMap.get(key);
+
+                final Set<CidsBean> baulasten = new HashSet<>();
+                for (final CidsBean flurstueck : flurstuecke) {
+                    final Collection<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
+                    final Collection<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(
+                            flurstueck);
+                    baulasten.addAll(baulastenBelastet);
+                    baulasten.addAll(baulastenBeguenstigt);
+                }
+
+                final StringBuffer sb = new StringBuffer();
+                for (final CidsBean baulast : baulasten) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append(", ");
+                    }
+                    sb.append(baulast);
+                }
+                final String baulastenString = sb.toString();
+
+                final int numOfBaulasten = baulasten.size();
+                switch (numOfBaulasten) {
+                    case 0: {
+                        protocolWriter.addMessage(" * Grundstück " + key + " => Negativ-Bescheinigung");
+                        anzahlNegativ++;
+                        break;
+                    }
+                    case 1: {
+                        protocolWriter.addMessage(" * Grundstück " + key
+                                    + " => Positiv-Bescheinigung für eine Baulast ("
+                                    + baulastenString
+                                    + ")");
+                        anzahlPositiv1++;
+                        break;
+                    }
+                    case 2: {
+                        protocolWriter.addMessage(" * Grundstück " + key
+                                    + " => Positiv-Bescheinigung für zwei Baulasten ("
+                                    + baulastenString
+                                    + ")");
+                        anzahlPositiv2++;
+                        break;
+                    }
+                    default: {
+                        protocolWriter.addMessage(" * Grundstück " + key
+                                    + " => Positiv-Bescheinigung für drei oder mehr Baulasten ("
+                                    + baulastenString + ")");
+                        anzahlPositiv3++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (anzahlNegativ > 0) {
+            if (anzahlNegativ > 10) {
+                prodAmounts.add(new ProductGroupAmount("ea_blab_neg_ab_10", 1));
+            } else {
+                prodAmounts.add(new ProductGroupAmount("ea_blab_neg", anzahlNegativ));
+            }
+        }
+        if (anzahlPositiv1 > 0) {
+            prodAmounts.add(new ProductGroupAmount("ea_blab_pos_1", anzahlPositiv1));
+        }
+        if (anzahlPositiv2 > 0) {
+            prodAmounts.add(new ProductGroupAmount("ea_blab_pos_2", anzahlPositiv2));
+        }
+        if (anzahlPositiv3 > 0) {
+            prodAmounts.add(new ProductGroupAmount("ea_blab_pos_3", anzahlPositiv3));
+        }
+
+        return prodAmounts;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   flurstueckeToGrundstueckeMap          flurstuecke DOCUMENT ME!
+     * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
+     * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
+     * @param   protocolWriter                        DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Set<BerechtigungspruefungBescheinigungGruppeInfo> createBescheinigungsGruppen(
+            final Map<CidsBean, Collection<String>> flurstueckeToGrundstueckeMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap,
+            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap,
+            final BaulastBescheinigungDialog.ProtocolWriter protocolWriter) {
+        final Map<String, BerechtigungspruefungBescheinigungGruppeInfo> gruppeMap = new HashMap<>();
+
+        final List<CidsBean> flurstuecke = new ArrayList<>(flurstueckeToGrundstueckeMap.keySet());
+        Collections.sort(flurstuecke, new Comparator<CidsBean>() {
 
                 @Override
-                public Collection<? extends Download> fetchDownloads() throws Exception {
-                    final Collection<Download> downloads = new ArrayList<>();
-                    try {
-                        downloads.add(new TxtDownload(
-                                downloadInfo.getProtokoll(),
-                                jobname,
-                                "Baulastbescheinigung-Protokoll",
-                                "baulastbescheinigung_protokoll",
-                                ".txt"));
+                public int compare(final CidsBean o1, final CidsBean o2) {
+                    final String s1 = (o1 == null) ? "" : (String)o1.getProperty("alkis_id");
+                    final String s2 = (o2 == null) ? "" : (String)o2.getProperty("alkis_id");
+                    return s1.compareTo(s2);
+                }
+            });
 
-                        if (downloadInfo.getBescheinigungsInfo() != null) {
-                            final Set<CidsBean> allBaulasten = new HashSet<>();
+        for (final CidsBean flurstueck : flurstuecke) {
+            final Collection<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(flurstueck);
+            final Collection<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
+            final BerechtigungspruefungBescheinigungGruppeInfo newGruppe = AlkisProductDownloadHelper
+                        .createBerechtigungspruefungBescheinigungGruppeInfo(
+                            baulastenBeguenstigt,
+                            baulastenBelastet,
+                            CachedInfoBaulastRetriever.getInstance().getCache());
+            final String gruppeKey = newGruppe.toString();
+            if (!gruppeMap.containsKey(gruppeKey)) {
+                gruppeMap.put(gruppeKey, newGruppe);
+            }
+            final BerechtigungspruefungBescheinigungGruppeInfo gruppe = gruppeMap.get(gruppeKey);
+            gruppe.getFlurstuecke()
+                    .add(AlkisProductDownloadHelper.createBerechtigungspruefungBescheinigungFlurstueckInfo(
+                            flurstueck,
+                            flurstueckeToGrundstueckeMap.get(flurstueck)));
+        }
 
-                            // Download: Berichte für alle Bescheinigungsgruppen
-                            int number = 0;
-                            final int max = downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen().size();
+        final Set<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen = new HashSet<>(
+                gruppeMap.values());
 
-                            final List<BerechtigungspruefungBescheinigungGruppeInfo> sortedBescheinigungsGruppen =
-                                new ArrayList<>(
-                                    downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen());
-                            Collections.sort(
-                                sortedBescheinigungsGruppen,
-                                new Comparator<BerechtigungspruefungBescheinigungGruppeInfo>() {
+        protocolWriter.addMessage("Anzahl Bescheinigungsgruppen: " + bescheinigungsgruppen.size());
+        for (final BerechtigungspruefungBescheinigungGruppeInfo gruppe : bescheinigungsgruppen) {
+            protocolWriter.addMessage(" * " + gruppe.toString());
+        }
+        return bescheinigungsgruppen;
+    }
 
-                                    @Override
-                                    public int compare(final BerechtigungspruefungBescheinigungGruppeInfo o1,
-                                            final BerechtigungspruefungBescheinigungGruppeInfo o2) {
-                                        final String alkisId1 = o1.getFlurstuecke().iterator().next().getAlkisId();
-                                        final String alkisId2 = o2.getFlurstuecke().iterator().next().getAlkisId();
-                                        return alkisId1.compareTo(alkisId2);
-                                    }
-                                });
-                            for (final BerechtigungspruefungBescheinigungGruppeInfo bescheinigungsGruppe
-                                        : sortedBescheinigungsGruppen) {
-                                downloads.add(createBescheinigungPdf(
-                                        bescheinigungsGruppe,
-                                        (jobname != null) ? jobname : downloadInfo.getAuftragsnummer(),
-                                        downloadInfo.getAuftragsnummer(),
-                                        downloadInfo.getProduktbezeichnung(),
-                                        anfrageSchluessel,
-                                        downloadInfo.getBescheinigungsInfo().getDatum(),
-                                        ++number,
-                                        max,
-                                        connectionContext));
-                                // alle Baulasten ermitteln
-                                for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
-                                            : bescheinigungsGruppe.getBaulastenBelastet()) {
-                                    allBaulasten.add(loadBaulast(baulastInfo, connectionContext));
-                                }
-                                for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
-                                            : bescheinigungsGruppe.getBaulastenBeguenstigt()) {
-                                    allBaulasten.add(loadBaulast(baulastInfo, connectionContext));
-                                }
-                            }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   flurstuecke                   DOCUMENT ME!
+     * @param   grundstueckeToFlurstueckeMap  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Map<CidsBean, Collection<String>> createFlurstueckeToGrundstueckeMap(
+            final Collection<CidsBean> flurstuecke,
+            final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap) {
+        final HashMap<CidsBean, Collection<String>> flurstueckeToGrundstueckeMap = new HashMap<>();
 
-                            if (!allBaulasten.isEmpty()) {
-                                // Download: Bericht für alle Baulasten
-                                downloads.addAll(BaulastenReportGenerator.generateRasterDownloads(
-                                        jobname,
-                                        allBaulasten,
-                                        downloadInfo.getAuftragsnummer(),
-                                        downloadInfo.getProduktbezeichnung(),
-                                        connectionContext));
-                            }
-                        }
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
+        for (final String grundstueck : grundstueckeToFlurstueckeMap.keySet()) {
+            final Collection<CidsBean> gruFlu = grundstueckeToFlurstueckeMap.get(grundstueck);
+            for (final CidsBean flurstueck : flurstuecke) {
+                if (gruFlu.contains(flurstueck)) {
+                    if (!flurstueckeToGrundstueckeMap.containsKey(flurstueck)) {
+                        flurstueckeToGrundstueckeMap.put(flurstueck, new HashSet<String>());
                     }
-
-                    return downloads;
+                    final Collection<String> grundstuecke = flurstueckeToGrundstueckeMap.get(flurstueck);
+                    grundstuecke.add(grundstueck);
                 }
-            };
-        return new BackgroundTaskMultipleDownload(null, jobname, fetchDownloadsTask);
+            }
+        }
+        return flurstueckeToGrundstueckeMap;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   user               DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
-    public static Collection<CidsBean> loadOpenDownloads(final User user,
-            final ConnectionContext connectionContext) {
-        try {
-            final MetaClass mcBerechtigungspruefung = CidsBean.getMetaClassFromTableName(
-                    "WUNDA_BLAU",
-                    "berechtigungspruefung",
-                    connectionContext);
-
-            final String pruefungQuery = "SELECT DISTINCT %d, id "
-                        + "FROM berechtigungspruefung "
-                        + "WHERE benutzer ILIKE '%s' "
-                        + "AND (geprueft IS NOT NULL AND geprueft IS TRUE) "
-                        + "AND (abgeholt IS NULL OR abgeholt IS FALSE);";
-
-            final MetaObject[] mos = SessionManager.getProxy()
-                        .getMetaObjectByQuery(String.format(
-                                pruefungQuery,
-                                mcBerechtigungspruefung.getID(),
-                                user.getKey()),
-                            0,
-                            connectionContext);
-            if (mos != null) {
-                final Collection<CidsBean> beans = new ArrayList<CidsBean>(mos.length);
-                for (final MetaObject mo : mos) {
-                    beans.add(mo.getBean());
-                }
-                return beans;
-            }
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
-        return null;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   schluessel         DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static CidsBean loadPruefung(final String schluessel, final ConnectionContext connectionContext) {
-        try {
-            final MetaClass mcBerechtigungspruefung = CidsBean.getMetaClassFromTableName(
-                    "WUNDA_BLAU",
-                    "berechtigungspruefung",
-                    connectionContext);
-
-            final String pruefungQuery = "SELECT DISTINCT %d, id "
-                        + "FROM berechtigungspruefung "
-                        + "WHERE schluessel LIKE '%s' "
-                        + "LIMIT 1;";
-
-            final MetaObject[] mos = SessionManager.getProxy()
-                        .getMetaObjectByQuery(String.format(pruefungQuery, mcBerechtigungspruefung.getID(), schluessel),
-                            0,
-                            connectionContext);
-            if ((mos != null) && (mos.length > 0)) {
-                return mos[0].getBean();
-            }
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
-        return null;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   s1  DOCUMENT ME!
-     * @param   s2  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static int compareString(final String s1, final String s2) {
-        if (s1 == null) {
-            if (s2 == null) {
-                return 0;
-            } else {
-                return -1;
-            }
-        } else if (s1.equals(s2)) {
-            return 0;
-        } else {
-            return s1.compareTo(s2);
-        }
+    private static ConnectionContext getConnectionContext() {
+        return CONNECTION_CONTEXT;
     }
 
     //~ Inner Classes ----------------------------------------------------------

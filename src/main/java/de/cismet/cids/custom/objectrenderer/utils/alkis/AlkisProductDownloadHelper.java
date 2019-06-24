@@ -26,9 +26,17 @@ import org.apache.log4j.Logger;
 
 import java.awt.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -37,11 +45,16 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungBaulastInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
+import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungFlurstueckInfo;
+import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
+
+import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
@@ -755,6 +768,243 @@ public class AlkisProductDownloadHelper {
             LOG.error("Could not validate action tag for Alkis HTML Products!", ex);
         }
         return false;
+    }
+
+    /**
+     * Creates a new BescheinigungsGruppe object.
+     *
+     * @param   baulastenBeguenstigt  DOCUMENT ME!
+     * @param   baulastenBelastet     DOCUMENT ME!
+     * @param   cache                 DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static BerechtigungspruefungBescheinigungGruppeInfo createBerechtigungspruefungBescheinigungGruppeInfo(
+            final Collection<CidsBean> baulastenBeguenstigt,
+            final Collection<CidsBean> baulastenBelastet,
+            final Map<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean> cache) {
+        return createBerechtigungspruefungBescheinigungGruppeInfo(new HashMap<CidsBean, Collection<String>>(),
+                baulastenBeguenstigt,
+                baulastenBelastet,
+                cache);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   flurstuecketoGrundstueckeMap  DOCUMENT ME!
+     * @param   baulastenBeguenstigtBeans     DOCUMENT ME!
+     * @param   baulastenBelastetBeans        DOCUMENT ME!
+     * @param   cache                         DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static BerechtigungspruefungBescheinigungGruppeInfo createBerechtigungspruefungBescheinigungGruppeInfo(
+            final Map<CidsBean, Collection<String>> flurstuecketoGrundstueckeMap,
+            final Collection<CidsBean> baulastenBeguenstigtBeans,
+            final Collection<CidsBean> baulastenBelastetBeans,
+            final Map<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean> cache) {
+        final List<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckeInfo =
+            new ArrayList<BerechtigungspruefungBescheinigungFlurstueckInfo>();
+        for (final CidsBean flurstueck : flurstuecketoGrundstueckeMap.keySet()) {
+            flurstueckeInfo.add(createBerechtigungspruefungBescheinigungFlurstueckInfo(
+                    flurstueck,
+                    flurstuecketoGrundstueckeMap.get(flurstueck)));
+        }
+
+        final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBeguenstigtInfos =
+            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
+        for (final CidsBean baulastBeguenstigt : baulastenBeguenstigtBeans) {
+            final BerechtigungspruefungBescheinigungBaulastInfo baulastBeguenstigtInfo =
+                createBerechtigungspruefungBescheinigungBaulastInfo(
+                    baulastBeguenstigt);
+            if (cache != null) {
+                cache.put(baulastBeguenstigtInfo, baulastBeguenstigt);
+            }
+            baulastBeguenstigtInfos.add(baulastBeguenstigtInfo);
+        }
+
+        final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBelastetInfos =
+            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
+        for (final CidsBean baulastBelastet : baulastenBelastetBeans) {
+            final BerechtigungspruefungBescheinigungBaulastInfo baulastBelastetInfo =
+                createBerechtigungspruefungBescheinigungBaulastInfo(
+                    baulastBelastet);
+            if (cache != null) {
+                cache.put(baulastBelastetInfo, baulastBelastet);
+            }
+            baulastBelastetInfos.add(baulastBelastetInfo);
+        }
+
+        Collections.sort(flurstueckeInfo, new Comparator<BerechtigungspruefungBescheinigungFlurstueckInfo>() {
+
+                @Override
+                public int compare(final BerechtigungspruefungBescheinigungFlurstueckInfo o1,
+                        final BerechtigungspruefungBescheinigungFlurstueckInfo o2) {
+                    final int compareGemarkung = compareString(o1.getGemarkung(), o2.getGemarkung());
+                    if (compareGemarkung != 0) {
+                        return compareGemarkung;
+                    } else {
+                        final int compareFlur = compareString(o1.getFlur(), o2.getFlur());
+                        if (compareFlur != 0) {
+                            return compareFlur;
+                        } else {
+                            final int compareNummer = compareString(o1.getNummer(), o2.getNummer());
+                            if (compareNummer != 0) {
+                                return compareNummer;
+                            } else {
+                                return 0;
+                            }
+                        }
+                    }
+                }
+            });
+
+        final Comparator<BerechtigungspruefungBescheinigungBaulastInfo> baulastBeanComparator =
+            new Comparator<BerechtigungspruefungBescheinigungBaulastInfo>() {
+
+                @Override
+                public int compare(final BerechtigungspruefungBescheinigungBaulastInfo o1,
+                        final BerechtigungspruefungBescheinigungBaulastInfo o2) {
+                    final int compareBlattnummer = compareString(o1.getBlattnummer(), o2.getBlattnummer());
+                    if (compareBlattnummer != 0) {
+                        return compareBlattnummer;
+                    } else {
+                        final Integer lfdN1 = (o1 == null) ? -1 : Integer.parseInt((String)o1.getLaufende_nummer());
+                        final int lfdN2 = (o2 == null) ? -1 : Integer.parseInt((String)o2.getLaufende_nummer());
+                        final int compareLaufendenummer = lfdN1.compareTo(lfdN2);
+
+                        if (compareLaufendenummer != 0) {
+                            return compareLaufendenummer;
+                        } else {
+                            return 0;
+                        }
+                    }
+                }
+            };
+
+        Collections.sort(baulastBeguenstigtInfos, baulastBeanComparator);
+        Collections.sort(baulastBelastetInfos, baulastBeanComparator);
+
+        return new BerechtigungspruefungBescheinigungGruppeInfo(
+                flurstueckeInfo,
+                baulastBeguenstigtInfos,
+                baulastBelastetInfos);
+    }
+
+    /**
+     * Creates a new FlurstueckBean object.
+     *
+     * @param   flurstueck    DOCUMENT ME!
+     * @param   grundstuecke  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static BerechtigungspruefungBescheinigungFlurstueckInfo
+    createBerechtigungspruefungBescheinigungFlurstueckInfo(final CidsBean flurstueck,
+            final Collection<String> grundstuecke) {
+        final String alkisId = (String)flurstueck.getProperty("alkis_id");
+        final String gemarkung = (String)flurstueck.getProperty("gemarkung");
+        final String flur = (String)flurstueck.getProperty("flur");
+        final String nenner = (String)flurstueck.getProperty("fstck_nenner");
+        final String zaehler = (String)flurstueck.getProperty("fstck_zaehler");
+
+        final String lage;
+        final Collection<CidsBean> adressen = flurstueck.getBeanCollectionProperty("adressen");
+        if (adressen.isEmpty()) {
+            lage = "";
+        } else {
+            final Set<String> strassen = new HashSet<String>();
+            final Map<String, Collection<String>> hausnummernMap = new HashMap<String, Collection<String>>();
+            for (final CidsBean adresse : adressen) {
+                final String strasse = (String)adresse.getProperty("strasse");
+                final String hausnummer = (String)adresse.getProperty("nummer");
+                strassen.add(strasse);
+                if (hausnummer != null) {
+                    if (!hausnummernMap.containsKey(strasse)) {
+                        hausnummernMap.put(strasse, new ArrayList<String>());
+                    }
+                    final List<String> hausnummern = (List)hausnummernMap.get(strasse);
+                    hausnummern.add(hausnummer);
+                }
+            }
+            final String strasse = strassen.iterator().next();
+            final StringBuffer sb = new StringBuffer(strasse);
+            boolean first = true;
+            final List<String> hausnummern = (List)hausnummernMap.get(strasse);
+            if (hausnummern != null) {
+                Collections.sort(hausnummern);
+                sb.append(" ");
+                for (final String hausnummer : hausnummern) {
+                    if (!first) {
+                        sb.append(", ");
+                    }
+                    sb.append(hausnummer);
+                    first = false;
+                }
+            }
+            if (strassen.size() > 1) {
+                sb.append(" u.a.");
+            }
+            lage = sb.toString();
+        }
+
+        return new BerechtigungspruefungBescheinigungFlurstueckInfo(
+                alkisId,
+                gemarkung,
+                flur,
+                zaehler,
+                nenner,
+                lage,
+                grundstuecke);
+    }
+
+    /**
+     * Creates a new BaulastBean object.
+     *
+     * @param   baulast  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static BerechtigungspruefungBescheinigungBaulastInfo createBerechtigungspruefungBescheinigungBaulastInfo(
+            final CidsBean baulast) {
+        final String blattnummer = (String)baulast.getProperty("blattnummer");
+        final String laufende_nummer = (String)baulast.getProperty("laufende_nummer");
+
+        final StringBuffer sb = new StringBuffer();
+        boolean first = true;
+        for (final CidsBean art : baulast.getBeanCollectionProperty("art")) {
+            if (!first) {
+                sb.append(", ");
+            }
+            first = false;
+            sb.append(art.getProperty("baulast_art"));
+        }
+        final String arten = sb.toString();
+
+        return new BerechtigungspruefungBescheinigungBaulastInfo(blattnummer, laufende_nummer, arten);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   s1  DOCUMENT ME!
+     * @param   s2  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static int compareString(final String s1, final String s2) {
+        if (s1 == null) {
+            if (s2 == null) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else if (s1.equals(s2)) {
+            return 0;
+        } else {
+            return s1.compareTo(s2);
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
