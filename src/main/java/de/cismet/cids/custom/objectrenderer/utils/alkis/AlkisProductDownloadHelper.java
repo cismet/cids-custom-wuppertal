@@ -22,11 +22,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import org.apache.log4j.Logger;
 
 import java.awt.Component;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,8 +51,10 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.BaulastBescheinigungUtils;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
+import de.cismet.cids.custom.utils.BaulastBescheinigungHelper;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.CachedInfoBaulastRetriever;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungBaulastInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
@@ -58,13 +69,19 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+
 import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.AbstractDownload;
+import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
+
+import static de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator.createFertigungsVermerk;
 
 /**
  * DOCUMENT ME!
@@ -77,6 +94,13 @@ public class AlkisProductDownloadHelper {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(AlkisProductDownloadHelper.class);
+    private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
+    private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
+    private static final String PARAMETER_PRUEFKEY = "PRUEFKEY";
+    private static final String PARAMETER_HAS_BELASTET = "HAS_BELASTET";
+    private static final String PARAMETER_HAS_BEGUENSTIGT = "HAS_BEGUENSTIGT";
+    private static final String PARAMETER_FABRICATIONNOTICE = "FABRICATIONNOTICE";
+    private static final String PARAMETER_FABRICATIONDATE = "FABRICATIONDATE";
 
     //~ Methods ----------------------------------------------------------------
 
@@ -543,6 +567,29 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
+     * @param  downloadInfo       DOCUMENT ME!
+     * @param  anfrageSchluessel  DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void downloadBaulastbescheinigung(final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
+            final String anfrageSchluessel,
+            final ConnectionContext connectionContext) {
+        try {
+            final Download download = generateBaulastbescheinigungDownload(
+                    downloadInfo,
+                    anfrageSchluessel,
+                    connectionContext);
+            if (download != null) {
+                DownloadManager.instance().add(download);
+            }
+        } catch (final Exception ex) {
+            LOG.error("error while generating download", ex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   schluessel         DOCUMENT ME!
      * @param   produkttyp         DOCUMENT ME!
      * @param   downloadInfo       DOCUMENT ME!
@@ -557,7 +604,7 @@ public class AlkisProductDownloadHelper {
         if (BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
             final BerechtigungspruefungBescheinigungDownloadInfo bescheinigungDownloadInfo =
                 new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungBescheinigungDownloadInfo.class);
-            BaulastBescheinigungUtils.doDownload(bescheinigungDownloadInfo, schluessel, connectionContext);
+            downloadBaulastbescheinigung(bescheinigungDownloadInfo, schluessel, connectionContext);
         } else if (BerechtigungspruefungAlkisDownloadInfo.PRODUKT_TYP.equals(produkttyp)) {
             final BerechtigungspruefungAlkisDownloadInfo alkisDownloadInfo =
                 new ObjectMapper().readValue(downloadInfo, BerechtigungspruefungAlkisDownloadInfo.class);
@@ -771,25 +818,6 @@ public class AlkisProductDownloadHelper {
     }
 
     /**
-     * Creates a new BescheinigungsGruppe object.
-     *
-     * @param   baulastenBeguenstigt  DOCUMENT ME!
-     * @param   baulastenBelastet     DOCUMENT ME!
-     * @param   cache                 DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static BerechtigungspruefungBescheinigungGruppeInfo createBerechtigungspruefungBescheinigungGruppeInfo(
-            final Collection<CidsBean> baulastenBeguenstigt,
-            final Collection<CidsBean> baulastenBelastet,
-            final Map<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean> cache) {
-        return createBerechtigungspruefungBescheinigungGruppeInfo(new HashMap<CidsBean, Collection<String>>(),
-                baulastenBeguenstigt,
-                baulastenBelastet,
-                cache);
-    }
-
-    /**
      * DOCUMENT ME!
      *
      * @param   flurstuecketoGrundstueckeMap  DOCUMENT ME!
@@ -804,16 +832,14 @@ public class AlkisProductDownloadHelper {
             final Collection<CidsBean> baulastenBeguenstigtBeans,
             final Collection<CidsBean> baulastenBelastetBeans,
             final Map<BerechtigungspruefungBescheinigungBaulastInfo, CidsBean> cache) {
-        final List<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckeInfo =
-            new ArrayList<BerechtigungspruefungBescheinigungFlurstueckInfo>();
+        final List<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckeInfo = new ArrayList<>();
         for (final CidsBean flurstueck : flurstuecketoGrundstueckeMap.keySet()) {
             flurstueckeInfo.add(createBerechtigungspruefungBescheinigungFlurstueckInfo(
                     flurstueck,
                     flurstuecketoGrundstueckeMap.get(flurstueck)));
         }
 
-        final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBeguenstigtInfos =
-            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
+        final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBeguenstigtInfos = new ArrayList<>();
         for (final CidsBean baulastBeguenstigt : baulastenBeguenstigtBeans) {
             final BerechtigungspruefungBescheinigungBaulastInfo baulastBeguenstigtInfo =
                 createBerechtigungspruefungBescheinigungBaulastInfo(
@@ -824,8 +850,7 @@ public class AlkisProductDownloadHelper {
             baulastBeguenstigtInfos.add(baulastBeguenstigtInfo);
         }
 
-        final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBelastetInfos =
-            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
+        final List<BerechtigungspruefungBescheinigungBaulastInfo> baulastBelastetInfos = new ArrayList<>();
         for (final CidsBean baulastBelastet : baulastenBelastetBeans) {
             final BerechtigungspruefungBescheinigungBaulastInfo baulastBelastetInfo =
                 createBerechtigungspruefungBescheinigungBaulastInfo(
@@ -870,8 +895,8 @@ public class AlkisProductDownloadHelper {
                     if (compareBlattnummer != 0) {
                         return compareBlattnummer;
                     } else {
-                        final Integer lfdN1 = (o1 == null) ? -1 : Integer.parseInt((String)o1.getLaufende_nummer());
-                        final int lfdN2 = (o2 == null) ? -1 : Integer.parseInt((String)o2.getLaufende_nummer());
+                        final Integer lfdN1 = Integer.parseInt((String)o1.getLaufende_nummer());
+                        final int lfdN2 = Integer.parseInt((String)o2.getLaufende_nummer());
                         final int compareLaufendenummer = lfdN1.compareTo(lfdN2);
 
                         if (compareLaufendenummer != 0) {
@@ -887,6 +912,7 @@ public class AlkisProductDownloadHelper {
         Collections.sort(baulastBelastetInfos, baulastBeanComparator);
 
         return new BerechtigungspruefungBescheinigungGruppeInfo(
+                null,
                 flurstueckeInfo,
                 baulastBeguenstigtInfos,
                 baulastBelastetInfos);
@@ -1007,6 +1033,203 @@ public class AlkisProductDownloadHelper {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bescheinigungsGruppe  DOCUMENT ME!
+     * @param   jobname               DOCUMENT ME!
+     * @param   jobnumber             DOCUMENT ME!
+     * @param   projectName           DOCUMENT ME!
+     * @param   anfrageSchluessel     DOCUMENT ME!
+     * @param   fabricationdate       DOCUMENT ME!
+     * @param   number                projectname DOCUMENT ME!
+     * @param   max                   DOCUMENT ME!
+     * @param   connectionContext     DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private static Download createBescheinigungPdf(
+            final BerechtigungspruefungBescheinigungGruppeInfo bescheinigungsGruppe,
+            final String jobname,
+            final String jobnumber,
+            final String projectName,
+            final String anfrageSchluessel,
+            final Date fabricationdate,
+            final int number,
+            final int max,
+            final ConnectionContext connectionContext) throws Exception {
+        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
+            new JasperReportDownload.JasperReportDataSourceGenerator() {
+
+                @Override
+                public JRDataSource generateDataSource() {
+                    try {
+                        final Collection<BerechtigungspruefungBescheinigungGruppeInfo> reportBeans = Arrays.asList(
+                                new BerechtigungspruefungBescheinigungGruppeInfo[] { bescheinigungsGruppe });
+                        final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
+                        return dataSource;
+                    } catch (final Exception ex) {
+                        LOG.warn(ex, ex);
+                        return null;
+                    }
+                }
+            };
+
+        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
+            new JasperReportDownload.JasperReportParametersGenerator() {
+
+                @Override
+                public Map generateParamters() {
+                    try {
+                        final HashMap parameters = new HashMap();
+                        parameters.put(PARAMETER_JOBNUMBER, jobnumber);
+                        parameters.put(PARAMETER_PROJECTNAME, projectName);
+                        parameters.put(PARAMETER_PRUEFKEY, anfrageSchluessel);
+
+                        parameters.put(PARAMETER_HAS_BELASTET, !bescheinigungsGruppe.getBaulastenBelastet().isEmpty());
+                        parameters.put(
+                            PARAMETER_FABRICATIONDATE,
+                            new SimpleDateFormat("dd.MM.yyyy").format(fabricationdate));
+                        parameters.put(
+                            PARAMETER_HAS_BEGUENSTIGT,
+                            !bescheinigungsGruppe.getBaulastenBeguenstigt().isEmpty());
+                        parameters.put(
+                            PARAMETER_FABRICATIONNOTICE,
+                            createFertigungsVermerk(SessionManager.getSession().getUser(), connectionContext));
+                        return parameters;
+                    } catch (final Exception ex) {
+                        LOG.warn(ex, ex);
+                        return null;
+                    }
+                }
+            };
+
+        final Collection<BerechtigungspruefungBescheinigungFlurstueckInfo> fls = bescheinigungsGruppe.getFlurstuecke();
+        final boolean ua = (fls.size() > 1);
+        final String title = "Bescheinigung " + fls.iterator().next().getAlkisId() + (ua ? " (ua)" : "")
+                    + " " + number + "/" + max;
+        final String fileName = "bescheinigung_" + fls.iterator().next().getAlkisId().replace("/", "--")
+                    + (ua ? ".ua" : "")
+                    + "_" + number;
+
+        final JasperReportDownload download = new JasperReportDownload(
+                "/de/cismet/cids/custom/wunda_blau/res/baulastbescheinigung.jasper",
+                parametersGenerator,
+                dataSourceGenerator,
+                jobname,
+                title,
+                fileName);
+
+        return download;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   downloadInfo       DOCUMENT ME!
+     * @param   anfrageSchluessel  DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static Download generateBaulastbescheinigungDownload(
+            final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo,
+            final String anfrageSchluessel,
+            final ConnectionContext connectionContext) throws Exception {
+        if (
+            !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            return null;
+        }
+        final String jobname = DownloadManagerDialog.getInstance().getJobName();
+
+        final BackgroundTaskMultipleDownload.FetchDownloadsTask fetchDownloadsTask =
+            new BackgroundTaskMultipleDownload.FetchDownloadsTask() {
+
+                @Override
+                public Collection<? extends Download> fetchDownloads() throws Exception {
+                    final Collection<Download> downloads = new ArrayList<>();
+                    try {
+                        downloads.add(new TxtDownload(
+                                downloadInfo.getProtokoll(),
+                                jobname,
+                                "Baulastbescheinigung-Protokoll",
+                                "baulastbescheinigung_protokoll",
+                                ".txt"));
+
+                        if (downloadInfo.getBescheinigungsInfo() != null) {
+                            final Set<CidsBean> allBaulasten = new HashSet<>();
+
+                            // Download: Berichte für alle Bescheinigungsgruppen
+                            int number = 0;
+                            final int max = downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen().size();
+
+                            final List<BerechtigungspruefungBescheinigungGruppeInfo> sortedBescheinigungsGruppen =
+                                new ArrayList<>(
+                                    downloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen());
+                            Collections.sort(
+                                sortedBescheinigungsGruppen,
+                                new Comparator<BerechtigungspruefungBescheinigungGruppeInfo>() {
+
+                                    @Override
+                                    public int compare(final BerechtigungspruefungBescheinigungGruppeInfo o1,
+                                            final BerechtigungspruefungBescheinigungGruppeInfo o2) {
+                                        final String alkisId1 = o1.getFlurstuecke().iterator().next().getAlkisId();
+                                        final String alkisId2 = o2.getFlurstuecke().iterator().next().getAlkisId();
+                                        return alkisId1.compareTo(alkisId2);
+                                    }
+                                });
+                            for (final BerechtigungspruefungBescheinigungGruppeInfo bescheinigungsGruppe
+                                        : sortedBescheinigungsGruppen) {
+                                downloads.add(createBescheinigungPdf(
+                                        bescheinigungsGruppe,
+                                        (jobname != null) ? jobname : downloadInfo.getAuftragsnummer(),
+                                        downloadInfo.getAuftragsnummer(),
+                                        downloadInfo.getProduktbezeichnung(),
+                                        anfrageSchluessel,
+                                        downloadInfo.getBescheinigungsInfo().getDatum(),
+                                        ++number,
+                                        max,
+                                        connectionContext));
+                                // alle Baulasten ermitteln
+                                for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
+                                            : bescheinigungsGruppe.getBaulastenBelastet()) {
+                                    allBaulasten.add(CachedInfoBaulastRetriever.getInstance().loadBaulast(
+                                            baulastInfo,
+                                            connectionContext));
+                                }
+                                for (final BerechtigungspruefungBescheinigungBaulastInfo baulastInfo
+                                            : bescheinigungsGruppe.getBaulastenBeguenstigt()) {
+                                    allBaulasten.add(CachedInfoBaulastRetriever.getInstance().loadBaulast(
+                                            baulastInfo,
+                                            connectionContext));
+                                }
+                            }
+
+                            if (!allBaulasten.isEmpty()) {
+                                // Download: Bericht für alle Baulasten
+                                downloads.addAll(BaulastenReportGenerator.generateRasterDownloads(
+                                        jobname,
+                                        allBaulasten,
+                                        downloadInfo.getAuftragsnummer(),
+                                        downloadInfo.getProduktbezeichnung(),
+                                        connectionContext));
+                            }
+                        }
+                    } catch (final Exception ex) {
+                        LOG.fatal(ex, ex);
+                    }
+
+                    return downloads;
+                }
+            };
+        return new BackgroundTaskMultipleDownload(null, jobname, fetchDownloadsTask);
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1076,6 +1299,78 @@ public class AlkisProductDownloadHelper {
             this.winkel = winkel;
             this.x = x;
             this.y = y;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    static class TxtDownload extends AbstractDownload {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final String content;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new TxtDownload object.
+         *
+         * @param  content    DOCUMENT ME!
+         * @param  directory  DOCUMENT ME!
+         * @param  title      DOCUMENT ME!
+         * @param  filename   DOCUMENT ME!
+         * @param  extension  DOCUMENT ME!
+         */
+        public TxtDownload(
+                final String content,
+                final String directory,
+                final String title,
+                final String filename,
+                final String extension) {
+            this.content = content;
+            this.directory = directory;
+            this.title = title;
+
+            status = Download.State.WAITING;
+
+            determineDestinationFile(filename, extension);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void run() {
+            if (status != Download.State.WAITING) {
+                return;
+            }
+
+            status = Download.State.RUNNING;
+
+            stateChanged();
+
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(fileToSaveTo, false));
+                writer.write(content);
+            } catch (Exception ex) {
+                error(ex);
+            } finally {
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    } catch (Exception e) {
+                        log.warn("Exception occured while closing file.", e);
+                    }
+                }
+            }
+
+            if (status == Download.State.RUNNING) {
+                status = Download.State.COMPLETED;
+                stateChanged();
+            }
         }
     }
 }

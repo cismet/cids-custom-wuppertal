@@ -15,15 +15,7 @@ package de.cismet.cids.custom.utils;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
-import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
-
 import com.vividsolutions.jts.geom.Geometry;
-
-import de.aedsicad.aaaweb.service.util.Buchungsblatt;
-import de.aedsicad.aaaweb.service.util.Buchungsstelle;
-import de.aedsicad.aaaweb.service.util.LandParcel;
 
 import org.apache.log4j.Logger;
 
@@ -32,7 +24,6 @@ import java.awt.Component;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,7 +32,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CancellationException;
 
 import javax.swing.JOptionPane;
@@ -51,20 +41,13 @@ import javax.swing.text.BadLocationException;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungInfo;
-import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
-import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
-import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
@@ -88,16 +71,12 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
     private static BaulastBescheinigungDialog INSTANCE;
 
-    private static final Map<CidsBean, Buchungsblatt> BUCHUNGSBLATT_CACHE = new HashMap<CidsBean, Buchungsblatt>();
-
     //~ Instance fields --------------------------------------------------------
 
     private final Collection<ProductGroupAmount> prodAmounts = new ArrayList<>();
-    private final Collection<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen = new HashSet<>();
+    private BerechtigungspruefungBescheinigungDownloadInfo downloadInfo = null;
 
     private SwingWorker worker;
-    private final ProtocolWriter protocolWriter = new ProtocolWriter();
-
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -358,11 +337,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         try {
             this.connectionContext = connectionContext;
             final List<CidsBean> flurstueckeList = new ArrayList<>(new HashSet<>(flurstuecke));
-            prodAmounts.clear();
-            bescheinigungsgruppen.clear();
 
             jTextField2.setText(new SimpleDateFormat("yy").format(new Date()) + "-");
-
             jPanel1.setVisible(!BillingPopup.hasUserBillingMode(getConnectionContext()));
 
             prepareDownload(flurstueckeList);
@@ -392,15 +368,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                 LOG.info("could not check config attr", ex);
             }
 
-            final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
-            final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
-                new BerechtigungspruefungBescheinigungDownloadInfo(
-                    hasBilling ? null : jTextField2.getText(),
-                    hasBilling ? null : jTextField1.getText(),
-                    protokollPane.getText(),
-                    new BerechtigungspruefungBescheinigungInfo(
-                        new Date(),
-                        new HashSet<>(bescheinigungsgruppen)));
             if (BillingPopup.doBilling(
                             "blab_be",
                             "no.yet",
@@ -413,11 +380,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             prodAmounts.toArray(new ProductGroupAmount[0]))) {
                 final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
                 if ((berechnung != null) && !berechnung.trim().isEmpty()) {
-                    protocolWriter.addMessage("\n===\n\nGebührenberechnung:\n");
-                    protocolWriter.addMessage(berechnung);
+                    addMessage("\n===\n\nGebührenberechnung:\n");
+                    addMessage(berechnung);
                 }
 
-                BaulastBescheinigungUtils.doDownload(downloadInfo, "", getConnectionContext());
+                AlkisProductDownloadHelper.downloadBaulastbescheinigung(downloadInfo, "", getConnectionContext());
             }
         } catch (final Exception ex) {
             LOG.error(ex, ex);
@@ -461,17 +428,19 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
             setStatusMessage("Bescheinigung wird vorbereitet...");
 
-            worker = new SwingWorker<Collection[], Void>() {
+            worker = new SwingWorker<BerechtigungspruefungBescheinigungDownloadInfo, Void>() {
 
                     @Override
-                    protected Collection[] doInBackground() throws Exception {
+                    protected BerechtigungspruefungBescheinigungDownloadInfo doInBackground() throws Exception {
+                        final StringBuffer protocolBuffer = new StringBuffer();
+
                         final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap = new HashMap<>();
                         final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap =
                             new HashMap<>();
 
-                        protocolWriter.addMessage("Baulastbescheinigungs-Protokoll für "
-                                    + ((flurstuecke.size() == 1) ? "folgendes Flurstück" : "folgende Flurstücke")
-                                    + ":");
+                        protocolBuffer.append("Baulastbescheinigungs-Protokoll für ")
+                                .append((flurstuecke.size() == 1) ? "folgendes Flurstück" : "folgende Flurstücke")
+                                .append(":");
 
                         Collections.sort(flurstuecke, new Comparator<CidsBean>() {
 
@@ -484,62 +453,81 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             });
 
                         for (final CidsBean flurstueck : flurstuecke) {
-                            protocolWriter.addMessage(" * " + flurstueck);
+                            protocolBuffer.append(" * ").append(flurstueck);
                         }
 
                         setStatusMessage("Buchungsblätter werden analysiert...");
 
                         final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap =
-                            createGrundstueckeToFlurstueckeMap(flurstuecke);
+                            ClientBaulastBescheinigungHelper.getInstance()
+                                    .createGrundstueckeToFlurstueckeMap(flurstuecke, protocolBuffer);
 
                         setStatusMessage("Baulasten werden gesucht...");
 
-                        BaulastBescheinigungUtils.fillFlurstueckeToBaulastenMaps(
-                            flurstuecke,
-                            flurstueckeToBaulastenBelastetMap,
-                            flurstueckeToBaulastenBeguenstigtMap,
-                            protocolWriter);
-
-                        setStatusMessage("Gebühr wird berechnet...");
-
-                        final Collection<ProductGroupAmount> prodAmounts = BaulastBescheinigungUtils.createBilling(
-                                grundstueckeToFlurstueckeMap,
-                                flurstueckeToBaulastenBelastetMap,
-                                flurstueckeToBaulastenBeguenstigtMap,
-                                protocolWriter);
+                        ClientBaulastBescheinigungHelper.getInstance()
+                                .fillFlurstueckeToBaulastenMaps(
+                                    flurstuecke,
+                                    flurstueckeToBaulastenBelastetMap,
+                                    flurstueckeToBaulastenBeguenstigtMap,
+                                    protocolBuffer);
 
                         final Collection<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen =
-                            BaulastBescheinigungUtils.createBescheinigungsGruppen(
-                                BaulastBescheinigungUtils.createFlurstueckeToGrundstueckeMap(
-                                    flurstuecke,
-                                    grundstueckeToFlurstueckeMap),
-                                flurstueckeToBaulastenBeguenstigtMap,
-                                flurstueckeToBaulastenBelastetMap,
-                                protocolWriter);
+                            ClientBaulastBescheinigungHelper.getInstance()
+                                    .createBescheinigungsGruppen(
+                                        ClientBaulastBescheinigungHelper.getInstance()
+                                            .createFlurstueckeToGrundstueckeMap(
+                                                flurstuecke,
+                                                grundstueckeToFlurstueckeMap),
+                                        flurstueckeToBaulastenBeguenstigtMap,
+                                        flurstueckeToBaulastenBelastetMap,
+                                        protocolBuffer);
 
-                        return new Collection[] { prodAmounts, bescheinigungsgruppen };
+                        final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
+                        final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
+                            new BerechtigungspruefungBescheinigungDownloadInfo(
+                                null,
+                                null,
+                                protocolBuffer.toString(),
+                                new BerechtigungspruefungBescheinigungInfo(
+                                    new Date(),
+                                    new HashSet<>(bescheinigungsgruppen)));
+                        downloadInfo.setAuftragsnummer(hasBilling ? null : jTextField2.getText());
+                        downloadInfo.setProduktbezeichnung(hasBilling ? null : jTextField1.getText());
+
+                        return downloadInfo;
                     }
 
                     @Override
                     protected void done() {
                         boolean errorOccurred = false;
                         try {
-                            final Collection[] result = get();
-                            prodAmounts.addAll(result[0]);
-                            bescheinigungsgruppen.addAll(result[1]);
+                            prodAmounts.clear();
+                            downloadInfo = get();
+
+                            final StringBuffer protocolBuffer = new StringBuffer(downloadInfo.getProtokoll());
+                            addMessage(protocolBuffer.toString());
+
+                            setStatusMessage("Gebühr wird berechnet...");
+                            final Collection<ProductGroupAmount> prodAmounts = ClientBaulastBescheinigungHelper
+                                        .getInstance()
+                                        .createBilling(downloadInfo.getBescheinigungsInfo(),
+                                            protocolBuffer);
+                            prodAmounts.addAll(prodAmounts);
                         } catch (final Exception ex) {
+                            downloadInfo = null;
+                            prodAmounts.clear();
                             errorOccurred = true;
                             final String errMessage;
                             final Throwable exception;
-                            if (ex.getCause() instanceof BaBeException) {
+                            if (ex.getCause() instanceof ClientBaulastBescheinigungHelper.BaBeException) {
                                 exception = ex.getCause();
                                 errMessage = exception.getMessage();
-                                protocolWriter.addError(errMessage);
+                                addError(errMessage);
                             } else {
                                 exception = ex;
                                 LOG.error(ex, ex);
                                 errMessage = exception.getMessage();
-                                protocolWriter.addError("Es ist ein Fehler aufgetreten: " + errMessage);
+                                addError("Es ist ein Fehler aufgetreten: " + errMessage);
                             }
                             if (!(ex instanceof CancellationException)) {
                                 JOptionPane.showMessageDialog(
@@ -651,226 +639,26 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         busyStatusPanel1.setStatusMessage(message);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   flurstuecke  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception             DOCUMENT ME!
-     * @throws  InterruptedException  DOCUMENT ME!
-     */
-    private Map<String, Collection<CidsBean>> createGrundstueckeToFlurstueckeMap(
-            final Collection<CidsBean> flurstuecke) throws Exception {
-        protocolWriter.addMessage("\n===\n\nZuordnung der Flurstücke zu Grundstücken...");
-
-        final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap = new HashMap<>();
-
-        for (final CidsBean flurstueckBean : flurstuecke) {
-            final List<CidsBean> buchungsblaetter = new ArrayList<>(flurstueckBean.getBeanCollectionProperty(
-                        "buchungsblaetter"));
-            if (buchungsblaetter.size() == 1) {
-                protocolWriter.addMessage("\nFlurstück: " + flurstueckBean + " (1 Buchungsblatt):");
-            } else {
-                protocolWriter.addMessage("\nFlurstück: " + flurstueckBean + " (" + buchungsblaetter.size()
-                            + " Buchungsblätter):");
-            }
-            Collections.sort(buchungsblaetter, new Comparator<CidsBean>() {
-
-                    @Override
-                    public int compare(final CidsBean o1, final CidsBean o2) {
-                        final String s1 = (o1 == null) ? "" : (String)o1.getProperty("buchungsblattcode");
-                        final String s2 = (o2 == null) ? "" : (String)o2.getProperty("buchungsblattcode");
-                        return s1.compareTo(s2);
-                    }
-                });
-
-//            boolean teileigentumAlreadyCounted = false;
-            boolean grundstueckFound = false;
-            for (final CidsBean buchungsblattBean : buchungsblaetter) {
-                if (grundstueckFound) {
-                    break; // we are done
-                }
-                if (buchungsblattBean != null) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        throw new InterruptedException();
-                    }
-                    protocolWriter.addMessage(" * analysiere Buchungsblatt " + buchungsblattBean + " ...");
-                    final Buchungsblatt buchungsblatt = getBuchungsblatt(buchungsblattBean);
-
-                    if (Thread.currentThread().isInterrupted()) {
-                        throw new InterruptedException();
-                    }
-                    final List<Buchungsstelle> buchungsstellen = Arrays.asList(buchungsblatt.getBuchungsstellen());
-                    Collections.sort(buchungsstellen, new Comparator<Buchungsstelle>() {
-
-                            @Override
-                            public int compare(final Buchungsstelle o1, final Buchungsstelle o2) {
-                                final String s1 = (o1 == null) ? "" : o1.getSequentialNumber();
-                                final String s2 = (o2 == null) ? "" : o2.getSequentialNumber();
-                                return s1.compareTo(s2);
-                            }
-                        });
-
-                    for (final Buchungsstelle buchungsstelle : buchungsstellen) {
-                        if (grundstueckFound) {
-                            break; // we are done
-                        }
-                        if (Thread.currentThread().isInterrupted()) {
-                            throw new InterruptedException();
-                        }
-                        boolean flurstueckPartOfStelle = false;
-                        final LandParcel[] landparcels = AlkisProducts.getLandparcelFromBuchungsstelle(
-                                buchungsstelle);
-                        if (landparcels != null) {
-                            for (final LandParcel lp : landparcels) {
-                                if (((String)flurstueckBean.getProperty("alkis_id")).equals(
-                                                lp.getLandParcelCode())) {
-                                    flurstueckPartOfStelle = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (flurstueckPartOfStelle) {
-                            final String[] bbc = buchungsblatt.getBuchungsblattCode().split("-");
-                            final String gemarkungsnummer = bbc[0].substring(2).trim();
-                            final String buchungsblattnummer = bbc[1].trim();
-                            final MetaClass mcGemarkung = CidsBean.getMetaClassFromTableName(
-                                    "WUNDA_BLAU",
-                                    "gemarkung",
-                                    getConnectionContext());
-
-                            final String pruefungQuery = "SELECT " + mcGemarkung.getID()
-                                        + ", " + mcGemarkung.getTableName() + "." + mcGemarkung.getPrimaryKey() + " "
-                                        + "FROM " + mcGemarkung.getTableName() + " "
-                                        + "WHERE " + mcGemarkung.getTableName() + ".gemarkungsnummer = "
-                                        + Integer.parseInt(gemarkungsnummer) + " "
-                                        + "LIMIT 1;";
-                            final MetaObject[] mos = SessionManager.getProxy()
-                                        .getMetaObjectByQuery(pruefungQuery, 0, getConnectionContext());
-
-                            final String key;
-                            if ((mos != null) && (mos.length > 0)) {
-                                final CidsBean gemarkung = mos[0].getBean();
-                                key = gemarkung.getProperty("name") + " "
-                                            + Integer.parseInt(buchungsblattnummer.substring(0, 5))
-                                            + buchungsblattnummer.substring(5) + " / "
-                                            + Integer.parseInt(buchungsstelle.getSequentialNumber());
-                            } else {
-                                key = "[" + gemarkungsnummer + "] "
-                                            + Integer.parseInt(buchungsblattnummer.substring(0, 5))
-                                            + buchungsblattnummer.substring(5) + " / "
-                                            + Integer.parseInt(buchungsstelle.getSequentialNumber());
-                            }
-
-                            final String buchungsart = buchungsstelle.getBuchungsart();
-                            if ("Erbbaurecht".equals(buchungsart)) {
-                                protocolWriter.addMessage("   -> ignoriere " + key + " aufgrund der Buchungsart ("
-                                            + buchungsart + ")");
-                                continue;
-                            }
-
-                            if (!grundstueckeToFlurstueckeMap.containsKey(key)) {
-                                grundstueckeToFlurstueckeMap.put(key, new HashSet<CidsBean>());
-                            }
-
-                            final String buchungsartSuffix = "Grundstück".equals(buchungsart)
-                                ? "" : (" (" + buchungsart + ")");
-                            protocolWriter.addMessage("   => füge Flurstück " + flurstueckBean + " zu Grundstück \""
-                                        + key + " \"hinzu"
-                                        + buchungsartSuffix);
-                            grundstueckeToFlurstueckeMap.get(key).add(flurstueckBean);
-                            grundstueckFound = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return grundstueckeToFlurstueckeMap;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   buchungsblattBean  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    private Buchungsblatt getBuchungsblatt(final CidsBean buchungsblattBean) throws Exception {
-        Buchungsblatt buchungsblatt = null;
-
-        if (buchungsblattBean != null) {
-            buchungsblatt = BUCHUNGSBLATT_CACHE.get(buchungsblattBean);
-            if (buchungsblatt == null) {
-                final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
-                if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
-                    buchungsblatt = AlkisUtils.getInstance()
-                                .getBuchungsblattFromAlkisSOAPServerAction(AlkisProducts.fixBuchungslattCode(
-                                            buchungsblattcode),
-                                        getConnectionContext());
-                    BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);
-                }
-            }
-        }
-
-        return buchungsblatt;
-    }
-
     @Override
     public final ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 
-    //~ Inner Classes ----------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @param  message  DOCUMENT ME!
      */
-    static class BaBeException extends Exception {
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new BaBeException object.
-         *
-         * @param  message  DOCUMENT ME!
-         */
-        public BaBeException(final String message) {
-            super(message);
-        }
+    public void addMessage(final String message) {
+        protokollPane.addMessage(message, BusyLoggingTextPane.Styles.INFO);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @param  message  DOCUMENT ME!
      */
-    public class ProtocolWriter {
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  message  DOCUMENT ME!
-         */
-        public void addMessage(final String message) {
-            getInstance().protokollPane.addMessage(message, BusyLoggingTextPane.Styles.INFO);
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  message  DOCUMENT ME!
-         */
-        public void addError(final String message) {
-            protokollPane.addMessage(message, BusyLoggingTextPane.Styles.ERROR);
-        }
+    public void addError(final String message) {
+        protokollPane.addMessage(message, BusyLoggingTextPane.Styles.ERROR);
     }
 }
