@@ -48,6 +48,7 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.utils.berechtigungspruefung.DownloadInfoFactory;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 
@@ -659,7 +660,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                 parcelCodes.add(AlkisProducts.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
             }
 
-            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = DownloadInfoFactory
                         .createBerechtigungspruefungAlkisEinzelnachweisDownloadInfo(product, parcelCodes);
             final String billingKey = ClientAlkisProducts.getInstance().getBillingKey(product);
             if ((billingKey == null)
@@ -698,7 +699,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             parcelCodes.add(AlkisProducts.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean()));
         }
 
-        final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = AlkisProductDownloadHelper
+        final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = DownloadInfoFactory
                     .createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
         AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo, getConnectionContext());
     }

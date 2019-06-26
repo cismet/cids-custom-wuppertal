@@ -61,6 +61,7 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.utils.berechtigungspruefung.DownloadInfoFactory;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -458,7 +459,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         final Date stichtag = stichtagDialog.getDate();
         try {
             if (stichtag != null) {
-                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = DownloadInfoFactory
                             .createAlkisBuchungsblattnachweisDownloadInfo(
                                 product,
                                 stichtag,
@@ -724,7 +725,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 buchungsblattCodes.add(getCompleteBuchungsblattCode(cidsBeanWrapper.getCidsBean()));
             }
 
-            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = DownloadInfoFactory
                         .createAlkisBuchungsblattachweisDownloadInfo(product, buchungsblattCodes);
 
             final String billingKey = ClientAlkisProducts.getInstance().getBillingKey(product);

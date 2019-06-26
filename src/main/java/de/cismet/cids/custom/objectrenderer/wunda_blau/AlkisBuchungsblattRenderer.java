@@ -102,6 +102,7 @@ import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
+import de.cismet.cids.custom.utils.berechtigungspruefung.DownloadInfoFactory;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -1325,7 +1326,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             }
             final List<String> bucungsblattCodes = Arrays.asList(buchungsblattCode);
 
-            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+            final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = DownloadInfoFactory
                         .createAlkisBuchungsblattachweisDownloadInfo(
                             product,
                             bucungsblattCodes);
@@ -1636,7 +1637,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             if (stichtag != null) {
                 final List<String> buchungsblattCodes = Arrays.asList(getCompleteBuchungsblattCode());
 
-                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = AlkisProductDownloadHelper
+                final BerechtigungspruefungAlkisEinzelnachweisDownloadInfo downloadInfo = DownloadInfoFactory
                             .createAlkisBuchungsblattnachweisDownloadInfo(
                                 product,
                                 stichtag,

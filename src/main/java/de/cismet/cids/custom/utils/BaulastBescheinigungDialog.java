@@ -73,7 +73,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Collection<ProductGroupAmount> prodAmounts = new ArrayList<>();
     private BerechtigungspruefungBescheinigungDownloadInfo downloadInfo = null;
 
     private SwingWorker worker;
@@ -368,6 +367,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                 LOG.info("could not check config attr", ex);
             }
 
+            final Collection<ProductGroupAmount> prodAmounts = new ArrayList<>();
+            for (final HashMap.Entry<String, Integer> amount : downloadInfo.getAmounts().entrySet()) {
+                prodAmounts.add(new ProductGroupAmount(amount.getKey(), amount.getValue()));
+            }
             if (BillingPopup.doBilling(
                             "blab_be",
                             "no.yet",
@@ -482,15 +485,22 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                         flurstueckeToBaulastenBelastetMap,
                                         protocolBuffer);
 
+                        final BerechtigungspruefungBescheinigungInfo bescheinigungInfo =
+                            new BerechtigungspruefungBescheinigungInfo(
+                                new Date(),
+                                new HashSet<>(bescheinigungsgruppen));
+                        setStatusMessage("Gebühr wird berechnet...");
+                        final HashMap<String, Integer> prodAmounts = ClientBaulastBescheinigungHelper.getInstance()
+                                    .createBilling(bescheinigungInfo, protocolBuffer);
+
                         final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
                         final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
                             new BerechtigungspruefungBescheinigungDownloadInfo(
                                 null,
                                 null,
                                 protocolBuffer.toString(),
-                                new BerechtigungspruefungBescheinigungInfo(
-                                    new Date(),
-                                    new HashSet<>(bescheinigungsgruppen)));
+                                bescheinigungInfo,
+                                prodAmounts);
                         downloadInfo.setAuftragsnummer(hasBilling ? null : jTextField2.getText());
                         downloadInfo.setProduktbezeichnung(hasBilling ? null : jTextField1.getText());
 
@@ -501,21 +511,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                     protected void done() {
                         boolean errorOccurred = false;
                         try {
-                            prodAmounts.clear();
                             downloadInfo = get();
-
-                            final StringBuffer protocolBuffer = new StringBuffer(downloadInfo.getProtokoll());
-                            addMessage(protocolBuffer.toString());
-
-                            setStatusMessage("Gebühr wird berechnet...");
-                            final Collection<ProductGroupAmount> prodAmounts = ClientBaulastBescheinigungHelper
-                                        .getInstance()
-                                        .createBilling(downloadInfo.getBescheinigungsInfo(),
-                                            protocolBuffer);
-                            prodAmounts.addAll(prodAmounts);
+                            addMessage(downloadInfo.getProtokoll());
                         } catch (final Exception ex) {
                             downloadInfo = null;
-                            prodAmounts.clear();
                             errorOccurred = true;
                             final String errMessage;
                             final Throwable exception;
