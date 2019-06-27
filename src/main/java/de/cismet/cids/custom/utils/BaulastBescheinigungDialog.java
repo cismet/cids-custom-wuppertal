@@ -25,13 +25,10 @@ import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CancellationException;
 
 import javax.swing.JOptionPane;
@@ -43,9 +40,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.alkis.BaulastBescheinigungHelper;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungInfo;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -429,82 +425,33 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
             pack();
 
-            setStatusMessage("Bescheinigung wird vorbereitet...");
-
             worker = new SwingWorker<BerechtigungspruefungBescheinigungDownloadInfo, Void>() {
 
                     @Override
                     protected BerechtigungspruefungBescheinigungDownloadInfo doInBackground() throws Exception {
-                        final StringBuffer protocolBuffer = new StringBuffer();
-
-                        final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap = new HashMap<>();
-                        final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap =
-                            new HashMap<>();
-
-                        protocolBuffer.append("Baulastbescheinigungs-Protokoll für ")
-                                .append((flurstuecke.size() == 1) ? "folgendes Flurstück" : "folgende Flurstücke")
-                                .append(":");
-
-                        Collections.sort(flurstuecke, new Comparator<CidsBean>() {
-
-                                @Override
-                                public int compare(final CidsBean o1, final CidsBean o2) {
-                                    final String s1 = (o1 == null) ? "" : (String)o1.getProperty("alkis_id");
-                                    final String s2 = (o2 == null) ? "" : (String)o2.getProperty("alkis_id");
-                                    return s1.compareTo(s2);
-                                }
-                            });
-
-                        for (final CidsBean flurstueck : flurstuecke) {
-                            protocolBuffer.append(" * ").append(flurstueck);
-                        }
-
-                        setStatusMessage("Buchungsblätter werden analysiert...");
-
-                        final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap =
-                            ClientBaulastBescheinigungHelper.getInstance()
-                                    .createGrundstueckeToFlurstueckeMap(flurstuecke, protocolBuffer);
-
-                        setStatusMessage("Baulasten werden gesucht...");
-
-                        ClientBaulastBescheinigungHelper.getInstance()
-                                .fillFlurstueckeToBaulastenMaps(
-                                    flurstuecke,
-                                    flurstueckeToBaulastenBelastetMap,
-                                    flurstueckeToBaulastenBeguenstigtMap,
-                                    protocolBuffer);
-
-                        final Collection<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen =
-                            ClientBaulastBescheinigungHelper.getInstance()
-                                    .createBescheinigungsGruppen(
-                                        ClientBaulastBescheinigungHelper.getInstance()
-                                            .createFlurstueckeToGrundstueckeMap(
-                                                flurstuecke,
-                                                grundstueckeToFlurstueckeMap),
-                                        flurstueckeToBaulastenBeguenstigtMap,
-                                        flurstueckeToBaulastenBelastetMap,
-                                        protocolBuffer);
-
-                        final BerechtigungspruefungBescheinigungInfo bescheinigungInfo =
-                            new BerechtigungspruefungBescheinigungInfo(
-                                new Date(),
-                                new HashSet<>(bescheinigungsgruppen));
-                        setStatusMessage("Gebühr wird berechnet...");
-                        final HashMap<String, Integer> prodAmounts = ClientBaulastBescheinigungHelper.getInstance()
-                                    .createBilling(bescheinigungInfo, protocolBuffer);
-
                         final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
-                        final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
-                            new BerechtigungspruefungBescheinigungDownloadInfo(
-                                null,
-                                null,
-                                protocolBuffer.toString(),
-                                bescheinigungInfo,
-                                prodAmounts);
-                        downloadInfo.setAuftragsnummer(hasBilling ? null : jTextField2.getText());
-                        downloadInfo.setProduktbezeichnung(hasBilling ? null : jTextField1.getText());
+                        return ClientBaulastBescheinigungHelper.getInstance()
+                                    .calculateDownloadInfo(
+                                        hasBilling ? null : jTextField2.getText(),
+                                        hasBilling ? null : jTextField1.getText(),
+                                        flurstuecke,
+                                        new BaulastBescheinigungHelper.ProtocolBuffer() {
 
-                        return downloadInfo;
+                                            @Override
+                                            public BaulastBescheinigungHelper.ProtocolBuffer append(
+                                                    final String string) {
+                                                addMessage(string);
+                                                return super.append(string);
+                                            }
+                                        },
+                                        new BaulastBescheinigungHelper.StatusHolder() {
+
+                                            @Override
+                                            public void setMessage(final String message) {
+                                                super.setMessage(message);
+                                                setStatusMessage(message);
+                                            }
+                                        });
                     }
 
                     @Override
@@ -512,7 +459,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                         boolean errorOccurred = false;
                         try {
                             downloadInfo = get();
-                            addMessage(downloadInfo.getProtokoll());
                         } catch (final Exception ex) {
                             downloadInfo = null;
                             errorOccurred = true;
