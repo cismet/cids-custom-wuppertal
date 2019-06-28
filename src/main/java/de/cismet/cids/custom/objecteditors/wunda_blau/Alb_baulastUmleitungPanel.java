@@ -40,7 +40,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
-import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
+import de.cismet.cids.custom.utils.BaulastenPictureFinder;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
@@ -272,9 +273,10 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                     final String lfdNummer = input.substring(input.length() - 2, input.length());
                     final List<String> res;
                     if (mode == MODE.LAGEPLAN) {
-                        res = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
+                        res = WebAccessBaulastenPictureFinder.getInstance().findPlanPicture(blattnummer, lfdNummer);
                     } else {
-                        res = BaulastenPictureFinder.findTextblattPicture(blattnummer, lfdNummer);
+                        res = WebAccessBaulastenPictureFinder.getInstance()
+                                    .findTextblattPicture(blattnummer, lfdNummer);
                     }
                     if ((res == null) || res.isEmpty()) {
                         return null;

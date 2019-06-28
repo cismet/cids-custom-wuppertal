@@ -56,12 +56,13 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ClientStaticProperties;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
+import de.cismet.cids.custom.utils.BaulastenPictureFinder;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -1339,9 +1340,9 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
      */
     private String getDocumentFilename() {
         if (currentDocument == LAGEPLAN_DOCUMENT) {
-            return BaulastenPictureFinder.getPlanPictureFilename(getCidsBean()).toString();
+            return WebAccessBaulastenPictureFinder.getInstance().getPlanPictureFilename(getCidsBean()).toString();
         } else {
-            return BaulastenPictureFinder.getTextblattPictureFilename(getCidsBean()).toString();
+            return WebAccessBaulastenPictureFinder.getInstance().getTextblattPictureFilename(getCidsBean()).toString();
         }
     }
 
@@ -1716,8 +1717,8 @@ public class Alb_picturePanel extends javax.swing.JPanel implements ConnectionCo
         @Override
         protected List<String>[] doInBackground() throws Exception {
             final List<String>[] result = new List[2];
-            result[TEXTBLATT_DOCUMENT] = BaulastenPictureFinder.findTextblattPicture(getCidsBean());
-            result[LAGEPLAN_DOCUMENT] = BaulastenPictureFinder.findPlanPicture(getCidsBean());
+            result[TEXTBLATT_DOCUMENT] = WebAccessBaulastenPictureFinder.getInstance().findTextblattPicture(getCidsBean());
+            result[LAGEPLAN_DOCUMENT] = WebAccessBaulastenPictureFinder.getInstance().findPlanPicture(getCidsBean());
 
             LOG.debug("Textblätter:" + result[TEXTBLATT_DOCUMENT]);
             LOG.debug("Lagepläne:" + result[LAGEPLAN_DOCUMENT]);

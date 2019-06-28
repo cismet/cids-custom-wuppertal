@@ -49,7 +49,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -270,13 +270,14 @@ public class BaulastenReportGenerator {
 
         final Collection<String> additionalFilesToDownload = new LinkedSet<>();
         for (final CidsBean selectedBaulast : selectedBaulasten) {
-            final List<String> documentListRasterdaten = BaulastenPictureFinder.findPlanPicture(
-                    selectedBaulast);
+            final List<String> documentListRasterdaten = WebAccessBaulastenPictureFinder.getInstance()
+                        .findPlanPicture(
+                            selectedBaulast);
             additionalFilesToDownload.addAll(documentListRasterdaten);
         }
 
         for (final String additionalFileToDownload : additionalFilesToDownload) {
-            final URL url = BaulastenPictureFinder.getUrlForDocument(additionalFileToDownload);
+            final URL url = WebAccessBaulastenPictureFinder.getInstance().getUrlForDocument(additionalFileToDownload);
             final String file = url.getFile().substring(url.getFile().lastIndexOf('/') + 1);
             final String filename = file.substring(0, file.lastIndexOf('.'));
             final String extension = file.substring(file.lastIndexOf('.'));
@@ -401,11 +402,13 @@ public class BaulastenReportGenerator {
                         if (Type.TEXTBLATT_PLAN_RASTER.equals(type)) {
                             int rasterPages = 0;
                             for (final CidsBean selectedBaulast : sortedBaulasten) {
-                                final List<String> documentListRasterdaten = BaulastenPictureFinder.findPlanPicture(
+                                final List<String> documentListRasterdaten = WebAccessBaulastenPictureFinder
+                                            .getInstance().findPlanPicture(
                                         selectedBaulast);
 
                                 for (final String document : documentListRasterdaten) {
-                                    final URL url = BaulastenPictureFinder.getUrlForDocument(document);
+                                    final URL url = WebAccessBaulastenPictureFinder.getInstance()
+                                                .getUrlForDocument(document);
 
                                     final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(
                                             url,
@@ -492,8 +495,9 @@ public class BaulastenReportGenerator {
                             final List<String> documentListTextblatt = new ArrayList<>();
                             final List<String> documentListLageplan = new ArrayList<>();
                             try {
-                                documentListTextblatt.addAll(BaulastenPictureFinder.findTextblattPicture(
-                                        selectedBaulast));
+                                documentListTextblatt.addAll(WebAccessBaulastenPictureFinder.getInstance()
+                                            .findTextblattPicture(
+                                                selectedBaulast));
                             } catch (final Exception ex) {
                                 // TODO: User feedback?
                                 LOG.warn("Could not include raster document for baulast '"
@@ -504,7 +508,8 @@ public class BaulastenReportGenerator {
                             }
 
                             if (Type.TEXTBLATT_PLAN.equals(type) || Type.TEXTBLATT_PLAN_RASTER.equals(type)) {
-                                documentListLageplan.addAll(BaulastenPictureFinder.findPlanPicture(selectedBaulast));
+                                documentListLageplan.addAll(WebAccessBaulastenPictureFinder.getInstance()
+                                            .findPlanPicture(selectedBaulast));
                             }
                             if (documentListTextblatt.isEmpty()) {
                                 LOG.info("No document URLS found for the Baulasten report");
@@ -514,7 +519,8 @@ public class BaulastenReportGenerator {
                             documentList.addAll(documentListLageplan);
                             for (final String document : documentList) {
                                 try {
-                                    final URL url = BaulastenPictureFinder.getUrlForDocument(document);
+                                    final URL url = WebAccessBaulastenPictureFinder.getInstance()
+                                                .getUrlForDocument(document);
                                     final WebAccessMultiPagePictureReader reader = new WebAccessMultiPagePictureReader(
                                             url,
                                             false,
