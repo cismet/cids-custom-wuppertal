@@ -16,7 +16,6 @@ import Sirius.navigator.connection.SessionManager;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.newuser.User;
 
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 
@@ -48,26 +47,32 @@ public class ClientBaulastBescheinigungHelper extends BaulastBescheinigungHelper
 
     private static final Map<CidsBean, Buchungsblatt> BUCHUNGSBLATT_CACHE = new HashMap<CidsBean, Buchungsblatt>();
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ClientBaulastBescheinigungHelper object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public ClientBaulastBescheinigungHelper(final ConnectionContext connectionContext) {
+        super(SessionManager.getSession().getUser(), null, connectionContext);
+    }
+
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    protected Collection executeSearch(final CidsServerSearch serverSearch,
-            final User user,
-            final ConnectionContext connectionContext) throws Exception {
-        return SessionManager.getProxy().customServerSearch(serverSearch, connectionContext);
+    protected Collection executeSearch(final CidsServerSearch serverSearch) throws Exception {
+        return SessionManager.getProxy().customServerSearch(serverSearch, getConnectionContext());
     }
 
     @Override
-    protected MetaObject getMetaObject(final int oid, final int cid, final User user, final ConnectionContext cc)
-            throws Exception {
-        return SessionManager.getProxy().getMetaObject(oid, cid, "WUNDA_BLAU", cc);
+    protected MetaObject getMetaObject(final int oid, final int cid) throws Exception {
+        return SessionManager.getProxy().getMetaObject(oid, cid, "WUNDA_BLAU", getConnectionContext());
     }
 
     @Override
-    protected MetaObject[] getMetaObjects(final String query,
-            final User user,
-            final ConnectionContext connectionContext) throws Exception {
-        return SessionManager.getProxy().getMetaObjectByQuery(query, 0, connectionContext);
+    protected MetaObject[] getMetaObjects(final String query) throws Exception {
+        return SessionManager.getProxy().getMetaObjectByQuery(query, 0, getConnectionContext());
     }
 
     @Override
@@ -97,36 +102,5 @@ public class ClientBaulastBescheinigungHelper extends BaulastBescheinigungHelper
         }
 
         return buchungsblatt;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static ClientBaulastBescheinigungHelper getInstance() {
-        return LazyInitialiser.INSTANCE;
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private static final class LazyInitialiser {
-
-        //~ Static fields/initializers -----------------------------------------
-
-        private static final ClientBaulastBescheinigungHelper INSTANCE = new ClientBaulastBescheinigungHelper();
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new LazyInitialiser object.
-         */
-        private LazyInitialiser() {
-        }
     }
 }

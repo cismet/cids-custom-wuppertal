@@ -430,28 +430,28 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                     @Override
                     protected BerechtigungspruefungBescheinigungDownloadInfo doInBackground() throws Exception {
                         final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
-                        return ClientBaulastBescheinigungHelper.getInstance()
-                                    .calculateDownloadInfo(
-                                        hasBilling ? null : jTextField2.getText(),
-                                        hasBilling ? null : jTextField1.getText(),
-                                        flurstuecke,
-                                        new BaulastBescheinigungHelper.ProtocolBuffer() {
+                        return
+                            new ClientBaulastBescheinigungHelper(getConnectionContext()).calculateDownloadInfo(
+                                hasBilling ? null : jTextField2.getText(),
+                                hasBilling ? null : jTextField1.getText(),
+                                flurstuecke,
+                                new BaulastBescheinigungHelper.ProtocolBuffer() {
 
-                                            @Override
-                                            public BaulastBescheinigungHelper.ProtocolBuffer append(
-                                                    final String string) {
-                                                addMessage(string);
-                                                return super.append(string);
-                                            }
-                                        },
-                                        new BaulastBescheinigungHelper.StatusHolder() {
+                                    @Override
+                                    public BaulastBescheinigungHelper.ProtocolBuffer appendLine(
+                                            final String string) {
+                                        addMessage(string);
+                                        return super.appendLine(string);
+                                    }
+                                },
+                                new BaulastBescheinigungHelper.StatusHolder() {
 
-                                            @Override
-                                            public void setMessage(final String message) {
-                                                super.setMessage(message);
-                                                setStatusMessage(message);
-                                            }
-                                        });
+                                    @Override
+                                    public void setMessage(final String message) {
+                                        super.setMessage(message);
+                                        setStatusMessage(message);
+                                    }
+                                });
                     }
 
                     @Override

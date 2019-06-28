@@ -22,9 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.apache.log4j.Logger;
 
 import java.awt.Component;
@@ -32,19 +29,14 @@ import java.awt.Component;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
-import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -63,12 +55,11 @@ import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.Berechti
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.BaulastBescheinigungReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-
-import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -79,8 +70,6 @@ import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
-
-import static de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator.createFertigungsVermerk;
 
 /**
  * DOCUMENT ME!
@@ -93,13 +82,6 @@ public class AlkisProductDownloadHelper {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(AlkisProductDownloadHelper.class);
-    private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
-    private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
-    private static final String PARAMETER_PRUEFKEY = "PRUEFKEY";
-    private static final String PARAMETER_HAS_BELASTET = "HAS_BELASTET";
-    private static final String PARAMETER_HAS_BEGUENSTIGT = "HAS_BEGUENSTIGT";
-    private static final String PARAMETER_FABRICATIONNOTICE = "FABRICATIONNOTICE";
-    private static final String PARAMETER_FABRICATIONDATE = "FABRICATIONDATE";
 
     //~ Methods ----------------------------------------------------------------
 
@@ -726,77 +708,32 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param   bescheinigungsGruppe  DOCUMENT ME!
-     * @param   jobname               DOCUMENT ME!
-     * @param   jobnumber             DOCUMENT ME!
-     * @param   projectName           DOCUMENT ME!
-     * @param   anfrageSchluessel     DOCUMENT ME!
-     * @param   fabricationdate       DOCUMENT ME!
-     * @param   number                projectname DOCUMENT ME!
-     * @param   max                   DOCUMENT ME!
-     * @param   connectionContext     DOCUMENT ME!
+     * @param   bescheinigungsGruppeInfo  DOCUMENT ME!
+     * @param   jobName                   DOCUMENT ME!
+     * @param   jobNumber                 DOCUMENT ME!
+     * @param   projectName               DOCUMENT ME!
+     * @param   anfrageSchluessel         DOCUMENT ME!
+     * @param   fabricationdate           DOCUMENT ME!
+     * @param   number                    projectname DOCUMENT ME!
+     * @param   max                       DOCUMENT ME!
+     * @param   connectionContext         DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     private static Download createBescheinigungPdf(
-            final BerechtigungspruefungBescheinigungGruppeInfo bescheinigungsGruppe,
-            final String jobname,
-            final String jobnumber,
+            final BerechtigungspruefungBescheinigungGruppeInfo bescheinigungsGruppeInfo,
+            final String jobName,
+            final String jobNumber,
             final String projectName,
             final String anfrageSchluessel,
             final Date fabricationdate,
             final int number,
             final int max,
             final ConnectionContext connectionContext) throws Exception {
-        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
-            new JasperReportDownload.JasperReportDataSourceGenerator() {
-
-                @Override
-                public JRDataSource generateDataSource() {
-                    try {
-                        final Collection<BerechtigungspruefungBescheinigungGruppeInfo> reportBeans = Arrays.asList(
-                                new BerechtigungspruefungBescheinigungGruppeInfo[] { bescheinigungsGruppe });
-                        final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-                        return dataSource;
-                    } catch (final Exception ex) {
-                        LOG.warn(ex, ex);
-                        return null;
-                    }
-                }
-            };
-
-        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
-            new JasperReportDownload.JasperReportParametersGenerator() {
-
-                @Override
-                public Map generateParamters() {
-                    try {
-                        final HashMap parameters = new HashMap();
-                        parameters.put(PARAMETER_JOBNUMBER, jobnumber);
-                        parameters.put(PARAMETER_PROJECTNAME, projectName);
-                        parameters.put(PARAMETER_PRUEFKEY, anfrageSchluessel);
-
-                        parameters.put(PARAMETER_HAS_BELASTET, !bescheinigungsGruppe.getBaulastenBelastet().isEmpty());
-                        parameters.put(
-                            PARAMETER_FABRICATIONDATE,
-                            new SimpleDateFormat("dd.MM.yyyy").format(fabricationdate));
-                        parameters.put(
-                            PARAMETER_HAS_BEGUENSTIGT,
-                            !bescheinigungsGruppe.getBaulastenBeguenstigt().isEmpty());
-                        parameters.put(
-                            PARAMETER_FABRICATIONNOTICE,
-                            createFertigungsVermerk(SessionManager.getSession().getUser(), connectionContext));
-                        return parameters;
-                    } catch (final Exception ex) {
-                        LOG.warn(ex, ex);
-                        return null;
-                    }
-                }
-            };
-
-        final Collection<BerechtigungspruefungBescheinigungFlurstueckInfo> fls = bescheinigungsGruppe.getFlurstuecke();
+        final Collection<BerechtigungspruefungBescheinigungFlurstueckInfo> fls =
+            bescheinigungsGruppeInfo.getFlurstuecke();
         final boolean ua = (fls.size() > 1);
         final String title = "Bescheinigung " + fls.iterator().next().getAlkisId() + (ua ? " (ua)" : "")
                     + " " + number + "/" + max;
@@ -804,15 +741,38 @@ public class AlkisProductDownloadHelper {
                     + (ua ? ".ua" : "")
                     + "_" + number;
 
-        final JasperReportDownload download = new JasperReportDownload(
-                "/de/cismet/cids/custom/wunda_blau/res/baulastbescheinigung.jasper",
-                parametersGenerator,
-                dataSourceGenerator,
-                jobname,
-                title,
-                fileName);
+        final ServerActionParameter[] saps = new ServerActionParameter[] {
+                new ServerActionParameter<>(
+                    BaulastBescheinigungReportServerAction.Parameter.BESCHEINIGUNGGRUPPE_INFO.toString(),
+                    new ObjectMapper().writeValueAsString(bescheinigungsGruppeInfo)),
+                new ServerActionParameter<>(
+                    BaulastBescheinigungReportServerAction.Parameter.FABRICATION_DATE.toString(),
+                    fabricationdate.getTime()),
+                new ServerActionParameter<>(
+                    BaulastBescheinigungReportServerAction.Parameter.FERTIGUNGS_VERMERK.toString(),
+                    BaulastenReportGenerator.createFertigungsVermerk(
+                        SessionManager.getSession().getUser(),
+                        connectionContext)),
+                new ServerActionParameter<>(
+                    BaulastBescheinigungReportServerAction.Parameter.JOB_NUMBER.toString(),
+                    jobNumber),
+                new ServerActionParameter<>(
+                    BaulastBescheinigungReportServerAction.Parameter.PROJECT_NAME.toString(),
+                    projectName),
+                new ServerActionParameter<>(
+                    BaulastBescheinigungReportServerAction.Parameter.ANFRAGE_SCHLUESSEL.toString(),
+                    anfrageSchluessel),
+            };
 
-        return download;
+        return new ByteArrayActionDownload(
+                BaulastBescheinigungReportServerAction.TASK_NAME,
+                null,
+                saps,
+                jobName,
+                title,
+                fileName,
+                ".pdf",
+                connectionContext);
     }
 
     /**
