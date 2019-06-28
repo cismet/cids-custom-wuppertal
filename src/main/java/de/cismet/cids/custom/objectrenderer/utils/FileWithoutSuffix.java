@@ -12,8 +12,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils;
 
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
-
 /**
  * DOCUMENT ME!
  *
@@ -76,7 +74,7 @@ public class FileWithoutSuffix {
 
         final String lb = String.format("%06d", lowerBorder);
         final String hb = String.format("%06d", higherBorder);
-        return new StringBuffer(StaticProperties.ALB_BAULAST_DOCUMENT_PATH).append("/")
+        return new StringBuffer(ClientStaticProperties.getInstance().getAlbBaulastDocumentPath()).append("/")
                     .append(lb)
                     .append("-")
                     .append(hb)

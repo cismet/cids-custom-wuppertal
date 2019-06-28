@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.utils.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -136,7 +136,9 @@ public final class BaulastenPictureFinder {
      * @throws  Exception  DOCUMENT ME!
      */
     public static URL getUrlForDocument(final String document) throws Exception {
-        return new URL(DOWNLOAD_TEMPLATE.replace("<rasterfari:url>", StaticProperties.ALB_BAULAST_URL_PREFIX).replace(
+        return new URL(DOWNLOAD_TEMPLATE.replace(
+                    "<rasterfari:url>",
+                    ClientStaticProperties.getInstance().getAlbBaulastUrlPrefix()).replace(
                     "<rasterfari:document>",
                     document));
     }

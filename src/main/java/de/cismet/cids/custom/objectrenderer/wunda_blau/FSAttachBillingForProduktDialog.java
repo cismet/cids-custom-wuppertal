@@ -31,7 +31,6 @@ import javax.swing.SwingWorker;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import de.cismet.cids.custom.utils.formsolutions.FormSolutionsBestellungHandler;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -187,7 +186,7 @@ public class FSAttachBillingForProduktDialog extends javax.swing.JDialog impleme
                             Arrays.asList(mon));
                     final ServerActionParameter<Integer> paramStep = new ServerActionParameter<Integer>(
                             FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.STEP_TO_EXECUTE.toString(),
-                            FormSolutionsBestellungHandler.STATUS_BILLING);
+                            FormSolutionServerNewStuffAvailableAction.STATUS_BILLING);
                     final ServerActionParameter<Boolean> singleStep = new ServerActionParameter<Boolean>(
                             FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.SINGLE_STEP.toString(),
                             Boolean.TRUE);
