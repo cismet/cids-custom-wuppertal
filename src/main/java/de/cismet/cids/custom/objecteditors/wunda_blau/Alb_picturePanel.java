@@ -61,8 +61,8 @@ import de.cismet.cids.custom.objectrenderer.utils.ClientStaticProperties;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
 import de.cismet.cids.custom.utils.BaulastenPictureFinder;
+import de.cismet.cids.custom.utils.alkis.BaulastenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 

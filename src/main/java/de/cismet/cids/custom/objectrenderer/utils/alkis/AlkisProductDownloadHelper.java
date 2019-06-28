@@ -43,7 +43,7 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportDownloadHelper;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.CachedInfoBaulastRetriever;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
@@ -750,7 +750,7 @@ public class AlkisProductDownloadHelper {
                     fabricationdate.getTime()),
                 new ServerActionParameter<>(
                     BaulastBescheinigungReportServerAction.Parameter.FERTIGUNGS_VERMERK.toString(),
-                    BaulastenReportGenerator.createFertigungsVermerk(
+                    BaulastenReportDownloadHelper.createFertigungsVermerk(
                         SessionManager.getSession().getUser(),
                         connectionContext)),
                 new ServerActionParameter<>(
@@ -862,7 +862,7 @@ public class AlkisProductDownloadHelper {
 
                             if (!allBaulasten.isEmpty()) {
                                 // Download: Bericht für alle Baulasten
-                                downloads.addAll(BaulastenReportGenerator.generateRasterDownloads(
+                                downloads.addAll(BaulastenReportDownloadHelper.generateRasterDownloads(
                                         jobname,
                                         allBaulasten,
                                         downloadInfo.getAuftragsnummer(),

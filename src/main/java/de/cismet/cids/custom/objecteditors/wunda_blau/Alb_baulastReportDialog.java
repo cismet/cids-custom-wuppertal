@@ -24,7 +24,8 @@ import java.util.Date;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportGenerator;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportDownloadHelper;
+import de.cismet.cids.custom.utils.alkis.BaulastenReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -283,7 +284,7 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog implements Conn
                     if ((projectname == null) || (projectname.trim().length() == 0)) {
                         projectname = "";
                     }
-                    final Download download = BaulastenReportGenerator.generateDownload(
+                    final Download download = BaulastenReportDownloadHelper.generateDownload(
                             type,
                             beans,
                             auftragsnummer,
