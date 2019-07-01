@@ -15,11 +15,8 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
+import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.newuser.User;
-
-import net.sf.jasperreports.engine.JRDataSource;
-
-import java.io.IOException;
 
 import java.net.URL;
 
@@ -27,21 +24,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.BaulastenReportGenerator;
+import de.cismet.cids.custom.wunda_blau.search.actions.BaulastenReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
-
-import de.cismet.commons.utils.MultiPagePictureReader;
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
-import de.cismet.tools.gui.WebAccessMultiPagePictureReader;
 import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -212,86 +207,40 @@ public class BaulastenReportDownloadHelper {
             final String projectName,
             final String title,
             final ConnectionContext connectionContext) throws Exception {
-//                final Collection<MetaObjectNode> mons = new ArrayList<>();
-//                for (final CidsBean baulastBean : selectedBaulasten) {
-//                    mons.add(new MetaObjectNode(baulastBean));
-//                }
-//
-//                final ServerActionParameter[] saps = new ServerActionParameter[] {
-//                new ServerActionParameter<>(
-//                    BaulastenReportServerAction.Parameter.BAULASTEN_MONS.toString(),
-//                    mons),
-//                new ServerActionParameter<>(
-//                    BaulastenReportServerAction.Parameter.FERTIGUNGS_VERMERK.toString(),
-//                    BaulastenReportDownloadHelper.createFertigungsVermerk(
-//                        SessionManager.getSession().getUser(),
-//                        connectionContext)),
-//                new ServerActionParameter<>(
-//                    BaulastenReportServerAction.Parameter.JOB_NUMBER.toString(),
-//                    jobNumber),
-//                new ServerActionParameter<>(
-//                    BaulastenReportServerAction.Parameter.PROJECT_NAME.toString(),
-//                    projectName),
-//            };
-//
-//        return new ByteArrayActionDownload(
-//                BaulastenReportServerAction.TASK_NAME,
-//                null,
-//                saps,
-//                jobName,
-//                title,
-//                "baulasten",
-//                ".pdf",
-//                connectionContext);
+        final Collection<MetaObjectNode> mons = new ArrayList<>();
+        for (final CidsBean baulastBean : selectedBaulasten) {
+            mons.add(new MetaObjectNode(baulastBean));
+        }
 
-        final BaulastenReportGenerator generator = new BaulastenReportGenerator(
-                WebAccessBaulastenPictureFinder.getInstance(),
-                new BaulastenReportGenerator.MultiPagePictureReaderCreator() {
-
-                    @Override
-                    public MultiPagePictureReader createReader(final URL imageURL,
-                            final boolean caching,
-                            final boolean checkHeapSize) throws IOException {
-                        return new WebAccessMultiPagePictureReader(imageURL, caching, checkHeapSize);
-                    }
-                });
-        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
-            new JasperReportDownload.JasperReportDataSourceGenerator() {
-
-                @Override
-                public JRDataSource generateDataSource() {
-                    try {
-                        generator.generate(
-                            selectedBaulasten,
-                            type,
-                            jobNumber,
-                            projectName,
-                            title);
-                        return generator.getDataSource();
-                    } catch (final Exception ex) {
-                        LOG.warn(ex, ex);
-                        return null;
-                    }
-                }
+        final ServerActionParameter[] saps = new ServerActionParameter[] {
+                new ServerActionParameter<>(
+                    BaulastenReportServerAction.Parameter.BAULASTEN_MONS.toString(),
+                    mons),
+                new ServerActionParameter<>(
+                    BaulastenReportServerAction.Parameter.FERTIGUNGS_VERMERK.toString(),
+                    BaulastenReportDownloadHelper.createFertigungsVermerk(
+                        SessionManager.getSession().getUser(),
+                        connectionContext)),
+                new ServerActionParameter<>(
+                    BaulastenReportServerAction.Parameter.JOB_NUMBER.toString(),
+                    jobNumber),
+                new ServerActionParameter<>(
+                    BaulastenReportServerAction.Parameter.PROJECT_NAME.toString(),
+                    projectName),
+                new ServerActionParameter<>(
+                    BaulastenReportServerAction.Parameter.TYPE.toString(),
+                    type),
             };
 
-        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
-            new JasperReportDownload.JasperReportParametersGenerator() {
-
-                @Override
-                public Map generateParamters() {
-                    return generator.getParameters();
-                }
-            };
-
-        final JasperReportDownload download = new JasperReportDownload(
-                "/de/cismet/cids/custom/wunda_blau/res/baulasten.jasper",
-                parametersGenerator,
-                dataSourceGenerator,
+        return new ByteArrayActionDownload(
+                BaulastenReportServerAction.TASK_NAME,
+                null,
+                saps,
                 jobName,
                 title,
-                "baulasten");
+                "baulasten",
+                ".pdf",
+                connectionContext);
 
-        return download;
     }
 }
