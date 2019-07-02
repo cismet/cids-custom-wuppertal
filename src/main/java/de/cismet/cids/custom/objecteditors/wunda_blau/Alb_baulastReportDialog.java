@@ -284,7 +284,7 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog implements Conn
                     if ((projectname == null) || (projectname.trim().length() == 0)) {
                         projectname = "";
                     }
-                    final Download download = BaulastenReportDownloadHelper.generateDownload(
+                    final Download download = BaulastenReportDownloadHelper.createDownload(
                             type,
                             beans,
                             auftragsnummer,

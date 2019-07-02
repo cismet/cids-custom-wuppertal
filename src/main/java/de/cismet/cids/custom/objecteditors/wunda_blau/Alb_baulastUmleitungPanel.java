@@ -41,7 +41,7 @@ import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
-import de.cismet.cids.custom.utils.BaulastenPictureFinder;
+import de.cismet.cids.custom.utils.alkis.BaulastenPictureFinder;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;

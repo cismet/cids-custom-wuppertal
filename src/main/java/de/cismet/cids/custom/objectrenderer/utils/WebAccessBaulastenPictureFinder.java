@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.utils;
 
-import de.cismet.cids.custom.utils.BaulastenPictureFinder;
+import de.cismet.cids.custom.utils.alkis.BaulastenPictureFinder;
 
 import de.cismet.security.WebAccessManager;
 

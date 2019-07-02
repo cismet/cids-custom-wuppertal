@@ -31,6 +31,7 @@ import javax.swing.SwingWorker;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import de.cismet.cids.custom.utils.formsolutions.FormSolutionsBestellungHandler;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionServerNewStuffAvailableAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -180,7 +181,7 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
                             Arrays.asList(mon));
                     final ServerActionParameter<Integer> paramStep = new ServerActionParameter<>(
                             FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.STEP_TO_EXECUTE.toString(),
-                            FormSolutionServerNewStuffAvailableAction.STATUS_DOWNLOAD);
+                            FormSolutionsBestellungHandler.STATUS_DOWNLOAD);
 
                     try {
                         SessionManager.getConnection()
