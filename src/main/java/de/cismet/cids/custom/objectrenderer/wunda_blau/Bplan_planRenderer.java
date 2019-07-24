@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -115,7 +117,7 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer,
     private void initComponents() {
         panContent = new javax.swing.JPanel();
         rasterfariDocumentLoaderPanel1 = new de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel(
-                "http://s10221:8081/rasterfariWMS",
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
                 this,
                 connectionContext);
 
