@@ -45,12 +45,12 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelp
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.DownloadInfoFactory;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisKarteDownloadInfo;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -673,7 +673,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                                     downloadInfo.getProduktTyp(),
                                     getConnectionContext())) ? downloadInfo : null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea", stueck))) {
+                            new BillingProductGroupAmount("ea", stueck))) {
                 AlkisProductDownloadHelper.downloadEinzelnachweisProduct(downloadInfo, getConnectionContext());
             }
         } catch (Exception e) {

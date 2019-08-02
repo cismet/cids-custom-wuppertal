@@ -131,6 +131,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdAttachBilling;
     private javax.swing.JButton cmdReload;
+    private org.jdesktop.swingx.JXHyperlink hlBerechtigungspruefung;
     private org.jdesktop.swingx.JXHyperlink hlEMailValue;
     private org.jdesktop.swingx.JXHyperlink hlFlurstueckeValue;
     private org.jdesktop.swingx.JXHyperlink hlProduktValue;
@@ -326,6 +327,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         hlProduktValue = new org.jdesktop.swingx.JXHyperlink();
         cmdReload = new javax.swing.JButton();
         cmdAttachBilling = new javax.swing.JButton();
+        hlBerechtigungspruefung = new org.jdesktop.swingx.JXHyperlink();
         lblGebuehr = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         lblGebuehrValue = new javax.swing.JLabel();
@@ -665,16 +667,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 hlProduktValue,
                 org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create(
-                    "${cidsBean.fk_produkt.fk_typ.name}, ${cidsBean.fk_produkt.fk_format.format}, 1:${cidsBean.massstab}"),
-                hlProduktValue,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
-        bindingGroup.addBinding(binding);
 
         hlProduktValue.addActionListener(new java.awt.event.ActionListener() {
 
@@ -708,7 +700,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         panProduktValue.add(cmdReload, gridBagConstraints);
@@ -731,10 +723,35 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         panProduktValue.add(cmdAttachBilling, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("(${cidsBean.berechtigungspruefung.schluessel})"),
+                hlBerechtigungspruefung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
+        bindingGroup.addBinding(binding);
+
+        hlBerechtigungspruefung.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlBerechtigungspruefungActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panProduktValue.add(hlBerechtigungspruefung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1526,7 +1543,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                             FormSolutionDownloadBestellungAction.TASK_NAME,
                             mon,
                             new ServerActionParameter[] {
-                                new ServerActionParameter<FormSolutionDownloadBestellungAction.Type>(
+                                new ServerActionParameter<>(
                                     FormSolutionDownloadBestellungAction.Parameter.TYPE.toString(),
                                     FormSolutionDownloadBestellungAction.Type.RECHNUNG)
                             },
@@ -1571,6 +1588,17 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlBerechtigungspruefungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBerechtigungspruefungActionPerformed
+        ComponentRegistry.getRegistry()
+                .getDescriptionPane()
+                .gotoMetaObjectNode(new MetaObjectNode((CidsBean)cidsBean.getProperty("berechtigungspruefung")));
+    }                                                                                           //GEN-LAST:event_hlBerechtigungspruefungActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     public boolean isProduktTooOld() {
@@ -1596,19 +1624,25 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         lblStatusValue.setText("-");
         hlFlurstueckeValue.setText("-");
+        hlProduktValue.setText("-");
         hlStatusErrorDetails.setVisible(false);
 
         if (cidsBean != null) {
             final String statusText;
             final Boolean erledigt = (Boolean)cidsBean.getProperty("erledigt");
             final String fehler = (String)cidsBean.getProperty("fehler");
+            final String type = (String)cidsBean.getProperty("fk_produkt.fk_typ.key");
 
             if (fehler != null) {
                 statusText = "Fehler: " + fehler;
             } else if (Boolean.TRUE.equals(erledigt)) {
                 statusText = "erledigt";
-            } else {
+            } else if ((type != null) && type.startsWith("LK.")) {
                 statusText = "in Bearbeitung";
+            } else if ("BAB".equals(type)) {
+                statusText = "warten auf Berechtigungsprüfung";
+            } else {
+                statusText = "-";
             }
             lblStatusValue.setText(statusText);
 
@@ -1622,6 +1656,16 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 hlFlurstueckeValue.setText(landparcelcode + ((landparcelcodes.length > 1) ? " u.a." : ""));
             } else {
                 landparcelcode = null;
+            }
+
+            if ((type != null) && type.startsWith("LK.")) {
+                hlProduktValue.setText(cidsBean.getProperty("fk_produkt.fk_typ.name") + ", "
+                            + cidsBean.getProperty("fk_produkt.fk_format.format") + ", 1:"
+                            + cidsBean.getProperty("massstab"));
+            } else if ("BAB".equals(type)) {
+                hlProduktValue.setText("Baulastbescheinigung");
+            } else {
+                hlProduktValue.setText("-");
             }
 
             final Geometry geom = (Geometry)cidsBean.getProperty("geometrie.geo_field");

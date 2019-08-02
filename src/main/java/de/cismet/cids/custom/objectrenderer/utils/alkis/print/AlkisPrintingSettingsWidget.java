@@ -55,9 +55,9 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -1328,7 +1328,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                                     requestPerUsage,
                                     (Geometry)null,
                                     getConnectionContext(),
-                                    new ProductGroupAmount(prGroup, 1))) {
+                                    new BillingProductGroupAmount(prGroup, 1))) {
                         AlkisProductDownloadHelper.downloadKarteCustomProduct(
                             MAPPER.readValue(
                                 BillingPopup.getInstance().getCurrentRequest(),

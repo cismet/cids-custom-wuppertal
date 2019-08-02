@@ -97,13 +97,13 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.berechtigungspruefung.DownloadInfoFactory;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1341,7 +1341,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                                     downloadInfo.getProduktTyp(),
                                     getConnectionContext())) ? downloadInfo : null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea", 1))) {
+                            new BillingProductGroupAmount("ea", 1))) {
                 AlkisProductDownloadHelper.downloadBuchungsblattnachweisProduct(
                     downloadInfo,
                     getConnectionContext());
@@ -1653,7 +1653,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                                         downloadInfo.getProduktTyp(),
                                         getConnectionContext())) ? downloadInfo : null,
                                 getConnectionContext(),
-                                new ProductGroupAmount("ea", 1))) {
+                                new BillingProductGroupAmount("ea", 1))) {
                     AlkisProductDownloadHelper.downloadBuchungsblattnachweisStichtagProduct(
                         downloadInfo,
                         getConnectionContext());

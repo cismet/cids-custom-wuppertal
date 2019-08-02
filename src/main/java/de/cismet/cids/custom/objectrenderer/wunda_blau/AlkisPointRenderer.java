@@ -78,9 +78,9 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -2089,7 +2089,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                             "no.yet",
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea", 1))) {
+                            new BillingProductGroupAmount("ea", 1))) {
                 downloadProduct(ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_PDF));
             }
         } catch (Exception e) {
@@ -2136,7 +2136,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                             "no.yet",
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("eapkt_1000", 1))) {
+                            new BillingProductGroupAmount("eapkt_1000", 1))) {
                 downloadProduct(ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_TXT));
             }
         } catch (Exception e) {
@@ -2193,7 +2193,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                                 url.toString(),
                                 (Geometry)null,
                                 getConnectionContext(),
-                                new ProductGroupAmount("ea", 1))) {
+                                new BillingProductGroupAmount("ea", 1))) {
                     CismetThreadPool.execute(new Runnable() {
 
                             @Override

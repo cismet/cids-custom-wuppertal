@@ -39,9 +39,9 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.BaulastBescheinigungHelper;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -363,9 +363,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                 LOG.info("could not check config attr", ex);
             }
 
-            final Collection<ProductGroupAmount> prodAmounts = new ArrayList<>();
+            final Collection<BillingProductGroupAmount> prodAmounts = new ArrayList<>();
             for (final HashMap.Entry<String, Integer> amount : downloadInfo.getAmounts().entrySet()) {
-                prodAmounts.add(new ProductGroupAmount(amount.getKey(), amount.getValue()));
+                prodAmounts.add(new BillingProductGroupAmount(amount.getKey(), amount.getValue()));
             }
             if (BillingPopup.doBilling(
                             "blab_be",
@@ -376,7 +376,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                     downloadInfo.getProduktTyp(),
                                     getConnectionContext())) ? downloadInfo : null,
                             getConnectionContext(),
-                            prodAmounts.toArray(new ProductGroupAmount[0]))) {
+                            prodAmounts.toArray(new BillingProductGroupAmount[0]))) {
                 final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
                 if ((berechnung != null) && !berechnung.trim().isEmpty()) {
                     addMessage("\n===\n\nGebührenberechnung:\n");

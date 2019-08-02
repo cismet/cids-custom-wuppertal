@@ -71,8 +71,8 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelp
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisPointReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
 
@@ -370,7 +370,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 "no.yet",
                                 (Geometry)null,
                                 getConnectionContext(),
-                                new ProductGroupAmount("ea", numOfPoints))) {
+                                new BillingProductGroupAmount("ea", numOfPoints))) {
                     generateAPMapReport(selectedAlkisPoints);
                 }
             } catch (Exception e) {
@@ -402,7 +402,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "no.yet",
                                     (Geometry)null,
                                     getConnectionContext(),
-                                    new ProductGroupAmount("ea", 1))) {
+                                    new BillingProductGroupAmount("ea", 1))) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
                 } catch (Exception e) {
@@ -411,11 +411,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 }
             } else if (format.equalsIgnoreCase(TEXT)) {
                 try {
-                    final ArrayList<ProductGroupAmount> productGroupAmounts = getProductGroupAmountForObject(
+                    final ArrayList<BillingProductGroupAmount> productGroupAmounts = getProductGroupAmountForObject(
                             "eapkt",
                             numOfPoints);
-                    final ProductGroupAmount[] groupAmounts = productGroupAmounts.toArray(
-                            new ProductGroupAmount[productGroupAmounts.size()]);
+                    final BillingProductGroupAmount[] groupAmounts = productGroupAmounts.toArray(
+                            new BillingProductGroupAmount[productGroupAmounts.size()]);
 
                     if (BillingPopup.doBilling(
                                     "pktlsttxt",
@@ -436,7 +436,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "no.yet",
                                     (Geometry)null,
                                     getConnectionContext(),
-                                    new ProductGroupAmount("ea", numOfPoints))) {
+                                    new BillingProductGroupAmount("ea", numOfPoints))) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
                 } catch (Exception e) {
@@ -457,29 +457,30 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @return  DOCUMENT ME!
      */
-    private ArrayList<ProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey, int amount) {
-        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
+    private ArrayList<BillingProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey,
+            int amount) {
+        final ArrayList<BillingProductGroupAmount> result = new ArrayList<BillingProductGroupAmount>();
         if (amount > 1000000) {
             final int tmpPoints = amount - 1000000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
+            result.add(new BillingProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
             amount = 1000000;
         }
         if (amount > 100000) {
             final int tmpPoints = amount - 100000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
+            result.add(new BillingProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
             amount = 100000;
         }
         if (amount > 10000) {
             final int tmpPoints = amount - 10000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
+            result.add(new BillingProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
             amount = 10000;
         }
         if (amount > 1000) {
             final int tmpPoints = amount - 1000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
+            result.add(new BillingProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
             amount = 1000;
         }
-        result.add(new ProductGroupAmount(objectBaseKey + "_1000", amount));
+        result.add(new BillingProductGroupAmount(objectBaseKey + "_1000", amount));
         return result;
     }
 

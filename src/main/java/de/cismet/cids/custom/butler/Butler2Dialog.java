@@ -59,7 +59,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 
@@ -826,8 +826,9 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                             productKey = RASTER_DATEN_BILLING_KEY;
                         }
                         final String requestNr = tfOrderId.getText().trim() + "_" + i;
-                        final ArrayList<ProductGroupAmount> list = productPanel.getProductGroupAmounts();
-                        final ProductGroupAmount[] groupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
+                        final ArrayList<BillingProductGroupAmount> list = productPanel.getProductGroupAmounts();
+                        final BillingProductGroupAmount[] groupAmounts = list.toArray(
+                                new BillingProductGroupAmount[list.size()]);
                         try {
                             if (BillingPopup.doBilling(
                                             productKey,

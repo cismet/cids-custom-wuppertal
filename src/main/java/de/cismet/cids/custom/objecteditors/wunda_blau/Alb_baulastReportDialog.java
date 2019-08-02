@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.Date;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportDownloadHelper;
 import de.cismet.cids.custom.utils.alkis.BaulastenReportGenerator;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -278,7 +278,7 @@ public class Alb_baulastReportDialog extends javax.swing.JDialog implements Conn
                             "no.yet",
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea_bla", beans.size()))) {
+                            new BillingProductGroupAmount("ea_bla", beans.size()))) {
                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                     String projectname = projektbezeichnung;
                     if ((projectname == null) || (projectname.trim().length() == 0)) {
