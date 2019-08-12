@@ -63,9 +63,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
-
-import de.cismet.cids.utils.serverresources.ServerResourcesLoader;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -177,9 +176,17 @@ public class BillingPopup extends javax.swing.JDialog {
 
         BillingInfo billingInfoTmp;
         try {
-            billingInfoTmp = MAPPER.readValue(
-                    ServerResourcesLoader.getInstance().loadStringReader(
-                        WundaBlauServerResources.BILLING_JSON.getValue()),
+            final Object ret = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.BILLING_JSON.getValue(),
+                            getConnectionContext());
+            if (ret instanceof Exception) {
+                throw (Exception)ret;
+            }
+            billingInfoTmp = MAPPER.readValue((String)ret,
                     BillingInfo.class);
         } catch (final Exception exception) {
             LOG.error("Error when trying to read the billingInfo.json", exception);
