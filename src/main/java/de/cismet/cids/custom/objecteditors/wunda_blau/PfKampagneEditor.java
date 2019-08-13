@@ -17,21 +17,14 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.newuser.permission.Policy;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import java.awt.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -41,8 +34,6 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper;
-import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -52,14 +43,11 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.actions.GetServerResourceServerAction;
-
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -67,8 +55,6 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
-import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -91,28 +77,22 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
     //~ Instance fields --------------------------------------------------------
 
-    private final MetaClass NUTZUNG_MC;
-    private final MetaClass OEPNV_MC;
-
     private final boolean editable;
     private CidsBean cidsBean;
     private ConnectionContext connectionContext;
-    private JEditorPane ep;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt2;
     private javax.swing.JButton btnRemoveArt2;
-    private javax.swing.JButton btnReport;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbGeom;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbSteckbrief;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbVeroeffentlicht;
-    private javax.swing.JEditorPane epFlaeche;
-    private javax.swing.Box.Filler filler9;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblBeschreibung;
     private javax.swing.JLabel lblBeschreibungTitle;
@@ -127,8 +107,8 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     private javax.swing.JPanel panBeschreibungBody;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
     private javax.swing.JPanel panMain;
-    private javax.swing.JPanel panPrintButton;
     private javax.swing.JPanel panTitle;
+    private javax.swing.JTextArea taBeschreibung;
     private javax.swing.JTextField txtBezeichnung;
     private javax.swing.JLabel txtTitle;
     private javax.swing.JLabel txtTitle1;
@@ -150,15 +130,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
      * @param  editable  DOCUMENT ME!
      */
     public PfKampagneEditor(final boolean editable) {
-        NUTZUNG_MC = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                "pf_nutzung",
-                getConnectionContext()); // NOI18N
-        OEPNV_MC = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                "pf_oepnv",
-                getConnectionContext()); // NOI18N
-
         this.editable = editable;
     }
 
@@ -227,7 +198,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             RendererTools.makeReadOnly(txtBezeichnung);
             RendererTools.makeReadOnly(cbSteckbrief);
             RendererTools.makeReadOnly(cbVeroeffentlicht);
-            RendererTools.makeReadOnly(epFlaeche);
+            RendererTools.makeReadOnly(taBeschreibung);
             panArtControls2.setVisible(false);
             cbGeom.setVisible(false);
             lblGeometrie5.setVisible(false);
@@ -247,8 +218,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
         txtTitle1 = new javax.swing.JLabel();
-        panPrintButton = new javax.swing.JPanel();
-        btnReport = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -265,8 +234,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblSteckbrief = new javax.swing.JLabel();
         lblGeometrie5 = new javax.swing.JLabel();
         cbGeom = (!editable) ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        epFlaeche = new javax.swing.JEditorPane();
         cbVeroeffentlicht = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         cbSteckbrief = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         lblGeometrie6 = new javax.swing.JLabel();
@@ -275,9 +242,11 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         panArtControls2 = new javax.swing.JPanel();
         btnAddArt2 = new javax.swing.JButton();
         btnRemoveArt2 = new javax.swing.JButton();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        jScrollPane1 = new javax.swing.JScrollPane();
+        taBeschreibung = new javax.swing.JTextArea();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0));
+                new java.awt.Dimension(0, 32767));
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -304,41 +273,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panTitle.add(txtTitle1, gridBagConstraints);
-
-        panPrintButton.setOpaque(false);
-        panPrintButton.setLayout(new java.awt.GridBagLayout());
-
-        btnReport.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/einzelReport.png")));                    // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnReport,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.btnReport.text")); // NOI18N
-        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
-                PfKampagneEditor.class,
-                "PfKampagneEditor.btnReport.toolTipText"));                                                   // NOI18N
-        btnReport.setBorderPainted(false);
-        btnReport.setContentAreaFilled(false);
-        btnReport.setFocusPainted(false);
-        btnReport.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnReportActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        panPrintButton.add(btnReport, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        panTitle.add(panPrintButton, gridBagConstraints);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -492,30 +426,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel7.add(cbGeom, gridBagConstraints);
 
-        jScrollPane7.setMaximumSize(new java.awt.Dimension(80, 80));
-        jScrollPane7.setMinimumSize(new java.awt.Dimension(80, 80));
-        jScrollPane7.setPreferredSize(new java.awt.Dimension(80, 100));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
-                epFlaeche,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane7.setViewportView(epFlaeche);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        jPanel7.add(jScrollPane7, gridBagConstraints);
-
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -633,10 +543,35 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel7.add(panArtControls2, gridBagConstraints);
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        taBeschreibung.setColumns(20);
+        taBeschreibung.setLineWrap(true);
+        taBeschreibung.setRows(5);
+        taBeschreibung.setWrapStyleWord(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(taBeschreibung);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel7.add(jScrollPane1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -646,7 +581,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         panBeschreibungBody.add(jPanel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -662,13 +597,15 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panMain.add(panAllgemein, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panMain.add(filler9, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        panMain.add(filler1, gridBagConstraints);
 
         add(panMain, "grunddaten");
 
@@ -750,55 +687,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             }
         }
     }                                                                                 //GEN-LAST:event_btnRemoveArt2ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
-        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
-            new JasperReportDownload.JasperReportDataSourceGenerator() {
-
-                @Override
-                public JRDataSource generateDataSource() {
-                    return new JRBeanCollectionDataSource(new ArrayList<>(Arrays.asList(cidsBean)));
-                }
-            };
-
-        final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "zugeordnete_flaechen");
-        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
-            new PotenzialFlaechenPrintHelper.PotenzialflaecheReportParameterGenerator(flaechen.get(0));
-
-        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
-                        ComponentRegistry.getRegistry().getMainWindow())) {
-            final String jobname = DownloadManagerDialog.getInstance().getJobName();
-            final String filename = "Potenzialflaeche"
-                        + flaechen.get(0).toString();
-            final String downloadTitle = "Potenzialflaeche "
-                        + flaechen.get(0).toString();
-            try {
-                final JasperReport report = (JasperReport)SessionManager.getSession().getConnection()
-                            .executeTask(SessionManager.getSession().getUser(),
-                                    GetServerResourceServerAction.TASK_NAME,
-                                    CidsBeanSupport.DOMAIN_NAME,
-                                    WundaBlauServerResources.POTENZIALFLAECHEN_JASPER.getValue(),
-                                    connectionContext);
-
-                final JasperReportDownload download = new JasperReportDownload(
-                        report,
-                        parametersGenerator,
-                        dataSourceGenerator,
-                        jobname,
-                        downloadTitle,
-                        filename);
-                DownloadManager.instance().add(download);
-            } catch (Exception e) {
-                LOG.error("Cannot create report", e);
-                ObjectRendererUtils.showExceptionWindowToUser("Fehler Erstellen des Reports", e, this);
-            }
-        }
-    } //GEN-LAST:event_btnReportActionPerformed
 
     @Override
     public CidsBean getCidsBean() {

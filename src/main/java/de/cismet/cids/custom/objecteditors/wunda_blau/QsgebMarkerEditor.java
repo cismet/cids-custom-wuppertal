@@ -1543,7 +1543,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         final CidsBean cb = this.getCidsBean();
         try {
             if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-//panPreviewMap.initMap(cidsBean, "FIELD__GEOREFERENZ__GEO_FIELD", 50.0, "http://s10221.wuppertal-intra.de:7098/alkis/services?&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=FALSE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=alf&STYLES=&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&SRS=EPSG:25832");
                 panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, 20.0);
             } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
