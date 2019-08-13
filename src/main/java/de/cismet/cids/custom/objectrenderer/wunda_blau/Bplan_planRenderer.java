@@ -115,13 +115,11 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer,
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         panContent = new javax.swing.JPanel();
         rasterfariDocumentLoaderPanel1 = new de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel(
-            ClientAlkisConf.getInstance().getRasterfariUrl(),
-            this,
-            connectionContext
-        );
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
+                this,
+                connectionContext);
 
         setLayout(new java.awt.BorderLayout());
 
@@ -134,7 +132,7 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer,
         panContent.add(rasterfariDocumentLoaderPanel1, java.awt.BorderLayout.CENTER);
 
         add(panContent, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
