@@ -7,34 +7,35 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
+
+import java.io.ByteArrayOutputStream;
 
 import java.lang.reflect.Field;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -48,8 +49,9 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper;
-import de.cismet.cids.custom.utils.WundaBlauServerResources;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.PotenzialflaechenProperties;
+import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -59,15 +61,19 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
-import de.cismet.cids.server.actions.GetServerResourceServerAction;
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
+import de.cismet.cismap.commons.HeadlessMapProvider;
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -75,11 +81,10 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-
-import static de.cismet.cids.custom.utils.PotenzialFlaechenPrintHelper.REPORT_PROPERTY_MAP;
 
 import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMetaClass;
 
@@ -3979,50 +3984,113 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     /**
      * DOCUMENT ME!
      *
+     * @param   flaecheBean  isDgk DOCUMENT ME!
+     * @param   isDgk        DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public BufferedImage generateOverviewMap(final CidsBean flaecheBean, final boolean isDgk) {
+        try {
+            final String urlBackground = (isDgk ? PotenzialflaechenProperties.getInstance().getDgkUrl()
+                                                : PotenzialflaechenProperties.getInstance().getOrthoUrl());
+            final Geometry geom = (Geometry)flaecheBean.getProperty("geometrie.geo_field");
+
+            if (geom != null) {
+                final XBoundingBox boundingBox = new XBoundingBox(geom);
+                boundingBox.increase(10);
+                boundingBox.setX1(boundingBox.getX1() - 50);
+                boundingBox.setY1(boundingBox.getY1() - 50);
+                boundingBox.setX2(boundingBox.getX2() + 50);
+                boundingBox.setY2(boundingBox.getY2() + 50);
+
+                final HeadlessMapProvider mapProvider = new HeadlessMapProvider();
+                mapProvider.setCenterMapOnResize(true);
+                mapProvider.setBoundingBox(boundingBox);
+                final SimpleWmsGetMapUrl getMapUrl = new SimpleWmsGetMapUrl(urlBackground);
+                final SimpleWMS simpleWms = new SimpleWMS(getMapUrl);
+                mapProvider.addLayer(simpleWms);
+                final DefaultStyledFeature f = new DefaultStyledFeature();
+                f.setGeometry(geom);
+                f.setHighlightingEnabled(true);
+                f.setLinePaint(Color.RED);
+                f.setLineWidth(3);
+                mapProvider.addFeature(f);
+
+                return (BufferedImage)mapProvider.getImageAndWait(72, 300, 250, 150);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            LOG.error("Error while retrieving map", e);
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  evt  DOCUMENT ME!
      */
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
-        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
-            new JasperReportDownload.JasperReportDataSourceGenerator() {
-
-                @Override
-                public JRDataSource generateDataSource() {
-                    return new JRBeanCollectionDataSource(new ArrayList<>(
-                                Arrays.asList((CidsBean)cidsBean.getProperty("kampagne"))));
-                }
-            };
-
-        final CidsBean flaeche = cidsBean;
-        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
-            new PotenzialFlaechenPrintHelper.PotenzialflaecheReportParameterGenerator(flaeche);
+        final CidsBean flaecheBean = cidsBean;
 
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         ComponentRegistry.getRegistry().getMainWindow())) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String filename = "Potenzialflaeche"
-                        + flaeche.toString();
+                        + flaecheBean.toString();
             final String downloadTitle = "Potenzialflaeche "
-                        + flaeche.toString();
-            try {
-                final JasperReport report = (JasperReport)SessionManager.getSession().getConnection()
-                            .executeTask(SessionManager.getSession().getUser(),
-                                    GetServerResourceServerAction.TASK_NAME,
-                                    CidsBeanSupport.DOMAIN_NAME,
-                                    WundaBlauServerResources.POTENZIALFLAECHEN_JASPER.getValue(),
-                                    connectionContext);
+                        + flaecheBean.toString();
+            new SwingWorker<Download, Void>() {
 
-                final JasperReportDownload download = new JasperReportDownload(
-                        report,
-                        parametersGenerator,
-                        dataSourceGenerator,
-                        jobname,
-                        downloadTitle,
-                        filename);
-                DownloadManager.instance().add(download);
-            } catch (Exception e) {
-                LOG.error("Cannot create report", e);
-                ObjectRendererUtils.showExceptionWindowToUser("Fehler Erstellen des Reports", e, this);
-            }
+                    @Override
+                    protected Download doInBackground() throws Exception {
+                        final BufferedImage[] maps = new BufferedImage[2];
+                        maps[0] = generateOverviewMap(flaecheBean, false);
+                        maps[1] = generateOverviewMap(flaecheBean, true);
+                        try(final ByteArrayOutputStream out0 = new ByteArrayOutputStream();
+                                    final ByteArrayOutputStream out1 = new ByteArrayOutputStream()) {
+                            final Collection<ServerActionParameter> params = new ArrayList<>();
+                            if (maps[0] != null) {
+                                ImageIO.write(maps[0], "png", out0);
+                                params.add(new ServerActionParameter<>(
+                                        PotenzialflaecheReportServerAction.Parameter.IMAGE_ORTHO.toString(),
+                                        out0.toByteArray()));
+                            }
+                            if (maps[1] != null) {
+                                ImageIO.write(maps[1], "png", out1);
+                                params.add(new ServerActionParameter<>(
+                                        PotenzialflaecheReportServerAction.Parameter.IMAGE_DGK.toString(),
+                                        out1.toByteArray()));
+                            }
+
+                            final Download download = new ByteArrayActionDownload(
+                                    PotenzialflaecheReportServerAction.TASK_NAME,
+                                    new MetaObjectNode(flaecheBean),
+                                    params.toArray(new ServerActionParameter[0]),
+                                    downloadTitle,
+                                    jobname,
+                                    filename,
+                                    ".pdf",
+                                    PfPotenzialflaecheEditor.this.getConnectionContext());
+                            return download;
+                        }
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final Download download = (Download)get();
+                            DownloadManager.instance().add(download);
+                        } catch (final Exception ex) {
+                            LOG.error("Cannot create report", ex);
+                            ObjectRendererUtils.showExceptionWindowToUser(
+                                "Fehler Erstellen des Reports",
+                                ex,
+                                PfPotenzialflaecheEditor.this);
+                        }
+                    }
+                }.execute();
         }
     } //GEN-LAST:event_btnReportActionPerformed
 
@@ -4089,7 +4157,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private void markUsedFields(final PfPotenzialflaecheEditor editor, final CidsBean steckbrieftemplate) {
         if (steckbrieftemplate != null) {
             final String fields = (String)steckbrieftemplate.getProperty("verwendete_flaechenattribute");
-            final List<String> usedFields = new ArrayList<String>();
+            final List<String> usedFields = new ArrayList<>();
 
             final StringTokenizer st = new StringTokenizer(fields, ",");
 
@@ -4099,8 +4167,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
             Collections.sort(usedFields);
 
-            for (final String key : REPORT_PROPERTY_MAP.keySet()) {
-                final PotenzialFlaechenPrintHelper.ReportProperty rp = REPORT_PROPERTY_MAP.get(key);
+            for (final String key : PotenzialflaecheReportServerAction.REPORT_PROPERTY_MAP.keySet()) {
+                final PotenzialflaecheReportServerAction.ReportProperty rp =
+                    PotenzialflaecheReportServerAction.REPORT_PROPERTY_MAP.get(key);
 
                 if (rp.getEditorLabelName() == null) {
                     continue;
