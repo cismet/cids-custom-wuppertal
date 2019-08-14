@@ -7,6 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
@@ -16,6 +17,8 @@ import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
+
+import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -52,6 +55,7 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.PotenzialflaechenProperties;
 import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.server.KstSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -707,11 +711,17 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         txtTitle1.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
         txtTitle1.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            txtTitle1,
-            org.openide.util.NbBundle.getMessage(
-                PfPotenzialflaecheEditor.class,
-                "PfPotenzialflaecheEditor.txtTitle1.text"));        // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kampagne.bezeichnung}:"),
+                txtTitle1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("Potenzialfläche:");
+        binding.setSourceUnreadableValue("Potenzialfläche:");
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1437,7 +1447,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblFlaeche, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bezeichnung}"),
@@ -1730,7 +1740,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblStadtbezirk, gridBagConstraints);
-        lblStadtbezirk.setVisible(false);
 
         lblStadtbezirkWert.setFont(lblStadtbezirkWert.getFont().deriveFont(
                 lblStadtbezirkWert.getFont().getStyle()
@@ -1747,7 +1756,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel7.add(lblStadtbezirkWert, gridBagConstraints);
-        lblStadtbezirkWert.setVisible(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -4145,6 +4153,48 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                         (CidsBean)kampagne.getProperty("steckbrieftemplate"));
                 }
             }
+        }
+        if ((cidsBean == null) || (cidsBean.getProperty("geometrie") == null)) {
+            lblStadtbezirkWert.setText("");
+        } else {
+            new SwingWorker<Collection<CidsBean>, Void>() {
+
+                    @Override
+                    protected Collection<CidsBean> doInBackground() throws Exception {
+                        final Collection<CidsBean> kstBezirke = new ArrayList<>();
+                        final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                    .customServerSearch(new KstSearch(
+                                            KstSearch.SearchFor.BEZIRK,
+                                            (Geometry)cidsBean.getProperty("geometrie.geo_field")),
+                                        getConnectionContext());
+                        for (final MetaObjectNode mon : mons) {
+                            final MetaObject mo = SessionManager.getProxy()
+                                        .getMetaObject(mon.getObjectId(),
+                                            mon.getClassId(),
+                                            mon.getDomain(),
+                                            getConnectionContext());
+                            kstBezirke.add(mo.getBean());
+                        }
+                        return kstBezirke;
+                    }
+
+                    @Override
+                    protected void done() {
+                        Collection<CidsBean> kstBezirke = null;
+                        try {
+                            kstBezirke = get();
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                        final Collection<String> kstBezirkStrings = new ArrayList<>();
+                        if (kstBezirke != null) {
+                            for (final CidsBean kstBezirk : kstBezirke) {
+                                kstBezirkStrings.add((String)kstBezirk.getProperty("name"));
+                            }
+                        }
+                        lblStadtbezirkWert.setText(String.join(", ", kstBezirkStrings));
+                    }
+                }.execute();
         }
     }
 
