@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -115,7 +117,7 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer,
     private void initComponents() {
         panContent = new javax.swing.JPanel();
         rasterfariDocumentLoaderPanel1 = new de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel(
-                "http://s10221:8081/rasterfariWMS",
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
                 this,
                 connectionContext);
 
@@ -124,6 +126,9 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer,
         panContent.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panContent.setOpaque(false);
         panContent.setLayout(new java.awt.BorderLayout());
+
+        rasterfariDocumentLoaderPanel1.setMinimumSize(new java.awt.Dimension(0, 500));
+        rasterfariDocumentLoaderPanel1.setPreferredSize(new java.awt.Dimension(0, 500));
         panContent.add(rasterfariDocumentLoaderPanel1, java.awt.BorderLayout.CENTER);
 
         add(panContent, java.awt.BorderLayout.CENTER);
