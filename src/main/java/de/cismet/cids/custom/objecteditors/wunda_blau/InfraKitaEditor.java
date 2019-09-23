@@ -170,6 +170,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     private JComboBox cbGeom;
     private DefaultBindableReferenceCombo cbStunden;
     private DefaultBindableReferenceCombo cbTraegertyp;
+    private JCheckBox chFamilienzentrzum;
     private JCheckBox chInklusion;
     private JCheckBox chOnline;
     private JDialog dlgChangeKitaName;
@@ -180,6 +181,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblAdresse;
     private JLabel lblAlter;
     private JLabel lblBemerkung;
+    private JLabel lblFamilienzentrum;
     private JLabel lblGeom;
     private JLabel lblInklusion;
     private JLabel lblInspire;
@@ -331,6 +333,8 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         cbStunden = new DefaultBindableReferenceCombo(true);
         chOnline = new JCheckBox();
         jFormattedTextField1 = new JFormattedTextField(telPatternFormatter);
+        lblFamilienzentrum = new JLabel();
+        chFamilienzentrzum = new JCheckBox();
 
         dlgChangeKitaName.setTitle("Ist dies eine neue Kita?");
         dlgChangeKitaName.setMinimumSize(new Dimension(215, 200));
@@ -823,7 +827,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         panDaten.add(panFiller, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weighty = 0.1;
@@ -838,8 +842,6 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
                 ELProperty.create("${cidsBean.plaetze_fuer_behinderte}"),
                 chInklusion,
                 BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -859,7 +861,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets(2, 4, 2, 2);
@@ -869,7 +871,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         lblOnline.setText("Online:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panDaten.add(lblOnline, gridBagConstraints);
@@ -878,7 +880,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panDaten.add(lblBemerkung, gridBagConstraints);
@@ -888,7 +890,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         lblUrl.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panDaten.add(lblUrl, gridBagConstraints);
@@ -948,7 +950,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         panDaten.add(panUrl, gridBagConstraints);
@@ -1030,7 +1032,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         panDaten.add(chOnline, gridBagConstraints);
 
         binding = Bindings.createAutoBinding(
@@ -1064,6 +1066,30 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 4, 2, 2);
         panDaten.add(jFormattedTextField1, gridBagConstraints);
 
+        lblFamilienzentrum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFamilienzentrum.setText("Familienzent.:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        panDaten.add(lblFamilienzentrum, gridBagConstraints);
+
+        chFamilienzentrzum.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.familienzentrum}"),
+                chFamilienzentrzum,
+                BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        panDaten.add(chFamilienzentrzum, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -1090,34 +1116,34 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkNameActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkNameActionPerformed
+    private void btnMenOkNameActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkNameActionPerformed
         dlgChangeKitaName.setVisible(false);
-    }                                                                 //GEN-LAST:event_btnMenOkNameActionPerformed
+    }//GEN-LAST:event_btnMenOkNameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jFormattedTextField1FocusLost(final FocusEvent evt) { //GEN-FIRST:event_jFormattedTextField1FocusLost
+    private void jFormattedTextField1FocusLost(final FocusEvent evt) {//GEN-FIRST:event_jFormattedTextField1FocusLost
         refreshValidTel();
-    }                                                                  //GEN-LAST:event_jFormattedTextField1FocusLost
+    }//GEN-LAST:event_jFormattedTextField1FocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jFormattedTextField1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jFormattedTextField1ActionPerformed
+    private void jFormattedTextField1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
         refreshValidTel();
-    }                                                                         //GEN-LAST:event_jFormattedTextField1ActionPerformed
+    }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         try {
             BrowserLauncher.openURL(jXHyperlink1.getText());
         } catch (final Exception e) {
@@ -1132,7 +1158,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
                     null);
             JXErrorPane.showDialog(this, ei);
         }
-    }                                                                 //GEN-LAST:event_jXHyperlink1ActionPerformed
+    }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1473,6 +1499,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             cbTraegertyp.setEnabled(false);
             cbAlter.setEnabled(false);
             chInklusion.setEnabled(false);
+            chFamilienzentrzum.setEnabled(false);
             chOnline.setEnabled(false);
             txtAdresse.setEnabled(false);
             txtBemerkung.setEnabled(false);
