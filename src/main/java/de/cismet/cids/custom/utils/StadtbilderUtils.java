@@ -989,14 +989,18 @@ public class StadtbilderUtils {
         public StadtbildInfo(final CidsBean stadtbildserie, final CidsBean stadtbild) {
             final String bildnummer = (String)stadtbild.getProperty("bildnummer");
             final Integer bildtypId = (Integer)stadtbildserie.getProperty("bildtyp.id");
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTime((stadtbildserie.getProperty("aufnahmedatum") != null)
-                    ? (Date)stadtbildserie.getProperty("aufnahmedatum") : null);
-            final Integer jahr = calendar.get(Calendar.YEAR);
-
+            final Date aufnahmedatum = (Date)stadtbildserie.getProperty("aufnahmedatum");
+            final Integer jahr;
+            if (aufnahmedatum != null) {
+                final Calendar calendar = Calendar.getInstance();
+                calendar.setTime(aufnahmedatum);
+                jahr = calendar.get(Calendar.YEAR);
+            } else {
+                jahr = null;
+            }
+            this.jahr = jahr;
             this.bildnummer = bildnummer;
             this.bildtypId = bildtypId;
-            this.jahr = jahr;
             this.blickrichtung = (String)stadtbildserie.getProperty("blickrichtung.schluessel");
         }
 
