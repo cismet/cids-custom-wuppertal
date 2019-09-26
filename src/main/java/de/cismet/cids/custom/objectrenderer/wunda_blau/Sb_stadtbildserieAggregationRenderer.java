@@ -72,7 +72,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
-import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
@@ -114,8 +113,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     private static final String REPORT_STADTBILDSERIE_URL =
         "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildbericht.jasper";
-    private static final String REPORT_STADTBILDSERIE_EXCEL_URL =
-        "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildbericht_Excel.jasper";
     private static final String REPORT_STADTBILDVORSCHAU_URL =
         "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildvorschaubericht.jasper";
 
@@ -932,29 +929,15 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String filename = "Stadtbilder_Einzelbilderauszug";
             final String downloadTitle = "Stadtbilder Einzelbilderauszug";
+            final String resourceName = REPORT_STADTBILDSERIE_URL;
 
-            final ArrayList<Download> downloads = new ArrayList<>(2);
-
-            String resourceName = REPORT_STADTBILDSERIE_URL;
             final JasperReportDownload download = new JasperReportDownload(
                     resourceName,
                     dataSourceGenerator,
                     jobname,
                     downloadTitle,
                     filename);
-            downloads.add(download);
-
-            resourceName = REPORT_STADTBILDSERIE_EXCEL_URL;
-            final JasperReportExcelDownload excelDownload = new JasperReportExcelDownload(
-                    resourceName,
-                    dataSourceGenerator,
-                    jobname,
-                    downloadTitle,
-                    filename);
-            downloads.add(excelDownload);
-
-            final MultipleDownload multipleDownload = new MultipleDownload(downloads, filename);
-            DownloadManager.instance().add(multipleDownload);
+            DownloadManager.instance().add(download);
         }
     }
 
