@@ -819,7 +819,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    final ArrayList<SerienReportBean> stadtbilderReportBeans = new ArrayList<>();
+                    final ArrayList<StadtbildReportBean> stadtbilderReportBeans = new ArrayList<>();
 
                     final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel())
                                 .elements();
@@ -843,7 +843,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                 LOG.error("Image could not be fetched.", ex);
                                 image = StadtbilderUtils.ERROR_IMAGE;
                             }
-                            stadtbilderReportBeans.add(new SerienReportBean(stadtbildserie, image));
+                            stadtbilderReportBeans.add(new StadtbildReportBean(
+                                    stadtbildserie,
+                                    (CidsBean)stadtbildserie.getProperty("vorschaubild"),
+                                    image));
                         }
                     }
 
@@ -1994,28 +1997,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         public String getHausnummer() {
             return (String)stadtbildserie.getProperty("hausnummer");
         }
-    }
-
-    /**
-     * A Java Bean which is used to create the report for ordering the stadtbilder from the Warenkorb.
-     *
-     * @version  $Revision$, $Date$
-     */
-    public static class SerienReportBean extends StadtbildReportBean {
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new SerienReportBean object.
-         *
-         * @param  stadtbildserie  DOCUMENT ME!
-         * @param  image           DOCUMENT ME!
-         */
-        public SerienReportBean(final CidsBean stadtbildserie, final Image image) {
-            super(stadtbildserie, (CidsBean)stadtbildserie.getProperty("vorschaubild"), image);
-        }
-
-        //~ Methods ------------------------------------------------------------
 
         /**
          * DOCUMENT ME!
