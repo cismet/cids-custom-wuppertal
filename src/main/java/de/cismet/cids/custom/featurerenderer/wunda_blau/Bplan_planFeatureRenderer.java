@@ -26,6 +26,8 @@ import java.util.Properties;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+
 import de.cismet.cids.featurerenderer.*;
 
 import de.cismet.cismap.commons.Refreshable;
@@ -93,14 +95,14 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
                                 String subpath = "bplaene/images/nicht_rechtskraeftig/";
                                 final String url = properties.getProperty("bebauungsplanurl");
                                 ImageIcon i;
+
                                 if ("rechtskraeftig".equals(status)) {
                                     subpath = "bplaene/images/nicht_rechtskraeftig/";
                                 }
                                 if (url == null) {
                                     i = new ImageIcon(
-                                            new URL(
-                                                "http://s10221.wuppertal-intra.de:80"
-                                                        + subpath
+                                            ClientAlkisConf.getInstance().getDownloadUrlForDocument(
+                                                subpath
                                                         + "B"
                                                         + nummer
                                                         + "_TEXT.gif"));

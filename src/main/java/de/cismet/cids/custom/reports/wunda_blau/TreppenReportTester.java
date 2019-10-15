@@ -80,52 +80,6 @@ public class TreppenReportTester implements ConnectionContextProvider {
     /**
      * DOCUMENT ME!
      *
-     * @param  args1  the command line arguments
-     */
-    public static void main(final String[] args1) {
-        final String[] args = {
-                "http://s10221:9986/callserver/binary",
-                "WUNDA_BLAU",
-                "1",
-                "compressionEnabled"
-            };
-
-        Log4JQuickConfig.configure4LumbermillOnLocalhost();
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        final String callServerURL = args[0];
-                        final String domain = args[1];
-                        final int id = Integer.parseInt(args[2]);
-                        final boolean compressionEnabled = (args.length > 3) && "compressionEnabled".equals(args[3]);
-
-                        final TreppenReportTester tester = new TreppenReportTester(id, ConnectionContext.createDummy());
-                        tester.login(callServerURL, domain, compressionEnabled);
-                        // System.exit(0);
-                    } catch (final Exception ex) {
-                        LOG.fatal("Fehler beim Starten des TreppenReportTester.", ex);
-                        final ErrorInfo errorInfo = new ErrorInfo(
-                                "Fehler",
-                                "Fehler beim Starten des TreppenReportTester.",
-                                null,
-                                null,
-                                ex,
-                                Level.ALL,
-                                null);
-                        JXErrorPane.showDialog(null, errorInfo);
-                        System.exit(1);
-                    }
-                }
-            });
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  callServerURL       DOCUMENT ME!
      * @param  domain              DOCUMENT ME!
      * @param  compressionEnabled  DOCUMENT ME!

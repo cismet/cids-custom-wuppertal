@@ -72,7 +72,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
-import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
@@ -114,12 +113,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     private static final String REPORT_STADTBILDSERIE_URL =
         "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildbericht.jasper";
-    private static final String REPORT_STADTBILDSERIE_EXCEL_URL =
-        "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildbericht_Excel.jasper";
     private static final String REPORT_STADTBILDVORSCHAU_URL =
         "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildvorschaubericht.jasper";
-    private static final String REPORT_STADTBILDVORSCHAU_EXCEL_URL =
-        "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildvorschaubericht_Excel.jasper";
 
     private static final String DOMAIN = "WUNDA_BLAU";
     private static final ExecutorService highResAvailableThreadPool = CismetExecutors.newFixedThreadPool(20);
@@ -824,7 +819,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    final ArrayList<SerienReportBean> stadtbilderReportBeans = new ArrayList<>();
+                    final ArrayList<StadtbildReportBean> stadtbilderReportBeans = new ArrayList<>();
 
                     final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel())
                                 .elements();
@@ -848,7 +843,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                 LOG.error("Image could not be fetched.", ex);
                                 image = StadtbilderUtils.ERROR_IMAGE;
                             }
-                            stadtbilderReportBeans.add(new SerienReportBean(stadtbildserie, image));
+                            stadtbilderReportBeans.add(new StadtbildReportBean(
+                                    stadtbildserie,
+                                    (CidsBean)stadtbildserie.getProperty("vorschaubild"),
+                                    image));
                         }
                     }
 
@@ -863,28 +861,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             final String filename = "Stadtbilder_Serienauszug";
             final String downloadTitle = "Stadtbilder Serienauszug";
 
-            final ArrayList<Download> downloads = new ArrayList<>(2);
-
-            String resourceName = REPORT_STADTBILDVORSCHAU_URL;
+            final String resourceName = REPORT_STADTBILDVORSCHAU_URL;
             final JasperReportDownload download = new JasperReportDownload(
                     resourceName,
                     dataSourceGenerator,
                     jobname,
                     downloadTitle,
                     filename);
-            downloads.add(download);
-
-            resourceName = REPORT_STADTBILDVORSCHAU_EXCEL_URL;
-            final JasperReportExcelDownload excelDownload = new JasperReportExcelDownload(
-                    resourceName,
-                    dataSourceGenerator,
-                    jobname,
-                    downloadTitle,
-                    filename);
-            downloads.add(excelDownload);
-
-            final MultipleDownload multipleDownload = new MultipleDownload(downloads, filename);
-            DownloadManager.instance().add(multipleDownload);
+            DownloadManager.instance().add(download);
         }
     }
 
@@ -948,29 +932,15 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
             final String filename = "Stadtbilder_Einzelbilderauszug";
             final String downloadTitle = "Stadtbilder Einzelbilderauszug";
+            final String resourceName = REPORT_STADTBILDSERIE_URL;
 
-            final ArrayList<Download> downloads = new ArrayList<>(2);
-
-            String resourceName = REPORT_STADTBILDSERIE_URL;
             final JasperReportDownload download = new JasperReportDownload(
                     resourceName,
                     dataSourceGenerator,
                     jobname,
                     downloadTitle,
                     filename);
-            downloads.add(download);
-
-            resourceName = REPORT_STADTBILDSERIE_EXCEL_URL;
-            final JasperReportExcelDownload excelDownload = new JasperReportExcelDownload(
-                    resourceName,
-                    dataSourceGenerator,
-                    jobname,
-                    downloadTitle,
-                    filename);
-            downloads.add(excelDownload);
-
-            final MultipleDownload multipleDownload = new MultipleDownload(downloads, filename);
-            DownloadManager.instance().add(multipleDownload);
+            DownloadManager.instance().add(download);
         }
     }
 
@@ -2027,28 +1997,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         public String getHausnummer() {
             return (String)stadtbildserie.getProperty("hausnummer");
         }
-    }
-
-    /**
-     * A Java Bean which is used to create the report for ordering the stadtbilder from the Warenkorb.
-     *
-     * @version  $Revision$, $Date$
-     */
-    public static class SerienReportBean extends StadtbildReportBean {
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new SerienReportBean object.
-         *
-         * @param  stadtbildserie  DOCUMENT ME!
-         * @param  image           DOCUMENT ME!
-         */
-        public SerienReportBean(final CidsBean stadtbildserie, final Image image) {
-            super(stadtbildserie, (CidsBean)stadtbildserie.getProperty("vorschaubild"), image);
-        }
-
-        //~ Methods ------------------------------------------------------------
 
         /**
          * DOCUMENT ME!
