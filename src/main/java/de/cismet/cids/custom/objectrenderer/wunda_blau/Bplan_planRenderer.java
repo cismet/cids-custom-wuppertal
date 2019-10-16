@@ -126,6 +126,9 @@ public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer,
         panContent.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panContent.setOpaque(false);
         panContent.setLayout(new java.awt.BorderLayout());
+
+        rasterfariDocumentLoaderPanel1.setMinimumSize(new java.awt.Dimension(0, 500));
+        rasterfariDocumentLoaderPanel1.setPreferredSize(new java.awt.Dimension(0, 500));
         panContent.add(rasterfariDocumentLoaderPanel1, java.awt.BorderLayout.CENTER);
 
         add(panContent, java.awt.BorderLayout.CENTER);

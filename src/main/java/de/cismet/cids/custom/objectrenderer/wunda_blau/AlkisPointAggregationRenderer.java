@@ -1031,6 +1031,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             if (punktListenString.length() > 3) {
                 if ((product != null) && (product.length() > 0)) {
                     try {
+                        if (
+                            !DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                                        AlkisPointAggregationRenderer.this)) {
+                            return;
+                        }
                         final String title = "Punktnachweis";
                         final String filename = product;
                         final String directory = DownloadManagerDialog.getInstance().getJobName();
