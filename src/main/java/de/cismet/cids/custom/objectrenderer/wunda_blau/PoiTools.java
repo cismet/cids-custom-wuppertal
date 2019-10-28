@@ -16,7 +16,7 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.objectrenderer.utils.ClientStaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -30,13 +30,10 @@ public class PoiTools {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final ImageIcon DEFAULT_ICON;
+    private static final ImageIcon DEFAULT_ICON = getIconFromResourceString(ClientStaticProperties.getInstance()
+                    .getPoiSignaturDefaultIcon());
 
-    static {
-        DEFAULT_ICON = getIconFromResourceString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
-    }
-
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             PoiTools.class);
 
     //~ Methods ----------------------------------------------------------------
@@ -50,7 +47,8 @@ public class PoiTools {
      */
     public static ImageIcon createPoiIconFromFileName(String in) {
         if ((in != null) && (in.length() > 0)) {
-            in = StaticProperties.POI_SIGNATUR_URL_PREFIX + in + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
+            in = ClientStaticProperties.getInstance().getPoiSignaturUrlPrefix() + in
+                        + ClientStaticProperties.getInstance().getPoiSignaturUrlSuffix();
             try {
                 // first try to load from jar
                 URL symbolURL = Object.class.getResource(in);
@@ -62,7 +60,7 @@ public class PoiTools {
                     return new ImageIcon(symbolURL);
                 }
             } catch (Exception ex) {
-                log.warn(ex, ex);
+                LOG.warn(ex, ex);
             }
         }
         return null;
@@ -88,14 +86,14 @@ public class PoiTools {
                 if (symbolURL != null) {
                     final ImageIcon ret = new ImageIcon(symbolURL);
                     if (ret == null) {
-                        log.error("could not create icon from :" + symbolURL);
+                        LOG.error("could not create icon from :" + symbolURL);
                     }
                     return ret;
                 } else {
-                    log.error("could not create icon from :" + symbolURL);
+                    LOG.error("could not create icon from :" + symbolURL);
                 }
             } catch (Exception ex) {
-                log.warn("Error in getSymbolFromResourceString(" + in + ")", ex);
+                LOG.warn("Error in getSymbolFromResourceString(" + in + ")", ex);
             }
         }
         return null;
@@ -159,13 +157,13 @@ public class PoiTools {
             try {
                 final Object fileName = signatur.getProperty("filename");
                 if (fileName != null) {
-                    final String ret = StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName
-                                + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
-                    log.info("Signatur Url: " + ret);
+                    final String ret = ClientStaticProperties.getInstance().getPoiSignaturUrlPrefix() + fileName
+                                + ClientStaticProperties.getInstance().getPoiSignaturUrlSuffix();
+                    LOG.info("Signatur Url: " + ret);
                     return ret;
                 }
             } catch (Exception ex) {
-                log.error(ex, ex);
+                LOG.error(ex, ex);
             }
         }
         return null;

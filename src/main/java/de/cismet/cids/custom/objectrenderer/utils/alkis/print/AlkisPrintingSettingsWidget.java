@@ -53,20 +53,16 @@ import javax.swing.ListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
-import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
-
-import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.features.Feature;
@@ -80,8 +76,6 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.downloadmanager.Download;
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
@@ -1035,7 +1029,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             if (((alkisObjectListModel.get(i) instanceof CidsBean)
                             && ((CidsBean)alkisObjectListModel.get(i)).getMetaObject().getMetaClass().getTableName()
                             .equals(ALKIS_LANDPARCEL_TABLE))) {
-                landParcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(alkisObjectListModel.get(i));
+                landParcelCode = AlkisProducts.getLandparcelCodeFromParcelBeanObject(alkisObjectListModel.get(i));
                 break;
             }
         }
@@ -1073,7 +1067,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     info.getProduct(),
                     info.getLandparcelCode(),
                     info.getAuftragsnummer(),
-                    AlkisUtils.getFertigungsVermerk(null, getConnectionContext()),
+                    AlkisProductDownloadHelper.getFertigungsVermerk(null, getConnectionContext()),
                     info.getZusatz(),
                     info.getMassstab(),
                     info.getMassstabMin(),
@@ -1334,7 +1328,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                                     requestPerUsage,
                                     (Geometry)null,
                                     getConnectionContext(),
-                                    new ProductGroupAmount(prGroup, 1))) {
+                                    new BillingProductGroupAmount(prGroup, 1))) {
                         AlkisProductDownloadHelper.downloadKarteCustomProduct(
                             MAPPER.readValue(
                                 BillingPopup.getInstance().getCurrentRequest(),
