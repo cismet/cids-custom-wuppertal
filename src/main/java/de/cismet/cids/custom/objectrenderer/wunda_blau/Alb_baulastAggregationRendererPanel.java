@@ -55,7 +55,8 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.alkis.BaulastenReportGenerator;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -418,14 +419,14 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                                             "no.yet",
                                             (Geometry)null,
                                             getConnectionContext(),
-                                            new ProductGroupAmount("ea_bla", selectedBaulasten.size()))) {
+                                            new BillingProductGroupAmount("ea_bla", selectedBaulasten.size()))) {
                                 if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                                 Alb_baulastAggregationRendererPanel.this)) {
                                     String projectname = txtProjectname.getText();
                                     if ((projectname == null) || (projectname.trim().length() == 0)) {
                                         projectname = "";
                                     }
-                                    final Download download = BaulastenReportGenerator.generateDownload(
+                                    final Download download = BaulastenReportDownloadHelper.createDownload(
                                             type,
                                             selectedBaulasten,
                                             txtJobnumber.getText(),

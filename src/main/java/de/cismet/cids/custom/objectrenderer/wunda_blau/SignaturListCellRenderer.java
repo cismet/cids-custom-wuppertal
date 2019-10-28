@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.utils.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 

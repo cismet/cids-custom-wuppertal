@@ -52,9 +52,9 @@ import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import de.cismet.cids.custom.objectrenderer.utils.ClientStaticProperties;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -456,7 +456,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 final String laufendeNr = fnr.substring(6, fnr.length());
                 final String documentName = "FN_" + year + "_" + cidsBean.getProperty("gemarkungs_nr.gemarkungsnummer")
                             + "_" + laufendeNr;
-                String prefix = StaticProperties.FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
+                String prefix = ClientStaticProperties.getInstance().getFortfuehrungsnachweiseUrlPrefix();
                 if (prefix == null) {
                     prefix = "file://///S102gs/_102-alkis-dokumente/Fortführungsnachweise/";
                 }

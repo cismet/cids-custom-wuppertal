@@ -60,10 +60,10 @@ import javax.swing.event.ListSelectionListener;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.StadtbilderUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -1039,7 +1039,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "not.yet",
                                         (Geometry)null,
                                         getConnectionContext(),
-                                        new ProductGroupAmount("ea", amountDownloads))
+                                        new BillingProductGroupAmount("ea", amountDownloads))
                                     && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
                             if (amountDownloads == 1) {
@@ -1115,7 +1115,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         "not.yet",
                                         (Geometry)null,
                                         getConnectionContext(),
-                                        new ProductGroupAmount("ea", amountDownloads))
+                                        new BillingProductGroupAmount("ea", amountDownloads))
                                     && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                                         Sb_stadtbildserieAggregationRenderer.this)) {
                             if (amountDownloads == 1) {

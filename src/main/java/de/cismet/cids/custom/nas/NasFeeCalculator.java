@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import de.cismet.cids.custom.butler.DigitalDataExportToolbarComponentProvider;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.Product;
+import de.cismet.cids.custom.utils.billing.BillingProduct;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearchStatement.Pointtype;
 import de.cismet.cids.custom.wunda_blau.search.server.NasPointSearch;
@@ -239,14 +239,14 @@ public abstract class NasFeeCalculator {
      * @return  DOCUMENT ME!
      */
     private static double getPriceForProduct(final String product, final String productGroup) {
-        final HashMap<String, Product> products = BillingPopup.getProducts();
+        final HashMap<String, BillingProduct> products = BillingPopup.getProducts();
         Double d = 0d;
         if (products == null) {
             LOG.warn("Could not get the list of billing products");
             return d;
         }
 
-        final Product p = products.get(product);
+        final BillingProduct p = products.get(product);
         if (p == null) {
             LOG.warn("Could not find an entry for the product " + product + " in the billing.json");
             return d;

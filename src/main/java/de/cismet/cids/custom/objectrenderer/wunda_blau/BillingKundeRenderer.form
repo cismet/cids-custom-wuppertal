@@ -556,7 +556,7 @@
                     <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblBillingsMouseExited"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblBillings.setDefaultRenderer(Usage.class, new UsageRenderer());&#xa;tblBillings.setDefaultRenderer(DateRequestTuple.class, new DateRequestTupleRenderer());"/>
+                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblBillings.setDefaultRenderer(de.cismet.cids.custom.utils.billing.BillingUsage.class, new UsageRenderer());&#xa;tblBillings.setDefaultRenderer(DateRequestTuple.class, new DateRequestTupleRenderer());"/>
                   </AuxValues>
                 </Component>
               </SubComponents>

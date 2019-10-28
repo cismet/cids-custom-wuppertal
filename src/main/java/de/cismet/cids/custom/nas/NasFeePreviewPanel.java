@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.utils.nas.NasProduct;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -361,8 +361,8 @@ public class NasFeePreviewPanel extends javax.swing.JPanel implements Connection
      *
      * @return  DOCUMENT ME!
      */
-    public ArrayList<ProductGroupAmount> getProductGroupAmounts() {
-        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
+    public ArrayList<BillingProductGroupAmount> getProductGroupAmounts() {
+        final ArrayList<BillingProductGroupAmount> result = new ArrayList<BillingProductGroupAmount>();
         if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
             result.addAll(getProductGroupAmountForObject("eapkt", pointAmount));
         } else if (nasProduct.getKey().equalsIgnoreCase("ohne_eigentuemer")
@@ -392,33 +392,34 @@ public class NasFeePreviewPanel extends javax.swing.JPanel implements Connection
      *
      * @return  DOCUMENT ME!
      */
-    private ArrayList<ProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey, int amount) {
-        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
+    private ArrayList<BillingProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey,
+            int amount) {
+        final ArrayList<BillingProductGroupAmount> result = new ArrayList<BillingProductGroupAmount>();
         if (amount > 1000000) {
             final int tmpPoints = amount
                         - 1000000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
+            result.add(new BillingProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
             amount = 1000000;
         }
         if (amount > 100000) {
             final int tmpPoints = amount
                         - 100000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
+            result.add(new BillingProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
             amount = 100000;
         }
         if (amount > 10000) {
             final int tmpPoints = amount
                         - 10000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
+            result.add(new BillingProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
             amount = 10000;
         }
         if (amount > 1000) {
             final int tmpPoints = amount
                         - 1000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
+            result.add(new BillingProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
             amount = 1000;
         }
-        result.add(new ProductGroupAmount(objectBaseKey + "_1000", amount));
+        result.add(new BillingProductGroupAmount(objectBaseKey + "_1000", amount));
         return result;
     }
 
