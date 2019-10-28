@@ -56,8 +56,8 @@ import de.cismet.cids.custom.objectrenderer.utils.VermessungsRissWebAccessReport
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsrissReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -456,10 +456,10 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             for (final String productGroupExt : productGroupExts.keySet()) {
                                 final Map<String, Integer> priceGroups = productGroupExts.get(productGroupExt);
                                 final Set<String> keys = priceGroups.keySet();
-                                final ProductGroupAmount[] amounts = new ProductGroupAmount[keys.size()];
+                                final BillingProductGroupAmount[] amounts = new BillingProductGroupAmount[keys.size()];
                                 int i = 0;
                                 for (final String k : keys) {
-                                    amounts[i] = new ProductGroupAmount(k, priceGroups.get(k));
+                                    amounts[i] = new BillingProductGroupAmount(k, priceGroups.get(k));
                                     i++;
                                 }
 

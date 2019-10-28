@@ -32,9 +32,9 @@ import javax.swing.Timer;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.StadtbilderUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -376,7 +376,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
                             "not.yet",
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea", 1))
+                            new BillingProductGroupAmount("ea", 1))
                         && DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 final String jobname = DownloadManagerDialog.getInstance().getJobName();
                 final CidsBean stadtbildSerie = stadtbildserieProvider.getStadtbildserie();

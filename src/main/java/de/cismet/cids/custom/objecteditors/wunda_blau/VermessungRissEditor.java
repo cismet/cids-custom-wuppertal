@@ -81,8 +81,8 @@ import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
@@ -1329,7 +1329,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                                     url.toExternalForm(),
                                     (Geometry)null,
                                     getConnectionContext(),
-                                    new ProductGroupAmount(priceGroup, 1))) {
+                                    new BillingProductGroupAmount(priceGroup, 1))) {
                         downloadProduct(url, true);
                     }
                 } else {
@@ -1339,7 +1339,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                                     url.toExternalForm(),
                                     (Geometry)null,
                                     getConnectionContext(),
-                                    new ProductGroupAmount(priceGroup, 1))) {
+                                    new BillingProductGroupAmount(priceGroup, 1))) {
                         downloadProduct(url, false);
                     }
                 }

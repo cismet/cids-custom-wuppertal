@@ -22,7 +22,6 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -48,18 +47,26 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BillingKundeRenderer;
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungBillingDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungDownloadInfo;
+import de.cismet.cids.custom.utils.billing.BillingInfo;
+import de.cismet.cids.custom.utils.billing.BillingInfoHandler;
+import de.cismet.cids.custom.utils.billing.BillingModus;
+import de.cismet.cids.custom.utils.billing.BillingPrice;
+import de.cismet.cids.custom.utils.billing.BillingProduct;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
+import de.cismet.cids.custom.utils.billing.BillingUsage;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnfrageServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -92,9 +99,9 @@ public class BillingPopup extends javax.swing.JDialog {
 
     //~ Instance fields --------------------------------------------------------
 
-    Product currentProduct = null;
-    Modus currentMode = null;
-    Usage currentUsage = null;
+    BillingProduct currentProduct = null;
+    BillingModus currentMode = null;
+    BillingUsage currentUsage = null;
     /**
      * E.g. an URL to a webservice such that an alkis product can be downloaded again in the
      * {@link BillingKundeRenderer}
@@ -104,17 +111,13 @@ public class BillingPopup extends javax.swing.JDialog {
     Geometry geom = null;
     CidsBean logEntry = null;
     String berechnungPrefix = "";
-    private final BillingInfo billingInfo;
-    private final HashMap<String, Modus> modi = new HashMap<String, Modus>();
-    private final HashMap<String, Product> products = new HashMap<String, Product>();
-    private final HashMap<String, Usage> usages = new HashMap<String, Usage>();
-    private final HashMap<String, ProductGroup> productGroups = new HashMap<String, ProductGroup>();
+    private final BillingInfoHandler infoHandler;
 
     private final ImageIcon money = new javax.swing.ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/billing/money--exclamation.png"));
+
     private double rawPrice = 0;
-    private double nettoPrice = 0;
-    private double bruttoPrice = 0;
+    private BillingPrice price;
     private boolean shouldGoOn = false;
     private BerechtigungspruefungBillingDownloadInfo downloadInfo = null;
 
@@ -173,31 +176,23 @@ public class BillingPopup extends javax.swing.JDialog {
 
         BillingInfo billingInfoTmp;
         try {
-            billingInfoTmp = MAPPER.readValue(BillingPopup.class.getResourceAsStream(
-                        "/de/cismet/cids/custom/billing/billing.json"),
+            final Object ret = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.BILLING_JSON.getValue(),
+                            getConnectionContext());
+            if (ret instanceof Exception) {
+                throw (Exception)ret;
+            }
+            billingInfoTmp = MAPPER.readValue((String)ret,
                     BillingInfo.class);
-
-            final ArrayList<Modus> lm = billingInfoTmp.getModi();
-            for (final Modus m : lm) {
-                modi.put(m.getKey(), m);
-            }
-            final ArrayList<Product> lp = billingInfoTmp.getProducts();
-            for (final Product p : lp) {
-                products.put(p.getId(), p);
-            }
-            final ArrayList<Usage> lu = billingInfoTmp.getUsages();
-            for (final Usage u : lu) {
-                usages.put(u.getKey(), u);
-            }
-            final ArrayList<ProductGroup> lpg = billingInfoTmp.getProductGroups();
-            for (final ProductGroup pg : lpg) {
-                productGroups.put(pg.getKey(), pg);
-            }
-        } catch (IOException ioException) {
-            LOG.error("Error when trying to read the billingInfo.json", ioException);
+        } catch (final Exception exception) {
+            LOG.error("Error when trying to read the billingInfo.json", exception);
             billingInfoTmp = null;
         }
-        billingInfo = billingInfoTmp;
+        this.infoHandler = (billingInfoTmp != null) ? new BillingInfoHandler(billingInfoTmp) : null;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -220,7 +215,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String product,
             final String request,
             final Geometry geom,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, geom, ConnectionContext.createDeprecated(), amounts);
     }
 
@@ -242,7 +237,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String request,
             final Geometry geom,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, (Map)null, geom, connectionContext, amounts);
     }
 
@@ -266,7 +261,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, (Map)null, geom, downloadInfo, connectionContext, amounts);
     }
 
@@ -290,7 +285,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final Map<String, String> requestPerUsage,
             final Geometry geom,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(product, defaultRequest, requestPerUsage, geom, null, connectionContext, amounts);
     }
 
@@ -316,7 +311,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         final User user = SessionManager.getSession().getUser();
         final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR, connectionContext);
@@ -350,7 +345,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String gBuchNr,
             final Geometry geom,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, gBuchNr, null, geom, connectionContext, amounts);
     }
 
@@ -376,7 +371,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String projektbez,
             final Geometry geom,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, null, gBuchNr, projektbez, geom, null, connectionContext, amounts);
     }
 
@@ -404,7 +399,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(product, request, null, gBuchNr, projektbez, geom, downloadInfo, connectionContext, amounts);
     }
 
@@ -430,7 +425,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String gBuchNr,
             final Geometry geom,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(product, defaultRequest, requestPerUsage, gBuchNr, null, geom, connectionContext, amounts);
     }
 
@@ -458,7 +453,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final String projektbez,
             final Geometry geom,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         return doBilling(
                 product,
                 defaultRequest,
@@ -497,7 +492,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
             final ConnectionContext connectionContext,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         instance.txtGBuchNr.setText(gBuchNr);
         instance.txtProjektbez.setText(projektbez);
@@ -957,9 +952,9 @@ public class BillingPopup extends javax.swing.JDialog {
             cb.setProperty("modus", currentMode.getKey());
             cb.setProperty("produktkey", currentProduct.getId());
             cb.setProperty("produktbezeichnung", currentProduct.getName());
-            cb.setProperty("netto_summe", nettoPrice);
+            cb.setProperty("netto_summe", (price != null) ? price.getNetto() : null);
             cb.setProperty("mwst_satz", currentProduct.getMwst());
-            cb.setProperty("brutto_summe", bruttoPrice);
+            cb.setProperty("brutto_summe", (price != null) ? price.getBrutto() : null);
             cb.setProperty("geschaeftsbuchnummer", txtGBuchNr.getText());
 //        cb.setProperty("geometrie", null);
             cb.setProperty("modusbezeichnung", currentMode.getName());
@@ -1093,7 +1088,7 @@ public class BillingPopup extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void cboUsageActionPerformed(final java.awt.event.ActionEvent evt) {
-        calculateNettoPrice();
+        calculatePrice();
     }
 
     /**
@@ -1107,24 +1102,30 @@ public class BillingPopup extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      */
-    private void calculateNettoPrice() {
+    private void calculatePrice() {
         final Object sel = cboUsage.getSelectedItem();
-        if (sel instanceof Usage) {
-            currentUsage = (Usage)sel;
+        if (sel instanceof BillingUsage) {
+            currentUsage = (BillingUsage)sel;
             String berechungUsageDependent = "";
 
-            final double discount = currentProduct.getDiscounts().get(currentUsage.getKey());
-            final double absDiscount = (1.0 - discount) * rawPrice;
-
-            berechungUsageDependent = "zweckabhängiger Rabatt (" + Math.round((1.0 - discount) * 100) + "%) : -"
-                        + NumberFormat.getCurrencyInstance().format(absDiscount) + " \n";
+            price = new BillingPrice(rawPrice, currentUsage.getKey(), currentProduct);
+            berechungUsageDependent = "zweckabhängiger Rabatt (" + price.getDiscountPercentage() + "%) : -"
+                        + NumberFormat.getCurrencyInstance().format(price.getDiscountAbsolute()) + " \n";
             berechungUsageDependent += "---------\n";
-            nettoPrice = rawPrice * discount;
 
-            berechungUsageDependent += NumberFormat.getCurrencyInstance().format(nettoPrice) + " \n";
+            berechungUsageDependent += NumberFormat.getCurrencyInstance().format(price.getNetto()) + " \n";
 
             txtBerechnung.setText(berechnungPrefix + "\n" + berechungUsageDependent);
-            calculateBruttoPrice();
+
+            final DecimalFormat df = new DecimalFormat("0.#");
+            lblMwstTitle.setText("zzgl. MwSt. (" + df.format(currentProduct.getMwst()) + "%):");
+            lblMwst.setText(NumberFormat.getCurrencyInstance().format(price.getMwst()));
+            lblGebuehr.setText(NumberFormat.getCurrencyInstance().format(price.getBrutto()));
+            if (price.getBrutto() > 0) {
+                lblGebTitle.setIcon(money);
+            } else {
+                lblGebTitle.setIcon(null);
+            }
         } else {
             currentUsage = null;
         }
@@ -1135,40 +1136,8 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @return  DOCUMENT ME!
      */
-    public Usage getCurrentUsage() {
+    public BillingUsage getCurrentUsage() {
         return currentUsage;
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void calculateBruttoPrice() {
-        final double mwst = nettoPrice * (currentProduct.getMwst() / 100);
-        bruttoPrice = nettoPrice + mwst;
-        bruttoPrice = Math.round(bruttoPrice * 100) / 100.;
-
-        final DecimalFormat df = new DecimalFormat("0.#");
-        lblMwstTitle.setText("zzgl. MwSt. (" + df.format(currentProduct.getMwst()) + "%):");
-        lblMwst.setText(NumberFormat.getCurrencyInstance().format(mwst));
-        lblGebuehr.setText(NumberFormat.getCurrencyInstance().format(bruttoPrice));
-        if (bruttoPrice > 0) {
-            lblGebTitle.setIcon(money);
-        } else {
-            lblGebTitle.setIcon(null);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!modus.
-     *
-     * @param  product  DOCUMENT ME!
-     * @param  amounts  DOCUMENT ME!
-     */
-    private void calculateRawPrice(final String product, final ProductGroupAmount... amounts) {
-        rawPrice = 0;
-        for (final ProductGroupAmount pga : amounts) {
-            rawPrice += ((double)pga.getAmount()) * currentProduct.getPrices().get(pga.group);
-        }
     }
 
     /**
@@ -1209,7 +1178,7 @@ public class BillingPopup extends javax.swing.JDialog {
     private static String[] getAllowedUsages(final User user,
             final String product,
             final ConnectionContext connectionContext) throws ConnectionException {
-        final Set<String> allowedUsages = new LinkedHashSet<String>();
+        final Set<String> allowedUsages = new LinkedHashSet<>();
 
         final String rawAllowedUsageLines = SessionManager.getConnection()
                     .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR, connectionContext);
@@ -1271,14 +1240,14 @@ public class BillingPopup extends javax.swing.JDialog {
             final Map<String, String> requestPerUsage,
             final Geometry geom,
             final BerechtigungspruefungBillingDownloadInfo downloadInfo,
-            final ProductGroupAmount... amounts) throws Exception {
+            final BillingProductGroupAmount... amounts) throws Exception {
         final User user = SessionManager.getSession().getUser();
 
         // Auslesen des Modus für diesen User
         final String modus = SessionManager.getConnection()
                     .getConfigAttr(user, MODE_CONFIG_ATTR, getConnectionContext());
 
-        currentMode = modi.get(modus);
+        currentMode = infoHandler.getModi().get(modus);
         if (currentMode == null) {
             // Im Moment noch Dialog beenden, später Exception und Druck ablehnen
             LOG.info("mode " + modus + " not found in billing.json. will hide billing popup. reports for free ;-)");
@@ -1290,11 +1259,9 @@ public class BillingPopup extends javax.swing.JDialog {
         txtBerechnung.setText(null);
         berechnungPrefix = "";
 
-        currentProduct = products.get(product);
+        currentProduct = infoHandler.getProducts().get(product);
 
         berechnungPrefix = "\nProdukt: " + currentProduct.getName() + "\n\n";
-
-        final HashMap<String, Double> prices = new HashMap<String, Double>();
 
         // Check ob es die Produktid gibt
         if (currentProduct == null) {
@@ -1302,40 +1269,42 @@ public class BillingPopup extends javax.swing.JDialog {
         }
 
         // Check ob es jede Produktgruppe gibt
-        for (final ProductGroupAmount pga : amounts) {
-            if ((currentProduct.getPrices().get(pga.group) == null) || (productGroups.get(pga.group) == null)) {
-                throw new IllegalArgumentException("Productgroup " + pga.group
+        for (final BillingProductGroupAmount pga : amounts) {
+            if ((currentProduct.getPrices().get(pga.getGroup()) == null)
+                        || (infoHandler.getProductGroups().get(pga.getGroup()) == null)) {
+                throw new IllegalArgumentException("Productgroup " + pga.getGroup()
                             + " not in the configured productgroups.");
             }
-            berechnungPrefix += (pga.getAmount() + " " + productGroups.get(pga.group).getDescription() + " (a "
-                            + NumberFormat.getCurrencyInstance().format(currentProduct.getPrices().get(pga.group))
+            berechnungPrefix += (pga.getAmount() + " "
+                            + infoHandler.getProductGroups().get(pga.getGroup()).getDescription() + " (a "
+                            + NumberFormat.getCurrencyInstance().format(currentProduct.getPrices().get(pga.getGroup()))
                             + ")\n");
         }
 
         berechnungPrefix += "---------\n";
-        calculateRawPrice(product, amounts);
+        rawPrice = BillingInfoHandler.calculateRawPrice(currentProduct, amounts);
         berechnungPrefix += NumberFormat.getCurrencyInstance().format(rawPrice) + " \n";
         berechnungPrefix += "\n";
 
         // Auslesen der gültigen Verwendungszwecke
-        final String[] validUsages = getAllowedUsages(user, currentProduct.id, getConnectionContext());
+        final String[] validUsages = getAllowedUsages(user, currentProduct.getId(), getConnectionContext());
 
-        final Usage[] comboUsages = new Usage[validUsages.length];
+        final BillingUsage[] comboUsages = new BillingUsage[validUsages.length];
         int i = 0;
         // Check ob dazu überhaupt ein Discount vorliegt
         for (final String usage : validUsages) {
-            if ((currentProduct.getDiscounts().get(usage) == null) || (usages.get(usage) == null)) {
+            if ((currentProduct.getDiscounts().get(usage) == null) || (infoHandler.getUsages().get(usage) == null)) {
                 throw new IllegalArgumentException("Usage " + usage + " not in the configured discounts for product "
-                            + currentProduct.id);
+                            + currentProduct.getId());
             }
-            comboUsages[i++] = usages.get(usage);
+            comboUsages[i++] = infoHandler.getUsages().get(usage);
         }
 
         cboUsage.setModel(new DefaultComboBoxModel(comboUsages));
 
         setTitle(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.title") + " (" + user + ")");
 
-        calculateNettoPrice();
+        calculatePrice();
 
         this.defaultRequest = defaultRequest;
         this.requestPerUsage = requestPerUsage;
@@ -1368,17 +1337,8 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @return  DOCUMENT ME!
      */
-    public static BillingInfo getBillingInfo() {
-        return getInstance().billingInfo;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static HashMap<String, Product> getProducts() {
-        return getInstance().products;
+    public static HashMap<String, BillingProduct> getProducts() {
+        return getInstance().infoHandler.getProducts();
     }
 
     /**
@@ -1399,10 +1359,10 @@ public class BillingPopup extends javax.swing.JDialog {
                 "request",
                 null,
                 ConnectionContext.createDummy(),
-                new ProductGroupAmount("ea", 2),
-                new ProductGroupAmount("ea", 1),
-                new ProductGroupAmount("ea", 1),
-                new ProductGroupAmount("ea", 1));
+                new BillingProductGroupAmount("ea", 2),
+                new BillingProductGroupAmount("ea", 1),
+                new BillingProductGroupAmount("ea", 1),
+                new BillingProductGroupAmount("ea", 1));
 
         System.out.println("schluss " + t);
 
@@ -1484,20 +1444,20 @@ public class BillingPopup extends javax.swing.JDialog {
             final ConnectionContext connectionContext) {
         final Collection<ServerActionParameter> params = new ArrayList<ServerActionParameter>();
         try {
-            params.add(new ServerActionParameter<String>(
+            params.add(new ServerActionParameter<>(
                     BerechtigungspruefungAnfrageServerAction.ParameterType.DATEINAME.toString(),
                     fileName));
 
-            params.add(new ServerActionParameter<String>(
+            params.add(new ServerActionParameter<>(
                     BerechtigungspruefungAnfrageServerAction.ParameterType.BERECHTIGUNGSGRUND.toString(),
                     berechtigungsgrund));
 
-            params.add(new ServerActionParameter<String>(
+            params.add(new ServerActionParameter<>(
                     BerechtigungspruefungAnfrageServerAction.ParameterType.BEGRUENDUNG.toString(),
                     begruendung));
 
             final ObjectMapper mapper = new ObjectMapper();
-            params.add(new ServerActionParameter<String>(
+            params.add(new ServerActionParameter<>(
                     BerechtigungspruefungAnfrageServerAction.ParameterType.DOWNLOADINFO_JSON.toString(),
                     mapper.writeValueAsString(downloadInfo)));
 

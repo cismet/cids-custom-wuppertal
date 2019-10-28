@@ -42,8 +42,8 @@ import javax.swing.table.TableModel;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.actions.NivPReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -363,7 +363,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                             "no.yet",
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea", selectedNivellementPunkte.size()))) {
+                            new BillingProductGroupAmount("ea", selectedNivellementPunkte.size()))) {
                 downloadReport(
                     selectedNivellementPunkte,
                     txtJobnumber.getText(),
