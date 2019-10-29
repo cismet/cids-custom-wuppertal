@@ -207,6 +207,40 @@ public class BaulastenReportDownloadHelper {
     /**
      * DOCUMENT ME!
      *
+     * @param   selectedBaulasten  DOCUMENT ME!
+     * @param   jobnumber          DOCUMENT ME!
+     * @param   projectname        DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private static Collection<Download> createTextblattPlanRasterDownloads(final Collection<CidsBean> selectedBaulasten,
+            final String jobnumber,
+            final String projectname,
+            final ConnectionContext connectionContext) throws Exception {
+        final String jobname = DownloadManagerDialog.getJobname();
+        final Collection<Download> downloads = new ArrayList<>();
+        downloads.add(createReportDownload(
+                BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER,
+                selectedBaulasten,
+                jobname,
+                jobnumber,
+                projectname,
+                "Bericht aus dem Baulastenverzeichnis",
+                connectionContext));
+        downloads.addAll(createAdditionalFilesDownloads(
+                jobname,
+                selectedBaulasten,
+                projectname,
+                connectionContext));
+        return downloads;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   type               DOCUMENT ME!
      * @param   selectedBaulasten  DOCUMENT ME!
      * @param   jobnumber          DOCUMENT ME!
@@ -229,21 +263,11 @@ public class BaulastenReportDownloadHelper {
 
                     @Override
                     public Collection<? extends Download> fetchDownloads() throws Exception {
-                        final Collection<Download> downloads = new ArrayList<>();
-                        downloads.add(createReportDownload(
-                                type,
+                        return createTextblattPlanRasterDownloads(
                                 selectedBaulasten,
-                                jobname,
                                 jobnumber,
                                 projectname,
-                                "Bericht aus dem Baulastenverzeichnis",
-                                connectionContext));
-                        downloads.addAll(createAdditionalFilesDownloads(
-                                jobname,
-                                selectedBaulasten,
-                                projectname,
-                                connectionContext));
-                        return downloads;
+                                connectionContext);
                     }
                 };
             return new BackgroundTaskMultipleDownload(null, jobname, fetchDownloadsTask);
@@ -432,8 +456,7 @@ public class BaulastenReportDownloadHelper {
                             }
 
                             if (!allBaulasten.isEmpty()) {
-                                downloads.add(createDownload(
-                                        BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER,
+                                downloads.addAll(createTextblattPlanRasterDownloads(
                                         allBaulasten,
                                         jobname,
                                         downloadInfo.getProduktbezeichnung(),
