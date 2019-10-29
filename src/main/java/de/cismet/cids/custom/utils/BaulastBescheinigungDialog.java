@@ -363,6 +363,10 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                 LOG.info("could not check config attr", ex);
             }
 
+            final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
+            downloadInfo.setAuftragsnummer(hasBilling ? null : jTextField2.getText());
+            downloadInfo.setProduktbezeichnung(hasBilling ? null : jTextField1.getText());
+
             final Collection<BillingProductGroupAmount> prodAmounts = new ArrayList<>();
             for (final HashMap.Entry<String, Integer> amount : downloadInfo.getAmounts().entrySet()) {
                 prodAmounts.add(new BillingProductGroupAmount(amount.getKey(), amount.getValue()));
