@@ -365,8 +365,8 @@ public class BaulastenReportDownloadHelper {
                 BaulastenReportServerAction.TASK_NAME,
                 null,
                 saps,
-                jobName,
                 title,
+                jobName,
                 "baulasten",
                 ".pdf",
                 connectionContext);
