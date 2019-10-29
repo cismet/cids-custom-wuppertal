@@ -227,8 +227,8 @@ public class BaulastenReportDownloadHelper {
                 selectedBaulasten,
                 jobname,
                 jobnumber,
-                "Bericht aus dem Baulastenverzeichnis",
                 projectname,
+                "Bericht aus dem Baulastenverzeichnis",
                 connectionContext));
         downloads.addAll(createAdditionalFilesDownloads(
                 jobname,
