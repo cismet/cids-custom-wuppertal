@@ -163,8 +163,8 @@ public class BaulastenReportDownloadHelper {
                 BaulastBescheinigungReportServerAction.TASK_NAME,
                 null,
                 saps,
-                jobName,
                 title,
+                jobName,
                 fileName,
                 ".pdf",
                 connectionContext);
@@ -227,8 +227,8 @@ public class BaulastenReportDownloadHelper {
                 selectedBaulasten,
                 jobname,
                 jobnumber,
-                projectname,
                 "Bericht aus dem Baulastenverzeichnis",
+                projectname,
                 connectionContext));
         downloads.addAll(createAdditionalFilesDownloads(
                 jobname,
