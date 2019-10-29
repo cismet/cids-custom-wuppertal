@@ -17,8 +17,8 @@ import java.awt.Paint;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
+import de.cismet.cids.custom.objectrenderer.utils.ClientStaticProperties;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.PoiTools;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
@@ -42,7 +42,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
     private static final FeatureAnnotationSymbol DEFAULT_SYMBOL;
 
     static {
-        DEFAULT_SYMBOL = getSymbolFromResourceString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
+        DEFAULT_SYMBOL = getSymbolFromResourceString(ClientStaticProperties.getInstance().getPoiSignaturDefaultIcon());
         if (DEFAULT_SYMBOL != null) {
             DEFAULT_SYMBOL.setSweetSpotX(0.5d);
             DEFAULT_SYMBOL.setSweetSpotY(0.5d);

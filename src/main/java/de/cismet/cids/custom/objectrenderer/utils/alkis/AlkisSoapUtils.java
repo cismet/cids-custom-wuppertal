@@ -39,7 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -750,26 +749,6 @@ public class AlkisSoapUtils {
             return "Anteil " + fraction;
         }
         return "";
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   buchungsblattCode  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String fixBuchungslattCode(final String buchungsblattCode) {
-        if (buchungsblattCode != null) {
-            final StringBuffer buchungsblattCodeSB = new StringBuffer(buchungsblattCode);
-            // Fix SICAD-API-strangeness...
-            while (buchungsblattCodeSB.length() < 14) {
-                buchungsblattCodeSB.append(" ");
-            }
-            return buchungsblattCodeSB.toString();
-        } else {
-            return "";
-        }
     }
 
     //~ Inner Classes ----------------------------------------------------------

@@ -6,20 +6,9 @@
 *
 ****************************************************/
 /*
- *  Copyright (C) 2011 thorsten
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
@@ -41,6 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer.Buchungsblattbezirke;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.wunda_blau.search.actions.ServerAlkisSoapAction;
 
@@ -56,7 +47,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 /**
  * DOCUMENT ME!
  *
- * @author   thorsten
+ * @author   jruiz
  * @version  $Revision$, $Date$
  */
 public class AlkisUtils {
@@ -93,7 +84,7 @@ public class AlkisUtils {
 
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     public static final String ALKIS_EIGENTUEMER = "custom.alkis.buchungsblatt@WUNDA_BLAU";
-    static final Buchungsblattbezirke BUCHUNGSBLATTBEZIRKE;
+    static final AlkisBuchungsblattRenderer.Buchungsblattbezirke BUCHUNGSBLATTBEZIRKE;
 
     static {
         final ConnectionContext connectionContext = ConnectionContext.create(
@@ -476,7 +467,7 @@ public class AlkisUtils {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static Point getPointFromAlkisSOAPServerAction(final String pointCode,
+    public Point getPointFromAlkisSOAPServerAction(final String pointCode,
             final ConnectionContext connectionContext) throws Exception {
         final ServerActionParameter pointCodeSAP = new ServerActionParameter<String>(
                 ServerAlkisSoapAction.RETURN_VALUE.POINT.toString(),
@@ -503,7 +494,7 @@ public class AlkisUtils {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static Buchungsblatt getBuchungsblattFromAlkisSOAPServerAction(final String buchungsblattCode,
+    public Buchungsblatt getBuchungsblattFromAlkisSOAPServerAction(final String buchungsblattCode,
             final ConnectionContext connectionContext) throws Exception {
         final ServerActionParameter buchungsblattCodeSAP = new ServerActionParameter<>(
                 ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT.toString(),
@@ -523,181 +514,23 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   buchungsblattCode  DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
-    public static String fixBuchungslattCode(final String buchungsblattCode) {
-        if (buchungsblattCode != null) {
-            final StringBuffer buchungsblattCodeSB = new StringBuffer(buchungsblattCode);
-            // Fix SICAD-API-strangeness...
-            while (buchungsblattCodeSB.length() < 14) {
-                buchungsblattCodeSB.append(" ");
-            }
-            return buchungsblattCodeSB.toString();
-        } else {
-            return "";
-        }
+    public static AlkisUtils getInstance() {
+        return LazyInitialiser.INSTANCE;
     }
+
+    //~ Inner Classes ----------------------------------------------------------
 
     /**
      * DOCUMENT ME!
      *
-     * @param   product  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
+     * @version  $Revision$, $Date$
      */
-    public static String getActionTag(final String product) {
-        final String actionTag;
-        if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_HTML).equals(
-                        product)) {
-            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS;
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF)
-                    .equals(product)
-                    || ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML).equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW;
-        } else if (
-            ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(
-                        product)) {
-            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN;
-        } else if (
-            ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML).equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM;
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(
-                        product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_HTML)
-                    .equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM;
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(
-                        product)
-                    || ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN;
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_HTML).equals(
-                        product)) {
-            actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW;
-        } else if (ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW;
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_HTML)
-                    .equals(product)) {
-            actionTag = PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW;
-        } else {
-            actionTag = "3wbgW§$%Q&/"; // unknown product, prevent NPE while checking action tag with null
-        }
-        return actionTag;
-    }
+    private static final class LazyInitialiser {
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   product  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String getProductName(final String product) {
-        final String downloadTitle;
-        if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_HTML).equals(
-                        product)) {
-            downloadTitle = "Flurstücksnachweis";
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF)
-                    .equals(product)
-                    || ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML).equals(product)) {
-            downloadTitle = "Flurstücks- und Eigentumsnachweis NRW";
-        } else if (
-            ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML).equals(product)) {
-            downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal)";
-        } else if (
-            ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(
-                        product)) {
-            downloadTitle = "Flurstücks- und Eigentumsnachweis (kommunal, intern)";
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_HTML).equals(
-                        product)) {
-            downloadTitle = "Bestandsnachweis (NRW)";
-        } else if (ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
-            downloadTitle = "Bestandsnachweis stichtagsbezogen (NRW)";
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(
-                        product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_HTML)
-                    .equals(product)) {
-            downloadTitle = "Bestandsnachweis (kommunal)";
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF).equals(
-                        product)
-                    || ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML).equals(product)) {
-            downloadTitle = "Bestandsnachweis (kommunal, intern)";
-        } else if (
-            ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(product)
-                    || ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_HTML)
-                    .equals(product)) {
-            downloadTitle = "Grundstücksnachweis (NRW)";
-        } else {
-            downloadTitle = null;
-        }
-        return downloadTitle;
-    }
+        //~ Static fields/initializers -----------------------------------------
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   product  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String getBillingKey(final String product) {
-        final String billingKey;
-        if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.FLURSTUECKSNACHWEIS_PDF).equals(product)) {
-            billingKey = "fsnw";
-        } else if (ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF).equals(product)) {
-            billingKey = "fsuenw";
-        } else if (ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF).equals(product)) {
-            billingKey = "fsuekom";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_NRW_PDF).equals(
-                        product)) {
-            billingKey = "benw";
-        } else if (ClientAlkisProducts.getInstance().get(
-                        ClientAlkisProducts.Type.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF).equals(product)) {
-            billingKey = "bestnw";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.BESTANDSNACHWEIS_KOMMUNAL_PDF).equals(
-                        product)) {
-            billingKey = "bekom";
-        } else if (ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.GRUNDSTUECKSNACHWEIS_NRW_PDF).equals(
-                        product)) {
-            billingKey = "grnw";
-        } else {
-            billingKey = null;
-        }
-        return billingKey;
+        private static final AlkisUtils INSTANCE = new AlkisUtils();
     }
 }

@@ -60,8 +60,8 @@ import javax.swing.table.AbstractTableModel;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.utils.nas.NasProduct;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
@@ -726,8 +726,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
                                 return;
                             }
                         }
-                        final ArrayList<ProductGroupAmount> list = feePreview.getProductGroupAmounts();
-                        final ProductGroupAmount[] goupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
+                        final ArrayList<BillingProductGroupAmount> list = feePreview.getProductGroupAmounts();
+                        final BillingProductGroupAmount[] goupAmounts = list.toArray(
+                                new BillingProductGroupAmount[list.size()]);
                         if (BillingPopup.doBilling(
                                         product.getBillingKey(),
                                         "request",

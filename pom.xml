@@ -13,7 +13,7 @@
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>6.12.9-aaaweb-6.4-pre-release-1</version>
+    <version>6.14-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal} [${project.version}]</name>
@@ -23,7 +23,7 @@
         <connection>scm:https://github.com/cismet/cids-custom-wuppertal.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-custom-wuppertal.git</developerConnection>
         <url>https://github.com/cismet/cids-custom-wuppertal</url>
-        <tag>v6.12.9-aaaweb-6.4-pre-release-1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.14.7-aaaweb-6.4-pre-release-1</version>
+                <version>6.15.1-aaaweb-6.4-pre-release-1</version>
                 <type>jar</type>
             </dependency>
             
@@ -399,13 +399,6 @@
             <version>0.9.5</version>
         </dependency>
         <dependency>
-            <groupId>com.drewnoakes</groupId>
-            <artifactId>metadata-extractor</artifactId>
-            <version>2.8.1</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.2.2</version>
@@ -431,13 +424,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>com.twelvemonkeys.imageio</groupId>
-            <artifactId>imageio-metadata</artifactId>
-            <version>3.0</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.0.12</version>
@@ -448,13 +434,6 @@
             <groupId>net.java.dev.fuse</groupId>
             <artifactId>fuse-core</artifactId>
             <version>0.4</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.twelvemonkeys.common</groupId>
-            <artifactId>common-lang</artifactId>
-            <version>3.0</version>
             <scope>compile</scope>
             <type>jar</type>
         </dependency>

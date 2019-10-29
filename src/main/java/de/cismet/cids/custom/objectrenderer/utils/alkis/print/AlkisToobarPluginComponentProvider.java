@@ -33,9 +33,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
-
-import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
@@ -91,7 +89,7 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
 
     @Override
     public List<ToolbarComponentDescription> getToolbarComponents() {
-        if (AlkisUtils.validateUserHasAlkisPrintAccess(getConnectionContext())) {
+        if (AlkisProductDownloadHelper.validateUserHasAlkisPrintAccess(getConnectionContext())) {
             return toolbarComponents;
         } else {
             return Collections.emptyList();

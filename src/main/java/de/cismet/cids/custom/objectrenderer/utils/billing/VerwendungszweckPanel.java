@@ -45,6 +45,9 @@ import javax.swing.Action;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
+import de.cismet.cids.custom.utils.billing.BillingInfo;
+import de.cismet.cids.custom.utils.billing.BillingUsage;
+
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
@@ -63,7 +66,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
 
     private static final Logger LOG = Logger.getLogger(VerwendungszweckPanel.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final HashMap<String, Usage> USAGES = new HashMap<String, Usage>();
+    private static final HashMap<String, BillingUsage> USAGES = new HashMap<String, BillingUsage>();
 
     static {
         try {
@@ -71,8 +74,8 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
                         "/de/cismet/cids/custom/billing/billing.json"),
                     BillingInfo.class);
 
-            final ArrayList<Usage> lu = billingInfo.getUsages();
-            for (final Usage u : lu) {
+            final ArrayList<BillingUsage> lu = billingInfo.getUsages();
+            for (final BillingUsage u : lu) {
                 USAGES.put(u.getKey(), u);
             }
         } catch (IOException ioException) {
@@ -82,7 +85,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
 
     //~ Instance fields --------------------------------------------------------
 
-    private final HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
+    private final HashMap<JCheckBox, BillingUsage> mappingJCheckboxToUsages = new HashMap<JCheckBox, BillingUsage>();
     private Action filterAction;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -176,7 +179,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
         }
 
         final List<JCheckBox> checkboxes = new ArrayList<JCheckBox>(USAGES.values().size());
-        for (final Usage usage : USAGES.values()) {
+        for (final BillingUsage usage : USAGES.values()) {
             if ((allowedUsages == null) || allowedUsages.contains(usage.getKey())) {
                 final JCheckBox checkBox = new JCheckBox();
                 checkBox.setSelected(true);
@@ -284,7 +287,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
         final ArrayList<String> ret = new ArrayList<String>();
         for (final JCheckBox jCheckBox : mappingJCheckboxToUsages.keySet()) {
             if (jCheckBox.isSelected()) {
-                final Usage usage = mappingJCheckboxToUsages.get(jCheckBox);
+                final BillingUsage usage = mappingJCheckboxToUsages.get(jCheckBox);
                 ret.add(usage.getKey());
             }
         }
@@ -296,7 +299,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
      *
      * @return  DOCUMENT ME!
      */
-    public static HashMap<String, Usage> getUsages() {
+    public static HashMap<String, BillingUsage> getUsages() {
         return USAGES;
     }
 
