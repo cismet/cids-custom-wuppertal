@@ -787,7 +787,6 @@ public class AlkisSoapUtils {
             final String[] lfds1 = tmp1.split("\\.");
             final String[] lfds2 = tmp2.split("\\.");
 
-            LOG.fatal("compare " + tmp1 + " to " + tmp2);
             for (int i = 0; i < Math.max(lfds1.length, lfds2.length); i++) {
                 String lfd1 = (i < lfds1.length) ? lfds1[i] : StringUtils.repeat("0", lfds2[i].length());
                 String lfd2 = (i < lfds2.length) ? lfds2[i] : StringUtils.repeat("0", lfds1[i].length());
@@ -799,8 +798,6 @@ public class AlkisSoapUtils {
                 }
 
                 final int compare = lfd1.compareTo(lfd2);
-                LOG.fatal("   " + lfd1 + " and " + lfd2 + " => " + compare);
-
                 if (compare != 0) {
                     return compare;
                 }
