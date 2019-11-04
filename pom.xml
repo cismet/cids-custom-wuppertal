@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.15.2</version>
+                <version>6.15.3-aaaweb-6.4-pre-release-1</version>
                 <type>jar</type>
             </dependency>
             
@@ -166,7 +166,7 @@
                 <groupId>de.cismet</groupId>
                 <artifactId>jgrid</artifactId>
                 <version>6.0</version>
-            </dependency>
+            </dependency>               
             <!-- END: managed cids-dependencies -->  
         </dependencies>
     </dependencyManagement>
@@ -350,7 +350,7 @@
             <artifactId>commons-lang</artifactId>
             <scope>compile</scope>
             <type>jar</type>
-        </dependency>   
+        </dependency>     
         <!-- END: managed dependencies -->
 
         <!-- BEGIN: Runtime dependencies -->
@@ -367,7 +367,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
+        </dependency>        
         <!-- END: Provided dependencies -->
         
         <!-- BEGIN: unmanaged dependencies -->
@@ -410,11 +410,11 @@
                     <artifactId>stax-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>      
         <dependency>
             <groupId>de.aedsicad</groupId>
             <artifactId>aaaweb-soap-connector</artifactId>
-            <version>6.3.16.1-2</version>
+            <version>6.4-pre-release-2</version>
         </dependency>        
         <dependency>
             <groupId>jfree</groupId>
@@ -460,7 +460,6 @@
         <dependency>
             <groupId>com.jgoodies</groupId>
             <artifactId>looks</artifactId>
-            <version>2.2.2</version>
             <scope>compile</scope>
             <type>jar</type>
         </dependency>        
