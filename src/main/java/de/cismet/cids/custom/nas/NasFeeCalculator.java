@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import de.cismet.cids.custom.butler.DigitalDataExportToolbarComponentProvider;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.billing.BillingProduct;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerAction;

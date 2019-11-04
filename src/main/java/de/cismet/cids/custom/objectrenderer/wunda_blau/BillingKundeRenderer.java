@@ -49,7 +49,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Observable;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
@@ -76,7 +75,6 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel;
 import de.cismet.cids.custom.reports.wunda_blau.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.utils.billing.BillingUsage;
-import de.cismet.cids.custom.wunda_blau.JahresberichtDialog;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostentyp;
 
