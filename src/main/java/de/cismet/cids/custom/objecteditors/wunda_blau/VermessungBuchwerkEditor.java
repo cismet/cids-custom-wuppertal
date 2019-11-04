@@ -50,7 +50,6 @@ import javax.swing.text.DocumentFilter;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.alkis.AlkisConf;
 import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 

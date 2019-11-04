@@ -753,30 +753,6 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
     /**
      * DOCUMENT ME!
      *
-     * @param   buchungsblattcode  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private String fixBuchungslattCode(final String buchungsblattcode) {
-        String result = "";
-
-        if (buchungsblattcode != null) {
-            final StringBuffer buchungsblattcodeBuffer = new StringBuffer(buchungsblattcode);
-
-            // Fix SICAD-API-strangeness...
-            while (buchungsblattcodeBuffer.length() < 14) {
-                buchungsblattcodeBuffer.append(" ");
-            }
-
-            result = buchungsblattcodeBuffer.toString();
-        }
-
-        return result;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param   cidsBean  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -788,7 +764,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             final Object buchungsblattcode = cidsBean.getProperty("buchungsblattcode");
 
             if (buchungsblattcode != null) {
-                result = fixBuchungslattCode(buchungsblattcode.toString());
+                result = AlkisProducts.fixBuchungslattCode(buchungsblattcode.toString());
             }
         }
 

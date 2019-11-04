@@ -178,7 +178,7 @@ public class AlkisProductDownloadHelper {
                 continue;
             }
 
-            final String queryID = AlkisProducts.escapeHtmlSpaces(buchungsblattCode);
+            final String queryID = AlkisSoapUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
                 final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
@@ -248,7 +248,7 @@ public class AlkisProductDownloadHelper {
 
         try {
             if (completeBuchungsblattCode.length() > 0) {
-                final String alkisCode = AlkisProducts.escapeHtmlSpaces(completeBuchungsblattCode);
+                final String alkisCode = AlkisSoapUtils.escapeHtmlSpaces(completeBuchungsblattCode);
 
                 final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
                 final String directory = DownloadManagerDialog.getInstance().getJobName();

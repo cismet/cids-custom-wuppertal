@@ -34,7 +34,6 @@ import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.LandParcel;
 import de.aedsicad.aaaweb.service.util.Offices;
-import de.aedsicad.aaaweb.service.util.Owner;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
@@ -92,6 +91,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSoapUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
@@ -2225,14 +2225,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     buchungsblatt = get();
                     if (buchungsblatt != null) {
                         displayBuchungsblattInfos(buchungsblatt);
-                        final Owner[] owners = buchungsblatt.getOwners();
-
-                        final StringBuilder ownerBuilder = new StringBuilder("<html><table>");
-                        for (final Owner owner : owners) {
-                            ownerBuilder.append(AlkisProducts.ownerToString(owner, ""));
-                        }
-                        ownerBuilder.append("</table></html>");
-                        epOwner.setText(ownerBuilder.toString());
+                        epOwner.setText(AlkisSoapUtils.buchungsblattOwnersToHtml(buchungsblatt));
                         // enable products that depend on soap info
                         hlGrundstuecksnachweisNrwPdf.setEnabled(true);
                         hlGrundstuecksnachweisNrwHtml.setEnabled(true);

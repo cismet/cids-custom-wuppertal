@@ -19,7 +19,6 @@ import javax.swing.JComponent;
 
 import de.cismet.cids.custom.objectrenderer.utils.ClientStaticProperties;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.PoiTools;
-import de.cismet.cids.custom.utils.StaticProperties;
 
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
