@@ -1,10 +1,10 @@
-/** *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- *
- *              ... and it just works.
- *
- *************************************************** */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -53,7 +53,6 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
-
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.menu.CidsUiComponent;
@@ -61,23 +60,26 @@ import de.cismet.tools.gui.menu.CidsUiComponent;
 /**
  * DOCUMENT ME!
  *
- * @author helllth
- * @version $Revision$, $Date$
+ * @author   helllth
+ * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = ToolbarComponentsProvider.class)
 public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsProvider,
-        ConnectionContextStore,
-        CidsUiComponent {
+    ConnectionContextStore,
+    CidsUiComponent {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static OrbitControlFeature currentOrbitControlFeature = null;
 
     //~ Instance fields --------------------------------------------------------
+
     private final List<ToolbarComponentDescription> toolbarComponents;
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
-    
-//~ Constructors -----------------------------------------------------------
+
+    //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates a new AlkisToobarPluginComponentProvider object.
      */
@@ -93,6 +95,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
     }
 
     //~ Methods ----------------------------------------------------------------
+
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
@@ -134,9 +137,9 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
     /**
      * DOCUMENT ME!
      *
-     * @param args DOCUMENT ME!
+     * @param   args  DOCUMENT ME!
      *
-     * @throws Exception DOCUMENT ME!
+     * @throws  Exception  DOCUMENT ME!
      */
     public static void main(final String[] args) throws Exception {
         System.out.println("started");
@@ -145,7 +148,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
         j.getContentPane().setLayout(new BorderLayout());
         j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         final ImageIcon FOVVIS = new javax.swing.ImageIcon(OrbitControlFeature.class.getResource(
-                "/de/cismet/cids/custom/virtualcitymap/vcm.control.png"));
+                    "/de/cismet/cids/custom/virtualcitymap/vcm.control.png"));
         final JLabel l = new JLabel("");
         final JLabel lblPan = new JLabel("");
         final JLabel lblFOV = new JLabel("");
@@ -169,19 +172,19 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
         pan.addChangeListener(new ChangeListener() {
 
-            @Override
-            public void stateChanged(final ChangeEvent e) {
-                l.setIcon(createArcImage(200, 200, pan.getValue(), fov.getValue()));
-            }
-        });
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    l.setIcon(createArcImage(200, 200, pan.getValue(), fov.getValue()));
+                }
+            });
 
         fov.addChangeListener(new ChangeListener() {
 
-            @Override
-            public void stateChanged(final ChangeEvent e) {
-                l.setIcon(createArcImage(200, 200, pan.getValue(), fov.getValue()));
-            }
-        });
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    l.setIcon(createArcImage(200, 200, pan.getValue(), fov.getValue()));
+                }
+            });
 
         j.getContentPane().add(pan, BorderLayout.NORTH);
         j.getContentPane().add(fov, BorderLayout.SOUTH);
@@ -196,16 +199,16 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
     /**
      * DOCUMENT ME!
      *
-     * @param width DOCUMENT ME!
-     * @param height DOCUMENT ME!
-     * @param pan DOCUMENT ME!
-     * @param fov DOCUMENT ME!
+     * @param   width   DOCUMENT ME!
+     * @param   height  DOCUMENT ME!
+     * @param   pan     DOCUMENT ME!
+     * @param   fov     DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public static ImageIcon createArcImage(final int width, final int height, int pan, int fov) {
         final BufferedImage bi = new BufferedImage(200, 200, BufferedImage.TYPE_4BYTE_ABGR);
-        final Graphics2D g2 = (Graphics2D) bi.getGraphics();
+        final Graphics2D g2 = (Graphics2D)bi.getGraphics();
         g2.setPaint(new Color(11, 72, 107, 200));
 
         fov = fov + 10;
@@ -221,24 +224,27 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     final class OrbitViewerControlJButton extends JButton {
 
         //~ Instance fields ----------------------------------------------------
+
         private Socket socket;
-        final private ObjectMapper mapper = new ObjectMapper();
+        private final ObjectMapper mapper = new ObjectMapper();
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new AlkisPrintJButton object.
          *
-         * @param connectionContext DOCUMENT ME!
+         * @param   connectionContext  DOCUMENT ME!
          *
-         * @throws RuntimeException DOCUMENT ME!
+         * @throws  RuntimeException  DOCUMENT ME!
          */
         public OrbitViewerControlJButton(final ConnectionContext connectionContext) {
             try {
@@ -261,56 +267,55 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
             addActionListener(new java.awt.event.ActionListener() {
 
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    SwingUtilities.invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    StacResult stacResult = null;
+                                    try {
+                                        final String ip = "notYet";
+                                        final Object ret = SessionManager.getProxy()
+                                                    .executeTask(
+                                                        GetOrbitStacAction.TASK_NAME,
+                                                        "WUNDA_BLAU",
+                                                        (Object)null,
+                                                        connectionContext,
+                                                        new ServerActionParameter<String>(
+                                                            GetOrbitStacAction.PARAMETER_TYPE.IP.toString(),
+                                                            ip));
 
-                        @Override
-                        public void run() {
-                            StacResult stacResult = null;
-                            try {
-                                final String ip = "notYet";
-                                final Object ret = SessionManager.getProxy()
-                                        .executeTask(
-                                                GetOrbitStacAction.TASK_NAME,
-                                                "WUNDA_BLAU",
-                                                (Object) null,
-                                                connectionContext,
-                                                new ServerActionParameter<String>(
-                                                        GetOrbitStacAction.PARAMETER_TYPE.IP.toString(),
-                                                        ip));
+                                        final String s = ret.toString();
+                                        System.out.println(s);
 
-                                final String s = ret.toString();
-                                System.out.println(s);
+                                        stacResult = mapper.readValue(s, StacResult.class);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    System.out.println("result:" + stacResult);
 
-                                stacResult = mapper.readValue(s, StacResult.class);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            System.out.println("result:" + stacResult);
+                                    final OrbitControlFeature vcmf = new OrbitControlFeature(
+                                            connectionContext,
+                                            stacResult,
+                                            socket);
 
-                            final OrbitControlFeature vcmf = new OrbitControlFeature(
-                                    connectionContext,
-                                    stacResult,
-                                    socket);
-
-                            if (currentOrbitControlFeature != null) {
-                                CismapBroker.getInstance()
-                                        .getMappingComponent()
-                                        .getFeatureCollection()
-                                        .removeFeature(currentOrbitControlFeature);
-                                currentOrbitControlFeature = null;
-                            }
-                            CismapBroker.getInstance()
-                                    .getMappingComponent()
-                                    .getFeatureCollection()
-                                    .addFeature(vcmf);
-                            currentOrbitControlFeature = vcmf;
-                        }
-                    });
-                }
-            });
+                                    if (currentOrbitControlFeature != null) {
+                                        CismapBroker.getInstance()
+                                                .getMappingComponent()
+                                                .getFeatureCollection()
+                                                .removeFeature(currentOrbitControlFeature);
+                                        currentOrbitControlFeature = null;
+                                    }
+                                    CismapBroker.getInstance()
+                                            .getMappingComponent()
+                                            .getFeatureCollection()
+                                            .addFeature(vcmf);
+                                    currentOrbitControlFeature = vcmf;
+                                }
+                            });
+                    }
+                });
         }
     }
 }
