@@ -27,7 +27,9 @@ import edu.umd.cs.piccolo.event.PInputEvent;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Stroke;
@@ -39,6 +41,11 @@ import java.util.Collection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.cismet.cids.custom.virtualcitymap.*;
 
@@ -177,6 +184,69 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
             return centroid.buffer(h / 2 * 0.625).getEnvelope();
         }
     }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        System.out.println("started");
+
+        final JFrame j = new JFrame("test");
+        j.getContentPane().setLayout(new BorderLayout());
+        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        final ImageIcon FOVVIS = new javax.swing.ImageIcon(OrbitControlFeature.class.getResource(
+                    "/de/cismet/cids/custom/virtualcitymap/vcm.control.png"));
+        final JLabel l = new JLabel("");
+        final JLabel lblPan = new JLabel("");
+        final JLabel lblFOV = new JLabel("");
+
+        j.getContentPane().add(l, BorderLayout.CENTER);
+        j.setVisible(true);
+
+        final JSlider pan = new JSlider(0, 360);
+        pan.setMajorTickSpacing(45);
+        pan.setMinorTickSpacing(10);
+        pan.setPaintTicks(true);
+        pan.setPaintLabels(true);
+        final JSlider fov = new JSlider(5, 130);
+        fov.setMajorTickSpacing(10);
+        fov.setMinorTickSpacing(5);
+        fov.setPaintTicks(true);
+        fov.setPaintLabels(true);
+        pan.setValue(0);
+        fov.setValue(80);
+        l.setIcon(createArcImage(200, 200, pan.getValue(), 100, fov.getValue()));
+
+        pan.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    l.setIcon(createArcImage(200, 200, pan.getValue(), 100, fov.getValue()));
+                }
+            });
+
+        fov.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    l.setIcon(createArcImage(200, 200, pan.getValue(), 100, fov.getValue()));
+                }
+            });
+
+        j.getContentPane().add(pan, BorderLayout.NORTH);
+        j.getContentPane().add(fov, BorderLayout.SOUTH);
+        j.getContentPane().add(l, BorderLayout.CENTER);
+
+        j.setSize(new Dimension(500, 500));
+
+        System.out.println("fertich");
+//        System.exit(0);
+    }
+
     /**
      * DOCUMENT ME!
      *
