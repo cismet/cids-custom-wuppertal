@@ -361,7 +361,6 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
     public void updateCamState() {
         this.camState.setX(this.getGeometry().getCentroid().getX());
         this.camState.setY(this.getGeometry().getCentroid().getY());
-        this.camState.setPan(headings[rotationIndex]);
     }
 
     /**
