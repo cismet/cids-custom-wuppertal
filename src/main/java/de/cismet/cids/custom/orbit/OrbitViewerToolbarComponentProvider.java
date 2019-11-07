@@ -19,36 +19,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 
+import org.apache.log4j.Logger;
+
 import org.openide.util.lookup.ServiceProvider;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
-import java.awt.geom.Arc2D;
-import java.awt.image.BufferedImage;
+
+import java.io.StringReader;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.wunda_blau.search.actions.GetOrbitStacAction;
 
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.connectioncontext.AbstractConnectionContext.Category;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -70,6 +67,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
     //~ Static fields/initializers ---------------------------------------------
 
+    private static final Logger LOG = Logger.getLogger(OrbitViewerToolbarComponentProvider.class);
     private static OrbitControlFeature currentOrbitControlFeature = null;
 
     //~ Instance fields --------------------------------------------------------
@@ -143,6 +141,10 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
      */
     final class OrbitViewerControlJButton extends JButton {
 
+        //~ Static fields/initializers -----------------------------------------
+
+        public static final String SOCKET_SERVICE_URI = "http://localhost:3001";
+
         //~ Instance fields ----------------------------------------------------
 
         private Socket socket;
@@ -158,8 +160,28 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
          * @throws  RuntimeException  DOCUMENT ME!
          */
         public OrbitViewerControlJButton(final ConnectionContext connectionContext) {
+            final Properties orbitSettings = new Properties();
+
             try {
-                socket = IO.socket("http://localhost:3001");
+                final Object ret = SessionManager.getSession()
+                            .getConnection()
+                            .executeTask(SessionManager.getSession().getUser(),
+                                GetServerResourceServerAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                WundaBlauServerResources.ORBIT_SETTINGS_PROPERTIES.getValue(),
+                                ConnectionContext.create(
+                                    Category.STATIC,
+                                    "ORBIT"));
+                if (ret instanceof Exception) {
+                    throw (Exception)ret;
+                }
+                orbitSettings.load(new StringReader((String)ret));
+            } catch (final Exception ex) {
+                LOG.error("Error during loading of the Orbit ServerRessources", ex);
+            }
+
+            try {
+                socket = IO.socket(orbitSettings.getProperty("socketBroadcaster"));
                 socket.connect();
             } catch (Exception ex) {
                 log.fatal(ex, ex);
@@ -198,13 +220,17 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
                                                             ip));
 
                                         final String s = ret.toString();
-                                        System.out.println(s);
+                                        if (LOG.isDebugEnabled()) {
+                                            LOG.debug("raw action result:" + s);
+                                        }
 
                                         stacResult = mapper.readValue(s, StacResult.class);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-                                    System.out.println("result:" + stacResult);
+                                    if (LOG.isDebugEnabled()) {
+                                        LOG.debug("stacResult:" + stacResult);
+                                    }
 
                                     final OrbitControlFeature vcmf = new OrbitControlFeature(
                                             connectionContext,

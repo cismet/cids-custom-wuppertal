@@ -102,14 +102,14 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
 
     private static final int ARCSIZE = 200;
 
+    public static final String ORBIT_LAUNCHER_URI = "http://localhost:3000";
+
     //~ Instance fields --------------------------------------------------------
 
     ArrayList<PNode> children = new ArrayList<>();
     private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
     private final VCMProperties properties = VCMProperties.getInstance();
     private final ConnectionContext connectionContext;
-
-    private int rotationIndex = 0;
 
     private final int[] headings = new int[] { 0, 45, 90, 135, 180, 225, 270, 315 };
     private FixedPImage arrow;
@@ -165,9 +165,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @return  DOCUMENT ME!
      */
     private Geometry getControlFeatureGeometry(Point centroid) {
-        final Geometry bb = CismapBroker.getInstance()
-                    .getMappingComponent()
-                    .getCurrentBoundingBoxFromCamera()
+        final Geometry bb = mappingComponent.getCurrentBoundingBoxFromCamera()
                     .getGeometry(
                         CrsTransformer.extractSridFromCrs(
                             CismapBroker.getInstance().getSrs().getCode()));
@@ -294,13 +292,17 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
     public void setSocketChannelId(final String socketChannelId) {
         this.socketChannelId = socketChannelId;
         if (this.socketChannelId != null) {
-            System.out.println("listening for fromOrbit:" + socketChannelId);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("listening for fromOrbit:" + socketChannelId);
+            }
             socket.on("fromOrbit:" + socketChannelId, new Emitter.Listener() {
 
                     @Override
                     public void call(final Object... args) {
-                        // JSONObject obj = (JSONObject)args[0];
-                        System.out.println("args on socket.io" + args[0]);
+                        if (LOG.isDebugEnabled()) {
+                            // JSONObject obj = (JSONObject)args[0];
+                            LOG.debug("args on socket.io" + args[0]);
+                        }
                         CamState cs = null;
                         try {
                             cs = mapper.readValue(args[0].toString(), CamState.class);
@@ -313,24 +315,28 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                                 final Geometry newGeometry = getControlFeatureGeometry(
                                         factory.createPoint(new Coordinate(cs.getX(), cs.getY())));
                                 setGeometry(newGeometry);
-                                ((DefaultFeatureCollection)CismapBroker.getInstance().getMappingComponent()
-                                            .getFeatureCollection()).removeFeature(OrbitControlFeature.this);
-                                ((DefaultFeatureCollection)CismapBroker.getInstance().getMappingComponent()
-                                            .getFeatureCollection()).addFeature(OrbitControlFeature.this);
-                                System.out.println("move it: " + cs.getX() + "," + cs.getY());
+                                ((DefaultFeatureCollection)mappingComponent.getFeatureCollection()).removeFeature(
+                                    OrbitControlFeature.this);
+                                ((DefaultFeatureCollection)mappingComponent.getFeatureCollection()).addFeature(
+                                    OrbitControlFeature.this);
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("move it: " + cs.getX() + "," + cs.getY());
+                                }
                                 setCamState(cs);
                                 visualizeRotation();
                                 mappingComponent.ensureVisibilityOfSpecialFeatures(OrbitControlFeature.class, true);
                             } else {
                                 setCamState(cs);
                                 visualizeRotation();
-                                System.out.println(
-                                    "pan,tilt, fov it: "
-                                            + cs.getPan()
-                                            + ", "
-                                            + cs.getTilt()
-                                            + ", "
-                                            + cs.getFov());
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug(
+                                        "pan,tilt, fov it: "
+                                                + cs.getPan()
+                                                + ", "
+                                                + cs.getTilt()
+                                                + ", "
+                                                + cs.getFov());
+                                }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -358,7 +364,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
     /**
      * DOCUMENT ME!
      */
-    public void updateCamState() {
+    public void updateCamStatePosition() {
         this.camState.setX(this.getGeometry().getCentroid().getX());
         this.camState.setY(this.getGeometry().getCentroid().getY());
     }
@@ -369,8 +375,8 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @return  DOCUMENT ME!
      */
     public String getLaunchUrl() {
-        updateCamState();
-        return "http://localhost:3000/?cidsOrbitSTAC="
+        updateCamStatePosition();
+        return ORBIT_LAUNCHER_URI + "/?cidsOrbitSTAC="
                     + stacInfo.getStac()
                     + "&initialx="
                     + camState.getX()
@@ -582,20 +588,13 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * DOCUMENT ME!
      */
     public void removeFeature() {
-        CismapBroker.getInstance().getMappingComponent().getFeatureCollection().removeFeature(this);
+        mappingComponent.getFeatureCollection().removeFeature(this);
     }
 
     /**
      * DOCUMENT ME!
      */
     public void openOrbitLauncher() {
-//        if (properties.isEmpty()) {
-//            LOG.warn("openVCM openVCM(). properties are empty. you should check this server_resource: "
-//                        + WundaBlauServerResources.VCM_PROPERTIES.getValue());
-//            LOG.info("trying to load the properties from server_resource");
-//            properties.load(getConnectionContext());
-//        }
-
         final int currentSrid = CrsTransformer.extractSridFromCrs(mappingComponent.getMappingModel().getSrs()
                         .getCode());
         final int epsg = currentSrid;
@@ -627,8 +626,11 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * DOCUMENT ME!
      */
     public void rotate() {
-        rotationIndex = (rotationIndex + 1) % headings.length;
-        updateCamState();
+//        rotationIndex = (rotationIndex + 1) % headings.length;
+        double np = this.camState.getPan();
+        np = (np - (np % 45) + 45) % 360;
+        this.camState.setPan(np);
+        updateCamStatePosition();
         visualizeRotation();
         updateOrbitIfPossible();
     }
@@ -656,7 +658,9 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
         final String channel = getSocketChannelId();
         if (channel != null) {
             try {
-                System.out.println("toOrbit:" + getSocketChannelId() + "  " + mapper.writeValueAsString(camState));
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("toOrbit:" + getSocketChannelId() + "  " + mapper.writeValueAsString(camState));
+                }
                 socket.emit(
                     "toOrbit:"
                             + getSocketChannelId(),
@@ -731,9 +735,10 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
             ((PBasicInputEventHandler)mappingComponent.getInputListener(MappingComponent.MOVE_POLYGON)).mouseReleased(
                 event);
             mappingComponent.ensureVisibilityOfSpecialFeatures(OrbitControlFeature.class, true);
-
-            System.out.println("Geometry changed" + parentFeature.getFeature().getGeometry());
-            updateCamState();
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Geometry changed" + parentFeature.getFeature().getGeometry());
+            }
+            updateCamStatePosition();
             updateOrbitIfPossible();
         }
 
