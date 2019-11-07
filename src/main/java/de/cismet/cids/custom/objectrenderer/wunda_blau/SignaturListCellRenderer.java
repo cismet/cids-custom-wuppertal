@@ -17,16 +17,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
-import java.net.URL;
-
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 

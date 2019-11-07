@@ -37,9 +37,9 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.NivellementPunktAggregationRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -991,7 +991,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                             urlOfDocument,
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea", 1))) {
+                            new BillingProductGroupAmount("ea", 1))) {
                 openDoc(urlOfDocument);
             }
         } catch (Exception e) {
@@ -1089,7 +1089,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                             "no.yet",
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea", 1))) {
+                            new BillingProductGroupAmount("ea", 1))) {
                 NivellementPunktAggregationRenderer.downloadReport(Arrays.asList(cidsBean),
                     "",
                     "",

@@ -73,13 +73,14 @@ import javax.swing.border.EmptyBorder;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -509,12 +510,13 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         retrieveableLabels.add(lblTxtLand);
         retrieveableLabels.add(lblTxtDienststelle);
         retrieveableLabels.add(lblTxtAnlass);
-        if (!AlkisUtils.validateUserHasAlkisProductAccess(getConnectionContext())) {
+        if (!AlkisProductDownloadHelper.validateUserHasAlkisProductAccess(getConnectionContext())) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
-        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess(getConnectionContext()));
+        panHtmlProducts.setVisible(AlkisProductDownloadHelper.validateUserHasAlkisHTMLProductAccess(
+                getConnectionContext()));
 
         final boolean billingAllowedPdf = BillingPopup.isBillingAllowed("pktlstpdf", getConnectionContext());
         final boolean billingAllowedTxt = BillingPopup.isBillingAllowed("pktlsttxt", getConnectionContext());
@@ -2087,7 +2089,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                             "no.yet",
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("ea", 1))) {
+                            new BillingProductGroupAmount("ea", 1))) {
                 downloadProduct(ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_PDF));
             }
         } catch (Exception e) {
@@ -2134,7 +2136,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                             "no.yet",
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount("eapkt_1000", 1))) {
+                            new BillingProductGroupAmount("eapkt_1000", 1))) {
                 downloadProduct(ClientAlkisProducts.getInstance().get(ClientAlkisProducts.Type.PUNKTLISTE_TXT));
             }
         } catch (Exception e) {
@@ -2191,7 +2193,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                                 url.toString(),
                                 (Geometry)null,
                                 getConnectionContext(),
-                                new ProductGroupAmount("ea", 1))) {
+                                new BillingProductGroupAmount("ea", 1))) {
                     CismetThreadPool.execute(new Runnable() {
 
                             @Override
@@ -2467,7 +2469,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
          */
         @Override
         protected Point doInBackground() throws Exception {
-            return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode, getConnectionContext());
+            return AlkisUtils.getInstance().getPointFromAlkisSOAPServerAction(pointCode, getConnectionContext());
         }
 
         /**

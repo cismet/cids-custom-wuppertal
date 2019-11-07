@@ -15,15 +15,7 @@ package de.cismet.cids.custom.utils;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
-import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
-
 import com.vividsolutions.jts.geom.Geometry;
-
-import de.aedsicad.aaaweb.service.util.Buchungsblatt;
-import de.aedsicad.aaaweb.service.util.Buchungsstelle;
-import de.aedsicad.aaaweb.service.util.LandParcel;
 
 import org.apache.log4j.Logger;
 
@@ -32,16 +24,11 @@ import java.awt.Component;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CancellationException;
 
 import javax.swing.JOptionPane;
@@ -51,19 +38,12 @@ import javax.swing.text.BadLocationException;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.alkis.BaulastBescheinigungHelper;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungGruppeInfo;
-import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungInfo;
-import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
-import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
-import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
@@ -87,15 +67,11 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
     private static BaulastBescheinigungDialog INSTANCE;
 
-    static final Map<CidsBean, Buchungsblatt> BUCHUNGSBLATT_CACHE = new HashMap<CidsBean, Buchungsblatt>();
-
     //~ Instance fields --------------------------------------------------------
 
-    private final Collection<ProductGroupAmount> prodAmounts = new ArrayList<>();
-    private final Collection<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen = new HashSet<>();
+    private BerechtigungspruefungBescheinigungDownloadInfo downloadInfo = null;
 
     private SwingWorker worker;
-
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -374,11 +350,8 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         try {
             this.connectionContext = connectionContext;
             final List<CidsBean> flurstueckeList = new ArrayList<>(new HashSet<>(flurstuecke));
-            prodAmounts.clear();
-            bescheinigungsgruppen.clear();
 
             jTextField2.setText(new SimpleDateFormat("yy").format(new Date()) + "-");
-
             jPanel1.setVisible(!BillingPopup.hasUserBillingMode(getConnectionContext()));
 
             prepareDownload(flurstueckeList);
@@ -409,14 +382,13 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             }
 
             final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
-            final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo =
-                new BerechtigungspruefungBescheinigungDownloadInfo(
-                    hasBilling ? null : jTextField2.getText(),
-                    hasBilling ? null : jTextField1.getText(),
-                    protokollPane.getText(),
-                    new BerechtigungspruefungBescheinigungInfo(
-                        new Date(),
-                        new HashSet<>(bescheinigungsgruppen)));
+            downloadInfo.setAuftragsnummer(hasBilling ? null : jTextField2.getText());
+            downloadInfo.setProduktbezeichnung(hasBilling ? null : jTextField1.getText());
+
+            final Collection<BillingProductGroupAmount> prodAmounts = new ArrayList<>();
+            for (final HashMap.Entry<String, Integer> amount : downloadInfo.getAmounts().entrySet()) {
+                prodAmounts.add(new BillingProductGroupAmount(amount.getKey(), amount.getValue()));
+            }
             if (BillingPopup.doBilling(
                             "blab_be",
                             "no.yet",
@@ -426,14 +398,14 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                                     downloadInfo.getProduktTyp(),
                                     getConnectionContext())) ? downloadInfo : null,
                             getConnectionContext(),
-                            prodAmounts.toArray(new ProductGroupAmount[0]))) {
+                            prodAmounts.toArray(new BillingProductGroupAmount[0]))) {
                 final String berechnung = BillingPopup.getInstance().getBerechnungsProtokoll();
                 if ((berechnung != null) && !berechnung.trim().isEmpty()) {
                     addMessage("\n===\n\nGebührenberechnung:\n");
                     addMessage(berechnung);
                 }
 
-                BaulastBescheinigungUtils.doDownload(downloadInfo, "", getConnectionContext());
+                AlkisProductDownloadHelper.downloadBaulastbescheinigung(downloadInfo, "", getConnectionContext());
             }
         } catch (final Exception ex) {
             LOG.error(ex, ex);
@@ -475,71 +447,46 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
 
             pack();
 
-            setStatusMessage("Bescheinigung wird vorbereitet...");
-
-            worker = new SwingWorker<Collection<ProductGroupAmount>, Void>() {
+            worker = new SwingWorker<BerechtigungspruefungBescheinigungDownloadInfo, Void>() {
 
                     @Override
-                    protected Collection<ProductGroupAmount> doInBackground() throws Exception {
-                        final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap = new HashMap<>();
-                        final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap =
-                            new HashMap<>();
+                    protected BerechtigungspruefungBescheinigungDownloadInfo doInBackground() throws Exception {
+                        final boolean hasBilling = BillingPopup.hasUserBillingMode(getConnectionContext());
+                        return
+                            new ClientBaulastBescheinigungHelper(getConnectionContext()).calculateDownloadInfo(
+                                hasBilling ? null : jTextField2.getText(),
+                                hasBilling ? null : jTextField1.getText(),
+                                flurstuecke,
+                                new BaulastBescheinigungHelper.ProtocolBuffer() {
 
-                        addMessage("Baulastbescheinigungs-Protokoll für "
-                                    + ((flurstuecke.size() == 1) ? "folgendes Flurstück" : "folgende Flurstücke")
-                                    + ":");
+                                    @Override
+                                    public BaulastBescheinigungHelper.ProtocolBuffer appendLine(
+                                            final String string) {
+                                        addMessage(string);
+                                        return super.appendLine(string);
+                                    }
+                                },
+                                new BaulastBescheinigungHelper.StatusHolder() {
 
-                        Collections.sort(flurstuecke, new Comparator<CidsBean>() {
-
-                                @Override
-                                public int compare(final CidsBean o1, final CidsBean o2) {
-                                    final String s1 = (o1 == null) ? "" : (String)o1.getProperty("alkis_id");
-                                    final String s2 = (o2 == null) ? "" : (String)o2.getProperty("alkis_id");
-                                    return s1.compareTo(s2);
-                                }
-                            });
-
-                        for (final CidsBean flurstueck : flurstuecke) {
-                            addMessage(" * " + flurstueck);
-                        }
-
-                        setStatusMessage("Buchungsblätter werden analysiert...");
-
-                        final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap =
-                            createGrundstueckeToFlurstueckeMap(flurstuecke);
-
-                        setStatusMessage("Baulasten werden gesucht...");
-
-                        fillFlurstueckeToBaulastenMaps(
-                            flurstuecke,
-                            flurstueckeToBaulastenBelastetMap,
-                            flurstueckeToBaulastenBeguenstigtMap);
-
-                        setStatusMessage("Gebühr wird berechnet...");
-
-                        final Collection<ProductGroupAmount> prodAmounts = createBilling(
-                                grundstueckeToFlurstueckeMap,
-                                flurstueckeToBaulastenBelastetMap,
-                                flurstueckeToBaulastenBeguenstigtMap);
-
-                        bescheinigungsgruppen.addAll(createBescheinigungsGruppen(
-                                createFlurstueckeToGrundstueckeMap(flurstuecke, grundstueckeToFlurstueckeMap),
-                                flurstueckeToBaulastenBeguenstigtMap,
-                                flurstueckeToBaulastenBelastetMap));
-
-                        return prodAmounts;
+                                    @Override
+                                    public void setMessage(final String message) {
+                                        super.setMessage(message);
+                                        setStatusMessage(message);
+                                    }
+                                });
                     }
 
                     @Override
                     protected void done() {
                         boolean errorOccurred = false;
                         try {
-                            prodAmounts.addAll(get());
+                            downloadInfo = get();
                         } catch (final Exception ex) {
+                            downloadInfo = null;
                             errorOccurred = true;
                             final String errMessage;
                             final Throwable exception;
-                            if (ex.getCause() instanceof BaBeException) {
+                            if (ex.getCause() instanceof ClientBaulastBescheinigungHelper.BaBeException) {
                                 exception = ex.getCause();
                                 errMessage = exception.getMessage();
                                 addError(errMessage);
@@ -572,27 +519,6 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
         } catch (final Exception ex) {
             LOG.fatal(ex, ex);
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   flurstuecke                           DOCUMENT ME!
-     * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
-     * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    private void fillFlurstueckeToBaulastenMaps(final Collection<CidsBean> flurstuecke,
-            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap,
-            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) throws Exception {
-        addMessage("\n===");
-
-        // belastete Baulasten pro Flurstück
-        flurstueckeToBaulastenBelastetMap.putAll(createFlurstueckeToBaulastenMap(flurstuecke, true));
-
-        // begünstigte Baulasten pro Flurstück
-        flurstueckeToBaulastenBeguenstigtMap.putAll(createFlurstueckeToBaulastenMap(flurstuecke, false));
     }
 
     /**
@@ -674,504 +600,14 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     /**
      * DOCUMENT ME!
      *
-     * @param   flurstuecke  DOCUMENT ME!
-     * @param   belastet     DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    private Map<CidsBean, Set<CidsBean>> createFlurstueckeToBaulastenMap(final Collection<CidsBean> flurstuecke,
-            final boolean belastet) throws Exception {
-        final String queryBeguenstigt = "SELECT %d, alb_baulast.%s \n"
-                    + "FROM alb_baulast_flurstuecke_beguenstigt, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
-                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_beguenstigt.baulast_reference \n"
-                    + "AND alb_baulast_flurstuecke_beguenstigt.flurstueck = alb_flurstueck_kicker.id \n"
-                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
-                    + "AND flurstueck.alkis_id ilike '%s' \n"
-                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
-
-        final String queryBelastet = "SELECT %d, alb_baulast.%s \n"
-                    + "FROM alb_baulast_flurstuecke_belastet, alb_baulast, alb_flurstueck_kicker, flurstueck \n"
-                    + "WHERE alb_baulast.id = alb_baulast_flurstuecke_belastet.baulast_reference \n"
-                    + "AND alb_baulast_flurstuecke_belastet.flurstueck = alb_flurstueck_kicker.id \n"
-                    + "AND alb_flurstueck_kicker.fs_referenz = flurstueck.id \n"
-                    + "AND flurstueck.alkis_id ilike '%s' \n"
-                    + "AND alb_baulast.geschlossen_am is null AND alb_baulast.loeschungsdatum is null";
-
-        final MetaClass mcBaulast = ClassCacheMultiple.getMetaClass(
-                "WUNDA_BLAU",
-                "alb_baulast",
-                getConnectionContext());
-
-        final String query = belastet ? queryBelastet : queryBeguenstigt;
-
-        addMessage("\nSuche der " + ((belastet) ? "belastenden" : "begünstigenden") + " Baulasten von:");
-        final Map<CidsBean, Set<CidsBean>> flurstueckeToBaulastenMap = new HashMap<>();
-        for (final CidsBean flurstueck : flurstuecke) {
-            addMessage(" * Flurstück: " + flurstueck + " ...");
-            final Set<CidsBean> baulasten = new HashSet<>();
-            try {
-                final BaulastSearchInfo searchInfo = new BaulastSearchInfo();
-                final Integer gemarkung = Integer.parseInt(((String)flurstueck.getProperty("alkis_id")).substring(
-                            2,
-                            6));
-                final String flur = (String)flurstueck.getProperty("flur");
-                final String zaehler = Integer.toString(Integer.parseInt(
-                            (String)flurstueck.getProperty("fstck_zaehler")));
-                final String nenner = (flurstueck.getProperty("fstck_nenner") == null)
-                    ? "0" : Integer.toString(Integer.parseInt((String)flurstueck.getProperty("fstck_nenner")));
-
-                final FlurstueckInfo fsi = new FlurstueckInfo(gemarkung, flur, zaehler, nenner);
-                searchInfo.setFlurstuecke(Arrays.asList(fsi));
-                searchInfo.setResult(CidsBaulastSearchStatement.Result.BAULAST);
-                searchInfo.setBelastet(belastet);
-                searchInfo.setBeguenstigt(!belastet);
-                searchInfo.setBlattnummer("");
-                searchInfo.setArt("");
-                final CidsBaulastSearchStatement search = new CidsBaulastSearchStatement(
-                        searchInfo,
-                        mcBaulast.getId(),
-                        -1);
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-                final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                            .customServerSearch(search, getConnectionContext());
-                for (final MetaObjectNode mon : mons) {
-                    final MetaObject mo = SessionManager.getProxy()
-                                .getMetaObject(mon.getObjectId(),
-                                    mon.getClassId(),
-                                    "WUNDA_BLAU",
-                                    getConnectionContext());
-                    if ((mo.getBean() != null) && (mo.getBean() != null)
-                                && (mo.getBean().getProperty("loeschungsdatum") != null)) {
-                        continue;
-                    }
-                    if (mon.getName().startsWith("indirekt: ")) {
-                        throw new BaBeException(
-                            "Zu den angegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
-                    }
-                }
-
-                final String alkisId = (String)flurstueck.getProperty("alkis_id");
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-                final MetaObject[] mos = SessionManager.getProxy()
-                            .getMetaObjectByQuery(String.format(
-                                    query,
-                                    mcBaulast.getID(),
-                                    mcBaulast.getPrimaryKey(),
-                                    alkisId),
-                                0,
-                                getConnectionContext());
-                for (final MetaObject mo : mos) {
-                    final CidsBean baulast = mo.getBean();
-                    final Boolean geprueft = (Boolean)baulast.getProperty("geprueft");
-                    if ((geprueft == null) || (geprueft == false)) {
-                        throw new BaBeException(
-                            "Zu den angegebenen Flurstücken kann aktuell keine Baulastauskunft erteilt werden, da sich einige der enthaltenen Baulasten im Bearbeitungszugriff befinden.");
-                    }
-                    addMessage("   => Baulast: " + baulast);
-                    baulasten.add(baulast);
-                }
-                flurstueckeToBaulastenMap.put(flurstueck, baulasten);
-            } catch (ConnectionException ex) {
-                LOG.fatal(ex, ex);
-            }
-        }
-        return flurstueckeToBaulastenMap;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  message  DOCUMENT ME!
      */
     private void setStatusMessage(final String message) {
         busyStatusPanel1.setStatusMessage(message);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   flurstueckeToGrundstueckeMap          flurstuecke DOCUMENT ME!
-     * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
-     * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Set<BerechtigungspruefungBescheinigungGruppeInfo> createBescheinigungsGruppen(
-            final Map<CidsBean, Collection<String>> flurstueckeToGrundstueckeMap,
-            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap,
-            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap) {
-        final Map<String, BerechtigungspruefungBescheinigungGruppeInfo> gruppeMap = new HashMap<>();
-
-        final List<CidsBean> flurstuecke = new ArrayList<>(flurstueckeToGrundstueckeMap.keySet());
-        Collections.sort(flurstuecke, new Comparator<CidsBean>() {
-
-                @Override
-                public int compare(final CidsBean o1, final CidsBean o2) {
-                    final String s1 = (o1 == null) ? "" : (String)o1.getProperty("alkis_id");
-                    final String s2 = (o2 == null) ? "" : (String)o2.getProperty("alkis_id");
-                    return s1.compareTo(s2);
-                }
-            });
-
-        for (final CidsBean flurstueck : flurstuecke) {
-            final Collection<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(flurstueck);
-            final Collection<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
-            final BerechtigungspruefungBescheinigungGruppeInfo newGruppe = BaulastBescheinigungUtils.createGruppeInfo(
-                    baulastenBeguenstigt,
-                    baulastenBelastet);
-            final String gruppeKey = newGruppe.toString();
-            if (!gruppeMap.containsKey(gruppeKey)) {
-                gruppeMap.put(gruppeKey, newGruppe);
-            }
-            final BerechtigungspruefungBescheinigungGruppeInfo gruppe = gruppeMap.get(gruppeKey);
-            gruppe.getFlurstuecke()
-                    .add(BaulastBescheinigungUtils.createFlurstueckInfo(
-                            flurstueck,
-                            flurstueckeToGrundstueckeMap.get(flurstueck)));
-        }
-
-        final Set<BerechtigungspruefungBescheinigungGruppeInfo> bescheinigungsgruppen = new HashSet<>(
-                gruppeMap.values());
-
-        addMessage("Anzahl Bescheinigungsgruppen: " + bescheinigungsgruppen.size());
-        for (final BerechtigungspruefungBescheinigungGruppeInfo gruppe : bescheinigungsgruppen) {
-            addMessage(" * " + gruppe.toString());
-        }
-        return bescheinigungsgruppen;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   flurstuecke                   DOCUMENT ME!
-     * @param   grundstueckeToFlurstueckeMap  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static Map<CidsBean, Collection<String>> createFlurstueckeToGrundstueckeMap(
-            final Collection<CidsBean> flurstuecke,
-            final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap) {
-        final HashMap<CidsBean, Collection<String>> flurstueckeToGrundstueckeMap = new HashMap<>();
-
-        for (final String grundstueck : grundstueckeToFlurstueckeMap.keySet()) {
-            final Collection<CidsBean> gruFlu = grundstueckeToFlurstueckeMap.get(grundstueck);
-            for (final CidsBean flurstueck : flurstuecke) {
-                if (gruFlu.contains(flurstueck)) {
-                    if (!flurstueckeToGrundstueckeMap.containsKey(flurstueck)) {
-                        flurstueckeToGrundstueckeMap.put(flurstueck, new HashSet<String>());
-                    }
-                    final Collection<String> grundstuecke = flurstueckeToGrundstueckeMap.get(flurstueck);
-                    grundstuecke.add(grundstueck);
-                }
-            }
-        }
-        return flurstueckeToGrundstueckeMap;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   flurstuecke  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception             DOCUMENT ME!
-     * @throws  InterruptedException  DOCUMENT ME!
-     */
-    private Map<String, Collection<CidsBean>> createGrundstueckeToFlurstueckeMap(
-            final Collection<CidsBean> flurstuecke) throws Exception {
-        addMessage("\n===\n\nZuordnung der Flurstücke zu Grundstücken...");
-
-        final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap = new HashMap<>();
-
-        for (final CidsBean flurstueckBean : flurstuecke) {
-            final List<CidsBean> buchungsblaetter = new ArrayList<>(flurstueckBean.getBeanCollectionProperty(
-                        "buchungsblaetter"));
-            if (buchungsblaetter.size() == 1) {
-                addMessage("\nFlurstück: " + flurstueckBean + " (1 Buchungsblatt):");
-            } else {
-                addMessage("\nFlurstück: " + flurstueckBean + " (" + buchungsblaetter.size()
-                            + " Buchungsblätter):");
-            }
-            Collections.sort(buchungsblaetter, new Comparator<CidsBean>() {
-
-                    @Override
-                    public int compare(final CidsBean o1, final CidsBean o2) {
-                        final String s1 = (o1 == null) ? "" : (String)o1.getProperty("buchungsblattcode");
-                        final String s2 = (o2 == null) ? "" : (String)o2.getProperty("buchungsblattcode");
-                        return s1.compareTo(s2);
-                    }
-                });
-
-//            boolean teileigentumAlreadyCounted = false;
-            boolean grundstueckFound = false;
-            for (final CidsBean buchungsblattBean : buchungsblaetter) {
-                if (grundstueckFound) {
-                    break; // we are done
-                }
-                if (buchungsblattBean != null) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        throw new InterruptedException();
-                    }
-                    addMessage(" * analysiere Buchungsblatt " + buchungsblattBean + " ...");
-                    final Buchungsblatt buchungsblatt = getBuchungsblatt(buchungsblattBean);
-
-                    if (Thread.currentThread().isInterrupted()) {
-                        throw new InterruptedException();
-                    }
-                    final List<Buchungsstelle> buchungsstellen = Arrays.asList(buchungsblatt.getBuchungsstellen());
-                    Collections.sort(buchungsstellen, new Comparator<Buchungsstelle>() {
-
-                            @Override
-                            public int compare(final Buchungsstelle o1, final Buchungsstelle o2) {
-                                final String s1 = (o1 == null) ? "" : o1.getSequentialNumber();
-                                final String s2 = (o2 == null) ? "" : o2.getSequentialNumber();
-                                return s1.compareTo(s2);
-                            }
-                        });
-
-                    for (final Buchungsstelle buchungsstelle : buchungsstellen) {
-                        if (grundstueckFound) {
-                            break; // we are done
-                        }
-                        if (Thread.currentThread().isInterrupted()) {
-                            throw new InterruptedException();
-                        }
-                        boolean flurstueckPartOfStelle = false;
-                        final LandParcel[] landparcels = AlkisUtils.getLandparcelFromBuchungsstelle(buchungsstelle);
-                        if (landparcels != null) {
-                            for (final LandParcel lp : landparcels) {
-                                if (((String)flurstueckBean.getProperty("alkis_id")).equals(
-                                                lp.getLandParcelCode())) {
-                                    flurstueckPartOfStelle = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (flurstueckPartOfStelle) {
-                            final String[] bbc = buchungsblatt.getBuchungsblattCode().split("-");
-                            final String gemarkungsnummer = bbc[0].substring(2).trim();
-                            final String buchungsblattnummer = bbc[1].trim();
-                            final MetaClass mcGemarkung = CidsBean.getMetaClassFromTableName(
-                                    "WUNDA_BLAU",
-                                    "gemarkung",
-                                    getConnectionContext());
-
-                            final String pruefungQuery = "SELECT " + mcGemarkung.getID()
-                                        + ", " + mcGemarkung.getTableName() + "." + mcGemarkung.getPrimaryKey() + " "
-                                        + "FROM " + mcGemarkung.getTableName() + " "
-                                        + "WHERE " + mcGemarkung.getTableName() + ".gemarkungsnummer = "
-                                        + Integer.parseInt(gemarkungsnummer) + " "
-                                        + "LIMIT 1;";
-                            final MetaObject[] mos = SessionManager.getProxy()
-                                        .getMetaObjectByQuery(pruefungQuery, 0, getConnectionContext());
-
-                            final String key;
-                            if ((mos != null) && (mos.length > 0)) {
-                                final CidsBean gemarkung = mos[0].getBean();
-                                key = gemarkung.getProperty("name") + " "
-                                            + Integer.parseInt(buchungsblattnummer.substring(0, 5))
-                                            + buchungsblattnummer.substring(5) + " / "
-                                            + Integer.parseInt(buchungsstelle.getSequentialNumber());
-                            } else {
-                                key = "[" + gemarkungsnummer + "] "
-                                            + Integer.parseInt(buchungsblattnummer.substring(0, 5))
-                                            + buchungsblattnummer.substring(5) + " / "
-                                            + Integer.parseInt(buchungsstelle.getSequentialNumber());
-                            }
-
-                            final String buchungsart = buchungsstelle.getBuchungsart();
-                            if ("Erbbaurecht".equals(buchungsart)) {
-                                addMessage("   -> ignoriere " + key + " aufgrund der Buchungsart ("
-                                            + buchungsart + ")");
-                                continue;
-                            }
-
-                            if (!grundstueckeToFlurstueckeMap.containsKey(key)) {
-                                grundstueckeToFlurstueckeMap.put(key, new HashSet<CidsBean>());
-                            }
-
-                            final String buchungsartSuffix = "Grundstück".equals(buchungsart)
-                                ? "" : (" (" + buchungsart + ")");
-                            addMessage("   => füge Flurstück " + flurstueckBean + " zu Grundstück \"" + key + " \"hinzu"
-                                        + buchungsartSuffix);
-                            grundstueckeToFlurstueckeMap.get(key).add(flurstueckBean);
-                            grundstueckFound = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return grundstueckeToFlurstueckeMap;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   grundstueckeToFlurstueckeMap          flurstuecke flurstueckeToBaulastengrundstueckMap DOCUMENT ME!
-     * @param   flurstueckeToBaulastenBelastetMap     DOCUMENT ME!
-     * @param   flurstueckeToBaulastenBeguenstigtMap  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static Collection<ProductGroupAmount> createBilling(
-            final Map<String, Collection<CidsBean>> grundstueckeToFlurstueckeMap,
-            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBelastetMap,
-            final Map<CidsBean, Collection<CidsBean>> flurstueckeToBaulastenBeguenstigtMap) {
-        final List<String> keys = new ArrayList<>(grundstueckeToFlurstueckeMap.keySet());
-        Collections.sort(keys);
-
-        final int anzahlGrundstuecke = grundstueckeToFlurstueckeMap.size();
-        if (anzahlGrundstuecke == 1) {
-            addMessage("\n===\n\nBescheinigungsart des Grundstücks:");
-        } else {
-            addMessage("\n===\n\nBescheinigungsarten der " + anzahlGrundstuecke + " ermittelten Grundstücke:");
-        }
-
-        final Collection<ProductGroupAmount> prodAmounts = new ArrayList<>();
-
-        int anzahlNegativ = 0;
-        int anzahlPositiv1 = 0;
-        int anzahlPositiv2 = 0;
-        int anzahlPositiv3 = 0;
-
-        for (final String key : keys) {
-            if (grundstueckeToFlurstueckeMap.containsKey(key)) {
-                boolean first = true;
-
-                final Collection<CidsBean> flurstuecke = grundstueckeToFlurstueckeMap.get(key);
-
-                final Set<CidsBean> baulasten = new HashSet<>();
-                for (final CidsBean flurstueck : flurstuecke) {
-                    final Collection<CidsBean> baulastenBelastet = flurstueckeToBaulastenBelastetMap.get(flurstueck);
-                    final Collection<CidsBean> baulastenBeguenstigt = flurstueckeToBaulastenBeguenstigtMap.get(
-                            flurstueck);
-                    baulasten.addAll(baulastenBelastet);
-                    baulasten.addAll(baulastenBeguenstigt);
-                }
-
-                final StringBuffer sb = new StringBuffer();
-                for (final CidsBean baulast : baulasten) {
-                    if (first) {
-                        first = false;
-                    } else {
-                        sb.append(", ");
-                    }
-                    sb.append(baulast);
-                }
-                final String baulastenString = sb.toString();
-
-                final int numOfBaulasten = baulasten.size();
-                switch (numOfBaulasten) {
-                    case 0: {
-                        addMessage(" * Grundstück " + key + " => Negativ-Bescheinigung");
-                        anzahlNegativ++;
-                        break;
-                    }
-                    case 1: {
-                        addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für eine Baulast ("
-                                    + baulastenString
-                                    + ")");
-                        anzahlPositiv1++;
-                        break;
-                    }
-                    case 2: {
-                        addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für zwei Baulasten ("
-                                    + baulastenString
-                                    + ")");
-                        anzahlPositiv2++;
-                        break;
-                    }
-                    default: {
-                        addMessage(" * Grundstück " + key + " => Positiv-Bescheinigung für drei oder mehr Baulasten ("
-                                    + baulastenString + ")");
-                        anzahlPositiv3++;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (anzahlNegativ > 0) {
-            if (anzahlNegativ > 10) {
-                prodAmounts.add(new ProductGroupAmount("ea_blab_neg_ab_10", 1));
-            } else {
-                prodAmounts.add(new ProductGroupAmount("ea_blab_neg", anzahlNegativ));
-            }
-        }
-        if (anzahlPositiv1 > 0) {
-            prodAmounts.add(new ProductGroupAmount("ea_blab_pos_1", anzahlPositiv1));
-        }
-        if (anzahlPositiv2 > 0) {
-            prodAmounts.add(new ProductGroupAmount("ea_blab_pos_2", anzahlPositiv2));
-        }
-        if (anzahlPositiv3 > 0) {
-            prodAmounts.add(new ProductGroupAmount("ea_blab_pos_3", anzahlPositiv3));
-        }
-
-        return prodAmounts;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   buchungsblattBean  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    private Buchungsblatt getBuchungsblatt(final CidsBean buchungsblattBean) throws Exception {
-        Buchungsblatt buchungsblatt = null;
-
-        if (buchungsblattBean != null) {
-            buchungsblatt = BUCHUNGSBLATT_CACHE.get(buchungsblattBean);
-            if (buchungsblatt == null) {
-                final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
-                if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
-                    buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
-                            AlkisUtils.fixBuchungslattCode(buchungsblattcode),
-                            getConnectionContext());
-                    BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);
-                }
-            }
-        }
-
-        return buchungsblatt;
-    }
-
     @Override
     public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    static class BaBeException extends Exception {
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new BaBeException object.
-         *
-         * @param  message  DOCUMENT ME!
-         */
-        public BaBeException(final String message) {
-            super(message);
-        }
     }
 }

@@ -50,9 +50,8 @@ import javax.swing.text.DocumentFilter;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.utils.alkis.AlkisConf;
 import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -761,7 +760,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                             documentUrl.toExternalForm(),
                             (Geometry)null,
                             getConnectionContext(),
-                            new ProductGroupAmount(priceGroup, 1))) {
+                            new BillingProductGroupAmount(priceGroup, 1))) {
                 downloadProduct(documentUrl);
             }
         } catch (Exception e) {
