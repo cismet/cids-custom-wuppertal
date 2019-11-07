@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.orbit;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -68,6 +69,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(OrbitViewerToolbarComponentProvider.class);
+    private static final String CONFIG_ATTR = "custom.orbit.toolbarButton@WUNDA_BLAU";
     private static OrbitControlFeature currentOrbitControlFeature = null;
 
     //~ Instance fields --------------------------------------------------------
@@ -99,13 +101,33 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
         this.connectionContext = connectionContext;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserConfigAttr(final ConnectionContext connectionContext) {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(
+                                SessionManager.getSession().getUser(),
+                                CONFIG_ATTR,
+                                connectionContext) != null;
+        } catch (ConnectionException ex) {
+            LOG.info("Could not validate action tag:" + CONFIG_ATTR, ex);
+        }
+        return false;
+    }
+
     @Override
     public List<ToolbarComponentDescription> getToolbarComponents() {
-//        if (AlkisUtils.validateUserHasAlkisPrintAccess(getConnectionContext())) {
-        return toolbarComponents;
-//        } else {
-//            return Collections.emptyList();
-//        }
+        if (validateUserConfigAttr(connectionContext)) {
+            return toolbarComponents;
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     @Override
