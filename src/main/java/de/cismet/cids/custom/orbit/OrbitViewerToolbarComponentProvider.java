@@ -257,7 +257,8 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
                                     final OrbitControlFeature vcmf = new OrbitControlFeature(
                                             connectionContext,
                                             stacResult,
-                                            socket);
+                                            socket,
+                                            orbitSettings.getProperty("launcherUrl"));
 
                                     if (currentOrbitControlFeature != null) {
                                         CismapBroker.getInstance()

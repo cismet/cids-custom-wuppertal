@@ -102,8 +102,6 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
 
     private static final int ARCSIZE = 200;
 
-    public static final String ORBIT_LAUNCHER_URI = "http://localhost:3000";
-
     //~ Instance fields --------------------------------------------------------
 
     ArrayList<PNode> children = new ArrayList<>();
@@ -116,6 +114,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
     private CamState camState = new CamState();
 
     private String socketChannelId;
+    private String launcherUrl;
     private StacResult stacInfo;
     private Socket socket;
 
@@ -129,8 +128,12 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @param  connectionContext  DOCUMENT ME!
      * @param  stac               stacResult
      * @param  socket             DOCUMENT ME!
+     * @param  launcherUrl        DOCUMENT ME!
      */
-    public OrbitControlFeature(final ConnectionContext connectionContext, final StacResult stac, final Socket socket) {
+    public OrbitControlFeature(final ConnectionContext connectionContext,
+            final StacResult stac,
+            final Socket socket,
+            final String launcherUrl) {
         this.connectionContext = connectionContext;
         setEditable(true);
         setCanBeSelected(true);
@@ -140,6 +143,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
 
         this.stacInfo = stac;
         this.socket = socket;
+        this.launcherUrl = launcherUrl;
         this.camState.setFov(100);
         this.camState.setTilt(0);
         this.camState.setPan(0);
@@ -376,7 +380,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      */
     public String getLaunchUrl() {
         updateCamStatePosition();
-        return ORBIT_LAUNCHER_URI + "/?cidsOrbitSTAC="
+        return launcherUrl + "/?cidsOrbitSTAC="
                     + stacInfo.getStac()
                     + "&initialx="
                     + camState.getX()
