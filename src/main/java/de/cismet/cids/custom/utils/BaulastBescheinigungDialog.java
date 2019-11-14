@@ -15,6 +15,8 @@ package de.cismet.cids.custom.utils;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
@@ -66,6 +68,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
     public static final Logger LOG = Logger.getLogger(BaulastBescheinigungDialog.class);
 
     private static BaulastBescheinigungDialog INSTANCE;
+    private static ObjectMapper MAPPER = new ObjectMapper();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -391,7 +394,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
             }
             if (BillingPopup.doBilling(
                             "blab_be",
-                            "no.yet",
+                            MAPPER.writeValueAsString(downloadInfo),
                             (Geometry)null,
                             (berechtigungspruefung
                                 && AlkisProductDownloadHelper.checkBerechtigungspruefung(
