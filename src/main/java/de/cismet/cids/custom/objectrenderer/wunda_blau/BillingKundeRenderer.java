@@ -17,6 +17,8 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.log4j.Logger;
 
 import org.openide.util.Exceptions;
@@ -72,8 +74,11 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.BillingCalculations;
 import de.cismet.cids.custom.objectrenderer.utils.BillingRestrictedReportJButton;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel;
 import de.cismet.cids.custom.reports.wunda_blau.PrintBillingReportForCustomer;
+import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungBillingDownloadInfo;
+import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
 import de.cismet.cids.custom.utils.billing.BillingUsage;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostentyp;
@@ -105,6 +110,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
 
     private static final Logger LOG = Logger.getLogger(BillingKundeRenderer.class);
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    private static ObjectMapper MAPPER = new ObjectMapper();
+
     // column headers
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
             "Geschäftsbuchnummer",
@@ -229,28 +236,52 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @param  request  DOCUMENT ME!
      */
     private void doDownload(final String request) {
-        DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this);
+        if (request != null) {
+            if (request.startsWith("http://")) {
+                DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this);
+            
+                try {
+                    final URL url = new URL(request);
+                    String filename = "alkis_druck";
+                    try {
+                        final Map<String, String> urlQuery = splitQuery(url);
+                        filename = urlQuery.get("product") + "." + urlQuery.get("landparcel").replace("/", "--");
+                    } catch (UnsupportedEncodingException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
 
-        try {
-            final URL url = new URL(request);
-            String filename = "alkis_druck";
-            try {
-                final Map<String, String> urlQuery = splitQuery(url);
-                filename = urlQuery.get("product") + "." + urlQuery.get("landparcel").replace("/", "--");
-            } catch (UnsupportedEncodingException ex) {
-                Exceptions.printStackTrace(ex);
+                    final HttpDownload download = new HttpDownload(
+                            url,
+                            "",
+                            DownloadManagerDialog.getInstance().getJobName(),
+                            "ALKIS-Druck",
+                            filename,
+                            ".pdf");
+                    DownloadManager.instance().add(download);
+                } catch (MalformedURLException ex) {
+                    LOG.error(ex.getMessage(), ex);
+                }
+            } else {
+                try {
+                    final String produktTyp = MAPPER.readValue(request, BerechtigungspruefungBillingDownloadInfo.class)
+                                .getProduktTyp();
+                    final BerechtigungspruefungBescheinigungDownloadInfo downloadInfo;
+                    if (BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP.equals(produktTyp)) {
+                        downloadInfo = MAPPER.readValue(request, BerechtigungspruefungBescheinigungDownloadInfo.class);
+                    } else {
+                        downloadInfo = null;
+                    }
+
+                    if (downloadInfo instanceof BerechtigungspruefungBescheinigungDownloadInfo) {
+                        AlkisProductDownloadHelper.downloadBaulastbescheinigung(
+                            downloadInfo,
+                            "",
+                            getConnectionContext());
+                    }
+                } catch (final Exception ex) {
+                    LOG.error(ex.getMessage(), ex);
+                }
             }
-
-            final HttpDownload download = new HttpDownload(
-                    url,
-                    "",
-                    DownloadManagerDialog.getInstance().getJobName(),
-                    "ALKIS-Druck",
-                    filename,
-                    ".pdf");
-            DownloadManager.instance().add(download);
-        } catch (MalformedURLException ex) {
-            LOG.error(ex.getMessage(), ex);
         }
     }
 
@@ -826,25 +857,25 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
+    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
+    }//GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
+    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBenutzerActionPerformed
         filterSettingsChanged();
-    }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
+    }//GEN-LAST:event_cboBenutzerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseClicked
+    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseClicked
         final int row = tblBillings.convertRowIndexToModel(tblBillings.getSelectedRow());
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.getSelectedColumn());
         if (column == 6) {
@@ -853,14 +884,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 doDownload(bt.getRequest());
             }
         }
-    }                                                                           //GEN-LAST:event_tblBillingsMouseClicked
+    }//GEN-LAST:event_tblBillingsMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseMoved
+    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseMoved
         final int row = tblBillings.convertRowIndexToModel(tblBillings.rowAtPoint(evt.getPoint()));
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.columnAtPoint(evt.getPoint()));
         if (column == 6) {
@@ -873,27 +904,27 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         } else {
             setCursor(Cursor.getDefaultCursor());
         }
-    }                                                                         //GEN-LAST:event_tblBillingsMouseMoved
+    }//GEN-LAST:event_tblBillingsMouseMoved
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseExited
+    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseExited
         setCursor(Cursor.getDefaultCursor());
-    }                                                                          //GEN-LAST:event_tblBillingsMouseExited
+    }//GEN-LAST:event_tblBillingsMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
+    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowResultsActionPerformed
         btnBuchungsbeleg.setEnabled(true);
         btnRechnungsanlage.setEnabled(true);
         filterBuchungen();
-    }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
+    }//GEN-LAST:event_btnShowResultsActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -922,7 +953,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
+    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechnungsanlageActionPerformed
         final PrintBillingReportForCustomer printBillingReportForCustomer = new PrintBillingReportForCustomer(
                 cidsBean,
                 getSortedBillingBeans(filteredBuchungen),
@@ -940,14 +971,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 getConnectionContext());
 
         printBillingReportForCustomer.print();
-    } //GEN-LAST:event_btnRechnungsanlageActionPerformed
+    }//GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
+    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuchungsbelegActionPerformed
         new PrintBillingReportForCustomer(
             cidsBean,
             getSortedBillingBeans(filteredBuchungen),
@@ -957,66 +988,66 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             retrieveShowBillingInReport(evt),
             null,
             getConnectionContext()).print();
-    }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
+    }//GEN-LAST:event_btnBuchungsbelegActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbgerechnetActionPerformed
+    private void cboAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAbgerechnetActionPerformed
         if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
             cboAbgerechnet.setSelected(true);
         }
         filterSettingsChanged();
-    }                                                                                  //GEN-LAST:event_cboAbgerechnetActionPerformed
+    }//GEN-LAST:event_cboAbgerechnetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboNichtAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboNichtAbgerechnetActionPerformed
+    private void cboNichtAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboNichtAbgerechnetActionPerformed
         if (!cboAbgerechnet.isSelected() && !cboNichtAbgerechnet.isSelected()) {
             cboAbgerechnet.setSelected(true);
         }
         filterSettingsChanged();
-    }                                                                                       //GEN-LAST:event_cboNichtAbgerechnetActionPerformed
+    }//GEN-LAST:event_cboNichtAbgerechnetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenpflichtigActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenpflichtig.setSelected(true);
         }
         filterSettingsChanged();
-    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
+    }//GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenfreiActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenpflichtig.setSelected(true);
         }
         filterSettingsChanged();
-    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
+    }//GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (worker != null) {
             worker.cancel(true);
         }
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1522,6 +1553,12 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
          * @return  DOCUMENT ME!
          */
         public boolean isRequestValid() {
+            try {
+                return BerechtigungspruefungBescheinigungDownloadInfo.PRODUKT_TYP.equals(MAPPER.readValue(
+                            request,
+                            BerechtigungspruefungBillingDownloadInfo.class).getProduktTyp());
+            } catch (final Exception ex) {
+            }
             return (request != null) && request.startsWith("http://") && this.isToday();
         }
 
