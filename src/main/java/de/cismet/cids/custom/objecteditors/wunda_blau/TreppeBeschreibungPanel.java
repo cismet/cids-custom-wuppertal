@@ -343,14 +343,8 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         defaultBindableDateChooser6 = new DefaultBindableDateChooser();
         defaultBindableDateChooser4 = new DefaultBindableDateChooser();
         defaultBindableDateChooser5 = new DefaultBindableDateChooser();
-        defaultBindableReferenceCombo3 = new DefaultBindableReferenceCombo(
-                MC__PRUEFUNGSART,
-                true,
-                false);
-        defaultBindableReferenceCombo2 = new DefaultBindableReferenceCombo(
-                MC__PRUEFUNGSART,
-                true,
-                false);
+        defaultBindableReferenceCombo3 = new DefaultBindableReferenceCombo(MC__PRUEFUNGSART, true, false);
+        defaultBindableReferenceCombo2 = new DefaultBindableReferenceCombo(MC__PRUEFUNGSART, true, false);
         final JLabel jLabel49 = new JLabel();
         final JLabel jLabel48 = new JLabel();
         final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
@@ -359,22 +353,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         final JPanel jPanel7 = new JPanel();
         final JLabel jLabel52 = new JLabel();
         final JLabel jLabel53 = new JLabel();
-        defaultBindableReferenceCombo7 = new DefaultBindableReferenceCombo(
-                MC__BEURTEILUNG,
-                true,
-                false);
-        defaultBindableReferenceCombo8 = new DefaultBindableReferenceCombo(
-                MC__EINSATZ,
-                true,
-                false);
-        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(
-                MC__BEURTEILUNG,
-                true,
-                false);
-        defaultBindableReferenceCombo6 = new DefaultBindableReferenceCombo(
-                MC__BEURTEILUNG,
-                true,
-                false);
+        defaultBindableReferenceCombo7 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
+        defaultBindableReferenceCombo8 = new DefaultBindableReferenceCombo(MC__EINSATZ, true, false);
+        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
+        defaultBindableReferenceCombo6 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
         final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         final JPanel jPanel30 = new JPanel();
 
@@ -1793,7 +1775,7 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 0, 10);
+        gridBagConstraints.insets = new Insets(5, 10, 0, 10);
         panBeschreibungContent.add(jPanel9, gridBagConstraints);
 
         jPanel30.setName("jPanel30"); // NOI18N
