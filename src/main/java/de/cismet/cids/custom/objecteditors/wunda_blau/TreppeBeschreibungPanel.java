@@ -178,6 +178,13 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new TreppeBeschreibungPanel object.
+     */
+    public TreppeBeschreibungPanel() {
+        this(ConnectionContext.createDeprecated());
+    }
+
+    /**
      * Creates a new TreppeLaufPanel object.
      *
      * @param  connectionContext  DOCUMENT ME!

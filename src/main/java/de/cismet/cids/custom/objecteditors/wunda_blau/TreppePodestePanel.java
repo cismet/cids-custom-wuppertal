@@ -162,6 +162,13 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
 
     /**
      * Creates a new TreppePodestePanel object.
+     */
+    public TreppePodestePanel() {
+        this(ConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new TreppePodestePanel object.
      *
      * @param  connectionContext  DOCUMENT ME!
      */

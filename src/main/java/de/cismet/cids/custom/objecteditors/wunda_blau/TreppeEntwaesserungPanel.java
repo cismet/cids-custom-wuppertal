@@ -106,6 +106,13 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new TreppeEntwaesserungPanel object.
+     */
+    public TreppeEntwaesserungPanel() {
+        this(ConnectionContext.createDeprecated());
+    }
+
+    /**
      * Creates a new TreppeLaufPanel object.
      *
      * @param  connectionContext  DOCUMENT ME!

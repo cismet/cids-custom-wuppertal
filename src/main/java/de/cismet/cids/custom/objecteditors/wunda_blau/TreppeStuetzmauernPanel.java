@@ -84,6 +84,13 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
 
     /**
      * Creates a new TreppeStuetzmauernPanel object.
+     */
+    public TreppeStuetzmauernPanel() {
+        this(ConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new TreppeStuetzmauernPanel object.
      *
      * @param  connectionContext  DOCUMENT ME!
      */
