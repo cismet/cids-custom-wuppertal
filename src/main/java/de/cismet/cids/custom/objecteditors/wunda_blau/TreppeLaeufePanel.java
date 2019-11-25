@@ -12,8 +12,6 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import net.sf.ehcache.hibernate.management.impl.CollectionStats;
-
 import org.apache.log4j.Logger;
 
 import java.awt.Component;
@@ -25,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.Box;
@@ -163,6 +160,13 @@ public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable,
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new TreppeLaeufePanel object.
+     */
+    public TreppeLaeufePanel() {
+        this(ConnectionContext.createDeprecated());
+    }
 
     /**
      * Creates a new TreppeLaeufePanel object.

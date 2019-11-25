@@ -163,6 +163,13 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
 
     /**
      * Creates a new TreppeHandlaeufePanel object.
+     */
+    public TreppeHandlaeufePanel() {
+        this(ConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new TreppeHandlaeufePanel object.
      *
      * @param  connectionContext  DOCUMENT ME!
      */

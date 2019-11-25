@@ -47,6 +47,7 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Currency;
@@ -166,6 +167,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         roundedPanel5 = new FullyRoundedPanel();
         roundedPanel6 = new FullyRoundedPanel();
         roundedPanel7 = new FullyRoundedPanel();
+        jLabel36 = new JLabel();
         final TreppeBeschreibungPanel treppeBeschreibungPanel1 = new TreppeBeschreibungPanel(
                 editable,
                 getConnectionContext());
@@ -324,8 +326,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 5, 12, 5);
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         jPanel11.add(jLabel19, gridBagConstraints);
 
         Mnemonics.setLocalizedText(jLabel20, NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel20.text")); // NOI18N
@@ -334,61 +337,74 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(12, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(8, 5, 0, 5);
         jPanel11.add(jLabel20, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jXHyperlink1,
             NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jXHyperlink1.text")); // NOI18N
         jXHyperlink1.setHorizontalAlignment(SwingConstants.CENTER);
+        jXHyperlink1.setHorizontalTextPosition(SwingConstants.CENTER);
         jXHyperlink1.setName("jXHyperlink1");                                           // NOI18N
+        jXHyperlink1.setVerticalAlignment(SwingConstants.TOP);
         jXHyperlink1.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 5, 12, 5);
+        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         jPanel11.add(jXHyperlink1, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jXHyperlink2,
             NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jXHyperlink2.text")); // NOI18N
         jXHyperlink2.setHorizontalAlignment(SwingConstants.CENTER);
+        jXHyperlink2.setHorizontalTextPosition(SwingConstants.CENTER);
         jXHyperlink2.setName("jXHyperlink2");                                           // NOI18N
+        jXHyperlink2.setVerticalAlignment(SwingConstants.TOP);
         jXHyperlink2.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 5, 12, 5);
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         jPanel11.add(jXHyperlink2, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jXHyperlink3,
             NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jXHyperlink3.text")); // NOI18N
         jXHyperlink3.setHorizontalAlignment(SwingConstants.CENTER);
+        jXHyperlink3.setHorizontalTextPosition(SwingConstants.CENTER);
         jXHyperlink3.setName("jXHyperlink3");                                           // NOI18N
+        jXHyperlink3.setVerticalAlignment(SwingConstants.TOP);
         jXHyperlink3.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 5, 12, 5);
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         jPanel11.add(jXHyperlink3, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jXHyperlink4,
             NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jXHyperlink4.text")); // NOI18N
         jXHyperlink4.setHorizontalAlignment(SwingConstants.CENTER);
+        jXHyperlink4.setHorizontalTextPosition(SwingConstants.CENTER);
         jXHyperlink4.setName("jXHyperlink4");                                           // NOI18N
+        jXHyperlink4.setVerticalAlignment(SwingConstants.TOP);
         jXHyperlink4.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 5, 12, 5);
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         jPanel11.add(jXHyperlink4, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -396,13 +412,15 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
             NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jXHyperlink5.text")); // NOI18N
         jXHyperlink5.setHorizontalAlignment(SwingConstants.CENTER);
         jXHyperlink5.setName("jXHyperlink5");                                           // NOI18N
+        jXHyperlink5.setVerticalAlignment(SwingConstants.TOP);
         jXHyperlink5.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 5, 12, 5);
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         jPanel11.add(jXHyperlink5, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -411,23 +429,23 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         jXHyperlink6.setHorizontalAlignment(SwingConstants.CENTER);
         jXHyperlink6.setHorizontalTextPosition(SwingConstants.CENTER);
         jXHyperlink6.setName("jXHyperlink6");                                           // NOI18N
+        jXHyperlink6.setVerticalAlignment(SwingConstants.TOP);
         jXHyperlink6.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 5, 12, 5);
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         jPanel11.add(jXHyperlink6, gridBagConstraints);
 
         Mnemonics.setLocalizedText(jLabel21, NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel21.text")); // NOI18N
         jLabel21.setName("jLabel21");                                                                                // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         jPanel11.add(jLabel21, gridBagConstraints);
 
@@ -517,7 +535,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(12, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(8, 5, 0, 5);
         jPanel11.add(jLabel29, gridBagConstraints);
 
         jLabel30.setHorizontalAlignment(SwingConstants.CENTER);
@@ -529,7 +547,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(12, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(8, 5, 0, 5);
         jPanel11.add(jLabel30, gridBagConstraints);
 
         jLabel31.setHorizontalAlignment(SwingConstants.CENTER);
@@ -541,7 +559,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(12, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(8, 5, 0, 5);
         jPanel11.add(jLabel31, gridBagConstraints);
 
         jLabel32.setHorizontalAlignment(SwingConstants.CENTER);
@@ -553,7 +571,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(12, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(8, 5, 0, 5);
         jPanel11.add(jLabel32, gridBagConstraints);
 
         jLabel33.setHorizontalAlignment(SwingConstants.CENTER);
@@ -565,7 +583,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(12, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(8, 5, 0, 5);
         jPanel11.add(jLabel33, gridBagConstraints);
 
         jLabel34.setHorizontalAlignment(SwingConstants.CENTER);
@@ -577,7 +595,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(12, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(8, 5, 0, 5);
         jPanel11.add(jLabel34, gridBagConstraints);
 
         jLabel35.setHorizontalAlignment(SwingConstants.CENTER);
@@ -589,7 +607,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(12, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(8, 5, 0, 5);
         jPanel11.add(jLabel35, gridBagConstraints);
 
         roundedPanel1.setMaximumSize(new Dimension(32, 32));
@@ -606,7 +624,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -627,7 +645,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -648,7 +666,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -669,7 +687,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -690,7 +708,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -711,7 +729,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -732,12 +750,24 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         jPanel11.add(roundedPanel7, gridBagConstraints);
+
+        jLabel36.setHorizontalAlignment(SwingConstants.CENTER);
+        Mnemonics.setLocalizedText(jLabel36, NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel36.text")); // NOI18N
+        jLabel36.setToolTipText(NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel36.toolTipText"));       // NOI18N
+        jLabel36.setHorizontalTextPosition(SwingConstants.CENTER);
+        jLabel36.setName("jLabel36");                                                                                // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
+        jPanel11.add(jLabel36, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -776,7 +806,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
+        gridBagConstraints.insets = new Insets(10, 0, 5, 0);
         jPanel1.add(treppeBeschreibungPanel1, gridBagConstraints);
 
         jTabbedPane1.addTab(NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jPanel1.TabConstraints.tabTitle"),
@@ -1021,6 +1051,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     JLabel jLabel33;
     JLabel jLabel34;
     JLabel jLabel35;
+    JLabel jLabel36;
     JTabbedPane jTabbedPane1;
     JXHyperlink jXHyperlink1;
     JXHyperlink jXHyperlink2;
@@ -1354,19 +1385,26 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         //~ Instance fields ----------------------------------------------------
 
-        private double zustandTreppen = 0;
+        private int anzahlStufen = 0;
+        private int anzahlTreppenlaeufe = 0;
+        private int anzahlPodeste = 0;
+        private int anzahlLeitelemente = 0;
+        private int anzahlHandlaeufe = 0;
+        private int anzahlStuetzmauern = 0;
+
+        private double zustandTreppenlauefe = 0;
         private double zustandPodeste = 0;
-        private double zustandHandlauf = 0;
+        private double zustandLeitelemente = 0;
+        private double zustandHandlaeufe = 0;
         private double zustandEntwaesserung = 0;
-        private double zustandAbsturzsicherung = 0;
         private double zustandStuetzmauern = 0;
         private double zustandGesamt = 0;
 
-        private double kostenTreppen = 0;
+        private double kostenTreppenlaeufe = 0;
         private double kostenPodeste = 0;
-        private double kostenHandlauf = 0;
+        private double kostenLeitelemente = 0;
+        private double kostenHandlaeufe = 0;
         private double kostenEntwaesserung = 0;
-        private double kostenAbsturzsicherung = 0;
         private double kostenStuetzmauern = 0;
         private double kostenGesamt = 0;
 
@@ -1379,8 +1417,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
             if (cidsBean != null) {
                 recalculateTreppenlaeufe();
                 recalculatePodeste();
-                recalculateHandlauf();
-                recalculateAbsturzsicherung();
+                recalculateHandlaeufe();
+                recalculateLeitelemente();
                 recalculateEntwaesserung();
                 recalculateStuetzmauern();
                 recalculateGesamt();
@@ -1390,105 +1428,92 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         /**
          * DOCUMENT ME!
+         *
+         * @param   anzahl        DOCUMENT ME!
+         * @param   nameSingular  DOCUMENT ME!
+         * @param   namePlural    DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private String refreshAnzahl(final int anzahl, final String nameSingular, final String namePlural) {
+            if (anzahl == 1) {
+                return String.format("%d " + nameSingular, anzahl);
+            } else {
+                return String.format("%d " + namePlural, anzahl);
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   backgroundColor  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private Color calculateBestForegroundColor(final Color backgroundColor) {
+            final double luminance = (0.2126 * backgroundColor.getRed()) + (0.7152 * backgroundColor.getGreen())
+                        + (0.0722 * backgroundColor.getBlue());
+            return (luminance < 140) ? Color.WHITE : Color.BLACK;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  zustand  DOCUMENT ME!
+         * @param  label    DOCUMENT ME!
+         * @param  panel    DOCUMENT ME!
+         */
+        private void refreshZustand(final double zustand, final JLabel label, final JPanel panel) {
+            final NumberFormat formatZustand = new DecimalFormat("#.#");
+            if (zustand < 2) {
+                panel.setBackground(GRUEN);
+            } else if (zustand < 3) {
+                panel.setBackground(GELB);
+            } else {
+                panel.setBackground(ROT);
+            }
+            label.setForeground(calculateBestForegroundColor(panel.getBackground()));
+            label.setText(formatZustand.format(zustand));
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  kosten  DOCUMENT ME!
+         * @param  label   DOCUMENT ME!
+         */
+        private void refreshKosten(final double kosten, final JLabel label) {
+            final NumberFormat formatKosten = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+            formatKosten.setCurrency(Currency.getInstance("EUR"));
+            label.setText(formatKosten.format(kosten));
+        }
+
+        /**
+         * DOCUMENT ME!
          */
         public void refreshView() {
-            final Currency eur = Currency.getInstance("EUR");
-            final NumberFormat formatKosten = NumberFormat.getCurrencyInstance(Locale.GERMANY);
-            formatKosten.setCurrency(eur);
-            jLabel29.setText(formatKosten.format(getKostenTreppen()));
-            jLabel30.setText(formatKosten.format(getKostenPodeste()));
-            jLabel31.setText(formatKosten.format(getKostenAbsturzsicherung()));
-            jLabel32.setText(formatKosten.format(getKostenHandlauf()));
-            jLabel33.setText(formatKosten.format(getKostenEntwaesserung()));
+            jXHyperlink1.setText(refreshAnzahl(getAnzahlTreppenlaeufe(), "Treppenlauf", "Treppenläufe"));
+            jLabel36.setText(refreshAnzahl(getAnzahlStufen(), "Stufe", "Stufen"));
+            jXHyperlink2.setText(refreshAnzahl(getAnzahlPodeste(), "Podest", "Podeste"));
+            jXHyperlink3.setText(refreshAnzahl(getAnzahlLeitelemente(), "Leitelement", "Leitelemente"));
+            jXHyperlink4.setText(refreshAnzahl(getAnzahlHandlaeufe(), "Handlauf", "Handläufe"));
+            jXHyperlink6.setText(refreshAnzahl(getAnzahlStuetzmauern(), "Stützmauer", "Stützmauern"));
 
-            jLabel34.setText(formatKosten.format(getKostenStuetzmauern()));
-            jLabel35.setText(formatKosten.format(getKostenGesamt()));
+            refreshZustand(getZustandTreppenlauefe(), jLabel23, roundedPanel1);
+            refreshZustand(getZustandPodeste(), jLabel24, roundedPanel2);
+            refreshZustand(getZustandLeitelemente(), jLabel25, roundedPanel3);
+            refreshZustand(getZustandHandlaeufe(), jLabel26, roundedPanel4);
+            refreshZustand(getZustandEntwaesserung(), jLabel27, roundedPanel5);
+            refreshZustand(getZustandStuetzmauern(), jLabel22, roundedPanel6);
+            refreshZustand(getZustandGesamt(), jLabel28, roundedPanel7);
 
-            final NumberFormat formatZustand = new DecimalFormat("#.#");
-
-            if (getZustandTreppen() < 2) {
-                roundedPanel1.setBackground(GRUEN);
-                roundedPanel1.setForeground(GRUEN);
-            } else if (getZustandTreppen() < 3) {
-                roundedPanel1.setBackground(GELB);
-                roundedPanel1.setForeground(GELB);
-            } else {
-                roundedPanel1.setBackground(ROT);
-                roundedPanel1.setForeground(ROT);
-            }
-            jLabel23.setText(formatZustand.format(getZustandTreppen()));
-
-            if (getZustandPodeste() < 2) {
-                roundedPanel2.setBackground(GRUEN);
-                roundedPanel2.setForeground(GRUEN);
-            } else if (getZustandPodeste() < 3) {
-                roundedPanel2.setBackground(GELB);
-                roundedPanel2.setForeground(GELB);
-            } else {
-                roundedPanel2.setBackground(ROT);
-                roundedPanel2.setForeground(ROT);
-            }
-            jLabel24.setText(formatZustand.format(getZustandPodeste()));
-
-            if (getZustandAbsturzsicherung() < 2) {
-                roundedPanel3.setBackground(GRUEN);
-                roundedPanel3.setForeground(GRUEN);
-            } else if (getZustandAbsturzsicherung() < 3) {
-                roundedPanel3.setBackground(GELB);
-                roundedPanel3.setForeground(GELB);
-            } else {
-                roundedPanel3.setBackground(ROT);
-                roundedPanel3.setForeground(ROT);
-            }
-            jLabel25.setText(formatZustand.format(getZustandAbsturzsicherung()));
-
-            if (getZustandHandlauf() < 2) {
-                roundedPanel4.setBackground(GRUEN);
-                roundedPanel4.setForeground(GRUEN);
-            } else if (getZustandHandlauf() < 3) {
-                roundedPanel4.setBackground(GELB);
-                roundedPanel4.setForeground(GELB);
-            } else {
-                roundedPanel4.setBackground(ROT);
-                roundedPanel4.setForeground(ROT);
-            }
-            jLabel26.setText(formatZustand.format(getZustandHandlauf()));
-
-            if (getZustandEntwaesserung() < 2) {
-                roundedPanel5.setBackground(GRUEN);
-                roundedPanel5.setForeground(GRUEN);
-            } else if (getZustandEntwaesserung() < 3) {
-                roundedPanel5.setBackground(GELB);
-                roundedPanel5.setForeground(GELB);
-            } else {
-                roundedPanel5.setBackground(ROT);
-                roundedPanel5.setForeground(ROT);
-            }
-            jLabel27.setText(formatZustand.format(getZustandEntwaesserung()));
-
-            if (getZustandStuetzmauern() < 2) {
-                roundedPanel6.setBackground(GRUEN);
-                roundedPanel6.setForeground(GRUEN);
-            } else if (getZustandStuetzmauern() < 3) {
-                roundedPanel6.setBackground(GELB);
-                roundedPanel6.setForeground(GELB);
-            } else {
-                roundedPanel6.setBackground(ROT);
-                roundedPanel6.setForeground(ROT);
-            }
-            jLabel22.setText(formatZustand.format(getZustandStuetzmauern()));
-
-            if (getZustandGesamt() < 2) {
-                roundedPanel7.setBackground(GRUEN);
-                roundedPanel7.setForeground(GRUEN);
-            } else if (getZustandGesamt() < 3) {
-                roundedPanel7.setBackground(GELB);
-                roundedPanel7.setForeground(GELB);
-            } else {
-                roundedPanel7.setBackground(ROT);
-                roundedPanel7.setForeground(ROT);
-            }
-            jLabel28.setText(formatZustand.format(getZustandGesamt()));
+            refreshKosten(getKostenTreppenlaeufe(), jLabel29);
+            refreshKosten(getKostenPodeste(), jLabel30);
+            refreshKosten(getKostenLeitelemente(), jLabel31);
+            refreshKosten(getKostenHandlaeufe(), jLabel32);
+            refreshKosten(getKostenEntwaesserung(), jLabel33);
+            refreshKosten(getKostenStuetzmauern(), jLabel34);
+            refreshKosten(getKostenGesamt(), jLabel35);
         }
 
         /**
@@ -1497,19 +1522,28 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         public void recalculateTreppenlaeufe() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
+            int anzahl = 0;
+            int stufenGesamt = 0;
             if (cidsBean != null) {
                 for (final CidsBean laufBean : cidsBean.getBeanCollectionProperty("treppenlaeufe")) {
                     final Double zustand = (laufBean != null) ? (Double)laufBean.getProperty("zustand.gesamt") : null;
                     final Double kosten = (laufBean != null) ? (Double)laufBean.getProperty("zustand.kosten") : null;
+                    final Integer stufen = (laufBean != null) ? (Integer)laufBean.getProperty("stufen") : null;
 
                     kostenGesamt += ((kosten != null) ? kosten : 0);
                     if ((zustand != null) && (zustand > zustandGesamt)) {
                         zustandGesamt = zustand;
                     }
+                    if (stufen != null) {
+                        stufenGesamt += stufen;
+                    }
+                    anzahl++;
                 }
             }
-            setZustandTreppen(zustandGesamt);
-            setKostenTreppen(kostenGesamt);
+            setAnzahlTreppenlaeufe(anzahl);
+            setAnzahlStufen(stufenGesamt);
+            setZustandTreppenlauefe(zustandGesamt);
+            setKostenTreppenlaeufe(kostenGesamt);
         }
 
         /**
@@ -1518,6 +1552,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         public void recalculatePodeste() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
+            int anzahl = 0;
             if (cidsBean != null) {
                 for (final CidsBean laufBean : cidsBean.getBeanCollectionProperty("podeste")) {
                     final Double zustand = (laufBean != null) ? (Double)laufBean.getProperty("zustand.gesamt") : null;
@@ -1527,8 +1562,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                     if ((zustand != null) && (zustand > zustandGesamt)) {
                         zustandGesamt = zustand;
                     }
+                    anzahl++;
                 }
             }
+            setAnzahlPodeste(anzahl);
             setZustandPodeste(zustandGesamt);
             setKostenPodeste(kostenGesamt);
         }
@@ -1536,9 +1573,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         /**
          * DOCUMENT ME!
          */
-        public void recalculateHandlauf() {
+        public void recalculateHandlaeufe() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
+            int anzahl = 0;
             if (cidsBean != null) {
                 for (final CidsBean laufBean : cidsBean.getBeanCollectionProperty("handlaeufe")) {
                     final Double zustand = (laufBean != null) ? (Double)laufBean.getProperty("zustand.gesamt") : null;
@@ -1548,19 +1586,21 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                     if ((zustand != null) && (zustand > zustandGesamt)) {
                         zustandGesamt = zustand;
                     }
+                    anzahl++;
                 }
             }
-
-            setZustandHandlauf(zustandGesamt);
-            setKostenHandlauf(kostenGesamt);
+            setAnzahlHandlaeufe(anzahl);
+            setZustandHandlaeufe(zustandGesamt);
+            setKostenHandlaeufe(kostenGesamt);
         }
 
         /**
          * DOCUMENT ME!
          */
-        public void recalculateAbsturzsicherung() {
+        public void recalculateLeitelemente() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
+            int anzahl = 0;
             if (cidsBean != null) {
                 for (final CidsBean laufBean : cidsBean.getBeanCollectionProperty("absturzsicherungen")) {
                     final Double zustand = (laufBean != null) ? (Double)laufBean.getProperty("zustand.gesamt") : null;
@@ -1570,11 +1610,12 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                     if ((zustand != null) && (zustand > zustandGesamt)) {
                         zustandGesamt = zustand;
                     }
+                    anzahl++;
                 }
             }
-
-            setZustandAbsturzsicherung(zustandGesamt);
-            setKostenAbsturzsicherung(kostenGesamt);
+            setAnzahlLeitelemente(anzahl);
+            setZustandLeitelemente(zustandGesamt);
+            setKostenLeitelemente(kostenGesamt);
         }
 
         /**
@@ -1596,6 +1637,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         public void recalculateStuetzmauern() {
             double zustandGesamt = 0;
             double kostenGesamt = 0;
+            int anzahl = 0;
             if (cidsBean != null) {
                 for (final CidsBean zustandBean : treppeStuetzmauernPanel1.getZustandBeans()) {
                     final Double zustand = (zustandBean != null) ? (Double)zustandBean.getProperty("gesamt") : null;
@@ -1605,9 +1647,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                     if ((zustand != null) && (zustand > zustandGesamt)) {
                         zustandGesamt = zustand;
                     }
+                    anzahl++;
                 }
             }
-
+            setAnzahlStuetzmauern(anzahl);
             setZustandStuetzmauern(zustandGesamt);
             setKostenStuetzmauern(kostenGesamt);
         }
@@ -1617,19 +1660,19 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
          */
         public void recalculateGesamt() {
             final double[] kostenAll = new double[] {
-                    kostenTreppen,
+                    kostenTreppenlaeufe,
                     kostenPodeste,
-                    kostenHandlauf,
+                    kostenHandlaeufe,
                     kostenEntwaesserung,
-                    kostenAbsturzsicherung,
+                    kostenLeitelemente,
                     kostenStuetzmauern
                 };
             final double[] zustandAll = new double[] {
-                    zustandTreppen,
+                    zustandTreppenlauefe,
                     zustandPodeste,
-                    zustandHandlauf,
+                    zustandHandlaeufe,
                     zustandEntwaesserung,
-                    zustandAbsturzsicherung,
+                    zustandLeitelemente,
                     zustandStuetzmauern
                 };
 

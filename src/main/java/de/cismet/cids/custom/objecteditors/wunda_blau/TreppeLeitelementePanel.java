@@ -163,6 +163,13 @@ public class TreppeLeitelementePanel extends javax.swing.JPanel implements Dispo
 
     /**
      * Creates a new TreppeLeitelementePanel object.
+     */
+    public TreppeLeitelementePanel() {
+        this(ConnectionContext.createDeprecated());
+    }
+
+    /**
+     * Creates a new TreppeLeitelementePanel object.
      *
      * @param  connectionContext  DOCUMENT ME!
      */
