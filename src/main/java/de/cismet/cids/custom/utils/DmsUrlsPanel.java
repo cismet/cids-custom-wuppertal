@@ -51,7 +51,6 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Collection<DmsUrlPanel> allPanels = new ArrayList<>();
     private Collection<CidsBean> dmsUrls;
     private ConnectionContext connectionContext;
     private final String domain;
@@ -64,6 +63,7 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
     /**
      * Creates a new DmsUrlsPanel object.
      */
+    @Deprecated
     public DmsUrlsPanel() {
         this(null);
     }
@@ -133,6 +133,7 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        setOpaque(false);
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
     } // </editor-fold>//GEN-END:initComponents
 
@@ -143,6 +144,7 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
      */
     public void setDmsUrls(final Collection<CidsBean> dmsUrls) {
         this.dmsUrls = dmsUrls;
+        refresh();
     }
 
     /**
@@ -161,7 +163,7 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
      *
      * @return  DOCUMENT ME!
      */
-    public DmsUrlPanel addDmsUrl(final CidsBean dmsUrlBean) {
+    private DmsUrlPanel createDmsUrlPanel(final CidsBean dmsUrlBean) {
         final DmsUrlPanel dp = new DmsUrlPanel(dmsUrlBean);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Typ des neuen DocPanels: " + dp.getTyp());
@@ -175,15 +177,12 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
                         final DmsUrlPanel docPanel = (DmsUrlPanel)e.getSource();
                         if (e.getActionCommand().equals(DmsUrlPanel.DELETE_ACTION_COMMAND)) {
                             DmsUrlsPanel.this.remove(docPanel);
-                            allPanels.remove(docPanel);
                             DmsUrlsPanel.this.revalidate();
                             repaint();
                         }
                     }
                 }
             });
-        this.add(dp);
-        revalidate();
         return dp;
     }
 
@@ -198,12 +197,14 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
                     url);
             if (description != null) {
                 try {
-                    final DmsUrlPanel dp = addDmsUrl(createNewDmsUrl(
-                                DmsUrlPathMapper.getInstance().replaceLocalPath(url),
-                                description,
-                                1));
-                    allPanels.add(dp);
-                    this.repaint();
+                    final CidsBean dmsUrlBean = createNewDmsUrl(
+                            DmsUrlPathMapper.getInstance().replaceLocalPath(url),
+                            description,
+                            1);
+                    dmsUrls.add(dmsUrlBean);
+                    add(createDmsUrlPanel(dmsUrlBean));
+                    revalidate();
+                    repaint();
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
                 }
@@ -234,16 +235,17 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
      * DOCUMENT ME!
      */
     public void refresh() {
-        allPanels.clear();
+        removeAll();
         if (dmsUrls != null) {
-            for (final CidsBean dmsUrl : dmsUrls) {
+            for (final CidsBean dmsUrlBean : dmsUrls) {
                 try {
-                    allPanels.add(addDmsUrl(dmsUrl));
+                    add(createDmsUrlPanel(dmsUrlBean));
                 } catch (Exception e) {
                     LOG.error("Fehler beim laden eines Dokumentes", e);
                 }
             }
         }
+        revalidate();
         repaint();
     }
 

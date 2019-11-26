@@ -47,6 +47,7 @@ public class DmsUrlPanel extends javax.swing.JPanel {
     private CidsBean dmsUrlBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblDescr;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JMenuItem mniDelete;
@@ -192,8 +193,11 @@ public class DmsUrlPanel extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        final java.awt.GridBagConstraints gridBagConstraints;
+
         pmnLink = new javax.swing.JPopupMenu();
         mniDelete = new javax.swing.JMenuItem();
+        jPanel1 = new javax.swing.JPanel();
         lblIcon = new javax.swing.JLabel();
         lblDescr = new javax.swing.JLabel();
 
@@ -208,7 +212,11 @@ public class DmsUrlPanel extends javax.swing.JPanel {
         pmnLink.add(mniDelete);
 
         setMaximumSize(new java.awt.Dimension(100, 100));
-        setLayout(new java.awt.BorderLayout());
+        setOpaque(false);
+        setLayout(new java.awt.GridBagLayout());
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIcon.setIcon(new javax.swing.ImageIcon(
@@ -220,7 +228,7 @@ public class DmsUrlPanel extends javax.swing.JPanel {
                     lblIconMousePressed(evt);
                 }
             });
-        add(lblIcon, java.awt.BorderLayout.CENTER);
+        jPanel1.add(lblIcon, java.awt.BorderLayout.CENTER);
 
         lblDescr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblDescr.setText("Beschreibung");
@@ -238,15 +246,19 @@ public class DmsUrlPanel extends javax.swing.JPanel {
                     lblDescrMouseClicked(evt);
                 }
                 @Override
-                public void mouseEntered(final java.awt.event.MouseEvent evt) {
-                    lblDescrMouseEntered(evt);
-                }
-                @Override
                 public void mouseExited(final java.awt.event.MouseEvent evt) {
                     lblDescrMouseExited(evt);
                 }
+                @Override
+                public void mouseEntered(final java.awt.event.MouseEvent evt) {
+                    lblDescrMouseEntered(evt);
+                }
             });
-        add(lblDescr, java.awt.BorderLayout.SOUTH);
+        jPanel1.add(lblDescr, java.awt.BorderLayout.SOUTH);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(jPanel1, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
