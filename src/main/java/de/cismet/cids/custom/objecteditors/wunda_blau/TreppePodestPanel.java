@@ -125,10 +125,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         final JLabel jLabel56 = new JLabel();
         final JLabel jLabel1 = new JLabel();
         final JPanel jPanel2 = new JPanel();
-        defaultBindableReferenceCombo1 = new DefaultBindableReferenceCombo(
-                MC__PODEST_MATERIAL,
-                true,
-                false);
+        defaultBindableReferenceCombo1 = new DefaultBindableReferenceCombo(MC__PODEST_MATERIAL, true, false);
         fastBindableReferenceCombo1 = new FastBindableReferenceCombo(
                 materialArtSearch1,
                 materialArtSearch1.getRepresentationPattern(),
@@ -139,15 +136,9 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
                 materialArtSearch2.getRepresentationFields());
         final JSeparator jSeparator3 = new JSeparator();
         final JLabel jLabel2 = new JLabel();
-        defaultBindableReferenceCombo4 = new DefaultBindableReferenceCombo(
-                MC__ENTWAESSERUNG_ART,
-                true,
-                false);
+        defaultBindableReferenceCombo4 = new DefaultBindableReferenceCombo(MC__ENTWAESSERUNG_ART, true, false);
         final JLabel jLabel3 = new JLabel();
-        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(
-                MC__PODEST_FUGEN,
-                true,
-                false);
+        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(MC__PODEST_FUGEN, true, false);
         final JLabel jLabel55 = new JLabel();
         final JScrollPane jScrollPane2 = new JScrollPane();
         jTextArea2 = new JTextArea();
@@ -157,7 +148,6 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         treppeBauteilZustandKostenPanel7 = new TreppeBauteilZustandKostenPanel(editable);
         final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         btnRemoveArt1 = new JButton();
-        final JSeparator jSeparator1 = new JSeparator();
         final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
 
         final FormListener formListener = new FormListener();
@@ -595,15 +585,6 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         add(jPanel4, gridBagConstraints);
-
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        add(jSeparator1, gridBagConstraints);
 
         filler2.setName("filler2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
