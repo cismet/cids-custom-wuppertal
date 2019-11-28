@@ -185,6 +185,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         final JPanel jPanel7 = new JPanel();
         treppeStuetzmauernPanel1 = new TreppeStuetzmauernPanel(editable, getConnectionContext());
         final JPanel jPanel8 = new JPanel();
+        treppenBandPanel1 = new TreppenBandPanel(!editable, connectionContext);
         treppePicturePanel1 = new WebDavPicturePanel(
                 editable,
                 "url_treppen",
@@ -963,6 +964,26 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         jTabbedPane1.addTab(NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jPanel7.TabConstraints.tabTitle"),
             jPanel7); // NOI18N
 
+        jPanel8.setName("jPanel8"); // NOI18N
+        jPanel8.setOpaque(false);
+        jPanel8.setLayout(new GridBagLayout());
+
+        treppenBandPanel1.setName("treppenBandPanel1"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
+        jPanel8.add(treppenBandPanel1, gridBagConstraints);
+
+        jTabbedPane1.addTab(NbBundle.getMessage(
+                TreppeEditor.class,
+                "TreppeEditor.jPanel8.TabConstraints.tabTitle",
+                new Object[] {}),
+            jPanel8); // NOI18N
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -1162,6 +1183,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     WebDavPicturePanel treppePicturePanel1;
     TreppePodestePanel treppePodestePanel1;
     TreppeStuetzmauernPanel treppeStuetzmauernPanel1;
+    TreppenBandPanel treppenBandPanel1;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -1352,6 +1374,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                 }
             }
             overview.recalculateAll();
+            treppenBandPanel1.setCidsBean(cidsBean);
         }
 
         ((CardLayout)getLayout()).show(this, "card1");
@@ -1377,6 +1400,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         treppeEntwaesserung1.dispose();
         treppeStuetzmauernPanel1.dispose();
         treppePicturePanel1.dispose();
+        treppenBandPanel1.dispose();
     }
 
     @Override
