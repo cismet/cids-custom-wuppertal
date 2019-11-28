@@ -20,6 +20,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JPanel;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.tools.gui.jbands.JBandCursorManager;
@@ -47,16 +49,20 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
     private Painter selectedBackgroundPainter;
     private String colorProperty;
     private String lineFieldName = "linie";
+    private TreppenBand parent;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates new form MassnahmenBandMember.
+     *
+     * @param  parent  DOCUMENT ME!
      */
-    public DummyBandMember() {
+    public DummyBandMember(final TreppenBand parent) {
         setMinimumSize(new Dimension(1, 7));
         setPreferredSize(getMinimumSize());
         determineBackgroundColour();
+        this.parent = parent;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -135,38 +141,6 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
 
     @Override
     public void mouseClicked(final MouseEvent e) {
-//        if ((e.getClickCount() == 2) && (cidsBean != null)) {
-//            final Geometry g = (Geometry)(cidsBean.getProperty(lineFieldName + ".geom.geo_field"));
-//            final MappingComponent mc = CismapBroker.getInstance().getMappingComponent();
-//            final XBoundingBox xbb = new XBoundingBox(g);
-//
-//            mc.gotoBoundingBoxWithHistory(new XBoundingBox(
-//                    g.getEnvelope().buffer((xbb.getWidth() + xbb.getHeight()) / 2 * 0.1)));
-//            final DefaultStyledFeature dsf = new DefaultStyledFeature();
-//            dsf.setGeometry(g);
-//            dsf.setCanBeSelected(false);
-//            dsf.setLinePaint(Color.YELLOW);
-//            dsf.setLineWidth(6);
-//            final PFeature highlighter = new PFeature(dsf, mc);
-//            mc.getHighlightingLayer().addChild(highlighter);
-//            highlighter.animateToTransparency(0.1f, 2000);
-//            de.cismet.tools.CismetThreadPool.execute(new javax.swing.SwingWorker<Void, Void>() {
-//
-//                    @Override
-//                    protected Void doInBackground() throws Exception {
-//                        Thread.currentThread().sleep(2500);
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    protected void done() {
-//                        try {
-//                            mc.getHighlightingLayer().removeChild(highlighter);
-//                        } catch (Exception e) {
-//                        }
-//                    }
-//                });
-//        }
     }
 
     @Override
@@ -211,5 +185,18 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
      */
     public String getColorProperty() {
         return colorProperty;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JPanel getObjectChooser() {
+        return new ObjectChooserPanel(parent.getAllowedObjectNames(),
+                parent.getAllowedObjectTableNames(),
+                parent,
+                from,
+                to);
     }
 }

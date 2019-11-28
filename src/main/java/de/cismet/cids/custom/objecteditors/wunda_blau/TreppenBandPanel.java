@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.swing.ScrollPaneConstants;
 
+import de.cismet.cids.custom.wunda_blau.band.DummyBandMember;
 import de.cismet.cids.custom.wunda_blau.band.ElementResizedEvent;
 import de.cismet.cids.custom.wunda_blau.band.ElementResizedListener;
 import de.cismet.cids.custom.wunda_blau.band.HandlaufBand;
@@ -49,6 +50,7 @@ import de.cismet.tools.gui.jbands.BandModelEvent;
 import de.cismet.tools.gui.jbands.JBand;
 import de.cismet.tools.gui.jbands.SimpleBandModel;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
+import de.cismet.tools.gui.jbands.interfaces.BandMemberSelectable;
 import de.cismet.tools.gui.jbands.interfaces.BandModelListener;
 
 /**
@@ -118,6 +120,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel panBand;
+    private javax.swing.JPanel panChooser;
     private javax.swing.JPanel panControls;
     private javax.swing.JPanel panEmpty;
     private javax.swing.JPanel panHandlaeufe;
@@ -215,6 +218,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         panLeitelemente = new javax.swing.JPanel();
         panHandlaeufe = new javax.swing.JPanel();
         panStuetzmauern = new javax.swing.JPanel();
+        panChooser = new javax.swing.JPanel();
         panEmpty = new javax.swing.JPanel();
         panHeader = new javax.swing.JPanel();
         panHeaderInfo = new javax.swing.JPanel();
@@ -257,6 +261,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         panStuetzmauern.setOpaque(false);
         panStuetzmauern.setLayout(new java.awt.BorderLayout());
         panInfoContent.add(panStuetzmauern, "stuetzmauern");
+
+        panChooser.setOpaque(false);
+        panChooser.setLayout(new java.awt.BorderLayout());
+        panInfoContent.add(panChooser, "chooser");
 
         panEmpty.setOpaque(false);
         panEmpty.setLayout(new java.awt.BorderLayout());
@@ -400,19 +408,19 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldZoomStateChanged
+    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldZoomStateChanged
         final double zoom = sldZoom.getValue() / 10d;
         jband.setZoomFactor(zoom);
-    }//GEN-LAST:event_sldZoomStateChanged
+    }                                                                           //GEN-LAST:event_sldZoomStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panHeaderInfoMouseClicked
+    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_panHeaderInfoMouseClicked
         System.out.println("click");
-    }//GEN-LAST:event_panHeaderInfoMouseClicked
+    }                                                                             //GEN-LAST:event_panHeaderInfoMouseClicked
 
     /**
      * Switch the sub editor panel to the given form.
@@ -616,8 +624,14 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
             handlaufLeftBand.refresh();
             handlaufRightBand.refresh();
             jband.bandModelChanged(new BandModelEvent());
-            
-            modelListener.bandModelChanged(null);;
+
+            final BandMember selectedBandMember = jband.getSelectedBandMember();
+
+            modelListener.bandModelChanged(null);
+
+            if (selectedBandMember instanceof BandMemberSelectable) {
+                jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
+            }
         }
     }
 
@@ -661,6 +675,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                 } else if (bm instanceof StuetzmauerBandMember) {
                     switchToForm("stuetzmauern");
                     treppeStuetzmauerPanel.setCidsBean(((StuetzmauerBandMember)bm).getCidsBean());
+                } else if (bm instanceof DummyBandMember) {
+                    panChooser.removeAll();
+                    panChooser.add(((DummyBandMember)bm).getObjectChooser());
+                    switchToForm("chooser");
                 }
             } else {
                 switchToForm("empty");

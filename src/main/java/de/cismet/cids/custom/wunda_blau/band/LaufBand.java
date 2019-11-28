@@ -43,6 +43,10 @@ public class LaufBand extends TreppenBand {
     protected Double getFixObjectLength() {
         return null;
     }
+    
+    protected boolean hasDummyAfterEnd() {
+        return true;
+    }
 
     @Override
     protected TreppeBandMember createBandMemberFromBean(final CidsBean bean) {
@@ -60,5 +64,27 @@ public class LaufBand extends TreppenBand {
     @Override
     public float getBandWeight() {
         return 0.4f;
+    }
+
+    @Override
+    public String[] getAllowedObjectNames() {
+        // todo: i18n
+        return new String[] { "Treppenlauf", "Podest" };
+    }
+
+    @Override
+    public String[] getAllowedObjectTableNames() {
+        return new String[] { "treppe_treppenlauf", "treppe_podest" };
+    }
+
+    @Override
+    public double getMax() {
+        fixMax = null;
+        return super.getMax() + 1;
+    }
+
+    @Override
+    public double getMin() {
+        return -1;
     }
 }

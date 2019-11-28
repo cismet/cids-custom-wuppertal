@@ -55,4 +55,15 @@ public class StuetzmauerBand extends TreppenBand {
     public float getBandWeight() {
         return 0.2f;
     }
+
+    @Override
+    public String[] getAllowedObjectNames() {
+        // todo: i18n
+        return new String[] { "Stützmauer" };
+    }
+
+    @Override
+    public String[] getAllowedObjectTableNames() {
+        return new String[] { "treppe_stuetzmauer" };
+    }
 }

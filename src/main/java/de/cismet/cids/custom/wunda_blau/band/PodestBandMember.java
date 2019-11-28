@@ -27,6 +27,10 @@ import java.awt.Color;
  */
 public class PodestBandMember extends LaufBandMember {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    public static double ELEMENT_WIDTH = 5.0 / 3.0;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -52,8 +56,6 @@ public class PodestBandMember extends LaufBandMember {
 
     @Override
     protected double roundToNextValidPosition(final double pos) {
-//        final double newPos = pos - oldStationValue;
-//        return (Math.floor(newPos * (5 / 3)) / (5 / 3)) + oldStationValue;
         return oldStationValue;
     }
 

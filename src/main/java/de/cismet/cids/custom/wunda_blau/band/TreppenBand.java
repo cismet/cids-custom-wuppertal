@@ -87,7 +87,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
 
     protected Collection<CidsBean> objectBeans = new ArrayList<CidsBean>();
     protected String objectTableName = null;
-    protected String lineFieldName = "linie";
+    protected String positionField = "position";
     protected boolean readOnly = false;
     protected Double fixMin = null;
     protected Double fixMax = null;
@@ -150,6 +150,15 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public JBand getParent() {
+        return parent;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  readOnly  DOCUMENT ME!
      */
     public void setReadOnly(final boolean readOnly) {
@@ -199,7 +208,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
 
         for (int i = 0; i < orderedMembers.size(); ++i) {
             if (orderedMembers.get(i).getMin() > last) {
-                final DummyBandMember dummy = new DummyBandMember();
+                final DummyBandMember dummy = new DummyBandMember(this);
                 dummy.setFrom(last);
                 dummy.setTo(orderedMembers.get(i).getMin());
                 addMember(dummy);
@@ -209,12 +218,19 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
                 last = orderedMembers.get(i).getMax();
             }
         }
-        if (last < parent.getMaxValue()) {
-            final DummyBandMember dummy = new DummyBandMember();
+        
+        double maxValue = (hasDummyAfterEnd ? parent.getMaxValue() - 1 : parent.getMaxValue());
+        
+        if (last < (parent.getMaxValue() - 1)) {
+            final DummyBandMember dummy = new DummyBandMember(this);
             dummy.setFrom(last);
-            dummy.setTo(getMax());
+            dummy.setTo(parent.getMaxValue() - 1);
             addMember(dummy);
         }
+    }
+    
+    protected boolean hasDummyAfterEnd() {
+        return false;
     }
 
     @Override
@@ -247,23 +263,32 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     /**
      * DOCUMENT ME!
      *
-     * @param  objectBean    DOCUMENT ME!
-     * @param  startStation  DOCUMENT ME!
-     * @param  endStation    endValue DOCUMENT ME!
+     * @param   objectBean  DOCUMENT ME!
+     * @param   start       startStation DOCUMENT ME!
+     * @param   end         endStation endValue DOCUMENT ME!
+     * @param   side        DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public void addMember(final CidsBean objectBean, final CidsBean startStation,
-            final CidsBean endStation) {
+    public TreppeBandMember addMember(final CidsBean objectBean,
+            final double start,
+            final double end,
+            final Side side) {
         try {
             final CidsBean position = createNewCidsBeanFromTableName("treppe_position");
-            position.setProperty("von", startStation);
-            position.setProperty("bis", endStation);
-            objectBean.setProperty(lineFieldName, position);
+            position.setProperty("von", start);
+            position.setProperty("bis", end);
+            position.setProperty("wo", side.ordinal());
+            objectBean.setProperty(positionField, position);
 
             final TreppeBandMember m = refresh(objectBean, true);
             objectBeans.add(objectBean);
             fireBandChanged(new BandEvent());
+
+            return m;
         } catch (Exception e) {
             LOG.error("error while creating new station.", e);
+            return null;
         }
     }
 
@@ -679,4 +704,17 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             }
         }
     }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public abstract String[] getAllowedObjectNames();
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public abstract String[] getAllowedObjectTableNames();
 }

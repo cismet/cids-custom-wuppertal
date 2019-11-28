@@ -35,6 +35,8 @@ import javax.swing.event.PopupMenuListener;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.LinearReferencedPointFeature;
+
 import de.cismet.tools.gui.jbands.BandMemberEvent;
 import de.cismet.tools.gui.jbands.JBandCursorManager;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
@@ -406,10 +408,11 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
     public void mouseMoved(final MouseEvent e) {
         if (!JBandCursorManager.getInstance().isLocked()) {
             if (isSelected && !isReadOnly()) {
-                if (e.getX() < 5) {
-                    JBandCursorManager.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
-                    JBandCursorManager.getInstance().setCursor(this);
-                } else if (e.getX() > (getWidth() - 5)) {
+//                if (e.getX() < 5) {
+//                    JBandCursorManager.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+//                    JBandCursorManager.getInstance().setCursor(this);
+//                } else
+                if (e.getX() > (getWidth() - 5)) {
                     JBandCursorManager.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
                     JBandCursorManager.getInstance().setCursor(this);
                 } else {
@@ -526,20 +529,30 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
      * DOCUMENT ME!
      */
     private void splitMember() {
-        // todo implement if required final double widthPerPixel = (getMax() - getMin()) / getBounds().getWidth(); final
-        // int pos = (int)(getMin() + (mouseClickedXPosition * widthPerPixel)); try { final CidsBean endStation =
-        // (CidsBean)bean.getProperty(lineFieldName + ".bis"); final CidsBean route =
-        // (CidsBean)endStation.getProperty("route"); CidsBean newStation =
-        // LinearReferencingHelper.createStationBeanFromRouteBean(route, (double)pos); try { newStation =
-        // newStation.persist(); } catch (Exception e) { LOG.error("Error while persist station", e); } final
-        // LinearReferencedPointFeature pointFeature = LinearReferencingSingletonInstances.FEATURE_REGISTRY
-        // .addStationFeature( newStation);
-        //
-        // bean.setProperty(lineFieldName + ".bis", newStation); newStation.setProperty("wert",
-        // newStation.getProperty("wert")); parent.addMember(cloneBean(bean), newStation, endStation);
-        // LinearReferencingSingletonInstances.FEATURE_REGISTRY.removeStationFeature(endStation); final
-        // BandMemberEvent e = new BandMemberEvent(); e.setSelectionLost(true); fireBandMemberChanged(e); } catch
-        // (Exception e) { LOG.error("Error while splitting station.", e); }
+//        final double widthPerPixel = (getMax() - getMin()) / getBounds().getWidth();
+//        final int pos = (int)(getMin() + (mouseClickedXPosition * widthPerPixel));
+//        try {
+//            final CidsBean endStation = (CidsBean)bean.getProperty(lineFieldName + ".bis");
+//            CidsBean newStation = LinearReferencingHelper.createStationBeanFromRouteBean(route, (double)pos);
+//            try {
+//                newStation = newStation.persist();
+//            } catch (Exception e) {
+//                LOG.error("Error while persist station", e);
+//            }
+//            final LinearReferencedPointFeature pointFeature = LinearReferencingSingletonInstances.FEATURE_REGISTRY
+//                        .addStationFeature(
+//                            newStation);
+//
+//            bean.setProperty("position.bis", newStation);
+//            newStation.setProperty("wert", newStation.getProperty("wert"));
+//            parent.addMember(cloneBean(bean), newStation, endStation);
+//            LinearReferencingSingletonInstances.FEATURE_REGISTRY.removeStationFeature(endStation);
+//            final BandMemberEvent e = new BandMemberEvent();
+//            e.setSelectionLost(true);
+//            fireBandMemberChanged(e);
+//        } catch (Exception e) {
+//            LOG.error("Error while splitting station.", e);
+//        }
     }
 
     /**

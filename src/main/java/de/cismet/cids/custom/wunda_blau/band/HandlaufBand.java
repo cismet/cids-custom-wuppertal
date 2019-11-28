@@ -55,4 +55,15 @@ public class HandlaufBand extends TreppenBand {
     public float getBandWeight() {
         return 0.1f;
     }
+
+    @Override
+    public String[] getAllowedObjectNames() {
+        // todo: i18n
+        return new String[] { "Handlauf" };
+    }
+
+    @Override
+    public String[] getAllowedObjectTableNames() {
+        return new String[] { "treppe_handlauf" };
+    }
 }

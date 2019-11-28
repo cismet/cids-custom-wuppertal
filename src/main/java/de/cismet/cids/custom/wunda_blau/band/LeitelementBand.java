@@ -55,4 +55,15 @@ public class LeitelementBand extends TreppenBand {
     public float getBandWeight() {
         return 0.1f;
     }
+
+    @Override
+    public String[] getAllowedObjectNames() {
+        // todo: i18n
+        return new String[] { "Leitelement" };
+    }
+
+    @Override
+    public String[] getAllowedObjectTableNames() {
+        return new String[] { "treppe_absturzsicherung" };
+    }
 }

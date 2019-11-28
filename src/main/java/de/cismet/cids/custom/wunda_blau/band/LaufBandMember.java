@@ -15,6 +15,7 @@ package de.cismet.cids.custom.wunda_blau.band;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.RectanglePainter;
 
 import org.openide.util.Exceptions;
@@ -118,7 +119,7 @@ public class LaufBandMember extends TreppeBandMember {
     @Override
     protected void determineBackgroundColour() {
         setDefaultBackground();
-        unselectedBackgroundPainter = getBackgroundPainter();
+        unselectedBackgroundPainter = new MattePainter(new Color(160, 60, 98));
         selectedBackgroundPainter = new CompoundPainter(
                 unselectedBackgroundPainter,
                 new RectanglePainter(
