@@ -1,0 +1,142 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package de.cismet.cids.custom.wunda_blau.band;
+
+import org.apache.log4j.Logger;
+
+import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.RectanglePainter;
+
+import org.openide.util.Exceptions;
+
+import java.awt.Color;
+
+import java.beans.PropertyChangeEvent;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @author   therter
+ * @version  $Revision$, $Date$
+ */
+public class LaufBandMember extends TreppeBandMember {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static Logger LOG = Logger.getLogger(LaufBandMember.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private boolean stufenChangedFromBand = false;
+    private int stufenCount;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new LaufBandMember object.
+     *
+     * @param  parent  DOCUMENT ME!
+     */
+    public LaufBandMember(final TreppenBand parent) {
+        super(parent);
+    }
+
+    /**
+     * Creates a new LaufBandMember object.
+     *
+     * @param  parent    DOCUMENT ME!
+     * @param  readOnly  DOCUMENT ME!
+     */
+    public LaufBandMember(final TreppenBand parent, final boolean readOnly) {
+        super(parent, readOnly);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        super.propertyChange(evt);
+
+        if (evt.getPropertyName().equals("von") || evt.getPropertyName().equals("bis")) {
+            von = (Double)bean.getProperty("position.von");
+            bis = (Double)bean.getProperty("position.bis");
+            final Integer stufen = (Integer)bean.getProperty("stufen");
+            final int stufenNewValue = Math.round((float)(Math.abs(von - bis) * 3.0f));
+
+            if ((stufen == null) || (stufen != stufenNewValue)) {
+                try {
+                    stufenChangedFromBand = true;
+                    bean.setProperty("stufen", stufenNewValue);
+                    stufenCount = stufen;
+                    stufenChangedFromBand = false;
+                } catch (Exception ex) {
+                    LOG.error("Cannot set stufen", ex);
+                }
+            }
+        } else if (evt.getPropertyName().equals("stufen")) {
+            if (!stufenChangedFromBand && !dragStart) {
+                final double von = (Double)bean.getProperty("position.von");
+                final double bis = (Double)bean.getProperty("position.von");
+                final Integer stufen = (Integer)bean.getProperty("stufen");
+                final double bisNew = von + (stufen * (1.0 / 3.0));
+                final int stufenold = stufenCount;
+                final double oldValue = von + (stufenold * (1.0 / 3.0));
+
+                if ((stufen != null) && (bis != bisNew)) {
+                    try {
+                        bean.setProperty("position.bis", bisNew);
+                    } catch (Exception ex) {
+                        LOG.error("Cannot set position bis", ex);
+                    }
+
+                    final ElementResizedEvent event = new ElementResizedEvent(this, true, oldStationValue, oldValue);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        super.setCidsBean(cidsBean);
+        if (bean.getProperty("stufen") != null) {
+            stufenCount = (Integer)bean.getProperty("stufen");
+        }
+    }
+
+    @Override
+    protected void determineBackgroundColour() {
+        setDefaultBackground();
+        unselectedBackgroundPainter = getBackgroundPainter();
+        selectedBackgroundPainter = new CompoundPainter(
+                unselectedBackgroundPainter,
+                new RectanglePainter(
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    true,
+                    new Color(100, 100, 100, 100),
+                    2f,
+                    new Color(50, 50, 50, 100)));
+        setBackgroundPainter(unselectedBackgroundPainter);
+    }
+
+    @Override
+    protected CidsBean cloneBean(final CidsBean bean) throws Exception {
+        return null;
+    }
+}

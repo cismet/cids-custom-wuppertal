@@ -1,0 +1,682 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package de.cismet.cids.custom.wunda_blau.band;
+
+import Sirius.server.middleware.types.MetaClass;
+
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+
+import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.dynamics.CidsBeanCollectionStore;
+import de.cismet.cids.dynamics.CidsBeanStore;
+
+import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.EditorSaveListener;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
+import de.cismet.tools.CismetThreadPool;
+
+import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.WaitingDialogThread;
+import de.cismet.tools.gui.jbands.BandEvent;
+import de.cismet.tools.gui.jbands.BandMemberEvent;
+import de.cismet.tools.gui.jbands.DefaultBand;
+import de.cismet.tools.gui.jbands.JBand;
+import de.cismet.tools.gui.jbands.interfaces.BandListener;
+import de.cismet.tools.gui.jbands.interfaces.BandMember;
+import de.cismet.tools.gui.jbands.interfaces.BandMemberListener;
+import de.cismet.tools.gui.jbands.interfaces.BandModificationProvider;
+import de.cismet.tools.gui.jbands.interfaces.DisposableBand;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @author   therter
+ * @version  $Revision$, $Date$
+ */
+public abstract class TreppenBand extends DefaultBand implements CidsBeanCollectionStore,
+    BandModificationProvider,
+    BandMemberListener,
+    EditorSaveListener,
+    DisposableBand,
+    ConnectionContextStore,
+    ElementResizedListener {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(TreppenBand.class);
+
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static enum Side {
+
+        //~ Enum constants -----------------------------------------------------
+
+        RIGHT, LEFT, NONE, BOTH
+    }
+
+    //~ Instance fields --------------------------------------------------------
+
+    protected Side side;
+
+    protected Collection<CidsBean> objectBeans = new ArrayList<CidsBean>();
+    protected String objectTableName = null;
+    protected String lineFieldName = "linie";
+    protected boolean readOnly = false;
+    protected Double fixMin = null;
+    protected Double fixMax = null;
+    protected List<ElementResizedListener> elementResizeListener = new ArrayList<ElementResizedListener>();
+
+    private ConnectionContext connectionContext;
+    private List<BandListener> listenerList = new ArrayList<BandListener>();
+    private boolean onlyAcceptNewBeanWithValue = true;
+
+    private HashMap<String, CidsBean> beanMap = new HashMap<String, CidsBean>();
+    private boolean normalise = false;
+    private List<CidsBean> beansToDelete = new ArrayList<CidsBean>();
+    private JBand parent;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new TreppenBand object.
+     *
+     * @param  side    DOCUMENT ME!
+     * @param  title   DOCUMENT ME!
+     * @param  parent  DOCUMENT ME!
+     */
+    public TreppenBand(final Side side, final String title, final JBand parent) {
+        super(title);
+        this.side = side;
+        this.parent = parent;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext cc) {
+        this.connectionContext = cc;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  side  DOCUMENT ME!
+     */
+    public void setSide(final Side side) {
+        this.side = side;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Side getSide() {
+        return this.side;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  readOnly  DOCUMENT ME!
+     */
+    public void setReadOnly(final boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
+    @Override
+    public Collection<CidsBean> getCidsBeans() {
+        return objectBeans;
+    }
+
+    @Override
+    public void setCidsBeans(final Collection<CidsBean> beans) {
+        disposeAllMember();
+        objectBeans = beans;
+        super.removeAllMember();
+
+        if (objectBeans != null) {
+            for (final CidsBean massnahme : objectBeans) {
+                final TreppeBandMember m = createBandMemberFromBean(massnahme);
+                m.setReadOnly(readOnly);
+                m.addBandMemberListener(this);
+                m.setCidsBean(massnahme);
+                addMember(m);
+            }
+        } else {
+            objectBeans = new ArrayList<CidsBean>();
+        }
+        addDummies();
+        fireBandChanged(new BandEvent());
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void addDummies() {
+        final List<BandMember> orderedMembers = new ArrayList<BandMember>(members);
+        Collections.sort(orderedMembers, new Comparator<BandMember>() {
+
+                @Override
+                public int compare(final BandMember o1, final BandMember o2) {
+                    return (int)Math.signum(o1.getMin() - o2.getMin());
+                }
+            });
+
+        double last = 0.0;
+
+        for (int i = 0; i < orderedMembers.size(); ++i) {
+            if (orderedMembers.get(i).getMin() > last) {
+                final DummyBandMember dummy = new DummyBandMember();
+                dummy.setFrom(last);
+                dummy.setTo(orderedMembers.get(i).getMin());
+                addMember(dummy);
+            }
+
+            if (last < orderedMembers.get(i).getMax()) {
+                last = orderedMembers.get(i).getMax();
+            }
+        }
+        if (last < parent.getMaxValue()) {
+            final DummyBandMember dummy = new DummyBandMember();
+            dummy.setFrom(last);
+            dummy.setTo(getMax());
+            addMember(dummy);
+        }
+    }
+
+    @Override
+    public void addMember(final Double startStation,
+            final Double endStation,
+            final Double minStart,
+            final Double maxEnd,
+            final List<BandMember> memberList) {
+        final WaitingDialogThread<Void> wdt = new WaitingDialogThread<Void>(StaticSwingTools.getParentFrame(
+                    getPrefixComponent()),
+                true,
+                "Erstelle Abschnitt",
+                null,
+                100) {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    if (endStation == null) {
+                        addUnspecifiedMember(startStation, minStart, maxEnd, memberList);
+                    } else {
+                        addSpecifiedMember(startStation, endStation);
+                    }
+
+                    return null;
+                }
+            };
+        wdt.start();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  objectBean    DOCUMENT ME!
+     * @param  startStation  DOCUMENT ME!
+     * @param  endStation    endValue DOCUMENT ME!
+     */
+    public void addMember(final CidsBean objectBean, final CidsBean startStation,
+            final CidsBean endStation) {
+        try {
+            final CidsBean position = createNewCidsBeanFromTableName("treppe_position");
+            position.setProperty("von", startStation);
+            position.setProperty("bis", endStation);
+            objectBean.setProperty(lineFieldName, position);
+
+            final TreppeBandMember m = refresh(objectBean, true);
+            objectBeans.add(objectBean);
+            fireBandChanged(new BandEvent());
+        } catch (Exception e) {
+            LOG.error("error while creating new station.", e);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bean    DOCUMENT ME!
+     * @param  value   DOCUMENT ME!
+     * @param  isFrom  DOCUMENT ME!
+     */
+    public void splitStation(final CidsBean bean, final double value, final boolean isFrom) {
+        // todo implemented, if required
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  startStation  DOCUMENT ME!
+     * @param  minStart      DOCUMENT ME!
+     * @param  maxEnd        DOCUMENT ME!
+     * @param  memberList    DOCUMENT ME!
+     */
+    private void addUnspecifiedMember(final Double startStation,
+            final Double minStart,
+            final Double maxEnd,
+            List<BandMember> memberList) {
+        double distanceBefore = Double.MAX_VALUE;
+        double distanceBehind = Double.MAX_VALUE;
+
+        if (memberList != null) {
+            // member list will be considered.
+            for (final BandMember tmp : memberList) {
+                if (tmp instanceof CidsBeanStore) {
+                    final CidsBean b = ((CidsBeanStore)tmp).getCidsBean();
+                    final Double from = (Double)tmp.getMin();
+                    final Double till = (Double)tmp.getMax();
+
+                    if ((from != null) && (till != null)) {
+                        double distance = startStation - till;
+                        if ((distance < distanceBefore) && (distance >= 0)) {
+                            distanceBefore = distance;
+                        }
+
+                        distance = from - startStation;
+                        if ((distance < distanceBehind) && (distance >= 0)) {
+                            distanceBehind = distance;
+                        }
+                    }
+                } else {
+                    // member list will be ignored
+                    memberList = null;
+                }
+            }
+        }
+
+        if (memberList == null) {
+            for (final CidsBean tmp : objectBeans) {
+                final Double from = (Double)tmp.getProperty("position.von");
+                final Double till = (Double)tmp.getProperty("position.bis");
+
+                if ((from != null) && (till != null)) {
+                    double distance = startStation - till;
+                    if ((distance < distanceBefore) && (distance >= 0)) {
+                        distanceBefore = distance;
+                    }
+
+                    distance = from - startStation;
+                    if ((distance < distanceBehind) && (distance >= 0)) {
+                        distanceBehind = distance;
+                    }
+                }
+            }
+        }
+
+        try {
+            if (getFixObjectLength() != null) {
+                distanceBehind = distanceBefore + getFixObjectLength();
+            }
+            addNewMember(distanceBefore, distanceBehind);
+        } catch (Exception e) {
+            LOG.error("error while creating new station.", e);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected abstract Double getFixObjectLength();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  startStation  DOCUMENT ME!
+     * @param  endStation    minStart DOCUMENT ME!
+     */
+    private void addSpecifiedMember(final Double startStation,
+            final Double endStation) {
+        try {
+            addNewMember(startStation, endStation);
+        } catch (Exception e) {
+            LOG.error("error while creating new station.", e);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   start  beanBefore DOCUMENT ME!
+     * @param   end    beanBehind DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private void addNewMember(final double start, final double end) throws Exception {
+        final CidsBean newBean = createNewCidsBeanFromTableName(objectTableName);
+        final CidsBean newPos = createNewCidsBeanFromTableName("treppe_position");
+        newPos.setProperty("von", start);
+        newPos.setProperty("bis", end);
+        newBean.setProperty("position", newPos);
+        final TreppeBandMember m = refresh(newBean, true);
+
+        objectBeans.add(newBean);
+
+        fireBandChanged(new BandEvent());
+        if (onlyAcceptNewBeanWithValue) {
+            m.setNewMode();
+        }
+    }
+
+    @Override
+    public void addMember(final BandMember m) {
+        super.addMember(m);
+
+        if (m instanceof TreppeBandMember) {
+            ((TreppeBandMember)m).addElementResizedListener(this);
+        }
+    }
+
+    @Override
+    public void elementResized(final ElementResizedEvent e) {
+        fireElementResized(e);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  listener  DOCUMENT ME!
+     */
+    public void addElementResizedListener(final ElementResizedListener listener) {
+        this.elementResizeListener.add(listener);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  listener  DOCUMENT ME!
+     */
+    public void removeElementResizedListener(final ElementResizedListener listener) {
+        this.elementResizeListener.remove(listener);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
+    private void fireElementResized(final ElementResizedEvent e) {
+        for (int i = 0; i < this.elementResizeListener.size(); ++i) {
+            this.elementResizeListener.get(i).elementResized(e);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   tableName  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static CidsBean createNewCidsBeanFromTableName(final String tableName) throws Exception {
+        if (tableName != null) {
+            final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", tableName);
+            if (metaClass != null) {
+                return metaClass.getEmptyInstance().getBean();
+            }
+        }
+        throw new Exception("Could not find MetaClass for table " + tableName);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void refresh() {
+        refresh(null, false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   special  DOCUMENT ME!
+     * @param   add      DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private TreppeBandMember refresh(final CidsBean special, final boolean add) {
+        disposeAllMember();
+        super.removeAllMember();
+
+        for (final CidsBean objectBean : objectBeans) {
+            if (add || (objectBean != special)) {
+                final TreppeBandMember m = createBandMemberFromBean(objectBean);
+                m.setReadOnly(readOnly);
+                m.setCidsBean(objectBean);
+                m.addBandMemberListener(this);
+                addMember(m);
+            }
+        }
+
+        if (add) {
+            final TreppeBandMember m = createBandMemberFromBean(special);
+            m.setReadOnly(readOnly);
+            m.setCidsBean(special);
+            m.addBandMemberListener(this);
+            addMember(m);
+            return m;
+        }
+
+        addDummies();
+
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected abstract TreppeBandMember createBandMemberFromBean(CidsBean bean);
+
+    @Override
+    public void addBandListener(final BandListener listener) {
+        listenerList.add(listener);
+    }
+
+    @Override
+    public void removeBandListener(final BandListener listener) {
+        listenerList.remove(listener);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
+    public void fireBandChanged(final BandEvent e) {
+        for (final BandListener l : listenerList) {
+            l.bandChanged(e);
+        }
+    }
+
+    @Override
+    public void bandMemberChanged(final BandMemberEvent e) {
+        final BandEvent ev = new BandEvent();
+        if ((e != null)) {
+            if (e.isSelectionLost()) {
+                ev.setSelectionLost(true);
+            }
+            ev.setModelChanged(e.isModelChanged());
+        }
+        fireBandChanged(ev);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  member  DOCUMENT ME!
+     */
+    public void deleteMember(final TreppeBandMember member) {
+        member.dispose();
+        final CidsBean memberBean = member.getCidsBean();
+        refresh(memberBean, false);
+        objectBeans.remove(memberBean);
+        beansToDelete.add(memberBean);
+
+        final BandEvent e = new BandEvent();
+        e.setSelectionLost(true);
+        fireBandChanged(e);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  status DOCUMENT ME!
+     */
+    @Override
+    public void editorClosed(final EditorClosedEvent event) {
+        if (event.getStatus() == EditorSaveStatus.SAVE_SUCCESS) {
+            // all as delete marked band member will be deleted in the database
+            CismetThreadPool.execute(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        for (final CidsBean tmp : beansToDelete) {
+                            try {
+                                tmp.delete();
+                                tmp.persist();
+                            } catch (Exception e) {
+                                LOG.error("Cannot delete bean.", e);
+                            }
+                        }
+                    }
+                });
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Override
+    public boolean prepareForSave() {
+        return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the onlyAcceptNewBeanWithValue
+     */
+    public boolean isOnlyAcceptNewBeanWithValue() {
+        return onlyAcceptNewBeanWithValue;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  onlyAcceptNewBeanWithValue  the onlyAcceptNewBeanWithValue to set
+     */
+    public void setOnlyAcceptNewBeanWithValue(final boolean onlyAcceptNewBeanWithValue) {
+        this.onlyAcceptNewBeanWithValue = onlyAcceptNewBeanWithValue;
+    }
+
+    @Override
+    public void removeAllMember() {
+        disposeAllMember();
+        objectBeans.clear();
+        super.removeAllMember();
+        refresh(null, false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  min  DOCUMENT ME!
+     */
+    @Override
+    public void setMin(final Double min) {
+        this.fixMin = min;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  max  DOCUMENT ME!
+     */
+    @Override
+    public void setMax(final Double max) {
+        this.fixMax = max;
+    }
+
+    @Override
+    public double getMin() {
+        if (fixMin != null) {
+            return fixMin;
+        } else {
+            return super.getMin();
+        }
+    }
+
+    @Override
+    public double getMax() {
+        if (fixMax != null) {
+            return fixMax;
+        } else {
+            return super.getMax();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    @Override
+    public void dispose() {
+        disposeAllMember();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void disposeAllMember() {
+        for (int i = 0; i < getNumberOfMembers(); ++i) {
+            final BandMember member = getMember(i);
+
+            if (member instanceof TreppeBandMember) {
+                ((TreppeBandMember)member).dispose();
+                ((TreppeBandMember)member).removeElementResizedListener(this);
+            }
+        }
+    }
+}
