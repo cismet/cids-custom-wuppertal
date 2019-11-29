@@ -72,9 +72,4 @@ public class HandlaufBandMember extends TreppeBandMember {
                     new Color(50, 50, 50, 100)));
         setBackgroundPainter(unselectedBackgroundPainter);
     }
-
-    @Override
-    protected CidsBean cloneBean(final CidsBean bean) throws Exception {
-        return null;
-    }
 }

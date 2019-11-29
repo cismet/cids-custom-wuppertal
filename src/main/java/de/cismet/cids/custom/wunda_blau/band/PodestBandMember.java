@@ -29,7 +29,7 @@ public class PodestBandMember extends LaufBandMember {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static double ELEMENT_WIDTH = 5.0 / 3.0;
+    public static double ELEMENT_WIDTH = 5.0;
 
     //~ Constructors -----------------------------------------------------------
 

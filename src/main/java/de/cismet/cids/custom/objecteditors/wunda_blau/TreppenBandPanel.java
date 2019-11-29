@@ -534,6 +534,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         leitelementRightBand.addElementResizedListener(resizedListener);
         stuetzmauerLinksBand.addElementResizedListener(resizedListener);
         stuetzmauerRechtsBand.addElementResizedListener(resizedListener);
+
+        refreshAllBands(true);
+        jband.bandModelChanged(new BandModelEvent());
 //        leitelementRightBand.setCidsBeans(leitelementList);
 //        leitelementLeftBand.setCidsBeans(leitelementList);
 //        stuetzmauerRechtsBand.setCidsBeans(stuetzmauerList);
@@ -544,6 +547,17 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 // cidsBean,
 // COLLECTION_PROPERTY));
 
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  withDummies  DOCUMENT ME!
+     */
+    private void refreshAllBands(final boolean withDummies) {
+        laufBand.refresh(withDummies);
+        handlaufLeftBand.refresh(withDummies);
+        handlaufRightBand.refresh(withDummies);
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -559,78 +573,82 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         @Override
         public void elementResized(final ElementResizedEvent e) {
-            final TreppeBandMember member = (TreppeBandMember)e.getBandMember();
-            final double oldValue = e.getOldValue();
-            final double newValue = e.getNewValue();
-            final double diff = newValue - oldValue;
-            double max = Double.MIN_VALUE;
+            if ((TreppeBandMember)e.getBandMember() instanceof LaufBandMember) {
+                final TreppeBandMember member = (TreppeBandMember)e.getBandMember();
+                final double oldValue = e.getOldValue();
+                final double newValue = e.getNewValue();
+                final double diff = newValue - oldValue;
+                double max = Double.MIN_VALUE;
 
-            final List<List<CidsBean>> beans = new ArrayList<List<CidsBean>>();
-            beans.add(laufList);
-//            beans.add(leitelementList);
-            beans.add(handlaufList);
-//            beans.add(stuetzmauerList);
+                final List<List<CidsBean>> beans = new ArrayList<List<CidsBean>>();
+                beans.add(laufList);
+                // beans.add(leitelementList);
+                beans.add(handlaufList);
+                // beans.add(stuetzmauerList);
 
-            for (int listIndex = 0; listIndex < beans.size(); ++listIndex) {
-                final List<CidsBean> beanList = beans.get(listIndex);
+                for (int listIndex = 0; listIndex < beans.size(); ++listIndex) {
+                    final List<CidsBean> beanList = beans.get(listIndex);
 
-                for (final CidsBean bean : beanList) {
-                    if (!bean.equals(member.getCidsBean())) {
-                        double from = (Double)bean.getProperty("position.von");
-                        double till = (Double)bean.getProperty("position.bis");
+                    for (final CidsBean bean : beanList) {
+                        if (!bean.equals(member.getCidsBean())) {
+                            double from = (Double)bean.getProperty("position.von");
+                            double till = (Double)bean.getProperty("position.bis");
 
-                        if (from > till) {
-                            try {
-                                bean.setProperty("position.von", till);
-                                bean.setProperty("position.bis", from);
-                            } catch (Exception ex) {
-                                LOG.error("Error while adjust element sizes", ex);
-                            }
-                            from = (Double)bean.getProperty("position.von");
-                            till = (Double)bean.getProperty("position.bis");
-                        }
-
-                        if (e.isMax()) {
-                            if (from >= oldValue) {
+                            if (from > till) {
                                 try {
-                                    bean.setProperty("position.von", from + diff);
+                                    bean.setProperty("position.von", till);
+                                    bean.setProperty("position.bis", from);
                                 } catch (Exception ex) {
                                     LOG.error("Error while adjust element sizes", ex);
                                 }
-                            }
-                            if (till >= oldValue) {
-                                try {
-                                    bean.setProperty("position.bis", till + diff);
-                                } catch (Exception ex) {
-                                    LOG.error("Error while adjust element sizes", ex);
-                                }
+                                from = (Double)bean.getProperty("position.von");
+                                till = (Double)bean.getProperty("position.bis");
                             }
 
-                            if ((Double)bean.getProperty("position.bis") > max) {
-                                max = (Double)bean.getProperty("position.bis");
+                            if (e.isMax()) {
+                                if (from >= oldValue) {
+                                    try {
+                                        bean.setProperty("position.von", from + diff);
+                                    } catch (Exception ex) {
+                                        LOG.error("Error while adjust element sizes", ex);
+                                    }
+                                }
+                                if (till >= oldValue) {
+                                    try {
+                                        bean.setProperty("position.bis", till + diff);
+                                    } catch (Exception ex) {
+                                        LOG.error("Error while adjust element sizes", ex);
+                                    }
+                                }
+
+                                if ((Double)bean.getProperty("position.bis") > max) {
+                                    max = (Double)bean.getProperty("position.bis");
+                                }
+                            } else {
                             }
-                        } else {
                         }
                     }
                 }
-            }
 
-            if (jband.getMaxValue() < max) {
-                jband.setMaxValue(max);
-                sbm.setMax(max);
+                // if (jband.getMaxValue() < max) {
+                jband.setMaxValue(max + 1);
+                refreshAllBands(false);
+                // sbm.setMax(max);
                 jband.bandModelChanged(new BandModelEvent());
-            }
-            laufBand.refresh();
-            handlaufLeftBand.refresh();
-            handlaufRightBand.refresh();
-            jband.bandModelChanged(new BandModelEvent());
+                // }
+                refreshAllBands(true);
+                jband.bandModelChanged(new BandModelEvent());
 
-            final BandMember selectedBandMember = jband.getSelectedBandMember();
+                final BandMember selectedBandMember = jband.getSelectedBandMember();
 
-            modelListener.bandModelChanged(null);
+                modelListener.bandModelChanged(null);
 
-            if (selectedBandMember instanceof BandMemberSelectable) {
-                jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
+                if (selectedBandMember instanceof BandMemberSelectable) {
+                    jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
+                }
+            } else {
+                refreshAllBands(true);
+                jband.bandModelChanged(new BandModelEvent());
             }
         }
     }
@@ -646,6 +664,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         @Override
         public void bandModelChanged(final BandModelEvent e) {
+            System.out.println("Band model changed");
         }
 
         @Override
@@ -690,6 +709,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         @Override
         public void bandModelValuesChanged(final BandModelEvent e) {
+            System.out.println("band mdel changed");
         }
     }
 }

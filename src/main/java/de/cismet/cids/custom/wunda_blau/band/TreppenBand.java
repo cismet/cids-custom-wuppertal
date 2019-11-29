@@ -170,6 +170,52 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         return objectBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   member  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected double getNextGreaterElementStart(final TreppeBandMember member) {
+        double next = Double.MAX_VALUE;
+
+        for (int i = 0; i < members.size(); ++i) {
+            final BandMember m = members.get(i);
+
+            if ((m != member) && !(m instanceof DummyBandMember)) {
+                if ((m.getMin() > member.getMin()) && (m.getMin() < next)) {
+                    next = m.getMin();
+                }
+            }
+        }
+
+        return next;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   member  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected double getNextLessElementEnd(final TreppeBandMember member) {
+        double next = Double.MIN_VALUE;
+
+        for (int i = 0; i < members.size(); ++i) {
+            final BandMember m = members.get(i);
+
+            if ((m != member) && !(m instanceof DummyBandMember)) {
+                if ((m.getMax() < member.getMin()) && (m.getMax() > next)) {
+                    next = m.getMax();
+                }
+            }
+        }
+
+        return next;
+    }
+
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         disposeAllMember();
@@ -204,7 +250,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
                 }
             });
 
-        double last = 0.0;
+        double last = (hasDummyAfterEnd() ? -1 : 0);
 
         for (int i = 0; i < orderedMembers.size(); ++i) {
             if (orderedMembers.get(i).getMin() > last) {
@@ -218,17 +264,22 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
                 last = orderedMembers.get(i).getMax();
             }
         }
-        
-        double maxValue = (hasDummyAfterEnd ? parent.getMaxValue() - 1 : parent.getMaxValue());
-        
-        if (last < (parent.getMaxValue() - 1)) {
+
+        final double maxValue = (hasDummyAfterEnd() ? (parent.getMaxValue()) : (parent.getMaxValue() - 1));
+
+        if (last < maxValue) {
             final DummyBandMember dummy = new DummyBandMember(this);
             dummy.setFrom(last);
-            dummy.setTo(parent.getMaxValue() - 1);
+            dummy.setTo(maxValue);
             addMember(dummy);
         }
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     protected boolean hasDummyAfterEnd() {
         return false;
     }
@@ -485,7 +536,16 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
      * DOCUMENT ME!
      */
     public void refresh() {
-        refresh(null, false);
+        refresh(true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  withDummies  DOCUMENT ME!
+     */
+    public void refresh(final boolean withDummies) {
+        refresh(null, false, withDummies);
     }
 
     /**
@@ -497,6 +557,19 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
      * @return  DOCUMENT ME!
      */
     private TreppeBandMember refresh(final CidsBean special, final boolean add) {
+        return refresh(special, add, true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   special      DOCUMENT ME!
+     * @param   add          DOCUMENT ME!
+     * @param   withDummies  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private TreppeBandMember refresh(final CidsBean special, final boolean add, final boolean withDummies) {
         disposeAllMember();
         super.removeAllMember();
 
@@ -519,7 +592,9 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             return m;
         }
 
-        addDummies();
+        if (withDummies) {
+            addDummies();
+        }
 
         return null;
     }

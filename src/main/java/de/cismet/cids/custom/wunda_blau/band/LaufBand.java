@@ -43,7 +43,8 @@ public class LaufBand extends TreppenBand {
     protected Double getFixObjectLength() {
         return null;
     }
-    
+
+    @Override
     protected boolean hasDummyAfterEnd() {
         return true;
     }

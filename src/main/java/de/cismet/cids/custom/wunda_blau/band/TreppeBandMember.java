@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda_blau.band;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXPanel;
@@ -24,6 +26,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -401,7 +404,19 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
      * @return  DOCUMENT ME!
      */
     protected double roundToNextValidPosition(final double pos) {
-        return Math.floor(pos * 3) / 3;
+        double nextValue = Math.floor(pos);
+        final double next = getParentBand().getNextGreaterElementStart(this);
+        final double last = getParentBand().getNextLessElementEnd(this);
+
+        if (nextValue > next) {
+            nextValue = next;
+        }
+
+        if (nextValue < last) {
+            nextValue = last;
+        }
+
+        return nextValue;
     }
 
     @Override
@@ -529,30 +544,27 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
      * DOCUMENT ME!
      */
     private void splitMember() {
-//        final double widthPerPixel = (getMax() - getMin()) / getBounds().getWidth();
-//        final int pos = (int)(getMin() + (mouseClickedXPosition * widthPerPixel));
-//        try {
-//            final CidsBean endStation = (CidsBean)bean.getProperty(lineFieldName + ".bis");
-//            CidsBean newStation = LinearReferencingHelper.createStationBeanFromRouteBean(route, (double)pos);
-//            try {
-//                newStation = newStation.persist();
-//            } catch (Exception e) {
-//                LOG.error("Error while persist station", e);
-//            }
-//            final LinearReferencedPointFeature pointFeature = LinearReferencingSingletonInstances.FEATURE_REGISTRY
-//                        .addStationFeature(
-//                            newStation);
-//
-//            bean.setProperty("position.bis", newStation);
-//            newStation.setProperty("wert", newStation.getProperty("wert"));
-//            parent.addMember(cloneBean(bean), newStation, endStation);
-//            LinearReferencingSingletonInstances.FEATURE_REGISTRY.removeStationFeature(endStation);
-//            final BandMemberEvent e = new BandMemberEvent();
-//            e.setSelectionLost(true);
-//            fireBandMemberChanged(e);
-//        } catch (Exception e) {
-//            LOG.error("Error while splitting station.", e);
-//        }
+        final double widthPerPixel = (getMax() - getMin()) / getBounds().getWidth();
+        final int pos = (int)(getMin() + (mouseClickedXPosition * widthPerPixel));
+        try {
+            final double endStation = (Double)bean.getProperty("position.bis");
+            Integer sideInt = (Integer)bean.getProperty("position.wo");
+
+            if (sideInt == null) {
+                sideInt = TreppenBand.Side.NONE.ordinal();
+            }
+
+            final TreppenBand.Side side = TreppenBand.Side.values()[sideInt];
+
+            bean.setProperty("position.bis", (double)pos);
+            parent.addMember(cloneBean(bean), pos, endStation, side);
+            parent.refresh();
+            final BandMemberEvent e = new BandMemberEvent();
+            e.setSelectionLost(true);
+            fireBandMemberChanged(e);
+        } catch (Exception e) {
+            LOG.error("Error while splitting station.", e);
+        }
     }
 
     /**
@@ -564,7 +576,87 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    protected abstract CidsBean cloneBean(final CidsBean bean) throws Exception;
+    protected CidsBean cloneBean(final CidsBean bean) throws Exception {
+        return cloneCidsBean(bean, false);
+    }
+
+    /**
+     * Creates a clone of the given bean.
+     *
+     * @param   bean        the bean to clone
+     * @param   cloneBeans  true, iff a deep copy of the sub beans should be created
+     *
+     * @return  a clone of the given bean
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static CidsBean cloneCidsBean(final CidsBean bean, final boolean cloneBeans) throws Exception {
+        if (bean == null) {
+            return null;
+        }
+        final CidsBean clone = bean.getMetaObject().getMetaClass().getEmptyInstance().getBean();
+
+        for (final String propName : bean.getPropertyNames()) {
+            if (!propName.toLowerCase().equals("id")) {
+                final Object o = bean.getProperty(propName);
+
+                if (o instanceof CidsBean) {
+                    if (cloneBeans) {
+                        clone.setProperty(propName, cloneCidsBean((CidsBean)o));
+                    } else {
+                        clone.setProperty(propName, (CidsBean)o);
+                    }
+                } else if (o instanceof Collection) {
+                    final List<CidsBean> list = (List<CidsBean>)o;
+                    final List<CidsBean> newList = new ArrayList<CidsBean>();
+
+                    for (final CidsBean tmpBean : list) {
+                        if (cloneBeans) {
+                            newList.add(cloneCidsBean(tmpBean));
+                        } else {
+                            newList.add(tmpBean);
+                        }
+                    }
+                    clone.setProperty(propName, newList);
+                } else if (o instanceof Geometry) {
+                    clone.setProperty(propName, ((Geometry)o).clone());
+                } else if (o instanceof Long) {
+                    clone.setProperty(propName, new Long(o.toString()));
+                } else if (o instanceof Double) {
+                    clone.setProperty(propName, new Double(o.toString()));
+                } else if (o instanceof Integer) {
+                    clone.setProperty(propName, new Integer(o.toString()));
+                } else if (o instanceof Boolean) {
+                    clone.setProperty(propName, new Boolean(o.toString()));
+                } else if (o instanceof String) {
+                    clone.setProperty(propName, o);
+                } else {
+                    if (o != null) {
+                        LOG.error("unknown property type: " + o.getClass().getName());
+                    }
+                    clone.setProperty(propName, o);
+                }
+            }
+        }
+
+        return clone;
+    }
+
+    /**
+     * cloneCidsBean(CidsBean bean) was tested and works with the type geom. Objects which have properties of a type
+     * that is not considered by the method, will not be returned as deep copy. The results of this method can be used
+     * as a deep copy, if we assume, that the properties, which are not of the type CidsBean, will not be changed in the
+     * future, but only replaced by other objects.
+     *
+     * @param   bean  DOCUMENT ME!
+     *
+     * @return  a deep copy of the given object
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static CidsBean cloneCidsBean(final CidsBean bean) throws Exception {
+        return cloneCidsBean(bean, true);
+    }
 
     /**
      * DOCUMENT ME!

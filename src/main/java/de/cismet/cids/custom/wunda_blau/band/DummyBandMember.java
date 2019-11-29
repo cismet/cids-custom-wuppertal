@@ -71,11 +71,7 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
      * DOCUMENT ME!
      */
     protected void determineBackgroundColour() {
-        final Color secondColor = new Color(200, 200, 200);
-        setBackgroundPainter(new CompoundPainter(
-                new MattePainter(secondColor),
-                new PinstripePainter(new Color(255, 255, 255), 45, 2, 5)));
-        unselectedBackgroundPainter = getBackgroundPainter();
+        unselectedBackgroundPainter = new CompoundPainter(new MattePainter(new Color(215, 215, 215)));
         selectedBackgroundPainter = new CompoundPainter(
                 unselectedBackgroundPainter,
                 new RectanglePainter(
@@ -89,8 +85,29 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
                     new Color(100, 100, 100, 100),
                     2f,
                     new Color(50, 50, 50, 100)));
+        setBackgroundPainter(unselectedBackgroundPainter);
 
         setSelected(isSelected());
+//        final Color secondColor = new Color(200, 200, 200);
+//        setBackgroundPainter(new CompoundPainter(
+//                new MattePainter(secondColor),
+//                new PinstripePainter(new Color(255, 255, 255), 45, 2, 5)));
+//        unselectedBackgroundPainter = getBackgroundPainter();
+//        selectedBackgroundPainter = new CompoundPainter(
+//                unselectedBackgroundPainter,
+//                new RectanglePainter(
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    true,
+//                    new Color(100, 100, 100, 100),
+//                    2f,
+//                    new Color(50, 50, 50, 100)));
+//
+//        setSelected(isSelected());
     }
     /**
      * DOCUMENT ME!

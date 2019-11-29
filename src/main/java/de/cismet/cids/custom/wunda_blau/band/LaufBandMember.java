@@ -74,7 +74,7 @@ public class LaufBandMember extends TreppeBandMember {
             von = (Double)bean.getProperty("position.von");
             bis = (Double)bean.getProperty("position.bis");
             final Integer stufen = (Integer)bean.getProperty("stufen");
-            final int stufenNewValue = Math.round((float)(Math.abs(von - bis) * 3.0f));
+            final int stufenNewValue = Math.round((float)(Math.abs(von - bis)));
 
             if ((stufen == null) || (stufen != stufenNewValue)) {
                 try {
@@ -91,9 +91,9 @@ public class LaufBandMember extends TreppeBandMember {
                 final double von = (Double)bean.getProperty("position.von");
                 final double bis = (Double)bean.getProperty("position.von");
                 final Integer stufen = (Integer)bean.getProperty("stufen");
-                final double bisNew = von + (stufen * (1.0 / 3.0));
+                final double bisNew = von + stufen;
                 final int stufenold = stufenCount;
-                final double oldValue = von + (stufenold * (1.0 / 3.0));
+                final double oldValue = von + stufenold;
 
                 if ((stufen != null) && (bis != bisNew)) {
                     try {
@@ -116,6 +116,18 @@ public class LaufBandMember extends TreppeBandMember {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   pos  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Override
+    protected double roundToNextValidPosition(final double pos) {
+        return Math.floor(pos);
+    }
+
     @Override
     protected void determineBackgroundColour() {
         setDefaultBackground();
@@ -134,10 +146,5 @@ public class LaufBandMember extends TreppeBandMember {
                     2f,
                     new Color(50, 50, 50, 100)));
         setBackgroundPainter(unselectedBackgroundPainter);
-    }
-
-    @Override
-    protected CidsBean cloneBean(final CidsBean bean) throws Exception {
-        return null;
     }
 }
