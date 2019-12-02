@@ -12,6 +12,10 @@
  */
 package de.cismet.cids.custom.wunda_blau.band;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.cismet.tools.gui.jbands.interfaces.Band;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
 
 /**
@@ -28,6 +32,8 @@ public class ElementResizedEvent {
     private boolean max;
     private double oldValue;
     private double newValue;
+    private List<Band> exception = new ArrayList<Band>();
+    private boolean refreshDummiesOnly = false;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -56,6 +62,42 @@ public class ElementResizedEvent {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the refreshDummiesOnly
+     */
+    public boolean isRefreshDummiesOnly() {
+        return refreshDummiesOnly;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  refreshDummiesOnly  the refreshDummiesOnly to set
+     */
+    public void setRefreshDummiesOnly(final boolean refreshDummiesOnly) {
+        this.refreshDummiesOnly = refreshDummiesOnly;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the exception
+     */
+    public List<Band> getException() {
+        return exception;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  exception  the exception to set
+     */
+    public void setException(final List<Band> exception) {
+        this.exception = exception;
+    }
 
     /**
      * DOCUMENT ME!

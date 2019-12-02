@@ -61,11 +61,28 @@ public class PodestBandMember extends LaufBandMember {
 
     @Override
     protected void determineBackgroundColour() {
-        final Color secondColor = new Color(255, 66, 66);
-        setBackgroundPainter(new CompoundPainter(
-                new MattePainter(secondColor),
-                new PinstripePainter(new Color(255, 255, 255), 45, 2, 5)));
-        unselectedBackgroundPainter = getBackgroundPainter();
+//        final Color secondColor = new Color(255, 66, 66);
+//        setBackgroundPainter(new CompoundPainter(
+//                new MattePainter(secondColor),
+//                new PinstripePainter(new Color(255, 255, 255), 45, 2, 5)));
+//        unselectedBackgroundPainter = getBackgroundPainter();
+//        selectedBackgroundPainter = new CompoundPainter(
+//                unselectedBackgroundPainter,
+//                new RectanglePainter(
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    true,
+//                    new Color(100, 100, 100, 100),
+//                    2f,
+//                    new Color(50, 50, 50, 100)));
+//
+//        setSelected(isSelected);
+        setDefaultBackground();
+        unselectedBackgroundPainter = new MattePainter(new Color(222, 184, 135));
         selectedBackgroundPainter = new CompoundPainter(
                 unselectedBackgroundPainter,
                 new RectanglePainter(
@@ -79,7 +96,6 @@ public class PodestBandMember extends LaufBandMember {
                     new Color(100, 100, 100, 100),
                     2f,
                     new Color(50, 50, 50, 100)));
-
-        setSelected(isSelected);
+        setBackgroundPainter(unselectedBackgroundPainter);
     }
 }

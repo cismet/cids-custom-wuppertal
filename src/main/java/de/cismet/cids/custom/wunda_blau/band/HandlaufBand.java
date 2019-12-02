@@ -12,9 +12,12 @@
  */
 package de.cismet.cids.custom.wunda_blau.band;
 
+import java.util.List;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.tools.gui.jbands.JBand;
+import de.cismet.tools.gui.jbands.interfaces.BandMember;
 
 /**
  * DOCUMENT ME!

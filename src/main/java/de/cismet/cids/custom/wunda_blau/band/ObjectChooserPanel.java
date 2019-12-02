@@ -270,8 +270,12 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
                             from
                                     + PodestBandMember.ELEMENT_WIDTH,
                             parentBand.getSide());
+                    final ElementResizedEvent event = new ElementResizedEvent(bandMember, false, 100000, 100000);
+                    bandMember.fireElementResized(event);
                 } else {
                     bandMember = parentBand.addMember(objectBean, from, till, parentBand.getSide());
+                    final ElementResizedEvent event = new ElementResizedEvent(bandMember, false, 100000, 100000);
+                    bandMember.fireElementResized(event);
                 }
 
                 parentBand.getParent().setSelectedMember(bandMember);

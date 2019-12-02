@@ -18,6 +18,11 @@ import org.jdesktop.swingx.painter.RectanglePainter;
 
 import java.awt.Color;
 
+import javax.swing.JMenuItem;
+
+import de.cismet.cids.custom.wunda_blau.band.actions.AddItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.SplitItem;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.tools.gui.jbands.SimpleModifiableBand;
@@ -56,7 +61,8 @@ public class HandlaufBandMember extends TreppeBandMember {
     @Override
     protected void determineBackgroundColour() {
         setDefaultBackground();
-        unselectedBackgroundPainter = new MattePainter(new Color(77, 157, 190));
+//        unselectedBackgroundPainter = new MattePainter(new Color(77, 157, 190));
+        unselectedBackgroundPainter = new MattePainter(new Color(99, 124, 129));
         selectedBackgroundPainter = new CompoundPainter(
                 unselectedBackgroundPainter,
                 new RectanglePainter(

@@ -46,7 +46,7 @@ public class LaufBand extends TreppenBand {
 
     @Override
     protected boolean hasDummyAfterEnd() {
-        return true;
+        return false;
     }
 
     @Override

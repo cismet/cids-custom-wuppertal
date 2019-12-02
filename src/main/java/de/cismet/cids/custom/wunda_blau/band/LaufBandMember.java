@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
+import org.jdesktop.swingx.painter.PinstripePainter;
 import org.jdesktop.swingx.painter.RectanglePainter;
 
 import org.openide.util.Exceptions;
@@ -41,6 +42,7 @@ public class LaufBandMember extends TreppeBandMember {
     //~ Instance fields --------------------------------------------------------
 
     private boolean stufenChangedFromBand = false;
+    private boolean stufenChangedFromPanel = false;
     private int stufenCount;
 
     //~ Constructors -----------------------------------------------------------
@@ -70,7 +72,8 @@ public class LaufBandMember extends TreppeBandMember {
     public void propertyChange(final PropertyChangeEvent evt) {
         super.propertyChange(evt);
 
-        if (evt.getPropertyName().equals("von") || evt.getPropertyName().equals("bis")) {
+        if (!(this instanceof PodestBandMember)
+                    && (evt.getPropertyName().equals("von") || evt.getPropertyName().equals("bis"))) {
             von = (Double)bean.getProperty("position.von");
             bis = (Double)bean.getProperty("position.bis");
             final Integer stufen = (Integer)bean.getProperty("stufen");
@@ -86,10 +89,10 @@ public class LaufBandMember extends TreppeBandMember {
                     LOG.error("Cannot set stufen", ex);
                 }
             }
-        } else if (evt.getPropertyName().equals("stufen")) {
-            if (!stufenChangedFromBand && !dragStart) {
+        } else if (!(this instanceof PodestBandMember) && evt.getPropertyName().equals("stufen")) {
+            if (!stufenChangedFromBand && !dragStart && !stufenChangedFromPanel) {
                 final double von = (Double)bean.getProperty("position.von");
-                final double bis = (Double)bean.getProperty("position.von");
+                final double bis = (Double)bean.getProperty("position.bis");
                 final Integer stufen = (Integer)bean.getProperty("stufen");
                 final double bisNew = von + stufen;
                 final int stufenold = stufenCount;
@@ -101,8 +104,10 @@ public class LaufBandMember extends TreppeBandMember {
                     } catch (Exception ex) {
                         LOG.error("Cannot set position bis", ex);
                     }
-
-                    final ElementResizedEvent event = new ElementResizedEvent(this, true, oldStationValue, oldValue);
+                    stufenChangedFromPanel = true;
+                    final ElementResizedEvent event = new ElementResizedEvent(this, true, oldValue, bisNew);
+                    fireElementResized(event);
+                    stufenChangedFromPanel = false;
                 }
             }
         }
@@ -130,8 +135,27 @@ public class LaufBandMember extends TreppeBandMember {
 
     @Override
     protected void determineBackgroundColour() {
-        setDefaultBackground();
-        unselectedBackgroundPainter = new MattePainter(new Color(160, 60, 98));
+//        setDefaultBackground();
+//        unselectedBackgroundPainter = new MattePainter(new Color(160, 60, 98));
+//        selectedBackgroundPainter = new CompoundPainter(
+//                unselectedBackgroundPainter,
+//                new RectanglePainter(
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    3,
+//                    true,
+//                    new Color(100, 100, 100, 100),
+//                    2f,
+//                    new Color(50, 50, 50, 100)));
+//        setBackgroundPainter(unselectedBackgroundPainter);
+        final Color secondColor = new Color(255, 211, 155);
+        setBackgroundPainter(new CompoundPainter(
+                new MattePainter(secondColor),
+                new PinstripePainter(new Color(255, 255, 255), 0, 3, 3)));
+        unselectedBackgroundPainter = getBackgroundPainter();
         selectedBackgroundPainter = new CompoundPainter(
                 unselectedBackgroundPainter,
                 new RectanglePainter(
@@ -145,6 +169,7 @@ public class LaufBandMember extends TreppeBandMember {
                     new Color(100, 100, 100, 100),
                     2f,
                     new Color(50, 50, 50, 100)));
-        setBackgroundPainter(unselectedBackgroundPainter);
+
+        setSelected(isSelected);
     }
 }
