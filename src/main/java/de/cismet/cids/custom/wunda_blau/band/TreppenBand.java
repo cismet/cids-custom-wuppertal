@@ -16,16 +16,16 @@ import Sirius.server.middleware.types.MetaClass;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Exceptions;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanCollectionStore;
-import de.cismet.cids.dynamics.CidsBeanStore;
 
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -37,8 +37,6 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.CismetThreadPool;
 
-import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.WaitingDialogThread;
 import de.cismet.tools.gui.jbands.BandEvent;
 import de.cismet.tools.gui.jbands.BandMemberEvent;
 import de.cismet.tools.gui.jbands.DefaultBand;
@@ -91,16 +89,13 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     protected boolean readOnly = false;
     protected Double fixMin = null;
     protected Double fixMax = null;
-    protected List<ElementResizedListener> elementResizeListener = new ArrayList<ElementResizedListener>();
+    protected final List<ElementResizedListener> elementResizeListener = new ArrayList<ElementResizedListener>();
 
     private ConnectionContext connectionContext;
-    private List<BandListener> listenerList = new ArrayList<BandListener>();
-    private boolean onlyAcceptNewBeanWithValue = true;
+    private final List<BandListener> listenerList = new ArrayList<BandListener>();
 
-    private HashMap<String, CidsBean> beanMap = new HashMap<String, CidsBean>();
-    private boolean normalise = false;
-    private List<CidsBean> beansToDelete = new ArrayList<CidsBean>();
-    private JBand parent;
+    private final List<CidsBean> beansToDelete = new ArrayList<CidsBean>();
+    private final JBand parent;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -184,7 +179,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             final BandMember m = members.get(i);
 
             if ((m != member) && !(m instanceof DummyBandMember)) {
-                if ((m.getMin() > member.getMin()) && (m.getMin() < next)) {
+                if ((m.getMin() >= member.getMin()) && (m.getMin() < next)) {
                     next = m.getMin();
                 }
             }
@@ -207,7 +202,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             final BandMember m = members.get(i);
 
             if ((m != member) && !(m instanceof DummyBandMember)) {
-                if ((m.getMax() < member.getMin()) && (m.getMax() > next)) {
+                if ((m.getMax() <= member.getMin()) && (m.getMax() > next)) {
                     next = m.getMax();
                 }
             }
@@ -235,6 +230,48 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         }
         addDummies();
         fireBandChanged(new BandEvent());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  start   DOCUMENT ME!
+     * @param  amount  DOCUMENT ME!
+     */
+    public void moveAllMember(final double start, final int amount) {
+        for (final CidsBean bean : objectBeans) {
+            if ((Double)bean.getProperty("position.von") >= start) {
+                try {
+                    bean.setProperty("position.von", (Double)bean.getProperty("position.von") + amount);
+                    bean.setProperty("position.bis", (Double)bean.getProperty("position.bis") + amount);
+                } catch (Exception ex) {
+                    LOG.error("Cannot move bean", ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public BandMember getMemberByBean(final CidsBean bean) {
+        for (int i = 0; i < members.size(); ++i) {
+            final BandMember member = members.get(i);
+
+            if (member instanceof TreppeBandMember) {
+                final CidsBean memberBean = ((TreppeBandMember)member).getCidsBean();
+
+                if (memberBean.equals(bean)) {
+                    return member;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -284,33 +321,6 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         return false;
     }
 
-    @Override
-    public void addMember(final Double startStation,
-            final Double endStation,
-            final Double minStart,
-            final Double maxEnd,
-            final List<BandMember> memberList) {
-        final WaitingDialogThread<Void> wdt = new WaitingDialogThread<Void>(StaticSwingTools.getParentFrame(
-                    getPrefixComponent()),
-                true,
-                "Erstelle Abschnitt",
-                null,
-                100) {
-
-                @Override
-                protected Void doInBackground() throws Exception {
-                    if (endStation == null) {
-                        addUnspecifiedMember(startStation, minStart, maxEnd, memberList);
-                    } else {
-                        addSpecifiedMember(startStation, endStation);
-                    }
-
-                    return null;
-                }
-            };
-        wdt.start();
-    }
-
     /**
      * DOCUMENT ME!
      *
@@ -333,6 +343,10 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             objectBean.setProperty(positionField, position);
 
             final TreppeBandMember m = refresh(objectBean, true);
+            // set the von and bis values again. Thsi is required, when any object property dependens on the object
+            // length
+            position.setProperty("von", start);
+            position.setProperty("bis", end);
             objectBeans.add(objectBean);
             fireBandChanged(new BandEvent());
 
@@ -341,6 +355,15 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             LOG.error("error while creating new station.", e);
             return null;
         }
+    }
+
+    @Override
+    public void addMember(final Double startStation,
+            final Double endStation,
+            final Double minStart,
+            final Double maxEnd,
+            final List<BandMember> members) {
+        // nothing to do. The default method to add a new object is not used
     }
 
     /**
@@ -357,118 +380,9 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     /**
      * DOCUMENT ME!
      *
-     * @param  startStation  DOCUMENT ME!
-     * @param  minStart      DOCUMENT ME!
-     * @param  maxEnd        DOCUMENT ME!
-     * @param  memberList    DOCUMENT ME!
-     */
-    private void addUnspecifiedMember(final Double startStation,
-            final Double minStart,
-            final Double maxEnd,
-            List<BandMember> memberList) {
-        double distanceBefore = Double.MAX_VALUE;
-        double distanceBehind = Double.MAX_VALUE;
-
-        if (memberList != null) {
-            // member list will be considered.
-            for (final BandMember tmp : memberList) {
-                if (tmp instanceof CidsBeanStore) {
-                    final CidsBean b = ((CidsBeanStore)tmp).getCidsBean();
-                    final Double from = (Double)tmp.getMin();
-                    final Double till = (Double)tmp.getMax();
-
-                    if ((from != null) && (till != null)) {
-                        double distance = startStation - till;
-                        if ((distance < distanceBefore) && (distance >= 0)) {
-                            distanceBefore = distance;
-                        }
-
-                        distance = from - startStation;
-                        if ((distance < distanceBehind) && (distance >= 0)) {
-                            distanceBehind = distance;
-                        }
-                    }
-                } else {
-                    // member list will be ignored
-                    memberList = null;
-                }
-            }
-        }
-
-        if (memberList == null) {
-            for (final CidsBean tmp : objectBeans) {
-                final Double from = (Double)tmp.getProperty("position.von");
-                final Double till = (Double)tmp.getProperty("position.bis");
-
-                if ((from != null) && (till != null)) {
-                    double distance = startStation - till;
-                    if ((distance < distanceBefore) && (distance >= 0)) {
-                        distanceBefore = distance;
-                    }
-
-                    distance = from - startStation;
-                    if ((distance < distanceBehind) && (distance >= 0)) {
-                        distanceBehind = distance;
-                    }
-                }
-            }
-        }
-
-        try {
-            if (getFixObjectLength() != null) {
-                distanceBehind = distanceBefore + getFixObjectLength();
-            }
-            addNewMember(distanceBefore, distanceBehind);
-        } catch (Exception e) {
-            LOG.error("error while creating new station.", e);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
     protected abstract Double getFixObjectLength();
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  startStation  DOCUMENT ME!
-     * @param  endStation    minStart DOCUMENT ME!
-     */
-    private void addSpecifiedMember(final Double startStation,
-            final Double endStation) {
-        try {
-            addNewMember(startStation, endStation);
-        } catch (Exception e) {
-            LOG.error("error while creating new station.", e);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   start  beanBefore DOCUMENT ME!
-     * @param   end    beanBehind DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    private void addNewMember(final double start, final double end) throws Exception {
-        final CidsBean newBean = createNewCidsBeanFromTableName(objectTableName);
-        final CidsBean newPos = createNewCidsBeanFromTableName("treppe_position");
-        newPos.setProperty("von", start);
-        newPos.setProperty("bis", end);
-        newBean.setProperty("position", newPos);
-        final TreppeBandMember m = refresh(newBean, true);
-
-        objectBeans.add(newBean);
-
-        fireBandChanged(new BandEvent());
-        if (onlyAcceptNewBeanWithValue) {
-            m.setNewMode();
-        }
-    }
 
     @Override
     public void addMember(final BandMember m) {
@@ -589,6 +503,9 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             m.setCidsBean(special);
             m.addBandMemberListener(this);
             addMember(m);
+            if (withDummies) {
+                addDummies();
+            }
             return m;
         }
 
@@ -692,24 +609,6 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     @Override
     public boolean prepareForSave() {
         return true;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  the onlyAcceptNewBeanWithValue
-     */
-    public boolean isOnlyAcceptNewBeanWithValue() {
-        return onlyAcceptNewBeanWithValue;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  onlyAcceptNewBeanWithValue  the onlyAcceptNewBeanWithValue to set
-     */
-    public void setOnlyAcceptNewBeanWithValue(final boolean onlyAcceptNewBeanWithValue) {
-        this.onlyAcceptNewBeanWithValue = onlyAcceptNewBeanWithValue;
     }
 
     @Override

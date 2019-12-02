@@ -494,7 +494,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         final List<CidsBean> podest = cidsBean.getBeanCollectionProperty("podeste");
         final List<CidsBean> treppe = cidsBean.getBeanCollectionProperty("treppenlaeufe");
         final List<CidsBean> handlaeufe = cidsBean.getBeanCollectionProperty("handlaeufe");
-        final List<CidsBean> stuetzmauer = cidsBean.getBeanCollectionProperty("stuetzmauer");
+        final List<CidsBean> stuetzmauer = cidsBean.getBeanCollectionProperty("stuetzmauern");
         final List<CidsBean> absturzsicherung = cidsBean.getBeanCollectionProperty("absturzsicherungen");
         laufList = new ArrayList<CidsBean>();
         leitelementList = new ArrayList<CidsBean>();
@@ -526,6 +526,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         handlaufLeftBand.setCidsBeans(handlaufList);
         handlaufRightBand.setCidsBeans(handlaufList);
         laufBand.setCidsBeans(laufList);
+        leitelementLeftBand.setCidsBeans(leitelementList);
+        leitelementRightBand.setCidsBeans(leitelementList);
+        stuetzmauerLinksBand.setCidsBeans(stuetzmauerList);
+        stuetzmauerRechtsBand.setCidsBeans(stuetzmauerList);
 
         handlaufRightBand.addElementResizedListener(resizedListener);
         handlaufLeftBand.addElementResizedListener(resizedListener);
@@ -537,9 +541,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         refreshAllBands(true);
         jband.bandModelChanged(new BandModelEvent());
-//        leitelementRightBand.setCidsBeans(leitelementList);
-//        leitelementLeftBand.setCidsBeans(leitelementList);
-//        stuetzmauerRechtsBand.setCidsBeans(stuetzmauerList);
 
         // todo: add listener to synchonize the object list with the cidsBean
 // ((ObservableList<CidsBean>)laufList).addObservableListListener(new MassnBezugListListener(
@@ -558,6 +559,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         laufBand.refresh(withDummies);
         handlaufLeftBand.refresh(withDummies);
         handlaufRightBand.refresh(withDummies);
+        leitelementRightBand.refresh(withDummies);
+        leitelementLeftBand.refresh(withDummies);
+        stuetzmauerRechtsBand.refresh(withDummies);
+        stuetzmauerLinksBand.refresh(withDummies);
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -573,7 +578,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         @Override
         public void elementResized(final ElementResizedEvent e) {
-            if ((TreppeBandMember)e.getBandMember() instanceof LaufBandMember) {
+            if (!e.isRefreshDummiesOnly() && ((TreppeBandMember)e.getBandMember() instanceof LaufBandMember)) {
                 final TreppeBandMember member = (TreppeBandMember)e.getBandMember();
                 final double oldValue = e.getOldValue();
                 final double newValue = e.getNewValue();
@@ -582,9 +587,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
                 final List<List<CidsBean>> beans = new ArrayList<List<CidsBean>>();
                 beans.add(laufList);
-                // beans.add(leitelementList);
+                beans.add(leitelementList);
                 beans.add(handlaufList);
-                // beans.add(stuetzmauerList);
+                beans.add(stuetzmauerList);
 
                 for (int listIndex = 0; listIndex < beans.size(); ++listIndex) {
                     final List<CidsBean> beanList = beans.get(listIndex);
@@ -630,25 +635,55 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                     }
                 }
 
-                // if (jband.getMaxValue() < max) {
+                final BandMember selectedBandMember = jband.getSelectedBandMember();
                 jband.setMaxValue(max + 1);
                 refreshAllBands(false);
-                // sbm.setMax(max);
                 jband.bandModelChanged(new BandModelEvent());
-                // }
                 refreshAllBands(true);
                 jband.bandModelChanged(new BandModelEvent());
-
-                final BandMember selectedBandMember = jband.getSelectedBandMember();
 
                 modelListener.bandModelChanged(null);
 
                 if (selectedBandMember instanceof BandMemberSelectable) {
-                    jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
+                    BandMember selectedMember = handlaufRightBand.getMemberByBean(
+                            ((TreppeBandMember)selectedBandMember).getCidsBean());
+                    if (selectedMember == null) {
+                        selectedMember = handlaufLeftBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                        .getCidsBean());
+                    }
+                    if (selectedMember == null) {
+                        selectedMember = laufBand.getMemberByBean(((TreppeBandMember)selectedBandMember).getCidsBean());
+                    }
+                    if (selectedMember == null) {
+                        selectedMember = leitelementLeftBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                        .getCidsBean());
+                    }
+                    if (selectedMember == null) {
+                        selectedMember = leitelementRightBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                        .getCidsBean());
+                    }
+                    if (selectedMember == null) {
+                        selectedMember = stuetzmauerLinksBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                        .getCidsBean());
+                    }
+                    if (selectedMember == null) {
+                        selectedMember = stuetzmauerRechtsBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                        .getCidsBean());
+                    }
+
+                    if (selectedMember != null) {
+                        jband.setSelectedMember((BandMemberSelectable)selectedMember);
+                    }
                 }
             } else {
+                final BandMember selectedBandMember = jband.getSelectedBandMember();
+                laufBand.refresh(false);
+                jband.setMaxValue(laufBand.getMax());
                 refreshAllBands(true);
                 jband.bandModelChanged(new BandModelEvent());
+                if (selectedBandMember instanceof BandMemberSelectable) {
+                    jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
+                }
             }
         }
     }
@@ -664,7 +699,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         @Override
         public void bandModelChanged(final BandModelEvent e) {
-            System.out.println("Band model changed");
         }
 
         @Override
@@ -709,7 +743,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         @Override
         public void bandModelValuesChanged(final BandModelEvent e) {
-            System.out.println("band mdel changed");
         }
     }
 }
