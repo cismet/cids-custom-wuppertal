@@ -38,6 +38,7 @@ import de.cismet.cids.custom.wunda_blau.band.StuetzmauerBand;
 import de.cismet.cids.custom.wunda_blau.band.StuetzmauerBandMember;
 import de.cismet.cids.custom.wunda_blau.band.TreppeBandMember;
 import de.cismet.cids.custom.wunda_blau.band.TreppenBand;
+import de.cismet.cids.custom.wunda_blau.band.actions.AddItem;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -574,10 +575,18 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      */
     class TreppenElementResizedListener implements ElementResizedListener {
 
+        //~ Instance fields ----------------------------------------------------
+
+        private boolean inResize = false;
+
         //~ Methods ------------------------------------------------------------
 
         @Override
         public void elementResized(final ElementResizedEvent e) {
+            if (inResize) {
+                return;
+            }
+            inResize = true;
             if (!e.isRefreshDummiesOnly() && ((TreppeBandMember)e.getBandMember() instanceof LaufBandMember)) {
                 final TreppeBandMember member = (TreppeBandMember)e.getBandMember();
                 final double oldValue = e.getOldValue();
@@ -595,7 +604,8 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                     final List<CidsBean> beanList = beans.get(listIndex);
 
                     for (final CidsBean bean : beanList) {
-                        if (!bean.equals(member.getCidsBean())) {
+                        if (!bean.equals(member.getCidsBean())
+                                    && ((AddItem.exception == null) || !AddItem.exception.equals(bean))) {
                             double from = (Double)bean.getProperty("position.von");
                             double till = (Double)bean.getProperty("position.bis");
 
@@ -685,6 +695,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                     jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
                 }
             }
+            inResize = false;
         }
     }
 

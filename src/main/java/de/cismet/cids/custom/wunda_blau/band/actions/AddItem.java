@@ -30,6 +30,7 @@ import de.cismet.cids.custom.wunda_blau.band.TreppenBand;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.tools.gui.jbands.interfaces.Band;
+import de.cismet.tools.gui.jbands.interfaces.BandMember;
 
 import static javax.swing.Action.NAME;
 import static javax.swing.Action.SHORT_DESCRIPTION;
@@ -45,6 +46,7 @@ public class AddItem extends AbstractAction {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(SplitItem.class);
+    public static CidsBean exception;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -88,11 +90,21 @@ public class AddItem extends AbstractAction {
             final double from = (after ? member.getMax() : (member.getMin()));
             final TreppenBand parentBand = member.getParentBand();
 
-            member.getParentBand().moveAllMember(from, elementSize);
-            bandMember = parentBand.addMember(objectBean, from, from + elementSize, parentBand.getSide());
-            final boolean changeLayerElements = true;
+            if (!(parentBand instanceof LaufBand)) {
+                member.getParentBand().moveAllMember(from, elementSize);
+            }
+            if (after) {
+                exception = member.getCidsBean();
+            } else {
+                final BandMember nextMember = member.getParentBand().getNextLessElement(member);
 
-            if (changeLayerElements && (parentBand instanceof LaufBand)) {
+                if (nextMember instanceof TreppeBandMember) {
+                    exception = ((TreppeBandMember)nextMember).getCidsBean();
+                }
+            }
+            bandMember = parentBand.addMember(objectBean, from, from + elementSize, parentBand.getSide());
+
+            if ((parentBand instanceof LaufBand)) {
                 final ElementResizedEvent event = new ElementResizedEvent(
                         bandMember,
                         true,
@@ -102,9 +114,18 @@ public class AddItem extends AbstractAction {
                 final List<Band> exceptions = new ArrayList<Band>();
                 exceptions.add(parentBand);
                 event.setException(exceptions);
+                event.setRefreshDummiesOnly(false);
+                bandMember.fireElementResized(event);
+            } else {
+                final ElementResizedEvent event = new ElementResizedEvent(
+                        bandMember,
+                        true,
+                        0,
+                        0);
                 event.setRefreshDummiesOnly(true);
                 bandMember.fireElementResized(event);
             }
+            exception = null;
 
             parentBand.getParent().setSelectedMember(bandMember);
         } catch (Exception ex) {

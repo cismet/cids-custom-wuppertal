@@ -211,6 +211,31 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         return next;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   member  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public BandMember getNextLessElement(final TreppeBandMember member) {
+        double next = Double.MIN_VALUE;
+        BandMember nextMember = null;
+
+        for (int i = 0; i < members.size(); ++i) {
+            final BandMember m = members.get(i);
+
+            if ((m != member) && !(m instanceof DummyBandMember)) {
+                if ((m.getMax() <= member.getMin()) && (m.getMax() > next)) {
+                    next = m.getMax();
+                    nextMember = m;
+                }
+            }
+        }
+
+        return nextMember;
+    }
+
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         disposeAllMember();
@@ -573,6 +598,11 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         final BandEvent e = new BandEvent();
         e.setSelectionLost(true);
         fireBandChanged(e);
+
+        if ((member instanceof LaufBandMember) || (member instanceof PodestBandMember)) {
+            final ElementResizedEvent event = new ElementResizedEvent(member, true, member.getMax(), 0);
+            fireElementResized(event);
+        }
     }
 
     /**

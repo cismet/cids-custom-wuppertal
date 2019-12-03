@@ -350,12 +350,42 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
     public void mouseReleased(final MouseEvent e) {
         if (dragStart) {
             dragStart = false;
-            final double newValue = (Double)position.getProperty("bis");
 
-            final ElementResizedEvent event = new ElementResizedEvent(this, true, oldStationValue, newValue);
-            fireElementResized(event);
+            if (dragSide == 2) {
+                final double newValue = (Double)position.getProperty("bis");
 
-            JBandCursorManager.getInstance().setLocked(false);
+                final ElementResizedEvent event = new ElementResizedEvent(this, true, oldStationValue, newValue);
+                fireElementResized(event);
+
+                JBandCursorManager.getInstance().setLocked(false);
+            } else if (dragSide == 1) {
+                if (this instanceof LaufBandMember) {
+                    try {
+                        final double newValue = (Double)position.getProperty("von");
+                        final double diff = oldStationValue - newValue;
+                        final double oldTillValue = (Double)position.getProperty("bis");
+                        position.setProperty("von", oldStationValue);
+                        position.setProperty("bis", (Double)position.getProperty("bis") + diff);
+                        final ElementResizedEvent event = new ElementResizedEvent(
+                                this,
+                                true,
+                                oldTillValue,
+                                oldTillValue
+                                        + diff);
+                        fireElementResized(event);
+                    } catch (Exception ex) {
+                        LOG.error("Error while drag band member", ex);
+                    }
+                } else {
+                    final ElementResizedEvent event = new ElementResizedEvent(
+                            this,
+                            false,
+                            oldStationValue,
+                            (Double)position.getProperty("von"));
+                    fireElementResized(event);
+                }
+                JBandCursorManager.getInstance().setLocked(false);
+            }
         }
         if (e.isPopupTrigger() && isSelected) {
             showPopupMenu(e.getX(), e.getY());
