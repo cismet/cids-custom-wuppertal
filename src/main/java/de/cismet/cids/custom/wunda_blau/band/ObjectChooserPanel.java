@@ -90,10 +90,15 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
 
         panCreation.setLayout(new GridLayout(objectNames.length, 1));
 
-        for (int i = 0; i < objectNames.length; ++i) {
-            final JButton button = new JButton(objectNames[i] + " erstellen");
-            button.addActionListener(new ButtonActionListener(tableNames[i]));
-            panCreation.add(button);
+        if (tableNames[0].equalsIgnoreCase("TREPPE_STUETZMAUER")) {
+            final JLabel label = new JLabel("Mauer auf leeren Abschnitt ziehen, um eine neue Stützmauer zu erzeugen");
+            panCreation.add(label);
+        } else {
+            for (int i = 0; i < objectNames.length; ++i) {
+                final JButton button = new JButton(objectNames[i] + " erstellen");
+                button.addActionListener(new ButtonActionListener(tableNames[i]));
+                panCreation.add(button);
+            }
         }
     }
 
@@ -182,7 +187,7 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(5, 5, 15, 5);
         panBeschreibungContent.add(jPanel48, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();

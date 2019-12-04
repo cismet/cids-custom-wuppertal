@@ -20,9 +20,16 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.tools.gui.jbands.JBandCursorManager;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
@@ -36,7 +43,8 @@ import de.cismet.tools.gui.jbands.interfaces.BandMemberSelectable;
  * @version  $Revision$, $Date$
  */
 public class DummyBandMember extends AbschnittsinfoMember implements BandMemberSelectable,
-    BandMemberMouseListeningComponent {
+    BandMemberMouseListeningComponent,
+    CidsBeanDropListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -63,6 +71,15 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
         setPreferredSize(getMinimumSize());
         determineBackgroundColour();
         this.parent = parent;
+
+        if (parent instanceof StuetzmauerBand) {
+            setToolTipText("Mauer auf dieses Element ziehen, um eine neue Stützmauer zu erzeugen.");
+            try {
+                new CidsBeanDropTarget(this);
+            } catch (final Exception ex) {
+                LOG.warn("error while init CidsBeanDropTarget", ex);
+            }
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -108,26 +125,6 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
 //                    new Color(50, 50, 50, 100)));
 //
 //        setSelected(isSelected());
-    }
-    /**
-     * DOCUMENT ME!
-     */
-    private void setDefaultBackground() {
-        setBackgroundPainter(new MattePainter(new Color(229, 0, 0)));
-        unselectedBackgroundPainter = getBackgroundPainter();
-        selectedBackgroundPainter = new CompoundPainter(
-                unselectedBackgroundPainter,
-                new RectanglePainter(
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    true,
-                    new Color(100, 100, 100, 100),
-                    2f,
-                    new Color(50, 50, 50, 100)));
     }
 
     @Override
@@ -215,5 +212,34 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
                 parent,
                 from,
                 to);
+    }
+
+    @Override
+    public void beansDropped(final ArrayList<CidsBean> droppedBeans) {
+        try {
+            if (droppedBeans.size() > 1) {
+            }
+            final CidsBean droppedBean = droppedBeans.get(0);
+            if (droppedBean != null) {
+                if (droppedBean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("mauer")) {
+                    try {
+                        final CidsBean objectBean = TreppenBand.createNewCidsBeanFromTableName("TREPPE_STUETZMAUER");
+                        objectBean.setProperty("mauer", droppedBean.getProperty("id"));
+                        final TreppeBandMember bandMember;
+
+                        bandMember = parent.addMember(objectBean, from, to, parent.getSide());
+                        final ElementResizedEvent event = new ElementResizedEvent(bandMember, false, 100000, 100000);
+                        bandMember.fireElementResized(event);
+
+                        parent.getParent().setSelectedMember(bandMember);
+                    } catch (Exception ex) {
+                    }
+                }
+            }
+        } catch (final Exception ex) {
+            final String message = "Fehler beim Erzeugen der Stützmauer.";
+            LOG.error(message, ex);
+            ObjectRendererUtils.showExceptionWindowToUser(message, ex, this);
+        }
     }
 }

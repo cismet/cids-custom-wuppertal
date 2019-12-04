@@ -87,12 +87,12 @@ public class AddItem extends AbstractAction {
             if (objectBean.getClass().getName().endsWith("Treppe_podest")) {
                 elementSize = (int)PodestBandMember.ELEMENT_WIDTH;
             }
-            final double from = (after ? member.getMax() : (member.getMin()));
+            double from = (after ? member.getMax() : (member.getMin()));
             final TreppenBand parentBand = member.getParentBand();
 
-            if (!(parentBand instanceof LaufBand)) {
-                member.getParentBand().moveAllMember(from, elementSize);
-            }
+//            if (!(parentBand instanceof LaufBand)) {
+//                member.getParentBand().moveAllMember(from, elementSize);
+//            }
             if (after) {
                 exception = member.getCidsBean();
             } else {
@@ -100,6 +100,10 @@ public class AddItem extends AbstractAction {
 
                 if (nextMember instanceof TreppeBandMember) {
                     exception = ((TreppeBandMember)nextMember).getCidsBean();
+                } else {
+                    if (!after) {
+                        from = from - 1.0;
+                    }
                 }
             }
             bandMember = parentBand.addMember(objectBean, from, from + elementSize, parentBand.getSide());

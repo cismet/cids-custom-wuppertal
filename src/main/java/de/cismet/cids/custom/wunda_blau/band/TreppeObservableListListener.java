@@ -83,10 +83,13 @@ public class TreppeObservableListListener implements ObservableListListener {
         for (final Object b : oldElements) {
             all.remove((CidsBean)b);
         }
-        all = cidsBean.getBeanCollectionProperty(secondCollectionPropertyName);
 
-        for (final Object b : oldElements) {
-            all.remove((CidsBean)b);
+        if (secondCollectionPropertyName != null) {
+            all = cidsBean.getBeanCollectionProperty(secondCollectionPropertyName);
+
+            for (final Object b : oldElements) {
+                all.remove((CidsBean)b);
+            }
         }
     }
 

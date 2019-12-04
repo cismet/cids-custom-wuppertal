@@ -161,6 +161,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         treppePodestPanel = new TreppePodestPanel(!readOnly, connectionContext);
         treppeStuetzmauerPanel = new TreppeStuetzmauerPanel(!readOnly);
         initComponents();
+        panHeaderInfo.setVisible(false);
         stuetzmauerLinksBand.setReadOnly(readOnly);
         handlaufLeftBand.setReadOnly(readOnly);
         handlaufRightBand.setReadOnly(readOnly);
@@ -649,6 +650,24 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                                     }
                                 }
 
+                                if (bean.getProperty("position.von").equals((Double)bean.getProperty("position.bis"))) {
+                                    try {
+                                        bean.setProperty(
+                                            "position.von",
+                                            (Double)bean.getProperty("position.von")
+                                                    - 1.0);
+                                    } catch (Exception ex) {
+                                        LOG.error("Error while adjust element sizes", ex);
+                                    }
+                                    try {
+                                        bean.setProperty(
+                                            "position.bis",
+                                            (Double)bean.getProperty("position.bis")
+                                                    + 1.0);
+                                    } catch (Exception ex) {
+                                        LOG.error("Error while adjust element sizes", ex);
+                                    }
+                                }
                                 if ((Double)bean.getProperty("position.bis") > max) {
                                     max = (Double)bean.getProperty("position.bis");
                                 }
@@ -705,6 +724,8 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                 refreshAllBands(true);
                 jband.bandModelChanged(new BandModelEvent());
                 if (selectedBandMember instanceof BandMemberSelectable) {
+                    jband.setSelectedMember((BandMemberSelectable)null);
+                    ((BandMemberSelectable)selectedBandMember).setSelected(false);
                     jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
                 }
             }

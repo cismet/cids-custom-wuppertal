@@ -18,6 +18,12 @@ import org.jdesktop.swingx.painter.RectanglePainter;
 
 import java.awt.Color;
 
+import javax.swing.JMenuItem;
+
+import de.cismet.cids.custom.wunda_blau.band.actions.AddItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.DeleteItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.SplitItem;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
@@ -52,8 +58,20 @@ public class StuetzmauerBandMember extends TreppeBandMember {
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    protected void configurePopupMenu() {
+        popup.removeAll();
+        final JMenuItem splitItem = new JMenuItem();
+        splitItem.setAction(new SplitItem(this));
+        final JMenuItem deleteItem = new JMenuItem();
+        deleteItem.setAction(new DeleteItem(this));
+
+        popup.add(splitItem);
+        popup.addSeparator();
+        popup.add(deleteItem);
+    }
+
+    @Override
     protected void determineBackgroundColour() {
-//        setDefaultBackground();
         unselectedBackgroundPainter = new MattePainter(new Color(100, 100, 100));
         selectedBackgroundPainter = new CompoundPainter(
                 unselectedBackgroundPainter,

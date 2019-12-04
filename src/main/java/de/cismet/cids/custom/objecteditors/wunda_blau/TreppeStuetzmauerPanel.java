@@ -12,8 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
@@ -48,12 +51,17 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -64,7 +72,9 @@ import de.cismet.tools.gui.SemiRoundedPanel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
+public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBeanStore,
+    Disposable,
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -471,6 +481,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     private CidsBean zustandBean;
     private TreppeStuetzmauernPanel parent;
     private final boolean editable;
+    private ConnectionContext connectionContext = ConnectionContext.createDeprecated();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnRemoveArt1;
@@ -559,7 +570,69 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        bindingGroup.bind();
+
+        final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
+        if ((mauerId != null)) {
+            new SwingWorker<CidsBean, Void>() {
+
+                    @Override
+                    protected CidsBean doInBackground() throws Exception {
+                        final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                                "WUNDA_BLAU",
+                                "mauer",
+                                getConnectionContext());
+                        final MetaObject mo = SessionManager.getProxy()
+                                    .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU", getConnectionContext());
+                        final CidsBean mauerBean = mo.getBean();
+
+                        final Integer kostenGelaender = (Integer)mauerBean.getProperty("san_kosten_gelaender");
+                        final Integer kostenGruendung = (Integer)mauerBean.getProperty("san_kosten_gruendung");
+                        final Integer kostenverformung = (Integer)mauerBean.getProperty("san_kosten_verformung");
+                        final Integer kostenGelaende = (Integer)mauerBean.getProperty("san_kosten_gelaende");
+                        final Integer kostenAnsicht = (Integer)mauerBean.getProperty("san_kosten_ansicht");
+                        final Integer kostenKopf = (Integer)mauerBean.getProperty("san_kosten_kopf");
+
+                        double summe = 0;
+                        summe += (kostenGelaender != null) ? kostenGelaender : 0;
+                        summe += (kostenGruendung != null) ? kostenGruendung : 0;
+                        summe += (kostenverformung != null) ? kostenverformung : 0;
+                        summe += (kostenGelaende != null) ? kostenGelaende : 0;
+                        summe += (kostenAnsicht != null) ? kostenAnsicht : 0;
+                        summe += (kostenKopf != null) ? kostenKopf : 0;
+
+                        final CidsBean zustandBean = CidsBean.createNewCidsBeanFromTableName(
+                                "WUNDA_BLAU",
+                                "TREPPE_ZUSTAND",
+                                getConnectionContext());
+                        zustandBean.setProperty("verkehrssicherheit", null);
+                        zustandBean.setProperty("dauerhaftigkeit", null);
+                        zustandBean.setProperty("standsicherheit", null);
+                        zustandBean.setProperty("sanierungsmassnahmen", "siehe Mauer-Beschreibung");
+                        zustandBean.setProperty("gesamt", mauerBean.getProperty("zustand_gesamt"));
+                        zustandBean.setProperty("kosten", summe);
+                        setZustandBean(zustandBean);
+
+                        return mauerBean;
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final CidsBean mauerBean = get();
+                            setMauerBean(mauerBean);
+                            bindingGroup.bind();
+                        } catch (final Exception ex) {
+                            final String message = "Fehler beim Laden der Stützmauer. (mauerId: " + mauerId
+                                        + ")";
+                            LOG.error(message, ex);
+                            ObjectRendererUtils.showExceptionWindowToUser(
+                                message,
+                                ex,
+                                TreppeStuetzmauerPanel.this);
+                        }
+                    }
+                }.execute();
+        }
     }
 
     /**
@@ -598,5 +671,15 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         mauerBean = null;
         zustandBean = null;
         treppeBauteilZustandKostenPanel4.dispose();
+    }
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext cc) {
+        this.connectionContext = cc;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return this.connectionContext;
     }
 }
