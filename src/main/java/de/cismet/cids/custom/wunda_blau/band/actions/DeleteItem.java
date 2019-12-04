@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import de.cismet.cids.custom.wunda_blau.band.ElementResizedEvent;
 import de.cismet.cids.custom.wunda_blau.band.TreppeBandMember;
 import de.cismet.cids.custom.wunda_blau.band.TreppenBand;
 

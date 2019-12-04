@@ -65,20 +65,6 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
 
     private static final Logger LOG = Logger.getLogger(TreppenBand.class);
 
-    //~ Enums ------------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public static enum Side {
-
-        //~ Enum constants -----------------------------------------------------
-
-        RIGHT, LEFT, NONE, BOTH
-    }
-
     //~ Instance fields --------------------------------------------------------
 
     protected Side side;
@@ -110,6 +96,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         super(title);
         this.side = side;
         this.parent = parent;
+        this.objectBeans = new FilteredCollection(side);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -219,15 +206,36 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
      * @return  DOCUMENT ME!
      */
     public BandMember getNextLessElement(final TreppeBandMember member) {
-        double next = Double.MIN_VALUE;
         BandMember nextMember = null;
 
         for (int i = 0; i < members.size(); ++i) {
             final BandMember m = members.get(i);
 
             if ((m != member) && !(m instanceof DummyBandMember)) {
-                if ((m.getMax() <= member.getMin()) && (m.getMax() > next)) {
-                    next = m.getMax();
+                if ((m.getMax() == member.getMin())) {
+                    nextMember = m;
+                }
+            }
+        }
+
+        return nextMember;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   member  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public BandMember getNextGreaterElement(final TreppeBandMember member) {
+        BandMember nextMember = null;
+
+        for (int i = 0; i < members.size(); ++i) {
+            final BandMember m = members.get(i);
+
+            if ((m != member) && !(m instanceof DummyBandMember)) {
+                if ((m.getMin() == member.getMax())) {
                     nextMember = m;
                 }
             }
@@ -239,20 +247,17 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         disposeAllMember();
-        objectBeans = beans;
+        objectBeans = new FilteredCollection(((beans != null) ? beans : new ArrayList<CidsBean>()), side);
         super.removeAllMember();
 
-        if (objectBeans != null) {
-            for (final CidsBean massnahme : objectBeans) {
-                final TreppeBandMember m = createBandMemberFromBean(massnahme);
-                m.setReadOnly(readOnly);
-                m.addBandMemberListener(this);
-                m.setCidsBean(massnahme);
-                addMember(m);
-            }
-        } else {
-            objectBeans = new ArrayList<CidsBean>();
+        for (final CidsBean massnahme : objectBeans) {
+            final TreppeBandMember m = createBandMemberFromBean(massnahme);
+            m.setReadOnly(readOnly);
+            m.addBandMemberListener(this);
+            m.setCidsBean(massnahme);
+            addMember(m);
         }
+
         addDummies();
         fireBandChanged(new BandEvent());
     }
@@ -368,7 +373,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             objectBean.setProperty(positionField, position);
 
             final TreppeBandMember m = refresh(objectBean, true);
-            // set the von and bis values again. Thsi is required, when any object property dependens on the object
+            // set the von and bis values again. This is required, when any object property dependens on the object
             // length
             position.setProperty("von", start);
             position.setProperty("bis", end);
@@ -600,7 +605,15 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         fireBandChanged(e);
 
         if ((member instanceof LaufBandMember) || (member instanceof PodestBandMember)) {
-            final ElementResizedEvent event = new ElementResizedEvent(member, true, member.getMax(), 0);
+            final ElementResizedEvent event = new ElementResizedEvent(member, true, member.getMax(), member.getMin());
+            fireElementResized(event);
+        } else {
+            final ElementResizedEvent event = new ElementResizedEvent(
+                    member,
+                    true,
+                    0,
+                    0);
+            event.setRefreshDummiesOnly(true);
             fireElementResized(event);
         }
     }
@@ -643,10 +656,10 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
 
     @Override
     public void removeAllMember() {
-        disposeAllMember();
-        objectBeans.clear();
-        super.removeAllMember();
-        refresh(null, false);
+//        disposeAllMember();
+//        objectBeans.clear();
+//        super.removeAllMember();
+//        refresh(null, false);
     }
 
     /**

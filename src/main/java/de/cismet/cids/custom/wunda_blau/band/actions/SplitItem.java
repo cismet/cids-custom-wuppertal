@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 
+import de.cismet.cids.custom.wunda_blau.band.Side;
 import de.cismet.cids.custom.wunda_blau.band.TreppeBandMember;
 import de.cismet.cids.custom.wunda_blau.band.TreppenBand;
 
@@ -73,10 +74,10 @@ public class SplitItem extends AbstractAction {
             Integer sideInt = (Integer)member.getCidsBean().getProperty("position.wo");
 
             if (sideInt == null) {
-                sideInt = TreppenBand.Side.NONE.ordinal();
+                sideInt = Side.BOTH.ordinal();
             }
 
-            final TreppenBand.Side side = TreppenBand.Side.values()[sideInt];
+            final Side side = Side.values()[sideInt];
 
             member.getCidsBean().setProperty("position.bis", (double)pos);
             member.getParentBand().addMember(cloneBean(member.getCidsBean()), pos, endStation, side);

@@ -25,6 +25,13 @@ import java.awt.Color;
 
 import java.beans.PropertyChangeEvent;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+import de.cismet.cids.custom.wunda_blau.band.actions.AddItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.DeleteItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.SplitItem;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
@@ -67,6 +74,45 @@ public class LaufBandMember extends TreppeBandMember {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    @Override
+    protected void configurePopupMenu() {
+        popup.removeAll();
+        final JMenuItem splitItem = new JMenuItem();
+        splitItem.setAction(new SplitItem(this));
+        final JMenuItem deleteItem = new JMenuItem();
+        deleteItem.setAction(new DeleteItem(this));
+
+        final String[] objectsNames = parent.getAllowedObjectNames();
+        final String[] objectsTables = parent.getAllowedObjectTableNames();
+
+        JMenu menu = new JMenu("davor hinzufügen");
+
+        for (int i = 0; i < objectsNames.length; ++i) {
+            final JMenuItem item = new JMenuItem();
+            item.setAction(new AddItem(this, false, objectsTables[i], objectsNames[i]));
+            menu.add(item);
+        }
+        popup.add(menu);
+
+        menu = new JMenu("danach hinzufügen");
+
+        for (int i = 0; i < objectsNames.length; ++i) {
+            final JMenuItem item = new JMenuItem();
+            item.setAction(new AddItem(this, true, objectsTables[i], objectsNames[i]));
+            menu.add(item);
+        }
+
+        popup.add(menu);
+
+        popup.addSeparator();
+        popup.add(splitItem);
+        popup.addSeparator();
+        popup.add(deleteItem);
+    }
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {

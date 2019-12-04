@@ -77,6 +77,7 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
     protected double oldStationValue;
     protected List<ElementResizedListener> elementResizeListener = new ArrayList<ElementResizedListener>();
     protected boolean dragStart = false;
+    protected TreppenBand parent;
 
     double von = 0;
     double bis = 0;
@@ -87,7 +88,6 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
 
     private CidsBean position;
     private int dragSide = 0;
-    private TreppenBand parent;
     private List<BandMemberListener> listenerList = new ArrayList<BandMemberListener>();
     private boolean readOnly;
 
@@ -218,6 +218,7 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
      * DOCUMENT ME!
      */
     protected void configurePopupMenu() {
+        popup.removeAll();
         final JMenuItem splitItem = new JMenuItem();
         splitItem.setAction(new SplitItem(this));
         final JMenuItem deleteItem = new JMenuItem();
@@ -226,24 +227,21 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
         final String[] objectsNames = parent.getAllowedObjectNames();
         final String[] objectsTables = parent.getAllowedObjectTableNames();
 
-        JMenu menu = new JMenu("davor hinzufügen");
-
-        for (int i = 0; i < objectsNames.length; ++i) {
-            final JMenuItem item = new JMenuItem();
-            item.setAction(new AddItem(this, false, objectsTables[i], objectsNames[i]));
-            menu.add(item);
+        JMenuItem item = new JMenuItem();
+        item.setAction(new AddItem(this, false, objectsTables[0], objectsNames[0] + " davor hinzufügen"));
+        if ((getMin() == 0.0) || (parent.getNextLessElement(this) != null)) {
+            item.setEnabled(false);
         }
-        popup.add(menu);
+        popup.add(item);
 
-        menu = new JMenu("danach hinzufügen");
-
-        for (int i = 0; i < objectsNames.length; ++i) {
-            final JMenuItem item = new JMenuItem();
-            item.setAction(new AddItem(this, true, objectsTables[i], objectsNames[i]));
-            menu.add(item);
+        item = new JMenuItem();
+        item.setAction(new AddItem(this, true, objectsTables[0], objectsNames[0] + " danach hinzufügen"));
+        if (parent.getNextGreaterElement(this) != null) {
+            item.setEnabled(false);
         }
-        popup.add(menu);
+        popup.add(item);
 
+        popup.addSeparator();
         popup.add(splitItem);
         popup.addSeparator();
         popup.add(deleteItem);
@@ -620,6 +618,7 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
      */
     private void showPopupMenu(final int x, final int y) {
         mouseClickedXPosition = x;
+        configurePopupMenu();
         popup.show(this, x, y);
     }
 

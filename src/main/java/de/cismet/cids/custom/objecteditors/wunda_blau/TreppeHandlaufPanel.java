@@ -22,6 +22,7 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 
 import org.openide.awt.Mnemonics;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
@@ -33,9 +34,14 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -45,6 +51,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.wunda_blau.band.SideComboBox;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -83,6 +90,8 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         final JPanel jPanel36 = new JPanel();
         final JLabel jLabel62 = new JLabel();
         jTextField22 = new JTextField();
+        final JLabel lblSide = new JLabel();
+        cbSide = new SideComboBox();
         final JLabel jLabel69 = new JLabel();
         final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final JScrollPane jScrollPane10 = new JScrollPane();
@@ -166,6 +175,26 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel36.add(jTextField22, gridBagConstraints);
+
+        Mnemonics.setLocalizedText(
+            lblSide,
+            NbBundle.getMessage(TreppeHandlaufPanel.class, "TreppeHandlaufPanel.lblSide.text", new Object[] {})); // NOI18N
+        lblSide.setName("lblSide");                                                                               // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        jPanel36.add(lblSide, gridBagConstraints);
+
+        cbSide.setName("cbSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel36.add(cbSide, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jLabel69,
@@ -389,6 +418,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnRemoveArt1;
+    SideComboBox cbSide;
     JTextArea jTextArea8;
     JTextArea jTextArea9;
     JTextField jTextField22;
@@ -419,6 +449,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
             RendererTools.makeReadOnly(jTextField22);
             RendererTools.makeReadOnly(jTextArea8);
             RendererTools.makeReadOnly(jTextArea9);
+            RendererTools.makeReadOnly(cbSide);
         }
         btnRemoveArt1.setVisible(editable);
     }
@@ -445,6 +476,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         bindingGroup.bind();
+        cbSide.setCidsBean(cidsBean);
     }
 
     /**
@@ -460,6 +492,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
     public void dispose() {
         bindingGroup.unbind();
         treppeBauteilZustandKostenPanel4.dispose();
+        cbSide.setCidsBean(null);
         cidsBean = null;
         parent = null;
     }

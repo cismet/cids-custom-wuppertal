@@ -13,7 +13,6 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import org.jdesktop.observablecollections.ObservableCollections;
-import org.jdesktop.observablecollections.ObservableList;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -34,6 +33,7 @@ import de.cismet.cids.custom.wunda_blau.band.LaufBandMember;
 import de.cismet.cids.custom.wunda_blau.band.LeitelementBand;
 import de.cismet.cids.custom.wunda_blau.band.LeitelementBandMember;
 import de.cismet.cids.custom.wunda_blau.band.PodestBandMember;
+import de.cismet.cids.custom.wunda_blau.band.Side;
 import de.cismet.cids.custom.wunda_blau.band.StuetzmauerBand;
 import de.cismet.cids.custom.wunda_blau.band.StuetzmauerBandMember;
 import de.cismet.cids.custom.wunda_blau.band.TreppeBandMember;
@@ -71,31 +71,31 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
     private final JBand jband = new JBand();
     private final TreppenBand laufBand = new LaufBand(
-            TreppenBand.Side.NONE,
+            Side.BOTH,
             "Treppenläufe/Podeste",
             jband);
     private final TreppenBand handlaufRightBand = new HandlaufBand(
-            TreppenBand.Side.RIGHT,
+            Side.LEFT,
             "Handläufe links",
             jband);
     private final TreppenBand handlaufLeftBand = new HandlaufBand(
-            TreppenBand.Side.LEFT,
+            Side.RIGHT,
             "Handläufe rechts",
             jband);
     private final TreppenBand leitelementRightBand = new LeitelementBand(
-            TreppenBand.Side.RIGHT,
+            Side.RIGHT,
             "Leitelemente rechts",
             jband);
     private final TreppenBand leitelementLeftBand = new LeitelementBand(
-            TreppenBand.Side.LEFT,
+            Side.LEFT,
             "Leitelemente links",
             jband);
     private final TreppenBand stuetzmauerLinksBand = new StuetzmauerBand(
-            TreppenBand.Side.LEFT,
+            Side.LEFT,
             "Stützmauer links",
             jband);
     private final TreppenBand stuetzmauerRechtsBand = new StuetzmauerBand(
-            TreppenBand.Side.RIGHT,
+            Side.RIGHT,
             "Stützmauer rechts",
             jband);
     private final BandModelListener modelListener = new TreppenBandModelListener();
@@ -409,19 +409,19 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldZoomStateChanged
+    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldZoomStateChanged
         final double zoom = sldZoom.getValue() / 10d;
         jband.setZoomFactor(zoom);
-    }                                                                           //GEN-LAST:event_sldZoomStateChanged
+    }//GEN-LAST:event_sldZoomStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_panHeaderInfoMouseClicked
+    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panHeaderInfoMouseClicked
         System.out.println("click");
-    }                                                                             //GEN-LAST:event_panHeaderInfoMouseClicked
+    }//GEN-LAST:event_panHeaderInfoMouseClicked
 
     /**
      * Switch the sub editor panel to the given form.

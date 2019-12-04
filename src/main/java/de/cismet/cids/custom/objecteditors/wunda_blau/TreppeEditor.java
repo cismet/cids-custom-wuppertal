@@ -1226,11 +1226,11 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         DevelopmentTools.createEditorInFrameFromRestfulConnection(
             "WUNDA_BLAU",
-            null,
+            "Administratoren",
             "admin",
-            "xxx",
+            "a",
             "treppe",
-            4,
+            527,
             1000,
             1000);
     }
