@@ -77,12 +77,12 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
             "Treppenläufe/Podeste",
             jband);
     private final TreppenBand handlaufRightBand = new HandlaufBand(
-            Side.LEFT,
-            "Handläufe links",
-            jband);
-    private final TreppenBand handlaufLeftBand = new HandlaufBand(
             Side.RIGHT,
             "Handläufe rechts",
+            jband);
+    private final TreppenBand handlaufLeftBand = new HandlaufBand(
+            Side.LEFT,
+            "Handläufe links",
             jband);
     private final TreppenBand leitelementRightBand = new LeitelementBand(
             Side.RIGHT,
@@ -597,139 +597,145 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         @Override
         public void elementResized(final ElementResizedEvent e) {
-            if (inResize) {
-                return;
-            }
-            inResize = true;
-            if (!e.isRefreshDummiesOnly() && ((TreppeBandMember)e.getBandMember() instanceof LaufBandMember)) {
-                final TreppeBandMember member = (TreppeBandMember)e.getBandMember();
-                final double oldValue = e.getOldValue();
-                final double newValue = e.getNewValue();
-                final double diff = newValue - oldValue;
-                double max = Double.MIN_VALUE;
+            try {
+                if (inResize) {
+                    return;
+                }
+                inResize = true;
+                if (!e.isRefreshDummiesOnly() && ((TreppeBandMember)e.getBandMember() instanceof LaufBandMember)) {
+                    final TreppeBandMember member = (TreppeBandMember)e.getBandMember();
+                    final double oldValue = e.getOldValue();
+                    final double newValue = e.getNewValue();
+                    final double diff = newValue - oldValue;
+                    double max = Double.MIN_VALUE;
 
-                final List<List<CidsBean>> beans = new ArrayList<List<CidsBean>>();
-                beans.add(laufList);
-                beans.add(leitelementList);
-                beans.add(handlaufList);
-                beans.add(stuetzmauerList);
+                    final List<List<CidsBean>> beans = new ArrayList<List<CidsBean>>();
+                    beans.add(laufList);
+                    beans.add(leitelementList);
+                    beans.add(handlaufList);
+                    beans.add(stuetzmauerList);
 
-                for (int listIndex = 0; listIndex < beans.size(); ++listIndex) {
-                    final List<CidsBean> beanList = beans.get(listIndex);
+                    for (int listIndex = 0; listIndex < beans.size(); ++listIndex) {
+                        final List<CidsBean> beanList = beans.get(listIndex);
 
-                    for (final CidsBean bean : beanList) {
-                        if (!bean.equals(member.getCidsBean())
-                                    && ((AddItem.exception == null) || !AddItem.exception.equals(bean))) {
-                            double from = (Double)bean.getProperty("position.von");
-                            double till = (Double)bean.getProperty("position.bis");
+                        for (final CidsBean bean : beanList) {
+                            if (!bean.equals(member.getCidsBean())
+                                        && ((AddItem.exception == null) || !AddItem.exception.equals(bean))) {
+                                double from = (Double)bean.getProperty("position.von");
+                                double till = (Double)bean.getProperty("position.bis");
 
-                            if (from > till) {
-                                try {
-                                    bean.setProperty("position.von", till);
-                                    bean.setProperty("position.bis", from);
-                                } catch (Exception ex) {
-                                    LOG.error("Error while adjust element sizes", ex);
-                                }
-                                from = (Double)bean.getProperty("position.von");
-                                till = (Double)bean.getProperty("position.bis");
-                            }
-
-                            if (e.isMax()) {
-                                if (from >= oldValue) {
+                                if (from > till) {
                                     try {
-                                        bean.setProperty("position.von", from + diff);
+                                        bean.setProperty("position.von", till);
+                                        bean.setProperty("position.bis", from);
                                     } catch (Exception ex) {
                                         LOG.error("Error while adjust element sizes", ex);
                                     }
-                                }
-                                if (till >= oldValue) {
-                                    try {
-                                        bean.setProperty("position.bis", till + diff);
-                                    } catch (Exception ex) {
-                                        LOG.error("Error while adjust element sizes", ex);
-                                    }
+                                    from = (Double)bean.getProperty("position.von");
+                                    till = (Double)bean.getProperty("position.bis");
                                 }
 
-                                if (bean.getProperty("position.von").equals((Double)bean.getProperty("position.bis"))) {
-                                    try {
-                                        bean.setProperty(
-                                            "position.von",
-                                            (Double)bean.getProperty("position.von")
-                                                    - 1.0);
-                                    } catch (Exception ex) {
-                                        LOG.error("Error while adjust element sizes", ex);
+                                if (e.isMax()) {
+                                    if (from >= oldValue) {
+                                        try {
+                                            bean.setProperty("position.von", from + diff);
+                                        } catch (Exception ex) {
+                                            LOG.error("Error while adjust element sizes", ex);
+                                        }
                                     }
-                                    try {
-                                        bean.setProperty(
-                                            "position.bis",
-                                            (Double)bean.getProperty("position.bis")
-                                                    + 1.0);
-                                    } catch (Exception ex) {
-                                        LOG.error("Error while adjust element sizes", ex);
+                                    if (till >= oldValue) {
+                                        try {
+                                            bean.setProperty("position.bis", till + diff);
+                                        } catch (Exception ex) {
+                                            LOG.error("Error while adjust element sizes", ex);
+                                        }
                                     }
+
+                                    if (bean.getProperty("position.von").equals(
+                                                    (Double)bean.getProperty("position.bis"))) {
+                                        try {
+                                            bean.setProperty(
+                                                "position.von",
+                                                (Double)bean.getProperty("position.von")
+                                                        - 1.0);
+                                        } catch (Exception ex) {
+                                            LOG.error("Error while adjust element sizes", ex);
+                                        }
+                                        try {
+                                            bean.setProperty(
+                                                "position.bis",
+                                                (Double)bean.getProperty("position.bis")
+                                                        + 1.0);
+                                        } catch (Exception ex) {
+                                            LOG.error("Error while adjust element sizes", ex);
+                                        }
+                                    }
+                                    if ((Double)bean.getProperty("position.bis") > max) {
+                                        max = (Double)bean.getProperty("position.bis");
+                                    }
+                                } else {
                                 }
-                                if ((Double)bean.getProperty("position.bis") > max) {
-                                    max = (Double)bean.getProperty("position.bis");
-                                }
-                            } else {
                             }
                         }
                     }
+
+                    final BandMember selectedBandMember = jband.getSelectedBandMember();
+                    jband.setMaxValue(max);
+                    refreshAllBands(false);
+                    jband.bandModelChanged(new BandModelEvent());
+                    refreshAllBands(true);
+                    jband.bandModelChanged(new BandModelEvent());
+
+                    modelListener.bandModelChanged(null);
+
+                    if (selectedBandMember instanceof BandMemberSelectable) {
+                        BandMember selectedMember = handlaufRightBand.getMemberByBean(
+                                ((TreppeBandMember)selectedBandMember).getCidsBean());
+                        if (selectedMember == null) {
+                            selectedMember = handlaufLeftBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                            .getCidsBean());
+                        }
+                        if (selectedMember == null) {
+                            selectedMember = laufBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                            .getCidsBean());
+                        }
+                        if (selectedMember == null) {
+                            selectedMember = leitelementLeftBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                            .getCidsBean());
+                        }
+                        if (selectedMember == null) {
+                            selectedMember = leitelementRightBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                            .getCidsBean());
+                        }
+                        if (selectedMember == null) {
+                            selectedMember = stuetzmauerLinksBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
+                                            .getCidsBean());
+                        }
+                        if (selectedMember == null) {
+                            selectedMember = stuetzmauerRechtsBand.getMemberByBean(
+                                    ((TreppeBandMember)selectedBandMember).getCidsBean());
+                        }
+
+                        if (selectedMember != null) {
+                            jband.setSelectedMember((BandMemberSelectable)selectedMember);
+                        }
+                    }
+                } else {
+                    final BandMember selectedBandMember = jband.getSelectedBandMember();
+                    laufBand.refresh(false);
+                    jband.setMaxValue(laufBand.getMax());
+                    refreshAllBands(true);
+                    jband.bandModelChanged(new BandModelEvent());
+                    if (selectedBandMember instanceof BandMemberSelectable) {
+                        jband.setSelectedMember((BandMemberSelectable)null);
+                        ((BandMemberSelectable)selectedBandMember).setSelected(false);
+                        jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
+                    }
                 }
-
-                final BandMember selectedBandMember = jband.getSelectedBandMember();
-                jband.setMaxValue(max + 1);
-                refreshAllBands(false);
-                jband.bandModelChanged(new BandModelEvent());
-                refreshAllBands(true);
-                jband.bandModelChanged(new BandModelEvent());
-
-                modelListener.bandModelChanged(null);
-
-                if (selectedBandMember instanceof BandMemberSelectable) {
-                    BandMember selectedMember = handlaufRightBand.getMemberByBean(
-                            ((TreppeBandMember)selectedBandMember).getCidsBean());
-                    if (selectedMember == null) {
-                        selectedMember = handlaufLeftBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
-                                        .getCidsBean());
-                    }
-                    if (selectedMember == null) {
-                        selectedMember = laufBand.getMemberByBean(((TreppeBandMember)selectedBandMember).getCidsBean());
-                    }
-                    if (selectedMember == null) {
-                        selectedMember = leitelementLeftBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
-                                        .getCidsBean());
-                    }
-                    if (selectedMember == null) {
-                        selectedMember = leitelementRightBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
-                                        .getCidsBean());
-                    }
-                    if (selectedMember == null) {
-                        selectedMember = stuetzmauerLinksBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
-                                        .getCidsBean());
-                    }
-                    if (selectedMember == null) {
-                        selectedMember = stuetzmauerRechtsBand.getMemberByBean(((TreppeBandMember)selectedBandMember)
-                                        .getCidsBean());
-                    }
-
-                    if (selectedMember != null) {
-                        jband.setSelectedMember((BandMemberSelectable)selectedMember);
-                    }
-                }
-            } else {
-                final BandMember selectedBandMember = jband.getSelectedBandMember();
-                laufBand.refresh(false);
-                jband.setMaxValue(laufBand.getMax());
-                refreshAllBands(true);
-                jband.bandModelChanged(new BandModelEvent());
-                if (selectedBandMember instanceof BandMemberSelectable) {
-                    jband.setSelectedMember((BandMemberSelectable)null);
-                    ((BandMemberSelectable)selectedBandMember).setSelected(false);
-                    jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
-                }
+                inResize = false;
+            } catch (Throwable t) {
+                LOG.error("Error during resize", t);
             }
-            inResize = false;
         }
     }
 
