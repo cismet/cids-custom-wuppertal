@@ -181,6 +181,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         treppeEntwaesserung1 = new TreppeEntwaesserungPanel(editable, getConnectionContext());
         final JPanel jPanel8 = new JPanel();
         treppenBandPanel1 = new TreppenBandPanel(!editable, connectionContext);
+        final JPanel jPanel9 = new JPanel();
         treppePicturePanel1 = new WebDavPicturePanel(
                 editable,
                 "url_treppen",
@@ -844,9 +845,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         add(pnlCard1, "card1");
 
-        jPanel8.setName("jPanel8"); // NOI18N
-        jPanel8.setOpaque(false);
-        jPanel8.setLayout(new GridBagLayout());
+        jPanel9.setName("jPanel8"); // NOI18N
+        jPanel9.setOpaque(false);
+        jPanel9.setLayout(new GridBagLayout());
 
         treppePicturePanel1.setName("treppePicturePanel1"); // NOI18N
 
@@ -862,7 +863,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 2.0;
-        jPanel8.add(treppePicturePanel1, gridBagConstraints);
+        jPanel9.add(treppePicturePanel1, gridBagConstraints);
 
         panDms.setName("panDms"); // NOI18N
         panDms.setLayout(new GridBagLayout());
@@ -928,9 +929,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 0, 0, 0);
-        jPanel8.add(panDms, gridBagConstraints);
+        jPanel9.add(panDms, gridBagConstraints);
 
-        add(jPanel8, "card2");
+        add(jPanel9, "card2");
 
         bindingGroup.bind();
     }
@@ -950,14 +951,14 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         @Override
         public void actionPerformed(final ActionEvent evt) {
-            if (evt.getSource() == btnReport) {
+            if (evt.getSource() == jXHyperlink5) {
+                TreppeEditor.this.jXHyperlink5ActionPerformed(evt);
+            } else if (evt.getSource() == btnReport) {
                 TreppeEditor.this.btnReportActionPerformed(evt);
             } else if (evt.getSource() == btnInfo) {
                 TreppeEditor.this.btnInfoActionPerformed(evt);
             } else if (evt.getSource() == btnImages) {
                 TreppeEditor.this.btnImagesActionPerformed(evt);
-            } else if (evt.getSource() == jXHyperlink5) {
-                TreppeEditor.this.jXHyperlink5ActionPerformed(evt);
             }
         }
 
