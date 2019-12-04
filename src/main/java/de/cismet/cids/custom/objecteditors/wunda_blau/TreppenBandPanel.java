@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import org.jdesktop.observablecollections.ObservableCollections;
+import org.jdesktop.observablecollections.ObservableList;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -37,6 +38,7 @@ import de.cismet.cids.custom.wunda_blau.band.Side;
 import de.cismet.cids.custom.wunda_blau.band.StuetzmauerBand;
 import de.cismet.cids.custom.wunda_blau.band.StuetzmauerBandMember;
 import de.cismet.cids.custom.wunda_blau.band.TreppeBandMember;
+import de.cismet.cids.custom.wunda_blau.band.TreppeObservableListListener;
 import de.cismet.cids.custom.wunda_blau.band.TreppenBand;
 import de.cismet.cids.custom.wunda_blau.band.actions.AddItem;
 
@@ -409,19 +411,19 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldZoomStateChanged
+    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldZoomStateChanged
         final double zoom = sldZoom.getValue() / 10d;
         jband.setZoomFactor(zoom);
-    }//GEN-LAST:event_sldZoomStateChanged
+    }                                                                           //GEN-LAST:event_sldZoomStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panHeaderInfoMouseClicked
+    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_panHeaderInfoMouseClicked
         System.out.println("click");
-    }//GEN-LAST:event_panHeaderInfoMouseClicked
+    }                                                                             //GEN-LAST:event_panHeaderInfoMouseClicked
 
     /**
      * Switch the sub editor panel to the given form.
@@ -544,11 +546,22 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         jband.bandModelChanged(new BandModelEvent());
 
         // todo: add listener to synchonize the object list with the cidsBean
-// ((ObservableList<CidsBean>)laufList).addObservableListListener(new MassnBezugListListener(
-// GupPlanungsabschnittEditor.GUP_UFER_RECHTS,
-// cidsBean,
-// COLLECTION_PROPERTY));
-
+        ((ObservableList<CidsBean>)handlaufList).addObservableListListener(new TreppeObservableListListener(
+                cidsBean,
+                "handlaeufe",
+                null));
+        ((ObservableList<CidsBean>)leitelementList).addObservableListListener(new TreppeObservableListListener(
+                cidsBean,
+                "absturzsicherungen",
+                null));
+        ((ObservableList<CidsBean>)stuetzmauerList).addObservableListListener(new TreppeObservableListListener(
+                cidsBean,
+                "stuetzmauern",
+                null));
+        ((ObservableList<CidsBean>)laufList).addObservableListListener(new TreppeObservableListListener(
+                cidsBean,
+                "treppenlaeufe",
+                "podeste"));
     }
 
     /**
