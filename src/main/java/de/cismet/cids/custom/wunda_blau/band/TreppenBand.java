@@ -317,7 +317,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
                 }
             });
 
-        double last = (hasDummyAfterEnd() ? -1 : 0);
+        double last = 0;
 
         for (int i = 0; i < orderedMembers.size(); ++i) {
             if (orderedMembers.get(i).getMin() > last) {
@@ -332,7 +332,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             }
         }
 
-        final double maxValue = (hasDummyAfterEnd() ? (parent.getMaxValue()) : (parent.getMaxValue() - 1));
+        final double maxValue = parent.getMaxValue();
 
         if (last < maxValue) {
             final DummyBandMember dummy = new DummyBandMember(this);

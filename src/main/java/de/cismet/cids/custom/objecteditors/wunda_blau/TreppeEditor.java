@@ -135,10 +135,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         final JPanel panRight = new JPanel();
         btnImages = new JButton();
         lblImages = new JLabel();
-        final JPanel pnlCard1 = new JPanel();
-        jTabbedPane1 = new JTabbedPane();
-        final JPanel jPanel1 = new JPanel();
-        final RoundedPanel panZusammenfassung = new RoundedPanel();
+        panZusammenfassung = new RoundedPanel();
         final SemiRoundedPanel panZusammenfassungTitle = new SemiRoundedPanel();
         final JLabel lblHeaderAllgemein = new JLabel();
         final JPanel panZusammenfassungContent = new JPanel();
@@ -174,11 +171,15 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         roundedPanel6 = new FullyRoundedPanel();
         roundedPanel7 = new FullyRoundedPanel();
         jLabel36 = new JLabel();
+        final JPanel jPanel2 = new JPanel();
+        final JPanel pnlCard1 = new JPanel();
+        jTabbedPane1 = new JTabbedPane();
+        final JPanel jPanel1 = new JPanel();
         final TreppeBeschreibungPanel treppeBeschreibungPanel1 = new TreppeBeschreibungPanel(
                 editable,
                 getConnectionContext());
         final JPanel jPanel8 = new JPanel();
-        treppenBandPanel1 = new TreppenBandPanel(!editable, connectionContext);
+        treppenBandPanel1 = new TreppenBandPanel(!editable, connectionContext, panZusammenfassung);
         final JPanel jPanel9 = new JPanel();
         treppePicturePanel1 = new WebDavPicturePanel(
                 editable,
@@ -277,22 +278,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridy = 0;
         panFooter.add(panRight, gridBagConstraints);
 
-        setName("Form"); // NOI18N
-        setOpaque(false);
-        setLayout(new CardLayout());
-
-        pnlCard1.setName("pnlCard1"); // NOI18N
-        pnlCard1.setOpaque(false);
-        pnlCard1.setLayout(new GridBagLayout());
-
-        jTabbedPane1.setName("jTabbedPane1"); // NOI18N
-        jTabbedPane1.addChangeListener(formListener);
-
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setOpaque(false);
-        jPanel1.setLayout(new GridBagLayout());
-
+        panZusammenfassung.setMaximumSize(new Dimension(1300, 180));
+        panZusammenfassung.setMinimumSize(new Dimension(700, 180));
         panZusammenfassung.setName("panZusammenfassung"); // NOI18N
+        panZusammenfassung.setPreferredSize(new Dimension(700, 180));
         panZusammenfassung.setLayout(new GridBagLayout());
 
         panZusammenfassungTitle.setBackground(new Color(51, 51, 51));
@@ -746,7 +735,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panZusammenfassungContent.add(jPanel11, gridBagConstraints);
 
@@ -754,17 +742,44 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         panZusammenfassung.add(panZusammenfassungContent, gridBagConstraints);
+
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setOpaque(false);
+
+        final GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel1.add(panZusammenfassung, gridBagConstraints);
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.weighty = 1.0;
+        panZusammenfassung.add(jPanel2, gridBagConstraints);
+
+        setName("Form"); // NOI18N
+        setOpaque(false);
+        setLayout(new CardLayout());
+
+        pnlCard1.setName("pnlCard1"); // NOI18N
+        pnlCard1.setOpaque(false);
+        pnlCard1.setLayout(new GridBagLayout());
+
+        jTabbedPane1.setName("jTabbedPane1"); // NOI18N
+        jTabbedPane1.addChangeListener(formListener);
+
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new GridBagLayout());
 
         treppeBeschreibungPanel1.setName("treppeBeschreibungPanel1"); // NOI18N
 
@@ -983,6 +998,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     JLabel lblTitle;
     JPanel panFooter;
     JPanel panTitle;
+    RoundedPanel panZusammenfassung;
     FullyRoundedPanel roundedPanel1;
     FullyRoundedPanel roundedPanel2;
     FullyRoundedPanel roundedPanel3;

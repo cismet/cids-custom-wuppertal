@@ -807,6 +807,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         materialArtSearch2.setTypId(2);
 
         initComponents();
+        btnRemoveArt1.setVisible(false);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner2, 4);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner3, 2);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner4, 4);
@@ -824,7 +825,6 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
             RendererTools.makeReadOnly(jTextArea3);
             RendererTools.makeReadOnly(jTextField22);
         }
-        btnRemoveArt1.setVisible(editable);
 
         fastBindableReferenceCombo1.setMetaClassFromTableName("WUNDA_BLAU", "treppe_treppenlauf_material_art");
         fastBindableReferenceCombo2.setMetaClassFromTableName("WUNDA_BLAU", "treppe_treppenlauf_material_art");

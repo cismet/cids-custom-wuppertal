@@ -512,6 +512,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         this.editable = editable;
         initComponents();
 
+        btnRemoveArt1.setVisible(false);
         jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jTextField1);
@@ -519,7 +520,6 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
             RendererTools.makeReadOnly(jTextField3);
             RendererTools.makeReadOnly(jTextArea4);
         }
-        btnRemoveArt1.setVisible(editable);
     }
 
     //~ Methods ----------------------------------------------------------------

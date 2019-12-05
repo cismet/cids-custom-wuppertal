@@ -413,6 +413,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
     public TreppeLeitelementPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
+        btnRemoveArt1.setVisible(false);
         jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         jTextArea7.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
@@ -420,7 +421,6 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
             RendererTools.makeReadOnly(jTextArea4);
             RendererTools.makeReadOnly(jTextArea7);
         }
-        btnRemoveArt1.setVisible(editable);
     }
 
     //~ Methods ----------------------------------------------------------------

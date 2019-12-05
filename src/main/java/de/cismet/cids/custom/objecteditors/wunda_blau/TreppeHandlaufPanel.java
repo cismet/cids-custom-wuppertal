@@ -443,6 +443,7 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
     public TreppeHandlaufPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
+        btnRemoveArt1.setVisible(false);
         jTextArea8.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         jTextArea9.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
@@ -451,7 +452,6 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
             RendererTools.makeReadOnly(jTextArea9);
             RendererTools.makeReadOnly(cbSide);
         }
-        btnRemoveArt1.setVisible(editable);
     }
 
     //~ Methods ----------------------------------------------------------------
