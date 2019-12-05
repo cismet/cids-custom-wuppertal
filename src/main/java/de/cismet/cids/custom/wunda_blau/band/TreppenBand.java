@@ -76,12 +76,12 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     protected Double fixMin = null;
     protected Double fixMax = null;
     protected final List<ElementResizedListener> elementResizeListener = new ArrayList<ElementResizedListener>();
+    protected final JBand parent;
 
     private ConnectionContext connectionContext;
     private final List<BandListener> listenerList = new ArrayList<BandListener>();
 
     private final List<CidsBean> beansToDelete = new ArrayList<CidsBean>();
-    private final JBand parent;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -307,7 +307,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     /**
      * DOCUMENT ME!
      */
-    private void addDummies() {
+    protected void addDummies() {
         final List<BandMember> orderedMembers = new ArrayList<BandMember>(members);
         Collections.sort(orderedMembers, new Comparator<BandMember>() {
 

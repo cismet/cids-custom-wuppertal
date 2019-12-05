@@ -81,6 +81,8 @@ public class AddItem extends AbstractAction {
     public void actionPerformed(final ActionEvent e) {
         try {
             final CidsBean objectBean = TreppenBand.createNewCidsBeanFromTableName(tableName);
+            final CidsBean zustandBean = TreppenBand.createNewCidsBeanFromTableName("treppe_zustand");
+            objectBean.setProperty("zustand", zustandBean);
             final TreppeBandMember bandMember;
             int elementSize = 1;
 

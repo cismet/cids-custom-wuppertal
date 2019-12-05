@@ -265,6 +265,8 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
         public void actionPerformed(final ActionEvent e) {
             try {
                 final CidsBean objectBean = TreppenBand.createNewCidsBeanFromTableName(tableName);
+                final CidsBean zustandBean = TreppenBand.createNewCidsBeanFromTableName("treppe_zustand");
+                objectBean.setProperty("zustand", zustandBean);
                 TreppeBandMember bandMember;
 
                 if (objectBean.getClass().getName().endsWith("Treppe_podest")) {

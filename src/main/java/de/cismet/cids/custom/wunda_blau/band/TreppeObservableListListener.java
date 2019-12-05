@@ -12,8 +12,12 @@
  */
 package de.cismet.cids.custom.wunda_blau.band;
 
+import org.apache.log4j.Logger;
+
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.observablecollections.ObservableListListener;
+
+import org.openide.util.Exceptions;
 
 import java.util.List;
 
@@ -26,6 +30,10 @@ import de.cismet.cids.dynamics.CidsBean;
  * @version  $Revision$, $Date$
  */
 public class TreppeObservableListListener implements ObservableListListener {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(TreppeObservableListListener.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -55,21 +63,30 @@ public class TreppeObservableListListener implements ObservableListListener {
     @Override
     public void listElementsAdded(final ObservableList list, final int index, final int length) {
         if (length == 1) {
-            if (secondCollectionPropertyName != null) {
-                final CidsBean bean = (CidsBean)list.get(index);
-                List<CidsBean> all;
-
-                if (bean.getClass().getName().endsWith("Treppe_podest")) {
-                    all = cidsBean.getBeanCollectionProperty(secondCollectionPropertyName);
-                } else {
-                    all = cidsBean.getBeanCollectionProperty(collectionPropertyName);
+            if (collectionPropertyName.equalsIgnoreCase("entwaesserung")) {
+                try {
+                    final CidsBean bean = (CidsBean)list.get(index);
+                    cidsBean.setProperty(collectionPropertyName, bean);
+                } catch (Exception ex) {
+                    LOG.error("Cannot remove entwaesserung", ex);
                 }
-                all.add(bean);
             } else {
-                final List<CidsBean> all = cidsBean.getBeanCollectionProperty(collectionPropertyName);
+                if (secondCollectionPropertyName != null) {
+                    final CidsBean bean = (CidsBean)list.get(index);
+                    List<CidsBean> all;
 
-                final CidsBean bean = (CidsBean)list.get(index);
-                all.add(bean);
+                    if (bean.getClass().getName().endsWith("Treppe_podest")) {
+                        all = cidsBean.getBeanCollectionProperty(secondCollectionPropertyName);
+                    } else {
+                        all = cidsBean.getBeanCollectionProperty(collectionPropertyName);
+                    }
+                    all.add(bean);
+                } else {
+                    final List<CidsBean> all = cidsBean.getBeanCollectionProperty(collectionPropertyName);
+
+                    final CidsBean bean = (CidsBean)list.get(index);
+                    all.add(bean);
+                }
             }
         } else {
             // not supported
@@ -78,17 +95,25 @@ public class TreppeObservableListListener implements ObservableListListener {
 
     @Override
     public void listElementsRemoved(final ObservableList ol, final int i, final List oldElements) {
-        List<CidsBean> all = cidsBean.getBeanCollectionProperty(collectionPropertyName);
-
-        for (final Object b : oldElements) {
-            all.remove((CidsBean)b);
-        }
-
-        if (secondCollectionPropertyName != null) {
-            all = cidsBean.getBeanCollectionProperty(secondCollectionPropertyName);
+        if (collectionPropertyName.equalsIgnoreCase("entwaesserung")) {
+            try {
+                cidsBean.setProperty(collectionPropertyName, null);
+            } catch (Exception ex) {
+                LOG.error("Cannot remove entwaesserung", ex);
+            }
+        } else {
+            List<CidsBean> all = cidsBean.getBeanCollectionProperty(collectionPropertyName);
 
             for (final Object b : oldElements) {
                 all.remove((CidsBean)b);
+            }
+
+            if (secondCollectionPropertyName != null) {
+                all = cidsBean.getBeanCollectionProperty(secondCollectionPropertyName);
+
+                for (final Object b : oldElements) {
+                    all.remove((CidsBean)b);
+                }
             }
         }
     }

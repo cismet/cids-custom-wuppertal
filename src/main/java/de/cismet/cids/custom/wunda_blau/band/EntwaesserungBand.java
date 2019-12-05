@@ -12,9 +12,15 @@
  */
 package de.cismet.cids.custom.wunda_blau.band;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.tools.gui.jbands.JBand;
+import de.cismet.tools.gui.jbands.interfaces.BandMember;
 
 /**
  * DOCUMENT ME!
@@ -22,18 +28,18 @@ import de.cismet.tools.gui.jbands.JBand;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class LaufBand extends TreppenBand {
+public class EntwaesserungBand extends TreppenBand {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new LaufBand object.
+     * Creates a new LeitelementBand object.
      *
      * @param  side    DOCUMENT ME!
      * @param  title   DOCUMENT ME!
      * @param  parent  DOCUMENT ME!
      */
-    public LaufBand(final Side side, final String title, final JBand parent) {
+    public EntwaesserungBand(final Side side, final String title, final JBand parent) {
         super(side, title, parent);
     }
 
@@ -45,47 +51,37 @@ public class LaufBand extends TreppenBand {
     }
 
     @Override
-    protected boolean hasDummyAfterEnd() {
-        return false;
-    }
+    protected void addDummies() {
+        final List<BandMember> orderedMembers = new ArrayList<BandMember>(members);
 
-    @Override
-    protected TreppeBandMember createBandMemberFromBean(final CidsBean bean) {
-        if (bean.getClass().getName().endsWith("Treppe_podest")) {
-            final TreppeBandMember m = new PodestBandMember(this, readOnly);
-
-            return m;
-        } else {
-            final LaufBandMember m = new LaufBandMember(this, readOnly);
-
-            return m;
+        if (orderedMembers.isEmpty()) {
+            final DummyBandMember dummy = new DummyBandMember(this);
+            dummy.setFrom(0);
+            dummy.setTo(parent.getMaxValue());
+            addMember(dummy);
         }
     }
 
     @Override
+    protected TreppeBandMember createBandMemberFromBean(final CidsBean bean) {
+        final EntwaesserungBandMember m = new EntwaesserungBandMember(this, readOnly);
+
+        return m;
+    }
+
+    @Override
     public float getBandWeight() {
-        return 0.4f;
+        return 0.1f;
     }
 
     @Override
     public String[] getAllowedObjectNames() {
         // todo: i18n
-        return new String[] { "Treppenlauf", "Podest" };
+        return new String[] { "Entwässerung" };
     }
 
     @Override
     public String[] getAllowedObjectTableNames() {
-        return new String[] { "treppe_treppenlauf", "treppe_podest" };
-    }
-
-    @Override
-    public double getMax() {
-        fixMax = null;
-        return super.getMax();
-    }
-
-    @Override
-    public double getMin() {
-        return -1;
+        return new String[] { "treppe_entwaesserung" };
     }
 }
