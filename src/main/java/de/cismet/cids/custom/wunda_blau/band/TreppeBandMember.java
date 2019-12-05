@@ -81,6 +81,7 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
 
     double von = 0;
     double bis = 0;
+    int wo;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel labText;
@@ -175,9 +176,11 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
         if (bean.getProperty("position") != null) {
             von = (Double)bean.getProperty("position.von");
             bis = (Double)bean.getProperty("position.bis");
+            wo = (Integer)bean.getProperty("position.wo");
         } else {
             von = 0;
             bis = 1;
+            wo = 2;
         }
         bean.addPropertyChangeListener(this);
         final CidsBean linieBean = (CidsBean)bean.getProperty("position");
@@ -542,6 +545,15 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("wo")) {
+            if (wo != (Integer)bean.getProperty("position.wo")) {
+                wo = (Integer)bean.getProperty("position.wo");
+                fireBandMemberChanged(false);
+                final ElementResizedEvent e = new ElementResizedEvent();
+                e.setRefreshDummiesOnly(true);
+                fireElementResized(e);
+            }
+        }
         if (evt.getPropertyName().equals("von")) {
             von = (Double)bean.getProperty("position.von");
             fireBandMemberChanged(false);

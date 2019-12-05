@@ -55,6 +55,7 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.band.SideComboBox;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -102,6 +103,8 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         jXHyperlink1 = new JXHyperlink();
         final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         jTextField1 = new JTextField();
+        final JLabel lblSide = new JLabel();
+        cbSide = new SideComboBox();
         final JLabel jLabel79 = new JLabel();
         jTextField2 = new JTextField();
         final JLabel jLabel78 = new JLabel();
@@ -237,6 +240,27 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel36.add(jPanel1, gridBagConstraints);
+
+        Mnemonics.setLocalizedText(
+            lblSide,
+            NbBundle.getMessage(TreppeStuetzmauerPanel.class, "TreppeStuetzmauerPanel.lblSide.text", new Object[] {
+                }));                // NOI18N
+        lblSide.setName("lblSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        jPanel36.add(lblSide, gridBagConstraints);
+
+        cbSide.setName("cbSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel36.add(cbSide, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jLabel79,
@@ -485,6 +509,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnRemoveArt1;
+    SideComboBox cbSide;
     JTextArea jTextArea4;
     JTextField jTextField1;
     JTextField jTextField2;
@@ -519,6 +544,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
             RendererTools.makeReadOnly(jTextField2);
             RendererTools.makeReadOnly(jTextField3);
             RendererTools.makeReadOnly(jTextArea4);
+            RendererTools.makeReadOnly(cbSide);
         }
     }
 
@@ -570,6 +596,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
+        cbSide.setCidsBean(cidsBean);
 
         final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
         if ((mauerId != null)) {
@@ -671,6 +698,7 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         mauerBean = null;
         zustandBean = null;
         treppeBauteilZustandKostenPanel4.dispose();
+        cbSide.setCidsBean(null);
     }
 
     @Override
