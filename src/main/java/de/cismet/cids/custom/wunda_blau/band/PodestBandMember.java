@@ -81,21 +81,24 @@ public class PodestBandMember extends LaufBandMember {
 //                    new Color(50, 50, 50, 100)));
 //
 //        setSelected(isSelected);
-        setDefaultBackground();
-        unselectedBackgroundPainter = new MattePainter(new Color(222, 184, 135));
-        selectedBackgroundPainter = new CompoundPainter(
-                unselectedBackgroundPainter,
-                new RectanglePainter(
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    true,
-                    new Color(100, 100, 100, 100),
-                    2f,
-                    new Color(50, 50, 50, 100)));
-        setBackgroundPainter(unselectedBackgroundPainter);
+        if (alternativeColor) {
+            setReadOnlyColor();
+        } else {
+            unselectedBackgroundPainter = new MattePainter(new Color(222, 184, 135));
+            selectedBackgroundPainter = new CompoundPainter(
+                    unselectedBackgroundPainter,
+                    new RectanglePainter(
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        true,
+                        new Color(100, 100, 100, 100),
+                        2f,
+                        new Color(50, 50, 50, 100)));
+            setBackgroundPainter(unselectedBackgroundPainter);
+        }
     }
 }

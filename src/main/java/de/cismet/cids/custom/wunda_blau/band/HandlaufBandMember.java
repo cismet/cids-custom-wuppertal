@@ -60,22 +60,25 @@ public class HandlaufBandMember extends TreppeBandMember {
 
     @Override
     protected void determineBackgroundColour() {
-        setDefaultBackground();
-//        unselectedBackgroundPainter = new MattePainter(new Color(77, 157, 190));
-        unselectedBackgroundPainter = new MattePainter(new Color(99, 124, 129));
-        selectedBackgroundPainter = new CompoundPainter(
-                unselectedBackgroundPainter,
-                new RectanglePainter(
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    true,
-                    new Color(100, 100, 100, 100),
-                    2f,
-                    new Color(50, 50, 50, 100)));
-        setBackgroundPainter(unselectedBackgroundPainter);
+        if (alternativeColor) {
+            setReadOnlyColor();
+        } else {
+//          unselectedBackgroundPainter = new MattePainter(new Color(77, 157, 190));
+            unselectedBackgroundPainter = new MattePainter(new Color(99, 124, 129));
+            selectedBackgroundPainter = new CompoundPainter(
+                    unselectedBackgroundPainter,
+                    new RectanglePainter(
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        true,
+                        new Color(100, 100, 100, 100),
+                        2f,
+                        new Color(50, 50, 50, 100)));
+            setBackgroundPainter(unselectedBackgroundPainter);
+        }
     }
 }

@@ -81,37 +81,39 @@ public class LaufBandMember extends TreppeBandMember {
     @Override
     protected void configurePopupMenu() {
         popup.removeAll();
-        final JMenuItem splitItem = new JMenuItem();
-        splitItem.setAction(new SplitItem(this));
-        final JMenuItem deleteItem = new JMenuItem();
-        deleteItem.setAction(new DeleteItem(this));
+        if (!isReadOnly()) {
+            final JMenuItem splitItem = new JMenuItem();
+            splitItem.setAction(new SplitItem(this));
+            final JMenuItem deleteItem = new JMenuItem();
+            deleteItem.setAction(new DeleteItem(this));
 
-        final String[] objectsNames = parent.getAllowedObjectNames();
-        final String[] objectsTables = parent.getAllowedObjectTableNames();
+            final String[] objectsNames = parent.getAllowedObjectNames();
+            final String[] objectsTables = parent.getAllowedObjectTableNames();
 
-        JMenu menu = new JMenu("davor hinzufügen");
+            JMenu menu = new JMenu("davor hinzufügen");
 
-        for (int i = 0; i < objectsNames.length; ++i) {
-            final JMenuItem item = new JMenuItem();
-            item.setAction(new AddItem(this, false, objectsTables[i], objectsNames[i]));
-            menu.add(item);
+            for (int i = 0; i < objectsNames.length; ++i) {
+                final JMenuItem item = new JMenuItem();
+                item.setAction(new AddItem(this, false, objectsTables[i], objectsNames[i]));
+                menu.add(item);
+            }
+            popup.add(menu);
+
+            menu = new JMenu("danach hinzufügen");
+
+            for (int i = 0; i < objectsNames.length; ++i) {
+                final JMenuItem item = new JMenuItem();
+                item.setAction(new AddItem(this, true, objectsTables[i], objectsNames[i]));
+                menu.add(item);
+            }
+
+            popup.add(menu);
+
+            popup.addSeparator();
+            popup.add(splitItem);
+            popup.addSeparator();
+            popup.add(deleteItem);
         }
-        popup.add(menu);
-
-        menu = new JMenu("danach hinzufügen");
-
-        for (int i = 0; i < objectsNames.length; ++i) {
-            final JMenuItem item = new JMenuItem();
-            item.setAction(new AddItem(this, true, objectsTables[i], objectsNames[i]));
-            menu.add(item);
-        }
-
-        popup.add(menu);
-
-        popup.addSeparator();
-        popup.add(splitItem);
-        popup.addSeparator();
-        popup.add(deleteItem);
     }
 
     @Override
@@ -197,25 +199,29 @@ public class LaufBandMember extends TreppeBandMember {
 //                    2f,
 //                    new Color(50, 50, 50, 100)));
 //        setBackgroundPainter(unselectedBackgroundPainter);
-        final Color secondColor = new Color(255, 211, 155);
-        setBackgroundPainter(new CompoundPainter(
-                new MattePainter(secondColor),
-                new PinstripePainter(new Color(255, 255, 255), 0, 3, 3)));
-        unselectedBackgroundPainter = getBackgroundPainter();
-        selectedBackgroundPainter = new CompoundPainter(
-                unselectedBackgroundPainter,
-                new RectanglePainter(
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    true,
-                    new Color(100, 100, 100, 100),
-                    2f,
-                    new Color(50, 50, 50, 100)));
+        if (alternativeColor) {
+            setReadOnlyColor();
+        } else {
+            final Color secondColor = new Color(255, 211, 155);
+            setBackgroundPainter(new CompoundPainter(
+                    new MattePainter(secondColor),
+                    new PinstripePainter(new Color(255, 255, 255), 0, 3, 3)));
+            unselectedBackgroundPainter = getBackgroundPainter();
+            selectedBackgroundPainter = new CompoundPainter(
+                    unselectedBackgroundPainter,
+                    new RectanglePainter(
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        true,
+                        new Color(100, 100, 100, 100),
+                        2f,
+                        new Color(50, 50, 50, 100)));
 
-        setSelected(isSelected);
+            setSelected(isSelected);
+        }
     }
 }

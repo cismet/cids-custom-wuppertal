@@ -73,6 +73,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
     protected String objectTableName = null;
     protected String positionField = "position";
     protected boolean readOnly = false;
+    protected boolean alternativeColor = false;
     protected Double fixMin = null;
     protected Double fixMax = null;
     protected final List<ElementResizedListener> elementResizeListener = new ArrayList<ElementResizedListener>();
@@ -145,6 +146,19 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
      */
     public void setReadOnly(final boolean readOnly) {
         this.readOnly = readOnly;
+        refresh();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  readOnly          DOCUMENT ME!
+     * @param  alternativeColor  DOCUMENT ME!
+     */
+    public void setReadOnly(final boolean readOnly, final boolean alternativeColor) {
+        this.readOnly = readOnly;
+        this.alternativeColor = alternativeColor;
+        refresh();
     }
 
     @Override
@@ -242,6 +256,30 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         }
 
         return nextMember;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean hasCollition() {
+        for (int checkMemberIndex = 0; checkMemberIndex < members.size(); ++checkMemberIndex) {
+            final BandMember cm = members.get(checkMemberIndex);
+
+            for (int i = 0; i < members.size(); ++i) {
+                final BandMember m = members.get(i);
+
+                if ((cm != m)
+                            && (((cm.getMin() >= m.getMin()) && (cm.getMin() < m.getMax()))
+                                || ((cm.getMax() > m.getMin()) && (cm.getMax() <= m.getMax()))
+                                || ((cm.getMin() == m.getMin()) && (cm.getMax() == m.getMax())))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -521,6 +559,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
             if (add || (objectBean != special)) {
                 final TreppeBandMember m = createBandMemberFromBean(objectBean);
                 m.setReadOnly(readOnly);
+                m.setAlternativeColor(alternativeColor);
                 m.setCidsBean(objectBean);
                 m.addBandMemberListener(this);
                 addMember(m);
@@ -530,6 +569,7 @@ public abstract class TreppenBand extends DefaultBand implements CidsBeanCollect
         if (add) {
             final TreppeBandMember m = createBandMemberFromBean(special);
             m.setReadOnly(readOnly);
+            m.setAlternativeColor(alternativeColor);
             m.setCidsBean(special);
             m.addBandMemberListener(this);
             addMember(m);

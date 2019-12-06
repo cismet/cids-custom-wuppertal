@@ -102,20 +102,24 @@ public class EntwaesserungBandMember extends TreppeBandMember {
 
     @Override
     protected void determineBackgroundColour() {
-        unselectedBackgroundPainter = new MattePainter(new Color(102, 174, 243));
-        selectedBackgroundPainter = new CompoundPainter(
-                unselectedBackgroundPainter,
-                new RectanglePainter(
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    true,
-                    new Color(100, 100, 100, 100),
-                    2f,
-                    new Color(50, 50, 50, 100)));
-        setBackgroundPainter(unselectedBackgroundPainter);
+        if (alternativeColor) {
+            setReadOnlyColor();
+        } else {
+            unselectedBackgroundPainter = new MattePainter(new Color(102, 174, 243));
+            selectedBackgroundPainter = new CompoundPainter(
+                    unselectedBackgroundPainter,
+                    new RectanglePainter(
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        true,
+                        new Color(100, 100, 100, 100),
+                        2f,
+                        new Color(50, 50, 50, 100)));
+            setBackgroundPainter(unselectedBackgroundPainter);
+        }
     }
 }

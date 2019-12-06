@@ -1300,7 +1300,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                 LOG.warn("error while setting gesamtzustand", ex);
             }
         }
-        return changed || treppePicturePanel1.prepareForSave();
+        return treppenBandPanel1.prepareForSave() && (changed || treppePicturePanel1.prepareForSave());
     }
 
     @Override
