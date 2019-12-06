@@ -22,6 +22,7 @@ import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ScrollPaneConstants;
 
@@ -61,7 +62,6 @@ import de.cismet.tools.gui.jbands.SimpleBandModel;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
 import de.cismet.tools.gui.jbands.interfaces.BandMemberSelectable;
 import de.cismet.tools.gui.jbands.interfaces.BandModelListener;
-import javax.swing.JOptionPane;
 
 /**
  * DOCUMENT ME!
@@ -446,19 +446,19 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldZoomStateChanged
+    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldZoomStateChanged
         final double zoom = sldZoom.getValue() / 10d;
         jband.setZoomFactor(zoom);
-    }//GEN-LAST:event_sldZoomStateChanged
+    }                                                                           //GEN-LAST:event_sldZoomStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panHeaderInfoMouseClicked
+    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_panHeaderInfoMouseClicked
         System.out.println("click");
-    }//GEN-LAST:event_panHeaderInfoMouseClicked
+    }                                                                             //GEN-LAST:event_panHeaderInfoMouseClicked
 
     /**
      * Switch the sub editor panel to the given form.
@@ -523,10 +523,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     private void setNamesAndBands() {
         final double from = 0;
         final double till = 10;
-//        sbm.setMin(from);
+        sbm.setMin(0);
 //        sbm.setMax(till);
 //
-//        jband.setMinValue(from);
+        jband.setMinValue(0);
 //        jband.setMaxValue(till);
 
         // extract geschuetzte Arten
@@ -719,7 +719,11 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     @Override
     public boolean prepareForSave() {
         if (tempReadOnly) {
-            JOptionPane.showMessageDialog(this, "Es existiert ein ungültiges (überlappendes) Band.\nSie können  erst speichern, wenn alle Bänder gültig sind", "Ungültiges Band gefunden", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                this,
+                "Es existiert ein ungültiges (überlappendes) Band.\nSie können  erst speichern, wenn alle Bänder gültig sind",
+                "Ungültiges Band gefunden",
+                JOptionPane.ERROR_MESSAGE);
         }
         return !tempReadOnly;
     }
@@ -819,7 +823,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                         }
                     }
 
-                    final BandMember selectedBandMember = jband.getSelectedBandMember();
+                    BandMember selectedBandMember = jband.getSelectedBandMember();
+                    if (selectedBandMember instanceof DummyBandMember) {
+                        selectedBandMember = null;
+                    }
                     jband.setMaxValue(getMaxSize());
                     refreshAllBands(false);
                     jband.bandModelChanged(new BandModelEvent());

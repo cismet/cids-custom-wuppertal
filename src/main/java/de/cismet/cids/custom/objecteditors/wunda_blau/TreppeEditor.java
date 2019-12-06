@@ -1125,26 +1125,26 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         bindingGroup.bind();
 
         if ((cidsBean != null)) {
-            if (editable) {
-                CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
-                if (entwaesserungBean == null) {
-                    try {
-                        entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
-                                "WUNDA_BLAU",
-                                "treppe_entwaesserung",
-                                getConnectionContext());
-                        entwaesserungBean.setProperty(
-                            "zustand",
-                            CidsBean.createNewCidsBeanFromTableName(
-                                "WUNDA_BLAU",
-                                "treppe_zustand",
-                                getConnectionContext()));
-                        cidsBean.setProperty("entwaesserung", entwaesserungBean);
-                    } catch (final Exception ex) {
-                        LOG.error("could not create entwaesserung bean", ex);
-                    }
-                }
-            }
+//            if (editable) {
+//                CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
+//                if (entwaesserungBean == null) {
+//                    try {
+//                        entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
+//                                "WUNDA_BLAU",
+//                                "treppe_entwaesserung",
+//                                getConnectionContext());
+//                        entwaesserungBean.setProperty(
+//                            "zustand",
+//                            CidsBean.createNewCidsBeanFromTableName(
+//                                "WUNDA_BLAU",
+//                                "treppe_zustand",
+//                                getConnectionContext()));
+//                        cidsBean.setProperty("entwaesserung", entwaesserungBean);
+//                    } catch (final Exception ex) {
+//                        LOG.error("could not create entwaesserung bean", ex);
+//                    }
+//                }
+//            }
             overview.recalculateAll();
             treppenBandPanel1.setCidsBean(cidsBean);
             final List<CidsBean> stuetzmauern = cidsBean.getBeanCollectionProperty("stuetzmauern");
