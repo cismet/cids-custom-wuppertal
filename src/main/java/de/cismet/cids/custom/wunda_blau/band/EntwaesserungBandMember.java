@@ -17,15 +17,13 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.RectanglePainter;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JMenuItem;
 
-import de.cismet.cids.custom.wunda_blau.band.actions.AddItem;
-import de.cismet.cids.custom.wunda_blau.band.actions.SplitItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.DeleteItem;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.tools.gui.jbands.SimpleModifiableBand;
 
 /**
  * DOCUMENT ME!
@@ -33,38 +31,81 @@ import de.cismet.tools.gui.jbands.SimpleModifiableBand;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class HandlaufBandMember extends TreppeBandMember {
+public class EntwaesserungBandMember extends TreppeBandMember {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new HandlaufBandMember object.
+     * Creates a new StuetzmauerBandMember object.
      *
      * @param  parent  DOCUMENT ME!
      */
-    public HandlaufBandMember(final TreppenBand parent) {
+    public EntwaesserungBandMember(final TreppenBand parent) {
         super(parent);
     }
 
     /**
-     * Creates a new HandlaufBandMember object.
+     * Creates a new StuetzmauerBandMember object.
      *
      * @param  parent    DOCUMENT ME!
      * @param  readOnly  DOCUMENT ME!
      */
-    public HandlaufBandMember(final TreppenBand parent, final boolean readOnly) {
+    public EntwaesserungBandMember(final TreppenBand parent, final boolean readOnly) {
         super(parent, readOnly);
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        bean = cidsBean;
+        popup.removeAll();
+        configurePopupMenu();
+        von = getMin();
+        bis = getMax();
+        determineBackgroundColour();
+    }
+
+    @Override
+    public double getMin() {
+        return 0.0;
+    }
+
+    @Override
+    public double getMax() {
+        return ((parent.getParent().getMaxValue() > 1) ? parent.getParent().getMaxValue() : 1.0);
+    }
+
+    @Override
+    public void mouseDragged(final MouseEvent e) {
+        // nothing to do
+    }
+
+    @Override
+    public void mouseDragged(final MouseEvent e, final double station) {
+        // nothing to do
+    }
+
+    @Override
+    public void mouseMoved(final MouseEvent e) {
+        // nothing to do
+    }
+
+    @Override
+    protected void configurePopupMenu() {
+        popup.removeAll();
+        final JMenuItem deleteItem = new JMenuItem();
+        deleteItem.setAction(new DeleteItem(this));
+
+        popup.add(deleteItem);
+    }
+
+    @Override
     protected void determineBackgroundColour() {
         if (alternativeColor) {
             setReadOnlyColor();
         } else {
-//          unselectedBackgroundPainter = new MattePainter(new Color(77, 157, 190));
-            unselectedBackgroundPainter = new MattePainter(new Color(99, 124, 129));
+            unselectedBackgroundPainter = new MattePainter(new Color(102, 174, 243));
             selectedBackgroundPainter = new CompoundPainter(
                     unselectedBackgroundPainter,
                     new RectanglePainter(

@@ -45,6 +45,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.wunda_blau.band.SideComboBox;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -83,6 +84,8 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         final JPanel jPanel25 = new JPanel();
         final JLabel jLabel62 = new JLabel();
         jTextField22 = new JTextField();
+        final JLabel lblSide = new JLabel();
+        cbSide = new SideComboBox();
         final JLabel jLabel68 = new JLabel();
         final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final JScrollPane jScrollPane8 = new JScrollPane();
@@ -166,6 +169,27 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel25.add(jTextField22, gridBagConstraints);
+
+        Mnemonics.setLocalizedText(
+            lblSide,
+            NbBundle.getMessage(TreppeLeitelementPanel.class, "TreppeLeitelementPanel.lblSide.text", new Object[] {
+                }));                // NOI18N
+        lblSide.setName("lblSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        jPanel25.add(lblSide, gridBagConstraints);
+
+        cbSide.setName("cbSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel25.add(cbSide, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jLabel68,
@@ -389,6 +413,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnRemoveArt1;
+    SideComboBox cbSide;
     JTextArea jTextArea4;
     JTextArea jTextArea7;
     JTextField jTextField22;
@@ -413,14 +438,15 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
     public TreppeLeitelementPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
+        btnRemoveArt1.setVisible(false);
         jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         jTextArea7.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jTextField22);
             RendererTools.makeReadOnly(jTextArea4);
             RendererTools.makeReadOnly(jTextArea7);
+            RendererTools.makeReadOnly(cbSide);
         }
-        btnRemoveArt1.setVisible(editable);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -445,6 +471,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         bindingGroup.bind();
+        cbSide.setCidsBean(cidsBean);
     }
 
     /**
@@ -462,5 +489,6 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         treppeBauteilZustandKostenPanel3.dispose();
         cidsBean = null;
         parent = null;
+        cbSide.setCidsBean(null);
     }
 }

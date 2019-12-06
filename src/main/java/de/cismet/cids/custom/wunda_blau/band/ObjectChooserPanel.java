@@ -57,6 +57,7 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
     private TreppenBand parentBand;
     private double from;
     private double till;
+    private final boolean readOnly;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -65,6 +66,7 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
      */
     public ObjectChooserPanel() {
         initComponents();
+        readOnly = false;
     }
 
     /**
@@ -81,7 +83,27 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
             final TreppenBand parentBand,
             final double from,
             final double till) {
+        this(objectNames, tableNames, parentBand, from, till, false);
+    }
+
+    /**
+     * Creates a new TreppeLaufPanel object.
+     *
+     * @param  objectNames  connectionContext DOCUMENT ME!
+     * @param  tableNames   DOCUMENT ME!
+     * @param  parentBand   DOCUMENT ME!
+     * @param  from         DOCUMENT ME!
+     * @param  till         DOCUMENT ME!
+     * @param  readOnly     DOCUMENT ME!
+     */
+    public ObjectChooserPanel(final String[] objectNames,
+            final String[] tableNames,
+            final TreppenBand parentBand,
+            final double from,
+            final double till,
+            final boolean readOnly) {
         initComponents();
+        this.readOnly = readOnly;
         this.objectNames = objectNames;
         this.tableNames = tableNames;
         this.parentBand = parentBand;
@@ -91,12 +113,19 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
         panCreation.setLayout(new GridLayout(objectNames.length, 1));
 
         if (tableNames[0].equalsIgnoreCase("TREPPE_STUETZMAUER")) {
-            final JLabel label = new JLabel("Mauer auf leeren Abschnitt ziehen, um eine neue Stützmauer zu erzeugen");
-            panCreation.add(label);
+            if (!readOnly) {
+                final JLabel label = new JLabel(
+                        "Mauer auf leeren Abschnitt ziehen, um eine neue Stützmauer zu erzeugen");
+                panCreation.add(label);
+            }
         } else {
             for (int i = 0; i < objectNames.length; ++i) {
                 final JButton button = new JButton(objectNames[i] + " erstellen");
                 button.addActionListener(new ButtonActionListener(tableNames[i]));
+
+                if (readOnly) {
+                    button.setEnabled(false);
+                }
                 panCreation.add(button);
             }
         }
@@ -265,6 +294,8 @@ public class ObjectChooserPanel extends javax.swing.JPanel {
         public void actionPerformed(final ActionEvent e) {
             try {
                 final CidsBean objectBean = TreppenBand.createNewCidsBeanFromTableName(tableName);
+                final CidsBean zustandBean = TreppenBand.createNewCidsBeanFromTableName("treppe_zustand");
+                objectBean.setProperty("zustand", zustandBean);
                 TreppeBandMember bandMember;
 
                 if (objectBean.getClass().getName().endsWith("Treppe_podest")) {

@@ -60,32 +60,38 @@ public class StuetzmauerBandMember extends TreppeBandMember {
     @Override
     protected void configurePopupMenu() {
         popup.removeAll();
-        final JMenuItem splitItem = new JMenuItem();
-        splitItem.setAction(new SplitItem(this));
-        final JMenuItem deleteItem = new JMenuItem();
-        deleteItem.setAction(new DeleteItem(this));
+        if (!isReadOnly()) {
+            final JMenuItem splitItem = new JMenuItem();
+            splitItem.setAction(new SplitItem(this));
+            final JMenuItem deleteItem = new JMenuItem();
+            deleteItem.setAction(new DeleteItem(this));
 
-        popup.add(splitItem);
-        popup.addSeparator();
-        popup.add(deleteItem);
+            popup.add(splitItem);
+            popup.addSeparator();
+            popup.add(deleteItem);
+        }
     }
 
     @Override
     protected void determineBackgroundColour() {
-        unselectedBackgroundPainter = new MattePainter(new Color(100, 100, 100));
-        selectedBackgroundPainter = new CompoundPainter(
-                unselectedBackgroundPainter,
-                new RectanglePainter(
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    true,
-                    new Color(100, 100, 100, 100),
-                    2f,
-                    new Color(50, 50, 50, 100)));
-        setBackgroundPainter(unselectedBackgroundPainter);
+        if (alternativeColor) {
+            setReadOnlyColor();
+        } else {
+            unselectedBackgroundPainter = new MattePainter(new Color(100, 100, 100));
+            selectedBackgroundPainter = new CompoundPainter(
+                    unselectedBackgroundPainter,
+                    new RectanglePainter(
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        3,
+                        true,
+                        new Color(100, 100, 100, 100),
+                        2f,
+                        new Color(50, 50, 50, 100)));
+            setBackgroundPainter(unselectedBackgroundPainter);
+        }
     }
 }

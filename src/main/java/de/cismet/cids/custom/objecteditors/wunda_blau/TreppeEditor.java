@@ -135,10 +135,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         final JPanel panRight = new JPanel();
         btnImages = new JButton();
         lblImages = new JLabel();
-        final JPanel pnlCard1 = new JPanel();
-        jTabbedPane1 = new JTabbedPane();
-        final JPanel jPanel1 = new JPanel();
-        final RoundedPanel panZusammenfassung = new RoundedPanel();
+        panZusammenfassung = new RoundedPanel();
         final SemiRoundedPanel panZusammenfassungTitle = new SemiRoundedPanel();
         final JLabel lblHeaderAllgemein = new JLabel();
         final JPanel panZusammenfassungContent = new JPanel();
@@ -149,9 +146,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         jLabel38 = new JLabel();
         jLabel39 = new JLabel();
         jLabel40 = new JLabel();
-        jXHyperlink5 = new JXHyperlink();
+        jLabel42 = new JLabel();
         jLabel41 = new JLabel();
-        final JLabel jLabel21 = new JLabel();
+        jLabel21 = new JLabel();
         jLabel22 = new JLabel();
         jLabel23 = new JLabel();
         jLabel24 = new JLabel();
@@ -174,13 +171,9 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         roundedPanel6 = new FullyRoundedPanel();
         roundedPanel7 = new FullyRoundedPanel();
         jLabel36 = new JLabel();
-        final TreppeBeschreibungPanel treppeBeschreibungPanel1 = new TreppeBeschreibungPanel(
-                editable,
-                getConnectionContext());
-        final JPanel jPanel6 = new JPanel();
-        treppeEntwaesserung1 = new TreppeEntwaesserungPanel(editable, getConnectionContext());
-        final JPanel jPanel8 = new JPanel();
-        treppenBandPanel1 = new TreppenBandPanel(!editable, connectionContext);
+        final JPanel jPanel2 = new JPanel();
+        final JPanel pnlCard1 = new JPanel();
+        treppeBeschreibungPanel2 = new TreppeBeschreibungPanel(editable, getConnectionContext(), panZusammenfassung);
         final JPanel jPanel9 = new JPanel();
         treppePicturePanel1 = new WebDavPicturePanel(
                 editable,
@@ -279,22 +272,10 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridy = 0;
         panFooter.add(panRight, gridBagConstraints);
 
-        setName("Form"); // NOI18N
-        setOpaque(false);
-        setLayout(new CardLayout());
-
-        pnlCard1.setName("pnlCard1"); // NOI18N
-        pnlCard1.setOpaque(false);
-        pnlCard1.setLayout(new GridBagLayout());
-
-        jTabbedPane1.setName("jTabbedPane1"); // NOI18N
-        jTabbedPane1.addChangeListener(formListener);
-
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setOpaque(false);
-        jPanel1.setLayout(new GridBagLayout());
-
+        panZusammenfassung.setMaximumSize(new Dimension(1300, 180));
+        panZusammenfassung.setMinimumSize(new Dimension(700, 180));
         panZusammenfassung.setName("panZusammenfassung"); // NOI18N
+        panZusammenfassung.setPreferredSize(new Dimension(700, 180));
         panZusammenfassung.setLayout(new GridBagLayout());
 
         panZusammenfassungTitle.setBackground(new Color(51, 51, 51));
@@ -392,21 +373,17 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         jPanel11.add(jLabel40, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(
-            jXHyperlink5,
-            NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jXHyperlink5.text")); // NOI18N
-        jXHyperlink5.setHorizontalAlignment(SwingConstants.CENTER);
-        jXHyperlink5.setName("jXHyperlink5");                                           // NOI18N
-        jXHyperlink5.setVerticalAlignment(SwingConstants.TOP);
-        jXHyperlink5.addActionListener(formListener);
+        jLabel42.setHorizontalAlignment(SwingConstants.CENTER);
+        Mnemonics.setLocalizedText(jLabel42, NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel42.text")); // NOI18N
+        jLabel42.setHorizontalTextPosition(SwingConstants.CENTER);
+        jLabel42.setName("jLabel42");                                                                                // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
-        jPanel11.add(jXHyperlink5, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        jPanel11.add(jLabel42, gridBagConstraints);
 
         jLabel41.setHorizontalAlignment(SwingConstants.CENTER);
         Mnemonics.setLocalizedText(jLabel41, NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jLabel41.text")); // NOI18N
@@ -752,7 +729,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panZusammenfassungContent.add(jPanel11, gridBagConstraints);
 
@@ -760,25 +736,45 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         panZusammenfassung.add(panZusammenfassungContent, gridBagConstraints);
+
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setOpaque(false);
+
+        final GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel1.add(panZusammenfassung, gridBagConstraints);
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.weighty = 1.0;
+        panZusammenfassung.add(jPanel2, gridBagConstraints);
 
-        treppeBeschreibungPanel1.setName("treppeBeschreibungPanel1"); // NOI18N
+        setName("Form"); // NOI18N
+        setOpaque(false);
+        setLayout(new CardLayout());
+
+        pnlCard1.setName("pnlCard1"); // NOI18N
+        pnlCard1.setOpaque(false);
+        pnlCard1.setLayout(new GridBagLayout());
+
+        treppeBeschreibungPanel2.setName("treppeBeschreibungPanel2"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 ELProperty.create("${cidsBean}"),
-                treppeBeschreibungPanel1,
+                treppeBeschreibungPanel2,
                 BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
@@ -787,61 +783,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 0, 5, 0);
-        jPanel1.add(treppeBeschreibungPanel1, gridBagConstraints);
-
-        jTabbedPane1.addTab(NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jPanel1.TabConstraints.tabTitle"),
-            jPanel1); // NOI18N
-
-        jPanel6.setName("jPanel6"); // NOI18N
-        jPanel6.setOpaque(false);
-        jPanel6.setLayout(new GridBagLayout());
-
-        treppeEntwaesserung1.setName("treppeEntwaesserung1"); // NOI18N
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.entwaesserung}"),
-                treppeEntwaesserung1,
-                BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
-        jPanel6.add(treppeEntwaesserung1, gridBagConstraints);
-
-        jTabbedPane1.addTab(NbBundle.getMessage(TreppeEditor.class, "TreppeEditor.jPanel6.TabConstraints.tabTitle"),
-            jPanel6); // NOI18N
-
-        jPanel8.setName("jPanel8"); // NOI18N
-        jPanel8.setOpaque(false);
-        jPanel8.setLayout(new GridBagLayout());
-
-        treppenBandPanel1.setName("treppenBandPanel1"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
-        jPanel8.add(treppenBandPanel1, gridBagConstraints);
-
-        jTabbedPane1.addTab(NbBundle.getMessage(
-                TreppeEditor.class,
-                "TreppeEditor.jPanel8.TabConstraints.tabTitle",
-                new Object[] {}),
-            jPanel8); // NOI18N
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlCard1.add(jTabbedPane1, gridBagConstraints);
-        jTabbedPane1.setUI(new TabbedPaneUITransparent());
+        pnlCard1.add(treppeBeschreibungPanel2, gridBagConstraints);
 
         add(pnlCard1, "card1");
 
@@ -941,7 +883,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
      *
      * @version  $Revision$, $Date$
      */
-    private class FormListener implements ActionListener, ChangeListener {
+    private class FormListener implements ActionListener {
 
         /**
          * Creates a new FormListener object.
@@ -951,21 +893,12 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
 
         @Override
         public void actionPerformed(final ActionEvent evt) {
-            if (evt.getSource() == jXHyperlink5) {
-                TreppeEditor.this.jXHyperlink5ActionPerformed(evt);
-            } else if (evt.getSource() == btnReport) {
+            if (evt.getSource() == btnReport) {
                 TreppeEditor.this.btnReportActionPerformed(evt);
             } else if (evt.getSource() == btnInfo) {
                 TreppeEditor.this.btnInfoActionPerformed(evt);
             } else if (evt.getSource() == btnImages) {
                 TreppeEditor.this.btnImagesActionPerformed(evt);
-            }
-        }
-
-        @Override
-        public void stateChanged(final ChangeEvent evt) {
-            if (evt.getSource() == jTabbedPane1) {
-                TreppeEditor.this.jTabbedPane1StateChanged(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -987,6 +920,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     DmsUrlsPanel dmsUrlsPanel1;
     JLabel jLabel19;
     JLabel jLabel20;
+    JLabel jLabel21;
     JLabel jLabel22;
     JLabel jLabel23;
     JLabel jLabel24;
@@ -1007,13 +941,13 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     JLabel jLabel39;
     JLabel jLabel40;
     JLabel jLabel41;
-    JTabbedPane jTabbedPane1;
-    JXHyperlink jXHyperlink5;
+    JLabel jLabel42;
     JLabel lblImages;
     JLabel lblInfo;
     JLabel lblTitle;
     JPanel panFooter;
     JPanel panTitle;
+    RoundedPanel panZusammenfassung;
     FullyRoundedPanel roundedPanel1;
     FullyRoundedPanel roundedPanel2;
     FullyRoundedPanel roundedPanel3;
@@ -1021,9 +955,8 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     FullyRoundedPanel roundedPanel5;
     FullyRoundedPanel roundedPanel6;
     FullyRoundedPanel roundedPanel7;
-    TreppeEntwaesserungPanel treppeEntwaesserung1;
+    TreppeBeschreibungPanel treppeBeschreibungPanel2;
     WebDavPicturePanel treppePicturePanel1;
-    TreppenBandPanel treppenBandPanel1;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -1112,29 +1045,6 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
             getConnectionContext());
     }                                                              //GEN-LAST:event_btnReportActionPerformed
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jTabbedPane1StateChanged(final ChangeEvent evt) { //GEN-FIRST:event_jTabbedPane1StateChanged
-        if (evt.getSource() instanceof JTabbedPane) {
-            final JTabbedPane pane = (JTabbedPane)evt.getSource();
-            if (pane.getSelectedIndex() == 0) {
-                overview.recalculateAll();
-            }
-        }
-    }                                                              //GEN-LAST:event_jTabbedPane1StateChanged
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jXHyperlink5ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink5ActionPerformed
-        jTabbedPane1.setSelectedIndex(1);
-    }                                                                 //GEN-LAST:event_jXHyperlink5ActionPerformed
-
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -1150,28 +1060,27 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
         bindingGroup.bind();
 
         if ((cidsBean != null)) {
-            if (editable) {
-                CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
-                if (entwaesserungBean == null) {
-                    try {
-                        entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
-                                "WUNDA_BLAU",
-                                "treppe_entwaesserung",
-                                getConnectionContext());
-                        entwaesserungBean.setProperty(
-                            "zustand",
-                            CidsBean.createNewCidsBeanFromTableName(
-                                "WUNDA_BLAU",
-                                "treppe_zustand",
-                                getConnectionContext()));
-                        cidsBean.setProperty("entwaesserung", entwaesserungBean);
-                    } catch (final Exception ex) {
-                        LOG.error("could not create entwaesserung bean", ex);
-                    }
-                }
-            }
+//            if (editable) {
+//                CidsBean entwaesserungBean = (CidsBean)cidsBean.getProperty("entwaesserung");
+//                if (entwaesserungBean == null) {
+//                    try {
+//                        entwaesserungBean = CidsBean.createNewCidsBeanFromTableName(
+//                                "WUNDA_BLAU",
+//                                "treppe_entwaesserung",
+//                                getConnectionContext());
+//                        entwaesserungBean.setProperty(
+//                            "zustand",
+//                            CidsBean.createNewCidsBeanFromTableName(
+//                                "WUNDA_BLAU",
+//                                "treppe_zustand",
+//                                getConnectionContext()));
+//                        cidsBean.setProperty("entwaesserung", entwaesserungBean);
+//                    } catch (final Exception ex) {
+//                        LOG.error("could not create entwaesserung bean", ex);
+//                    }
+//                }
+//            }
             overview.recalculateAll();
-            treppenBandPanel1.setCidsBean(cidsBean);
             final List<CidsBean> stuetzmauern = cidsBean.getBeanCollectionProperty("stuetzmauern");
 
             for (final CidsBean cb : stuetzmauern) {
@@ -1288,9 +1197,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
     public void dispose() {
         bindingGroup.unbind();
 
-        treppeEntwaesserung1.dispose();
         treppePicturePanel1.dispose();
-        treppenBandPanel1.dispose();
     }
 
     @Override
@@ -1326,7 +1233,7 @@ public class TreppeEditor extends javax.swing.JPanel implements CidsBeanRenderer
                 LOG.warn("error while setting gesamtzustand", ex);
             }
         }
-        return changed || treppePicturePanel1.prepareForSave();
+        return treppeBeschreibungPanel2.prepareForSave() && (changed || treppePicturePanel1.prepareForSave());
     }
 
     @Override

@@ -12,8 +12,6 @@
  */
 package de.cismet.cids.custom.wunda_blau.band.actions;
 
-import org.apache.log4j.Logger;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -21,7 +19,9 @@ import javax.swing.ImageIcon;
 
 import de.cismet.cids.custom.wunda_blau.band.TreppeBandMember;
 
-import static javax.swing.Action.NAME;
+import de.cismet.tools.gui.jbands.interfaces.BandMember;
+import de.cismet.tools.gui.jbands.interfaces.BandMemberSelectable;
+
 import static javax.swing.Action.SHORT_DESCRIPTION;
 import static javax.swing.Action.SMALL_ICON;
 
@@ -31,11 +31,7 @@ import static javax.swing.Action.SMALL_ICON;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class DeleteItem extends AbstractAction {
-
-    //~ Static fields/initializers ---------------------------------------------
-
-    private static final Logger LOG = Logger.getLogger(SplitItem.class);
+public class SelectNext extends AbstractAction {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -46,20 +42,20 @@ public class DeleteItem extends AbstractAction {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new DeleteItem object.
+     * Creates a new SelectNext object.
      */
-    public DeleteItem() {
+    public SelectNext() {
         useIcon = true;
         initValues();
         setEnabled(false);
     }
 
     /**
-     * Creates a new DeleteItem object.
+     * Creates a new SelectNext object.
      *
      * @param  member  DOCUMENT ME!
      */
-    public DeleteItem(final TreppeBandMember member) {
+    public SelectNext(final TreppeBandMember member) {
         initValues();
         init(member);
     }
@@ -81,14 +77,13 @@ public class DeleteItem extends AbstractAction {
      * DOCUMENT ME!
      */
     private void initValues() {
-        putValue(SHORT_DESCRIPTION, "löschen");
+        putValue(SHORT_DESCRIPTION, "nächstes Object selektieren");
         if (!useIcon) {
-            putValue(NAME, "löschen");
+            putValue(NAME, "nächstes Object selektieren");
         }
-
         if (useIcon) {
             final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
-                        "/res/remove-1.png"));
+                        "/res/forward.4.png"));
             putValue(SMALL_ICON, icon);
         }
     }
@@ -106,6 +101,11 @@ public class DeleteItem extends AbstractAction {
         if (!initialised) {
             return;
         }
-        member.getParentBand().deleteMember(member);
+
+        final BandMember nextMember = member.getParentBand().getNextGreaterElement(member);
+
+        if (nextMember instanceof BandMemberSelectable) {
+            member.getParentBand().getParent().setSelectedMember((BandMemberSelectable)nextMember);
+        }
     }
 }

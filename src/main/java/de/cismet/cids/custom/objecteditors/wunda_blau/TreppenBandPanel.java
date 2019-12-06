@@ -22,11 +22,15 @@ import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.ScrollPaneConstants;
 
 import de.cismet.cids.custom.wunda_blau.band.DummyBandMember;
 import de.cismet.cids.custom.wunda_blau.band.ElementResizedEvent;
 import de.cismet.cids.custom.wunda_blau.band.ElementResizedListener;
+import de.cismet.cids.custom.wunda_blau.band.EntwaesserungBand;
+import de.cismet.cids.custom.wunda_blau.band.EntwaesserungBandMember;
 import de.cismet.cids.custom.wunda_blau.band.HandlaufBand;
 import de.cismet.cids.custom.wunda_blau.band.HandlaufBandMember;
 import de.cismet.cids.custom.wunda_blau.band.LaufBand;
@@ -41,10 +45,16 @@ import de.cismet.cids.custom.wunda_blau.band.TreppeBandMember;
 import de.cismet.cids.custom.wunda_blau.band.TreppeObservableListListener;
 import de.cismet.cids.custom.wunda_blau.band.TreppenBand;
 import de.cismet.cids.custom.wunda_blau.band.actions.AddItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.DeleteItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.SelectNext;
+import de.cismet.cids.custom.wunda_blau.band.actions.SelectPrevious;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
+
+import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -62,7 +72,10 @@ import de.cismet.tools.gui.jbands.interfaces.BandModelListener;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionContextStore, Disposable, CidsBeanStore {
+public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionContextStore,
+    Disposable,
+    CidsBeanStore,
+    EditorSaveListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -100,6 +113,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
             Side.RIGHT,
             "Stützmauer rechts",
             jband);
+    private final TreppenBand entwaesserungBand = new EntwaesserungBand(
+            Side.BOTH,
+            "Entwässerung",
+            jband);
     private final BandModelListener modelListener = new TreppenBandModelListener();
     private final SimpleBandModel sbm = new SimpleBandModel();
     private TreppeLaufPanel treppelaufPanel;
@@ -107,34 +124,41 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     private TreppeLeitelementPanel treppeLeitelementpanel;
     private TreppePodestPanel treppePodestPanel;
     private TreppeStuetzmauerPanel treppeStuetzmauerPanel;
+    private TreppeEntwaesserungPanel treppeEntwaesserungPanel;
     private ConnectionContext connectionContext;
     private CidsBean cidsBean;
     private List<CidsBean> laufList = new ArrayList<CidsBean>();
     private List<CidsBean> leitelementList = new ArrayList<CidsBean>();
     private List<CidsBean> handlaufList = new ArrayList<CidsBean>();
     private List<CidsBean> stuetzmauerList = new ArrayList<CidsBean>();
+    private List<CidsBean> entwaesserungList = new ArrayList<CidsBean>();
     private TreppenElementResizedListener resizedListener = new TreppenElementResizedListener();
+    private boolean tempReadOnly = false;
+    private boolean readOnly = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton butAddAfter;
+    private javax.swing.JButton butAddAfterSecond;
+    private javax.swing.JButton butAddBefore;
+    private javax.swing.JButton butAddBeforeSecond;
+    private javax.swing.JButton butNext;
+    private javax.swing.JButton butPrev;
+    private javax.swing.JButton butRemove;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel panBand;
+    private javax.swing.JPanel panBand1;
     private javax.swing.JPanel panChooser;
-    private javax.swing.JPanel panControls;
-    private javax.swing.JPanel panEmpty;
+    private javax.swing.JPanel panEntwaesserung;
     private javax.swing.JPanel panHandlaeufe;
     private javax.swing.JPanel panHeader;
-    private javax.swing.JPanel panHeaderInfo;
     private javax.swing.JPanel panInfoContent;
     private javax.swing.JPanel panLeitelemente;
     private javax.swing.JPanel panPodeste;
     private javax.swing.JPanel panStuetzmauern;
     private javax.swing.JPanel panStufe;
-    private javax.swing.JSlider sldZoom;
+    private javax.swing.JPanel panSummary;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -152,7 +176,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      * @param  readOnly           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppenBandPanel(final boolean readOnly, final ConnectionContext connectionContext) {
+    public TreppenBandPanel(final boolean readOnly,
+            final ConnectionContext connectionContext) {
+        this.readOnly = readOnly;
         jband.setReadOnly(readOnly);
         this.connectionContext = connectionContext;
         treppelaufPanel = new TreppeLaufPanel(!readOnly, connectionContext);
@@ -160,8 +186,8 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         treppeLeitelementpanel = new TreppeLeitelementPanel(!readOnly);
         treppePodestPanel = new TreppePodestPanel(!readOnly, connectionContext);
         treppeStuetzmauerPanel = new TreppeStuetzmauerPanel(!readOnly);
+        treppeEntwaesserungPanel = new TreppeEntwaesserungPanel(!readOnly, connectionContext);
         initComponents();
-        panHeaderInfo.setVisible(false);
         stuetzmauerLinksBand.setReadOnly(readOnly);
         handlaufLeftBand.setReadOnly(readOnly);
         handlaufRightBand.setReadOnly(readOnly);
@@ -169,6 +195,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         leitelementRightBand.setReadOnly(readOnly);
         leitelementLeftBand.setReadOnly(readOnly);
         stuetzmauerRechtsBand.setReadOnly(readOnly);
+        entwaesserungBand.setReadOnly(readOnly);
         sbm.addBand(stuetzmauerLinksBand);
         sbm.addBand(leitelementLeftBand);
         sbm.addBand(handlaufLeftBand);
@@ -176,22 +203,31 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         sbm.addBand(handlaufRightBand);
         sbm.addBand(leitelementRightBand);
         sbm.addBand(stuetzmauerRechtsBand);
+        sbm.addBand(entwaesserungBand);
         jband.setModel(sbm);
 
         panBand.add(jband, BorderLayout.CENTER);
-        jband.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jband.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         sbm.addBandModelListener(modelListener);
-
-        sldZoom.setPaintTrack(false);
 
         panStufe.add(treppelaufPanel, BorderLayout.CENTER);
         panPodeste.add(treppePodestPanel, BorderLayout.CENTER);
         panLeitelemente.add(treppeLeitelementpanel, BorderLayout.CENTER);
         panStuetzmauern.add(treppeStuetzmauerPanel, BorderLayout.CENTER);
+        panEntwaesserung.add(treppeEntwaesserungPanel, BorderLayout.CENTER);
         panHandlaeufe.add(treppeHandlaufPanel, BorderLayout.CENTER);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  summaryPanel  DOCUMENT ME!
+     */
+    public void setZusammenfassung(final JPanel summaryPanel) {
+        panSummary.add(summaryPanel, BorderLayout.CENTER);
+    }
 
     /**
      * DOCUMENT ME!
@@ -216,34 +252,164 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        panHeader = new javax.swing.JPanel();
+        panBand = new javax.swing.JPanel();
+        panBand1 = new javax.swing.JPanel();
+        jToolBar1 = new javax.swing.JToolBar();
+        butPrev = new javax.swing.JButton();
+        butAddBeforeSecond = new javax.swing.JButton();
+        butAddBefore = new javax.swing.JButton();
+        butAddAfter = new javax.swing.JButton();
+        butAddAfterSecond = new javax.swing.JButton();
+        butRemove = new javax.swing.JButton();
+        butNext = new javax.swing.JButton();
         panInfoContent = new javax.swing.JPanel();
         panStufe = new javax.swing.JPanel();
         panPodeste = new javax.swing.JPanel();
         panLeitelemente = new javax.swing.JPanel();
         panHandlaeufe = new javax.swing.JPanel();
         panStuetzmauern = new javax.swing.JPanel();
+        panEntwaesserung = new javax.swing.JPanel();
         panChooser = new javax.swing.JPanel();
-        panEmpty = new javax.swing.JPanel();
-        panHeader = new javax.swing.JPanel();
-        panHeaderInfo = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        sldZoom = new javax.swing.JSlider();
-        panControls = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        panBand = new javax.swing.JPanel();
+        panSummary = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(1050, 650));
+        setMinimumSize(new java.awt.Dimension(1050, 510));
         setOpaque(false);
-        setPreferredSize(new java.awt.Dimension(1050, 650));
+        setPreferredSize(new java.awt.Dimension(1050, 510));
         setLayout(new java.awt.GridBagLayout());
 
-        panInfoContent.setMinimumSize(new java.awt.Dimension(640, 310));
+        panHeader.setOpaque(false);
+        panHeader.setLayout(new java.awt.GridBagLayout());
+
+        panBand.setMaximumSize(new java.awt.Dimension(1500, 230));
+        panBand.setMinimumSize(new java.awt.Dimension(750, 230));
+        panBand.setOpaque(false);
+        panBand.setPreferredSize(new java.awt.Dimension(750, 230));
+        panBand.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panHeader.add(panBand, gridBagConstraints);
+
+        panBand1.setMaximumSize(new java.awt.Dimension(75, 230));
+        panBand1.setMinimumSize(new java.awt.Dimension(75, 230));
+        panBand1.setOpaque(false);
+        panBand1.setPreferredSize(new java.awt.Dimension(75, 230));
+        panBand1.setLayout(new java.awt.BorderLayout());
+
+        jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar1.setRollover(true);
+        jToolBar1.setOpaque(false);
+
+        butPrev.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.SelectPrevious());
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butPrev,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butPrev.text",
+                new Object[] {})); // NOI18N
+        butPrev.setAlignmentX(0.5F);
+        butPrev.setFocusable(false);
+        butPrev.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butPrev.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butPrev);
+
+        butAddBeforeSecond.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.AddItem(false, true));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butAddBeforeSecond,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butAddBeforeSecond.text",
+                new Object[] {})); // NOI18N
+        butAddBeforeSecond.setAlignmentX(0.5F);
+        butAddBeforeSecond.setFocusable(false);
+        butAddBeforeSecond.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butAddBeforeSecond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butAddBeforeSecond);
+
+        butAddBefore.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.AddItem(false, false));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butAddBefore,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butAddBefore.text",
+                new Object[] {})); // NOI18N
+        butAddBefore.setAlignmentX(0.5F);
+        butAddBefore.setFocusable(false);
+        butAddBefore.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butAddBefore.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butAddBefore);
+
+        butAddAfter.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.AddItem(true, false));
+        butAddAfter.setAlignmentX(0.5F);
+        butAddAfter.setFocusable(false);
+        butAddAfter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butAddAfter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butAddAfter);
+
+        butAddAfterSecond.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.AddItem(true, true));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butAddAfterSecond,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butAddAfterSecond.text",
+                new Object[] {})); // NOI18N
+        butAddAfterSecond.setAlignmentX(0.5F);
+        butAddAfterSecond.setFocusable(false);
+        butAddAfterSecond.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butAddAfterSecond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butAddAfterSecond);
+
+        butRemove.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.DeleteItem());
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butRemove,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butRemove.text",
+                new Object[] {})); // NOI18N
+        butRemove.setAlignmentX(0.5F);
+        butRemove.setFocusable(false);
+        butRemove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butRemove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butRemove);
+
+        butNext.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.SelectNext());
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butNext,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butNext.text",
+                new Object[] {})); // NOI18N
+        butNext.setAlignmentX(0.5F);
+        butNext.setFocusable(false);
+        butNext.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butNext.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butNext);
+
+        panBand1.add(jToolBar1, java.awt.BorderLayout.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panHeader.add(panBand1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        add(panHeader, gridBagConstraints);
+
+        panInfoContent.setMinimumSize(new java.awt.Dimension(640, 240));
         panInfoContent.setOpaque(false);
-        panInfoContent.setPreferredSize(new java.awt.Dimension(640, 310));
+        panInfoContent.setPreferredSize(new java.awt.Dimension(640, 240));
         panInfoContent.setLayout(new java.awt.CardLayout());
 
         panStufe.setOpaque(false);
@@ -266,13 +432,17 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         panStuetzmauern.setLayout(new java.awt.BorderLayout());
         panInfoContent.add(panStuetzmauern, "stuetzmauern");
 
+        panEntwaesserung.setOpaque(false);
+        panEntwaesserung.setLayout(new java.awt.BorderLayout());
+        panInfoContent.add(panEntwaesserung, "entwaesserung");
+
         panChooser.setOpaque(false);
         panChooser.setLayout(new java.awt.BorderLayout());
         panInfoContent.add(panChooser, "chooser");
 
-        panEmpty.setOpaque(false);
-        panEmpty.setLayout(new java.awt.BorderLayout());
-        panInfoContent.add(panEmpty, "empty");
+        panSummary.setOpaque(false);
+        panSummary.setLayout(new java.awt.BorderLayout());
+        panInfoContent.add(panSummary, "summary");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
@@ -280,96 +450,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(15, 5, 5, 5);
         add(panInfoContent, gridBagConstraints);
-
-        panHeader.setOpaque(false);
-        panHeader.setLayout(new java.awt.GridBagLayout());
-
-        panHeaderInfo.setMinimumSize(new java.awt.Dimension(531, 102));
-        panHeaderInfo.setOpaque(false);
-        panHeaderInfo.setPreferredSize(new java.awt.Dimension(532, 50));
-        panHeaderInfo.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    panHeaderInfoMouseClicked(evt);
-                }
-            });
-        panHeaderInfo.setLayout(null);
-
-        jLabel5.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, "Zoom:");
-        jLabel5.setMaximumSize(new java.awt.Dimension(92, 22));
-        jLabel5.setMinimumSize(new java.awt.Dimension(92, 22));
-        jLabel5.setPreferredSize(new java.awt.Dimension(92, 22));
-        panHeaderInfo.add(jLabel5);
-        jLabel5.setBounds(10, 10, 80, 20);
-
-        sldZoom.setMaximum(200);
-        sldZoom.setValue(0);
-        sldZoom.addChangeListener(new javax.swing.event.ChangeListener() {
-
-                @Override
-                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
-                    sldZoomStateChanged(evt);
-                }
-            });
-        panHeaderInfo.add(sldZoom);
-        sldZoom.setBounds(110, 10, 350, 16);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        panHeader.add(panHeaderInfo, gridBagConstraints);
-
-        panControls.setOpaque(false);
-        panControls.setLayout(new java.awt.GridBagLayout());
-
-        jPanel1.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 1.0;
-        panControls.add(jPanel1, gridBagConstraints);
-
-        jPanel2.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        panControls.add(jPanel2, gridBagConstraints);
-
-        jPanel4.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        panControls.add(jPanel4, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        panHeader.add(panControls, gridBagConstraints);
-
-        panBand.setOpaque(false);
-        panBand.setLayout(new java.awt.BorderLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panHeader.add(panBand, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(panHeader, gridBagConstraints);
 
         jPanel3.setMinimumSize(new java.awt.Dimension(1050, 1));
         jPanel3.setOpaque(false);
@@ -404,27 +484,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.weighty = 1.0;
         add(jPanel3, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldZoomStateChanged
-        final double zoom = sldZoom.getValue() / 10d;
-        jband.setZoomFactor(zoom);
-    }                                                                           //GEN-LAST:event_sldZoomStateChanged
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_panHeaderInfoMouseClicked
-        System.out.println("click");
-    }                                                                             //GEN-LAST:event_panHeaderInfoMouseClicked
 
     /**
      * Switch the sub editor panel to the given form.
@@ -455,6 +517,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         treppeLeitelementpanel.dispose();
         treppePodestPanel.dispose();
         treppeStuetzmauerPanel.dispose();
+        treppeEntwaesserungPanel.dispose();
     }
 
     @Override
@@ -475,7 +538,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     @Override
     public void setCidsBean(final CidsBean cb) {
         this.cidsBean = cb;
-        switchToForm("empty");
+        switchToForm("summary");
 
         if (cidsBean != null) {
             setNamesAndBands();
@@ -488,10 +551,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     private void setNamesAndBands() {
         final double from = 0;
         final double till = 10;
-//        sbm.setMin(from);
+        sbm.setMin(0);
 //        sbm.setMax(till);
 //
-//        jband.setMinValue(from);
+        jband.setMinValue(0);
 //        jband.setMaxValue(till);
 
         // extract geschuetzte Arten
@@ -500,10 +563,12 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         final List<CidsBean> handlaeufe = cidsBean.getBeanCollectionProperty("handlaeufe");
         final List<CidsBean> stuetzmauer = cidsBean.getBeanCollectionProperty("stuetzmauern");
         final List<CidsBean> absturzsicherung = cidsBean.getBeanCollectionProperty("absturzsicherungen");
+        final CidsBean entwaesserung = (CidsBean)cidsBean.getProperty("entwaesserung");
         laufList = new ArrayList<CidsBean>();
         leitelementList = new ArrayList<CidsBean>();
         handlaufList = new ArrayList<CidsBean>();
         stuetzmauerList = new ArrayList<CidsBean>();
+        entwaesserungList = new ArrayList<CidsBean>();
 
         if (podest != null) {
             laufList.addAll(podest);
@@ -520,13 +585,16 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         if (stuetzmauer != null) {
             stuetzmauerList.addAll(stuetzmauer);
         }
+        if (entwaesserung != null) {
+            entwaesserungList.add(entwaesserung);
+        }
 
         laufList = ObservableCollections.observableList(laufList);
         leitelementList = ObservableCollections.observableList(leitelementList);
         handlaufList = ObservableCollections.observableList(handlaufList);
         stuetzmauerList = ObservableCollections.observableList(stuetzmauerList);
+        entwaesserungList = ObservableCollections.observableList(entwaesserungList);
 
-//        stuetzmauerLinksBand.setCidsBeans(stuetzmauerList);
         handlaufLeftBand.setCidsBeans(handlaufList);
         handlaufRightBand.setCidsBeans(handlaufList);
         laufBand.setCidsBeans(laufList);
@@ -534,6 +602,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         leitelementRightBand.setCidsBeans(leitelementList);
         stuetzmauerLinksBand.setCidsBeans(stuetzmauerList);
         stuetzmauerRechtsBand.setCidsBeans(stuetzmauerList);
+        entwaesserungBand.setCidsBeans(entwaesserungList);
 
         handlaufRightBand.addElementResizedListener(resizedListener);
         handlaufLeftBand.addElementResizedListener(resizedListener);
@@ -559,6 +628,10 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                 cidsBean,
                 "stuetzmauern",
                 null));
+        ((ObservableList<CidsBean>)entwaesserungList).addObservableListListener(new TreppeObservableListListener(
+                cidsBean,
+                "entwaesserung",
+                null));
         ((ObservableList<CidsBean>)laufList).addObservableListListener(new TreppeObservableListListener(
                 cidsBean,
                 "treppenlaeufe",
@@ -578,6 +651,109 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         leitelementLeftBand.refresh(withDummies);
         stuetzmauerRechtsBand.refresh(withDummies);
         stuetzmauerLinksBand.refresh(withDummies);
+        entwaesserungBand.refresh(withDummies);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tempReadOnly  DOCUMENT ME!
+     */
+    private void setModeTempReadOnly(final boolean tempReadOnly) {
+        if (tempReadOnly != this.tempReadOnly) {
+            this.tempReadOnly = tempReadOnly;
+            jband.setSelectedMember((BandMemberSelectable)null);
+            treppelaufPanel = new TreppeLaufPanel(!tempReadOnly, connectionContext);
+            treppeHandlaufPanel = new TreppeHandlaufPanel(!tempReadOnly);
+            treppeLeitelementpanel = new TreppeLeitelementPanel(!tempReadOnly);
+            treppePodestPanel = new TreppePodestPanel(!tempReadOnly, connectionContext);
+            treppeStuetzmauerPanel = new TreppeStuetzmauerPanel(!tempReadOnly);
+            treppeEntwaesserungPanel = new TreppeEntwaesserungPanel(!tempReadOnly, connectionContext);
+
+            disposeSubeditor();
+            panStufe.removeAll();
+            panPodeste.removeAll();
+            panLeitelemente.removeAll();
+            panStuetzmauern.removeAll();
+            panEntwaesserung.removeAll();
+            panHandlaeufe.removeAll();
+
+            panStufe.add(treppelaufPanel, BorderLayout.CENTER);
+            panPodeste.add(treppePodestPanel, BorderLayout.CENTER);
+            panLeitelemente.add(treppeLeitelementpanel, BorderLayout.CENTER);
+            panStuetzmauern.add(treppeStuetzmauerPanel, BorderLayout.CENTER);
+            panEntwaesserung.add(treppeEntwaesserungPanel, BorderLayout.CENTER);
+            panHandlaeufe.add(treppeHandlaufPanel, BorderLayout.CENTER);
+
+            final List<TreppenBand> bands = new ArrayList<TreppenBand>();
+            bands.add(handlaufLeftBand);
+            bands.add(handlaufRightBand);
+            bands.add(leitelementRightBand);
+            bands.add(leitelementLeftBand);
+            bands.add(stuetzmauerRechtsBand);
+            bands.add(stuetzmauerLinksBand);
+            bands.add(laufBand);
+            bands.add(entwaesserungBand);
+
+            if (tempReadOnly) {
+                for (int index = 0; index < bands.size(); ++index) {
+                    final TreppenBand band = bands.get(index);
+
+                    if (!band.hasCollition()) {
+                        band.setReadOnly(true, true);
+                    }
+                }
+            } else {
+                for (int index = 0; index < bands.size(); ++index) {
+                    final TreppenBand band = bands.get(index);
+
+                    band.setReadOnly(false, false);
+                }
+            }
+            // this does also refreshs the colors in the bands
+            jband.setSelectedMember((BandMemberSelectable)null);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean hasCollision() {
+        final List<TreppenBand> bands = new ArrayList<TreppenBand>();
+        bands.add(handlaufLeftBand);
+        bands.add(handlaufRightBand);
+        bands.add(leitelementRightBand);
+        bands.add(leitelementLeftBand);
+        bands.add(stuetzmauerRechtsBand);
+        bands.add(stuetzmauerLinksBand);
+        bands.add(laufBand);
+        bands.add(entwaesserungBand);
+
+        for (int index = 0; index < bands.size(); ++index) {
+            if (bands.get(index).hasCollition()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void editorClosed(final EditorClosedEvent ece) {
+    }
+
+    @Override
+    public boolean prepareForSave() {
+        if (tempReadOnly) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Es existiert ein ungültiges (überlappendes) Band.\nSie können  erst speichern, wenn alle Bänder gültig sind",
+                "Ungültiges Band gefunden",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        return !tempReadOnly;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -607,7 +783,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                     final double oldValue = e.getOldValue();
                     final double newValue = e.getNewValue();
                     final double diff = newValue - oldValue;
-                    double max = Double.MIN_VALUE;
 
                     final List<List<CidsBean>> beans = new ArrayList<List<CidsBean>>();
                     beans.add(laufList);
@@ -670,17 +845,17 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                                             LOG.error("Error while adjust element sizes", ex);
                                         }
                                     }
-                                    if ((Double)bean.getProperty("position.bis") > max) {
-                                        max = (Double)bean.getProperty("position.bis");
-                                    }
                                 } else {
                                 }
                             }
                         }
                     }
 
-                    final BandMember selectedBandMember = jband.getSelectedBandMember();
-                    jband.setMaxValue(max);
+                    BandMember selectedBandMember = jband.getSelectedBandMember();
+                    if (selectedBandMember instanceof DummyBandMember) {
+                        selectedBandMember = null;
+                    }
+                    jband.setMaxValue(getMaxSize());
                     refreshAllBands(false);
                     jband.bandModelChanged(new BandModelEvent());
                     refreshAllBands(true);
@@ -723,7 +898,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                 } else {
                     final BandMember selectedBandMember = jband.getSelectedBandMember();
                     laufBand.refresh(false);
-                    jband.setMaxValue(laufBand.getMax());
+                    jband.setMaxValue(getMaxSize());
                     refreshAllBands(true);
                     jband.bandModelChanged(new BandModelEvent());
                     if (selectedBandMember instanceof BandMemberSelectable) {
@@ -732,10 +907,38 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                         jband.setSelectedMember((BandMemberSelectable)selectedBandMember);
                     }
                 }
+
+                setModeTempReadOnly(hasCollision());
                 inResize = false;
             } catch (Throwable t) {
                 LOG.error("Error during resize", t);
             }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private double getMaxSize() {
+            final List<List<CidsBean>> beans = new ArrayList<List<CidsBean>>();
+            beans.add(laufList);
+            beans.add(leitelementList);
+            beans.add(handlaufList);
+            beans.add(stuetzmauerList);
+            double max = Math.max(Math.max(leitelementList.size(), handlaufList.size()), stuetzmauerList.size());
+
+            for (final CidsBean bean : laufList) {
+                final double from = (Double)bean.getProperty("position.von");
+                final double till = (Double)bean.getProperty("position.bis");
+                final double maxBean = Math.max(from, till);
+
+                if (maxBean > max) {
+                    max = maxBean;
+                }
+            }
+
+            return max;
         }
     }
 
@@ -761,35 +964,125 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
             disposeSubeditor();
 
             if (bm != null) {
-                switchToForm("empty");
+                switchToForm("summary");
 
                 if (bm instanceof PodestBandMember) {
                     // PodestBandMember is also a LaufBandMember. So the test on Podest must be first
                     switchToForm("podeste");
                     treppePodestPanel.setCidsBean(((PodestBandMember)bm).getCidsBean());
+                    final String objectName = ((PodestBandMember)bm).getParentBand().getAllowedObjectNames()[0];
+                    final String objectTable = ((PodestBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
+                    final String secondObjectName = ((PodestBandMember)bm).getParentBand().getAllowedObjectNames()[1];
+                    final String secondObjectTable =
+                        ((PodestBandMember)bm).getParentBand().getAllowedObjectTableNames()[1];
+
+                    activateControls((PodestBandMember)bm,
+                        objectName,
+                        secondObjectName,
+                        objectTable,
+                        secondObjectTable);
                 } else if (bm instanceof LaufBandMember) {
                     switchToForm("stufen");
                     treppelaufPanel.setCidsBean(((LaufBandMember)bm).getCidsBean());
+                    final String objectName = ((LaufBandMember)bm).getParentBand().getAllowedObjectNames()[0];
+                    final String objectTable = ((LaufBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
+                    final String secondObjectName = ((LaufBandMember)bm).getParentBand().getAllowedObjectNames()[1];
+                    final String secondObjectTable =
+                        ((LaufBandMember)bm).getParentBand().getAllowedObjectTableNames()[1];
+
+                    activateControls((LaufBandMember)bm, objectName, secondObjectName, objectTable, secondObjectTable);
                 } else if (bm instanceof LeitelementBandMember) {
                     switchToForm("leitelemente");
                     treppeLeitelementpanel.setCidsBean(((LeitelementBandMember)bm).getCidsBean());
+                    final String objectName = ((LeitelementBandMember)bm).getParentBand().getAllowedObjectNames()[0];
+                    final String objectTable =
+                        ((LeitelementBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
+
+                    activateControls((LeitelementBandMember)bm, objectName, null, objectTable, null);
                 } else if (bm instanceof HandlaufBandMember) {
                     switchToForm("handlaeufe");
                     treppeHandlaufPanel.setCidsBean(((HandlaufBandMember)bm).getCidsBean());
+                    final String objectName = ((HandlaufBandMember)bm).getParentBand().getAllowedObjectNames()[0];
+                    final String objectTable = ((HandlaufBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
+
+                    activateControls((HandlaufBandMember)bm, objectName, null, objectTable, null);
                 } else if (bm instanceof StuetzmauerBandMember) {
                     switchToForm("stuetzmauern");
                     treppeStuetzmauerPanel.setCidsBean(((StuetzmauerBandMember)bm).getCidsBean());
+                    activateControls(null, null, null, null, null);
+                    ((DeleteItem)butRemove.getAction()).init((StuetzmauerBandMember)bm);
+                    ((SelectNext)butNext.getAction()).init((StuetzmauerBandMember)bm);
+                    ((SelectPrevious)butPrev.getAction()).init((StuetzmauerBandMember)bm);
+                } else if (bm instanceof EntwaesserungBandMember) {
+                    switchToForm("entwaesserung");
+                    treppeEntwaesserungPanel.setCidsBean(((EntwaesserungBandMember)bm).getCidsBean());
+                    activateControls(null, null, null, null, null);
+                    ((DeleteItem)butRemove.getAction()).init((EntwaesserungBandMember)bm);
                 } else if (bm instanceof DummyBandMember) {
                     panChooser.removeAll();
                     panChooser.add(((DummyBandMember)bm).getObjectChooser());
+                    activateControls(null, null, null, null, null);
                     switchToForm("chooser");
                 }
             } else {
-                switchToForm("empty");
+                switchToForm("summary");
+                activateControls(null, null, null, null, null);
             }
 
             jband.setRefreshAvoided(false);
             jband.bandModelChanged(null);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  member             DOCUMENT ME!
+         * @param  objectName         DOCUMENT ME!
+         * @param  secondObjectName   DOCUMENT ME!
+         * @param  objectTable        DOCUMENT ME!
+         * @param  secondObjectTable  DOCUMENT ME!
+         */
+        private void activateControls(final TreppeBandMember member,
+                final String objectName,
+                final String secondObjectName,
+                final String objectTable,
+                final String secondObjectTable) {
+            final boolean active = member != null;
+
+            if (member != null) {
+                ((AddItem)butAddAfter.getAction()).init(member, true, objectTable, objectName);
+                if (secondObjectName != null) {
+                    ((AddItem)butAddAfterSecond.getAction()).init(member, true, secondObjectTable, secondObjectName);
+                } else {
+                    ((AddItem)butAddAfterSecond.getAction()).deactivate();
+                }
+                ((AddItem)butAddBefore.getAction()).init(member, false, objectTable, objectName);
+                if (secondObjectName != null) {
+                    ((AddItem)butAddBeforeSecond.getAction()).init(member, false, secondObjectTable, secondObjectName);
+                } else {
+                    ((AddItem)butAddBeforeSecond.getAction()).deactivate();
+                }
+
+                ((DeleteItem)butRemove.getAction()).init(member);
+                ((SelectNext)butNext.getAction()).init(member);
+                ((SelectPrevious)butPrev.getAction()).init(member);
+            } else {
+                ((AddItem)butAddAfter.getAction()).deactivate();
+                ((AddItem)butAddAfterSecond.getAction()).deactivate();
+                ((AddItem)butAddBefore.getAction()).deactivate();
+                ((AddItem)butAddBeforeSecond.getAction()).deactivate();
+                ((DeleteItem)butRemove.getAction()).deactivate();
+                ((SelectNext)butNext.getAction()).deactivate();
+                ((SelectPrevious)butPrev.getAction()).deactivate();
+            }
+
+            if (readOnly) {
+                ((AddItem)butAddAfter.getAction()).deactivate();
+                ((AddItem)butAddAfterSecond.getAction()).deactivate();
+                ((AddItem)butAddBefore.getAction()).deactivate();
+                ((AddItem)butAddBeforeSecond.getAction()).deactivate();
+                ((DeleteItem)butRemove.getAction()).deactivate();
+            }
         }
 
         @Override

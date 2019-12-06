@@ -78,9 +78,11 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
     protected List<ElementResizedListener> elementResizeListener = new ArrayList<ElementResizedListener>();
     protected boolean dragStart = false;
     protected TreppenBand parent;
+    protected boolean alternativeColor = false;
 
     double von = 0;
     double bis = 0;
+    int wo;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel labText;
@@ -160,6 +162,16 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
     /**
      * DOCUMENT ME!
      *
+     * @param  alternativeColor  DOCUMENT ME!
+     */
+    public void setAlternativeColor(final boolean alternativeColor) {
+        this.alternativeColor = alternativeColor;
+        determineBackgroundColour();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  text  DOCUMENT ME!
      */
     public void setText(final String text) {
@@ -175,9 +187,11 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
         if (bean.getProperty("position") != null) {
             von = (Double)bean.getProperty("position.von");
             bis = (Double)bean.getProperty("position.bis");
+            wo = (Integer)bean.getProperty("position.wo");
         } else {
             von = 0;
             bis = 1;
+            wo = 2;
         }
         bean.addPropertyChangeListener(this);
         final CidsBean linieBean = (CidsBean)bean.getProperty("position");
@@ -217,34 +231,61 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
     /**
      * DOCUMENT ME!
      */
+    protected void setReadOnlyColor() {
+        unselectedBackgroundPainter = new MattePainter(new Color(75, 75, 75));
+        selectedBackgroundPainter = new CompoundPainter(
+                unselectedBackgroundPainter,
+                new RectanglePainter(
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    true,
+                    new Color(100, 100, 100, 100),
+                    2f,
+                    new Color(50, 50, 50, 100)));
+        if (isSelected) {
+            setBackgroundPainter(selectedBackgroundPainter);
+        } else {
+            setBackgroundPainter(unselectedBackgroundPainter);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     protected void configurePopupMenu() {
         popup.removeAll();
-        final JMenuItem splitItem = new JMenuItem();
-        splitItem.setAction(new SplitItem(this));
-        final JMenuItem deleteItem = new JMenuItem();
-        deleteItem.setAction(new DeleteItem(this));
+        if (!isReadOnly()) {
+            final JMenuItem splitItem = new JMenuItem();
+            splitItem.setAction(new SplitItem(this));
+            final JMenuItem deleteItem = new JMenuItem();
+            deleteItem.setAction(new DeleteItem(this));
 
-        final String[] objectsNames = parent.getAllowedObjectNames();
-        final String[] objectsTables = parent.getAllowedObjectTableNames();
+            final String[] objectsNames = parent.getAllowedObjectNames();
+            final String[] objectsTables = parent.getAllowedObjectTableNames();
 
-        JMenuItem item = new JMenuItem();
-        item.setAction(new AddItem(this, false, objectsTables[0], objectsNames[0] + " davor hinzufügen"));
-        if ((getMin() == 0.0) || (parent.getNextLessElement(this) != null)) {
-            item.setEnabled(false);
+            JMenuItem item = new JMenuItem();
+            item.setAction(new AddItem(this, false, objectsTables[0], objectsNames[0] + " davor hinzufügen"));
+            if ((Math.floor(getMin()) == 0.0) || (parent.getNextLessElement(this) != null)) {
+                item.setEnabled(false);
+            }
+            popup.add(item);
+
+            item = new JMenuItem();
+            item.setAction(new AddItem(this, true, objectsTables[0], objectsNames[0] + " danach hinzufügen"));
+            if ((getMax() == getParentBand().getMax()) || (parent.getNextGreaterElement(this) != null)) {
+                item.setEnabled(false);
+            }
+            popup.add(item);
+
+            popup.addSeparator();
+            popup.add(splitItem);
+            popup.addSeparator();
+            popup.add(deleteItem);
         }
-        popup.add(item);
-
-        item = new JMenuItem();
-        item.setAction(new AddItem(this, true, objectsTables[0], objectsNames[0] + " danach hinzufügen"));
-        if (parent.getNextGreaterElement(this) != null) {
-            item.setEnabled(false);
-        }
-        popup.add(item);
-
-        popup.addSeparator();
-        popup.add(splitItem);
-        popup.addSeparator();
-        popup.add(deleteItem);
     }
 
     /**
@@ -424,14 +465,14 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
         } else {
             if (dragSide == 1) {
                 try {
-                    final double nextPos = roundToNextValidPosition(station);
+                    final double nextPos = roundToNextValidPosition(station, false);
                     position.setProperty("von", nextPos);
                 } catch (Exception ex) {
                     LOG.error("Error while setting new station value.", ex);
                 }
             } else {
                 try {
-                    final double nextPos = roundToNextValidPosition(station);
+                    final double nextPos = roundToNextValidPosition(station, true);
                     position.setProperty("bis", nextPos);
                 } catch (Exception ex) {
                     LOG.error("Error while setting new station value.", ex);
@@ -443,11 +484,12 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
     /**
      * DOCUMENT ME!
      *
-     * @param   pos  DOCUMENT ME!
+     * @param   pos   DOCUMENT ME!
+     * @param   till  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    protected double roundToNextValidPosition(final double pos) {
+    protected double roundToNextValidPosition(final double pos, final boolean till) {
         double nextValue = Math.floor(pos);
         final double next = getParentBand().getNextGreaterElementStart(this);
         final double last = getParentBand().getNextLessElementEnd(this);
@@ -458,6 +500,16 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
 
         if (nextValue < last) {
             nextValue = last;
+        }
+
+        if (till) {
+            if (von == pos) {
+                return von + 1.0;
+            }
+        } else {
+            if (bis == pos) {
+                return bis - 1.0;
+            }
         }
 
         return nextValue;
@@ -542,6 +594,15 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("wo")) {
+            if (wo != (Integer)bean.getProperty("position.wo")) {
+                wo = (Integer)bean.getProperty("position.wo");
+                fireBandMemberChanged(false);
+                final ElementResizedEvent e = new ElementResizedEvent();
+                e.setRefreshDummiesOnly(true);
+                fireElementResized(e);
+            }
+        }
         if (evt.getPropertyName().equals("von")) {
             von = (Double)bean.getProperty("position.von");
             fireBandMemberChanged(false);

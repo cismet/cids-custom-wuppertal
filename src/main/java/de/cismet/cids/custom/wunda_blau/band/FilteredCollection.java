@@ -29,7 +29,7 @@ public class FilteredCollection implements Collection<CidsBean> {
 
     //~ Instance fields --------------------------------------------------------
 
-    private Collection<CidsBean> internalCollection;
+    private Collection<CidsBean> internalCollection = new ArrayList<CidsBean>();
     private Side side;
 
     //~ Constructors -----------------------------------------------------------
@@ -69,9 +69,11 @@ public class FilteredCollection implements Collection<CidsBean> {
     public int size() {
         int count = 0;
 
-        for (final CidsBean b : internalCollection) {
-            if (isValidCidsBean(b)) {
-                ++count;
+        if (internalCollection != null) {
+            for (final CidsBean b : internalCollection) {
+                if (isValidCidsBean(b)) {
+                    ++count;
+                }
             }
         }
 
@@ -99,9 +101,11 @@ public class FilteredCollection implements Collection<CidsBean> {
 
     @Override
     public boolean contains(final Object o) {
-        for (final CidsBean b : internalCollection) {
-            if (isValidCidsBean(b) && b.equals(o)) {
-                return true;
+        if (internalCollection != null) {
+            for (final CidsBean b : internalCollection) {
+                if (isValidCidsBean(b) && b.equals(o)) {
+                    return true;
+                }
             }
         }
 
@@ -118,9 +122,11 @@ public class FilteredCollection implements Collection<CidsBean> {
         final CidsBean[] array = new CidsBean[size()];
         int index = 0;
 
-        for (final CidsBean b : internalCollection) {
-            if (isValidCidsBean(b)) {
-                array[index++] = b;
+        if (internalCollection != null) {
+            for (final CidsBean b : internalCollection) {
+                if (isValidCidsBean(b)) {
+                    array[index++] = b;
+                }
             }
         }
 
@@ -139,12 +145,13 @@ public class FilteredCollection implements Collection<CidsBean> {
             array = (T[])new Object[size];
         }
 
-        for (final CidsBean b : internalCollection) {
-            if (isValidCidsBean(b)) {
-                array[index++] = (T)b;
+        if (internalCollection != null) {
+            for (final CidsBean b : internalCollection) {
+                if (isValidCidsBean(b)) {
+                    array[index++] = (T)b;
+                }
             }
         }
-
         if (array.length > index) {
             array[index] = null;
         }

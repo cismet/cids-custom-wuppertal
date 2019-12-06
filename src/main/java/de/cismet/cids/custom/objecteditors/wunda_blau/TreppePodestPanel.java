@@ -678,6 +678,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         materialArtSearch2.setTypId(2);
 
         initComponents();
+        btnRemoveArt1.setVisible(false);
         jTextArea2.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
             RendererTools.makeReadOnly(jCheckBox1);
@@ -690,7 +691,6 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
             RendererTools.makeReadOnly(jTextArea2);
             RendererTools.makeReadOnly(jTextField19);
         }
-        btnRemoveArt1.setVisible(editable);
 
         fastBindableReferenceCombo1.setMetaClassFromTableName("WUNDA_BLAU", "treppe_podest_material_art");
         fastBindableReferenceCombo2.setMetaClassFromTableName("WUNDA_BLAU", "treppe_podest_material_art");

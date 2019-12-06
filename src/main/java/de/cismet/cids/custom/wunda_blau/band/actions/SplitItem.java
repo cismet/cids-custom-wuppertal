@@ -48,9 +48,17 @@ public class SplitItem extends AbstractAction {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final TreppeBandMember member;
+    private TreppeBandMember member;
+    private boolean initialised = false;
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new SplitItem object.
+     */
+    public SplitItem() {
+        setEnabled(false);
+    }
 
     /**
      * Creates a new SplitItem object.
@@ -58,15 +66,37 @@ public class SplitItem extends AbstractAction {
      * @param  member  DOCUMENT ME!
      */
     public SplitItem(final TreppeBandMember member) {
-        this.member = member;
-        putValue(SHORT_DESCRIPTION, "teilen");
-        putValue(NAME, "teilen");
+        init(member);
     }
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  member  DOCUMENT ME!
+     */
+    public void init(final TreppeBandMember member) {
+        this.member = member;
+        putValue(SHORT_DESCRIPTION, "teilen");
+        putValue(NAME, "teilen");
+        setEnabled(true);
+        this.initialised = true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void deactivate() {
+        setEnabled(false);
+        initialised = false;
+    }
+
     @Override
     public void actionPerformed(final ActionEvent event) {
+        if (!initialised) {
+            return;
+        }
         final double widthPerPixel = (member.getMax() - member.getMin()) / member.getBounds().getWidth();
         final int pos = (int)(member.getMin() + (member.getMouseClickedXPosition() * widthPerPixel));
         try {
