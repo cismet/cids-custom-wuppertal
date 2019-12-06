@@ -166,19 +166,34 @@ public class LaufBandMember extends TreppeBandMember {
         super.setCidsBean(cidsBean);
         if (bean.getProperty("stufen") != null) {
             stufenCount = (Integer)bean.getProperty("stufen");
+        } else {
+            stufenCount = 1;
         }
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   pos  DOCUMENT ME!
+     * @param   pos   DOCUMENT ME!
+     * @param   till  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     @Override
-    protected double roundToNextValidPosition(final double pos) {
-        return Math.floor(pos);
+    protected double roundToNextValidPosition(final double pos, final boolean till) {
+        final double val = Math.floor(pos);
+
+        if (till) {
+            if (von == pos) {
+                return von + 1.0;
+            }
+        } else {
+            if (bis == pos) {
+                return bis - 1.0;
+            }
+        }
+
+        return val;
     }
 
     @Override

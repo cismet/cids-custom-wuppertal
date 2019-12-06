@@ -81,11 +81,11 @@ public class LaufBand extends TreppenBand {
     @Override
     public double getMax() {
         fixMax = null;
-        return super.getMax();
+        return ((super.getMax() < 1) ? 1.0 : super.getMax());
     }
 
     @Override
     public double getMin() {
-        return -1;
+        return 0;
     }
 }

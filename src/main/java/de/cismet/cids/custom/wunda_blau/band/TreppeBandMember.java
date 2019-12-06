@@ -269,14 +269,14 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
 
             JMenuItem item = new JMenuItem();
             item.setAction(new AddItem(this, false, objectsTables[0], objectsNames[0] + " davor hinzufügen"));
-            if ((getMin() == 0.0) || (parent.getNextLessElement(this) != null)) {
+            if ((Math.floor(getMin()) == 0.0) || (parent.getNextLessElement(this) != null)) {
                 item.setEnabled(false);
             }
             popup.add(item);
 
             item = new JMenuItem();
             item.setAction(new AddItem(this, true, objectsTables[0], objectsNames[0] + " danach hinzufügen"));
-            if (parent.getNextGreaterElement(this) != null) {
+            if ((getMax() == getParentBand().getMax()) || (parent.getNextGreaterElement(this) != null)) {
                 item.setEnabled(false);
             }
             popup.add(item);
@@ -465,14 +465,14 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
         } else {
             if (dragSide == 1) {
                 try {
-                    final double nextPos = roundToNextValidPosition(station);
+                    final double nextPos = roundToNextValidPosition(station, false);
                     position.setProperty("von", nextPos);
                 } catch (Exception ex) {
                     LOG.error("Error while setting new station value.", ex);
                 }
             } else {
                 try {
-                    final double nextPos = roundToNextValidPosition(station);
+                    final double nextPos = roundToNextValidPosition(station, true);
                     position.setProperty("bis", nextPos);
                 } catch (Exception ex) {
                     LOG.error("Error while setting new station value.", ex);
@@ -484,11 +484,12 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
     /**
      * DOCUMENT ME!
      *
-     * @param   pos  DOCUMENT ME!
+     * @param   pos   DOCUMENT ME!
+     * @param   till  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    protected double roundToNextValidPosition(final double pos) {
+    protected double roundToNextValidPosition(final double pos, final boolean till) {
         double nextValue = Math.floor(pos);
         final double next = getParentBand().getNextGreaterElementStart(this);
         final double last = getParentBand().getNextLessElementEnd(this);
@@ -499,6 +500,16 @@ public abstract class TreppeBandMember extends JXPanel implements ModifiableBand
 
         if (nextValue < last) {
             nextValue = last;
+        }
+
+        if (till) {
+            if (von == pos) {
+                return von + 1.0;
+            }
+        } else {
+            if (bis == pos) {
+                return bis - 1.0;
+            }
         }
 
         return nextValue;

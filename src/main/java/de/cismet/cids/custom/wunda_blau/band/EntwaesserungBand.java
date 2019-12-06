@@ -55,7 +55,7 @@ public class EntwaesserungBand extends TreppenBand {
         final List<BandMember> orderedMembers = new ArrayList<BandMember>(members);
 
         if (orderedMembers.isEmpty()) {
-            final DummyBandMember dummy = new DummyBandMember(this);
+            final DummyBandMember dummy = new DummyBandMember(this, readOnly);
             dummy.setFrom(0);
             dummy.setTo(parent.getMaxValue());
             addMember(dummy);

@@ -55,7 +55,7 @@ public class PodestBandMember extends LaufBandMember {
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    protected double roundToNextValidPosition(final double pos) {
+    protected double roundToNextValidPosition(final double pos, final boolean till) {
         return oldStationValue;
     }
 

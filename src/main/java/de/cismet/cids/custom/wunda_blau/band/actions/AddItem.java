@@ -103,7 +103,7 @@ public class AddItem extends AbstractAction {
                 if (nextMember instanceof TreppeBandMember) {
                     exception = ((TreppeBandMember)nextMember).getCidsBean();
                 } else {
-                    if (!after) {
+                    if (!after && !(parentBand instanceof LaufBand)) {
                         from = from - 1.0;
                     }
                 }

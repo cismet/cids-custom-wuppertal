@@ -58,15 +58,27 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
     private String colorProperty;
     private String lineFieldName = "linie";
     private TreppenBand parent;
+    private boolean readOnly = false;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form MassnahmenBandMember.
+     * Creates new form DummyBandMember.
      *
      * @param  parent  DOCUMENT ME!
      */
     public DummyBandMember(final TreppenBand parent) {
+        this(parent, false);
+    }
+
+    /**
+     * Creates new form DummyBandMember.
+     *
+     * @param  parent    DOCUMENT ME!
+     * @param  readOnly  DOCUMENT ME!
+     */
+    public DummyBandMember(final TreppenBand parent, final boolean readOnly) {
+        this.readOnly = readOnly;
         setMinimumSize(new Dimension(1, 7));
         setPreferredSize(getMinimumSize());
         determineBackgroundColour();
@@ -143,6 +155,24 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  readOnly  DOCUMENT ME!
+     */
+    public void setReadOnly(final boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
     @Override
     public boolean isSelectable() {
         return true;
@@ -211,7 +241,8 @@ public class DummyBandMember extends AbschnittsinfoMember implements BandMemberS
                 parent.getAllowedObjectTableNames(),
                 parent,
                 from,
-                to);
+                to,
+                readOnly);
     }
 
     @Override
