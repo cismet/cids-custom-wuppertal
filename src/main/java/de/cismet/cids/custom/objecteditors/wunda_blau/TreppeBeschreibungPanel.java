@@ -270,23 +270,23 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        JScrollPane jScrollPane3 = new JScrollPane();
-        JPanel panBeschreibungContent = new JPanel();
-        SemiRoundedPanel panBeschreibungTitle = new SemiRoundedPanel();
-        JLabel lblHeaderAllgemein1 = new JLabel();
-        JPanel jPanel9 = new JPanel();
-        JLabel jLabel84 = new JLabel();
-        JLabel jLabel1 = new JLabel();
-        JPanel jPanel6 = new JPanel();
+        final JScrollPane jScrollPane3 = new JScrollPane();
+        final JPanel panBeschreibungContent = new JPanel();
+        final SemiRoundedPanel panBeschreibungTitle = new SemiRoundedPanel();
+        final JLabel lblHeaderAllgemein1 = new JLabel();
+        final JPanel jPanel9 = new JPanel();
+        final JLabel jLabel84 = new JLabel();
+        final JLabel jLabel1 = new JLabel();
+        final JPanel jPanel6 = new JPanel();
         jTextField2 = new JTextField();
-        JLabel jLabel2 = new JLabel();
-        JLabel jLabel7 = new JLabel();
+        final JLabel jLabel2 = new JLabel();
+        final JLabel jLabel7 = new JLabel();
         jFormattedTextField1 = new JFormattedTextField();
         jFormattedTextField2 = new JFormattedTextField();
-        Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         jTextField6 = new JTextField();
-        JLabel jLabel3 = new JLabel();
-        JPanel jPanel8 = new JPanel();
+        final JLabel jLabel3 = new JLabel();
+        final JPanel jPanel8 = new JPanel();
         jTextField3 = new JTextField();
         if (editable) {
             lblGeom = new JLabel();
@@ -295,84 +295,84 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setMetaClass(MC__GEOM);
         }
-        Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        JLabel jLabel4 = new JLabel();
+        final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final JLabel jLabel4 = new JLabel();
         jTextField4 = new JTextField();
         treppenBandPanel1 = new TreppenBandPanel(!editable, connectionContext);
-        SemiRoundedPanel panBeschreibungTitle1 = new SemiRoundedPanel();
-        JLabel lblHeaderAllgemein2 = new JLabel();
-        JPanel jPanel4 = new JPanel();
-        JLabel jLabel5 = new JLabel();
-        JPanel jPanel5 = new JPanel();
+        final SemiRoundedPanel panBeschreibungTitle1 = new SemiRoundedPanel();
+        final JLabel lblHeaderAllgemein2 = new JLabel();
+        final JPanel jPanel4 = new JPanel();
+        final JLabel jLabel5 = new JLabel();
+        final JPanel jPanel5 = new JPanel();
         jCheckBox11 = new JCheckBox();
         jCheckBox2 = new JCheckBox();
         jTextField5 = new JTextField();
-        JLabel jLabel43 = new JLabel();
-        JLabel jLabel45 = new JLabel();
-        JPanel jPanel3 = new JPanel();
+        final JLabel jLabel43 = new JLabel();
+        final JLabel jLabel45 = new JLabel();
+        final JPanel jPanel3 = new JPanel();
         jTextField10 = new JTextField();
-        JLabel jLabel47 = new JLabel();
+        final JLabel jLabel47 = new JLabel();
         jTextField14 = new JTextField();
         jTextField13 = new JTextField();
-        JLabel jLabel46 = new JLabel();
+        final JLabel jLabel46 = new JLabel();
         jTextField12 = new JTextField();
-        JLabel jLabel44 = new JLabel();
+        final JLabel jLabel44 = new JLabel();
         jTextField11 = new JTextField();
-        JLabel jLabel8 = new JLabel();
-        JLabel jLabel9 = new JLabel();
-        JLabel jLabel10 = new JLabel();
-        JPanel jPanel1 = new JPanel();
+        final JLabel jLabel8 = new JLabel();
+        final JLabel jLabel9 = new JLabel();
+        final JLabel jLabel10 = new JLabel();
+        final JPanel jPanel1 = new JPanel();
         jCheckBox3 = new JCheckBox();
-        JLabel jLabel14 = new JLabel();
+        final JLabel jLabel14 = new JLabel();
         jTextField7 = new JTextField();
         jCheckBox4 = new JCheckBox();
-        JLabel jLabel15 = new JLabel();
+        final JLabel jLabel15 = new JLabel();
         jTextField8 = new JTextField();
         jCheckBox5 = new JCheckBox();
-        JLabel jLabel16 = new JLabel();
+        final JLabel jLabel16 = new JLabel();
         jTextField9 = new JTextField();
-        JLabel jLabel20 = new JLabel();
+        final JLabel jLabel20 = new JLabel();
         jTextField1 = new JTextField();
-        JLabel jLabel21 = new JLabel();
+        final JLabel jLabel21 = new JLabel();
         jTextField15 = new JTextField();
-        JLabel jLabel11 = new JLabel();
-        JLabel jLabel19 = new JLabel();
-        JPanel jPanel10 = new JPanel();
+        final JLabel jLabel11 = new JLabel();
+        final JLabel jLabel19 = new JLabel();
+        final JPanel jPanel10 = new JPanel();
         jCheckBox6 = new JCheckBox();
         jCheckBox8 = new JCheckBox();
         jCheckBox10 = new JCheckBox();
         jCheckBox7 = new JCheckBox();
         jCheckBox9 = new JCheckBox();
-        JLabel jLabel6 = new JLabel();
-        JLabel jLabel17 = new JLabel();
-        JLabel jLabel12 = new JLabel();
-        JPanel jPanel2 = new JPanel();
+        final JLabel jLabel6 = new JLabel();
+        final JLabel jLabel17 = new JLabel();
+        final JLabel jLabel12 = new JLabel();
+        final JPanel jPanel2 = new JPanel();
         defaultBindableDateChooser1 = new DefaultBindableDateChooser();
         defaultBindableDateChooser2 = new DefaultBindableDateChooser();
         defaultBindableDateChooser3 = new DefaultBindableDateChooser();
         jCheckBox1 = new JCheckBox();
-        JLabel jLabel13 = new JLabel();
-        JLabel jLabel18 = new JLabel();
-        JLabel jLabel85 = new JLabel();
+        final JLabel jLabel13 = new JLabel();
+        final JLabel jLabel18 = new JLabel();
+        final JLabel jLabel85 = new JLabel();
         defaultBindableDateChooser6 = new DefaultBindableDateChooser();
         defaultBindableDateChooser4 = new DefaultBindableDateChooser();
         defaultBindableDateChooser5 = new DefaultBindableDateChooser();
         defaultBindableReferenceCombo3 = new DefaultBindableReferenceCombo(MC__PRUEFUNGSART, true, false);
         defaultBindableReferenceCombo2 = new DefaultBindableReferenceCombo(MC__PRUEFUNGSART, true, false);
-        JLabel jLabel49 = new JLabel();
-        JLabel jLabel48 = new JLabel();
-        Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        JLabel jLabel50 = new JLabel();
-        JLabel jLabel51 = new JLabel();
-        JPanel jPanel7 = new JPanel();
-        JLabel jLabel52 = new JLabel();
-        JLabel jLabel53 = new JLabel();
+        final JLabel jLabel49 = new JLabel();
+        final JLabel jLabel48 = new JLabel();
+        final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final JLabel jLabel50 = new JLabel();
+        final JLabel jLabel51 = new JLabel();
+        final JPanel jPanel7 = new JPanel();
+        final JLabel jLabel52 = new JLabel();
+        final JLabel jLabel53 = new JLabel();
         defaultBindableReferenceCombo7 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
         defaultBindableReferenceCombo8 = new DefaultBindableReferenceCombo(MC__EINSATZ, true, false);
         defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
         defaultBindableReferenceCombo6 = new DefaultBindableReferenceCombo(MC__BEURTEILUNG, true, false);
-        Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        JPanel jPanel30 = new JPanel();
+        final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final JPanel jPanel30 = new JPanel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -391,8 +391,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         panBeschreibungTitle.setLayout(new FlowLayout());
 
         lblHeaderAllgemein1.setForeground(new Color(255, 255, 255));
-        Mnemonics.setLocalizedText(lblHeaderAllgemein1, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.lblHeaderAllgemein1.text")); // NOI18N
-        lblHeaderAllgemein1.setName("lblHeaderAllgemein1"); // NOI18N
+        Mnemonics.setLocalizedText(
+            lblHeaderAllgemein1,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.lblHeaderAllgemein1.text")); // NOI18N
+        lblHeaderAllgemein1.setName("lblHeaderAllgemein1");                                                          // NOI18N
         panBeschreibungTitle.add(lblHeaderAllgemein1);
 
         gridBagConstraints = new GridBagConstraints();
@@ -406,8 +408,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jPanel9.setOpaque(false);
         jPanel9.setLayout(new GridBagLayout());
 
-        Mnemonics.setLocalizedText(jLabel84, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel84.text")); // NOI18N
-        jLabel84.setName("jLabel84"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel84,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel84.text")); // NOI18N
+        jLabel84.setName("jLabel84");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -415,8 +419,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel9.add(jLabel84, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel1, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel1,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -430,7 +436,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField2.setName("jTextField2"); // NOI18N
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), jTextField2, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                jTextField2,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -442,8 +453,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel6.add(jTextField2, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel2, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel2,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -452,8 +465,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 10, 1, 5);
         jPanel6.add(jLabel2, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel7, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel7.text")); // NOI18N
-        jLabel7.setName("jLabel7"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel7,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel7.text")); // NOI18N
+        jLabel7.setName("jLabel7");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -462,11 +477,19 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 10, 1, 5);
         jPanel6.add(jLabel7, gridBagConstraints);
 
-        jFormattedTextField1.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#0000"))));
-        jFormattedTextField1.setText(NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jFormattedTextField1.text")); // NOI18N
-        jFormattedTextField1.setName("jFormattedTextField1"); // NOI18N
+        jFormattedTextField1.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#0000"))));
+        jFormattedTextField1.setText(NbBundle.getMessage(
+                TreppeBeschreibungPanel.class,
+                "TreppeBeschreibungPanel.jFormattedTextField1.text")); // NOI18N
+        jFormattedTextField1.setName("jFormattedTextField1");          // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.nummer}"), jFormattedTextField1, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.nummer}"),
+                jFormattedTextField1,
+                BeanProperty.create("value"));
         binding.setConverter(CONVERTER_INT);
         bindingGroup.addBinding(binding);
 
@@ -478,11 +501,19 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel6.add(jFormattedTextField1, gridBagConstraints);
 
-        jFormattedTextField2.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#00000"))));
-        jFormattedTextField2.setText(NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jFormattedTextField2.text")); // NOI18N
-        jFormattedTextField2.setName("jFormattedTextField2"); // NOI18N
+        jFormattedTextField2.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#00000"))));
+        jFormattedTextField2.setText(NbBundle.getMessage(
+                TreppeBeschreibungPanel.class,
+                "TreppeBeschreibungPanel.jFormattedTextField2.text")); // NOI18N
+        jFormattedTextField2.setName("jFormattedTextField2");          // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strassenschluessel}"), jFormattedTextField2, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.strassenschluessel}"),
+                jFormattedTextField2,
+                BeanProperty.create("value"));
         binding.setConverter(CONVERTER_INT);
         bindingGroup.addBinding(binding);
 
@@ -520,8 +551,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.weightx = 1.0;
         jPanel9.add(jPanel6, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel3, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel3.text")); // NOI18N
-        jLabel3.setName("jLabel3"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel3,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -535,7 +568,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField3.setName("jTextField3"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.lagebeschreibung}"), jTextField3, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.lagebeschreibung}"),
+                jTextField3,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -548,11 +586,13 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jPanel8.add(jTextField3, gridBagConstraints);
 
         if (editable) {
-            if(editable){
-                Mnemonics.setLocalizedText(lblGeom, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.lblGeom.text")); // NOI18N
+            if (editable) {
+                Mnemonics.setLocalizedText(
+                    lblGeom,
+                    NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.lblGeom.text")); // NOI18N
             }
-            if(editable){
-                lblGeom.setName("lblGeom"); // NOI18N
+            if (editable) {
+                lblGeom.setName("lblGeom");                                                                      // NOI18N
             }
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
@@ -570,7 +610,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
             cbGeom.setName("cbGeom"); // NOI18N
             cbGeom.setPreferredSize(new Dimension(41, 25));
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.geometrie}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.geometrie}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
 
@@ -597,8 +642,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.weightx = 1.0;
         jPanel9.add(jPanel8, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel4, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel4.text")); // NOI18N
-        jLabel4.setName("jLabel4"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel4,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel4.text")); // NOI18N
+        jLabel4.setName("jLabel4");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -608,7 +655,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField4.setName("jTextField4"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umgebung}"), jTextField4, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.umgebung}"),
+                jTextField4,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -642,8 +694,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         panBeschreibungTitle1.setLayout(new FlowLayout());
 
         lblHeaderAllgemein2.setForeground(new Color(255, 255, 255));
-        Mnemonics.setLocalizedText(lblHeaderAllgemein2, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.lblHeaderAllgemein2.text")); // NOI18N
-        lblHeaderAllgemein2.setName("lblHeaderAllgemein2"); // NOI18N
+        Mnemonics.setLocalizedText(
+            lblHeaderAllgemein2,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.lblHeaderAllgemein2.text")); // NOI18N
+        lblHeaderAllgemein2.setName("lblHeaderAllgemein2");                                                          // NOI18N
         panBeschreibungTitle1.add(lblHeaderAllgemein2);
 
         gridBagConstraints = new GridBagConstraints();
@@ -657,8 +711,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jPanel4.setOpaque(false);
         jPanel4.setLayout(new GridBagLayout());
 
-        Mnemonics.setLocalizedText(jLabel5, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel5,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -670,12 +726,19 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jPanel5.setOpaque(false);
         jPanel5.setLayout(new GridBagLayout());
 
-        Mnemonics.setLocalizedText(jCheckBox11, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox11.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox11,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox11.text")); // NOI18N
         jCheckBox11.setContentAreaFilled(false);
         jCheckBox11.setHorizontalTextPosition(SwingConstants.LEADING);
-        jCheckBox11.setName("jCheckBox11"); // NOI18N
+        jCheckBox11.setName("jCheckBox11");                                                                  // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_din1076}"), jCheckBox11, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_din1076}"),
+                jCheckBox11,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -689,12 +752,19 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 10, 1, 0);
         jPanel5.add(jCheckBox11, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jCheckBox2, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox2.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox2,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox2.text")); // NOI18N
         jCheckBox2.setContentAreaFilled(false);
         jCheckBox2.setHorizontalTextPosition(SwingConstants.LEADING);
-        jCheckBox2.setName("jCheckBox2"); // NOI18N
+        jCheckBox2.setName("jCheckBox2");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_denkmalschutz}"), jCheckBox2, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_denkmalschutz}"),
+                jCheckBox2,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -710,7 +780,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField5.setName("jTextField5"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.baujahr_ca}"), jTextField5, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.baujahr_ca}"),
+                jTextField5,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -728,8 +803,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.weightx = 1.0;
         jPanel4.add(jPanel5, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel43, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel43.text")); // NOI18N
-        jLabel43.setName("jLabel43"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel43,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel43.text")); // NOI18N
+        jLabel43.setName("jLabel43");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -737,8 +814,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel4.add(jLabel43, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel45, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel45.text")); // NOI18N
-        jLabel45.setName("jLabel45"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel45,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel45.text")); // NOI18N
+        jLabel45.setName("jLabel45");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -752,7 +831,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField10.setName("jTextField10"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.eigentuemer}"), jTextField10, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.eigentuemer}"),
+                jTextField10,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -764,8 +848,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel3.add(jTextField10, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel47, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel47.text")); // NOI18N
-        jLabel47.setName("jLabel47"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel47,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel47.text")); // NOI18N
+        jLabel47.setName("jLabel47");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -777,7 +863,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField14.setName("jTextField14"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.unterhaltungspflicht}"), jTextField14, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.unterhaltungspflicht}"),
+                jTextField14,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -791,7 +882,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField13.setName("jTextField13"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.verkehrssicherungspflicht}"), jTextField13, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.verkehrssicherungspflicht}"),
+                jTextField13,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -803,8 +899,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel3.add(jTextField13, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel46, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel46.text")); // NOI18N
-        jLabel46.setName("jLabel46"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel46,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel46.text")); // NOI18N
+        jLabel46.setName("jLabel46");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -816,7 +914,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField12.setName("jTextField12"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.kontaktdaten_anlieger}"), jTextField12, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.kontaktdaten_anlieger}"),
+                jTextField12,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -835,8 +938,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.weightx = 1.0;
         jPanel4.add(jPanel3, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel44, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel44.text")); // NOI18N
-        jLabel44.setName("jLabel44"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel44,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel44.text")); // NOI18N
+        jLabel44.setName("jLabel44");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -846,7 +951,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField11.setName("jTextField11"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.baulast}"), jTextField11, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.baulast}"),
+                jTextField11,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -855,8 +965,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel4.add(jTextField11, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel8, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel8.text")); // NOI18N
-        jLabel8.setName("jLabel8"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel8,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel8.text")); // NOI18N
+        jLabel8.setName("jLabel8");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -864,8 +976,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel4.add(jLabel8, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel9, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel9.text")); // NOI18N
-        jLabel9.setName("jLabel9"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel9,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel9.text")); // NOI18N
+        jLabel9.setName("jLabel9");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -873,8 +987,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel4.add(jLabel9, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel10, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel10.text")); // NOI18N
-        jLabel10.setName("jLabel10"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel10,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel10.text")); // NOI18N
+        jLabel10.setName("jLabel10");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -886,11 +1002,18 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new GridBagLayout());
 
-        Mnemonics.setLocalizedText(jCheckBox3, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox3.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox3,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox3.text")); // NOI18N
         jCheckBox3.setContentAreaFilled(false);
-        jCheckBox3.setName("jCheckBox3"); // NOI18N
+        jCheckBox3.setName("jCheckBox3");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_zugaenge}"), jCheckBox3, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_zugaenge}"),
+                jCheckBox3,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -903,8 +1026,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel1.add(jCheckBox3, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel14, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel14.text")); // NOI18N
-        jLabel14.setName("jLabel14"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel14,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel14.text")); // NOI18N
+        jLabel14.setName("jLabel14");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -916,9 +1041,19 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField7.setName("jTextField7"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.art_zugaenge}"), jTextField7, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.art_zugaenge}"),
+                jTextField7,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, jCheckBox3, ELProperty.create("${selected}"), jTextField7, BeanProperty.create("enabled"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                jCheckBox3,
+                ELProperty.create("${selected}"),
+                jTextField7,
+                BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -930,11 +1065,18 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel1.add(jTextField7, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jCheckBox4, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox4.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox4,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox4.text")); // NOI18N
         jCheckBox4.setContentAreaFilled(false);
-        jCheckBox4.setName("jCheckBox4"); // NOI18N
+        jCheckBox4.setName("jCheckBox4");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_gebaeude}"), jCheckBox4, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_gebaeude}"),
+                jCheckBox4,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -947,8 +1089,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel1.add(jCheckBox4, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel15, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel15.text")); // NOI18N
-        jLabel15.setName("jLabel15"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel15,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel15.text")); // NOI18N
+        jLabel15.setName("jLabel15");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -960,9 +1104,19 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField8.setName("jTextField8"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.art_gebaeude}"), jTextField8, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.art_gebaeude}"),
+                jTextField8,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, jCheckBox4, ELProperty.create("${selected}"), jTextField8, BeanProperty.create("enabled"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                jCheckBox4,
+                ELProperty.create("${selected}"),
+                jTextField8,
+                BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -974,11 +1128,18 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel1.add(jTextField8, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jCheckBox5, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox5.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox5,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox5.text")); // NOI18N
         jCheckBox5.setContentAreaFilled(false);
-        jCheckBox5.setName("jCheckBox5"); // NOI18N
+        jCheckBox5.setName("jCheckBox5");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_beleuchtung}"), jCheckBox5, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_beleuchtung}"),
+                jCheckBox5,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -991,8 +1152,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel1.add(jCheckBox5, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel16, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel16.text")); // NOI18N
-        jLabel16.setName("jLabel16"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel16,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel16.text")); // NOI18N
+        jLabel16.setName("jLabel16");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -1004,9 +1167,19 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField9.setName("jTextField9"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.art_beleuchtung}"), jTextField9, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.art_beleuchtung}"),
+                jTextField9,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, jCheckBox5, ELProperty.create("${selected}"), jTextField9, BeanProperty.create("enabled"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                jCheckBox5,
+                ELProperty.create("${selected}"),
+                jTextField9,
+                BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1025,8 +1198,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.weightx = 1.0;
         jPanel4.add(jPanel1, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel20, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel20.text")); // NOI18N
-        jLabel20.setName("jLabel20"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel20,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel20.text")); // NOI18N
+        jLabel20.setName("jLabel20");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1036,7 +1211,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField1.setName("jTextField1"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.eigenschaften_treppengruendung}"), jTextField1, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.eigenschaften_treppengruendung}"),
+                jTextField1,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1046,8 +1226,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel4.add(jTextField1, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel21, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel21.text")); // NOI18N
-        jLabel21.setName("jLabel21"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel21,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel21.text")); // NOI18N
+        jLabel21.setName("jLabel21");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1057,7 +1239,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         jTextField15.setName("jTextField15"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.eigenschaften_treppenlagerung}"), jTextField15, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.eigenschaften_treppenlagerung}"),
+                jTextField15,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1067,8 +1254,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel4.add(jTextField15, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel11, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel11.text")); // NOI18N
-        jLabel11.setName("jLabel11"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel11,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel11.text")); // NOI18N
+        jLabel11.setName("jLabel11");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1076,8 +1265,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel4.add(jLabel11, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel19, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel19.text")); // NOI18N
-        jLabel19.setName("jLabel19"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel19,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel19.text")); // NOI18N
+        jLabel19.setName("jLabel19");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1089,55 +1280,90 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jPanel10.setOpaque(false);
         jPanel10.setLayout(new GridLayout(0, 3, 0, 2));
 
-        Mnemonics.setLocalizedText(jCheckBox6, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox6.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox6,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox6.text")); // NOI18N
         jCheckBox6.setContentAreaFilled(false);
-        jCheckBox6.setName("jCheckBox6"); // NOI18N
+        jCheckBox6.setName("jCheckBox6");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_handlauf_einseitig}"), jCheckBox6, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_handlauf_einseitig}"),
+                jCheckBox6,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         jPanel10.add(jCheckBox6);
 
-        Mnemonics.setLocalizedText(jCheckBox8, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox8.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox8,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox8.text")); // NOI18N
         jCheckBox8.setContentAreaFilled(false);
-        jCheckBox8.setName("jCheckBox8"); // NOI18N
+        jCheckBox8.setName("jCheckBox8");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_handlauf_beidseitig}"), jCheckBox8, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_handlauf_beidseitig}"),
+                jCheckBox8,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         jPanel10.add(jCheckBox8);
 
-        Mnemonics.setLocalizedText(jCheckBox10, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox10.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox10,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox10.text")); // NOI18N
         jCheckBox10.setContentAreaFilled(false);
-        jCheckBox10.setName("jCheckBox10"); // NOI18N
+        jCheckBox10.setName("jCheckBox10");                                                                  // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_handlauf_durchgaengig}"), jCheckBox10, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_handlauf_durchgaengig}"),
+                jCheckBox10,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         jPanel10.add(jCheckBox10);
 
-        Mnemonics.setLocalizedText(jCheckBox7, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox7.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox7,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox7.text")); // NOI18N
         jCheckBox7.setContentAreaFilled(false);
-        jCheckBox7.setName("jCheckBox7"); // NOI18N
+        jCheckBox7.setName("jCheckBox7");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_rampen}"), jCheckBox7, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_rampen}"),
+                jCheckBox7,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         jPanel10.add(jCheckBox7);
 
-        Mnemonics.setLocalizedText(jCheckBox9, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox9.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox9,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox9.text")); // NOI18N
         jCheckBox9.setContentAreaFilled(false);
-        jCheckBox9.setName("jCheckBox9"); // NOI18N
+        jCheckBox9.setName("jCheckBox9");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_taktile_elemente}"), jCheckBox9, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_taktile_elemente}"),
+                jCheckBox9,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1151,8 +1377,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.weightx = 1.0;
         jPanel4.add(jPanel10, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel6, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel6.text")); // NOI18N
-        jLabel6.setName("jLabel6"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel6,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel6.text")); // NOI18N
+        jLabel6.setName("jLabel6");                                                                      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1160,8 +1388,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel4.add(jLabel6, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel17, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel17.text")); // NOI18N
-        jLabel17.setName("jLabel17"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel17,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel17.text")); // NOI18N
+        jLabel17.setName("jLabel17");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1169,8 +1399,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel4.add(jLabel17, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel12, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel12.text")); // NOI18N
-        jLabel12.setName("jLabel12"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel12,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel12.text")); // NOI18N
+        jLabel12.setName("jLabel12");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1184,7 +1416,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableDateChooser1.setName("defaultBindableDateChooser1"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_letzte_sanierung}"), defaultBindableDateChooser1, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_letzte_sanierung}"),
+                defaultBindableDateChooser1,
+                BeanProperty.create("date"));
         binding.setConverter(defaultBindableDateChooser1.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -1198,7 +1435,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableDateChooser2.setName("defaultBindableDateChooser2"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_letzte_bauwerksbesichtigung}"), defaultBindableDateChooser2, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_letzte_bauwerksbesichtigung}"),
+                defaultBindableDateChooser2,
+                BeanProperty.create("date"));
         binding.setConverter(defaultBindableDateChooser2.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -1213,7 +1455,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableDateChooser3.setName("defaultBindableDateChooser3"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_naechste_bauwerksbesichtigung}"), defaultBindableDateChooser3, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_naechste_bauwerksbesichtigung}"),
+                defaultBindableDateChooser3,
+                BeanProperty.create("date"));
         binding.setConverter(defaultBindableDateChooser3.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -1226,12 +1473,19 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel2.add(defaultBindableDateChooser3, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jCheckBox1, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox1.text")); // NOI18N
+        Mnemonics.setLocalizedText(
+            jCheckBox1,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jCheckBox1.text")); // NOI18N
         jCheckBox1.setContentAreaFilled(false);
         jCheckBox1.setHorizontalTextPosition(SwingConstants.LEADING);
-        jCheckBox1.setName("jCheckBox1"); // NOI18N
+        jCheckBox1.setName("jCheckBox1");                                                                   // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ist_gesperrt}"), jCheckBox1, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ist_gesperrt}"),
+                jCheckBox1,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1245,8 +1499,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 10, 1, 0);
         jPanel2.add(jCheckBox1, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel13, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel13,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel13.text")); // NOI18N
+        jLabel13.setName("jLabel13");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -1257,8 +1513,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 10, 1, 5);
         jPanel2.add(jLabel13, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel18, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel18.text")); // NOI18N
-        jLabel18.setName("jLabel18"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel18,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel18.text")); // NOI18N
+        jLabel18.setName("jLabel18");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -1269,8 +1527,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 10, 1, 5);
         jPanel2.add(jLabel18, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel85, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel85.text")); // NOI18N
-        jLabel85.setName("jLabel85"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel85,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel85.text")); // NOI18N
+        jLabel85.setName("jLabel85");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -1282,10 +1542,20 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableDateChooser6.setName("defaultBindableDateChooser6"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_gesperrt_seit}"), defaultBindableDateChooser6, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_gesperrt_seit}"),
+                defaultBindableDateChooser6,
+                BeanProperty.create("date"));
         binding.setConverter(defaultBindableDateChooser6.getConverter());
         bindingGroup.addBinding(binding);
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, jCheckBox1, ELProperty.create("${selected}"), defaultBindableDateChooser6, BeanProperty.create("enabled"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                jCheckBox1,
+                ELProperty.create("${selected}"),
+                defaultBindableDateChooser6,
+                BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1299,7 +1569,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableDateChooser4.setName("defaultBindableDateChooser4"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_letzte_pruefung}"), defaultBindableDateChooser4, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_letzte_pruefung}"),
+                defaultBindableDateChooser4,
+                BeanProperty.create("date"));
         binding.setConverter(defaultBindableDateChooser4.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -1314,7 +1589,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableDateChooser5.setName("defaultBindableDateChooser5"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_naechste_pruefung}"), defaultBindableDateChooser5, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_naechste_pruefung}"),
+                defaultBindableDateChooser5,
+                BeanProperty.create("date"));
         binding.setConverter(defaultBindableDateChooser5.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -1329,7 +1609,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableReferenceCombo3.setName("defaultBindableReferenceCombo3"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.art_letzte_pruefung}"), defaultBindableReferenceCombo3, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.art_letzte_pruefung}"),
+                defaultBindableReferenceCombo3,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1342,7 +1627,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableReferenceCombo2.setName("defaultBindableReferenceCombo2"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.art_naechste_pruefung}"), defaultBindableReferenceCombo2, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.art_naechste_pruefung}"),
+                defaultBindableReferenceCombo2,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1353,8 +1643,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel2.add(defaultBindableReferenceCombo2, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel49, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel49.text")); // NOI18N
-        jLabel49.setName("jLabel49"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel49,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel49.text")); // NOI18N
+        jLabel49.setName("jLabel49");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
@@ -1364,8 +1656,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 10, 1, 5);
         jPanel2.add(jLabel49, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel48, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel48.text")); // NOI18N
-        jLabel48.setName("jLabel48"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel48,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel48.text")); // NOI18N
+        jLabel48.setName("jLabel48");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
@@ -1391,8 +1685,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.weightx = 1.0;
         jPanel4.add(jPanel2, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel50, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel50.text")); // NOI18N
-        jLabel50.setName("jLabel50"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel50,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel50.text")); // NOI18N
+        jLabel50.setName("jLabel50");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1400,8 +1696,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel4.add(jLabel50, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel51, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel51.text")); // NOI18N
-        jLabel51.setName("jLabel51"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel51,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel51.text")); // NOI18N
+        jLabel51.setName("jLabel51");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1413,8 +1711,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jPanel7.setOpaque(false);
         jPanel7.setLayout(new GridBagLayout());
 
-        Mnemonics.setLocalizedText(jLabel52, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel52.text")); // NOI18N
-        jLabel52.setName("jLabel52"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel52,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel52.text")); // NOI18N
+        jLabel52.setName("jLabel52");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -1424,8 +1724,10 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.insets = new Insets(1, 10, 1, 5);
         jPanel7.add(jLabel52, gridBagConstraints);
 
-        Mnemonics.setLocalizedText(jLabel53, NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel53.text")); // NOI18N
-        jLabel53.setName("jLabel53"); // NOI18N
+        Mnemonics.setLocalizedText(
+            jLabel53,
+            NbBundle.getMessage(TreppeBeschreibungPanel.class, "TreppeBeschreibungPanel.jLabel53.text")); // NOI18N
+        jLabel53.setName("jLabel53");                                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -1437,7 +1739,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableReferenceCombo7.setName("defaultBindableReferenceCombo7"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beurteilung_dauerhaftigkeit}"), defaultBindableReferenceCombo7, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beurteilung_dauerhaftigkeit}"),
+                defaultBindableReferenceCombo7,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1450,7 +1757,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableReferenceCombo8.setName("defaultBindableReferenceCombo8"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.notwendigkeit_eingriff}"), defaultBindableReferenceCombo8, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.notwendigkeit_eingriff}"),
+                defaultBindableReferenceCombo8,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1463,7 +1775,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableReferenceCombo5.setName("defaultBindableReferenceCombo5"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beurteilung_standsicherheit}"), defaultBindableReferenceCombo5, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beurteilung_standsicherheit}"),
+                defaultBindableReferenceCombo5,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1476,7 +1793,12 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
 
         defaultBindableReferenceCombo6.setName("defaultBindableReferenceCombo6"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beurteilung_verkehrssicherheit}"), defaultBindableReferenceCombo6, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beurteilung_verkehrssicherheit}"),
+                defaultBindableReferenceCombo6,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1533,7 +1855,7 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
         jScrollPane3.getViewport().setOpaque(false);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!

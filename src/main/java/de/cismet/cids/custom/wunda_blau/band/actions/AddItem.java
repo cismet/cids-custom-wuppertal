@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 
 import de.cismet.cids.custom.wunda_blau.band.ElementResizedEvent;
 import de.cismet.cids.custom.wunda_blau.band.LaufBand;
@@ -34,6 +35,7 @@ import de.cismet.tools.gui.jbands.interfaces.BandMember;
 
 import static javax.swing.Action.NAME;
 import static javax.swing.Action.SHORT_DESCRIPTION;
+import static javax.swing.Action.SMALL_ICON;
 
 /**
  * DOCUMENT ME!
@@ -51,21 +53,33 @@ public class AddItem extends AbstractAction {
     //~ Instance fields --------------------------------------------------------
 
     private TreppeBandMember member;
-    private boolean after;
+    private boolean after = true;
+    private boolean secondIcon = false;
     private String tableName;
     private boolean initialised = false;
+    private boolean useIcon = false;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new AddItem object.
-     *
-     * @param  member      DOCUMENT ME!
-     * @param  after       DOCUMENT ME!
-     * @param  tableName   DOCUMENT ME!
-     * @param  objectName  DOCUMENT ME!
      */
     public AddItem() {
+        setEnabled(false);
+        useIcon = true;
+    }
+
+    /**
+     * Creates a new AddItem object.
+     *
+     * @param  after       DOCUMENT ME!
+     * @param  secondIcon  DOCUMENT ME!
+     */
+    public AddItem(final boolean after, final boolean secondIcon) {
+        this.after = after;
+        this.secondIcon = secondIcon;
+        useIcon = true;
+        initValues(null, after);
         setEnabled(false);
     }
 
@@ -82,10 +96,19 @@ public class AddItem extends AbstractAction {
             final String tableName,
             final String objectName) {
         init(member, after, tableName, objectName);
+        initValues(objectName, after);
     }
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  member      DOCUMENT ME!
+     * @param  after       DOCUMENT ME!
+     * @param  tableName   DOCUMENT ME!
+     * @param  objectName  DOCUMENT ME!
+     */
     public void init(final TreppeBandMember member,
             final boolean after,
             final String tableName,
@@ -93,17 +116,69 @@ public class AddItem extends AbstractAction {
         this.member = member;
         this.after = after;
         this.tableName = tableName;
-        putValue(SHORT_DESCRIPTION, objectName);
-        putValue(NAME, objectName);
         setEnabled(true);
+        initValues(objectName, after);
         this.initialised = true;
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  objectName  DOCUMENT ME!
+     * @param  after       DOCUMENT ME!
+     */
+    private void initValues(final String objectName, final boolean after) {
+        String object = objectName;
+
+        if (objectName == null) {
+            object = "Objekt";
+        }
+
+        if (after) {
+            putValue(SHORT_DESCRIPTION, object + " dahinter einfügen");
+            if (!useIcon) {
+                putValue(NAME, object + " dahinter einfügen");
+            }
+        } else {
+            putValue(SHORT_DESCRIPTION, object + " davor einfügen");
+            if (!useIcon) {
+                putValue(NAME, object + " davor einfügen");
+            }
+        }
+
+        if (useIcon) {
+            if (after) {
+                if (secondIcon) {
+                    final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
+                                "/res/fast-forward.7.png"));
+                    putValue(SMALL_ICON, icon);
+                } else {
+                    final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
+                                "/res/next.4.png"));
+                    putValue(SMALL_ICON, icon);
+                }
+            } else {
+                if (secondIcon) {
+                    final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
+                                "/res/fast-backward.png"));
+                    putValue(SMALL_ICON, icon);
+                } else {
+                    final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
+                                "/res/previous.2.png"));
+                    putValue(SMALL_ICON, icon);
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     public void deactivate() {
         setEnabled(false);
         initialised = false;
     }
-    
+
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (!initialised) {

@@ -18,8 +18,6 @@ import org.jdesktop.observablecollections.ObservableList;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +45,9 @@ import de.cismet.cids.custom.wunda_blau.band.TreppeBandMember;
 import de.cismet.cids.custom.wunda_blau.band.TreppeObservableListListener;
 import de.cismet.cids.custom.wunda_blau.band.TreppenBand;
 import de.cismet.cids.custom.wunda_blau.band.actions.AddItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.DeleteItem;
+import de.cismet.cids.custom.wunda_blau.band.actions.SelectNext;
+import de.cismet.cids.custom.wunda_blau.band.actions.SelectPrevious;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -133,8 +134,16 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     private List<CidsBean> entwaesserungList = new ArrayList<CidsBean>();
     private TreppenElementResizedListener resizedListener = new TreppenElementResizedListener();
     private boolean tempReadOnly = false;
+    private boolean readOnly = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton butAddAfter;
+    private javax.swing.JButton butAddAfterSecond;
+    private javax.swing.JButton butAddBefore;
+    private javax.swing.JButton butAddBeforeSecond;
+    private javax.swing.JButton butNext;
+    private javax.swing.JButton butPrev;
+    private javax.swing.JButton butRemove;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar jToolBar1;
@@ -169,6 +178,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      */
     public TreppenBandPanel(final boolean readOnly,
             final ConnectionContext connectionContext) {
+        this.readOnly = readOnly;
         jband.setReadOnly(readOnly);
         this.connectionContext = connectionContext;
         treppelaufPanel = new TreppeLaufPanel(!readOnly, connectionContext);
@@ -246,6 +256,13 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         panBand = new javax.swing.JPanel();
         panBand1 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
+        butPrev = new javax.swing.JButton();
+        butAddBeforeSecond = new javax.swing.JButton();
+        butAddBefore = new javax.swing.JButton();
+        butAddAfter = new javax.swing.JButton();
+        butAddAfterSecond = new javax.swing.JButton();
+        butRemove = new javax.swing.JButton();
+        butNext = new javax.swing.JButton();
         panInfoContent = new javax.swing.JPanel();
         panStufe = new javax.swing.JPanel();
         panPodeste = new javax.swing.JPanel();
@@ -288,6 +305,92 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar1.setRollover(true);
         jToolBar1.setOpaque(false);
+
+        butPrev.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.SelectPrevious());
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butPrev,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butPrev.text",
+                new Object[] {})); // NOI18N
+        butPrev.setAlignmentX(0.5F);
+        butPrev.setFocusable(false);
+        butPrev.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butPrev.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butPrev);
+
+        butAddBeforeSecond.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.AddItem(false, true));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butAddBeforeSecond,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butAddBeforeSecond.text",
+                new Object[] {})); // NOI18N
+        butAddBeforeSecond.setAlignmentX(0.5F);
+        butAddBeforeSecond.setFocusable(false);
+        butAddBeforeSecond.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butAddBeforeSecond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butAddBeforeSecond);
+
+        butAddBefore.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.AddItem(false, false));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butAddBefore,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butAddBefore.text",
+                new Object[] {})); // NOI18N
+        butAddBefore.setAlignmentX(0.5F);
+        butAddBefore.setFocusable(false);
+        butAddBefore.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butAddBefore.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butAddBefore);
+
+        butAddAfter.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.AddItem(true, false));
+        butAddAfter.setAlignmentX(0.5F);
+        butAddAfter.setFocusable(false);
+        butAddAfter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butAddAfter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butAddAfter);
+
+        butAddAfterSecond.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.AddItem(true, true));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butAddAfterSecond,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butAddAfterSecond.text",
+                new Object[] {})); // NOI18N
+        butAddAfterSecond.setAlignmentX(0.5F);
+        butAddAfterSecond.setFocusable(false);
+        butAddAfterSecond.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butAddAfterSecond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butAddAfterSecond);
+
+        butRemove.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.DeleteItem());
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butRemove,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butRemove.text",
+                new Object[] {})); // NOI18N
+        butRemove.setAlignmentX(0.5F);
+        butRemove.setFocusable(false);
+        butRemove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butRemove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butRemove);
+
+        butNext.setAction(new de.cismet.cids.custom.wunda_blau.band.actions.SelectNext());
+        org.openide.awt.Mnemonics.setLocalizedText(
+            butNext,
+            org.openide.util.NbBundle.getMessage(
+                TreppenBandPanel.class,
+                "TreppenBandPanel.butNext.text",
+                new Object[] {})); // NOI18N
+        butNext.setAlignmentX(0.5F);
+        butNext.setFocusable(false);
+        butNext.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        butNext.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(butNext);
+
         panBand1.add(jToolBar1, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -867,32 +970,119 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                     // PodestBandMember is also a LaufBandMember. So the test on Podest must be first
                     switchToForm("podeste");
                     treppePodestPanel.setCidsBean(((PodestBandMember)bm).getCidsBean());
+                    final String objectName = ((PodestBandMember)bm).getParentBand().getAllowedObjectNames()[0];
+                    final String objectTable = ((PodestBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
+                    final String secondObjectName = ((PodestBandMember)bm).getParentBand().getAllowedObjectNames()[1];
+                    final String secondObjectTable =
+                        ((PodestBandMember)bm).getParentBand().getAllowedObjectTableNames()[1];
+
+                    activateControls((PodestBandMember)bm,
+                        objectName,
+                        secondObjectName,
+                        objectTable,
+                        secondObjectTable);
                 } else if (bm instanceof LaufBandMember) {
                     switchToForm("stufen");
                     treppelaufPanel.setCidsBean(((LaufBandMember)bm).getCidsBean());
+                    final String objectName = ((LaufBandMember)bm).getParentBand().getAllowedObjectNames()[0];
+                    final String objectTable = ((LaufBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
+                    final String secondObjectName = ((LaufBandMember)bm).getParentBand().getAllowedObjectNames()[1];
+                    final String secondObjectTable =
+                        ((LaufBandMember)bm).getParentBand().getAllowedObjectTableNames()[1];
+
+                    activateControls((LaufBandMember)bm, objectName, secondObjectName, objectTable, secondObjectTable);
                 } else if (bm instanceof LeitelementBandMember) {
                     switchToForm("leitelemente");
                     treppeLeitelementpanel.setCidsBean(((LeitelementBandMember)bm).getCidsBean());
+                    final String objectName = ((LeitelementBandMember)bm).getParentBand().getAllowedObjectNames()[0];
+                    final String objectTable =
+                        ((LeitelementBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
+
+                    activateControls((LeitelementBandMember)bm, objectName, null, objectTable, null);
                 } else if (bm instanceof HandlaufBandMember) {
                     switchToForm("handlaeufe");
                     treppeHandlaufPanel.setCidsBean(((HandlaufBandMember)bm).getCidsBean());
+                    final String objectName = ((HandlaufBandMember)bm).getParentBand().getAllowedObjectNames()[0];
+                    final String objectTable = ((HandlaufBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
+
+                    activateControls((HandlaufBandMember)bm, objectName, null, objectTable, null);
                 } else if (bm instanceof StuetzmauerBandMember) {
                     switchToForm("stuetzmauern");
                     treppeStuetzmauerPanel.setCidsBean(((StuetzmauerBandMember)bm).getCidsBean());
+                    activateControls(null, null, null, null, null);
+                    ((DeleteItem)butRemove.getAction()).init((StuetzmauerBandMember)bm);
+                    ((SelectNext)butNext.getAction()).init((StuetzmauerBandMember)bm);
+                    ((SelectPrevious)butPrev.getAction()).init((StuetzmauerBandMember)bm);
                 } else if (bm instanceof EntwaesserungBandMember) {
                     switchToForm("entwaesserung");
                     treppeEntwaesserungPanel.setCidsBean(((EntwaesserungBandMember)bm).getCidsBean());
+                    activateControls(null, null, null, null, null);
+                    ((DeleteItem)butRemove.getAction()).init((EntwaesserungBandMember)bm);
                 } else if (bm instanceof DummyBandMember) {
                     panChooser.removeAll();
                     panChooser.add(((DummyBandMember)bm).getObjectChooser());
+                    activateControls(null, null, null, null, null);
                     switchToForm("chooser");
                 }
             } else {
                 switchToForm("summary");
+                activateControls(null, null, null, null, null);
             }
 
             jband.setRefreshAvoided(false);
             jband.bandModelChanged(null);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  member             DOCUMENT ME!
+         * @param  objectName         DOCUMENT ME!
+         * @param  secondObjectName   DOCUMENT ME!
+         * @param  objectTable        DOCUMENT ME!
+         * @param  secondObjectTable  DOCUMENT ME!
+         */
+        private void activateControls(final TreppeBandMember member,
+                final String objectName,
+                final String secondObjectName,
+                final String objectTable,
+                final String secondObjectTable) {
+            final boolean active = member != null;
+
+            if (member != null) {
+                ((AddItem)butAddAfter.getAction()).init(member, true, objectTable, objectName);
+                if (secondObjectName != null) {
+                    ((AddItem)butAddAfterSecond.getAction()).init(member, true, secondObjectTable, secondObjectName);
+                } else {
+                    ((AddItem)butAddAfterSecond.getAction()).deactivate();
+                }
+                ((AddItem)butAddBefore.getAction()).init(member, false, objectTable, objectName);
+                if (secondObjectName != null) {
+                    ((AddItem)butAddBeforeSecond.getAction()).init(member, false, secondObjectTable, secondObjectName);
+                } else {
+                    ((AddItem)butAddBeforeSecond.getAction()).deactivate();
+                }
+
+                ((DeleteItem)butRemove.getAction()).init(member);
+                ((SelectNext)butNext.getAction()).init(member);
+                ((SelectPrevious)butPrev.getAction()).init(member);
+            } else {
+                ((AddItem)butAddAfter.getAction()).deactivate();
+                ((AddItem)butAddAfterSecond.getAction()).deactivate();
+                ((AddItem)butAddBefore.getAction()).deactivate();
+                ((AddItem)butAddBeforeSecond.getAction()).deactivate();
+                ((DeleteItem)butRemove.getAction()).deactivate();
+                ((SelectNext)butNext.getAction()).deactivate();
+                ((SelectPrevious)butPrev.getAction()).deactivate();
+            }
+
+            if (readOnly) {
+                ((AddItem)butAddAfter.getAction()).deactivate();
+                ((AddItem)butAddAfterSecond.getAction()).deactivate();
+                ((AddItem)butAddBefore.getAction()).deactivate();
+                ((AddItem)butAddBeforeSecond.getAction()).deactivate();
+                ((DeleteItem)butRemove.getAction()).deactivate();
+            }
         }
 
         @Override
