@@ -50,11 +50,24 @@ public class AddItem extends AbstractAction {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final TreppeBandMember member;
-    private final boolean after;
-    private final String tableName;
+    private TreppeBandMember member;
+    private boolean after;
+    private String tableName;
+    private boolean initialised = false;
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new AddItem object.
+     *
+     * @param  member      DOCUMENT ME!
+     * @param  after       DOCUMENT ME!
+     * @param  tableName   DOCUMENT ME!
+     * @param  objectName  DOCUMENT ME!
+     */
+    public AddItem() {
+        setEnabled(false);
+    }
 
     /**
      * Creates a new AddItem object.
@@ -68,17 +81,34 @@ public class AddItem extends AbstractAction {
             final boolean after,
             final String tableName,
             final String objectName) {
+        init(member, after, tableName, objectName);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    public void init(final TreppeBandMember member,
+            final boolean after,
+            final String tableName,
+            final String objectName) {
         this.member = member;
         this.after = after;
         this.tableName = tableName;
         putValue(SHORT_DESCRIPTION, objectName);
         putValue(NAME, objectName);
+        setEnabled(true);
+        this.initialised = true;
     }
-
-    //~ Methods ----------------------------------------------------------------
-
+    
+    public void deactivate() {
+        setEnabled(false);
+        initialised = false;
+    }
+    
     @Override
     public void actionPerformed(final ActionEvent e) {
+        if (!initialised) {
+            return;
+        }
         try {
             final CidsBean objectBean = TreppenBand.createNewCidsBeanFromTableName(tableName);
             final CidsBean zustandBean = TreppenBand.createNewCidsBeanFromTableName("treppe_zustand");

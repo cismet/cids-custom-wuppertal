@@ -18,6 +18,8 @@ import org.jdesktop.observablecollections.ObservableList;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,25 +136,20 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel panBand;
+    private javax.swing.JPanel panBand1;
     private javax.swing.JPanel panChooser;
-    private javax.swing.JPanel panControls;
     private javax.swing.JPanel panEntwaesserung;
     private javax.swing.JPanel panHandlaeufe;
     private javax.swing.JPanel panHeader;
-    private javax.swing.JPanel panHeaderInfo;
     private javax.swing.JPanel panInfoContent;
     private javax.swing.JPanel panLeitelemente;
     private javax.swing.JPanel panPodeste;
     private javax.swing.JPanel panStuetzmauern;
     private javax.swing.JPanel panStufe;
     private javax.swing.JPanel panSummary;
-    private javax.swing.JSlider sldZoom;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -161,7 +158,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      * Creates new form TreppenBandPanel.
      */
     public TreppenBandPanel() {
-        this(false, ConnectionContext.createDeprecated(), new JPanel());
+        this(false, ConnectionContext.createDeprecated());
     }
 
     /**
@@ -169,11 +166,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      *
      * @param  readOnly           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
-     * @param  summaryPanel       DOCUMENT ME!
      */
     public TreppenBandPanel(final boolean readOnly,
-            final ConnectionContext connectionContext,
-            final JPanel summaryPanel) {
+            final ConnectionContext connectionContext) {
         jband.setReadOnly(readOnly);
         this.connectionContext = connectionContext;
         treppelaufPanel = new TreppeLaufPanel(!readOnly, connectionContext);
@@ -183,9 +178,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         treppeStuetzmauerPanel = new TreppeStuetzmauerPanel(!readOnly);
         treppeEntwaesserungPanel = new TreppeEntwaesserungPanel(!readOnly, connectionContext);
         initComponents();
-        panSummary.add(summaryPanel, BorderLayout.CENTER);
-        panControls.setVisible(false);
-        panHeaderInfo.setVisible(false);
         stuetzmauerLinksBand.setReadOnly(readOnly);
         handlaufLeftBand.setReadOnly(readOnly);
         handlaufRightBand.setReadOnly(readOnly);
@@ -208,8 +200,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         jband.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         sbm.addBandModelListener(modelListener);
 
-        sldZoom.setPaintTrack(false);
-
         panStufe.add(treppelaufPanel, BorderLayout.CENTER);
         panPodeste.add(treppePodestPanel, BorderLayout.CENTER);
         panLeitelemente.add(treppeLeitelementpanel, BorderLayout.CENTER);
@@ -219,6 +209,15 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  summaryPanel  DOCUMENT ME!
+     */
+    public void setZusammenfassung(final JPanel summaryPanel) {
+        panSummary.add(summaryPanel, BorderLayout.CENTER);
+    }
 
     /**
      * DOCUMENT ME!
@@ -244,14 +243,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         java.awt.GridBagConstraints gridBagConstraints;
 
         panHeader = new javax.swing.JPanel();
-        panHeaderInfo = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        sldZoom = new javax.swing.JSlider();
-        panControls = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
         panBand = new javax.swing.JPanel();
+        panBand1 = new javax.swing.JPanel();
+        jToolBar1 = new javax.swing.JToolBar();
         panInfoContent = new javax.swing.JPanel();
         panStufe = new javax.swing.JPanel();
         panPodeste = new javax.swing.JPanel();
@@ -264,81 +258,13 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(1050, 650));
+        setMinimumSize(new java.awt.Dimension(1050, 510));
         setOpaque(false);
-        setPreferredSize(new java.awt.Dimension(1050, 650));
+        setPreferredSize(new java.awt.Dimension(1050, 510));
         setLayout(new java.awt.GridBagLayout());
 
         panHeader.setOpaque(false);
         panHeader.setLayout(new java.awt.GridBagLayout());
-
-        panHeaderInfo.setMinimumSize(new java.awt.Dimension(531, 102));
-        panHeaderInfo.setOpaque(false);
-        panHeaderInfo.setPreferredSize(new java.awt.Dimension(532, 50));
-        panHeaderInfo.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    panHeaderInfoMouseClicked(evt);
-                }
-            });
-        panHeaderInfo.setLayout(null);
-
-        jLabel5.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, "Zoom:");
-        jLabel5.setMaximumSize(new java.awt.Dimension(92, 22));
-        jLabel5.setMinimumSize(new java.awt.Dimension(92, 22));
-        jLabel5.setPreferredSize(new java.awt.Dimension(92, 22));
-        panHeaderInfo.add(jLabel5);
-        jLabel5.setBounds(10, 10, 80, 20);
-
-        sldZoom.setMaximum(200);
-        sldZoom.setValue(0);
-        sldZoom.addChangeListener(new javax.swing.event.ChangeListener() {
-
-                @Override
-                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
-                    sldZoomStateChanged(evt);
-                }
-            });
-        panHeaderInfo.add(sldZoom);
-        sldZoom.setBounds(110, 10, 350, 16);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        panHeader.add(panHeaderInfo, gridBagConstraints);
-
-        panControls.setOpaque(false);
-        panControls.setLayout(new java.awt.GridBagLayout());
-
-        jPanel1.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 1.0;
-        panControls.add(jPanel1, gridBagConstraints);
-
-        jPanel2.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        panControls.add(jPanel2, gridBagConstraints);
-
-        jPanel4.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        panControls.add(jPanel4, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        panHeader.add(panControls, gridBagConstraints);
 
         panBand.setMaximumSize(new java.awt.Dimension(1500, 230));
         panBand.setMinimumSize(new java.awt.Dimension(750, 230));
@@ -348,10 +274,28 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panHeader.add(panBand, gridBagConstraints);
+
+        panBand1.setMaximumSize(new java.awt.Dimension(75, 230));
+        panBand1.setMinimumSize(new java.awt.Dimension(75, 230));
+        panBand1.setOpaque(false);
+        panBand1.setPreferredSize(new java.awt.Dimension(75, 230));
+        panBand1.setLayout(new java.awt.BorderLayout());
+
+        jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar1.setRollover(true);
+        jToolBar1.setOpaque(false);
+        panBand1.add(jToolBar1, java.awt.BorderLayout.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panHeader.add(panBand1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -360,9 +304,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         gridBagConstraints.weightx = 1.0;
         add(panHeader, gridBagConstraints);
 
-        panInfoContent.setMinimumSize(new java.awt.Dimension(640, 310));
+        panInfoContent.setMinimumSize(new java.awt.Dimension(640, 240));
         panInfoContent.setOpaque(false);
-        panInfoContent.setPreferredSize(new java.awt.Dimension(640, 310));
+        panInfoContent.setPreferredSize(new java.awt.Dimension(640, 240));
         panInfoContent.setLayout(new java.awt.CardLayout());
 
         panStufe.setOpaque(false);
@@ -440,25 +384,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         gridBagConstraints.weighty = 1.0;
         add(jPanel3, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void sldZoomStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldZoomStateChanged
-        final double zoom = sldZoom.getValue() / 10d;
-        jband.setZoomFactor(zoom);
-    }                                                                           //GEN-LAST:event_sldZoomStateChanged
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void panHeaderInfoMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_panHeaderInfoMouseClicked
-        System.out.println("click");
-    }                                                                             //GEN-LAST:event_panHeaderInfoMouseClicked
 
     /**
      * Switch the sub editor panel to the given form.
