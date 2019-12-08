@@ -17,7 +17,11 @@ import org.jdesktop.observablecollections.ObservableList;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,20 +123,14 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
             jband);
     private final BandModelListener modelListener = new TreppenBandModelListener();
     private final SimpleBandModel sbm = new SimpleBandModel();
-    private TreppeLaufPanel treppelaufPanel;
-    private TreppeHandlaufPanel treppeHandlaufPanel;
-    private TreppeLeitelementPanel treppeLeitelementpanel;
-    private TreppePodestPanel treppePodestPanel;
-    private TreppeStuetzmauerPanel treppeStuetzmauerPanel;
-    private TreppeEntwaesserungPanel treppeEntwaesserungPanel;
     private ConnectionContext connectionContext;
     private CidsBean cidsBean;
-    private List<CidsBean> laufList = new ArrayList<CidsBean>();
-    private List<CidsBean> leitelementList = new ArrayList<CidsBean>();
-    private List<CidsBean> handlaufList = new ArrayList<CidsBean>();
-    private List<CidsBean> stuetzmauerList = new ArrayList<CidsBean>();
-    private List<CidsBean> entwaesserungList = new ArrayList<CidsBean>();
-    private TreppenElementResizedListener resizedListener = new TreppenElementResizedListener();
+    private List<CidsBean> laufList = new ArrayList<>();
+    private List<CidsBean> leitelementList = new ArrayList<>();
+    private List<CidsBean> handlaufList = new ArrayList<>();
+    private List<CidsBean> stuetzmauerList = new ArrayList<>();
+    private List<CidsBean> entwaesserungList = new ArrayList<>();
+    private final TreppenElementResizedListener resizedListener = new TreppenElementResizedListener();
     private boolean tempReadOnly = false;
     private boolean readOnly = false;
 
@@ -144,21 +142,25 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
     private javax.swing.JButton butNext;
     private javax.swing.JButton butPrev;
     private javax.swing.JButton butRemove;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel panBand;
     private javax.swing.JPanel panBand1;
     private javax.swing.JPanel panChooser;
     private javax.swing.JPanel panEntwaesserung;
-    private javax.swing.JPanel panHandlaeufe;
+    private javax.swing.JPanel panHandlaeuf;
     private javax.swing.JPanel panHeader;
     private javax.swing.JPanel panInfoContent;
-    private javax.swing.JPanel panLeitelemente;
-    private javax.swing.JPanel panPodeste;
+    private javax.swing.JPanel panLeitelement;
+    private javax.swing.JPanel panPodest;
     private javax.swing.JPanel panStuetzmauern;
-    private javax.swing.JPanel panStufe;
     private javax.swing.JPanel panSummary;
+    private javax.swing.JPanel panTreppenlauf;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEntwaesserungPanel treppeEntwaesserungPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.TreppeHandlaufPanel treppeHandlaufPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.TreppeLaufPanel treppeLaufPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.TreppeLeitelementPanel treppeLeitelementPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.TreppePodestPanel treppePodestPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel treppeStuetzmauerPanel1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -181,12 +183,6 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         this.readOnly = readOnly;
         jband.setReadOnly(readOnly);
         this.connectionContext = connectionContext;
-        treppelaufPanel = new TreppeLaufPanel(!readOnly, connectionContext);
-        treppeHandlaufPanel = new TreppeHandlaufPanel(!readOnly);
-        treppeLeitelementpanel = new TreppeLeitelementPanel(!readOnly);
-        treppePodestPanel = new TreppePodestPanel(!readOnly, connectionContext);
-        treppeStuetzmauerPanel = new TreppeStuetzmauerPanel(!readOnly);
-        treppeEntwaesserungPanel = new TreppeEntwaesserungPanel(!readOnly, connectionContext);
         initComponents();
         stuetzmauerLinksBand.setReadOnly(readOnly);
         handlaufLeftBand.setReadOnly(readOnly);
@@ -210,12 +206,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         jband.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         sbm.addBandModelListener(modelListener);
 
-        panStufe.add(treppelaufPanel, BorderLayout.CENTER);
-        panPodeste.add(treppePodestPanel, BorderLayout.CENTER);
-        panLeitelemente.add(treppeLeitelementpanel, BorderLayout.CENTER);
-        panStuetzmauern.add(treppeStuetzmauerPanel, BorderLayout.CENTER);
-        panEntwaesserung.add(treppeEntwaesserungPanel, BorderLayout.CENTER);
-        panHandlaeufe.add(treppeHandlaufPanel, BorderLayout.CENTER);
+        switchToForm("summary");
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -264,36 +255,50 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         butRemove = new javax.swing.JButton();
         butNext = new javax.swing.JButton();
         panInfoContent = new javax.swing.JPanel();
-        panStufe = new javax.swing.JPanel();
-        panPodeste = new javax.swing.JPanel();
-        panLeitelemente = new javax.swing.JPanel();
-        panHandlaeufe = new javax.swing.JPanel();
+        panTreppenlauf = new javax.swing.JPanel();
+        treppeLaufPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeLaufPanel(
+                !readOnly,
+                getConnectionContext());
+        panPodest = new javax.swing.JPanel();
+        treppePodestPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppePodestPanel(
+                !readOnly,
+                getConnectionContext());
+        panLeitelement = new javax.swing.JPanel();
+        treppeLeitelementPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeLeitelementPanel(
+                !readOnly,
+                getConnectionContext());
+        panHandlaeuf = new javax.swing.JPanel();
+        treppeHandlaufPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeHandlaufPanel(
+                !readOnly,
+                getConnectionContext());
         panStuetzmauern = new javax.swing.JPanel();
+        treppeStuetzmauerPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauerPanel(
+                !readOnly,
+                getConnectionContext());
         panEntwaesserung = new javax.swing.JPanel();
+        treppeEntwaesserungPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEntwaesserungPanel(
+                !readOnly,
+                getConnectionContext());
         panChooser = new javax.swing.JPanel();
         panSummary = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(1050, 510));
+        setMinimumSize(new java.awt.Dimension(800, 510));
         setOpaque(false);
-        setPreferredSize(new java.awt.Dimension(1050, 510));
+        setPreferredSize(new java.awt.Dimension(800, 510));
         setLayout(new java.awt.GridBagLayout());
 
         panHeader.setOpaque(false);
         panHeader.setLayout(new java.awt.GridBagLayout());
 
-        panBand.setMaximumSize(new java.awt.Dimension(1500, 230));
-        panBand.setMinimumSize(new java.awt.Dimension(750, 230));
         panBand.setOpaque(false);
-        panBand.setPreferredSize(new java.awt.Dimension(750, 230));
         panBand.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         panHeader.add(panBand, gridBagConstraints);
 
         panBand1.setMaximumSize(new java.awt.Dimension(75, 230));
@@ -395,9 +400,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         panHeader.add(panBand1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -407,33 +412,44 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         gridBagConstraints.weightx = 1.0;
         add(panHeader, gridBagConstraints);
 
-        panInfoContent.setMinimumSize(new java.awt.Dimension(640, 240));
         panInfoContent.setOpaque(false);
-        panInfoContent.setPreferredSize(new java.awt.Dimension(640, 240));
         panInfoContent.setLayout(new java.awt.CardLayout());
+        panInfoContent.setLayout(new PageViewer());
 
-        panStufe.setOpaque(false);
-        panStufe.setLayout(new java.awt.BorderLayout());
-        panInfoContent.add(panStufe, "stufen");
+        panTreppenlauf.setOpaque(false);
+        panTreppenlauf.setLayout(new java.awt.BorderLayout());
+        panTreppenlauf.add(treppeLaufPanel1, java.awt.BorderLayout.CENTER);
 
-        panPodeste.setOpaque(false);
-        panPodeste.setLayout(new java.awt.BorderLayout());
-        panInfoContent.add(panPodeste, "podeste");
+        panInfoContent.add(panTreppenlauf, "stufen");
 
-        panLeitelemente.setOpaque(false);
-        panLeitelemente.setLayout(new java.awt.BorderLayout());
-        panInfoContent.add(panLeitelemente, "leitelemente");
+        panPodest.setOpaque(false);
+        panPodest.setLayout(new java.awt.BorderLayout());
+        panPodest.add(treppePodestPanel1, java.awt.BorderLayout.CENTER);
 
-        panHandlaeufe.setOpaque(false);
-        panHandlaeufe.setLayout(new java.awt.BorderLayout());
-        panInfoContent.add(panHandlaeufe, "handlaeufe");
+        panInfoContent.add(panPodest, "podeste");
+
+        panLeitelement.setOpaque(false);
+        panLeitelement.setLayout(new java.awt.BorderLayout());
+        panLeitelement.add(treppeLeitelementPanel1, java.awt.BorderLayout.CENTER);
+
+        panInfoContent.add(panLeitelement, "leitelemente");
+
+        panHandlaeuf.setOpaque(false);
+        panHandlaeuf.setLayout(new java.awt.BorderLayout());
+        panHandlaeuf.add(treppeHandlaufPanel1, java.awt.BorderLayout.CENTER);
+
+        panInfoContent.add(panHandlaeuf, "handlaeufe");
 
         panStuetzmauern.setOpaque(false);
         panStuetzmauern.setLayout(new java.awt.BorderLayout());
+        panStuetzmauern.add(treppeStuetzmauerPanel1, java.awt.BorderLayout.CENTER);
+
         panInfoContent.add(panStuetzmauern, "stuetzmauern");
 
         panEntwaesserung.setOpaque(false);
         panEntwaesserung.setLayout(new java.awt.BorderLayout());
+        panEntwaesserung.add(treppeEntwaesserungPanel1, java.awt.BorderLayout.CENTER);
+
         panInfoContent.add(panEntwaesserung, "entwaesserung");
 
         panChooser.setOpaque(false);
@@ -448,44 +464,9 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 5, 5, 5);
-        add(panInfoContent, gridBagConstraints);
-
-        jPanel3.setMinimumSize(new java.awt.Dimension(1050, 1));
-        jPanel3.setOpaque(false);
-
-        jLabel4.setMaximumSize(new java.awt.Dimension(1050, 1));
-        jLabel4.setMinimumSize(new java.awt.Dimension(1050, 1));
-        jLabel4.setPreferredSize(new java.awt.Dimension(1050, 1));
-
-        final javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                1050,
-                Short.MAX_VALUE).addGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                    jPanel3Layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(
-                        jLabel4,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        1040,
-                        javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 10, Short.MAX_VALUE))));
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 1, Short.MAX_VALUE)
-                        .addGroup(
-                            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                                jPanel3Layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(
-                                    jLabel4,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 0, Short.MAX_VALUE))));
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.weighty = 1.0;
-        add(jPanel3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(15, 0, 5, 0);
+        add(panInfoContent, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -499,6 +480,8 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                 @Override
                 public void run() {
                     ((CardLayout)panInfoContent.getLayout()).show(panInfoContent, id);
+                    TreppenBandPanel.this.revalidate();
+                    TreppenBandPanel.this.repaint();
                 }
             };
         if (EventQueue.isDispatchThread()) {
@@ -512,12 +495,12 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      * dispose all sub editors.
      */
     void disposeSubeditor() {
-        treppelaufPanel.dispose();
-        treppeHandlaufPanel.dispose();
-        treppeLeitelementpanel.dispose();
-        treppePodestPanel.dispose();
-        treppeStuetzmauerPanel.dispose();
-        treppeEntwaesserungPanel.dispose();
+        treppeLaufPanel1.dispose();
+        treppeHandlaufPanel1.dispose();
+        treppeLeitelementPanel1.dispose();
+        treppePodestPanel1.dispose();
+        treppeStuetzmauerPanel1.dispose();
+        treppeEntwaesserungPanel1.dispose();
     }
 
     @Override
@@ -564,11 +547,11 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         final List<CidsBean> stuetzmauer = cidsBean.getBeanCollectionProperty("stuetzmauern");
         final List<CidsBean> absturzsicherung = cidsBean.getBeanCollectionProperty("absturzsicherungen");
         final CidsBean entwaesserung = (CidsBean)cidsBean.getProperty("entwaesserung");
-        laufList = new ArrayList<CidsBean>();
-        leitelementList = new ArrayList<CidsBean>();
-        handlaufList = new ArrayList<CidsBean>();
-        stuetzmauerList = new ArrayList<CidsBean>();
-        entwaesserungList = new ArrayList<CidsBean>();
+        laufList = new ArrayList<>();
+        leitelementList = new ArrayList<>();
+        handlaufList = new ArrayList<>();
+        stuetzmauerList = new ArrayList<>();
+        entwaesserungList = new ArrayList<>();
 
         if (podest != null) {
             laufList.addAll(podest);
@@ -663,29 +646,14 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
         if (tempReadOnly != this.tempReadOnly) {
             this.tempReadOnly = tempReadOnly;
             jband.setSelectedMember((BandMemberSelectable)null);
-            treppelaufPanel = new TreppeLaufPanel(!tempReadOnly, connectionContext);
-            treppeHandlaufPanel = new TreppeHandlaufPanel(!tempReadOnly);
-            treppeLeitelementpanel = new TreppeLeitelementPanel(!tempReadOnly);
-            treppePodestPanel = new TreppePodestPanel(!tempReadOnly, connectionContext);
-            treppeStuetzmauerPanel = new TreppeStuetzmauerPanel(!tempReadOnly);
-            treppeEntwaesserungPanel = new TreppeEntwaesserungPanel(!tempReadOnly, connectionContext);
+            treppeLaufPanel1.setEditable(!tempReadOnly);
+            treppeHandlaufPanel1.setEditable(!tempReadOnly);
+            treppeLeitelementPanel1.setEditable(!tempReadOnly);
+            treppePodestPanel1.setEditable(!tempReadOnly);
+            treppeStuetzmauerPanel1.setEditable(!tempReadOnly);
+            treppeEntwaesserungPanel1.setEditable(!tempReadOnly);
 
-            disposeSubeditor();
-            panStufe.removeAll();
-            panPodeste.removeAll();
-            panLeitelemente.removeAll();
-            panStuetzmauern.removeAll();
-            panEntwaesserung.removeAll();
-            panHandlaeufe.removeAll();
-
-            panStufe.add(treppelaufPanel, BorderLayout.CENTER);
-            panPodeste.add(treppePodestPanel, BorderLayout.CENTER);
-            panLeitelemente.add(treppeLeitelementpanel, BorderLayout.CENTER);
-            panStuetzmauern.add(treppeStuetzmauerPanel, BorderLayout.CENTER);
-            panEntwaesserung.add(treppeEntwaesserungPanel, BorderLayout.CENTER);
-            panHandlaeufe.add(treppeHandlaufPanel, BorderLayout.CENTER);
-
-            final List<TreppenBand> bands = new ArrayList<TreppenBand>();
+            final List<TreppenBand> bands = new ArrayList<>();
             bands.add(handlaufLeftBand);
             bands.add(handlaufRightBand);
             bands.add(leitelementRightBand);
@@ -721,7 +689,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
      * @return  DOCUMENT ME!
      */
     private boolean hasCollision() {
-        final List<TreppenBand> bands = new ArrayList<TreppenBand>();
+        final List<TreppenBand> bands = new ArrayList<>();
         bands.add(handlaufLeftBand);
         bands.add(handlaufRightBand);
         bands.add(leitelementRightBand);
@@ -921,7 +889,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
          * @return  DOCUMENT ME!
          */
         private double getMaxSize() {
-            final List<List<CidsBean>> beans = new ArrayList<List<CidsBean>>();
+            final List<List<CidsBean>> beans = new ArrayList<>();
             beans.add(laufList);
             beans.add(leitelementList);
             beans.add(handlaufList);
@@ -969,7 +937,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                 if (bm instanceof PodestBandMember) {
                     // PodestBandMember is also a LaufBandMember. So the test on Podest must be first
                     switchToForm("podeste");
-                    treppePodestPanel.setCidsBean(((PodestBandMember)bm).getCidsBean());
+                    treppePodestPanel1.setCidsBean(((PodestBandMember)bm).getCidsBean());
                     final String objectName = ((PodestBandMember)bm).getParentBand().getAllowedObjectNames()[0];
                     final String objectTable = ((PodestBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
                     final String secondObjectName = ((PodestBandMember)bm).getParentBand().getAllowedObjectNames()[1];
@@ -983,7 +951,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                         secondObjectTable);
                 } else if (bm instanceof LaufBandMember) {
                     switchToForm("stufen");
-                    treppelaufPanel.setCidsBean(((LaufBandMember)bm).getCidsBean());
+                    treppeLaufPanel1.setCidsBean(((LaufBandMember)bm).getCidsBean());
                     final String objectName = ((LaufBandMember)bm).getParentBand().getAllowedObjectNames()[0];
                     final String objectTable = ((LaufBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
                     final String secondObjectName = ((LaufBandMember)bm).getParentBand().getAllowedObjectNames()[1];
@@ -993,7 +961,7 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                     activateControls((LaufBandMember)bm, objectName, secondObjectName, objectTable, secondObjectTable);
                 } else if (bm instanceof LeitelementBandMember) {
                     switchToForm("leitelemente");
-                    treppeLeitelementpanel.setCidsBean(((LeitelementBandMember)bm).getCidsBean());
+                    treppeLeitelementPanel1.setCidsBean(((LeitelementBandMember)bm).getCidsBean());
                     final String objectName = ((LeitelementBandMember)bm).getParentBand().getAllowedObjectNames()[0];
                     final String objectTable =
                         ((LeitelementBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
@@ -1001,21 +969,21 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                     activateControls((LeitelementBandMember)bm, objectName, null, objectTable, null);
                 } else if (bm instanceof HandlaufBandMember) {
                     switchToForm("handlaeufe");
-                    treppeHandlaufPanel.setCidsBean(((HandlaufBandMember)bm).getCidsBean());
+                    treppeHandlaufPanel1.setCidsBean(((HandlaufBandMember)bm).getCidsBean());
                     final String objectName = ((HandlaufBandMember)bm).getParentBand().getAllowedObjectNames()[0];
                     final String objectTable = ((HandlaufBandMember)bm).getParentBand().getAllowedObjectTableNames()[0];
 
                     activateControls((HandlaufBandMember)bm, objectName, null, objectTable, null);
                 } else if (bm instanceof StuetzmauerBandMember) {
                     switchToForm("stuetzmauern");
-                    treppeStuetzmauerPanel.setCidsBean(((StuetzmauerBandMember)bm).getCidsBean());
+                    treppeStuetzmauerPanel1.setCidsBean(((StuetzmauerBandMember)bm).getCidsBean());
                     activateControls(null, null, null, null, null);
                     ((DeleteItem)butRemove.getAction()).init((StuetzmauerBandMember)bm);
                     ((SelectNext)butNext.getAction()).init((StuetzmauerBandMember)bm);
                     ((SelectPrevious)butPrev.getAction()).init((StuetzmauerBandMember)bm);
                 } else if (bm instanceof EntwaesserungBandMember) {
                     switchToForm("entwaesserung");
-                    treppeEntwaesserungPanel.setCidsBean(((EntwaesserungBandMember)bm).getCidsBean());
+                    treppeEntwaesserungPanel1.setCidsBean(((EntwaesserungBandMember)bm).getCidsBean());
                     activateControls(null, null, null, null, null);
                     ((DeleteItem)butRemove.getAction()).init((EntwaesserungBandMember)bm);
                 } else if (bm instanceof DummyBandMember) {
@@ -1087,6 +1055,45 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
 
         @Override
         public void bandModelValuesChanged(final BandModelEvent e) {
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public class PageViewer extends CardLayout {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Dimension preferredLayoutSize(final Container parent) {
+            final Component current = findCurrentComponent(parent);
+            if (current != null) {
+                final Insets insets = parent.getInsets();
+                final Dimension pref = current.getPreferredSize();
+                pref.width += insets.left + insets.right;
+                pref.height += insets.top + insets.bottom;
+                return pref;
+            }
+            return super.preferredLayoutSize(parent);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   parent  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Component findCurrentComponent(final Container parent) {
+            for (final Component comp : parent.getComponents()) {
+                if (comp.isVisible()) {
+                    return comp;
+                }
+            }
+            return null;
         }
     }
 }
