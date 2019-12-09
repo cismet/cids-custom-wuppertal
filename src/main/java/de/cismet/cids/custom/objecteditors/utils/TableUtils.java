@@ -26,6 +26,9 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.connectioncontext.ConnectionContext;
+import java.awt.Component;
+import java.awt.HeadlessException;
+import javax.swing.JOptionPane;
 
 /**
  * DOCUMENT ME!
@@ -158,16 +161,24 @@ public class TableUtils {
      * @return  DOCUMENT ME!
      */
 
+    
+    public static CidsBean addBeanToCollection(final CidsBean addBean,
+            final String propName,
+            final CidsBean newTypeBean) {
+        return addBeanToCollectionWithMessage(null, addBean,propName, newTypeBean);
+    }
     /**
      * DOCUMENT ME!
      *
+     * @param   parentComponent      DOCUMENT ME!
      * @param   addBean      DOCUMENT ME!
      * @param   propName     DOCUMENT ME!
      * @param   newTypeBean  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean addBeanToCollection(final CidsBean addBean,
+    public static CidsBean addBeanToCollectionWithMessage(final Component parentComponent,
+            final CidsBean addBean,
             final String propName,
             final CidsBean newTypeBean) {
         if ((newTypeBean != null) && (propName != null)) {
@@ -178,11 +189,19 @@ public class TableUtils {
                     for (final CidsBean bean : col) {
                         if (newTypeBean.equals(bean)) {
                             LOG.info("Bean " + newTypeBean + " already present in " + propName + "!");
+                            if (parentComponent != null){
+                                JOptionPane.showMessageDialog(
+                                    //StaticSwingTools.getParentFrame(this),
+                                        parentComponent,
+                                    "Das Objekt " + newTypeBean + " kann nicht noch einmal hinzugefügt werden.",
+                                    "Objekt hinzufügen",
+                                    JOptionPane.OK_OPTION);
+                            }
                             return addBean;
                         }
                     }
                     col.add(newTypeBean);
-                } catch (Exception ex) {
+                } catch (HeadlessException ex) {
                     LOG.error(ex, ex);
                 }
             }
