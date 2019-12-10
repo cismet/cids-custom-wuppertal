@@ -21,7 +21,8 @@ import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
-import de.cismet.cids.custom.objecteditors.utils.TableUtils;
+
+import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
@@ -31,6 +32,8 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingbinding.JListBinding;
+import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
@@ -50,13 +53,23 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.io.IOException;
+import java.io.StringReader;
+
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.logging.Level;
 
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
 
+import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
@@ -72,6 +85,7 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -83,22 +97,12 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
+
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.MalformedURLException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.Properties;
-import lombok.Getter;
-import org.jdesktop.swingbinding.JListBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 
 /**
  * DOCUMENT ME!
@@ -116,21 +120,19 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
     private static final Logger LOG = Logger.getLogger(PrbrParkplatzEditor.class);
 
-  
-    public static final String FIELD__UEBER = "ueberdachung";                            // prbr_parkplatz
-    public static final String FIELD__GEOREFERENZ = "fk_geom";                           // prbr_parkplatz
-    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";      // prbr_parkplatz
-    public static final String FIELD__FOTO = "foto";                                     // prbr_parkplatz
-    public static final String FIELD__BUSLINIE = "arr_buslinien";                        // prbr_parkplatz
-    public static final String FIELD__BAHNLINIE = "arr_bahnlinien";                      // prbr_parkplatz
-    public static final String FIELD__NAME = "name";                                     // prbr_parkplatz
-    public static final String FIELD__TYP = "fk_typ";                                    // prbr_parkplatz
-    public static final String FIELD__GEO_FIELD = "geo_field";                           // geom
+    public static final String FIELD__UEBER = "ueberdachung";                       // prbr_parkplatz
+    public static final String FIELD__GEOREFERENZ = "fk_geom";                      // prbr_parkplatz
+    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // prbr_parkplatz
+    public static final String FIELD__FOTO = "foto";                                // prbr_parkplatz
+    public static final String FIELD__BUSLINIE = "arr_buslinien";                   // prbr_parkplatz
+    public static final String FIELD__BAHNLINIE = "arr_bahnlinien";                 // prbr_parkplatz
+    public static final String FIELD__NAME = "name";                                // prbr_parkplatz
+    public static final String FIELD__TYP = "fk_typ";                               // prbr_parkplatz
+    public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
     public static final String TABLE_NAME = "prbr_parkplatz";
     public static final String TABLE_GEOM = "geom";
 
     private static PrbrProperties PROPERTIES;
-
 
     //~ Instance fields --------------------------------------------------------
 
@@ -140,7 +142,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
     private final ImageIcon statusOK = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnAddBahn;
     private JButton btnAddBus;
@@ -222,6 +224,9 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     private void initProperties() {
         if (PROPERTIES == null) {
             try {
@@ -231,7 +236,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
             }
         }
     }
-    
+
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
@@ -247,8 +252,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         setReadOnly();
     }
 
-   
-
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
      * content of this method is always regenerated by the Form Editor.
@@ -262,8 +265,11 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         dlgAddBuslinien = new JDialog();
         panAddBuslinie = new JPanel();
         lblAuswaehlenBus = new JLabel();
-        final MetaObject[] buslinie = ObjectRendererUtils.getLightweightMetaObjectsForTable("prbr_buslinie", new String[]{"name"}, getConnectionContext());
-        if(buslinie != null) {
+        final MetaObject[] buslinie = ObjectRendererUtils.getLightweightMetaObjectsForTable(
+                "prbr_buslinie",
+                new String[] { "name" },
+                getConnectionContext());
+        if (buslinie != null) {
             Arrays.sort(buslinie);
             cbBuslinie = new JComboBox(buslinie);
             panMenButtonsBus = new JPanel();
@@ -272,8 +278,11 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
             dlgAddBahnlinien = new JDialog();
             panAddBahnlinie = new JPanel();
             lblAuswaehlenBahn = new JLabel();
-            final MetaObject[] bahnlinie = ObjectRendererUtils.getLightweightMetaObjectsForTable("prbr_bahnlinie", new String[]{"name"}, getConnectionContext());
-            if(bahnlinie != null) {
+            final MetaObject[] bahnlinie = ObjectRendererUtils.getLightweightMetaObjectsForTable(
+                    "prbr_bahnlinie",
+                    new String[] { "name" },
+                    getConnectionContext());
+            if (bahnlinie != null) {
                 Arrays.sort(bahnlinie);
                 cbBahnlinie = new JComboBox(bahnlinie);
                 panMenButtonsBahn = new JPanel();
@@ -291,7 +300,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 panName = new JPanel();
                 lblName = new JLabel();
                 txtName = new JTextField();
-                if (isEditor){
+                if (isEditor) {
                     cbGeom = new DefaultCismapGeometryComboBoxEditor();
                 }
                 lblGeom = new JLabel();
@@ -309,8 +318,8 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 lblBemerkung = new JLabel();
                 panUrl = new JPanel();
                 lblUrlCheck = new JLabel();
-                cbTyp = new DefaultBindableReferenceCombo(true) ;
-                cbHaltestelle = new DefaultBindableReferenceCombo(true) ;
+                cbTyp = new DefaultBindableReferenceCombo(true);
+                cbHaltestelle = new DefaultBindableReferenceCombo(true);
                 lblAnbindung = new JLabel();
                 chAnbindung = new JCheckBox();
                 panButtonsBus = new JPanel();
@@ -337,7 +346,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 gridBagConstraints = new GridBagConstraints();
                 gridBagConstraints.insets = new Insets(10, 10, 10, 10);
                 panAddBuslinie.add(lblAuswaehlenBus, gridBagConstraints);
-
             }
             cbBuslinie.setMaximumSize(new Dimension(100, 20));
             cbBuslinie.setMinimumSize(new Dimension(100, 20));
@@ -353,10 +361,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
             btnMenAbortBus.setText("Abbrechen");
             btnMenAbortBus.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenAbortBusActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final ActionEvent evt) {
+                        btnMenAbortBusActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -366,10 +376,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
             btnMenOkBus.setText("Ok");
             btnMenOkBus.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenOkBusActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final ActionEvent evt) {
+                        btnMenOkBusActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
@@ -397,7 +409,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.insets = new Insets(10, 10, 10, 10);
             panAddBahnlinie.add(lblAuswaehlenBahn, gridBagConstraints);
-
         }
         cbBahnlinie.setMaximumSize(new Dimension(100, 20));
         cbBahnlinie.setMinimumSize(new Dimension(100, 20));
@@ -413,10 +424,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         btnMenAbortBahn.setText("Abbrechen");
         btnMenAbortBahn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenAbortBahnActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenAbortBahnActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -426,10 +439,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         btnMenOkBahn.setText("Ok");
         btnMenOkBahn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenOkBahnActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenOkBahnActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -453,14 +468,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -482,14 +495,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -549,14 +560,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panFillerRechtsLage.setName(""); // NOI18N
         panFillerRechtsLage.setOpaque(false);
 
-        GroupLayout panFillerRechtsLageLayout = new GroupLayout(panFillerRechtsLage);
+        final GroupLayout panFillerRechtsLageLayout = new GroupLayout(panFillerRechtsLage);
         panFillerRechtsLage.setLayout(panFillerRechtsLageLayout);
-        panFillerRechtsLageLayout.setHorizontalGroup(panFillerRechtsLageLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerRechtsLageLayout.setVerticalGroup(panFillerRechtsLageLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerRechtsLageLayout.setHorizontalGroup(panFillerRechtsLageLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerRechtsLageLayout.setVerticalGroup(panFillerRechtsLageLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -590,7 +599,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -601,17 +615,21 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(txtName, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
+        if (isEditor) {
+            if (isEditor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 3;
             gridBagConstraints.gridy = 0;
@@ -641,7 +659,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_plaetze}"), txtPlaetze, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anzahl_plaetze}"),
+                txtPlaetze,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -653,7 +676,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panDaten.add(txtPlaetze, gridBagConstraints);
         txtPlaetze.getAccessibleContext().setAccessibleName("");
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.foto}"), txtFoto, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.foto}"),
+                txtFoto,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -720,14 +748,16 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panFiller.setOpaque(false);
         panFiller.setPreferredSize(new Dimension(20, 0));
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -738,7 +768,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         chUeberdachung.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ueberdachung}"), chUeberdachung, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ueberdachung}"),
+                chUeberdachung,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -753,7 +788,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         txtBemerkung.setToolTipText("");
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), txtBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                txtBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -778,7 +818,8 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panUrl.setOpaque(false);
         panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -796,7 +837,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         cbTyp.setMinimumSize(new Dimension(150, 23));
         cbTyp.setPreferredSize(new Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_typ}"), cbTyp, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_typ}"),
+                cbTyp,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -814,7 +860,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         cbHaltestelle.setMinimumSize(new Dimension(150, 23));
         cbHaltestelle.setPreferredSize(new Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_haltestelle}"), cbHaltestelle, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_haltestelle}"),
+                cbHaltestelle,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -841,7 +892,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         chAnbindung.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anbindung_schwebebahn}"), chAnbindung, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anbindung_schwebebahn}"),
+                chAnbindung,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -857,22 +913,28 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panButtonsBus.setOpaque(false);
         panButtonsBus.setLayout(new GridBagLayout());
 
-        btnAddBus.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddBus.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddBus.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddBusActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddBusActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panButtonsBus.add(btnAddBus, gridBagConstraints);
 
-        btnRemoveBus.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveBus.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveBus.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveBusActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveBusActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -889,7 +951,11 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         lstBuslinien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         ELProperty eLProperty = ELProperty.create("${cidsBean.arr_buslinien}");
-        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstBuslinien);
+        JListBinding jListBinding = SwingBindings.createJListBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstBuslinien);
         bindingGroup.addBinding(jListBinding);
 
         scpLstBuslinie.setViewportView(lstBuslinien);
@@ -917,7 +983,11 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         lstBahnlinien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         eLProperty = ELProperty.create("${cidsBean.arr_bahnlinien}");
-        jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstBahnlinien);
+        jListBinding = SwingBindings.createJListBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstBahnlinien);
         bindingGroup.addBinding(jListBinding);
 
         scpLstBahnlinie.setViewportView(lstBahnlinien);
@@ -945,22 +1015,28 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         panButtonsBahn.setOpaque(false);
         panButtonsBahn.setLayout(new GridBagLayout());
 
-        btnAddBahn.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddBahn.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddBahn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddBahnActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddBahnActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panButtonsBahn.add(btnAddBahn, gridBagConstraints);
 
-        btnRemoveBahn.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveBahn.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveBahn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveBahnActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveBahnActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -993,51 +1069,74 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnAddBusActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddBusActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBusActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(PrbrParkplatzEditor.this),
             dlgAddBuslinien,
             true);
-    }//GEN-LAST:event_btnAddBusActionPerformed
+    }                                                              //GEN-LAST:event_btnAddBusActionPerformed
 
-    private void btnRemoveBusActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveBusActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBusActionPerformed
         final Object selection = lstBuslinien.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
-                StaticSwingTools.getParentFrame(this),
-                "Soll die Buslinie wirklich gelöscht werden?",
-                "Buslinie entfernen",
-                JOptionPane.YES_NO_OPTION);
+                    StaticSwingTools.getParentFrame(this),
+                    "Soll die Buslinie wirklich gelöscht werden?",
+                    "Buslinie entfernen",
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
-                    //deleteItemFromList(FIELD__BUSLINIE, selection, false);
+                    // deleteItemFromList(FIELD__BUSLINIE, selection, false);
                     cidsBean = TableUtils.deleteItemFromList(cidsBean, FIELD__BUSLINIE, selection, false);
                 } catch (Exception ex) {
                     final ErrorInfo ei = new ErrorInfo(
-                        "Fehler beim Löschen",
-                        "Beim Löschen der Buslinie ist ein Fehler aufgetreten",
-                        null,
-                        null,
-                        ex,
-                        Level.SEVERE,
-                        null);
+                            "Fehler beim Löschen",
+                            "Beim Löschen der Buslinie ist ein Fehler aufgetreten",
+                            null,
+                            null,
+                            ex,
+                            Level.SEVERE,
+                            null);
                     JXErrorPane.showDialog(this, ei);
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBusActionPerformed
+    } //GEN-LAST:event_btnRemoveBusActionPerformed
 
-    private void btnMenAbortBusActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortBusActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortBusActionPerformed
         dlgAddBuslinien.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortBusActionPerformed
+    }                                                                   //GEN-LAST:event_btnMenAbortBusActionPerformed
 
-    private void btnMenOkBusActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkBusActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkBusActionPerformed
         try {
             final Object selItem = cbBuslinie.getSelectedItem();
             if (selItem instanceof MetaObject) {
-                //addBeanToCollection(FIELD__BUSLINIE, ((MetaObject)selItem).getBean());
-                cidsBean = TableUtils.addBeanToCollectionWithMessage(StaticSwingTools.getParentFrame(this), cidsBean, FIELD__BUSLINIE, ((MetaObject)selItem).getBean());
+                // addBeanToCollection(FIELD__BUSLINIE, ((MetaObject)selItem).getBean());
+                cidsBean = TableUtils.addBeanToCollectionWithMessage(StaticSwingTools.getParentFrame(this),
+                        cidsBean,
+                        FIELD__BUSLINIE,
+                        ((MetaObject)selItem).getBean());
                 sortListNew(FIELD__BUSLINIE);
             }
         } catch (Exception ex) {
@@ -1045,51 +1144,74 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddBuslinien.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkBusActionPerformed
+    } //GEN-LAST:event_btnMenOkBusActionPerformed
 
-    private void btnAddBahnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddBahnActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBahnActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(PrbrParkplatzEditor.this),
             dlgAddBahnlinien,
             true);
-    }//GEN-LAST:event_btnAddBahnActionPerformed
+    }                                                               //GEN-LAST:event_btnAddBahnActionPerformed
 
-    private void btnRemoveBahnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveBahnActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBahnActionPerformed
         final Object selection = lstBahnlinien.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
-                StaticSwingTools.getParentFrame(this),
-                "Soll die Bahnlinie wirklich gelöscht werden?",
-                "Bahnlinie entfernen",
-                JOptionPane.YES_NO_OPTION);
+                    StaticSwingTools.getParentFrame(this),
+                    "Soll die Bahnlinie wirklich gelöscht werden?",
+                    "Bahnlinie entfernen",
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
-                    //deleteItemFromList(FIELD__BAHNLINIE, selection, false);
+                    // deleteItemFromList(FIELD__BAHNLINIE, selection, false);
                     cidsBean = TableUtils.deleteItemFromList(cidsBean, FIELD__BAHNLINIE, selection, false);
                 } catch (Exception ex) {
                     final ErrorInfo ei = new ErrorInfo(
-                        "Fehler beim Löschen",
-                        "Beim Löschen der Bahnlinie ist ein Fehler aufgetreten",
-                        null,
-                        null,
-                        ex,
-                        Level.SEVERE,
-                        null);
+                            "Fehler beim Löschen",
+                            "Beim Löschen der Bahnlinie ist ein Fehler aufgetreten",
+                            null,
+                            null,
+                            ex,
+                            Level.SEVERE,
+                            null);
                     JXErrorPane.showDialog(this, ei);
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBahnActionPerformed
+    } //GEN-LAST:event_btnRemoveBahnActionPerformed
 
-    private void btnMenAbortBahnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortBahnActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortBahnActionPerformed
         dlgAddBahnlinien.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortBahnActionPerformed
+    }                                                                    //GEN-LAST:event_btnMenAbortBahnActionPerformed
 
-    private void btnMenOkBahnActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkBahnActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkBahnActionPerformed
         try {
             final Object selItem = cbBahnlinie.getSelectedItem();
             if (selItem instanceof MetaObject) {
-                //addBeanToCollection(FIELD__BAHNLINIE, ((MetaObject)selItem).getBean());
-                cidsBean = TableUtils.addBeanToCollectionWithMessage(StaticSwingTools.getParentFrame(this), cidsBean, FIELD__BAHNLINIE, ((MetaObject)selItem).getBean());
+                // addBeanToCollection(FIELD__BAHNLINIE, ((MetaObject)selItem).getBean());
+                cidsBean = TableUtils.addBeanToCollectionWithMessage(StaticSwingTools.getParentFrame(this),
+                        cidsBean,
+                        FIELD__BAHNLINIE,
+                        ((MetaObject)selItem).getBean());
                 sortListNew(FIELD__BAHNLINIE);
             }
         } catch (Exception ex) {
@@ -1097,16 +1219,15 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddBahnlinien.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkBahnActionPerformed
-
+    } //GEN-LAST:event_btnMenOkBahnActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     private void testUrlAndShowResult() {
         try {
-           final URL url = new URL(PROPERTIES.getFotoUrl().concat(txtFoto.getText()));
-           if (WebAccessManager.getInstance().checkIfURLaccessible(url)){
+            final URL url = new URL(PROPERTIES.getFotoUrl().concat(txtFoto.getText()));
+            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
                 lblUrlCheck.setIcon(statusOK);
             } else {
                 lblUrlCheck.setIcon(statusFalsch);
@@ -1116,17 +1237,17 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
             LOG.warn("URL Ceck Problem.", e);
         }
     }
-   
-     /**
+
+    /**
      * DOCUMENT ME!
      *
-     * @param  propName     DOCUMENT ME!
+     * @param  propName  DOCUMENT ME!
      */
-    private void sortListNew (final String propName) {
+    private void sortListNew(final String propName) {
         bindingGroup.unbind();
         final List<CidsBean> changeCol = CidsBeanSupport.getBeanCollectionFromProperty(
-                    cidsBean,
-                    propName);
+                cidsBean,
+                propName);
         Collections.sort(changeCol, AlphanumComparator.getInstance());
         bindingGroup.bind();
     }
@@ -1140,27 +1261,30 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         try {
             if (txtName.getText().trim().isEmpty()) {
                 LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(PrbrParkplatzEditor.class,
+                errorMessage.append(NbBundle.getMessage(
+                        PrbrParkplatzEditor.class,
                         "PrbrParkplatzEditor.prepareForSave().noName"));
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
             save = false;
         }
-        //Typ muss angegeben werden
+        // Typ muss angegeben werden
         try {
             if (cbTyp.getSelectedItem() == null) {
                 LOG.warn("No typ specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(PrbrParkplatzEditor.class,
+                errorMessage.append(NbBundle.getMessage(
+                        PrbrParkplatzEditor.class,
                         "PrbrParkplatzEditor.prepareForSave().noTyp"));
-            } else{
+            } else {
                 final String typ = cbTyp.getSelectedItem().toString();
-                if (typ.equalsIgnoreCase("P")){
+                if (typ.equalsIgnoreCase("P")) {
                     final boolean bUeber = chUeberdachung.isSelected();
-                   if (bUeber){
+                    if (bUeber) {
                         LOG.warn("Wrong typ specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(PrbrParkplatzEditor.class,
-                        "PrbrParkplatzEditor.prepareForSave().wrongTyp"));
+                        errorMessage.append(NbBundle.getMessage(
+                                PrbrParkplatzEditor.class,
+                                "PrbrParkplatzEditor.prepareForSave().wrongTyp"));
                     }
                 }
             }
@@ -1172,21 +1296,22 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         try {
             if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(PrbrParkplatzEditor.class,
+                errorMessage.append(NbBundle.getMessage(
+                        PrbrParkplatzEditor.class,
                         "PrbrParkplatzEditor.prepareForSave().noGeom"));
             } else {
                 final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(PrbrParkplatzEditor.class,
+                    errorMessage.append(NbBundle.getMessage(
+                            PrbrParkplatzEditor.class,
                             "PrbrParkplatzEditor.prepareForSave().wrongGeom"));
-                } 
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);
             save = false;
         }
-
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -1197,10 +1322,11 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                         + NbBundle.getMessage(
                             PrbrParkplatzEditor.class,
                             "PrbrParkplatzEditor.prepareForSave().JOptionPane.message.suffix"),
-            NbBundle.getMessage(PrbrParkplatzEditor.class,
+                NbBundle.getMessage(
+                    PrbrParkplatzEditor.class,
                     "PrbrParkplatzEditor.prepareForSave().JOptionPane.title"),
                 JOptionPane.WARNING_MESSAGE);
-            
+
             return false;
         }
         return save;
@@ -1225,15 +1351,15 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 LOG.info("add propchange prbr_parkplatz: " + this.cidsBean);
                 this.cidsBean.addPropertyChangeListener(this);
             }
-            //Damit die Linien sortiert in der Liste erscheinen.
+            // Damit die Linien sortiert in der Liste erscheinen.
             final List<CidsBean> busCol = CidsBeanSupport.getBeanCollectionFromProperty(
-                        cidsBean,
-                        FIELD__BUSLINIE);
-                Collections.sort(busCol, AlphanumComparator.getInstance());
+                    cidsBean,
+                    FIELD__BUSLINIE);
+            Collections.sort(busCol, AlphanumComparator.getInstance());
             final List<CidsBean> bahnCol = CidsBeanSupport.getBeanCollectionFromProperty(
-                        cidsBean,
-                        FIELD__BAHNLINIE);
-                Collections.sort(bahnCol, AlphanumComparator.getInstance());
+                    cidsBean,
+                    FIELD__BAHNLINIE);
+            Collections.sort(bahnCol, AlphanumComparator.getInstance());
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
@@ -1249,7 +1375,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         }
     }
 
-
     /**
      * DOCUMENT ME!
      */
@@ -1263,7 +1388,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
             txtFoto.setEnabled(false);
             txtName.setEnabled(false);
             txtPlaetze.setEnabled(false);
-            //cbGeom.setVisible(false);
+            // cbGeom.setVisible(false);
             lblGeom.setVisible(false);
             lstBuslinien.setEnabled(false);
             lstBahnlinien.setEnabled(false);
@@ -1271,7 +1396,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
             btnRemoveBus.setEnabled(false);
             btnAddBahn.setEnabled(false);
             btnRemoveBahn.setEnabled(false);
-            //lblUrlCheck.setEnabled(false); Es soll noch erkennbar sein.
+            // lblUrlCheck.setEnabled(false); Es soll noch erkennbar sein.
         }
     }
 
@@ -1304,16 +1429,21 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         }
     }
 
-     public String makeTitle() {
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String makeTitle() {
         String myname;
         myname = String.valueOf(cidsBean.getProperty("name"));
         if ("null".equals(myname)) {
             myname = "Neue P+R bzw. B+R Anlage anlegen";
-        } 
+        }
 
         return myname;
     }
-     
+
     @Override
     public void dispose() {
         super.dispose();
@@ -1353,14 +1483,46 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         if (evt.getPropertyName().equals(FIELD__FOTO)) {
             testUrlAndShowResult();
         }
-        
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     public void testUeberdachung() {
         final String typ = cbTyp.getSelectedItem().toString();
-        if (typ.equalsIgnoreCase("B")){
-            
+        if (typ.equalsIgnoreCase("B")) {
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private static PrbrProperties loadPropertiesFromServerResources(final ConnectionContext connectionContext)
+            throws Exception {
+        final Object ret;
+        /* ret = SessionManager.getSession()
+         *       .getConnection()      .executeTask(SessionManager.getSession().getUser(),
+         * GetServerResourceServerAction.TASK_NAME,              "WUNDA_BLAU",
+         * WundaBlauServerResources.PRBR_PROPERTIES.getValue(),              connectionContext); if (ret instanceof
+         * Exception) {  throw (Exception)ret; }*/
+        final Properties properties = new Properties();
+        // properties.load(new StringReader((String)ret));
+        try {
+            properties.load(new StringReader(
+                    "PICTURE_PATH=https://www.wuppertal.de/geoportal/prbr/fotos/"
+                            + "\n"
+                            + "BUFFER_METER=20.0"));
+        } catch (IOException e) {
+            LOG.warn("Fehler beim Laden der Properties", e);
+        }
+
+        return new PrbrProperties(properties);
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1378,9 +1540,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         protected java.util.regex.Matcher matchingMatcher;
         private Object lastValid = null;
 
-        //~ Constructors -------------------------------------------------------
-
-        
         //~ Methods ------------------------------------------------------------
 
         @Override
@@ -1412,34 +1571,13 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         public Object getLastValid() {
             return lastValid;
         }
-        
-        
     }
-    
-    private static PrbrProperties loadPropertiesFromServerResources(final ConnectionContext connectionContext)
-        throws Exception {
-        final Object ret;
-       /* ret = SessionManager.getSession()
-                .getConnection()
-                .executeTask(SessionManager.getSession().getUser(),
-                        GetServerResourceServerAction.TASK_NAME,
-                        "WUNDA_BLAU",
-                        WundaBlauServerResources.PRBR_PROPERTIES.getValue(),
-                        connectionContext);
-        if (ret instanceof Exception) {
-            throw (Exception)ret;
-        }*/
-        final Properties properties = new Properties();
-        //properties.load(new StringReader((String)ret));
-        try {
-            properties.load(new StringReader("PICTURE_PATH=https://www.wuppertal.de/geoportal/prbr/fotos/" + "\n" + "BUFFER_METER=20.0"));
-        } catch (IOException e) {
-            LOG.warn("Fehler beim Laden der Properties", e);
-        }
 
-        return new PrbrProperties(properties);
-    }
-    
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     @Getter
     static class PrbrProperties {
 
@@ -1449,6 +1587,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         private final String fotoUrl;
         private final Double bufferMeter;
+
         //~ Constructors -------------------------------------------------------
 
         /**
@@ -1479,7 +1618,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 value = getProperties().getProperty(property, defaultValue);
             } catch (final Exception ex) {
                 final String message = "could not read " + property + " from "
-         //                   + WundaBlauServerResources.PRBR_PROPERTIES.getValue()
+                            // + WundaBlauServerResources.PRBR_PROPERTIES.getValue()
                             + ". setting to default value: " + defaultValue;
                 LOG.warn(message, ex);
             }
