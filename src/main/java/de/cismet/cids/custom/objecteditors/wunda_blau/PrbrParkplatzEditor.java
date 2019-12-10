@@ -12,17 +12,13 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
-
-import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
@@ -53,9 +49,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.io.IOException;
-import java.io.StringReader;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -63,18 +56,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.Properties;
 import java.util.logging.Level;
 
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
 
+import de.cismet.cids.custom.objecteditors.utils.PrbrConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -85,8 +77,6 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-
-import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -131,8 +121,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
     public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
     public static final String TABLE_NAME = "prbr_parkplatz";
     public static final String TABLE_GEOM = "geom";
-
-    private static PrbrProperties PROPERTIES;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -224,23 +212,9 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void initProperties() {
-        if (PROPERTIES == null) {
-            try {
-                PROPERTIES = loadPropertiesFromServerResources(getConnectionContext());
-            } catch (final Exception ex) {
-                LOG.warn("properties couldn't be loaded. Editor/Renderer might not working as expected !", ex);
-            }
-        }
-    }
-
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
-        initProperties();
         initComponents();
         dlgAddBuslinien.pack();
         dlgAddBuslinien.getRootPane().setDefaultButton(btnMenOkBus);
@@ -1076,18 +1050,16 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBusActionPerformed
-        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(PrbrParkplatzEditor.this),
-            dlgAddBuslinien,
-            true);
-    }                                                              //GEN-LAST:event_btnAddBusActionPerformed
+    private void btnAddBusActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddBusActionPerformed
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(PrbrParkplatzEditor.this), dlgAddBuslinien, true);
+    }//GEN-LAST:event_btnAddBusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBusActionPerformed
+    private void btnRemoveBusActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveBusActionPerformed
         final Object selection = lstBuslinien.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1112,23 +1084,23 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveBusActionPerformed
+    }//GEN-LAST:event_btnRemoveBusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortBusActionPerformed
+    private void btnMenAbortBusActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortBusActionPerformed
         dlgAddBuslinien.setVisible(false);
-    }                                                                   //GEN-LAST:event_btnMenAbortBusActionPerformed
+    }//GEN-LAST:event_btnMenAbortBusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkBusActionPerformed
+    private void btnMenOkBusActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkBusActionPerformed
         try {
             final Object selItem = cbBuslinie.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1144,25 +1116,25 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddBuslinien.setVisible(false);
         }
-    } //GEN-LAST:event_btnMenOkBusActionPerformed
+    }//GEN-LAST:event_btnMenOkBusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBahnActionPerformed
+    private void btnAddBahnActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddBahnActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(PrbrParkplatzEditor.this),
             dlgAddBahnlinien,
             true);
-    }                                                               //GEN-LAST:event_btnAddBahnActionPerformed
+    }//GEN-LAST:event_btnAddBahnActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBahnActionPerformed
+    private void btnRemoveBahnActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveBahnActionPerformed
         final Object selection = lstBahnlinien.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1187,23 +1159,23 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveBahnActionPerformed
+    }//GEN-LAST:event_btnRemoveBahnActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortBahnActionPerformed
+    private void btnMenAbortBahnActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortBahnActionPerformed
         dlgAddBahnlinien.setVisible(false);
-    }                                                                    //GEN-LAST:event_btnMenAbortBahnActionPerformed
+    }//GEN-LAST:event_btnMenAbortBahnActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkBahnActionPerformed
+    private void btnMenOkBahnActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkBahnActionPerformed
         try {
             final Object selItem = cbBahnlinie.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1219,14 +1191,14 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddBahnlinien.setVisible(false);
         }
-    } //GEN-LAST:event_btnMenOkBahnActionPerformed
+    }//GEN-LAST:event_btnMenOkBahnActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     private void testUrlAndShowResult() {
         try {
-            final URL url = new URL(PROPERTIES.getFotoUrl().concat(txtFoto.getText()));
+            final URL url = new URL(PrbrConfProperties.getInstance().getFotoUrl().concat(txtFoto.getText()));
             if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
                 lblUrlCheck.setIcon(statusOK);
             } else {
@@ -1406,8 +1378,9 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
     public void setMapWindow() {
         final CidsBean cb = this.getCidsBean();
         try {
+            final Double bufferMeter = PrbrConfProperties.getInstance().getBufferMeter();
             if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, PROPERTIES.getBufferMeter());
+                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
             } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
                 final BoundingBox initialBoundingBox;
@@ -1421,7 +1394,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                         getConnectionContext());
                 final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
                 newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, PROPERTIES.getBufferMeter());
+                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
             }
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
@@ -1494,37 +1467,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    private static PrbrProperties loadPropertiesFromServerResources(final ConnectionContext connectionContext)
-            throws Exception {
-        final Object ret;
-        /* ret = SessionManager.getSession()
-         *       .getConnection()      .executeTask(SessionManager.getSession().getUser(),
-         * GetServerResourceServerAction.TASK_NAME,              "WUNDA_BLAU",
-         * WundaBlauServerResources.PRBR_PROPERTIES.getValue(),              connectionContext); if (ret instanceof
-         * Exception) {  throw (Exception)ret; }*/
-        final Properties properties = new Properties();
-        // properties.load(new StringReader((String)ret));
-        try {
-            properties.load(new StringReader(
-                    "PICTURE_PATH=https://www.wuppertal.de/geoportal/prbr/fotos/"
-                            + "\n"
-                            + "BUFFER_METER=20.0"));
-        } catch (IOException e) {
-            LOG.warn("Fehler beim Laden der Properties", e);
-        }
-
-        return new PrbrProperties(properties);
-    }
-
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1570,59 +1512,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
          */
         public Object getLastValid() {
             return lastValid;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    @Getter
-    static class PrbrProperties {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private final Properties properties;
-
-        private final String fotoUrl;
-        private final Double bufferMeter;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new PrbrProperties object.
-         *
-         * @param  properties  DOCUMENT ME!
-         */
-        public PrbrProperties(final Properties properties) {
-            this.properties = properties;
-
-            fotoUrl = readProperty("PICTURE_PATH", null);
-            bufferMeter = Double.valueOf(readProperty("BUFFER_METER", null));
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param   property      DOCUMENT ME!
-         * @param   defaultValue  DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        private String readProperty(final String property, final String defaultValue) {
-            String value = defaultValue;
-            try {
-                value = getProperties().getProperty(property, defaultValue);
-            } catch (final Exception ex) {
-                final String message = "could not read " + property + " from "
-                            // + WundaBlauServerResources.PRBR_PROPERTIES.getValue()
-                            + ". setting to default value: " + defaultValue;
-                LOG.warn(message, ex);
-            }
-            return value;
         }
     }
 }
