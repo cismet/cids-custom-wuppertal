@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
@@ -60,6 +61,7 @@ import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -70,6 +72,7 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -85,11 +88,15 @@ import de.cismet.security.WebAccessManager;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.io.IOException;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Properties;
+import lombok.Getter;
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 
@@ -122,7 +129,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
     public static final String TABLE_NAME = "prbr_parkplatz";
     public static final String TABLE_GEOM = "geom";
 
-    public static final Coordinate RATHAUS_POINT = new Coordinate(374420, 5681660);
+    private static PrbrProperties PROPERTIES;
 
 
     //~ Instance fields --------------------------------------------------------
@@ -215,9 +222,20 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
     //~ Methods ----------------------------------------------------------------
 
+    private void initProperties() {
+        if (PROPERTIES == null) {
+            try {
+                PROPERTIES = loadPropertiesFromServerResources(getConnectionContext());
+            } catch (final Exception ex) {
+                LOG.warn("properties couldn't be loaded. Editor/Renderer might not working as expected !", ex);
+            }
+        }
+    }
+    
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
+        initProperties();
         initComponents();
         dlgAddBuslinien.pack();
         dlgAddBuslinien.getRootPane().setDefaultButton(btnMenOkBus);
@@ -1087,7 +1105,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
      */
     private void testUrlAndShowResult() {
         try {
-           final URL url = new URL("https://www.wuppertal.de/geoportal/prbr/fotos/".concat(txtFoto.getText()));
+           final URL url = new URL(PROPERTIES.getFotoUrl().concat(txtFoto.getText()));
            if (WebAccessManager.getInstance().checkIfURLaccessible(url)){
                 lblUrlCheck.setIcon(statusOK);
             } else {
@@ -1106,7 +1124,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
      */
     private void sortListNew (final String propName) {
         bindingGroup.unbind();
-        List<CidsBean> changeCol = CidsBeanSupport.getBeanCollectionFromProperty(
+        final List<CidsBean> changeCol = CidsBeanSupport.getBeanCollectionFromProperty(
                     cidsBean,
                     propName);
         Collections.sort(changeCol, AlphanumComparator.getInstance());
@@ -1208,11 +1226,11 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 this.cidsBean.addPropertyChangeListener(this);
             }
             //Damit die Linien sortiert in der Liste erscheinen.
-            List<CidsBean> busCol = CidsBeanSupport.getBeanCollectionFromProperty(
+            final List<CidsBean> busCol = CidsBeanSupport.getBeanCollectionFromProperty(
                         cidsBean,
                         FIELD__BUSLINIE);
                 Collections.sort(busCol, AlphanumComparator.getInstance());
-            List<CidsBean> bahnCol = CidsBeanSupport.getBeanCollectionFromProperty(
+            final List<CidsBean> bahnCol = CidsBeanSupport.getBeanCollectionFromProperty(
                         cidsBean,
                         FIELD__BAHNLINIE);
                 Collections.sort(bahnCol, AlphanumComparator.getInstance());
@@ -1264,7 +1282,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         final CidsBean cb = this.getCidsBean();
         try {
             if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, 20.0);
+                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, PROPERTIES.getBufferMeter());
             } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
                 final BoundingBox initialBoundingBox;
@@ -1278,7 +1296,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                         getConnectionContext());
                 final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
                 newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, 20.0);
+                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, PROPERTIES.getBufferMeter());
             }
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
@@ -1308,7 +1326,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
     @Override
     public String getTitle() {
-        return makeTitle();//cidsBean.toString();
+        return makeTitle();
     }
 
     @Override
@@ -1393,6 +1411,79 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
          */
         public Object getLastValid() {
             return lastValid;
+        }
+        
+        
+    }
+    
+    private static PrbrProperties loadPropertiesFromServerResources(final ConnectionContext connectionContext)
+        throws Exception {
+        final Object ret;
+       /* ret = SessionManager.getSession()
+                .getConnection()
+                .executeTask(SessionManager.getSession().getUser(),
+                        GetServerResourceServerAction.TASK_NAME,
+                        "WUNDA_BLAU",
+                        WundaBlauServerResources.PRBR_PROPERTIES.getValue(),
+                        connectionContext);
+        if (ret instanceof Exception) {
+            throw (Exception)ret;
+        }*/
+        final Properties properties = new Properties();
+        //properties.load(new StringReader((String)ret));
+        try {
+            properties.load(new StringReader("PICTURE_PATH=https://www.wuppertal.de/geoportal/prbr/fotos/" + "\n" + "BUFFER_METER=20.0"));
+        } catch (IOException e) {
+            LOG.warn("Fehler beim Laden der Properties", e);
+        }
+
+        return new PrbrProperties(properties);
+    }
+    
+    @Getter
+    static class PrbrProperties {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final Properties properties;
+
+        private final String fotoUrl;
+        private final Double bufferMeter;
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PrbrProperties object.
+         *
+         * @param  properties  DOCUMENT ME!
+         */
+        public PrbrProperties(final Properties properties) {
+            this.properties = properties;
+
+            fotoUrl = readProperty("PICTURE_PATH", null);
+            bufferMeter = Double.valueOf(readProperty("BUFFER_METER", null));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   property      DOCUMENT ME!
+         * @param   defaultValue  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private String readProperty(final String property, final String defaultValue) {
+            String value = defaultValue;
+            try {
+                value = getProperties().getProperty(property, defaultValue);
+            } catch (final Exception ex) {
+                final String message = "could not read " + property + " from "
+         //                   + WundaBlauServerResources.PRBR_PROPERTIES.getValue()
+                            + ". setting to default value: " + defaultValue;
+                LOG.warn(message, ex);
+            }
+            return value;
         }
     }
 }
