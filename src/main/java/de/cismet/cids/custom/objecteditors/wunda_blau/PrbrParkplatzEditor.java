@@ -62,6 +62,7 @@ import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.PrbrConfProperties;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -149,6 +150,10 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
     private JCheckBox chUeberdachung;
     private JDialog dlgAddBahnlinien;
     private JDialog dlgAddBuslinien;
+    private Box.Filler filler1;
+    private Box.Filler filler2;
+    private Box.Filler filler3;
+    private JScrollPane jScrollPane1;
     private JLabel lblAnbindung;
     private JLabel lblAuswaehlenBahn;
     private JLabel lblAuswaehlenBus;
@@ -173,7 +178,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFiller;
-    private JPanel panFillerRechtsLage;
     private JPanel panFillerUnten;
     private JPanel panFillerUnten1;
     private JPanel panLage;
@@ -186,7 +190,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
     private JScrollPane scpLstBahnlinie;
     private JScrollPane scpLstBuslinie;
     private SemiRoundedPanel semiRoundedPanel7;
-    private JTextField txtBemerkung;
+    private JTextArea txtBemerkung;
     private JTextField txtFoto;
     private JTextField txtName;
     private JTextField txtPlaetze;
@@ -270,7 +274,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 panPreviewMap = new DefaultPreviewMapPanel();
                 semiRoundedPanel7 = new SemiRoundedPanel();
                 lblKarte = new JLabel();
-                panFillerRechtsLage = new JPanel();
                 panName = new JPanel();
                 lblName = new JLabel();
                 txtName = new JTextField();
@@ -288,7 +291,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 lblTyp = new JLabel();
                 panFiller = new JPanel();
                 chUeberdachung = new JCheckBox();
-                txtBemerkung = new JTextField();
                 lblBemerkung = new JLabel();
                 panUrl = new JPanel();
                 lblUrlCheck = new JLabel();
@@ -299,6 +301,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 panButtonsBus = new JPanel();
                 btnAddBus = new JButton();
                 btnRemoveBus = new JButton();
+                filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
                 scpLstBuslinie = new JScrollPane();
                 lstBuslinien = new JList();
                 lblBuslinien = new JLabel();
@@ -308,6 +311,10 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 panButtonsBahn = new JPanel();
                 btnAddBahn = new JButton();
                 btnRemoveBahn = new JButton();
+                filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+                jScrollPane1 = new JScrollPane();
+                txtBemerkung = new JTextArea();
+                filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
 
                 dlgAddBuslinien.setModal(true);
 
@@ -490,17 +497,12 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         rpKarte.setName(""); // NOI18N
         rpKarte.setLayout(new GridBagLayout());
-
-        panPreviewMap.setMinimumSize(new Dimension(600, 600));
-        panPreviewMap.setPreferredSize(new Dimension(500, 300));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 10, 5);
         rpKarte.add(panPreviewMap, gridBagConstraints);
 
         semiRoundedPanel7.setBackground(Color.darkGray);
@@ -523,30 +525,10 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.9;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 0, 0);
-        panLage.add(rpKarte, gridBagConstraints);
-
-        panFillerRechtsLage.setName(""); // NOI18N
-        panFillerRechtsLage.setOpaque(false);
-
-        final GroupLayout panFillerRechtsLageLayout = new GroupLayout(panFillerRechtsLage);
-        panFillerRechtsLage.setLayout(panFillerRechtsLageLayout);
-        panFillerRechtsLageLayout.setHorizontalGroup(panFillerRechtsLageLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        panFillerRechtsLageLayout.setVerticalGroup(panFillerRechtsLageLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
-        panLage.add(panFillerRechtsLage, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        panLage.add(rpKarte, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -554,8 +536,8 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 9.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 0, 10);
         panContent.add(panLage, gridBagConstraints);
 
         panName.setOpaque(false);
@@ -627,7 +609,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(10, 10, 0, 10);
         panContent.add(panName, gridBagConstraints);
 
         panDaten.setOpaque(false);
@@ -645,6 +627,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 3.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtPlaetze, gridBagConstraints);
@@ -662,7 +645,8 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 3.0;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtFoto, gridBagConstraints);
 
@@ -672,8 +656,9 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblFoto, gridBagConstraints);
 
         lblPlaetze.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -682,6 +667,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(0, 5, 0, 5);
         panDaten.add(lblPlaetze, gridBagConstraints);
@@ -692,8 +678,8 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panDaten.add(lblUeberdachung, gridBagConstraints);
 
@@ -703,8 +689,9 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblHaltestelle, gridBagConstraints);
 
         lblTyp.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -713,9 +700,9 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblTyp, gridBagConstraints);
 
         panFiller.setMinimumSize(new Dimension(20, 0));
@@ -733,12 +720,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 0,
                 Short.MAX_VALUE));
 
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        panDaten.add(panFiller, gridBagConstraints);
+        panDaten.add(panFiller, new GridBagConstraints());
 
         chUeberdachung.setContentAreaFilled(false);
 
@@ -757,36 +739,18 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(4, 0, 4, 0);
-        panDaten.add(chUeberdachung, gridBagConstraints);
-
-        txtBemerkung.setToolTipText("");
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.beschreibung}"),
-                txtBemerkung,
-                BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(txtBemerkung, gridBagConstraints);
+        panDaten.add(chUeberdachung, gridBagConstraints);
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBemerkung, gridBagConstraints);
 
         panUrl.setOpaque(false);
@@ -824,9 +788,8 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(cbTyp, gridBagConstraints);
 
@@ -847,9 +810,8 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(cbHaltestelle, gridBagConstraints);
 
@@ -859,8 +821,8 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panDaten.add(lblAnbindung, gridBagConstraints);
 
@@ -881,7 +843,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(4, 0, 4, 0);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(chAnbindung, gridBagConstraints);
 
         panButtonsBus.setOpaque(false);
@@ -897,7 +859,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 }
             });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsBus.add(btnAddBus, gridBagConstraints);
 
         btnRemoveBus.setIcon(new ImageIcon(
@@ -912,17 +874,28 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsBus.add(btnRemoveBus, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        panButtonsBus.add(filler1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 2);
         panDaten.add(panButtonsBus, gridBagConstraints);
 
+        scpLstBuslinie.setMaximumSize(new Dimension(258, 66));
+        scpLstBuslinie.setMinimumSize(new Dimension(258, 66));
+
         lstBuslinien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstBuslinien.setVisibleRowCount(4);
 
         ELProperty eLProperty = ELProperty.create("${cidsBean.arr_buslinien}");
         JListBinding jListBinding = SwingBindings.createJListBinding(
@@ -936,7 +909,9 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -949,12 +924,18 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         lblBuslinien.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBuslinien, gridBagConstraints);
 
+        scpLstBahnlinie.setMaximumSize(new Dimension(258, 66));
+        scpLstBahnlinie.setMinimumSize(new Dimension(258, 66));
+
         lstBahnlinien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstBahnlinien.setVisibleRowCount(4);
 
         eLProperty = ELProperty.create("${cidsBean.arr_bahnlinien}");
         jListBinding = SwingBindings.createJListBinding(
@@ -968,7 +949,9 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -981,9 +964,11 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         lblBahnlinien.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBahnlinien, gridBagConstraints);
 
         panButtonsBahn.setOpaque(false);
@@ -999,7 +984,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 }
             });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsBahn.add(btnAddBahn, gridBagConstraints);
 
         btnRemoveBahn.setIcon(new ImageIcon(
@@ -1014,22 +999,62 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsBahn.add(btnRemoveBahn, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        panButtonsBahn.add(filler2, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 2);
         panDaten.add(panButtonsBahn, gridBagConstraints);
+
+        jScrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        txtBemerkung.setColumns(20);
+        txtBemerkung.setRows(1);
+        txtBemerkung.setMargin(new Insets(3, 0, 0, 0));
+        txtBemerkung.setMinimumSize(new Dimension(220, 16));
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                txtBemerkung,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(txtBemerkung);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(jScrollPane1, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panDaten.add(filler3, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(10, 10, 0, 10);
         panContent.add(panDaten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1039,7 +1064,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
@@ -1352,23 +1377,19 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
      */
     private void setReadOnly() {
         if (!(isEditor)) {
-            cbTyp.setEnabled(false);
-            cbHaltestelle.setEnabled(false);
-            chUeberdachung.setEnabled(false);
-            chAnbindung.setEnabled(false);
-            txtBemerkung.setEnabled(false);
-            txtFoto.setEnabled(false);
-            txtName.setEnabled(false);
-            txtPlaetze.setEnabled(false);
-            // cbGeom.setVisible(false);
+            RendererTools.makeReadOnly(cbTyp);
+            RendererTools.makeReadOnly(cbHaltestelle);
+            RendererTools.makeReadOnly(chUeberdachung);
+            RendererTools.makeReadOnly(chAnbindung);
+            RendererTools.makeReadOnly(txtBemerkung);
+            RendererTools.makeReadOnly(txtFoto);
+            RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtPlaetze);
+            RendererTools.makeReadOnly(txtName);
             lblGeom.setVisible(false);
-            lstBuslinien.setEnabled(false);
-            lstBahnlinien.setEnabled(false);
-            btnAddBus.setEnabled(false);
-            btnRemoveBus.setEnabled(false);
-            btnAddBahn.setEnabled(false);
-            btnRemoveBahn.setEnabled(false);
-            // lblUrlCheck.setEnabled(false); Es soll noch erkennbar sein.
+            panButtonsBahn.setVisible(false);
+            panButtonsBus.setVisible(false);
+            // RendererTools.makeReadOnly(lblUrlCheck);
         }
     }
 

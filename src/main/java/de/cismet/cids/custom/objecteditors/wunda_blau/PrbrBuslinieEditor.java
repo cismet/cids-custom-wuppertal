@@ -34,6 +34,7 @@ import java.awt.Insets;
 
 import javax.swing.*;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -295,7 +296,7 @@ public class PrbrBuslinieEditor extends DefaultCustomObjectEditor implements Cid
      */
     private void setReadOnly() {
         if (!(isEditor)) {
-            txtName.setEnabled(false);
+            RendererTools.makeReadOnly(txtName);
         }
     }
 
