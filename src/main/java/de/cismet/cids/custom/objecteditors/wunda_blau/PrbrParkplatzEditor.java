@@ -1075,16 +1075,16 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBusActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddBusActionPerformed
+    private void btnAddBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBusActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(PrbrParkplatzEditor.this), dlgAddBuslinien, true);
-    }//GEN-LAST:event_btnAddBusActionPerformed
+    }                                                              //GEN-LAST:event_btnAddBusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBusActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveBusActionPerformed
+    private void btnRemoveBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBusActionPerformed
         final Object selection = lstBuslinien.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1109,23 +1109,23 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBusActionPerformed
+    } //GEN-LAST:event_btnRemoveBusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortBusActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortBusActionPerformed
+    private void btnMenAbortBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortBusActionPerformed
         dlgAddBuslinien.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortBusActionPerformed
+    }                                                                   //GEN-LAST:event_btnMenAbortBusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkBusActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkBusActionPerformed
+    private void btnMenOkBusActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkBusActionPerformed
         try {
             final Object selItem = cbBuslinie.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1141,25 +1141,25 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddBuslinien.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkBusActionPerformed
+    } //GEN-LAST:event_btnMenOkBusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBahnActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddBahnActionPerformed
+    private void btnAddBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBahnActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(PrbrParkplatzEditor.this),
             dlgAddBahnlinien,
             true);
-    }//GEN-LAST:event_btnAddBahnActionPerformed
+    }                                                               //GEN-LAST:event_btnAddBahnActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBahnActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveBahnActionPerformed
+    private void btnRemoveBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBahnActionPerformed
         final Object selection = lstBahnlinien.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1184,23 +1184,23 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBahnActionPerformed
+    } //GEN-LAST:event_btnRemoveBahnActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortBahnActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortBahnActionPerformed
+    private void btnMenAbortBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortBahnActionPerformed
         dlgAddBahnlinien.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortBahnActionPerformed
+    }                                                                    //GEN-LAST:event_btnMenAbortBahnActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkBahnActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkBahnActionPerformed
+    private void btnMenOkBahnActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkBahnActionPerformed
         try {
             final Object selItem = cbBahnlinie.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1216,7 +1216,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddBahnlinien.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkBahnActionPerformed
+    } //GEN-LAST:event_btnMenOkBahnActionPerformed
 
     /**
      * DOCUMENT ME!
