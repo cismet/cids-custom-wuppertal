@@ -1546,18 +1546,18 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
         jTextArea3.setText("");
         diaFreigabe.pack();
         StaticSwingTools.showDialog(diaFreigabe);
-    }                                                                                //GEN-LAST:event_btnFreigebenActionPerformed
+    }//GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlDateianhangValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlDateianhangValueActionPerformed
+    private void hlDateianhangValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlDateianhangValueActionPerformed
         final String dateiName = (String)cidsBean.getProperty("dateiname");
         final int extPos = dateiName.lastIndexOf(".");
         final String pureName = dateiName.substring(0, extPos);
@@ -1574,89 +1574,89 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 ext,
                 getConnectionContext());
         DownloadManager.instance().add(download);
-    } //GEN-LAST:event_hlDateianhangValueActionPerformed
+    }//GEN-LAST:event_hlDateianhangValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         diaStorno.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         diaFreigabe.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         executeFreigabe();
         diaFreigabe.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         executeStorno();
         diaStorno.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnStornoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnStornoActionPerformed
+    private void btnStornoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStornoActionPerformed
         jTextArea4.setText("");
         diaStorno.pack();
         StaticSwingTools.showDialog(diaStorno);
-    }                                                                             //GEN-LAST:event_btnStornoActionPerformed
+    }//GEN-LAST:event_btnStornoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jComboBox1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         final String vorlage = (String)jComboBox1.getSelectedItem();
         final String langtext = freigabegruendeMap.get(vorlage);
         jTextArea5.setText(langtext);
         jButton3.setEnabled(langtext != null);
         diaFreigabe.pack();
-    }                                                                              //GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jComboBox2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jComboBox2ActionPerformed
+    private void jComboBox2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         final String vorlage = (String)jComboBox2.getSelectedItem();
         final String langtext = ablehnungsgruendeMap.get(vorlage);
         jTextArea6.setText(langtext);
         jButton5.setEnabled(langtext != null);
         diaStorno.pack();
-    }                                                                              //GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_jComboBox2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList1MouseClicked
+    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         if (evt.getClickCount() > 1) {
             final Object selObject = jList1.getSelectedValue();
             if (selObject instanceof String) {
@@ -1665,14 +1665,14 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         .gotoMetaObjectNode(new MetaObjectNode(baulastMap.get((String)selObject)), false);
             }
         }
-    }                                                                      //GEN-LAST:event_jList1MouseClicked
+    }//GEN-LAST:event_jList1MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlVorschauValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlVorschauValueActionPerformed
+    private void hlVorschauValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlVorschauValueActionPerformed
         try {
             AlkisProductDownloadHelper.download((String)cidsBean.getProperty("schluessel"),
                 downloadInfo.getProduktTyp(),
@@ -1681,14 +1681,14 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
-    }                                                                                   //GEN-LAST:event_hlVorschauValueActionPerformed
+    }//GEN-LAST:event_hlVorschauValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList3MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList3MouseClicked
+    private void jList3MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList3MouseClicked
         if (evt.getClickCount() > 1) {
             final Object selObject = jList3.getSelectedValue();
             if (selObject instanceof String) {
@@ -1697,14 +1697,14 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         .gotoMetaObjectNode(new MetaObjectNode(alkisMap.get((String)selObject)), false);
             }
         }
-    }                                                                      //GEN-LAST:event_jList3MouseClicked
+    }//GEN-LAST:event_jList3MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlEMailValueActionPerformed
+    private void hlEMailValueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlEMailValueActionPerformed
         final String email = hlEMailValue.getText();
         if ((email != null) && !email.isEmpty()) {
             try {
@@ -1713,14 +1713,14 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 LOG.warn(ex, ex);
             }
         }
-    }                                                                                //GEN-LAST:event_hlEMailValueActionPerformed
+    }//GEN-LAST:event_hlEMailValueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList2MouseClicked
+    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList2MouseClicked
         if (evt.getClickCount() > 1) {
             final Object selObject = jList2.getSelectedValue();
             if (selObject instanceof String) {
@@ -1729,26 +1729,26 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         .gotoMetaObjectNode(new MetaObjectNode(alkisMap.get((String)selObject)), false);
             }
         }
-    }                                                                      //GEN-LAST:event_jList2MouseClicked
+    }//GEN-LAST:event_jList2MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigeben1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigeben1ActionPerformed
+    private void btnFreigeben1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigeben1ActionPerformed
         final String kommentar = (String)cidsBean.getProperty("pruefkommentar");
         executeFreigabeOrStorno(true, kommentar);
-    }                                                                                 //GEN-LAST:event_btnFreigeben1ActionPerformed
+    }//GEN-LAST:event_btnFreigeben1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlBestellungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestellungActionPerformed
+    private void hlBestellungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestellungActionPerformed
         ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(bestellungBean));
-    }                                                                                //GEN-LAST:event_hlBestellungActionPerformed
+    }//GEN-LAST:event_hlBestellungActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1889,6 +1889,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         ((DefaultListModel<String>)jList1.getModel()).clear();
         if (cidsBean != null) {
+            final boolean isBestellung = "formsolutions".equals(cidsBean.getProperty("benutzer"));
+            
             hlDateianhangValue.setEnabled((cidsBean.getProperty("dateiname") != null)
                         && ((Timestamp)cidsBean.getProperty("anfrage_timestamp") != null)
                         && !((Timestamp)cidsBean.getProperty("anfrage_timestamp")).before(
@@ -1915,8 +1917,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             lblAnfrageVonValue.setText((String)cidsBean.getProperty("benutzer"));
             hlEMailValue.setText("");
             hlEMailValue.setText("");
-
-            final boolean isBestellung = "formsolutions".equals(cidsBean.getProperty("benutzer"));
+            
             lblBestellung.setVisible(isBestellung);
             hlBestellung.setVisible(isBestellung);
             lblTelNummer.setVisible(!isBestellung);
@@ -2001,12 +2002,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         final BerechtigungspruefungBescheinigungDownloadInfo bescheinigungDownloadInfo =
                             (BerechtigungspruefungBescheinigungDownloadInfo)downloadInfo;
 
-                        final Collection<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckInfos =
-                            new ArrayList<BerechtigungspruefungBescheinigungFlurstueckInfo>();
-                        final Collection<BerechtigungspruefungBescheinigungBaulastInfo> baulastInfos =
-                            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
-                        for (final BerechtigungspruefungBescheinigungGruppeInfo gruppeInfo
-                                    : bescheinigungDownloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen()) {
+                        final Collection<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckInfos = new ArrayList<>();
+                        final Collection<BerechtigungspruefungBescheinigungBaulastInfo> baulastInfos = new ArrayList<>();
+                        for (final BerechtigungspruefungBescheinigungGruppeInfo gruppeInfo : bescheinigungDownloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen()) {
                             flurstueckInfos.addAll(gruppeInfo.getFlurstuecke());
                             baulastInfos.addAll(gruppeInfo.getBaulastenBeguenstigt());
                             baulastInfos.addAll(gruppeInfo.getBaulastenBelastet());
@@ -2064,14 +2062,16 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                     } else if (downloadInfo instanceof BerechtigungspruefungAlkisDownloadInfo) {
                         final BerechtigungspruefungAlkisDownloadInfo alkisDownloadInfo =
                             (BerechtigungspruefungAlkisDownloadInfo)downloadInfo;
-                        if (BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE.equals(
-                                        alkisDownloadInfo.getAlkisObjectTyp())) {
-                            lblBegruendungstext3.setText("Flurstücke:");
-                        } else if (BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.BUCHUNGSBLAETTER.equals(
-                                        alkisDownloadInfo.getAlkisObjectTyp())) {
-                            lblBegruendungstext3.setText("Buchungsblätter:");
-                        } else {
+                        
+                        if (null == alkisDownloadInfo.getAlkisObjectTyp()) {
                             lblBegruendungstext3.setText("Alkis-Codes:");
+                        } else switch (alkisDownloadInfo.getAlkisObjectTyp()) {
+                            case FLURSTUECKE:
+                                lblBegruendungstext3.setText("Flurstücke:");
+                                break;
+                            case BUCHUNGSBLAETTER:
+                                lblBegruendungstext3.setText("Buchungsblätter:");
+                                break;
                         }
 
                         if (downloadInfo instanceof BerechtigungspruefungAlkisEinzelnachweisDownloadInfo) {
@@ -2120,6 +2120,22 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             } else {
                 downloadInfo = null;
             }
+            
+            final String notYetDownloadedKuText = "Vom Kunden noch nicht heruntergeladen";
+            final String notYetDownloadedFSText = "Noch nicht zum Download ausgeliefert";
+            final String pruefungTrueKuText = "Vom Kunden heruntergeladen";
+            final String pruefungTrueFSText = "Zum Download ausgeliefert";
+                        
+            final String notYetDownloadedText = isBestellung ? notYetDownloadedFSText : notYetDownloadedKuText;
+
+            final String pruefungTrueText = isBestellung ? pruefungTrueFSText : pruefungTrueKuText;
+            final String pruefungFalseText = "Ablehnungsmeldung erhalten";
+            
+            final String downloadedText = Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus")) ? pruefungTrueText : pruefungFalseText;
+            
+            final String abholstatusText = Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")) ? downloadedText : notYetDownloadedText;
+
+            lblAbholStatusValue.setText(abholstatusText);
         } else {
             hlDateianhangValue.setEnabled(false);
 
@@ -2132,13 +2148,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             txtTelNummerValue.setText("");
 
             downloadInfo = null;
+            lblAbholStatusValue.setText(null);
         }
-
-        lblAbholStatusValue.setText(((cidsBean != null) && Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")))
-                ? (Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus")) ? "Vom Kunden heruntergeladen"
-                                                                            : "Ablehnungsmeldung erhalten")
-                : "Vom Kunden noch nicht heruntergeladen");
-
+        
         bindingGroup.bind();
     }
 
