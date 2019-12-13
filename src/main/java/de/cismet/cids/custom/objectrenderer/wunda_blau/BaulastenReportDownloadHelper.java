@@ -107,7 +107,6 @@ public class BaulastenReportDownloadHelper {
      * @param   jobName                   DOCUMENT ME!
      * @param   auftragsNummer            DOCUMENT ME!
      * @param   projectName               DOCUMENT ME!
-     * @param   anfrageSchluessel         DOCUMENT ME!
      * @param   fabricationdate           DOCUMENT ME!
      * @param   number                    projectname DOCUMENT ME!
      * @param   max                       DOCUMENT ME!
@@ -122,7 +121,6 @@ public class BaulastenReportDownloadHelper {
             final String jobName,
             final String auftragsNummer,
             final String projectName,
-            final String anfrageSchluessel,
             final Date fabricationdate,
             final int number,
             final int max,
@@ -154,9 +152,6 @@ public class BaulastenReportDownloadHelper {
                 new ServerActionParameter<>(
                     BaulastBescheinigungReportServerAction.Parameter.PROJECT_NAME.toString(),
                     projectName),
-                new ServerActionParameter<>(
-                    BaulastBescheinigungReportServerAction.Parameter.ANFRAGE_SCHLUESSEL.toString(),
-                    anfrageSchluessel),
             };
 
         return new ByteArrayActionDownload(
@@ -435,7 +430,6 @@ public class BaulastenReportDownloadHelper {
                                         (jobname != null) ? jobname : downloadInfo.getAuftragsnummer(),
                                         downloadInfo.getAuftragsnummer(),
                                         downloadInfo.getProduktbezeichnung(),
-                                        anfrageSchluessel,
                                         downloadInfo.getBescheinigungsInfo().getDatum(),
                                         ++number,
                                         max,
@@ -528,13 +522,13 @@ public class BaulastenReportDownloadHelper {
             try {
                 writer = new BufferedWriter(new FileWriter(fileToSaveTo, false));
                 writer.write(content);
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 error(ex);
             } finally {
                 if (writer != null) {
                     try {
                         writer.close();
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         log.warn("Exception occured while closing file.", e);
                     }
                 }
