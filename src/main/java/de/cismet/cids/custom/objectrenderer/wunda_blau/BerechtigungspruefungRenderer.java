@@ -1889,6 +1889,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         ((DefaultListModel<String>)jList1.getModel()).clear();
         if (cidsBean != null) {
+            final boolean isBestellung = "formsolutions".equals(cidsBean.getProperty("benutzer"));
+
             hlDateianhangValue.setEnabled((cidsBean.getProperty("dateiname") != null)
                         && ((Timestamp)cidsBean.getProperty("anfrage_timestamp") != null)
                         && !((Timestamp)cidsBean.getProperty("anfrage_timestamp")).before(
@@ -1916,7 +1918,6 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             hlEMailValue.setText("");
             hlEMailValue.setText("");
 
-            final boolean isBestellung = "formsolutions".equals(cidsBean.getProperty("benutzer"));
             lblBestellung.setVisible(isBestellung);
             hlBestellung.setVisible(isBestellung);
             lblTelNummer.setVisible(!isBestellung);
@@ -2002,9 +2003,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                             (BerechtigungspruefungBescheinigungDownloadInfo)downloadInfo;
 
                         final Collection<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckInfos =
-                            new ArrayList<BerechtigungspruefungBescheinigungFlurstueckInfo>();
+                            new ArrayList<>();
                         final Collection<BerechtigungspruefungBescheinigungBaulastInfo> baulastInfos =
-                            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
+                            new ArrayList<>();
                         for (final BerechtigungspruefungBescheinigungGruppeInfo gruppeInfo
                                     : bescheinigungDownloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen()) {
                             flurstueckInfos.addAll(gruppeInfo.getFlurstuecke());
@@ -2064,14 +2065,20 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                     } else if (downloadInfo instanceof BerechtigungspruefungAlkisDownloadInfo) {
                         final BerechtigungspruefungAlkisDownloadInfo alkisDownloadInfo =
                             (BerechtigungspruefungAlkisDownloadInfo)downloadInfo;
-                        if (BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE.equals(
-                                        alkisDownloadInfo.getAlkisObjectTyp())) {
-                            lblBegruendungstext3.setText("Flurstücke:");
-                        } else if (BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.BUCHUNGSBLAETTER.equals(
-                                        alkisDownloadInfo.getAlkisObjectTyp())) {
-                            lblBegruendungstext3.setText("Buchungsblätter:");
-                        } else {
+
+                        if (null == alkisDownloadInfo.getAlkisObjectTyp()) {
                             lblBegruendungstext3.setText("Alkis-Codes:");
+                        } else {
+                            switch (alkisDownloadInfo.getAlkisObjectTyp()) {
+                                case FLURSTUECKE: {
+                                    lblBegruendungstext3.setText("Flurstücke:");
+                                    break;
+                                }
+                                case BUCHUNGSBLAETTER: {
+                                    lblBegruendungstext3.setText("Buchungsblätter:");
+                                    break;
+                                }
+                            }
                         }
 
                         if (downloadInfo instanceof BerechtigungspruefungAlkisEinzelnachweisDownloadInfo) {
@@ -2120,6 +2127,24 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             } else {
                 downloadInfo = null;
             }
+
+            final String notYetDownloadedKuText = "Vom Kunden noch nicht heruntergeladen";
+            final String notYetDownloadedFSText = "Noch nicht zum Download ausgeliefert";
+            final String pruefungTrueKuText = "Vom Kunden heruntergeladen";
+            final String pruefungTrueFSText = "Zum Download ausgeliefert";
+
+            final String notYetDownloadedText = isBestellung ? notYetDownloadedFSText : notYetDownloadedKuText;
+
+            final String pruefungTrueText = isBestellung ? pruefungTrueFSText : pruefungTrueKuText;
+            final String pruefungFalseText = "Ablehnungsmeldung erhalten";
+
+            final String downloadedText = Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus")) ? pruefungTrueText
+                                                                                                   : pruefungFalseText;
+
+            final String abholstatusText = Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")) ? downloadedText
+                                                                                                 : notYetDownloadedText;
+
+            lblAbholStatusValue.setText(abholstatusText);
         } else {
             hlDateianhangValue.setEnabled(false);
 
@@ -2132,12 +2157,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             txtTelNummerValue.setText("");
 
             downloadInfo = null;
+            lblAbholStatusValue.setText(null);
         }
-
-        lblAbholStatusValue.setText(((cidsBean != null) && Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")))
-                ? (Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus")) ? "Vom Kunden heruntergeladen"
-                                                                            : "Ablehnungsmeldung erhalten")
-                : "Vom Kunden noch nicht heruntergeladen");
 
         bindingGroup.bind();
     }
