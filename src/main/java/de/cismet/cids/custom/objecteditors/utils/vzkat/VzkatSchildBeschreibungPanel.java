@@ -58,7 +58,8 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VzkatSchildBeschreibungPanel.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            VzkatSchildBeschreibungPanel.class);
     private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatSchildIconFactory.class.getResource(
                 "/res/16/vzkat_error.png"));
     private static final String ICON_URL_TEMPLATE =
@@ -137,12 +138,13 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         lblVerkehrszeichen = new javax.swing.JLabel();
         txtPosition = new javax.swing.JTextField();
         cbStvo = new DefaultBindableReferenceCombo(mcVzkatStvo, true, false);
-        fillBeschreibungBodyLeft = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        fillBeschreibungBodyLeft = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         cbVerkehrszeichen = new de.cismet.cids.editors.FastBindableReferenceCombo(
-            verkehrszeichenSearch,
-            verkehrszeichenSearch.getRepresentationPattern(),
-            verkehrszeichenSearch.getRepresentationFields()
-        );
+                verkehrszeichenSearch,
+                verkehrszeichenSearch.getRepresentationPattern(),
+                verkehrszeichenSearch.getRepresentationFields());
         lblBemerkung = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtBemerkung = new javax.swing.JTextArea();
@@ -159,7 +161,11 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
 
         lblBezeichnung.setFont(lblBezeichnung.getFont());
         lblBezeichnung.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblBezeichnung, org.openide.util.NbBundle.getMessage(VzkatSchildBeschreibungPanel.class, "VzkatSchildBeschreibungPanel.lblBezeichnung.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBezeichnung,
+            org.openide.util.NbBundle.getMessage(
+                VzkatSchildBeschreibungPanel.class,
+                "VzkatSchildBeschreibungPanel.lblBezeichnung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -178,7 +184,11 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         panBeschreibungBodyLeft.setLayout(new java.awt.GridBagLayout());
 
         lblPosition.setFont(lblPosition.getFont().deriveFont(lblPosition.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(lblPosition, org.openide.util.NbBundle.getMessage(VzkatSchildBeschreibungPanel.class, "VzkatSchildBeschreibungPanel.lblPosition.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblPosition,
+            org.openide.util.NbBundle.getMessage(
+                VzkatSchildBeschreibungPanel.class,
+                "VzkatSchildBeschreibungPanel.lblPosition.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -189,7 +199,11 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         panBeschreibungBodyLeft.add(lblPosition, gridBagConstraints);
 
         lblStvo.setFont(lblStvo.getFont().deriveFont(lblStvo.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(lblStvo, org.openide.util.NbBundle.getMessage(VzkatSchildBeschreibungPanel.class, "VzkatSchildBeschreibungPanel.lblStvo.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStvo,
+            org.openide.util.NbBundle.getMessage(
+                VzkatSchildBeschreibungPanel.class,
+                "VzkatSchildBeschreibungPanel.lblStvo.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -199,8 +213,14 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panBeschreibungBodyLeft.add(lblStvo, gridBagConstraints);
 
-        lblVerkehrszeichen.setFont(lblVerkehrszeichen.getFont().deriveFont(lblVerkehrszeichen.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(lblVerkehrszeichen, org.openide.util.NbBundle.getMessage(VzkatSchildBeschreibungPanel.class, "VzkatSchildBeschreibungPanel.lblVerkehrszeichen.text")); // NOI18N
+        lblVerkehrszeichen.setFont(lblVerkehrszeichen.getFont().deriveFont(
+                lblVerkehrszeichen.getFont().getStyle()
+                        | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblVerkehrszeichen,
+            org.openide.util.NbBundle.getMessage(
+                VzkatSchildBeschreibungPanel.class,
+                "VzkatSchildBeschreibungPanel.lblVerkehrszeichen.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -210,7 +230,12 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panBeschreibungBodyLeft.add(lblVerkehrszeichen, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.position}"), txtPosition, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.position}"),
+                txtPosition,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -222,10 +247,12 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         panBeschreibungBodyLeft.add(txtPosition, gridBagConstraints);
 
         cbStvo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbStvoActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbStvoActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -240,14 +267,21 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         gridBagConstraints.weighty = 1.0;
         panBeschreibungBodyLeft.add(fillBeschreibungBodyLeft, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zeichen}"), cbVerkehrszeichen, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zeichen}"),
+                cbVerkehrszeichen,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbVerkehrszeichen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbVerkehrszeichenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbVerkehrszeichenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -257,7 +291,11 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         panBeschreibungBodyLeft.add(cbVerkehrszeichen, gridBagConstraints);
 
         lblBemerkung.setFont(lblBemerkung.getFont().deriveFont(lblBemerkung.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(lblBemerkung, org.openide.util.NbBundle.getMessage(VzkatSchildBeschreibungPanel.class, "VzkatSchildBeschreibungPanel.lblBemerkung.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBemerkung,
+            org.openide.util.NbBundle.getMessage(
+                VzkatSchildBeschreibungPanel.class,
+                "VzkatSchildBeschreibungPanel.lblBemerkung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -270,7 +308,12 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         txtBemerkung.setColumns(20);
         txtBemerkung.setRows(3);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"), txtBemerkung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                txtBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(txtBemerkung);
@@ -295,7 +338,11 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         panIcon.setOpaque(false);
         panIcon.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblIcon, org.openide.util.NbBundle.getMessage(VzkatSchildBeschreibungPanel.class, "VzkatSchildBeschreibungPanel.lblIcon.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblIcon,
+            org.openide.util.NbBundle.getMessage(
+                VzkatSchildBeschreibungPanel.class,
+                "VzkatSchildBeschreibungPanel.lblIcon.text")); // NOI18N
         lblIcon.setMaximumSize(new java.awt.Dimension(128, 128));
         lblIcon.setMinimumSize(new java.awt.Dimension(128, 128));
         lblIcon.setPreferredSize(new java.awt.Dimension(128, 128));
@@ -332,14 +379,14 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
         add(panBeschreibung, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStvoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStvoActionPerformed
+    private void cbStvoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStvoActionPerformed
         if (cbStvoActionListenerEnabled) {
             final CidsBean stvoBean = (CidsBean)cbStvo.getSelectedItem();
             verkehrszeichenSearch.setStvoId((stvoBean != null) ? (Integer)stvoBean.getProperty("id") : null);
@@ -353,14 +400,14 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
                     }
                 }.execute();
         }
-    }//GEN-LAST:event_cbStvoActionPerformed
+    } //GEN-LAST:event_cbStvoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbVerkehrszeichenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVerkehrszeichenActionPerformed
+    private void cbVerkehrszeichenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbVerkehrszeichenActionPerformed
         final JTextField txt = (JTextField)cbVerkehrszeichen.getEditor().getEditorComponent();
         final CidsBean selectedZeichen = (CidsBean)cbVerkehrszeichen.getSelectedItem();
 
@@ -386,7 +433,7 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
             refreshIcon(null);
         }
         txt.setText(text);
-    }//GEN-LAST:event_cbVerkehrszeichenActionPerformed
+    } //GEN-LAST:event_cbVerkehrszeichenActionPerformed
 
     @Override
     public CidsBean getCidsBean() {

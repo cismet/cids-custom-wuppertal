@@ -127,7 +127,8 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
 
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
-        vzkatSchildPanel1 = new de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatSchildBeschreibungPanel(isEditable());
+        vzkatSchildPanel1 = new de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatSchildBeschreibungPanel(
+                isEditable());
         fillerMainBottom = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
