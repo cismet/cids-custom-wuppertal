@@ -13,11 +13,9 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObjectNode;
-import Sirius.server.newuser.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,7 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
-import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.CachedInfoBaulastRetriever;
 import de.cismet.cids.custom.utils.ClientBaulastBescheinigungHelper;
@@ -75,38 +73,11 @@ public class BaulastenReportDownloadHelper {
     /**
      * DOCUMENT ME!
      *
-     * @param   user               DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  ConnectionException  DOCUMENT ME!
-     */
-    public static String createFertigungsVermerk(final User user, final ConnectionContext connectionContext)
-            throws ConnectionException {
-        final String fertigungsVermerk = SessionManager.getConnection()
-                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU", connectionContext);
-        if (fertigungsVermerk != null) {
-            return fertigungsVermerk;
-        } else {
-            final CidsBean billingLogin = (CidsBean)BillingPopup.getInstance().getExternalUser(user);
-            if (billingLogin != null) {
-                final CidsBean billingKunde = (CidsBean)billingLogin.getProperty("kunde");
-                if (billingKunde != null) {
-                    return (String)billingKunde.getProperty("name");
-                }
-            }
-            return "";
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param   bescheinigungsGruppeInfo  DOCUMENT ME!
      * @param   jobName                   DOCUMENT ME!
      * @param   auftragsNummer            DOCUMENT ME!
      * @param   projectName               DOCUMENT ME!
+     * @param   fertigungsVermerk         DOCUMENT ME!
      * @param   fabricationdate           DOCUMENT ME!
      * @param   number                    projectname DOCUMENT ME!
      * @param   max                       DOCUMENT ME!
@@ -121,6 +92,7 @@ public class BaulastenReportDownloadHelper {
             final String jobName,
             final String auftragsNummer,
             final String projectName,
+            final String fertigungsVermerk,
             final Date fabricationdate,
             final int number,
             final int max,
@@ -143,9 +115,7 @@ public class BaulastenReportDownloadHelper {
                     fabricationdate.getTime()),
                 new ServerActionParameter<>(
                     BaulastBescheinigungReportServerAction.Parameter.FERTIGUNGS_VERMERK.toString(),
-                    createFertigungsVermerk(
-                        SessionManager.getSession().getUser(),
-                        connectionContext)),
+                    fertigungsVermerk),
                 new ServerActionParameter<>(
                     BaulastBescheinigungReportServerAction.Parameter.JOB_NUMBER.toString(),
                     auftragsNummer),
@@ -203,6 +173,7 @@ public class BaulastenReportDownloadHelper {
      * DOCUMENT ME!
      *
      * @param   selectedBaulasten  DOCUMENT ME!
+     * @param   jobname            DOCUMENT ME!
      * @param   jobnumber          DOCUMENT ME!
      * @param   projectname        DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
@@ -212,10 +183,10 @@ public class BaulastenReportDownloadHelper {
      * @throws  Exception  DOCUMENT ME!
      */
     private static Collection<Download> createTextblattPlanRasterDownloads(final Collection<CidsBean> selectedBaulasten,
+            final String jobname,
             final String jobnumber,
             final String projectname,
             final ConnectionContext connectionContext) throws Exception {
-        final String jobname = DownloadManagerDialog.getJobname();
         final Collection<Download> downloads = new ArrayList<>();
         downloads.add(createReportDownload(
                 BaulastenReportGenerator.Type.TEXTBLATT_PLAN_RASTER,
@@ -260,6 +231,7 @@ public class BaulastenReportDownloadHelper {
                     public Collection<? extends Download> fetchDownloads() throws Exception {
                         return createTextblattPlanRasterDownloads(
                                 selectedBaulasten,
+                                jobname,
                                 jobnumber,
                                 projectname,
                                 connectionContext);
@@ -277,36 +249,6 @@ public class BaulastenReportDownloadHelper {
                     title,
                     connectionContext);
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   type               DOCUMENT ME!
-     * @param   selectedBaulasten  DOCUMENT ME!
-     * @param   jobName            DOCUMENT ME!
-     * @param   jobNumber          DOCUMENT ME!
-     * @param   projectName        DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    public static Download createReportDownload(final BaulastenReportGenerator.Type type,
-            final Collection<CidsBean> selectedBaulasten,
-            final String jobName,
-            final String jobNumber,
-            final String projectName,
-            final ConnectionContext connectionContext) throws Exception {
-        return createReportDownload(
-                type,
-                selectedBaulasten,
-                jobName,
-                jobNumber,
-                projectName,
-                projectName,
-                connectionContext);
     }
 
     /**
@@ -342,7 +284,7 @@ public class BaulastenReportDownloadHelper {
                     mons),
                 new ServerActionParameter<>(
                     BaulastenReportServerAction.Parameter.FERTIGUNGS_VERMERK.toString(),
-                    createFertigungsVermerk(
+                    AlkisUtils.getInstance().createFertigungsVermerk(
                         SessionManager.getSession().getUser(),
                         connectionContext)),
                 new ServerActionParameter<>(
@@ -430,6 +372,7 @@ public class BaulastenReportDownloadHelper {
                                         (jobname != null) ? jobname : downloadInfo.getAuftragsnummer(),
                                         downloadInfo.getAuftragsnummer(),
                                         downloadInfo.getProduktbezeichnung(),
+                                        downloadInfo.getFertigungsVermerk(),
                                         downloadInfo.getBescheinigungsInfo().getDatum(),
                                         ++number,
                                         max,
@@ -453,6 +396,7 @@ public class BaulastenReportDownloadHelper {
                                 downloads.addAll(createTextblattPlanRasterDownloads(
                                         allBaulasten,
                                         jobname,
+                                        downloadInfo.getAuftragsnummer(),
                                         downloadInfo.getProduktbezeichnung(),
                                         connectionContext));
                             }
