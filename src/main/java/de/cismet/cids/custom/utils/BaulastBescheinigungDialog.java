@@ -40,6 +40,7 @@ import javax.swing.text.BadLocationException;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.alkis.BaulastBescheinigungHelper;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
@@ -459,6 +460,9 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             new ClientBaulastBescheinigungHelper(getConnectionContext()).calculateDownloadInfo(
                                 hasBilling ? null : jTextField2.getText(),
                                 hasBilling ? null : jTextField1.getText(),
+                                AlkisUtils.getInstance().createFertigungsVermerk(
+                                    SessionManager.getSession().getUser(),
+                                    getConnectionContext()),
                                 flurstuecke,
                                 new BaulastBescheinigungHelper.ProtocolBuffer() {
 

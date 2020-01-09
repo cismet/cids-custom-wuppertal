@@ -74,9 +74,10 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
     //~ Instance fields --------------------------------------------------------
 
-    private final List<ToolbarComponentDescription> toolbarComponents;
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private List<ToolbarComponentDescription> toolbarComponents;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
+    private Properties orbitSettings;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -84,14 +85,6 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
      * Creates a new AlkisToobarPluginComponentProvider object.
      */
     public OrbitViewerToolbarComponentProvider() {
-        final List<ToolbarComponentDescription> preparationList = TypeSafeCollections.newArrayList();
-        final ToolbarComponentDescription description = new ToolbarComponentDescription(
-                "tlbMain",
-                new OrbitViewerControlJButton(connectionContext),
-                ToolbarPositionHint.AFTER,
-                "cmdPan");
-        preparationList.add(description);
-        this.toolbarComponents = Collections.unmodifiableList(preparationList);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -99,6 +92,39 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
+
+        if (validateUserConfigAttr(connectionContext)) {
+            try {
+                final Properties orbitSettings = new Properties();
+                final Object ret = SessionManager.getSession()
+                            .getConnection()
+                            .executeTask(SessionManager.getSession().getUser(),
+                                GetServerResourceServerAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                WundaBlauServerResources.ORBIT_SETTINGS_PROPERTIES.getValue(),
+                                ConnectionContext.create(
+                                    Category.STATIC,
+                                    "ORBIT"));
+                if (ret instanceof Exception) {
+                    throw (Exception)ret;
+                }
+                orbitSettings.load(new StringReader((String)ret));
+                this.orbitSettings = orbitSettings;
+                final List<ToolbarComponentDescription> preparationList = TypeSafeCollections.newArrayList();
+                final ToolbarComponentDescription description = new ToolbarComponentDescription(
+                        "tlbMain",
+                        new OrbitViewerControlJButton(orbitSettings, connectionContext),
+                        ToolbarPositionHint.AFTER,
+                        "cmdPan");
+                preparationList.add(description);
+                toolbarComponents = Collections.unmodifiableList(preparationList);
+            } catch (final Exception ex) {
+                LOG.error("Error during loading of the Orbit ServerRessources", ex);
+
+                toolbarComponents = Collections.emptyList();
+                orbitSettings = null;
+            }
+        }
     }
 
     /**
@@ -123,11 +149,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
     @Override
     public List<ToolbarComponentDescription> getToolbarComponents() {
-        if (validateUserConfigAttr(connectionContext)) {
-            return toolbarComponents;
-        } else {
-            return Collections.emptyList();
-        }
+        return toolbarComponents;
     }
 
     @Override
@@ -151,7 +173,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
     @Override
     public Component getComponent() {
-        return new OrbitViewerControlJButton(connectionContext);
+        return (orbitSettings != null) ? new OrbitViewerControlJButton(orbitSettings, connectionContext) : null;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -177,31 +199,12 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
         /**
          * Creates a new AlkisPrintJButton object.
          *
+         * @param   orbitSettings      DOCUMENT ME!
          * @param   connectionContext  DOCUMENT ME!
          *
          * @throws  RuntimeException  DOCUMENT ME!
          */
-        public OrbitViewerControlJButton(final ConnectionContext connectionContext) {
-            final Properties orbitSettings = new Properties();
-
-            try {
-                final Object ret = SessionManager.getSession()
-                            .getConnection()
-                            .executeTask(SessionManager.getSession().getUser(),
-                                GetServerResourceServerAction.TASK_NAME,
-                                "WUNDA_BLAU",
-                                WundaBlauServerResources.ORBIT_SETTINGS_PROPERTIES.getValue(),
-                                ConnectionContext.create(
-                                    Category.STATIC,
-                                    "ORBIT"));
-                if (ret instanceof Exception) {
-                    throw (Exception)ret;
-                }
-                orbitSettings.load(new StringReader((String)ret));
-            } catch (final Exception ex) {
-                LOG.error("Error during loading of the Orbit ServerRessources", ex);
-            }
-
+        public OrbitViewerControlJButton(final Properties orbitSettings, final ConnectionContext connectionContext) {
             try {
                 socket = IO.socket(orbitSettings.getProperty("socketBroadcaster"));
                 socket.connect();
