@@ -61,7 +61,10 @@
             </Property>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="enabled" source="Form" sourcePath="${cidsBean.postweg}" target="jButton2" targetPath="enabled" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="enabled" source="Form" sourcePath="${cidsBean.postweg}" target="jButton2" targetPath="enabled" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="boolean" value="false"/>
+              <Property name="incompletePathValue" type="boolean" value="false"/>
+            </BindingProperty>
           </BindingProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
@@ -747,7 +750,9 @@
                             <Property name="rows" type="int" value="5"/>
                           </Properties>
                           <BindingProperties>
-                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_versand.alternativ}" target="jTextArea1" targetPath="text" updateStrategy="0" immediately="false"/>
+                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse_versand.alternativ}" target="jTextArea1" targetPath="text" updateStrategy="0" immediately="false">
+                              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                            </BindingProperty>
                           </BindingProperties>
                         </Component>
                       </SubComponents>
@@ -988,7 +993,9 @@
                             <Property name="rows" type="int" value="5"/>
                           </Properties>
                           <BindingProperties>
-                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_rechnung.alternativ}" target="jTextArea2" targetPath="text" updateStrategy="0" immediately="false"/>
+                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse_rechnung.alternativ}" target="jTextArea2" targetPath="text" updateStrategy="0" immediately="false">
+                              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                            </BindingProperty>
                           </BindingProperties>
                         </Component>
                       </SubComponents>

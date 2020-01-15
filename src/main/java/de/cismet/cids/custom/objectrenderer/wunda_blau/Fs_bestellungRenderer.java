@@ -107,8 +107,10 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             public String convertForward(final Boolean s) {
                 if (Boolean.TRUE.equals(s)) {
                     return "Postweg";
-                } else {
+                } else if (Boolean.FALSE.equals(s)) {
                     return "Download";
+                } else {
+                    return null;
                 }
             }
 
@@ -125,7 +127,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private String title;
     private CidsBean cidsBean;
     private MetaObjectNode flurstueckMon;
-
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -416,6 +417,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.postweg}"),
                 jButton2,
                 org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -1032,8 +1035,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create(
-                    "${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_versand.alternativ}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_versand.alternativ}"),
                 jTextArea1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -1285,8 +1287,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create(
-                    "${cidsBean.fk_adresse_versand.vorname} ${cidsBean.fk_adresse_rechnung.alternativ}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_adresse_rechnung.alternativ}"),
                 jTextArea2,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
