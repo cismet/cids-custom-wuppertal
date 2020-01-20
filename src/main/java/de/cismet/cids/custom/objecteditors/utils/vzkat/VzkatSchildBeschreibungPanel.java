@@ -442,18 +442,20 @@ public class VzkatSchildBeschreibungPanel extends javax.swing.JPanel implements 
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
-        this.cidsBean = cidsBean;
-        if (cidsBean != null) {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                cidsBean,
-                getConnectionContext());
-            bindingGroup.bind();
-        }
+        if (bindingGroup != null) {
+            bindingGroup.unbind();
+            this.cidsBean = cidsBean;
+            if (cidsBean != null) {
+                DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                    bindingGroup,
+                    cidsBean,
+                    getConnectionContext());
+                bindingGroup.bind();
+            }
 
-        refreshIcon((cidsBean != null) ? VzkatUtils.createZeichenKey((CidsBean)cidsBean.getProperty("fk_zeichen"))
-                                       : null);
+            refreshIcon((cidsBean != null) ? VzkatUtils.createZeichenKey((CidsBean)cidsBean.getProperty("fk_zeichen"))
+                                           : null);
+        }
     }
 
     @Override

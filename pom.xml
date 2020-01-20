@@ -116,7 +116,11 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
+<<<<<<< Updated upstream
                 <version>6.18-SNAPSHOT</version>
+=======
+                <version>6.17.14</version>
+>>>>>>> Stashed changes
                 <type>jar</type>
             </dependency>
             
