@@ -18,8 +18,7 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
-import java.beans.PropertyChangeEvent;
-
+import java.util.Collection;
 import java.util.List;
 
 import de.cismet.cids.custom.wunda_blau.search.server.KkVerfahrenSearch;
@@ -79,7 +78,15 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
                                     getConnectionContext());
 
                 if ((res != null) && (res.size() == 1)) {
-                    setVerfahrenBean(((MetaObject)res.get(0)).getBean());
+                    final CidsBean verfahren = ((MetaObject)res.get(0)).getBean();
+                    final Collection<CidsBean> kompensationen = verfahren.getBeanCollectionProperty("kompensationen");
+
+                    if (editable) { // workaround for
+                        kompensationen.remove(cidsBean);
+                        kompensationen.add(cidsBean);
+                    }
+
+                    setVerfahrenBean(verfahren);
                     selectKompensation(cidsBean);
                 } else {
                     setVerfahrenBean(null);
@@ -100,17 +107,7 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
      * @param  verfahrenBean  DOCUMENT ME!
      */
     private void setVerfahrenBean(final CidsBean verfahrenBean) {
-        if (editable && (super.getCidsBean() != null)) {
-            LOG.info("remove propchange verfahren: " + super.getCidsBean());
-            super.getCidsBean().removePropertyChangeListener(this);
-        }
-
         super.setCidsBean(verfahrenBean);
-
-        if (editable && (super.getCidsBean() != null)) {
-            LOG.info("add propchange verfahren: " + super.getCidsBean());
-            super.getCidsBean().addPropertyChangeListener(this);
-        }
     }
 
     @Override
@@ -133,14 +130,6 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
             LOG.error("Cannot persist object", ex);
         }
         return false;
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        if (editable) {
-            LOG.info("propchange " + evt.getPropertyName() + " " + evt.getNewValue());
-            kompensationBean.setArtificialChangeFlag(true);
-        }
     }
 
     @Override
