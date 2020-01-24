@@ -203,6 +203,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private javax.swing.JComboBox<String> cboFlaecheSchutzstatus;
     private javax.swing.JCheckBox chkFlaecheMassnahmeUmgesetzt;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcAufnahme;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -215,6 +216,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
     private javax.swing.JLabel jLabel25;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -362,6 +365,11 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
         panTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(580, 10),
+                new java.awt.Dimension(580, 10),
+                new java.awt.Dimension(32767, 0));
         panFlaechenMainSub1 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
@@ -388,6 +396,14 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         jLabel24 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         taBemerkung = new javax.swing.JTextArea();
+        rpGIS = new de.cismet.tools.gui.RoundedPanel();
+        semiRoundedPanel6 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel16 = new javax.swing.JLabel();
+        labQm = new javax.swing.JLabel();
+        panControlsLaufendeNummern2 = new javax.swing.JPanel();
+        pnlMap = new javax.swing.JPanel();
+        semiRoundedPanelSouth = new de.cismet.tools.gui.SemiRoundedPanel();
+        labGem = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         panFlaechenMainSub3 = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
@@ -421,14 +437,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         panKontrollen = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         xtKontrollen = new org.jdesktop.swingx.JXTable();
-        rpGIS = new de.cismet.tools.gui.RoundedPanel();
-        semiRoundedPanel6 = new de.cismet.tools.gui.SemiRoundedPanel();
-        jLabel16 = new javax.swing.JLabel();
-        labQm = new javax.swing.JLabel();
-        panControlsLaufendeNummern2 = new javax.swing.JPanel();
-        pnlMap = new javax.swing.JPanel();
-        semiRoundedPanelSouth = new de.cismet.tools.gui.SemiRoundedPanel();
-        labGem = new javax.swing.JLabel();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -447,11 +455,22 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         panTitle.add(lblTitle, gridBagConstraints);
 
         setMinimumSize(new java.awt.Dimension(862, 348));
+        setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        panFlaechenMainSub1.setMinimumSize(new java.awt.Dimension(580, 164));
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jPanel4.setOpaque(false);
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel4.add(filler1, gridBagConstraints);
+
         panFlaechenMainSub1.setOpaque(false);
-        panFlaechenMainSub1.setPreferredSize(new java.awt.Dimension(580, 164));
         panFlaechenMainSub1.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -583,16 +602,6 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 org.openide.util.NbBundle.getMessage(
                     KkVerfahrenKompensationEditor.class,
                     "KkVerfahrenKompensationEditor.chkFlaecheMassnahmeUmgesetzt.text")); // NOI18N
-
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_umgesetzt}"),
-                    chkFlaecheMassnahmeUmgesetzt,
-                    org.jdesktop.beansbinding.BeanProperty.create("selected"));
-            binding.setSourceNullValue(false);
-            binding.setSourceUnreadableValue(false);
-            bindingGroup.addBinding(binding);
         } else {
             org.openide.awt.Mnemonics.setLocalizedText(
                 chkFlaecheMassnahmeUmgesetzt,
@@ -609,6 +618,18 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
             binding.setSourceUnreadableValue(false);
             bindingGroup.addBinding(binding);
         }
+        chkFlaecheMassnahmeUmgesetzt.setContentAreaFilled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_umgesetzt}"),
+                chkFlaecheMassnahmeUmgesetzt,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -765,10 +786,8 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 4, 0, 4);
-        add(panFlaechenMainSub1, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel4.add(panFlaechenMainSub1, gridBagConstraints);
 
         panFlaechenMainSub2.setOpaque(false);
         panFlaechenMainSub2.setLayout(new java.awt.GridBagLayout());
@@ -808,11 +827,104 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 4, 10, 7);
-        add(panFlaechenMainSub2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel4.add(panFlaechenMainSub2, gridBagConstraints);
+
+        rpGIS.setLayout(new java.awt.GridBagLayout());
+
+        semiRoundedPanel6.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel16,
+            org.openide.util.NbBundle.getMessage(
+                KkVerfahrenKompensationEditor.class,
+                "KkVerfahrenKompensationEditor.jLabel16.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        semiRoundedPanel6.add(jLabel16, gridBagConstraints);
+
+        labQm.setForeground(new java.awt.Color(255, 255, 255));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        semiRoundedPanel6.add(labQm, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        rpGIS.add(semiRoundedPanel6, gridBagConstraints);
+
+        panControlsLaufendeNummern2.setOpaque(false);
+        panControlsLaufendeNummern2.setLayout(new java.awt.GridBagLayout());
+
+        pnlMap.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
+        panControlsLaufendeNummern2.add(pnlMap, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        rpGIS.add(panControlsLaufendeNummern2, gridBagConstraints);
+
+        semiRoundedPanelSouth.setCurveLocation(SemiRoundedPanel.Orientation.SOUTH);
+        semiRoundedPanelSouth.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanelSouth.setLayout(new java.awt.GridBagLayout());
+
+        labGem.setForeground(new java.awt.Color(255, 255, 255));
+        labGem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            labGem,
+            org.openide.util.NbBundle.getMessage(
+                KkVerfahrenKompensationEditor.class,
+                "KkVerfahrenKompensationEditor.labGem.text",
+                new Object[] {})); // NOI18N
+        labGem.setMinimumSize(new java.awt.Dimension(10, 17));
+        labGem.setPreferredSize(new java.awt.Dimension(10, 17));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        semiRoundedPanelSouth.add(labGem, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        rpGIS.add(semiRoundedPanelSouth, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        jPanel4.add(rpGIS, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        jPanel3.add(jPanel4, gridBagConstraints);
 
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -857,15 +969,17 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.4;
         gridBagConstraints.weighty = 2.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 4, 10, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel2.add(panFlaechenMainSub3, gridBagConstraints);
 
+        panFlaechenMainSubTabbedPane.setOpaque(false);
         panFlaechenMainSubTabbedPane.setLayout(new java.awt.GridBagLayout());
 
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new javax.swing.OverlayLayout(jPanel1));
 
         panControl.setAlignmentX(0.0F);
@@ -1085,6 +1199,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 }
             });
 
+        panBiotope.setOpaque(false);
         panBiotope.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane6.setViewportView(xtBiotopeAus);
@@ -1115,6 +1230,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 new Object[] {}),
             panBiotope); // NOI18N
 
+        panMassnahmen.setOpaque(false);
         panMassnahmen.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane5.setViewportView(xtMassnahmen);
@@ -1135,6 +1251,7 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
                 new Object[] {}),
             panMassnahmen); // NOI18N
 
+        panKontrollen.setOpaque(false);
         panKontrollen.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane4.setViewportView(xtKontrollen);
@@ -1167,61 +1284,12 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.6;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel2.add(panFlaechenMainSubTabbedPane, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(jPanel2, gridBagConstraints);
-
-        rpGIS.setLayout(new java.awt.GridBagLayout());
-
-        semiRoundedPanel6.setBackground(java.awt.Color.darkGray);
-        semiRoundedPanel6.setLayout(new java.awt.GridBagLayout());
-
-        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel16,
-            org.openide.util.NbBundle.getMessage(
-                KkVerfahrenKompensationEditor.class,
-                "KkVerfahrenKompensationEditor.jLabel16.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-        semiRoundedPanel6.add(jLabel16, gridBagConstraints);
-
-        labQm.setForeground(new java.awt.Color(255, 255, 255));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        semiRoundedPanel6.add(labQm, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpGIS.add(semiRoundedPanel6, gridBagConstraints);
-
-        panControlsLaufendeNummern2.setOpaque(false);
-        panControlsLaufendeNummern2.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
-        panControlsLaufendeNummern2.add(pnlMap, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1229,45 +1297,14 @@ public class KkVerfahrenKompensationEditor extends javax.swing.JPanel implements
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        rpGIS.add(panControlsLaufendeNummern2, gridBagConstraints);
-
-        semiRoundedPanelSouth.setCurveLocation(SemiRoundedPanel.Orientation.SOUTH);
-        semiRoundedPanelSouth.setBackground(java.awt.Color.darkGray);
-        semiRoundedPanelSouth.setLayout(new java.awt.GridBagLayout());
-
-        labGem.setForeground(new java.awt.Color(255, 255, 255));
-        labGem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            labGem,
-            org.openide.util.NbBundle.getMessage(
-                KkVerfahrenKompensationEditor.class,
-                "KkVerfahrenKompensationEditor.labGem.text",
-                new Object[] {})); // NOI18N
-        labGem.setMinimumSize(new java.awt.Dimension(10, 17));
-        labGem.setPreferredSize(new java.awt.Dimension(10, 17));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-        semiRoundedPanelSouth.add(labGem, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel3.add(jPanel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        rpGIS.add(semiRoundedPanelSouth, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 5, 15, 10);
-        add(rpGIS, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        add(jPanel3, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
