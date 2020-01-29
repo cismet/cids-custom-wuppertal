@@ -15,7 +15,6 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
-import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -53,7 +52,7 @@ import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageN
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
-import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ClientBillingUtils;
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.CachedInfoBaulastRetriever;
@@ -2024,7 +2023,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
                         @Override
                         protected CidsBean doInBackground() throws Exception {
-                            return BillingPopup.getInstance().getExternalUser((String)cidsBean.getProperty("benutzer"));
+                            return ClientBillingUtils.getInstance()
+                                        .getExternalUser((String)cidsBean.getProperty("benutzer"), connectionContext);
                         }
 
                         @Override
