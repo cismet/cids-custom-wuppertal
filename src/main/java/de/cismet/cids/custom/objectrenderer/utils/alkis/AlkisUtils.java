@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ClientBillingUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer.Buchungsblattbezirke;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
@@ -521,16 +522,16 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      *
-     * @throws  ConnectionException  DOCUMENT ME!
+     * @throws  Exception  ConnectionException DOCUMENT ME!
      */
     public static String createFertigungsVermerk(final User user, final ConnectionContext connectionContext)
-            throws ConnectionException {
+            throws Exception {
         final String fertigungsVermerk = SessionManager.getConnection()
                     .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU", connectionContext);
         if (fertigungsVermerk != null) {
             return fertigungsVermerk;
         } else {
-            final CidsBean billingLogin = (CidsBean)BillingPopup.getInstance().getExternalUser(user);
+            final CidsBean billingLogin = ClientBillingUtils.getInstance().getExternalUser(user, connectionContext);
             if (billingLogin != null) {
                 final CidsBean billingKunde = (CidsBean)billingLogin.getProperty("kunde");
                 if (billingKunde != null) {

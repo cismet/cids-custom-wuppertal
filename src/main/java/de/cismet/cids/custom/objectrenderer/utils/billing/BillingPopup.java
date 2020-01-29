@@ -11,8 +11,6 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
-import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.commons.io.FileUtils;
+
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.io.File;
 
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -60,8 +62,6 @@ import de.cismet.cids.custom.utils.billing.BillingUsage;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnfrageServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
@@ -941,41 +941,35 @@ public class BillingPopup extends javax.swing.JDialog {
 
         // save the log entry
         try {
-            final CidsBean cb = CidsBean.createNewCidsBeanFromTableName(
-                    "WUNDA_BLAU",
-                    "Billing_Billing",
-                    getConnectionContext());
-            cb.setProperty("username", SessionManager.getSession().getUser().toString());
-            cb.setProperty("angelegt_durch", getExternalUser());
-            cb.setProperty("ts", new java.sql.Timestamp(System.currentTimeMillis()));
-            cb.setProperty("angeschaeftsbuch", Boolean.FALSE);
-            cb.setProperty("modus", currentMode.getKey());
-            cb.setProperty("produktkey", currentProduct.getId());
-            cb.setProperty("produktbezeichnung", currentProduct.getName());
-            cb.setProperty("netto_summe", (price != null) ? price.getNetto() : null);
-            cb.setProperty("mwst_satz", currentProduct.getMwst());
-            cb.setProperty("brutto_summe", (price != null) ? price.getBrutto() : null);
-            cb.setProperty("geschaeftsbuchnummer", txtGBuchNr.getText());
-//        cb.setProperty("geometrie", null);
-            cb.setProperty("modusbezeichnung", currentMode.getName());
-            cb.setProperty("berechnung", txtBerechnung.getText().trim());
-            cb.setProperty("verwendungszweck", currentUsage.getName());
-            cb.setProperty("projektbezeichnung", txtProjektbez.getText());
-            cb.setProperty("request", getCurrentRequest());
-            cb.setProperty("verwendungskey", currentUsage.getKey());
-            cb.setProperty("abgerechnet", Boolean.FALSE);
-            final CidsBean persistedCb = cb.persist(getConnectionContext());
-
             if (downloadInfo != null) {
-                try {
-                    downloadInfo.setBillingId(persistedCb.getPrimaryKeyValue());
-                    downloadInfo.setProduktbezeichnung(txtProjektbez.getText());
-                    doAnfrage(
-                        downloadInfo,
-                        new Callback() {
+                downloadInfo.setProduktbezeichnung(txtProjektbez.getText());
+                new SwingWorker<String, Void>() {
 
-                            @Override
-                            public void callback(final String anfrageSchluessel) {
+                        @Override
+                        protected String doInBackground() throws Exception {
+                            final String fileName = (file != null) ? file.getName() : null;
+                            final byte[] fileData = (file != null) ? FileUtils.readFileToByteArray(file) : null;
+
+                            final String anfrageSchluessel = requestPruefung(
+                                    fileData,
+                                    fileName,
+                                    jComboBox1.getSelectedItem().toString(),
+                                    jTextArea1.getText(),
+                                    downloadInfo,
+                                    txtBerechnung.getText().trim(),
+                                    currentMode,
+                                    currentUsage,
+                                    currentProduct,
+                                    price,
+                                    getConnectionContext());
+
+                            return anfrageSchluessel;
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                final String anfrageSchluessel = get();
                                 JOptionPane.showMessageDialog(
                                     BillingPopup.this,
                                     "<html>Ihre Anfrage wird unter dem Schlüssel \""
@@ -984,18 +978,49 @@ public class BillingPopup extends javax.swing.JDialog {
                                             + "<br/>Sie werden benachrichtigt, sobald sie bearbeitet wurde.",
                                     "Ihre Anfrage wird bearbeitet",
                                     JOptionPane.INFORMATION_MESSAGE);
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                                final String title = "Unerwarteter Fehler";
+                                final String message =
+                                    "Beim Anfrage der Berechtigungsprüfung ist es zu unerwartetem einem Fehler gekommen.";
+                                LOG.error(message, ex);
+                                final ErrorInfo info = new ErrorInfo(
+                                        title,
+                                        message,
+                                        null,
+                                        null,
+                                        ex,
+                                        Level.SEVERE,
+                                        null);
+                                JXErrorPane.showDialog(ComponentRegistry.getRegistry().getMainWindow(), info);
                             }
-                        });
-                } catch (final Exception ex) {
-                    LOG.error(ex, ex);
-                }
+                        }
+                    }.execute();
                 shouldGoOn = false;
             } else {
-                // Nebenläufigkeit my arse
+                final CidsBean billingBean = ClientBillingUtils.getInstance()
+                            .createBilling(txtBerechnung.getText().trim(),
+                                txtGBuchNr.getText(),
+                                getCurrentRequest(),
+                                txtBerechnung.getText().trim(),
+                                currentMode,
+                                currentUsage,
+                                currentProduct,
+                                price,
+                                SessionManager.getSession().getUser(),
+                                null,
+                                connectionContext);
+                billingBean.persist(connectionContext);
+
                 shouldGoOn = true;
             }
-        } catch (Exception e) {
-            LOG.error("Error during the persitence of the billing log.", e);
+        } catch (Exception ex) {
+            LOG.error("Error during the persitence of the billing log.", ex);
+            final String title = "Unerwarteter Fehler";
+            final String message = "Beim Erzeugen der Buchung ist es zu unerwartetem einem Fehler gekommen.";
+            LOG.error(message, ex);
+            final ErrorInfo info = new ErrorInfo(title, message, null, null, ex, Level.SEVERE, null);
+            JXErrorPane.showDialog(ComponentRegistry.getRegistry().getMainWindow(), info);
             shouldGoOn = false;
         }
         // the end
@@ -1014,62 +1039,6 @@ public class BillingPopup extends javax.swing.JDialog {
         } else {
             return defaultRequest;
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public CidsBean getExternalUser() {
-        return getExternalUser(SessionManager.getSession().getUser());
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   user  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public CidsBean getExternalUser(final User user) {
-        return getExternalUser(user.getName());
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   loginName  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public CidsBean getExternalUser(final String loginName) {
-        final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
-                "WUNDA_BLAU",
-                "billing_kunden_logins",
-                getConnectionContext());
-        if (MB_MC == null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(
-                    "The metaclass for billing_kunden_logins is null. The current user has probably not the needed rights.");
-            }
-            return null;
-        }
-        String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
-        query += "FROM " + MB_MC.getTableName();
-        query += " WHERE name = '" + loginName + "'";
-
-        CidsBean externalUser = null;
-        try {
-            final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(query, 0, getConnectionContext());
-            if ((metaObjects != null) && (metaObjects.length > 0)) {
-                externalUser = metaObjects[0].getBean();
-            }
-        } catch (ConnectionException ex) {
-            LOG.error("Error while retrieving the CidsBean of an external user.", ex);
-        }
-        return externalUser;
     }
 
     /**
@@ -1431,9 +1400,16 @@ public class BillingPopup extends javax.swing.JDialog {
      * @param   berechtigungsgrund  DOCUMENT ME!
      * @param   begruendung         DOCUMENT ME!
      * @param   downloadInfo        DOCUMENT ME!
+     * @param   billingBerechnung   DOCUMENT ME!
+     * @param   billingModus        DOCUMENT ME!
+     * @param   billingUsage        DOCUMENT ME!
+     * @param   billingProduct      DOCUMENT ME!
+     * @param   billingPrice        DOCUMENT ME!
      * @param   connectionContext   DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
      */
     private static String requestPruefung(
             final byte[] fileData,
@@ -1441,77 +1417,55 @@ public class BillingPopup extends javax.swing.JDialog {
             final String berechtigungsgrund,
             final String begruendung,
             final BerechtigungspruefungDownloadInfo downloadInfo,
-            final ConnectionContext connectionContext) {
-        final Collection<ServerActionParameter> params = new ArrayList<ServerActionParameter>();
-        try {
-            params.add(new ServerActionParameter<>(
-                    BerechtigungspruefungAnfrageServerAction.ParameterType.DATEINAME.toString(),
-                    fileName));
+            final String billingBerechnung,
+            final BillingModus billingModus,
+            final BillingUsage billingUsage,
+            final BillingProduct billingProduct,
+            final BillingPrice billingPrice,
+            final ConnectionContext connectionContext) throws Exception {
+        final Collection<ServerActionParameter> params = new ArrayList<>();
+        final ObjectMapper mapper = new ObjectMapper();
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.DATEINAME.toString(),
+                fileName));
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.BERECHTIGUNGSGRUND.toString(),
+                berechtigungsgrund));
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.BEGRUENDUNG.toString(),
+                begruendung));
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.DOWNLOADINFO_JSON.toString(),
+                mapper.writeValueAsString(downloadInfo)));
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.BILLING_BERECHNUNG.toString(),
+                billingBerechnung));
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.BILLING_MODUS.toString(),
+                billingModus));
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.BILLING_USAGE.toString(),
+                billingUsage));
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.BILLING_PRODUCT.toString(),
+                billingProduct));
+        params.add(new ServerActionParameter<>(
+                BerechtigungspruefungAnfrageServerAction.ParameterType.BILLING_PRICE.toString(),
+                billingPrice));
 
-            params.add(new ServerActionParameter<>(
-                    BerechtigungspruefungAnfrageServerAction.ParameterType.BERECHTIGUNGSGRUND.toString(),
-                    berechtigungsgrund));
-
-            params.add(new ServerActionParameter<>(
-                    BerechtigungspruefungAnfrageServerAction.ParameterType.BEGRUENDUNG.toString(),
-                    begruendung));
-
-            final ObjectMapper mapper = new ObjectMapper();
-            params.add(new ServerActionParameter<>(
-                    BerechtigungspruefungAnfrageServerAction.ParameterType.DOWNLOADINFO_JSON.toString(),
-                    mapper.writeValueAsString(downloadInfo)));
-
-            final Object ret = SessionManager.getSession()
-                        .getConnection()
-                        .executeTask(SessionManager.getSession().getUser(),
-                            BerechtigungspruefungAnfrageServerAction.TASK_NAME,
-                            SessionManager.getSession().getUser().getDomain(),
-                            fileData,
-                            connectionContext,
-                            params.toArray(new ServerActionParameter[0]));
+        final Object ret = SessionManager.getSession()
+                    .getConnection()
+                    .executeTask(SessionManager.getSession().getUser(),
+                        BerechtigungspruefungAnfrageServerAction.TASK_NAME,
+                        SessionManager.getSession().getUser().getDomain(),
+                        fileData,
+                        connectionContext,
+                        params.toArray(new ServerActionParameter[0]));
+        if (ret instanceof Exception) {
+            throw (Exception)ret;
+        } else {
             return (String)ret;
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-            return null;
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  downloadInfo  DOCUMENT ME!
-     * @param  callback      DOCUMENT ME!
-     */
-    public void doAnfrage(final BerechtigungspruefungDownloadInfo downloadInfo, final Callback callback) {
-        new SwingWorker<String, Void>() {
-
-                @Override
-                protected String doInBackground() throws Exception {
-                    final String fileName = (file != null) ? file.getName() : null;
-                    final byte[] fileData = (file != null) ? FileUtils.readFileToByteArray(file) : null;
-
-                    final String anfrageSchluessel = requestPruefung(
-                            fileData,
-                            fileName,
-                            jComboBox1.getSelectedItem().toString(),
-                            jTextArea1.getText(),
-                            downloadInfo,
-                            getConnectionContext());
-
-                    return anfrageSchluessel;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        final String anfrageSchluessel = get();
-                        callback.callback(anfrageSchluessel);
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                        // TODO SHOW ERROR
-                    }
-                }
-            }.execute();
     }
 
     /**
@@ -1521,25 +1475,6 @@ public class BillingPopup extends javax.swing.JDialog {
      */
     public final ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    //~ Inner Interfaces -------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public static interface Callback {
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  anfrageSchluessel  DOCUMENT ME!
-         */
-        void callback(final String anfrageSchluessel);
     }
 
     //~ Inner Classes ----------------------------------------------------------
