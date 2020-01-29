@@ -88,7 +88,7 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>6.5.7</version>
+                <version>6.5.8</version>
                 <type>jar</type>
             </dependency>
             <dependency>
@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.17.11</version>
+                <version>6.18-SNAPSHOT</version>
                 <type>jar</type>
             </dependency>
             
