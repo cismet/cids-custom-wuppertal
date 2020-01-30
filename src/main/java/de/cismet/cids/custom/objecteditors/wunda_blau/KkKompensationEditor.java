@@ -18,6 +18,9 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -36,7 +39,7 @@ import de.cismet.cids.server.search.AbstractCidsServerSearch;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSaveListener {
+public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSaveListener, PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -107,7 +110,15 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
      * @param  verfahrenBean  DOCUMENT ME!
      */
     private void setVerfahrenBean(final CidsBean verfahrenBean) {
+        if (editable && (super.getCidsBean() != null)) {
+            LOG.info("remove propchange verfahren: " + super.getCidsBean());
+            super.getCidsBean().removePropertyChangeListener(this);
+        }
         super.setCidsBean(verfahrenBean);
+        if (editable && (super.getCidsBean() != null)) {
+            LOG.info("add propchange verfahren: " + super.getCidsBean());
+            super.getCidsBean().addPropertyChangeListener(this);
+        }
     }
 
     @Override
@@ -136,5 +147,13 @@ public class KkKompensationEditor extends KkVerfahrenEditor implements EditorSav
     public void dispose() {
         setCidsBean(null);
         super.dispose();
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (editable) {
+            LOG.info("propchange " + evt.getPropertyName() + " " + evt.getNewValue());
+            kompensationBean.setArtificialChangeFlag(true);
+        }
     }
 }
