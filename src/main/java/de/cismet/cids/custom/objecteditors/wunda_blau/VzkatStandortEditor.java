@@ -7,23 +7,25 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
+import Sirius.server.middleware.types.MetaObjectNode;
 
-import java.net.URL;
+import java.awt.Component;
 
-import javax.imageio.ImageIO;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatSchildBeschreibungPanel;
 import de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatStandortKartePanel;
+import de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatStandortSchildPanel;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.wunda_blau.search.server.VzkatSchilderSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -36,8 +38,6 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
-import de.cismet.security.WebAccessManager;
-
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
@@ -47,7 +47,7 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRenderer,
+public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     RequestsFullSizeComponent,
     ConnectionContextStore,
@@ -55,7 +55,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VzkatSchildEditor.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VzkatStandortEditor.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -65,13 +65,9 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler fillerMainBottom;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel lblBeschreibungTitle;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblBildTitle;
     private javax.swing.JLabel lblLageTitle;
-    private de.cismet.tools.gui.RoundedPanel panBeschreibung;
-    private javax.swing.JPanel panBeschreibungBody;
-    private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
     private de.cismet.tools.gui.RoundedPanel panBild;
     private de.cismet.tools.gui.SemiRoundedPanel panBildTitle;
     private javax.swing.JPanel panLageBody1;
@@ -81,7 +77,6 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.JPanel panTitle;
     private de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private javax.swing.JLabel txtTitle;
-    private de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatSchildBeschreibungPanel vzkatSchildPanel;
     private de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatStandortKartePanel vzkatStandortKartePanel;
     // End of variables declaration//GEN-END:variables
 
@@ -90,7 +85,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
     /**
      * Creates a new VzkatSchildEditor object.
      */
-    public VzkatSchildEditor() {
+    public VzkatStandortEditor() {
         this(true);
     }
 
@@ -99,7 +94,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
      *
      * @param  editable  DOCUMENT ME!
      */
-    public VzkatSchildEditor(final boolean editable) {
+    public VzkatStandortEditor(final boolean editable) {
         this.editable = editable;
     }
 
@@ -130,7 +125,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
             "WUNDA_BLAU",
             null,
             true,
-            "vzkat_schild",
+            "vzkat_standort",
             1,
             800,
             600);
@@ -140,8 +135,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
-        vzkatStandortKartePanel.initWithConnectionContext(getConnectionContext());
-        vzkatSchildPanel.initWithConnectionContext(getConnectionContext());
+        vzkatStandortKartePanel.initWithConnectionContext(connectionContext);
     }
 
     /**
@@ -155,9 +149,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
 
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
-        fillerMainBottom = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        fillerMainBottom = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         panStandortKarte = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle = new javax.swing.JLabel();
@@ -168,15 +160,10 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         lblBildTitle = new javax.swing.JLabel();
         panLageBody1 = new javax.swing.JPanel();
         rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
-                ClientAlkisConf.getInstance().getRasterfariUrl(),
-                this,
-                getConnectionContext());
-        jLabel1 = new javax.swing.JLabel();
-        panBeschreibung = new de.cismet.tools.gui.RoundedPanel();
-        panBeschreibungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblBeschreibungTitle = new javax.swing.JLabel();
-        panBeschreibungBody = new javax.swing.JPanel();
-        vzkatSchildPanel = new VzkatSchildBeschreibungPanel(isEditable());
+            ClientAlkisConf.getInstance().getRasterfariUrl(),
+            this,
+            getConnectionContext());
+        jPanel1 = new javax.swing.JPanel();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -209,9 +196,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
 
         lblLageTitle.setFont(lblLageTitle.getFont());
         lblLageTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblLageTitle,
-            org.openide.util.NbBundle.getMessage(VzkatSchildEditor.class, "VzkatSchildEditor.lblLageTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblLageTitle, org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblLageTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -226,19 +211,18 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         panStandortKarteBody.setOpaque(false);
         panStandortKarteBody.setLayout(new java.awt.GridBagLayout());
 
-        final javax.swing.GroupLayout vzkatStandortKartePanelLayout = new javax.swing.GroupLayout(
-                vzkatStandortKartePanel);
+        vzkatStandortKartePanel.setOpaque(false);
+
+        javax.swing.GroupLayout vzkatStandortKartePanelLayout = new javax.swing.GroupLayout(vzkatStandortKartePanel);
         vzkatStandortKartePanel.setLayout(vzkatStandortKartePanelLayout);
         vzkatStandortKartePanelLayout.setHorizontalGroup(
-            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                0,
-                Short.MAX_VALUE));
+            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
         vzkatStandortKartePanelLayout.setVerticalGroup(
-            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                0,
-                Short.MAX_VALUE));
+            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -270,9 +254,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
 
         lblBildTitle.setFont(lblBildTitle.getFont());
         lblBildTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblBildTitle,
-            org.openide.util.NbBundle.getMessage(VzkatSchildEditor.class, "VzkatSchildEditor.lblBildTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblBildTitle, org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblBildTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -288,25 +270,12 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         panLageBody1.setOpaque(false);
         panLageBody1.setPreferredSize(new java.awt.Dimension(320, 320));
         panLageBody1.setLayout(new java.awt.GridBagLayout());
-
-        rasterfariDocumentLoaderPanel1.setVisible(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panLageBody1.add(rasterfariDocumentLoaderPanel1, gridBagConstraints);
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(VzkatSchildEditor.class, "VzkatSchildEditor.jLabel1.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panLageBody1.add(jLabel1, gridBagConstraints);
+        panLageBody1.add(rasterfariDocumentLoaderPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -324,57 +293,19 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(panBild, gridBagConstraints);
 
-        panBeschreibung.setLayout(new java.awt.GridBagLayout());
-
-        panBeschreibungTitle.setBackground(java.awt.Color.darkGray);
-        panBeschreibungTitle.setLayout(new java.awt.GridBagLayout());
-
-        lblBeschreibungTitle.setFont(lblBeschreibungTitle.getFont());
-        lblBeschreibungTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblBeschreibungTitle,
-            org.openide.util.NbBundle.getMessage(
-                VzkatSchildEditor.class,
-                "VzkatSchildEditor.lblBeschreibungTitle.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panBeschreibungTitle.add(lblBeschreibungTitle, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panBeschreibung.add(panBeschreibungTitle, gridBagConstraints);
-
-        panBeschreibungBody.setOpaque(false);
-        panBeschreibungBody.setLayout(new java.awt.GridBagLayout());
-
-        vzkatSchildPanel.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panBeschreibungBody.add(vzkatSchildPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panBeschreibung.add(panBeschreibungBody, gridBagConstraints);
-
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridLayout(0, 1, 10, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(panBeschreibung, gridBagConstraints);
-    } // </editor-fold>//GEN-END:initComponents
+        add(jPanel1, gridBagConstraints);
+    }// </editor-fold>//GEN-END:initComponents
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -383,38 +314,55 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         this.cidsBean = cidsBean;
-        if (cidsBean != null) {
-            txtTitle.setText(getTitle());
-        } else {
-            txtTitle.setText(null);
-        }
-        this.cidsBean = cidsBean;
+
         txtTitle.setText((cidsBean != null) ? getTitle() : null);
-        // rasterfariDocumentLoaderPanel1.setDocument(null);
+        rasterfariDocumentLoaderPanel1.setDocument(null);
+        vzkatStandortKartePanel.setCidsBean(cidsBean);
 
-        vzkatStandortKartePanel.setCidsBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_standort") : null);
-        vzkatSchildPanel.setCidsBean(cidsBean);
+        if (cidsBean != null) {
+            final VzkatSchilderSearch schilderSearch = new VzkatSchilderSearch();
+            schilderSearch.setStandortId((Integer)cidsBean.getProperty("id"));
+            new SwingWorker<Collection, Void>() {
 
-        try {
-            final URL bildURL = new URL("https://i.pinimg.com/236x/b7/95/67/b79567b505f3101a8a58f1d0f6d10687.jpg");
-            final BufferedImage originalBild = ImageIO.read(WebAccessManager.getInstance().doRequest(bildURL));
-            final int bildZielBreite = (originalBild.getWidth() > originalBild.getHeight()) ? 320 : -1;
-            final int bildZielHoehe = (originalBild.getWidth() > originalBild.getHeight()) ? -1 : 320;
-            final Image skaliertesBild = originalBild.getScaledInstance(
-                    bildZielBreite,
-                    bildZielHoehe,
-                    Image.SCALE_SMOOTH);
-            jLabel1.setIcon(new ImageIcon(skaliertesBild));
-        } catch (final Exception ex) {
-            LOG.error("Bild konnte nicht geladen werden", ex);
+                    @Override
+                    protected Collection doInBackground() throws Exception {
+                        final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
+                                    .customServerSearch(schilderSearch, getConnectionContext());
+                        final Collection<CidsBean> schildBeans = new ArrayList<>();
+                        for (final MetaObjectNode mon : mons) {
+                            schildBeans.add(SessionManager.getProxy().getMetaObject(
+                                    mon.getObjectId(),
+                                    mon.getClassId(),
+                                    "WUNDA_BLAU",
+                                    getConnectionContext()).getBean());
+                        }
+                        return schildBeans;
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final Collection<CidsBean> schildBeans = (Collection)get();
+                            jPanel1.removeAll();
+                            for (final CidsBean schildBean : schildBeans) {
+                                final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(isEditable());
+                                schildPanel.setOpaque(true);
+                                schildPanel.initWithConnectionContext(getConnectionContext());
+                                schildPanel.setCidsBean(schildBean);
+                                jPanel1.add(schildPanel);
+                            }
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                    }
+                }.execute();
         }
     }
 
     @Override
     public String getTitle() {
-        final String standort = String.valueOf(cidsBean.getProperty("fk_standort"));
-        final String position = String.valueOf(cidsBean.getProperty("position"));
-        return String.format("<html>Schild in Position <i>%s</i> an Standort <i>%s</i>", position, standort);
+        final String standort = String.valueOf(cidsBean);
+        return String.format("<html>Standort <i>%s</i>", standort);
     }
 
     @Override
@@ -431,9 +379,24 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         return connectionContext;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<VzkatStandortSchildPanel> getSchildPanels() {
+        final Collection<VzkatStandortSchildPanel> vzkatSchildPanel = new ArrayList<>();
+        for (final Component component : jPanel1.getComponents()) {
+            vzkatSchildPanel.add((VzkatStandortSchildPanel)component);
+        }
+        return vzkatSchildPanel;
+    }
+
     @Override
     public void dispose() {
-        vzkatSchildPanel.dispose();
+        for (final VzkatStandortSchildPanel vzkatSchildPanel : getSchildPanels()) {
+            vzkatSchildPanel.dispose();
+        }
         vzkatStandortKartePanel.dispose();
         rasterfariDocumentLoaderPanel1.dispose();
     }
