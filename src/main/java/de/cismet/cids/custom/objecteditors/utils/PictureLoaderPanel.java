@@ -47,19 +47,6 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(PictureLoaderPanel.class);
-    protected static XBoundingBox INITIAL_BOUNDINGBOX = new XBoundingBox(
-            2583621.251964098d,
-            5682507.032498134d,
-            2584022.9413952776d,
-            5682742.852810634d,
-            ClientAlkisConf.getInstance().getSrsService(),
-            true);
-    protected static Crs CRS = new Crs(
-            ClientAlkisConf.getInstance().getSrsService(),
-            ClientAlkisConf.getInstance().getSrsService(),
-            ClientAlkisConf.getInstance().getSrsService(),
-            true,
-            true);
     private static final int NO_SELECTION = -1;
     private static final ListModel MODEL_LOAD = new DefaultListModel() {
 
@@ -76,6 +63,9 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
         };
 
     //~ Instance fields --------------------------------------------------------
+
+    private final XBoundingBox initialBoundingbox;
+    private final Crs crs;
 
     private PictureSelectWorker currentPictureSelectWorker = null;
     private PictureReaderWorker pictureReaderWorker = null;
@@ -96,6 +86,13 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates new form PictureLoaderPanel.
+     */
+    public PictureLoaderPanel() {
+        this(null, ConnectionContext.createDummy());
+    }
+
+    /**
      * Creates a new PictureLoaderPanel object.
      *
      * @param  listener           DOCUMENT ME!
@@ -105,14 +102,29 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
         this.connectionContext = connectionContext;
         this.listener = listener;
 
-        initComponents();
-    }
+        XBoundingBox initialBoundingbox = null;
+        Crs crs = null;
+        try {
+            initialBoundingbox = new XBoundingBox(
+                    2583621.251964098d,
+                    5682507.032498134d,
+                    2584022.9413952776d,
+                    5682742.852810634d,
+                    ClientAlkisConf.getInstance().getSrsService(),
+                    true);
+            crs = new Crs(
+                    ClientAlkisConf.getInstance().getSrsService(),
+                    ClientAlkisConf.getInstance().getSrsService(),
+                    ClientAlkisConf.getInstance().getSrsService(),
+                    true,
+                    true);
 
-    /**
-     * Creates new form PictureLoaderPanel.
-     */
-    private PictureLoaderPanel() {
-        this(null, ConnectionContext.createDummy());
+            initComponents();
+        } catch (final Throwable ex) {
+            LOG.error("could not initialize PictureLoaderPanel");
+        }
+        this.initialBoundingbox = initialBoundingbox;
+        this.crs = crs;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -176,13 +188,12 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         scpPages = new javax.swing.JScrollPane();
         lstPages = new javax.swing.JList();
         togPan = new javax.swing.JToggleButton();
         togZoom = new javax.swing.JToggleButton();
         btnHome = new javax.swing.JButton();
-        measuringComponent = new MeasuringComponent(INITIAL_BOUNDINGBOX, CRS);
+        measuringComponent = new MeasuringComponent(initialBoundingbox, crs);
 
         scpPages.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         scpPages.setMinimumSize(new java.awt.Dimension(31, 75));
@@ -192,64 +203,83 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
         lstPages.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstPages.setFixedCellWidth(75);
         lstPages.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstPagesValueChanged(evt);
-            }
-        });
+
+                @Override
+                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
+                    lstPagesValueChanged(evt);
+                }
+            });
         scpPages.setViewportView(lstPages);
 
-        togPan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
+        togPan.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif")));                       // NOI18N
         togPan.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(togPan, org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.togPan.text_1")); // NOI18N
-        togPan.setToolTipText(org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.togPan.toolTipText_1")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            togPan,
+            org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.togPan.text_1")); // NOI18N
+        togPan.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PictureLoaderPanel.class,
+                "PictureLoaderPanel.togPan.toolTipText_1"));                                                     // NOI18N
         togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togPan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                togPanActionPerformed(evt);
-            }
-        });
 
-        togZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(togZoom, org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.togZoom.text_1")); // NOI18N
-        togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.togZoom.toolTipText_1")); // NOI18N
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    togPanActionPerformed(evt);
+                }
+            });
+
+        togZoom.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif")));                       // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            togZoom,
+            org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.togZoom.text_1")); // NOI18N
+        togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PictureLoaderPanel.class,
+                "PictureLoaderPanel.togZoom.toolTipText_1"));                                                     // NOI18N
         togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togZoom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                togZoomActionPerformed(evt);
-            }
-        });
 
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnHome, org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.btnHome.text_1")); // NOI18N
-        btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.btnHome.toolTipText_1")); // NOI18N
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    togZoomActionPerformed(evt);
+                }
+            });
+
+        btnHome.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif")));                       // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnHome,
+            org.openide.util.NbBundle.getMessage(PictureLoaderPanel.class, "PictureLoaderPanel.btnHome.text_1")); // NOI18N
+        btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PictureLoaderPanel.class,
+                "PictureLoaderPanel.btnHome.toolTipText_1"));                                                     // NOI18N
         btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHomeActionPerformed(evt);
-            }
-        });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnHomeActionPerformed(evt);
+                }
+            });
+
+        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE));
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstPagesValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPagesValueChanged
+    private void lstPagesValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstPagesValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object page = lstPages.getSelectedValue();
 
@@ -257,7 +287,7 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
                 loadPage(((Integer)page) - 1);
             }
         }
-    }//GEN-LAST:event_lstPagesValueChanged
+    } //GEN-LAST:event_lstPagesValueChanged
     /**
      * DOCUMENT ME!
      *
@@ -277,27 +307,27 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }//GEN-LAST:event_togPanActionPerformed
+    }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }//GEN-LAST:event_togZoomActionPerformed
+    }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }//GEN-LAST:event_btnHomeActionPerformed
+    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -383,6 +413,15 @@ public class PictureLoaderPanel extends javax.swing.JPanel implements Connection
 //                setCurrentDocumentNull();
 
         listener.showMeasureIsLoading();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  args  DOCUMENT ME!
+     */
+    public static void main(final String[] args) {
+        new PictureLoaderPanel();
     }
 
     //~ Inner Interfaces -------------------------------------------------------
