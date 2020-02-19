@@ -64,8 +64,12 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler fillerMainBottom;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private javax.swing.JLabel lblBildTitle;
     private javax.swing.JLabel lblLageTitle;
     private de.cismet.tools.gui.RoundedPanel panBild;
@@ -149,7 +153,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
-        fillerMainBottom = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        fillerMainBottom = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         panStandortKarte = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle = new javax.swing.JLabel();
@@ -160,10 +166,16 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         lblBildTitle = new javax.swing.JLabel();
         panLageBody1 = new javax.swing.JPanel();
         rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
-            ClientAlkisConf.getInstance().getRasterfariUrl(),
-            this,
-            getConnectionContext());
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
+                this,
+                getConnectionContext());
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        jLabel1 = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -183,7 +195,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
@@ -196,7 +208,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
         lblLageTitle.setFont(lblLageTitle.getFont());
         lblLageTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblLageTitle, org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblLageTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLageTitle,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblLageTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -213,16 +227,19 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
         vzkatStandortKartePanel.setOpaque(false);
 
-        javax.swing.GroupLayout vzkatStandortKartePanelLayout = new javax.swing.GroupLayout(vzkatStandortKartePanel);
+        final javax.swing.GroupLayout vzkatStandortKartePanelLayout = new javax.swing.GroupLayout(
+                vzkatStandortKartePanel);
         vzkatStandortKartePanel.setLayout(vzkatStandortKartePanelLayout);
         vzkatStandortKartePanelLayout.setHorizontalGroup(
-            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         vzkatStandortKartePanelLayout.setVerticalGroup(
-            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -254,7 +271,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
         lblBildTitle.setFont(lblBildTitle.getFont());
         lblBildTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblBildTitle, org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblBildTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBildTitle,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblBildTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -297,14 +316,44 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         jPanel1.setLayout(new java.awt.GridLayout(0, 1, 10, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel1, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        jPanel2.add(jXDatePicker1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel2.add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(jPanel2, gridBagConstraints);
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -346,9 +395,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                             jPanel1.removeAll();
                             for (final CidsBean schildBean : schildBeans) {
                                 final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(isEditable());
-                                schildPanel.setOpaque(true);
                                 schildPanel.initWithConnectionContext(getConnectionContext());
                                 schildPanel.setCidsBean(schildBean);
+                                schildPanel.setOpaque(false);
                                 jPanel1.add(schildPanel);
                             }
                         } catch (final Exception ex) {

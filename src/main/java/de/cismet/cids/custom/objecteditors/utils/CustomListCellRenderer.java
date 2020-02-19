@@ -22,6 +22,7 @@ import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 /**
  * DOCUMENT ME!
@@ -33,7 +34,19 @@ public class CustomListCellRenderer extends DefaultListCellRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
-    ColorLabel renderer = new ColorLabel();
+    private final ListCellRenderer origRenderer;
+    private final ColorLabel component = new ColorLabel();
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new CustomListCellRenderer object.
+     *
+     * @param  origRenderer  DOCUMENT ME!
+     */
+    public CustomListCellRenderer(final ListCellRenderer origRenderer) {
+        this.origRenderer = origRenderer;
+    }
 
     //~ Methods ----------------------------------------------------------------
 
@@ -44,11 +57,13 @@ public class CustomListCellRenderer extends DefaultListCellRenderer {
             final boolean isSelected,
             final boolean cellHasFocus) {
         if (value != null) {
-            renderer.setText(value.toString());
+            component.setText(
+                ((JLabel)origRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus))
+                            .getText());
         } else {
-            renderer.setText("");
+            component.setText("");
         }
-        return renderer;
+        return component;
     }
 
     //~ Inner Classes ----------------------------------------------------------

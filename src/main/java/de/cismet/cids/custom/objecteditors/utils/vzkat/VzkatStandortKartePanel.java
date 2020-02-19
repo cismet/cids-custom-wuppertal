@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.utils.vzkat;
 
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -220,6 +221,7 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_geom}"),
                 cbGeom,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
         bindingGroup.addBinding(binding);
 
         cbGeom.addActionListener(new java.awt.event.ActionListener() {
@@ -301,6 +303,8 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
                 try {
                     cbStrassenschluesselEnabled = false;
                     cbStrassenname.setSelectedItem(cbStrassenschluessel.getSelectedItem());
+                    cbStrassennameActionPerformed(null);
+                    repaint();
                 } finally {
                     cbStrassenschluesselEnabled = true;
                 }
@@ -320,6 +324,8 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
                 try {
                     cbStrassennameEnabled = false;
                     cbStrassenschluessel.setSelectedItem(cbStrassenname.getSelectedItem());
+                    cbStrassenschluesselActionPerformed(null);
+                    repaint();
                 } finally {
                     cbStrassennameEnabled = true;
                 }
@@ -383,10 +389,12 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
         this.cidsBean = cidsBean;
         initMap();
         refreshStrassenComboboxes();
         refreshGeomFeatures();
+        bindingGroup.bind();
     }
 
     /**
@@ -411,13 +419,16 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
                                 strassennameSearch.setGeom(geom);
                             }
                             cbStrassenname.refreshModel();
-//                            for (int index = 0; index < cbStrassenschluessel.getModel().getSize(); index++) {
-//                                final CidsBean strasseBean = (MetaObject)(cbStrassenschluessel.getModel().getElementAt(index)).getBean();
-//                                if ((strasseBean != null)
-//                                            && strassenschluessel.equals(strasseBean.getProperty("strasse"))) {
-//                                    return strasseBean;
-//                                }
-//                            }
+                            for (int index = 0; index < cbStrassenschluessel.getModel().getSize(); index++) {
+                                final Object element = cbStrassenschluessel.getModel().getElementAt(index);
+                                if (element != null) {
+                                    final CidsBean strasseBean = ((MetaObject)element).getBean();
+                                    if ((strasseBean != null)
+                                                && strassenschluessel.equals(strasseBean.getProperty("strasse"))) {
+                                        return strasseBean;
+                                    }
+                                }
+                            }
                             return null;
                         }
 
@@ -425,7 +436,10 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
                         protected void done() {
                             try {
                                 final CidsBean strasseBean = get();
+                                cbStrassennameEnabled = false;
                                 cbStrassenschluessel.setSelectedItem(strasseBean);
+                                cbStrassenschluesselActionPerformed(null);
+                                repaint();
                             } catch (final Exception ex) {
                                 LOG.error(ex, ex);
                             } finally {

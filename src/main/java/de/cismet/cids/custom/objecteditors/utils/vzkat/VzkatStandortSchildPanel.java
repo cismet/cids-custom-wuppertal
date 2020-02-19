@@ -39,6 +39,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private javax.swing.JLabel lblBeschreibungTitle;
     private javax.swing.JPanel panBeschreibungBody;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
+    private de.cismet.tools.gui.RoundedPanel panBild;
     private de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatSchildBeschreibungPanel vzkatSchildPanel;
     // End of variables declaration//GEN-END:variables
 
@@ -80,12 +81,16 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        panBild = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBeschreibungTitle = new javax.swing.JLabel();
         panBeschreibungBody = new javax.swing.JPanel();
         vzkatSchildPanel = new VzkatSchildBeschreibungPanel(isEditable());
 
+        setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
+
+        panBild.setLayout(new java.awt.GridBagLayout());
 
         panBeschreibungTitle.setBackground(java.awt.Color.darkGray);
         panBeschreibungTitle.setLayout(new java.awt.GridBagLayout());
@@ -106,7 +111,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        add(panBeschreibungTitle, gridBagConstraints);
+        panBild.add(panBeschreibungTitle, gridBagConstraints);
 
         panBeschreibungBody.setOpaque(false);
         panBeschreibungBody.setLayout(new java.awt.GridBagLayout());
@@ -124,7 +129,16 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(panBeschreibungBody, gridBagConstraints);
+        panBild.add(panBeschreibungBody, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(panBild, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
