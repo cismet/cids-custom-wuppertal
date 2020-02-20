@@ -11,8 +11,6 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
-import Sirius.server.localserver.attribute.ObjectAttribute;
-
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Binding;
@@ -51,6 +49,9 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
+import javax.swing.DefaultListCellRenderer;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 
 /**
  * DOCUMENT ME!
@@ -91,7 +92,7 @@ public class RendererTools {
                     if (expr.substring(2, expr.length() - 1).startsWith(baseProp + ".")) {
                         makeReadOnly(target);
                     }
-                } catch (final Exception ex) {
+                } catch (final IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException ex) {
                     LOG.warn("", ex);
                 }
             }
@@ -137,6 +138,25 @@ public class RendererTools {
                         return null;
                     }
                 });
+        } else if(comp instanceof JXTable){
+            final JXTable jxt = (JXTable)comp;
+            jxt.setEditable(false);
+            ((DefaultTableRenderer)jxt.getDefaultRenderer(Object.class)).setBackground(new Color (0,0,0,0));
+            jxt.setOpaque(false);
+            jxt.setGridColor(Color.GRAY);
+            jxt.setBackground(new Color (0,0,0,0));
+        } else if (comp instanceof JList){
+            final JList jl = (JList) comp;
+            jl.setOpaque(false);
+            jl.setCellRenderer(new DefaultListCellRenderer(){
+                    @Override
+                    public Component getListCellRendererComponent (JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus){
+                        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                        // setForeground(Color.WHITE);
+                        setOpaque(isSelected);
+                        return this;
+                    }    
+            });
         } else if (comp != null) {
             comp.setEnabled(false);
         }

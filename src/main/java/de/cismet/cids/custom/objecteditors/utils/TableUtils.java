@@ -16,6 +16,8 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 
 import org.apache.log4j.Logger;
 
@@ -31,6 +33,10 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.connectioncontext.ConnectionContext;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.jdesktop.swingx.JXTable;
 
 /**
  * DOCUMENT ME!
@@ -211,5 +217,32 @@ public class TableUtils {
             }
         }
         return addBean;
+    }
+      
+    //Für 1:n-Beziehung 
+    public static void addObjectToTable(final JXTable table, final String tableClass, ConnectionContext connectionContext) {
+        try {
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(tableClass, connectionContext);
+
+            ((DivBeanTable)table.getModel()).addBean(bean);
+        } catch (Exception e) {
+            LOG.error("Cannot add new " + tableClass + " object", e);
+        }
+    }
+    //Für 1:n-Beziehung 
+    public static void removeObjectsFromTable(final JXTable table) {
+        final int[] selectedRows = table.getSelectedRows();
+        final List<Integer> modelRows = new ArrayList<>();
+
+        // The model rows should be in reverse order
+        for (final int row : selectedRows) {
+            modelRows.add(table.convertRowIndexToModel(row));
+        }
+
+        Collections.sort(modelRows, Collections.reverseOrder());
+
+        for (final Integer row : modelRows) {
+            ((DivBeanTable)table.getModel()).removeRow(row);
+        }
     }
 }
