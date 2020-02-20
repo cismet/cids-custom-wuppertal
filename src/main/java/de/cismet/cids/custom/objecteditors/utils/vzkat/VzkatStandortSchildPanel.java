@@ -12,6 +12,10 @@
  */
 package de.cismet.cids.custom.objecteditors.utils.vzkat;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
+import Sirius.server.middleware.types.MetaObjectNode;
+
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
@@ -36,7 +40,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lblBeschreibungTitle;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
     private javax.swing.JPanel panBeschreibungBody;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
     private de.cismet.tools.gui.RoundedPanel panBild;
@@ -83,7 +87,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 
         panBild = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblBeschreibungTitle = new javax.swing.JLabel();
+        jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         panBeschreibungBody = new javax.swing.JPanel();
         vzkatSchildPanel = new VzkatSchildBeschreibungPanel(isEditable());
 
@@ -95,17 +99,22 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         panBeschreibungTitle.setBackground(java.awt.Color.darkGray);
         panBeschreibungTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblBeschreibungTitle.setFont(lblBeschreibungTitle.getFont());
-        lblBeschreibungTitle.setForeground(new java.awt.Color(255, 255, 255));
         org.openide.awt.Mnemonics.setLocalizedText(
-            lblBeschreibungTitle,
+            jXHyperlink1,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.lblBeschreibungTitle.text")); // NOI18N
+                "VzkatStandortSchildPanel.jXHyperlink1.text")); // NOI18N
+        jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panBeschreibungTitle.add(lblBeschreibungTitle, gridBagConstraints);
+        panBeschreibungTitle.add(jXHyperlink1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -140,6 +149,15 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.weighty = 1.0;
         add(panBild, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(cidsBean));
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {

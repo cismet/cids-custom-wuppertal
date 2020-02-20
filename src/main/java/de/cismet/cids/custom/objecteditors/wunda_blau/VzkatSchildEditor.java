@@ -7,7 +7,10 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -66,9 +69,9 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler fillerMainBottom;
     private javax.swing.JLabel jLabel1;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
     private javax.swing.JLabel lblBeschreibungTitle;
     private javax.swing.JLabel lblBildTitle;
-    private javax.swing.JLabel lblLageTitle;
     private de.cismet.tools.gui.RoundedPanel panBeschreibung;
     private javax.swing.JPanel panBeschreibungBody;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
@@ -160,7 +163,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
                 new java.awt.Dimension(0, 32767));
         panStandortKarte = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblLageTitle = new javax.swing.JLabel();
+        jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         panStandortKarteBody = new javax.swing.JPanel();
         vzkatStandortKartePanel = new VzkatStandortKartePanel(isEditable());
         panBild = new de.cismet.tools.gui.RoundedPanel();
@@ -207,15 +210,20 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         panLageTitle.setBackground(java.awt.Color.darkGray);
         panLageTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblLageTitle.setFont(lblLageTitle.getFont());
-        lblLageTitle.setForeground(new java.awt.Color(255, 255, 255));
         org.openide.awt.Mnemonics.setLocalizedText(
-            lblLageTitle,
-            org.openide.util.NbBundle.getMessage(VzkatSchildEditor.class, "VzkatSchildEditor.lblLageTitle.text")); // NOI18N
+            jXHyperlink1,
+            org.openide.util.NbBundle.getMessage(VzkatSchildEditor.class, "VzkatSchildEditor.jXHyperlink1.text")); // NOI18N
+        jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panLageTitle.add(lblLageTitle, gridBagConstraints);
+        panLageTitle.add(jXHyperlink1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -252,6 +260,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panStandortKarte.add(panStandortKarteBody, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -314,6 +323,7 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panBild.add(panLageBody1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -375,6 +385,17 @@ public class VzkatSchildEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(panBeschreibung, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+        ComponentRegistry.getRegistry()
+                .getDescriptionPane()
+                .gotoMetaObjectNode(new MetaObjectNode((CidsBean)cidsBean.getProperty("fk_standort")));
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;

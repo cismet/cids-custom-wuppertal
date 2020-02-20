@@ -14,6 +14,8 @@ import Sirius.server.middleware.types.MetaObjectNode;
 
 import java.awt.Component;
 
+import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -326,6 +328,14 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jXDatePicker1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXDatePicker1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -355,6 +365,59 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         add(jPanel2, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXDatePicker1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXDatePicker1ActionPerformed
+        refreshShilder();
+    }                                                                                 //GEN-LAST:event_jXDatePicker1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshShilder() {
+        final VzkatSchilderSearch schilderSearch = new VzkatSchilderSearch();
+        schilderSearch.setStandortId((Integer)cidsBean.getProperty("id"));
+        schilderSearch.setActiveTimestamp((jXDatePicker1.getDate() != null)
+                ? new Timestamp(jXDatePicker1.getDate().getTime()) : null);
+        new SwingWorker<Collection, Void>() {
+
+                @Override
+                protected Collection doInBackground() throws Exception {
+                    final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
+                                .customServerSearch(schilderSearch, getConnectionContext());
+                    final Collection<CidsBean> schildBeans = new ArrayList<>();
+                    for (final MetaObjectNode mon : mons) {
+                        schildBeans.add(SessionManager.getProxy().getMetaObject(
+                                mon.getObjectId(),
+                                mon.getClassId(),
+                                "WUNDA_BLAU",
+                                getConnectionContext()).getBean());
+                    }
+                    return schildBeans;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final Collection<CidsBean> schildBeans = (Collection)get();
+                        jPanel1.removeAll();
+                        for (final CidsBean schildBean : schildBeans) {
+                            final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(isEditable());
+                            schildPanel.initWithConnectionContext(getConnectionContext());
+                            schildPanel.setCidsBean(schildBean);
+                            schildPanel.setOpaque(false);
+                            jPanel1.add(schildPanel);
+                        }
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            }.execute();
+    }
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -369,42 +432,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         vzkatStandortKartePanel.setCidsBean(cidsBean);
 
         if (cidsBean != null) {
-            final VzkatSchilderSearch schilderSearch = new VzkatSchilderSearch();
-            schilderSearch.setStandortId((Integer)cidsBean.getProperty("id"));
-            new SwingWorker<Collection, Void>() {
-
-                    @Override
-                    protected Collection doInBackground() throws Exception {
-                        final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
-                                    .customServerSearch(schilderSearch, getConnectionContext());
-                        final Collection<CidsBean> schildBeans = new ArrayList<>();
-                        for (final MetaObjectNode mon : mons) {
-                            schildBeans.add(SessionManager.getProxy().getMetaObject(
-                                    mon.getObjectId(),
-                                    mon.getClassId(),
-                                    "WUNDA_BLAU",
-                                    getConnectionContext()).getBean());
-                        }
-                        return schildBeans;
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            final Collection<CidsBean> schildBeans = (Collection)get();
-                            jPanel1.removeAll();
-                            for (final CidsBean schildBean : schildBeans) {
-                                final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(isEditable());
-                                schildPanel.initWithConnectionContext(getConnectionContext());
-                                schildPanel.setCidsBean(schildBean);
-                                schildPanel.setOpaque(false);
-                                jPanel1.add(schildPanel);
-                            }
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
-                        }
-                    }
-                }.execute();
+            refreshShilder();
         }
     }
 
