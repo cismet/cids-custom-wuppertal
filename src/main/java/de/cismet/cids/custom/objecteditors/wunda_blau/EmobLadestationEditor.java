@@ -47,7 +47,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.Arrays;
@@ -87,7 +86,6 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.connectioncontext.AbstractConnectionContext;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -96,6 +94,7 @@ import de.cismet.security.WebAccessManager;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.Cursor;
 import java.text.DecimalFormat;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -105,7 +104,10 @@ import org.jdesktop.swingx.JXTable;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 /**
  * DOCUMENT ME!
  *
@@ -119,7 +121,14 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final MetaClass STECKDOSENTYP_MC;
+    private MetaClass steckdosentypMetaClass;
+    private Boolean redundantName = false;
+                       
+    public static final String TEXT_OPEN = "24 Stunden / 7 Tage";
+    public static final String GEOMTYPE = "Point";
+    public static final int COLUMN_WIDTH = 180;
+    public static final int FOTO_WIDTH = 150;
+    private static enum otherTableCases {setValue, redundantAttName};
     
     private static final Logger LOG = Logger.getLogger(EmobLadestationEditor.class);
 
@@ -145,10 +154,34 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
     public static final String TABLE_NAME = "emob_ladestation";     
     public static final String TABLE_GEOM = "geom";                                  
     public static final String TABLE_NAME_VERSATZ = "emob_versatz";                   
-    public static final String TABLE_NAME_STECKDOSE= "emob_steckdose";
-                       
-    public static final String TEXT_OPEN= "24 Stunden / 7 Tage";
+    public static final String TABLE_NAME_STECKDOSE = "emob_steckdose";
+    public static final String TABLE_NAME_STECKDOSENTYP = "emob_steckdosentyp";
     
+    public static final String BUNDLE_NOLOAD = "EmobLadestationEditor.loadPictureWithUrl().noLoad";
+    public static final String BUNDLE_NONAME = "EmobLadestationEditor.prepareForSave().noName";
+    public static final String BUNDLE_DUPLICATENAME = "EmobLadestationEditor.prepareForSave().duplicateName";
+    public static final String BUNDLE_NOSTREET = "EmobLadestationEditor.prepareForSave().noStrasse";
+    public static final String BUNDLE_NOCOUNT = "EmobLadestationEditor.prepareForSave().noAnzahl";
+    public static final String BUNDLE_WRONGCOUNT = "EmobLadestationEditor.prepareForSave().wrongAnzahl";
+    public static final String BUNDLE_NOOPEN = "EmobLadestationEditor.prepareForSave().noOpen";
+    public static final String BUNDLE_NOGEOM = "EmobLadestationEditor.prepareForSave().noGeom";
+    public static final String BUNDLE_WRONGGEOM = "EmobLadestationEditor.prepareForSave().wrongGeom";
+    public static final String BUNDLE_NOOPERATOR = "EmobLadestationEditor.prepareForSave().noBetreiber";
+    public static final String BUNDLE_TWICESOCKET = "EmobLadestationEditor.prepareForSave().twiceSocket";
+    public static final String BUNDLE_NOVOLTAGE = "EmobLadestationEditor.prepareForSave().noVoltage";
+    public static final String BUNDLE_NOCURRENT = "EmobLadestationEditor.prepareForSave().noCurrent";
+    public static final String BUNDLE_NOPOWER = "EmobLadestationEditor.prepareForSave().noPower";
+    public static final String BUNDLE_NOSOCKETTYPE = "EmobLadestationEditor.prepareForSave().noSocketType";
+    public static final String BUNDLE_NOSOCKETCOUNT = "EmobLadestationEditor.prepareForSave().noSocketCount";
+    public static final String BUNDLE_PANE_PREFIX = "EmobLadestationEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "EmobLadestationEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "EmobLadestationEditor.prepareForSave().JOptionPane.title";
+    
+    public static final String BUNDLE_REMZUG_QUESTION = "EmobLadestationEditor.btnRemoveZugangActionPerformed().question";
+    public static final String BUNDLE_REMZUG_TITLE = "EmobLadestationEditor.btnRemoveZugangActionPerformed().title";
+    public static final String BUNDLE_REMZUG_ERRORTITLE = "EmobLadestationEditor.btnRemoveZugangActionPerformed().errortitle";
+    public static final String BUNDLE_REMZUG_ERRORTEXT = "EmobLadestationEditor.btnRemoveZugangActionPerformed().errortext";
+        
     private static final String[] STECKDOSEN_COL_NAMES = new String[] { "kW", "A", "V", "Anz", "Typ" };
     private static final String[] STECKDOSEN_PROP_NAMES = new String[] { "leistung", "strom", "spannung", "anzahl", "fk_typ" };
     private static final Class[] STECKDOSEN_PROP_TYPES = new Class[] { Double.class, Integer.class, Integer.class, Integer.class, CidsBean.class};
@@ -160,19 +193,10 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
    
     private final ImageIcon statusFalsch = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
-    private final ImageIcon statusOK = new ImageIcon(
+    private final ImageIcon statusOk = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
     
-    static {
-        final ConnectionContext connectionContext = ConnectionContext.create(
-                AbstractConnectionContext.Category.STATIC,
-                EmobLadestationEditor.class.getSimpleName());
-
-        STECKDOSENTYP_MC = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                "emob_steckdosentyp",
-                connectionContext);
-    }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnAddSteckdose;
@@ -297,12 +321,63 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        if(isEditor){
-            ((DefaultBindableScrollableComboBox)this.cbAbrechnung).setNullable(true);
-        }
+        steckdosentypMetaClass = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                TABLE_NAME_STECKDOSENTYP,
+                connectionContext);
+        
+        //Aufruf worker um default values zu setzen
+        valueFromOtherTable(TABLE_NAME_VERSATZ, 
+                    " where "
+                            + FIELD__SCHLUESSEL
+                            + " ilike '"
+                            + VERSATZ_ZENTRAL_SCHLUESSEL
+                            + "'",
+                    FIELD__VERSATZ,
+                    otherTableCases.setValue);
+        
+                              
+        txtName.getDocument().addDocumentListener(new DocumentListener() {
+            //Immer, wenn der Name geändert wird, wird dieser überprüft.
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    checkName();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    checkName();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    checkName();
+                }
+            });
+        
+        txtFoto.getDocument().addDocumentListener(new DocumentListener() {
+            //Immer, wenn das Foto geändert wird, wird dieses überprüft und neu geladen.
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    doWithFotoUrl();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    doWithFotoUrl();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    doWithFotoUrl();
+                }
+        });
+        
         dlgAddZugang.pack();
         dlgAddZugang.getRootPane().setDefaultButton(btnMenOkZugang);
+        
         if (isEditor) {
+            ((DefaultBindableScrollableComboBox)this.cbAbrechnung).setNullable(true);
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
         }
         setReadOnly();
@@ -1596,16 +1671,16 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
                     StaticSwingTools.getParentFrame(this),
-                    "Soll diese Zugangsart wirklich gelöscht werden?",
-                    "Zugangsart entfernen",
+                    NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_REMZUG_QUESTION),
+                    NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_REMZUG_TITLE),
                     JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
                     cidsBean = TableUtils.deleteItemFromList(cidsBean, FIELD__ZUGANG, selection, false);
                 } catch (Exception ex) {
                     final ErrorInfo ei = new ErrorInfo(
-                            "Fehler beim Löschen",
-                            "Beim Löschen der Zugangsart ist ein Fehler aufgetreten",
+                            BUNDLE_REMZUG_ERRORTITLE,
+                            BUNDLE_REMZUG_ERRORTEXT,
                             null,
                             null,
                             ex,
@@ -1660,22 +1735,6 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         isOpen();
     }//GEN-LAST:event_chHalbStateChanged
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void testUrlAndShowResult() {
-        try {
-            final URL url = new URL(EmobConfProperties.getInstance().getFotoUrlAutos().concat(txtFoto.getText()));
-            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
-                lblUrlCheck.setIcon(statusOK);
-            } else {
-                lblUrlCheck.setIcon(statusFalsch);
-            }
-        } catch (final MalformedURLException e) {
-            lblUrlCheck.setIcon(statusFalsch);
-            LOG.warn("URL Check Problem.", e);
-        }
-    }
 
     /**
      * DOCUMENT ME!
@@ -1691,31 +1750,30 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         bindingGroup.bind();
     }
     
-    private void setDefaultValues(){
-        
-        if(this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            try {
-
-                final CidsBean versatzBean = getOtherTableValue(
-                    TABLE_NAME_VERSATZ,
-                    " where "
-                            + FIELD__SCHLUESSEL
-                            + " ilike '"
-                            + VERSATZ_ZENTRAL_SCHLUESSEL
-                            + "'",
-                    getConnectionContext());
-                try {
-                    cidsBean.setProperty(
-                        FIELD__VERSATZ,
-                        versatzBean);
-                } catch (Exception ex) {
-                    LOG.warn("setVersatz: Versatz not set.", ex);
-                }
-            } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
+    private void doWithFotoUrl(){
+        final String foto = EmobConfProperties.getInstance().getFotoUrlAutos().concat(txtFoto.getText());
+        //Worker Aufruf, grün/rot
+        checkUrl(foto, lblUrlCheck);
+        //Worker Aufruf, Foto laden
+        loadPictureWithUrl(foto, lblFotoAnzeigen);
     }
+    
+    private void checkName(){
+        //Worker Aufruf, ob das Objekt schon existiert
+        valueFromOtherTable(TABLE_NAME, 
+                    " where "
+                            + FIELD__NAME
+                            + " ilike '"
+                            + txtName.getText().trim()
+                            + "' and " 
+                            + FIELD__ID 
+                            + " <> " 
+                            + cidsBean.getProperty(FIELD__ID),
+                    FIELD__NAME,
+                    otherTableCases.redundantAttName);
+    }
+    
+
     
     @Override
     public boolean prepareForSave() {
@@ -1726,24 +1784,11 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         try {
             if (txtName.getText().trim().isEmpty()) {
                 LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                        "EmobLadestationEditor.prepareForSave().noName"));
+                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NONAME));
             }else {
-                String myQuery;
-                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-                    myQuery = " where " + FIELD__NAME + " ilike '" + txtName.getText().trim() + "'";
-                    if (TableUtils.getOtherTableValue(TABLE_NAME, myQuery, getConnectionContext()) != null) {
-                        LOG.warn("Duplicate name specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(EmobBetreiberEditor.class,
-                                "EmobLadestationEditor.prepareForSave().duplicateName"));
-                    } else {
-                        myQuery = " where " + FIELD__NAME + " ilike '" + txtName.getText().trim() + "' and " + FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID);
-                        if (TableUtils.getOtherTableValue(TABLE_NAME, myQuery, getConnectionContext()) != null) {
-                            LOG.warn("Duplicate name specified. Skip persisting.");
-                            errorMessage.append(NbBundle.getMessage(EmobBetreiberEditor.class,
-                                    "EmobLadestationEditor.prepareForSave().duplicateName"));
-                        }
-                    }
+                if (redundantName){
+                     LOG.warn("Duplicate name specified. Skip persisting.");
+                     errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_DUPLICATENAME));
                 } 
             }
         } catch (final MissingResourceException ex) {
@@ -1753,50 +1798,45 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         // Betreiber muss angegeben werden
         try {
             if (cbBetreiber.getSelectedItem() == null) {
-                LOG.warn("No betreiber specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                        "EmobLadestationEditor.prepareForSave().noBetreiber"));
+                LOG.warn("No operator specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOOPERATOR));
             }
         } catch (final MissingResourceException ex) {
-            LOG.warn("Betreiber not given.", ex);
+            LOG.warn("Operator not given.", ex);
             save = false;
         }
         // Straße muss angegeben werden
         try {
             if (txtStrasse.getText().trim().isEmpty()) {
-                LOG.warn("No strasse specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                        "EmobLadestationEditor.prepareForSave().noStrasse"));
+                LOG.warn("No street specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOSTREET));
             }
         } catch (final MissingResourceException ex) {
-            LOG.warn("Strasse not given.", ex);
+            LOG.warn("Street not given.", ex);
             save = false;
         }
         // Anzahl muss angegeben werden
         try {
             if (ftxtAnzahl.getText().trim().isEmpty()) {
-                LOG.warn("No anzahl specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                        "EmobLadestationEditor.prepareForSave().noAnzahl"));
+                LOG.warn("No count specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOCOUNT));
             } else{
                 try{
                     Integer.parseInt(ftxtAnzahl.getText());
                 } catch(NumberFormatException e){
-                    LOG.warn("Wrong anzahl specified. Skip persisting.", e);
-                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                        "EmobLadestationEditor.prepareForSave().wrongAnzahl"));
+                    LOG.warn("Wrong count specified. Skip persisting.", e);
+                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_WRONGCOUNT));
                 }
             }
         } catch (final MissingResourceException ex) {
-            LOG.warn("Anzahl not given.", ex);
+            LOG.warn("Countl not given.", ex);
             save = false;
         }
         // Öffnungszeiten müssen angegeben werden, wenn halb-öffentlich
         try {
             if (taOffen.getText().trim().isEmpty() && chHalb.isSelected() ) {
                 LOG.warn("No open specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                        "EmobLadestationEditor.prepareForSave().noOpen"));
+                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOOPEN));
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Open not given.", ex);
@@ -1806,14 +1846,12 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         try {
             if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                        "EmobLadestationEditor.prepareForSave().noGeom"));
+                errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOGEOM));
             } else {
                 final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
+                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                            "EmobLadestationEditor.prepareForSave().wrongGeom"));
+                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_WRONGGEOM));
                 }
             }
         } catch (final MissingResourceException ex) {
@@ -1825,45 +1863,36 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         switch(checkValuesForSocket()){
             case 1:
                 LOG.warn("Twice socket specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                            "EmobLadestationEditor.prepareForSave().twiceSocket"));
+                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_TWICESOCKET));
                 break;
             case 2:
                 LOG.warn("No voltage specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                            "EmobLadestationEditor.prepareForSave().noVoltage"));
+                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOVOLTAGE));
                 break;
             case 3:
                 LOG.warn("No current specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                            "EmobLadestationEditor.prepareForSave().noCurrent"));
+                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOCURRENT));
                 break;
             case 4:
                 LOG.warn("No power specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                            "EmobLadestationEditor.prepareForSave().noPower"));
+                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOPOWER));
                 break;
             case 5:
                 LOG.warn("No socket type specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                            "EmobLadestationEditor.prepareForSave().noSocketType"));
+                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOSOCKETTYPE));
                 break;
             case 6:
                 LOG.warn("No socket count specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class,
-                            "EmobLadestationEditor.prepareForSave().noSocketCount"));
+                    errorMessage.append(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOSOCKETCOUNT));
                 break;
         }
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(EmobLadestationEditor.class,
-                    "EmobLadestationEditor.prepareForSave().JOptionPane.message.prefix")
+                NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()
-                        + NbBundle.getMessage(EmobLadestationEditor.class,
-                            "EmobLadestationEditor.prepareForSave().JOptionPane.message.suffix"),
-                NbBundle.getMessage(EmobLadestationEditor.class,
-                    "EmobLadestationEditor.prepareForSave().JOptionPane.title"),
+                        + NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_PANE_SUFFIX), 
+                NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
 
             return false;
@@ -1947,20 +1976,17 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
                 getConnectionContext());
             setMapWindow();
             bindingGroup.bind();
-            setDefaultValues();
-            testUrlAndShowResult();
             isOpen();
-            loadPicture();
             final DivBeanTable steckdoseModel = new DivBeanTable(
                 isEditor,
                 cidsBean,
-                "n_steckdosen",
+                FIELD__STECKDOSE,
                 STECKDOSEN_COL_NAMES,
                 STECKDOSEN_PROP_NAMES,
                 STECKDOSEN_PROP_TYPES);
             xtSteckdose.setModel(steckdoseModel);
-            xtSteckdose.getColumn(4).setCellEditor(new DefaultBindableComboboxCellEditor(STECKDOSENTYP_MC));
-            xtSteckdose.getColumn(4).setPreferredWidth(180);
+            xtSteckdose.getColumn(4).setCellEditor(new DefaultBindableComboboxCellEditor(steckdosentypMetaClass));
+            xtSteckdose.getColumn(4).setPreferredWidth(COLUMN_WIDTH);
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
@@ -2014,20 +2040,19 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             }
         }
     }
+  
     
-    public void loadPicture(){
+    public ImageIcon loadPicture(URL url){
         try {
-            final String foto = (String)cidsBean.getProperty(FIELD__FOTO);
-            final URL bildURL = new URL(EmobConfProperties.getInstance().getFotoUrlAutos() + foto);
-            final int bildZielBreite = 150;
-            final BufferedImage originalBild = ImageIO.read(WebAccessManager.getInstance().doRequest(bildURL));
+            final int bildZielBreite = FOTO_WIDTH;
+            final BufferedImage originalBild = ImageIO.read(WebAccessManager.getInstance().doRequest(url));
             final Image skaliertesBild = originalBild.getScaledInstance(bildZielBreite, -1, Image.SCALE_SMOOTH);
-            lblFotoAnzeigen.setIcon(new ImageIcon(skaliertesBild));
+            return new ImageIcon(skaliertesBild);
         } catch (final Exception ex) {
             LOG.error("Could not load picture.", ex);
+            return null;
         }
     }
-
     /**
      * DOCUMENT ME!
      */
@@ -2095,10 +2120,6 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             setMapWindow();
         }
 
-        if (evt.getPropertyName().equals(FIELD__FOTO)) {
-            testUrlAndShowResult();
-            loadPicture();
-        }
     }
     
 
@@ -2148,5 +2169,135 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         public Object getLastValid() {
             return lastValid;
         }
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url        DOCUMENT ME!
+     * @param  showLabel  DOCUMENT ME!
+     */
+    private void checkUrl(final String url, final JLabel showLabel) {
+        showLabel.setIcon(statusFalsch);
+        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    return WebAccessManager.getInstance().checkIfURLaccessible(new URL(url));
+                }
+
+                @Override
+                protected void done() {
+                    final Boolean check;
+                    try {
+                        check = get();
+                        if (check) {
+                            showLabel.setIcon(statusOk);
+                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        } else {
+                            showLabel.setIcon(statusFalsch);
+                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        showLabel.setIcon(statusFalsch);
+                        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        LOG.warn("URL Check Problem in Worker.", e);
+                    }
+                }
+            };
+        worker.execute();
+    }
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url        DOCUMENT ME!
+     * @param  showLabel  DOCUMENT ME!
+     */
+    private void loadPictureWithUrl(final String url, final JLabel showLabel) {
+        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        final SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
+
+                @Override
+                protected ImageIcon doInBackground() throws Exception {            
+                    return loadPicture(new URL(url));
+                }
+
+                @Override
+                protected void done() {
+                    final ImageIcon check;
+                    try {
+                        check = get();
+                        if (check != null) {
+                            showLabel.setIcon(check);
+                            showLabel.setText("");
+                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        } else {
+                            showLabel.setIcon(null);
+                            showLabel.setText(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOLOAD));
+                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        showLabel.setText(NbBundle.getMessage(EmobLadestationEditor.class, BUNDLE_NOLOAD));
+                        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        LOG.warn("load picture Problem in Worker.", e);
+                    }
+                }
+            };
+        worker.execute();
+    }
+     /**
+     * DOCUMENT ME!
+     *
+     * @param  tableName    DOCUMENT ME!
+     * @param  whereClause  DOCUMENT ME!
+     * @param  propertyName DOCUMENT ME!
+     * @param  fall         DOCUMENT ME!
+     */
+    private void valueFromOtherTable(final String tableName, final String whereClause, final String propertyName, final otherTableCases fall) {
+        final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
+
+                @Override
+                protected CidsBean doInBackground() throws Exception {            
+                    return getOtherTableValue(tableName, whereClause, getConnectionContext());
+                }
+
+                @Override
+                protected void done() {
+                    final CidsBean check;
+                    try { 
+                        check = get();
+                        if (check != null) {
+
+                            switch (fall) {
+                                case setValue: {//set default value
+                                        try {
+                                            cidsBean.setProperty(
+                                            propertyName,
+                                            check);
+                                        } catch (Exception ex) {
+                                            LOG.warn("setVersatz: Versatz not set.", ex);
+                                        } 
+                                        break;
+                                }
+                                case redundantAttName: {//check redundant name
+                                        redundantName = true;
+                                        break;
+                                }
+                            } 
+                        } else {
+                            switch (fall) {
+                                case redundantAttName: {//check redundant name
+                                        redundantName = false;
+                                        break;
+                                }
+                            }
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        LOG.warn("problem in Worker: load values.", e);
+                    }
+                }
+            };
+        worker.execute();
     }
 }

@@ -26,7 +26,7 @@ import org.openide.util.NbBundle;
 import javax.swing.*;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.TableUtils;
+import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -41,6 +41,9 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.util.concurrent.ExecutionException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * DOCUMENT ME!
@@ -56,10 +59,22 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(EmobSteckdosentypEditor.class);
+    
+    private Boolean redundantName = false;
+    private Boolean redundantKey = false;
+    private static enum otherTableCases {redundantAttKey, redundantAttName};
 
     public static final String TABLE_NAME = "emob_steckdosentyp";
     public static final String FIELD__SCHLUESSEL = "schluessel";
-    public static final String FIELD__NAME = "name";
+    public static final String FIELD__NAME = "name";                                 
+    public static final String FIELD__ID = "id"; 
+    
+    public static final String BUNDLE_NONAME = "EmobSteckdosentypEditor.prepareForSave().noName";
+    public static final String BUNDLE_DUPLICATENAME = "EmobSteckdosentypEditor.prepareForSave().duplicateName";
+    public static final String BUNDLE_DUPLICATEKEY = "EmobSteckdosentypEditor.prepareForSave().duplicateSchluessel";
+    public static final String BUNDLE_PANE_PREFIX = "EmobSteckdosentypEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "EmobSteckdosentypEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "EmobSteckdosentypEditor.prepareForSave().JOptionPane.title";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -98,6 +113,23 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        txtName.getDocument().addDocumentListener(new DocumentListener() {
+            //Immer, wenn der Name geändert wird, wird dieser überprüft.
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    checkAttributes();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    checkAttributes();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    checkAttributes();
+                }
+            });
         setReadOnly();
     }
 
@@ -227,30 +259,25 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-        String myQuery;
 
         // name vorhanden
         try {
             if (txtName.getText().trim().isEmpty()) {
                 LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                        "EmobSteckdosentypEditor.prepareForSave().noName"));
+                errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class, BUNDLE_NONAME));
             } else {
-                myQuery = " where " + FIELD__NAME + " ilike '" + txtName.getText().trim() + "'";
-                if (TableUtils.getOtherTableValue(TABLE_NAME, myQuery, getConnectionContext()) != null) {
+                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                    cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
+                }
+                if (redundantName) {
                     LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                            "EmobSteckdosentypEditor.prepareForSave().duplicateName"));
+                    errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class, BUNDLE_DUPLICATENAME));
                 } else {
-                    myQuery = " where " + FIELD__SCHLUESSEL + " ilike '" + txtName.getText().trim() + "'";
-                    if (TableUtils.getOtherTableValue(TABLE_NAME, myQuery, getConnectionContext()) != null) {
-                        LOG.warn("Duplicate schluessel specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                                "EmobSteckdosentypEditor.prepareForSave().duplicateSchluessel"));
+                    if (redundantKey) {
+                        LOG.warn("Duplicate key specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class, BUNDLE_DUPLICATEKEY));
                     } else {
-                        if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-                            cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
-                        }
+                        
                     }
                 }
             }
@@ -261,13 +288,10 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                    "EmobSteckdosentypEditor.prepareForSave().JOptionPane.message.prefix")
+                NbBundle.getMessage(EmobSteckdosentypEditor.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()
-                        + NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                            "EmobSteckdosentypEditor.prepareForSave().JOptionPane.message.suffix"),
-                NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                    "EmobSteckdosentypEditor.prepareForSave().JOptionPane.title"),
+                        + NbBundle.getMessage(EmobSteckdosentypEditor.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(EmobSteckdosentypEditor.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
 
             return false;
@@ -300,7 +324,26 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
             RendererTools.makeReadOnly(txtName);
         }
     }
+    
+    private void checkName(final String field, final otherTableCases fall){
+        //Worker Aufruf, ob das Objekt schon existiert
+        valueFromOtherTable(TABLE_NAME, 
+                    " where "
+                            + field
+                            + " ilike '"
+                            + txtName.getText().trim()
+                            + "' and " 
+                            + FIELD__ID 
+                            + " <> " 
+                            + cidsBean.getProperty(FIELD__ID),
+                    fall);
+    }
 
+    private void checkAttributes(){
+        checkName(FIELD__NAME, otherTableCases.redundantAttName);
+        checkName(FIELD__SCHLUESSEL, otherTableCases.redundantAttKey);
+    }
+    
     @Override
     public void dispose() {
         super.dispose();
@@ -322,5 +365,57 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
     @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
+    }
+       /**
+     * DOCUMENT ME!
+     *
+     * @param  tableName    DOCUMENT ME!
+     * @param  whereClause  DOCUMENT ME!
+     * @param  propertyName DOCUMENT ME!
+     * @param  fall         DOCUMENT ME!
+     */
+    private void valueFromOtherTable(final String tableName, final String whereClause, final otherTableCases fall) {
+        final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
+
+                @Override
+                protected CidsBean doInBackground() throws Exception {            
+                    return getOtherTableValue(tableName, whereClause, getConnectionContext());
+                }
+
+                @Override
+                protected void done() {
+                    final CidsBean check;
+                    try { 
+                        check = get();
+                        if (check != null) {
+
+                            switch (fall) {
+                                case redundantAttKey: {//check redundant key
+                                        redundantKey = true;
+                                        break;
+                                }
+                                case redundantAttName: {//check redundant name
+                                        redundantName = true;
+                                        break;
+                                }
+                            } 
+                        } else {
+                            switch (fall) {
+                                case redundantAttKey: {//check redundant key
+                                        redundantKey = false;
+                                        break;
+                                }
+                                case redundantAttName: {//check redundant name
+                                        redundantName = false;
+                                        break;
+                                }
+                            }
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        LOG.warn("problem in Worker: load values.", e);
+                    }
+                }
+            };
+        worker.execute();
     }
 }
