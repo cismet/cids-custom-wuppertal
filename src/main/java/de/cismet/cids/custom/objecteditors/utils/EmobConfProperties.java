@@ -15,13 +15,14 @@ package de.cismet.cids.custom.objecteditors.utils;
 import Sirius.navigator.connection.SessionManager;
 
 import Sirius.server.newuser.User;
-import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import lombok.Getter;
 
 import java.io.StringReader;
 
 import java.util.Properties;
+
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
@@ -40,7 +41,8 @@ public class EmobConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EmobConfProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            EmobConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -112,7 +114,8 @@ public class EmobConfProperties {
                 final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(user,
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
                                 WundaBlauServerResources.EMOB_CONF_PROPERTIES.getValue(),

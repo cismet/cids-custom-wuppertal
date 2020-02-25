@@ -13,33 +13,54 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
-
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.net.URL;
 
+import java.text.DecimalFormat;
+
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatter;
-
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -53,32 +74,13 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.security.WebAccessManager;
-import de.cismet.tools.BrowserLauncher;
-import de.cismet.tools.gui.RoundedPanel;
 
+import de.cismet.tools.BrowserLauncher;
+
+import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.text.DecimalFormat;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Pattern;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingx.JXHyperlink;
+
+import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 
 /**
  * DOCUMENT ME!
@@ -95,33 +97,45 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(EmobBetreiberEditor.class);
-    
-    private Boolean redundantName = false;
-    private Boolean redundantKey = false;
-    private static enum otherTableCases {redundantAttKey, redundantAttName};
 
     public static final String TABLE_NAME = "emob_betreiber";
-    public static final String FIELD__HOMEPAGE = "homepage";                              
-    public static final String FIELD__NAME = "name";                              
-    public static final String FIELD__SCHLUESSEL = "schluessel";                                
-    public static final String FIELD__TELEFON = "telefon";                                 
-    public static final String FIELD__ID = "id"; 
-    
+    public static final String FIELD__HOMEPAGE = "homepage";
+    public static final String FIELD__NAME = "name";
+    public static final String FIELD__SCHLUESSEL = "schluessel";
+    public static final String FIELD__TELEFON = "telefon";
+    public static final String FIELD__ID = "id";
+
     public static final String BUNDLE_NONAME = "EmobBetreiberEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "EmobBetreiberEditor.prepareForSave().duplicateName";
     public static final String BUNDLE_DUPLICATEKEY = "EmobBetreiberEditor.prepareForSave().duplicateSchluessel";
     public static final String BUNDLE_PANE_PREFIX = "EmobBetreiberEditor.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "EmobBetreiberEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "EmobBetreiberEditor.prepareForSave().JOptionPane.title";
-    
+
     public static final String BUNDLE_HP_TITLE = "EmobBetreiberEditor.xhHomepageActionPerformed.title";
     public static final String BUNDLE_HP_TEXT = "EmobBetreiberEditor.xhHomepageActionPerformed.text";
-    
+
     public static final Pattern TEL_FILLING_PATTERN = Pattern.compile("(|\\+(-|[0-9])*)");
     public static final Pattern TEL_MATCHING_PATTERN = Pattern.compile("\\+[0-9]{1,3}(-[0-9]+){1,}");
-    
-    
+
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static enum otherTableCases {
+
+        //~ Enum constants -----------------------------------------------------
+
+        redundantAttKey, redundantAttName
+    }
+
     //~ Instance fields --------------------------------------------------------
+
+    private Boolean redundantName = false;
+    private Boolean redundantKey = false;
 
     private boolean isEditor = true;
 
@@ -129,12 +143,10 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
     private final ImageIcon statusOk = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
-    
+
     private final RegexPatternFormatter telPatternFormatter = new RegexPatternFormatter(
             TEL_FILLING_PATTERN,
             TEL_MATCHING_PATTERN);
-    
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Box.Filler filler3;
@@ -207,7 +219,8 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
                 }
             });
         txtName.getDocument().addDocumentListener(new DocumentListener() {
-            //Immer, wenn der Name geändert wird, wird dieser überprüft.
+
+                // Immer, wenn der Name geändert wird, wird dieser überprüft.
                 @Override
                 public void insertUpdate(final DocumentEvent e) {
                     checkAttributes();
@@ -225,7 +238,6 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
             });
         setReadOnly();
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -382,7 +394,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panDaten.add(filler3, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -394,7 +411,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtName, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strasse}"), txtStrasse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -408,7 +430,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
 
         ftxtPlz.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plz}"), ftxtPlz, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.plz}"),
+                ftxtPlz,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -420,19 +447,28 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(ftxtPlz, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtTelefon, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.telefon}"),
+                ftxtTelefon,
+                BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         ftxtTelefon.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent evt) {
-                ftxtTelefonFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusLost(final FocusEvent evt) {
+                    ftxtTelefonFocusLost(evt);
+                }
+            });
         ftxtTelefon.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                ftxtTelefonActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    ftxtTelefonActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -446,10 +482,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         panHomepage.setLayout(new GridBagLayout());
 
         xhHomepage.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                xhHomepageActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    xhHomepageActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -459,7 +497,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.weightx = 1.0;
         panHomepage.add(xhHomepage, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.homepage}"), txtHomepage, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.homepage}"),
+                txtHomepage,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -472,7 +515,8 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.weighty = 1.0;
         panHomepage.add(txtHomepage, gridBagConstraints);
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -488,7 +532,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(panHomepage, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), txtBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                txtBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -500,7 +549,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtBemerkung, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hausnummer}"), txtHnr, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hausnummer}"),
+                txtHnr,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -513,7 +567,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtHnr, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ort}"), txtOrt, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ort}"),
+                txtOrt,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -526,7 +585,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtOrt, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.email}"), txtMail, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.email}"),
+                txtMail,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -550,14 +614,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -581,14 +643,12 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -601,39 +661,54 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void ftxtTelefonFocusLost(FocusEvent evt) {//GEN-FIRST:event_ftxtTelefonFocusLost
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtTelefonFocusLost(final FocusEvent evt) { //GEN-FIRST:event_ftxtTelefonFocusLost
         refreshValidTel();
-    }//GEN-LAST:event_ftxtTelefonFocusLost
+    }                                                         //GEN-LAST:event_ftxtTelefonFocusLost
 
-    private void ftxtTelefonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_ftxtTelefonActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtTelefonActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtTelefonActionPerformed
         refreshValidTel();
-    }//GEN-LAST:event_ftxtTelefonActionPerformed
+    }                                                                //GEN-LAST:event_ftxtTelefonActionPerformed
 
-   
-    
-    private void xhHomepageActionPerformed(ActionEvent evt) {//GEN-FIRST:event_xhHomepageActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void xhHomepageActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_xhHomepageActionPerformed
         try {
             BrowserLauncher.openURL(xhHomepage.getText());
         } catch (final Exception e) {
             LOG.fatal("Problem during opening url", e);
             final ErrorInfo ei = new ErrorInfo(
-                BUNDLE_HP_TITLE,
-                BUNDLE_HP_TEXT,
-                null,
-                null,
-                e,
-                Level.SEVERE,
-                null);
+                    BUNDLE_HP_TITLE,
+                    BUNDLE_HP_TEXT,
+                    null,
+                    null,
+                    e,
+                    Level.SEVERE,
+                    null);
             JXErrorPane.showDialog(this, ei);
         }
-    }//GEN-LAST:event_xhHomepageActionPerformed
+    }                                                               //GEN-LAST:event_xhHomepageActionPerformed
 
-    public void homepageCheck(){
+    /**
+     * DOCUMENT ME!
+     */
+    public void homepageCheck() {
         checkUrl(txtHomepage.getText(), lblUrlCheck);
     }
-
 
     @Override
     public boolean prepareForSave() {
@@ -646,7 +721,7 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
                 LOG.warn("No name specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(EmobBetreiberEditor.class, BUNDLE_NONAME));
             } else {
-                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
                     cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
                 }
                 if (redundantName) {
@@ -657,22 +732,23 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
                         LOG.warn("Duplicate key specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(EmobBetreiberEditor.class, BUNDLE_DUPLICATEKEY));
                     } else {
-                        
                     }
                 }
             }
         } catch (final Exception ex) {
             LOG.warn("Name not given.", ex);
             save = false;
-        }   
+        }
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(
-                    EmobBetreiberEditor.class, BUNDLE_PANE_PREFIX)
+                    EmobBetreiberEditor.class,
+                    BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()
                         + NbBundle.getMessage(
-                            EmobBetreiberEditor.class, BUNDLE_PANE_SUFFIX),
+                            EmobBetreiberEditor.class,
+                            BUNDLE_PANE_SUFFIX),
                 NbBundle.getMessage(EmobBetreiberEditor.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
 
@@ -700,7 +776,7 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
                 LOG.info("add propchange emob_betreiber: " + this.cidsBean);
                 this.cidsBean.addPropertyChangeListener(this);
             }
-            
+
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
@@ -739,7 +815,6 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
     /**
      * DOCUMENT ME!
      */
-    
 
     @Override
     public void dispose() {
@@ -766,9 +841,8 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // To change body of generated methods, choose Tools | Templates.
-       
+        // throw new UnsupportedOperationException("Not supported yet."); To change body of generated methods, choose
+        // Tools | Templates.
     }
 
     /**
@@ -777,99 +851,45 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
     private void refreshValidTel() {
         ftxtTelefon.setValue(telPatternFormatter.getLastValid());
     }
-    
-    private void saveValidTel(Object okValue) {
-        telPatternFormatter.setLastValid(okValue);
-    }
-    
-    private void checkName(final String field, final otherTableCases fall){
-        //Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(TABLE_NAME, 
-                    " where "
-                            + field
-                            + " ilike '"
-                            + txtName.getText().trim()
-                            + "' and " 
-                            + FIELD__ID 
-                            + " <> " 
-                            + cidsBean.getProperty(FIELD__ID),
-                    fall);
-    }
-  
-    private void checkAttributes(){
-        checkName(FIELD__NAME, otherTableCases.redundantAttName);
-        checkName(FIELD__SCHLUESSEL, otherTableCases.redundantAttKey);
-    }
-    
-    //~ Inner Classes ----------------------------------------------------------
 
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @param  okValue  DOCUMENT ME!
      */
-
-     class RegexPatternFormatter extends DefaultFormatter {
-
-        //~ Instance fields ----------------------------------------------------
-
-        protected java.util.regex.Matcher fillingMatcher;
-        protected java.util.regex.Matcher matchingMatcher;
-        private Object lastValid = null;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new RegexPatternFormatter object.
-         *
-         * @param  fillingRegex   DOCUMENT ME!
-         * @param  matchingRegex  DOCUMENT ME!
-         */
-        public RegexPatternFormatter(final Pattern fillingRegex, final Pattern matchingRegex) {
-            setOverwriteMode(false);
-            fillingMatcher = fillingRegex.matcher("");
-            matchingMatcher = matchingRegex.matcher("");
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public Object stringToValue(final String string) throws java.text.ParseException {
-            if ((string == null) || string.isEmpty()) {                     
-                lastValid = null;  
-                return null;
-            }
-            fillingMatcher.reset(string);
-
-            if (!fillingMatcher.matches()) {
-                throw new java.text.ParseException("does not match regex", 0);
-            }
-
-            final Object value = (String)super.stringToValue(string);
-
-            matchingMatcher.reset(string);
-            if (matchingMatcher.matches()) {
-                lastValid = value;
-            }
-            return value;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Object getLastValid() {
-            return lastValid;
-        }
-        
-        public void setLastValid(Object okValue) {
-            if (lastValid == null) {
-                lastValid = okValue;
-            }
-        }
+    private void saveValidTel(final Object okValue) {
+        telPatternFormatter.setLastValid(okValue);
     }
-     /**
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  field  DOCUMENT ME!
+     * @param  fall   DOCUMENT ME!
+     */
+    private void checkName(final String field, final otherTableCases fall) {
+        // Worker Aufruf, ob das Objekt schon existiert
+        valueFromOtherTable(
+            TABLE_NAME,
+            " where "
+                    + field
+                    + " ilike '"
+                    + txtName.getText().trim()
+                    + "' and "
+                    + FIELD__ID
+                    + " <> "
+                    + cidsBean.getProperty(FIELD__ID),
+            fall);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void checkAttributes() {
+        checkName(FIELD__NAME, otherTableCases.redundantAttName);
+        checkName(FIELD__SCHLUESSEL, otherTableCases.redundantAttKey);
+    }
+    /**
      * DOCUMENT ME!
      *
      * @param  url        DOCUMENT ME!
@@ -906,48 +926,46 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
             };
         worker.execute();
     }
-      /**
+    /**
      * DOCUMENT ME!
      *
      * @param  tableName    DOCUMENT ME!
      * @param  whereClause  DOCUMENT ME!
-     * @param  propertyName DOCUMENT ME!
      * @param  fall         DOCUMENT ME!
      */
     private void valueFromOtherTable(final String tableName, final String whereClause, final otherTableCases fall) {
         final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
 
                 @Override
-                protected CidsBean doInBackground() throws Exception {            
+                protected CidsBean doInBackground() throws Exception {
                     return getOtherTableValue(tableName, whereClause, getConnectionContext());
                 }
 
                 @Override
                 protected void done() {
                     final CidsBean check;
-                    try { 
+                    try {
                         check = get();
                         if (check != null) {
-
                             switch (fall) {
-                                case redundantAttKey: {//check redundant key
-                                        redundantKey = true;
-                                        break;
+                                case redundantAttKey: {  // check redundant key
+                                    redundantKey = true;
+                                    break;
                                 }
-                                case redundantAttName: {//check redundant name
-                                        redundantName = true;
-                                        break;
+                                case redundantAttName: { // check redundant name
+                                    redundantName = true;
+                                    break;
                                 }
-                            } 
+                            }
                         } else {
                             switch (fall) {
-                                case redundantAttKey: {//check redundant key
-                                        redundantKey = false;
-                                        break;
+                                case redundantAttKey: {  // check redundant key
+                                    redundantKey = false;
+                                    break;
                                 }
-                                case redundantAttName: {//check redundant name
-                                        redundantName = false;
-                                        break;
+                                case redundantAttName: { // check redundant name
+                                    redundantName = false;
+                                    break;
                                 }
                             }
                         }
@@ -957,5 +975,79 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
                 }
             };
         worker.execute();
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+
+    class RegexPatternFormatter extends DefaultFormatter {
+
+        //~ Instance fields ----------------------------------------------------
+
+        protected java.util.regex.Matcher fillingMatcher;
+        protected java.util.regex.Matcher matchingMatcher;
+        private Object lastValid = null;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new RegexPatternFormatter object.
+         *
+         * @param  fillingRegex   DOCUMENT ME!
+         * @param  matchingRegex  DOCUMENT ME!
+         */
+        public RegexPatternFormatter(final Pattern fillingRegex, final Pattern matchingRegex) {
+            setOverwriteMode(false);
+            fillingMatcher = fillingRegex.matcher("");
+            matchingMatcher = matchingRegex.matcher("");
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Object stringToValue(final String string) throws java.text.ParseException {
+            if ((string == null) || string.isEmpty()) {
+                lastValid = null;
+                return null;
+            }
+            fillingMatcher.reset(string);
+
+            if (!fillingMatcher.matches()) {
+                throw new java.text.ParseException("does not match regex", 0);
+            }
+
+            final Object value = (String)super.stringToValue(string);
+
+            matchingMatcher.reset(string);
+            if (matchingMatcher.matches()) {
+                lastValid = value;
+            }
+            return value;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Object getLastValid() {
+            return lastValid;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  okValue  DOCUMENT ME!
+         */
+        public void setLastValid(final Object okValue) {
+            if (lastValid == null) {
+                lastValid = okValue;
+            }
+        }
     }
 }

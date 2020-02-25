@@ -16,27 +16,29 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 
 import org.apache.log4j.Logger;
+
+import org.jdesktop.swingx.JXTable;
 
 import java.awt.Component;
 import java.awt.HeadlessException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import org.jdesktop.swingx.JXTable;
 
 /**
  * DOCUMENT ME!
@@ -218,9 +220,16 @@ public class TableUtils {
         }
         return addBean;
     }
-      
-    //Für 1:n-Beziehung 
-    public static void addObjectToTable(final JXTable table, final String tableClass, ConnectionContext connectionContext) {
+    /**
+     * Für 1:n-Beziehung.
+     *
+     * @param  table              DOCUMENT ME!
+     * @param  tableClass         DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void addObjectToTable(final JXTable table,
+            final String tableClass,
+            final ConnectionContext connectionContext) {
         try {
             final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(tableClass, connectionContext);
 
@@ -229,7 +238,11 @@ public class TableUtils {
             LOG.error("Cannot add new " + tableClass + " object", e);
         }
     }
-    //Für 1:n-Beziehung 
+    /**
+     * Für 1:n-Beziehung.
+     *
+     * @param  table  DOCUMENT ME!
+     */
     public static void removeObjectsFromTable(final JXTable table) {
         final int[] selectedRows = table.getSelectedRows();
         final List<Integer> modelRows = new ArrayList<>();

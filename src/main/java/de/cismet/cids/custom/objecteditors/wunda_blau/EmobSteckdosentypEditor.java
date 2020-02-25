@@ -12,8 +12,8 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
@@ -23,10 +23,13 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
+import java.util.concurrent.ExecutionException;
+
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -41,9 +44,8 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.util.concurrent.ExecutionException;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+
+import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 
 /**
  * DOCUMENT ME!
@@ -59,24 +61,39 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(EmobSteckdosentypEditor.class);
-    
-    private Boolean redundantName = false;
-    private Boolean redundantKey = false;
-    private static enum otherTableCases {redundantAttKey, redundantAttName};
 
     public static final String TABLE_NAME = "emob_steckdosentyp";
     public static final String FIELD__SCHLUESSEL = "schluessel";
-    public static final String FIELD__NAME = "name";                                 
-    public static final String FIELD__ID = "id"; 
-    
+    public static final String FIELD__NAME = "name";
+    public static final String FIELD__ID = "id";
+
     public static final String BUNDLE_NONAME = "EmobSteckdosentypEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "EmobSteckdosentypEditor.prepareForSave().duplicateName";
     public static final String BUNDLE_DUPLICATEKEY = "EmobSteckdosentypEditor.prepareForSave().duplicateSchluessel";
-    public static final String BUNDLE_PANE_PREFIX = "EmobSteckdosentypEditor.prepareForSave().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX = "EmobSteckdosentypEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX =
+        "EmobSteckdosentypEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX =
+        "EmobSteckdosentypEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "EmobSteckdosentypEditor.prepareForSave().JOptionPane.title";
 
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static enum otherTableCases {
+
+        //~ Enum constants -----------------------------------------------------
+
+        redundantAttKey, redundantAttName
+    }
+
     //~ Instance fields --------------------------------------------------------
+
+    private Boolean redundantName = false;
+    private Boolean redundantKey = false;
 
     private boolean isEditor = true;
 
@@ -114,7 +131,8 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
         super.initWithConnectionContext(connectionContext);
         initComponents();
         txtName.getDocument().addDocumentListener(new DocumentListener() {
-            //Immer, wenn der Name geändert wird, wird dieser überprüft.
+
+                // Immer, wenn der Name geändert wird, wird dieser überprüft.
                 @Override
                 public void insertUpdate(final DocumentEvent e) {
                     checkAttributes();
@@ -158,16 +176,18 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
+        final javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
         panFillerUntenLayout.setHorizontalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -189,16 +209,18 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
+        final javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
         panFillerUnten1Layout.setHorizontalGroup(
-            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUnten1Layout.setVerticalGroup(
-            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -223,7 +245,12 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
 
         txtName.setToolTipText("");
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                txtName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -253,7 +280,7 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public boolean prepareForSave() {
@@ -266,7 +293,7 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
                 LOG.warn("No name specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class, BUNDLE_NONAME));
             } else {
-                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
                     cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
                 }
                 if (redundantName) {
@@ -277,7 +304,6 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
                         LOG.warn("Duplicate key specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class, BUNDLE_DUPLICATEKEY));
                     } else {
-                        
                     }
                 }
             }
@@ -324,26 +350,36 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
             RendererTools.makeReadOnly(txtName);
         }
     }
-    
-    private void checkName(final String field, final otherTableCases fall){
-        //Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(TABLE_NAME, 
-                    " where "
-                            + field
-                            + " ilike '"
-                            + txtName.getText().trim()
-                            + "' and " 
-                            + FIELD__ID 
-                            + " <> " 
-                            + cidsBean.getProperty(FIELD__ID),
-                    fall);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  field  DOCUMENT ME!
+     * @param  fall   DOCUMENT ME!
+     */
+    private void checkName(final String field, final otherTableCases fall) {
+        // Worker Aufruf, ob das Objekt schon existiert
+        valueFromOtherTable(
+            TABLE_NAME,
+            " where "
+                    + field
+                    + " ilike '"
+                    + txtName.getText().trim()
+                    + "' and "
+                    + FIELD__ID
+                    + " <> "
+                    + cidsBean.getProperty(FIELD__ID),
+            fall);
     }
 
-    private void checkAttributes(){
+    /**
+     * DOCUMENT ME!
+     */
+    private void checkAttributes() {
         checkName(FIELD__NAME, otherTableCases.redundantAttName);
         checkName(FIELD__SCHLUESSEL, otherTableCases.redundantAttKey);
     }
-    
+
     @Override
     public void dispose() {
         super.dispose();
@@ -366,48 +402,46 @@ public class EmobSteckdosentypEditor extends DefaultCustomObjectEditor implement
     public BindingGroup getBindingGroup() {
         return bindingGroup;
     }
-       /**
+    /**
      * DOCUMENT ME!
      *
      * @param  tableName    DOCUMENT ME!
      * @param  whereClause  DOCUMENT ME!
-     * @param  propertyName DOCUMENT ME!
      * @param  fall         DOCUMENT ME!
      */
     private void valueFromOtherTable(final String tableName, final String whereClause, final otherTableCases fall) {
         final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
 
                 @Override
-                protected CidsBean doInBackground() throws Exception {            
+                protected CidsBean doInBackground() throws Exception {
                     return getOtherTableValue(tableName, whereClause, getConnectionContext());
                 }
 
                 @Override
                 protected void done() {
                     final CidsBean check;
-                    try { 
+                    try {
                         check = get();
                         if (check != null) {
-
                             switch (fall) {
-                                case redundantAttKey: {//check redundant key
-                                        redundantKey = true;
-                                        break;
+                                case redundantAttKey: {  // check redundant key
+                                    redundantKey = true;
+                                    break;
                                 }
-                                case redundantAttName: {//check redundant name
-                                        redundantName = true;
-                                        break;
+                                case redundantAttName: { // check redundant name
+                                    redundantName = true;
+                                    break;
                                 }
-                            } 
+                            }
                         } else {
                             switch (fall) {
-                                case redundantAttKey: {//check redundant key
-                                        redundantKey = false;
-                                        break;
+                                case redundantAttKey: {  // check redundant key
+                                    redundantKey = false;
+                                    break;
                                 }
-                                case redundantAttName: {//check redundant name
-                                        redundantName = false;
-                                        break;
+                                case redundantAttName: { // check redundant name
+                                    redundantName = false;
+                                    break;
                                 }
                             }
                         }
