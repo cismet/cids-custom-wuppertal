@@ -1631,6 +1631,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         if (cidsBean != null) {
             final String statusText;
             final Boolean erledigt = (Boolean)cidsBean.getProperty("erledigt");
+            final Boolean postweg = (Boolean)cidsBean.getProperty("postweg");
             final String fehler = (String)cidsBean.getProperty("fehler");
             final String type = (String)cidsBean.getProperty("fk_produkt.fk_typ.key");
 
@@ -1638,9 +1639,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 statusText = "Fehler: " + fehler;
             } else if (Boolean.TRUE.equals(erledigt)) {
                 statusText = "erledigt";
-            } else if ((type != null) && type.startsWith("LK.")) {
+            } else if ("LK.".startsWith(type) || ("BAB".equals(type) && Boolean.TRUE.equals(postweg))) {
                 statusText = "in Bearbeitung";
-            } else if ("BAB".equals(type)) {
+            } else if ("BAB".equals(type) && Boolean.FALSE.equals(postweg)) {
                 statusText = "warten auf Berechtigungsprüfung";
             } else {
                 statusText = "-";
