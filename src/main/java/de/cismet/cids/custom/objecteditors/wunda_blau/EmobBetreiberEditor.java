@@ -30,7 +30,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.logging.Level;
@@ -40,7 +39,7 @@ import javax.swing.text.DefaultFormatter;
 
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.TableUtils;
+import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -58,6 +57,7 @@ import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.gui.RoundedPanel;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -67,7 +67,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.text.DecimalFormat;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import org.jdesktop.beansbinding.AutoBinding;
@@ -92,13 +95,27 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(EmobBetreiberEditor.class);
+    
+    private Boolean redundantName = false;
+    private Boolean redundantKey = false;
+    private static enum otherTableCases {redundantAttKey, redundantAttName};
 
     public static final String TABLE_NAME = "emob_betreiber";
     public static final String FIELD__HOMEPAGE = "homepage";                              
     public static final String FIELD__NAME = "name";                              
     public static final String FIELD__SCHLUESSEL = "schluessel";                                
     public static final String FIELD__TELEFON = "telefon";                                 
-    public static final String FIELD__ID = "id";                                 
+    public static final String FIELD__ID = "id"; 
+    
+    public static final String BUNDLE_NONAME = "EmobBetreiberEditor.prepareForSave().noName";
+    public static final String BUNDLE_DUPLICATENAME = "EmobBetreiberEditor.prepareForSave().duplicateName";
+    public static final String BUNDLE_DUPLICATEKEY = "EmobBetreiberEditor.prepareForSave().duplicateSchluessel";
+    public static final String BUNDLE_PANE_PREFIX = "EmobBetreiberEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "EmobBetreiberEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "EmobBetreiberEditor.prepareForSave().JOptionPane.title";
+    
+    public static final String BUNDLE_HP_TITLE = "EmobBetreiberEditor.xhHomepageActionPerformed.title";
+    public static final String BUNDLE_HP_TEXT = "EmobBetreiberEditor.xhHomepageActionPerformed.text";
     
     public static final Pattern TEL_FILLING_PATTERN = Pattern.compile("(|\\+(-|[0-9])*)");
     public static final Pattern TEL_MATCHING_PATTERN = Pattern.compile("\\+[0-9]{1,3}(-[0-9]+){1,}");
@@ -110,7 +127,7 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
 
     private final ImageIcon statusFalsch = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
-    private final ImageIcon statusOK = new ImageIcon(
+    private final ImageIcon statusOk = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
     
     private final RegexPatternFormatter telPatternFormatter = new RegexPatternFormatter(
@@ -172,8 +189,43 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        txtHomepage.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    homepageCheck();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    homepageCheck();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    homepageCheck();
+                }
+            });
+        txtName.getDocument().addDocumentListener(new DocumentListener() {
+            //Immer, wenn der Name geändert wird, wird dieser überprüft.
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    checkAttributes();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    checkAttributes();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    checkAttributes();
+                }
+            });
         setReadOnly();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -567,8 +619,8 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         } catch (final Exception e) {
             LOG.fatal("Problem during opening url", e);
             final ErrorInfo ei = new ErrorInfo(
-                "Fehler beim Aufrufen der Url",
-                "Beim Aufrufen der Url ist ein Fehler aufgetreten",
+                BUNDLE_HP_TITLE,
+                BUNDLE_HP_TEXT,
                 null,
                 null,
                 e,
@@ -578,21 +630,8 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         }
     }//GEN-LAST:event_xhHomepageActionPerformed
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void testUrlAndShowResult() {
-        try {
-            final URL url = new URL(txtHomepage.getText());
-            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
-                lblUrlCheck.setIcon(statusOK);
-            } else {
-                lblUrlCheck.setIcon(statusFalsch);
-            }
-        } catch (final MalformedURLException e) {
-            lblUrlCheck.setIcon(statusFalsch);
-            LOG.warn("URL Check Problem.", e);
-        }
+    public void homepageCheck(){
+        checkUrl(txtHomepage.getText(), lblUrlCheck);
     }
 
 
@@ -600,30 +639,25 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-        String myQuery;
 
         // name vorhanden
         try {
             if (txtName.getText().trim().isEmpty()) {
                 LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                        "EmobBetreiberEditor.prepareForSave().noName"));
+                errorMessage.append(NbBundle.getMessage(EmobBetreiberEditor.class, BUNDLE_NONAME));
             } else {
-                myQuery = " where " + FIELD__NAME + " ilike '" + txtName.getText().trim() + "'";
-                if ((this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) && TableUtils.getOtherTableValue(TABLE_NAME, myQuery, getConnectionContext()) != null) {
+                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                    cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
+                }
+                if (redundantName) {
                     LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                            "EmobBetreiberEditor.prepareForSave().duplicateName"));
+                    errorMessage.append(NbBundle.getMessage(EmobBetreiberEditor.class, BUNDLE_DUPLICATENAME));
                 } else {
-                    myQuery = " where " + FIELD__SCHLUESSEL + " ilike '" + txtName.getText().trim() + "' and " + FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID);
-                    if (TableUtils.getOtherTableValue(TABLE_NAME, myQuery, getConnectionContext()) != null) {
-                        LOG.warn("Duplicate schluessel specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(EmobSteckdosentypEditor.class,
-                                "EmobBetreiberEditor.prepareForSave().duplicateSchluessel"));
+                    if (redundantKey) {
+                        LOG.warn("Duplicate key specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(EmobBetreiberEditor.class, BUNDLE_DUPLICATEKEY));
                     } else {
-                        if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-                            cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
-                        }
+                        
                     }
                 }
             }
@@ -635,14 +669,11 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(
-                    EmobBetreiberEditor.class,
-                    "EmobBetreiberEditor.prepareForSave().JOptionPane.message.prefix")
+                    EmobBetreiberEditor.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()
                         + NbBundle.getMessage(
-                            EmobBetreiberEditor.class,
-                            "EmobBetreiberEditor.prepareForSave().JOptionPane.message.suffix"),
-                NbBundle.getMessage(EmobBetreiberEditor.class,
-                    "EmobBetreiberEditor.prepareForSave().JOptionPane.title"),
+                            EmobBetreiberEditor.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(EmobBetreiberEditor.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
 
             return false;
@@ -677,7 +708,6 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
-            testUrlAndShowResult();
             saveValidTel(String.valueOf(cidsBean.getProperty(FIELD__TELEFON)));
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
@@ -739,9 +769,6 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         // throw new UnsupportedOperationException("Not supported yet.");
         // To change body of generated methods, choose Tools | Templates.
        
-        if (evt.getPropertyName().equals(FIELD__HOMEPAGE)) {
-            testUrlAndShowResult();
-        }
     }
 
     /**
@@ -755,7 +782,25 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
         telPatternFormatter.setLastValid(okValue);
     }
     
+    private void checkName(final String field, final otherTableCases fall){
+        //Worker Aufruf, ob das Objekt schon existiert
+        valueFromOtherTable(TABLE_NAME, 
+                    " where "
+                            + field
+                            + " ilike '"
+                            + txtName.getText().trim()
+                            + "' and " 
+                            + FIELD__ID 
+                            + " <> " 
+                            + cidsBean.getProperty(FIELD__ID),
+                    fall);
+    }
   
+    private void checkAttributes(){
+        checkName(FIELD__NAME, otherTableCases.redundantAttName);
+        checkName(FIELD__SCHLUESSEL, otherTableCases.redundantAttKey);
+    }
+    
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -823,5 +868,94 @@ public class EmobBetreiberEditor extends DefaultCustomObjectEditor implements Ci
                 lastValid = okValue;
             }
         }
+    }
+     /**
+     * DOCUMENT ME!
+     *
+     * @param  url        DOCUMENT ME!
+     * @param  showLabel  DOCUMENT ME!
+     */
+    private void checkUrl(final String url, final JLabel showLabel) {
+        showLabel.setIcon(statusFalsch);
+        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    return WebAccessManager.getInstance().checkIfURLaccessible(new URL(url));
+                }
+
+                @Override
+                protected void done() {
+                    final Boolean check;
+                    try {
+                        check = get();
+                        if (check) {
+                            showLabel.setIcon(statusOk);
+                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        } else {
+                            showLabel.setIcon(statusFalsch);
+                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        showLabel.setIcon(statusFalsch);
+                        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        LOG.warn("URL Check Problem in Worker.", e);
+                    }
+                }
+            };
+        worker.execute();
+    }
+      /**
+     * DOCUMENT ME!
+     *
+     * @param  tableName    DOCUMENT ME!
+     * @param  whereClause  DOCUMENT ME!
+     * @param  propertyName DOCUMENT ME!
+     * @param  fall         DOCUMENT ME!
+     */
+    private void valueFromOtherTable(final String tableName, final String whereClause, final otherTableCases fall) {
+        final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
+
+                @Override
+                protected CidsBean doInBackground() throws Exception {            
+                    return getOtherTableValue(tableName, whereClause, getConnectionContext());
+                }
+
+                @Override
+                protected void done() {
+                    final CidsBean check;
+                    try { 
+                        check = get();
+                        if (check != null) {
+
+                            switch (fall) {
+                                case redundantAttKey: {//check redundant key
+                                        redundantKey = true;
+                                        break;
+                                }
+                                case redundantAttName: {//check redundant name
+                                        redundantName = true;
+                                        break;
+                                }
+                            } 
+                        } else {
+                            switch (fall) {
+                                case redundantAttKey: {//check redundant key
+                                        redundantKey = false;
+                                        break;
+                                }
+                                case redundantAttName: {//check redundant name
+                                        redundantName = false;
+                                        break;
+                                }
+                            }
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        LOG.warn("problem in Worker: load values.", e);
+                    }
+                }
+            };
+        worker.execute();
     }
 }
