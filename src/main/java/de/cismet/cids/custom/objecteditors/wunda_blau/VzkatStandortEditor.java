@@ -1,0 +1,488 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
+package de.cismet.cids.custom.objecteditors.wunda_blau;
+
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
+import Sirius.server.middleware.types.MetaObjectNode;
+
+import java.awt.Component;
+
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.JComponent;
+import javax.swing.SwingWorker;
+
+import de.cismet.cids.client.tools.DevelopmentTools;
+
+import de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatStandortKartePanel;
+import de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatStandortSchildPanel;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.wunda_blau.search.server.VzkatSchilderSearch;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
+import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextStore;
+
+import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @author   jruiz
+ * @version  $Revision$, $Date$
+ */
+public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanRenderer,
+    TitleComponentProvider,
+    RequestsFullSizeComponent,
+    ConnectionContextStore,
+    RasterfariDocumentLoaderPanel.Listener {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VzkatStandortEditor.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final boolean editable;
+    private CidsBean cidsBean;
+    private ConnectionContext connectionContext;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler fillerMainBottom;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
+    private javax.swing.JLabel lblBildTitle;
+    private javax.swing.JLabel lblLageTitle;
+    private de.cismet.tools.gui.RoundedPanel panBild;
+    private de.cismet.tools.gui.SemiRoundedPanel panBildTitle;
+    private javax.swing.JPanel panLageBody1;
+    private de.cismet.tools.gui.SemiRoundedPanel panLageTitle;
+    private de.cismet.tools.gui.RoundedPanel panStandortKarte;
+    private javax.swing.JPanel panStandortKarteBody;
+    private javax.swing.JPanel panTitle;
+    private de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
+    private javax.swing.JLabel txtTitle;
+    private de.cismet.cids.custom.objecteditors.utils.vzkat.VzkatStandortKartePanel vzkatStandortKartePanel;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new VzkatSchildEditor object.
+     */
+    public VzkatStandortEditor() {
+        this(true);
+    }
+
+    /**
+     * Creates a new VzkatSchildEditor object.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public VzkatStandortEditor(final boolean editable) {
+        this.editable = editable;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        Log4JQuickConfig.configure4LumbermillOnLocalhost();
+        final MappingComponent mc = new MappingComponent();
+        CismapBroker.getInstance().setMappingComponent(mc);
+        DevelopmentTools.createEditorFromRestfulConnection(
+            DevelopmentTools.RESTFUL_CALLSERVER_CALLSERVER,
+            "WUNDA_BLAU",
+            null,
+            true,
+            "vzkat_standort",
+            1,
+            800,
+            600);
+    }
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        initComponents();
+        vzkatStandortKartePanel.initWithConnectionContext(connectionContext);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        panTitle = new javax.swing.JPanel();
+        txtTitle = new javax.swing.JLabel();
+        fillerMainBottom = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        panStandortKarte = new de.cismet.tools.gui.RoundedPanel();
+        panLageTitle = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblLageTitle = new javax.swing.JLabel();
+        panStandortKarteBody = new javax.swing.JPanel();
+        vzkatStandortKartePanel = new VzkatStandortKartePanel(isEditable());
+        panBild = new de.cismet.tools.gui.RoundedPanel();
+        panBildTitle = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblBildTitle = new javax.swing.JLabel();
+        panLageBody1 = new javax.swing.JPanel();
+        rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
+                ClientAlkisConf.getInstance().getRasterfariUrl(),
+                this,
+                getConnectionContext());
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        jLabel1 = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+
+        panTitle.setOpaque(false);
+        panTitle.setLayout(new java.awt.GridBagLayout());
+
+        txtTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        txtTitle.setForeground(new java.awt.Color(255, 255, 255));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        panTitle.add(txtTitle, gridBagConstraints);
+
+        setOpaque(false);
+        setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        add(fillerMainBottom, gridBagConstraints);
+
+        panStandortKarte.setLayout(new java.awt.GridBagLayout());
+
+        panLageTitle.setBackground(java.awt.Color.darkGray);
+        panLageTitle.setLayout(new java.awt.GridBagLayout());
+
+        lblLageTitle.setFont(lblLageTitle.getFont());
+        lblLageTitle.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblLageTitle,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblLageTitle.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panLageTitle.add(lblLageTitle, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panStandortKarte.add(panLageTitle, gridBagConstraints);
+
+        panStandortKarteBody.setOpaque(false);
+        panStandortKarteBody.setLayout(new java.awt.GridBagLayout());
+
+        vzkatStandortKartePanel.setOpaque(false);
+
+        final javax.swing.GroupLayout vzkatStandortKartePanelLayout = new javax.swing.GroupLayout(
+                vzkatStandortKartePanel);
+        vzkatStandortKartePanel.setLayout(vzkatStandortKartePanelLayout);
+        vzkatStandortKartePanelLayout.setHorizontalGroup(
+            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+        vzkatStandortKartePanelLayout.setVerticalGroup(
+            vzkatStandortKartePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panStandortKarteBody.add(vzkatStandortKartePanel, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panStandortKarte.add(panStandortKarteBody, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(panStandortKarte, gridBagConstraints);
+
+        panBild.setLayout(new java.awt.GridBagLayout());
+
+        panBildTitle.setBackground(java.awt.Color.darkGray);
+        panBildTitle.setLayout(new java.awt.GridBagLayout());
+
+        lblBildTitle.setFont(lblBildTitle.getFont());
+        lblBildTitle.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBildTitle,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblBildTitle.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panBildTitle.add(lblBildTitle, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panBild.add(panBildTitle, gridBagConstraints);
+
+        panLageBody1.setMinimumSize(new java.awt.Dimension(320, 320));
+        panLageBody1.setOpaque(false);
+        panLageBody1.setPreferredSize(new java.awt.Dimension(320, 320));
+        panLageBody1.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panLageBody1.add(rasterfariDocumentLoaderPanel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panBild.add(panLageBody1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(panBild, gridBagConstraints);
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridLayout(0, 1, 10, 0));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(jPanel1, gridBagConstraints);
+
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jXDatePicker1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXDatePicker1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        jPanel2.add(jXDatePicker1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel2.add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(jPanel2, gridBagConstraints);
+    } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXDatePicker1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXDatePicker1ActionPerformed
+        refreshShilder();
+    }                                                                                 //GEN-LAST:event_jXDatePicker1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshShilder() {
+        final VzkatSchilderSearch schilderSearch = new VzkatSchilderSearch();
+        schilderSearch.setStandortId((Integer)cidsBean.getProperty("id"));
+        schilderSearch.setActiveTimestamp((jXDatePicker1.getDate() != null)
+                ? new Timestamp(jXDatePicker1.getDate().getTime()) : null);
+        new SwingWorker<Collection, Void>() {
+
+                @Override
+                protected Collection doInBackground() throws Exception {
+                    final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
+                                .customServerSearch(schilderSearch, getConnectionContext());
+                    final Collection<CidsBean> schildBeans = new ArrayList<>();
+                    for (final MetaObjectNode mon : mons) {
+                        schildBeans.add(SessionManager.getProxy().getMetaObject(
+                                mon.getObjectId(),
+                                mon.getClassId(),
+                                "WUNDA_BLAU",
+                                getConnectionContext()).getBean());
+                    }
+                    return schildBeans;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final Collection<CidsBean> schildBeans = (Collection)get();
+                        jPanel1.removeAll();
+                        for (final CidsBean schildBean : schildBeans) {
+                            final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(isEditable());
+                            schildPanel.initWithConnectionContext(getConnectionContext());
+                            schildPanel.setCidsBean(schildBean);
+                            schildPanel.setOpaque(false);
+                            jPanel1.add(schildPanel);
+                        }
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            }.execute();
+    }
+
+    @Override
+    public CidsBean getCidsBean() {
+        return cidsBean;
+    }
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        this.cidsBean = cidsBean;
+
+        txtTitle.setText((cidsBean != null) ? getTitle() : null);
+        rasterfariDocumentLoaderPanel1.setDocument(null);
+        vzkatStandortKartePanel.setCidsBean(cidsBean);
+
+        if (cidsBean != null) {
+            refreshShilder();
+        }
+    }
+
+    @Override
+    public String getTitle() {
+        final String standort = String.valueOf(cidsBean);
+        return String.format("<html>Standort <i>%s</i>", standort);
+    }
+
+    @Override
+    public void setTitle(final String string) {
+    }
+
+    @Override
+    public JComponent getTitleComponent() {
+        return panTitle;
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<VzkatStandortSchildPanel> getSchildPanels() {
+        final Collection<VzkatStandortSchildPanel> vzkatSchildPanel = new ArrayList<>();
+        for (final Component component : jPanel1.getComponents()) {
+            vzkatSchildPanel.add((VzkatStandortSchildPanel)component);
+        }
+        return vzkatSchildPanel;
+    }
+
+    @Override
+    public void dispose() {
+        for (final VzkatStandortSchildPanel vzkatSchildPanel : getSchildPanels()) {
+            vzkatSchildPanel.dispose();
+        }
+        vzkatStandortKartePanel.dispose();
+        rasterfariDocumentLoaderPanel1.dispose();
+    }
+
+    @Override
+    public void showMeasureIsLoading() {
+    }
+
+    @Override
+    public void showMeasurePanel() {
+    }
+}
