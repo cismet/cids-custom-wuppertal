@@ -44,6 +44,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicCheckBoxUI;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
@@ -52,6 +53,7 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 /**
  * DOCUMENT ME!
@@ -118,7 +120,7 @@ public class RendererTools {
         } else if (comp instanceof JComboBox) {
             final JComboBox cb = (JComboBox)comp;
             cb.setEnabled(false);
-            cb.setRenderer(new CustomListCellRenderer());
+            cb.setRenderer(new CustomListCellRenderer((ListCellRenderer)cb.getRenderer()));
         } else if (comp instanceof JSpinner) {
             final JSpinner sp = (JSpinner)comp;
             sp.setOpaque(false);
