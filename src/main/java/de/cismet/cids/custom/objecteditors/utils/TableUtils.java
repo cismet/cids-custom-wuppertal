@@ -19,12 +19,20 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.swingx.JXTable;
+
 import java.awt.Component;
 import java.awt.HeadlessException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -211,5 +219,43 @@ public class TableUtils {
             }
         }
         return addBean;
+    }
+    /**
+     * Für 1:n-Beziehung.
+     *
+     * @param  table              DOCUMENT ME!
+     * @param  tableClass         DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void addObjectToTable(final JXTable table,
+            final String tableClass,
+            final ConnectionContext connectionContext) {
+        try {
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(tableClass, connectionContext);
+
+            ((DivBeanTable)table.getModel()).addBean(bean);
+        } catch (Exception e) {
+            LOG.error("Cannot add new " + tableClass + " object", e);
+        }
+    }
+    /**
+     * Für 1:n-Beziehung.
+     *
+     * @param  table  DOCUMENT ME!
+     */
+    public static void removeObjectsFromTable(final JXTable table) {
+        final int[] selectedRows = table.getSelectedRows();
+        final List<Integer> modelRows = new ArrayList<>();
+
+        // The model rows should be in reverse order
+        for (final int row : selectedRows) {
+            modelRows.add(table.convertRowIndexToModel(row));
+        }
+
+        Collections.sort(modelRows, Collections.reverseOrder());
+
+        for (final Integer row : modelRows) {
+            ((DivBeanTable)table.getModel()).removeRow(row);
+        }
     }
 }
