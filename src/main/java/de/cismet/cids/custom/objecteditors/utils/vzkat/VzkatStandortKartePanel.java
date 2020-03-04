@@ -27,6 +27,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
@@ -82,6 +84,7 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
     private final boolean editable;
     private ConnectionContext connectionContext;
     private CidsBean cidsBean;
+
     private boolean cbStrassenschluesselEnabled = true;
     private boolean cbStrassennameEnabled = true;
     private boolean comboboxesInited = false;
@@ -141,7 +144,7 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
-        cbGeom = new DefaultCismapGeometryComboBoxEditor();
+        cbGeom = new DefaultCismapGeometryComboBoxEditor(editable);
         lblGeom = new javax.swing.JLabel();
 
         setOpaque(false);
@@ -221,7 +224,7 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_geom}"),
                 cbGeom,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
+        binding.setConverter(editable ? ((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter() : null);
         bindingGroup.addBinding(binding);
 
         cbGeom.addActionListener(new java.awt.event.ActionListener() {
@@ -237,6 +240,7 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
         jPanel1.add(cbGeom, gridBagConstraints);
+        cbGeom.setVisible(editable);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblGeom,
@@ -249,6 +253,7 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
         jPanel1.add(lblGeom, gridBagConstraints);
+        lblGeom.setVisible(editable);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -288,6 +293,7 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
                 final StyledFeature dsf = new DefaultStyledFeature();
                 dsf.setGeometry(geom);
                 mappingComponent1.getFeatureCollection().addFeature(dsf);
+                mappingComponent1.zoomToFeatureCollection();
             }
         }
     }
@@ -339,7 +345,9 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
      * @param  evt  DOCUMENT ME!
      */
     private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomActionPerformed
-        refreshGeomFeatures();
+        if (editable) {
+            refreshGeomFeatures();
+        }
     }                                                                          //GEN-LAST:event_cbGeomActionPerformed
 
     /**
@@ -391,10 +399,16 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        initMap();
-        refreshStrassenComboboxes();
-        refreshGeomFeatures();
-        bindingGroup.bind();
+        if (cidsBean != null) {
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                bindingGroup,
+                cidsBean,
+                getConnectionContext());
+            bindingGroup.bind();
+            initMap();
+            refreshStrassenComboboxes();
+            refreshGeomFeatures();
+        }
     }
 
     /**
@@ -455,8 +469,6 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
-        lblGeom.setVisible(editable);
-        cbGeom.setVisible(editable);
 
         if (!editable) {
             RendererTools.makeReadOnly(cbStrassenschluessel);
@@ -473,23 +485,25 @@ public class VzkatStandortKartePanel extends javax.swing.JPanel implements CidsB
      * DOCUMENT ME!
      */
     private void initComboboxes() {
-        new SwingWorker<MetaClass, Void>() {
+        new SwingWorker<Void, Void>() {
 
                 @Override
-                protected MetaClass doInBackground() throws Exception {
-                    return ClassCacheMultiple.getMetaClass(
+                protected Void doInBackground() throws Exception {
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(
                             "WUNDA_BLAU",
                             "str_adr_strasse",
                             connectionContext);
+                    cbStrassenschluessel.setMetaClass(mc);
+                    cbStrassenschluessel.refreshModel();
+                    cbStrassenname.setMetaClass(mc);
+                    cbStrassenname.refreshModel();
+                    return null;
                 }
 
                 @Override
                 protected void done() {
                     try {
-                        cbStrassenschluessel.setMetaClass(get());
-                        cbStrassenschluessel.refreshModel();
-                        cbStrassenname.setMetaClass(get());
-                        cbStrassenname.refreshModel();
+                        get();
                     } catch (final Exception ex) {
                         LOG.error(ex, ex);
                     } finally {

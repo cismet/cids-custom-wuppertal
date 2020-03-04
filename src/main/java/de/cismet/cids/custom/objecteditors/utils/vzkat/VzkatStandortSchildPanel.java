@@ -16,6 +16,8 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObjectNode;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.VzkatStandortEditor;
+
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
@@ -38,8 +40,13 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private ConnectionContext connectionContext;
     private final boolean editable;
     private CidsBean cidsBean;
+    private final VzkatStandortEditor parentEditor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
     private javax.swing.JPanel panBeschreibungBody;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
@@ -53,16 +60,18 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
      * Creates new form VzkatStandortSchildPanel.
      */
     public VzkatStandortSchildPanel() {
-        this(false);
+        this(null, false);
     }
 
     /**
      * Creates a new VzkatStandortSchildPanel object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  parentEditor  DOCUMENT ME!
+     * @param  editable      DOCUMENT ME!
      */
-    public VzkatStandortSchildPanel(final boolean editable) {
+    public VzkatStandortSchildPanel(final VzkatStandortEditor parentEditor, final boolean editable) {
         this.editable = editable;
+        this.parentEditor = parentEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -88,8 +97,12 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         panBild = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         panBeschreibungBody = new javax.swing.JPanel();
         vzkatSchildPanel = new VzkatSchildBeschreibungPanel(isEditable());
+        jButton3 = new javax.swing.JButton();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -104,6 +117,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortSchildPanel.class,
                 "VzkatStandortSchildPanel.jXHyperlink1.text")); // NOI18N
+        jXHyperlink1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -112,9 +126,70 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panBeschreibungTitle.add(jXHyperlink1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panBeschreibungTitle.add(jButton1, gridBagConstraints);
+        jButton1.setVisible(isEditable());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton2,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        panBeschreibungTitle.add(jButton2, gridBagConstraints);
+        jButton2.setVisible(isEditable());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton4,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.jButton4.text")); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panBeschreibungTitle.add(jButton4, gridBagConstraints);
+        jButton4.setVisible(isEditable());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -126,6 +201,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         panBeschreibungBody.setLayout(new java.awt.GridBagLayout());
 
         vzkatSchildPanel.setOpaque(false);
+        vzkatSchildPanel.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -148,6 +224,26 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(panBild, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton3,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.jButton3.text")); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        add(jButton3, gridBagConstraints);
+        jButton3.setVisible(isEditable());
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -158,6 +254,42 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
         ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(cidsBean));
     }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+        parentEditor.removeSchildPanel(this);
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        parentEditor.addSchildPanel(this);
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        parentEditor.downSchildPanel(this);
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        parentEditor.upSchildPanel(this);
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
