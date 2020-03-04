@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
@@ -247,7 +248,9 @@ public class PrbrHaltestelleEditor extends DefaultCustomObjectEditor implements 
                             PrbrHaltestelleEditor.class,
                             "PrbrHaltestelleEditor.prepareForSave().duplicateName"));
                 } else {
-                    cidsBean.setProperty("schluessel", txtName.getText().trim());
+                    if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
+                        cidsBean.setProperty("schluessel", txtName.getText().trim());
+                    }
                 }
             }
         } catch (final Exception ex) {
@@ -300,21 +303,7 @@ public class PrbrHaltestelleEditor extends DefaultCustomObjectEditor implements 
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String makeTitle() {
-        String myname;
-        myname = String.valueOf(cidsBean.getProperty("name"));
-        if ("null".equals(myname)) {
-            myname = "Neue Haltestelle anlegen";
-        }
-
-        return myname;
-    }
-
+   
     @Override
     public void dispose() {
         super.dispose();
@@ -322,7 +311,7 @@ public class PrbrHaltestelleEditor extends DefaultCustomObjectEditor implements 
 
     @Override
     public String getTitle() {
-        return makeTitle(); // =cidsBean.toString();
+        return cidsBean.toString();
     }
 
     @Override
