@@ -77,7 +77,6 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private List<ToolbarComponentDescription> toolbarComponents;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
-    private Properties orbitSettings;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -95,25 +94,10 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
         if (validateUserConfigAttr(connectionContext)) {
             try {
-                final Properties orbitSettings = new Properties();
-                final Object ret = SessionManager.getSession()
-                            .getConnection()
-                            .executeTask(SessionManager.getSession().getUser(),
-                                GetServerResourceServerAction.TASK_NAME,
-                                "WUNDA_BLAU",
-                                WundaBlauServerResources.ORBIT_SETTINGS_PROPERTIES.getValue(),
-                                ConnectionContext.create(
-                                    Category.STATIC,
-                                    "ORBIT"));
-                if (ret instanceof Exception) {
-                    throw (Exception)ret;
-                }
-                orbitSettings.load(new StringReader((String)ret));
-                this.orbitSettings = orbitSettings;
                 final List<ToolbarComponentDescription> preparationList = TypeSafeCollections.newArrayList();
                 final ToolbarComponentDescription description = new ToolbarComponentDescription(
                         "tlbMain",
-                        new OrbitViewerControlJButton(orbitSettings, connectionContext),
+                        new OrbitViewerControlJButton(connectionContext),
                         ToolbarPositionHint.AFTER,
                         "cmdPan");
                 preparationList.add(description);
@@ -122,7 +106,6 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
                 LOG.error("Error during loading of the Orbit ServerRessources", ex);
 
                 toolbarComponents = Collections.emptyList();
-                orbitSettings = null;
             }
         }
     }
@@ -173,7 +156,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
     @Override
     public Component getComponent() {
-        return (orbitSettings != null) ? new OrbitViewerControlJButton(orbitSettings, connectionContext) : null;
+        return new OrbitViewerControlJButton(connectionContext);
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -199,14 +182,13 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
         /**
          * Creates a new AlkisPrintJButton object.
          *
-         * @param   orbitSettings      DOCUMENT ME!
          * @param   connectionContext  DOCUMENT ME!
          *
          * @throws  RuntimeException  DOCUMENT ME!
          */
-        public OrbitViewerControlJButton(final Properties orbitSettings, final ConnectionContext connectionContext) {
+        public OrbitViewerControlJButton(final ConnectionContext connectionContext) {
             try {
-                socket = IO.socket(orbitSettings.getProperty("socketBroadcaster"));
+                socket = IO.socket(OrbitviewerProperties.getInstance().getSocketBroadcaster());
                 socket.connect();
             } catch (Exception ex) {
                 log.fatal(ex, ex);
@@ -261,7 +243,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
                                             connectionContext,
                                             stacResult,
                                             socket,
-                                            orbitSettings.getProperty("launcherUrl"));
+                                            OrbitviewerProperties.getInstance().getLauncherUrl());
 
                                     if (currentOrbitControlFeature != null) {
                                         CismapBroker.getInstance()

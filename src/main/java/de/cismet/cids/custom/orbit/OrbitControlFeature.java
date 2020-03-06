@@ -47,8 +47,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.cismet.cids.custom.virtualcitymap.*;
-
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.features.ChildNodesProvider;
@@ -104,19 +102,18 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
 
     //~ Instance fields --------------------------------------------------------
 
-    ArrayList<PNode> children = new ArrayList<>();
+    private final ArrayList<PNode> children = new ArrayList<>();
     private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
-    private final VCMProperties properties = VCMProperties.getInstance();
     private final ConnectionContext connectionContext;
 
-    private final int[] headings = new int[] { 0, 45, 90, 135, 180, 225, 270, 315 };
+//    private final int[] headings = new int[] { 0, 45, 90, 135, 180, 225, 270, 315 };
     private FixedPImage arrow;
     private CamState camState = new CamState();
 
     private String socketChannelId;
-    private String launcherUrl;
-    private StacResult stacInfo;
-    private Socket socket;
+    private final String launcherUrl;
+    private final StacResult stacInfo;
+    private final Socket socket;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -266,7 +263,24 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
         // tilt is between -90 and 90
 
         //
-        g2.setPaint(new Color(11, 72, 107, 255));
+        final int[] rgba = { 11, 72, 107, 207 };
+        if (OrbitviewerProperties.getInstance().getArcColorRGBA() != null) {
+            final String[] rgbaFromSettings = OrbitviewerProperties.getInstance().getArcColorRGBA().split(",");
+            try {
+                final int r = Integer.parseInt(rgbaFromSettings[0].trim());
+                final int g = Integer.parseInt(rgbaFromSettings[1].trim());
+                final int b = Integer.parseInt(rgbaFromSettings[2].trim());
+                final int a = Integer.parseInt(rgbaFromSettings[3].trim());
+
+                rgba[0] = r;
+                rgba[1] = g;
+                rgba[2] = b;
+                rgba[3] = a;
+            } catch (final Exception ex) {
+                LOG.warn("could not parse rgba from settings", ex);
+            }
+        }
+        g2.setPaint(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
 
         fov = fov + 10;
         pan = ((pan + (fov / 2) - 90) * -1) % 360;
