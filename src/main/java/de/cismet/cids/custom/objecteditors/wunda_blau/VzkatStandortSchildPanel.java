@@ -15,6 +15,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.awt.Color;
+
 import java.io.InputStream;
 
 import java.net.URL;
@@ -27,11 +29,9 @@ import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.treeicons.wunda_blau.VzkatSchildIconFactory;
 import de.cismet.cids.custom.utils.vzkat.VzkatUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.VzkatZeichenLightweightSearch;
 
@@ -62,8 +62,8 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             VzkatStandortSchildPanel.class);
-    private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatSchildIconFactory.class.getResource(
-                "/res/16/vzkat_error.png"));
+    private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatStandortSchildPanel.class.getResource(
+                "/de/cismet/cids/custom/objecteditors/utils/vzkat/error_128.png"));
     private static final String ICON_URL_TEMPLATE =
         "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/128x128/%s.png";
     private static final Map<String, ImageIcon> ICONS = new HashMap<>();
@@ -95,6 +95,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -170,6 +171,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         panBeschreibungBody = new javax.swing.JPanel();
         panBeschreibungBodyLeft = new javax.swing.JPanel();
         lblVerkehrszeichen = new javax.swing.JLabel();
@@ -261,8 +263,8 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         panBeschreibungTitle.add(jButton4, gridBagConstraints);
         jButton4.setVisible(isEditable());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
@@ -276,13 +278,26 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                 VzkatStandortSchildPanel.class,
                 "VzkatStandortSchildPanel.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panBeschreibungTitle.add(jLabel2, gridBagConstraints);
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/circle.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel3,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.jLabel3.text"));                                                             // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panBeschreibungTitle.add(jLabel3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -409,11 +424,14 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/down.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton2,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.jButton2.text")); // NOI18N
+                "VzkatStandortSchildPanel.jButton2.text"));                                                           // NOI18N
+        jButton2.setBorderPainted(false);
+        jButton2.setContentAreaFilled(false);
         jButton2.setMaximumSize(new java.awt.Dimension(24, 24));
         jButton2.setMinimumSize(new java.awt.Dimension(24, 24));
         jButton2.setPreferredSize(new java.awt.Dimension(24, 24));
@@ -450,11 +468,14 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/up.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton1,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.jButton1.text")); // NOI18N
+                "VzkatStandortSchildPanel.jButton1.text"));                                                         // NOI18N
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
         jButton1.setMaximumSize(new java.awt.Dimension(24, 24));
         jButton1.setMinimumSize(new java.awt.Dimension(24, 24));
         jButton1.setPreferredSize(new java.awt.Dimension(24, 24));
@@ -763,8 +784,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
-            panBeschreibungTitle.setBackground((MetaObject.NEW == cidsBean.getMetaObject().getStatus())
-                    ? java.awt.SystemColor.info : java.awt.Color.darkGray);
+            jLabel3.setVisible(MetaObject.NEW == cidsBean.getMetaObject().getStatus());
             final CidsBean stvoOfSelectedZeichen = (CidsBean)cidsBean.getProperty("fk_zeichen.fk_stvo");
             try {
                 cbStvoActionListenerEnabled = false;
