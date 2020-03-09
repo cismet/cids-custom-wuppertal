@@ -288,9 +288,9 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
                 org.openide.util.NbBundle.getMessage(
                     VzkatStandortWindowSearch.class,
                     "VzkatStandortWindowSearch.pnlPruefung.border.title"))); // NOI18N
-        pnlPruefung.setMaximumSize(new java.awt.Dimension(600, 2147483647));
-        pnlPruefung.setMinimumSize(new java.awt.Dimension(600, 96));
-        pnlPruefung.setPreferredSize(new java.awt.Dimension(600, 96));
+        pnlPruefung.setMaximumSize(new java.awt.Dimension(550, 2147483647));
+        pnlPruefung.setMinimumSize(new java.awt.Dimension(550, 96));
+        pnlPruefung.setPreferredSize(new java.awt.Dimension(550, 96));
         pnlPruefung.setLayout(new java.awt.GridBagLayout());
 
         jLabel7.setText(org.openide.util.NbBundle.getMessage(
@@ -567,7 +567,7 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
         }
 
         final VzkatSchilderSearch search = new VzkatSchilderSearch();
-        search.setSearchFor(VzkatSchilderSearch.SearchFor.STANDORT);
+        search.setSearchFor(VzkatSchilderSearch.SearchFor.SCHILD);
         search.setGeom(transformedBoundingBox);
         search.setSearchMode(mode);
         search.setZeichenId((cbVerkehrszeichen.getSelectedItem() != null)

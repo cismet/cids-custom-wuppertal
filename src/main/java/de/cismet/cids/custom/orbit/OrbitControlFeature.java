@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.orbit;
 
+import Sirius.navigator.connection.SessionManager;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -24,6 +26,7 @@ import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
+import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -44,10 +47,13 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
+import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.cismet.cids.custom.virtualcitymap.*;
+import de.cismet.cids.custom.wunda_blau.search.actions.GetOrbitStacAction;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.Refreshable;
@@ -93,34 +99,49 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrbitControlFeature.class);
 
-    static final Image OPENORBIT = new javax.swing.ImageIcon(OrbitControlFeature.class.getResource(
+    private static final Image OPENORBIT = new javax.swing.ImageIcon(OrbitControlFeature.class.getResource(
                 "/de/cismet/cids/custom/orbitviewer/orbit32.png")).getImage();
-    static final Image ROTATE = new javax.swing.ImageIcon(OrbitControlFeature.class.getResource(
+    private static final Image ROTATE = new javax.swing.ImageIcon(OrbitControlFeature.class.getResource(
                 "/de/cismet/cids/custom/virtualcitymap/turn.png")).getImage();
-    static final Image REMOVE = new javax.swing.ImageIcon(OrbitControlFeature.class.getResource(
+    private static final Image REMOVE = new javax.swing.ImageIcon(OrbitControlFeature.class.getResource(
                 "/de/cismet/cids/custom/virtualcitymap/remove.png")).getImage();
 
     private static final int ARCSIZE = 200;
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static OrbitControlFeature CURRENT_CONTROL_FEATURE = null;
+
     //~ Instance fields --------------------------------------------------------
 
-    ArrayList<PNode> children = new ArrayList<>();
+    private final ArrayList<PNode> children = new ArrayList<>();
     private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
-    private final VCMProperties properties = VCMProperties.getInstance();
     private final ConnectionContext connectionContext;
 
-    private final int[] headings = new int[] { 0, 45, 90, 135, 180, 225, 270, 315 };
+//    private final int[] headings = new int[] { 0, 45, 90, 135, 180, 225, 270, 315 };
     private FixedPImage arrow;
     private CamState camState = new CamState();
 
     private String socketChannelId;
-    private String launcherUrl;
-    private StacResult stacInfo;
-    private Socket socket;
-
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final String launcherUrl;
+    private final StacResult stacInfo;
+    private final Socket socket;
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new OrbitControlFeature object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     * @param  stac               DOCUMENT ME!
+     * @param  socket             DOCUMENT ME!
+     * @param  launcherUrl        DOCUMENT ME!
+     */
+    public OrbitControlFeature(final ConnectionContext connectionContext,
+            final StacResult stac,
+            final Socket socket,
+            final String launcherUrl) {
+        this(connectionContext, stac, socket, launcherUrl, null);
+    }
 
     /**
      * Creates a new VCMControlFeature object.
@@ -129,11 +150,13 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @param  stac               stacResult
      * @param  socket             DOCUMENT ME!
      * @param  launcherUrl        DOCUMENT ME!
+     * @param  centroid           DOCUMENT ME!
      */
     public OrbitControlFeature(final ConnectionContext connectionContext,
             final StacResult stac,
             final Socket socket,
-            final String launcherUrl) {
+            final String launcherUrl,
+            final Point centroid) {
         this.connectionContext = connectionContext;
         setEditable(true);
         setCanBeSelected(true);
@@ -147,7 +170,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
         this.camState.setFov(100);
         this.camState.setTilt(0);
         this.camState.setPan(0);
-        this.setGeometry(getControlFeatureGeometry());
+        this.setGeometry(getControlFeatureGeometry(centroid));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -157,8 +180,85 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      *
      * @return  DOCUMENT ME!
      */
-    private Geometry getControlFeatureGeometry() {
-        return getControlFeatureGeometry(null);
+    public static OrbitControlFeature getCurrentControlFeature() {
+        return CURRENT_CONTROL_FEATURE;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void addToMap(final ConnectionContext connectionContext) {
+        addToMap(null, connectionContext);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   centroid           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @throws  RuntimeException  DOCUMENT ME!
+     */
+    public static void addToMap(final Point centroid, final ConnectionContext connectionContext) {
+        try {
+            new SwingWorker<OrbitControlFeature, Void>() {
+
+                    @Override
+                    protected OrbitControlFeature doInBackground() throws Exception {
+                        final Socket socket = IO.socket(OrbitviewerProperties.getInstance().getSocketBroadcaster());
+                        socket.connect();
+                        final String ip = "notYet";
+                        final Object ret = SessionManager.getProxy()
+                                    .executeTask(
+                                        GetOrbitStacAction.TASK_NAME,
+                                        "WUNDA_BLAU",
+                                        (Object)null,
+                                        connectionContext,
+                                        new ServerActionParameter<>(
+                                            GetOrbitStacAction.PARAMETER_TYPE.IP.toString(),
+                                            ip));
+
+                        final String s = ret.toString();
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("raw action result:" + s);
+                        }
+
+                        final StacResult stacResult = MAPPER.readValue(s, StacResult.class);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("stacResult:" + stacResult);
+                        }
+                        return new OrbitControlFeature(
+                                connectionContext,
+                                stacResult,
+                                socket,
+                                OrbitviewerProperties.getInstance().getLauncherUrl(),
+                                centroid);
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final OrbitControlFeature vcmf = get();
+                            if (CURRENT_CONTROL_FEATURE != null) {
+                                CismapBroker.getInstance()
+                                        .getMappingComponent()
+                                        .getFeatureCollection()
+                                        .removeFeature(CURRENT_CONTROL_FEATURE);
+                                CURRENT_CONTROL_FEATURE = null;
+                            }
+                            CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeature(vcmf);
+                            CURRENT_CONTROL_FEATURE = vcmf;
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                    }
+                }.execute();
+        } catch (final Exception ex) {
+            LOG.fatal(ex, ex);
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -266,7 +366,24 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
         // tilt is between -90 and 90
 
         //
-        g2.setPaint(new Color(11, 72, 107, 255));
+        final int[] rgba = { 11, 72, 107, 207 };
+        if (OrbitviewerProperties.getInstance().getArcColorRGBA() != null) {
+            final String[] rgbaFromSettings = OrbitviewerProperties.getInstance().getArcColorRGBA().split(",");
+            try {
+                final int r = Integer.parseInt(rgbaFromSettings[0].trim());
+                final int g = Integer.parseInt(rgbaFromSettings[1].trim());
+                final int b = Integer.parseInt(rgbaFromSettings[2].trim());
+                final int a = Integer.parseInt(rgbaFromSettings[3].trim());
+
+                rgba[0] = r;
+                rgba[1] = g;
+                rgba[2] = b;
+                rgba[3] = a;
+            } catch (final Exception ex) {
+                LOG.warn("could not parse rgba from settings", ex);
+            }
+        }
+        g2.setPaint(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
 
         fov = fov + 10;
         pan = ((pan + (fov / 2) - 90) * -1) % 360;
@@ -309,7 +426,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                         }
                         CamState cs = null;
                         try {
-                            cs = mapper.readValue(args[0].toString(), CamState.class);
+                            cs = MAPPER.readValue(args[0].toString(), CamState.class);
                             final Point oldCentroid = getGeometry().getCentroid();
                             if ((Math.abs(cs.getX() - oldCentroid.getX()) > 0.1)
                                         || (Math.abs(cs.getY() - oldCentroid.getY()) > 0.1)) {
@@ -342,8 +459,8 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                                                 + cs.getFov());
                                 }
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
                         }
                     }
                 });
@@ -618,9 +735,9 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                 socket.emit(
                     "toOrbit:"
                             + getSocketChannelId(),
-                    mapper.writeValueAsString(camState));
-            } catch (Exception e) {
-                e.printStackTrace();
+                    MAPPER.writeValueAsString(camState));
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
                 setSocketChannelId("");
             }
         }
@@ -663,14 +780,14 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
         if (channel != null) {
             try {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("toOrbit:" + getSocketChannelId() + "  " + mapper.writeValueAsString(camState));
+                    LOG.debug("toOrbit:" + getSocketChannelId() + "  " + MAPPER.writeValueAsString(camState));
                 }
                 socket.emit(
                     "toOrbit:"
                             + getSocketChannelId(),
-                    mapper.writeValueAsString(camState));
-            } catch (Exception e) {
-                e.printStackTrace();
+                    MAPPER.writeValueAsString(camState));
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
                 setSocketChannelId("");
             }
         }

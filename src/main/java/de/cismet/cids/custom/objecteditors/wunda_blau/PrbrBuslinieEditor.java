@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
@@ -302,7 +303,6 @@ public class PrbrBuslinieEditor extends DefaultCustomObjectEditor implements Cid
             RendererTools.makeReadOnly(txtName);
         }
     }
-
 
     @Override
     public void dispose() {
