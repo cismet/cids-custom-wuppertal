@@ -22,6 +22,10 @@ import de.cismet.cids.dynamics.CidsBean;
  */
 public class VzkatSchildEditor extends VzkatStandortEditor {
 
+    //~ Instance fields --------------------------------------------------------
+
+    private CidsBean cidsBean;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -44,7 +48,8 @@ public class VzkatSchildEditor extends VzkatStandortEditor {
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        super.setCidsBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_standort") : null);
+        super.setCidsBean(cidsBean);
+        setStandortBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_standort") : null);
 
         if (cidsBean != null) {
             setSelectedSchildBean(cidsBean);

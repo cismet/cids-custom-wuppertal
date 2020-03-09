@@ -48,7 +48,6 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.treeicons.wunda_blau.VzkatSchildIconFactory;
 import de.cismet.cids.custom.utils.vzkat.VzkatUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.VzkatSchilderSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.VzkatSchilderSearch.SearchMode;
@@ -94,8 +93,8 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
     private static final Logger LOG = Logger.getLogger(VzkatStandortWindowSearch.class);
     // End of variables declaration
     private static final String ACTION_TAG = "custom.treppen.search@WUNDA_BLAU";
-    private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatSchildIconFactory.class.getResource(
-                "/res/16/vzkat_error.png"));
+    private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatStandortWindowSearch.class.getResource(
+                "/de/cismet/cids/custom/objecteditors/utils/vzkat/error_64.png"));
     private static final String ICON_URL_TEMPLATE =
         "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/64x64/%s.png";
     private static final Map<String, ImageIcon> ICONS = new HashMap<>();
@@ -491,7 +490,7 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private static ImageIcon loadZeichenIcon(final String key) throws Exception {
+    public static ImageIcon loadZeichenIcon(final String key) throws Exception {
         final String urlString = String.format(ICON_URL_TEMPLATE, key);
         final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
         return new ImageIcon(ImageIO.read(is));

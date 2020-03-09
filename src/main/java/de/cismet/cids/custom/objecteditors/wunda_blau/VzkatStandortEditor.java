@@ -45,7 +45,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.VzkatSchilderSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
@@ -119,6 +118,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     private final List<CidsBean> schildBeans = new ArrayList<>();
     private final List<CidsBean> deletedSchildBeans = new ArrayList<>();
+    private CidsBean standortBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbGeom;
@@ -347,7 +347,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_geom}"),
+                org.jdesktop.beansbinding.ELProperty.create("${standortBean.fk_geom}"),
                 cbGeom,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         binding.setConverter(editable ? ((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter() : null);
@@ -390,6 +390,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.ipady = 10;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel4.add(lblStrassenschluessel, gridBagConstraints);
+        lblStrassenschluessel.setVisible(editable);
 
         cbStrassenschluessel.addActionListener(new java.awt.event.ActionListener() {
 
@@ -403,6 +404,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel4.add(cbStrassenschluessel, gridBagConstraints);
+        cbStrassenschluessel.setVisible(editable);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblStrasse,
@@ -550,9 +552,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.jButton3.text")); // NOI18N
         jButton3.setBorderPainted(false);
         jButton3.setContentAreaFilled(false);
-        jButton3.setMaximumSize(new java.awt.Dimension(30, 30));
-        jButton3.setMinimumSize(new java.awt.Dimension(30, 30));
-        jButton3.setPreferredSize(new java.awt.Dimension(30, 30));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -710,7 +709,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
-        final Geometry geom = (Geometry)cidsBean.getProperty("fk_geom.geo_field");
+        final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
         final Point centroid = geom.getCentroid();
 
         final Geometry currentBB = CismapBroker.getInstance()
@@ -743,7 +742,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         jPanel5.add(jLabel3);
         jButton3.setEnabled(false);
         final VzkatSchilderSearch schilderSearch = new VzkatSchilderSearch();
-        schilderSearch.setStandortId((Integer)cidsBean.getProperty("id"));
+        schilderSearch.setStandortId((Integer)standortBean.getProperty("id"));
         schilderSearch.setActiveTimestamp((jXDatePicker1.getDate() != null)
                 ? new Timestamp(jXDatePicker1.getDate().getTime() + (1000 * 60 * 60 * 24) - 1) : null);
         new SwingWorker<Void, Void>() {
@@ -856,13 +855,21 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
                     final CidsBean panelBean = (panel != null) ? panel.getCidsBean() : null;
 
+                    final String query =
+                        "SELECT (select id from cs_class where table_name ilike 'vzkat_richtung') as class_id, vzkat_richtung.id as id "
+                                + "FROM vzkat_richtung "
+                                + "WHERE vzkat_richtung.schluessel ilike 'vorne';";
                     if (panelBean != null) {
                         newSchildBean.setProperty("fk_richtung", panelBean.getProperty("fk_richtung"));
                         newSchildBean.setProperty("fk_zeichen", panelBean.getProperty("fk_zeichen"));
+                    } else {
+                        final CidsBean vorneRichtungBean =
+                            SessionManager.getProxy().getMetaObjectByQuery(query, 0, getConnectionContext())[0]
+                                    .getBean();
+                        newSchildBean.setProperty("fk_richtung", vorneRichtungBean);
                     }
 
-                    final CidsBean richtungBean = (panelBean != null) ? (CidsBean)panelBean.getProperty("fk_richtung")
-                                                                      : null;
+                    final CidsBean richtungBean = (CidsBean)newSchildBean.getProperty("fk_richtung");
 
                     final Map<CidsBean, List> richtungsLists = createRichtungsLists(schildBeans);
                     if (!richtungsLists.containsKey(richtungBean)) {
@@ -870,7 +877,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                     }
                     final List<CidsBean> sameRichtungBeans = richtungsLists.get(richtungBean);
 
-                    final int index = sameRichtungBeans.indexOf(panelBean);
+                    final int index = (panelBean != null) ? sameRichtungBeans.indexOf(panelBean) : -1;
                     richtungsLists.get(richtungBean).add(index + 1, newSchildBean);
 
                     redoSchilder(redoReihenfolge(richtungsLists));
@@ -1051,19 +1058,24 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     @Override
     public CidsBean getCidsBean() {
-        return cidsBean;
+        return standortBean;
     }
 
-    @Override
-    public void setCidsBean(final CidsBean cidsBean) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  standortBean  DOCUMENT ME!
+     */
+    public void setStandortBean(final CidsBean standortBean) {
         bindingGroup.unbind();
 
-        this.cidsBean = cidsBean;
+        this.standortBean = standortBean;
 
-        txtTitle.setText((cidsBean != null) ? getTitle() : null);
+        txtTitle.setText((standortBean != null) ? getTitle() : null);
 
-        if (cidsBean != null) {
+        if (standortBean != null) {
             bindingGroup.bind();
+
             initMap();
             refreshStrassenComboboxes();
             refreshGeomFeatures();
@@ -1098,11 +1110,30 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 //                    }
 //                }
 //            }.execute();
+
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getStandortBean() {
+        return standortBean;
+    }
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        this.cidsBean = cidsBean;
+        if ((cidsBean != null)
+                    && "vzkat_standort".equalsIgnoreCase((cidsBean.getMetaObject().getMetaClass().getTableName()))) {
+            setStandortBean(cidsBean);
+        }
     }
 
     @Override
     public String getTitle() {
-        final String standort = String.valueOf(cidsBean);
+        final String standort = String.valueOf(standortBean);
         return String.format("<html>Standort <i>%s</i>", standort);
     }
 
@@ -1173,7 +1204,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         if (comboboxesInited && editable) {
             final CidsBean selectedStrAdrAddresse = (CidsBean)cbStrassenschluessel.getSelectedItem();
             try {
-                cidsBean.setProperty(
+                standortBean.setProperty(
                     "strassenschluessel",
                     (selectedStrAdrAddresse != null) ? (String)selectedStrAdrAddresse.getProperty("strasse") : null);
             } catch (final Exception ex) {
@@ -1187,8 +1218,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      */
     private void refreshGeomFeatures() {
         mappingComponent1.getFeatureCollection().removeAllFeatures();
-        if (cidsBean != null) {
-            final Geometry geom = (Geometry)cidsBean.getProperty("fk_geom.geo_field");
+        if (standortBean != null) {
+            final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
             if (geom != null) {
                 final StyledFeature dsf = new DefaultStyledFeature();
                 dsf.setGeometry(geom);
@@ -1201,8 +1232,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * DOCUMENT ME!
      */
     private void initMap() {
-        if (cidsBean != null) {
-            final Geometry geom = (Geometry)cidsBean.getProperty("fk_geom.geo_field");
+        if (standortBean != null) {
+            final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
             try {
                 final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
                             ClientAlkisConf.getInstance().getGeoBuffer()
@@ -1240,20 +1271,20 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * DOCUMENT ME!
      */
     private void refreshStrassenComboboxes() {
-        if (comboboxesInited && (cidsBean != null)) {
+        if (comboboxesInited && (standortBean != null)) {
             synchronized (this) {
                 cbStrassennameEnabled = false;
                 new SwingWorker<CidsBean, Void>() {
 
                         @Override
                         protected CidsBean doInBackground() throws Exception {
-                            final String strassenschluessel = (String)cidsBean.getProperty("strassenschluessel");
+                            final String strassenschluessel = (String)standortBean.getProperty("strassenschluessel");
                             if (strassenschluessel == null) {
                                 return null;
                             }
 
-                            final Geometry geom = (Geometry)cidsBean.getProperty("fk_geom.geo_field");
-                            if (cidsBean != null) {
+                            final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
+                            if (standortBean != null) {
                                 strassennameSearch.setSortDistanceLimit(10);
                                 strassennameSearch.setGeom(geom);
                             }

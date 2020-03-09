@@ -16,6 +16,7 @@ import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.types.treenode.PureTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.tree.CidsTreeObjectIconFactory;
+import Sirius.navigator.ui.tree.MetaCatalogueTree;
 import Sirius.navigator.ui.tree.SearchResultsTree;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -38,6 +39,8 @@ import javax.swing.SwingWorker;
 import javax.swing.tree.DefaultTreeModel;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.commons.concurrency.CismetExecutors;
 
 import de.cismet.security.WebAccessManager;
 
@@ -62,6 +65,8 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
                 "/res/16/vzkat_error.png"));
     private static final String ICON_URL_TEMPLATE =
         "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/16x16/%s.png";
+
+    private static final ExecutorService EXECUTOR = CismetExecutors.newFixedThreadPool(4);
 
     //~ Enums ------------------------------------------------------------------
 
@@ -243,7 +248,7 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
                     final Overlay overlay = getOverlay(schildBean);
                     return overlayIcon(icon, overlay);
                 } else {
-                    new SwingWorker<ImageIcon, Void>() {
+                    EXECUTOR.execute(new SwingWorker<ImageIcon, Void>() {
 
                             @Override
                             protected ImageIcon doInBackground() throws Exception {
@@ -256,14 +261,19 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
                                     final ImageIcon icon = get();
                                     ICONS.put(key, icon);
                                 } catch (final Exception ex) {
-                                    LOG.error(ex, ex);
+                                    LOG.info(ex, ex);
                                     ICONS.put(key, ERROR_ICON);
                                 }
-                                final SearchResultsTree tree = ComponentRegistry.getRegistry().getSearchResultsTree();
+                                final SearchResultsTree SearchTree = ComponentRegistry.getRegistry()
+                                            .getSearchResultsTree();
+                                final DefaultTreeModel searchModel = (DefaultTreeModel)SearchTree.getModel();
+                                searchModel.reload(node);
+
+                                final MetaCatalogueTree tree = ComponentRegistry.getRegistry().getCatalogueTree();
                                 final DefaultTreeModel treeModel = (DefaultTreeModel)tree.getModel();
                                 treeModel.reload(node);
                             }
-                        }.execute();
+                        });
                 }
             } else {
                 loadNode(node);
