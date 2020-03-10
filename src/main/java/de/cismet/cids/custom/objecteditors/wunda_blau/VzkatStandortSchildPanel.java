@@ -15,11 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
-import java.awt.Color;
-
 import java.io.InputStream;
-
-import java.net.URL;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,8 +42,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
-import de.cismet.security.WebAccessManager;
-
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -63,9 +57,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             VzkatStandortSchildPanel.class);
     private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatStandortSchildPanel.class.getResource(
-                "/de/cismet/cids/custom/objecteditors/utils/vzkat/error_128.png"));
-    private static final String ICON_URL_TEMPLATE =
-        "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/128x128/%s.png";
+                "/res/vzkat/error_128.png"));
+//    private static final String ICON_URL_TEMPLATE = "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/128x128/%s.png";
+    private static final String ICON_PATH_TEMPLATE =
+        "/de/cismet/cids/custom/wunda_blau/res/vzkat-bilder/128x128/%s.png";
     private static final Map<String, ImageIcon> ICONS = new HashMap<>();
 
     //~ Instance fields --------------------------------------------------------
@@ -813,9 +808,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private static ImageIcon loadZeichenIcon(final String key) throws Exception {
-        final String urlString = String.format(ICON_URL_TEMPLATE, key);
-        final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
+    private ImageIcon loadZeichenIcon(final String key) throws Exception {
+//        final String urlString = String.format(ICON_URL_TEMPLATE, key);
+//        final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
+        final InputStream is = getClass().getResourceAsStream(String.format(ICON_PATH_TEMPLATE, key));
         return new ImageIcon(ImageIO.read(is));
     }
 

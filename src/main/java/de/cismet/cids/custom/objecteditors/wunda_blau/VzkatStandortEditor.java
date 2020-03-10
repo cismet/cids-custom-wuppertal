@@ -10,6 +10,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
@@ -1292,10 +1293,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                             for (int index = 0; index < cbStrassenschluessel.getModel().getSize(); index++) {
                                 final Object element = cbStrassenschluessel.getModel().getElementAt(index);
                                 if (element != null) {
-                                    final CidsBean strasseBean = ((MetaObject)element).getBean();
-                                    if ((strasseBean != null)
-                                                && strassenschluessel.equals(strasseBean.getProperty("strasse"))) {
-                                        return strasseBean;
+                                    if (strassenschluessel.equals(((LightweightMetaObject)element).toString())) {
+                                        return ((MetaObject)element).getBean();
                                     }
                                 }
                             }

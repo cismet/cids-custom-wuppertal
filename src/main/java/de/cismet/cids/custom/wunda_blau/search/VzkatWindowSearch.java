@@ -73,8 +73,6 @@ import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
-import de.cismet.security.WebAccessManager;
-
 /**
  * DOCUMENT ME!
  *
@@ -82,7 +80,7 @@ import de.cismet.security.WebAccessManager;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class VzkatStandortWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
+public class VzkatWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
     SearchControlListener,
     PropertyChangeListener,
@@ -90,13 +88,13 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(VzkatStandortWindowSearch.class);
+    private static final Logger LOG = Logger.getLogger(VzkatWindowSearch.class);
     // End of variables declaration
-    private static final String ACTION_TAG = "custom.treppen.search@WUNDA_BLAU";
-    private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatStandortWindowSearch.class.getResource(
-                "/de/cismet/cids/custom/objecteditors/utils/vzkat/error_64.png"));
-    private static final String ICON_URL_TEMPLATE =
-        "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/64x64/%s.png";
+    private static final String ACTION_TAG = "custom.vzkat.search@WUNDA_BLAU";
+    private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatWindowSearch.class.getResource(
+                "/res/vzkat/error_64.png"));
+//    private static final String ICON_URL_TEMPLATE = "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/64x64/%s.png";
+    public static final String ICON_PATH_TEMPLATE = "/de/cismet/cids/custom/wunda_blau/res/vzkat-bilder/64x64/%s.png";
     private static final Map<String, ImageIcon> ICONS = new HashMap<>();
 
     //~ Instance fields --------------------------------------------------------
@@ -138,7 +136,7 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
     /**
      * Creates a new VzkatStandortWindowSearch object.
      */
-    public VzkatStandortWindowSearch() {
+    public VzkatWindowSearch() {
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -194,17 +192,15 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
             mappingComponent = CismapBroker.getInstance().getMappingComponent();
             geoSearchEnabled = mappingComponent != null;
             if (geoSearchEnabled) {
-                final VzkatStandortCreateSearchGeometryListener geometryListener =
-                    new VzkatStandortCreateSearchGeometryListener(mappingComponent,
-                        new TreppenSearchTooltip(icon));
+                final VzkatSchildCreateSearchGeometryListener geometryListener =
+                    new VzkatSchildCreateSearchGeometryListener(mappingComponent,
+                        new VzkatSearchTooltip(icon));
                 geometryListener.addPropertyChangeListener(this);
                 btnGeoSearch = new GeoSearchButton(
-                        VzkatStandortCreateSearchGeometryListener.CREATE_SEARCH_GEOMETRY,
+                        VzkatSchildCreateSearchGeometryListener.CREATE_SEARCH_GEOMETRY,
                         mappingComponent,
                         null,
-                        org.openide.util.NbBundle.getMessage(
-                            VzkatStandortWindowSearch.class,
-                            "TreppenWindowSearch.btnGeoSearch.toolTipText"));
+                        "Geo-Suche nach Verkehrszeichen");
                 pnlButtons.add(btnGeoSearch);
             }
 
@@ -285,16 +281,16 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
 
         pnlPruefung.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
-                    VzkatStandortWindowSearch.class,
-                    "VzkatStandortWindowSearch.pnlPruefung.border.title"))); // NOI18N
+                    VzkatWindowSearch.class,
+                    "VzkatWindowSearch.pnlPruefung.border.title"))); // NOI18N
         pnlPruefung.setMaximumSize(new java.awt.Dimension(550, 2147483647));
         pnlPruefung.setMinimumSize(new java.awt.Dimension(550, 96));
         pnlPruefung.setPreferredSize(new java.awt.Dimension(550, 96));
         pnlPruefung.setLayout(new java.awt.GridBagLayout());
 
         jLabel7.setText(org.openide.util.NbBundle.getMessage(
-                VzkatStandortWindowSearch.class,
-                "VzkatStandortWindowSearch.jLabel7.text")); // NOI18N
+                VzkatWindowSearch.class,
+                "VzkatWindowSearch.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -336,8 +332,8 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
         pnlPruefung.add(cbVerkehrszeichen, gridBagConstraints);
 
         lblIcon.setText(org.openide.util.NbBundle.getMessage(
-                VzkatStandortWindowSearch.class,
-                "VzkatStandortWindowSearch.lblIcon.text")); // NOI18N
+                VzkatWindowSearch.class,
+                "VzkatWindowSearch.lblIcon.text")); // NOI18N
         lblIcon.setMaximumSize(new java.awt.Dimension(64, 64));
         lblIcon.setMinimumSize(new java.awt.Dimension(64, 64));
         lblIcon.setPreferredSize(new java.awt.Dimension(64, 64));
@@ -364,8 +360,8 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
         pnlPruefung.add(filler3, gridBagConstraints);
 
         jLabel8.setText(org.openide.util.NbBundle.getMessage(
-                VzkatStandortWindowSearch.class,
-                "VzkatStandortWindowSearch.jLabel8.text")); // NOI18N
+                VzkatWindowSearch.class,
+                "VzkatWindowSearch.jLabel8.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -383,8 +379,8 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
         pnlScrollPane.add(pnlPruefung, gridBagConstraints);
         pnlPruefung.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
-                        VzkatStandortWindowSearch.class,
-                        "VzkatStandortWindowSearch.pnlPruefung.AccessibleContext.accessibleName")); // NOI18N
+                        VzkatWindowSearch.class,
+                        "VzkatWindowSearch.pnlPruefung.AccessibleContext.accessibleName")); // NOI18N
 
         pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -395,8 +391,8 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
         pnlScrollPane.add(pnlButtons, gridBagConstraints);
 
         cbMapSearch.setText(org.openide.util.NbBundle.getMessage(
-                VzkatStandortWindowSearch.class,
-                "VzkatStandortWindowSearch.cbMapSearch.text")); // NOI18N
+                VzkatWindowSearch.class,
+                "VzkatWindowSearch.cbMapSearch.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -405,8 +401,8 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
         pnlScrollPane.add(cbMapSearch, gridBagConstraints);
 
         lblFiller6.setText(org.openide.util.NbBundle.getMessage(
-                VzkatStandortWindowSearch.class,
-                "VzkatStandortWindowSearch.lblFiller6.text")); // NOI18N
+                VzkatWindowSearch.class,
+                "VzkatWindowSearch.lblFiller6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -490,9 +486,10 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static ImageIcon loadZeichenIcon(final String key) throws Exception {
-        final String urlString = String.format(ICON_URL_TEMPLATE, key);
-        final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
+    public ImageIcon loadZeichenIcon(final String key) throws Exception {
+//        final String urlString = String.format(ICON_URL_TEMPLATE, key);
+//        final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
+        final InputStream is = getClass().getResourceAsStream(String.format(VzkatWindowSearch.ICON_PATH_TEMPLATE, key));
         return new ImageIcon(ImageIO.read(is));
     }
 
@@ -618,12 +615,12 @@ public class VzkatStandortWindowSearch extends javax.swing.JPanel implements Cid
 
     @Override
     public String getName() {
-        return NbBundle.getMessage(VzkatStandortWindowSearch.class, "VzkatStandortWindowSearch.name");
+        return NbBundle.getMessage(VzkatWindowSearch.class, "VzkatStandortWindowSearch.name");
     }
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (TreppenCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+        if (VzkatSchildCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());

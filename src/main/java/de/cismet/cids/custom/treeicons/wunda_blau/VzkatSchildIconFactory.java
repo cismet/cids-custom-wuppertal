@@ -23,8 +23,6 @@ import Sirius.server.middleware.types.MetaObject;
 
 import java.io.InputStream;
 
-import java.net.URL;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -42,8 +40,6 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.commons.concurrency.CismetExecutors;
 
-import de.cismet.security.WebAccessManager;
-
 import de.cismet.tools.Static2DTools;
 
 /**
@@ -60,11 +56,11 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
 
     // TODO change
     private static final ImageIcon LOADING_ICON = new ImageIcon(VzkatSchildIconFactory.class.getResource(
-                "/res/16/vzkat_loading.png"));
+                "/res/vzkat/loading_16.png"));
     private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatSchildIconFactory.class.getResource(
-                "/res/16/vzkat_error.png"));
-    private static final String ICON_URL_TEMPLATE =
-        "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/16x16/%s.png";
+                "/res/vzkat/error_16.png"));
+//    private static final String ICON_URL_TEMPLATE = "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/16x16/%s.png";
+    private static final String ICON_PATH_TEMPLATE = "/de/cismet/cids/custom/wunda_blau/res/vzkat-bilder/16x16/%s.png";
 
     private static final ExecutorService EXECUTOR = CismetExecutors.newFixedThreadPool(4);
 
@@ -142,10 +138,11 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static ImageIcon loadZeichenIcon(final String key) throws Exception {
-        final String urlString = String.format(ICON_URL_TEMPLATE, key);
-        final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
-        return new ImageIcon(ImageIO.read(is));
+    public ImageIcon loadZeichenIcon(final String key) throws Exception {
+//        final String urlString = String.format(ICON_URL_TEMPLATE, key);
+//        final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
+        final InputStream is = getClass().getResourceAsStream(String.format(ICON_PATH_TEMPLATE, key));
+        return (is != null) ? new ImageIcon(ImageIO.read(is)) : null;
     }
 
     /**
