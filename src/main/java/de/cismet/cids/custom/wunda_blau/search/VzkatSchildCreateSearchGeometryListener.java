@@ -19,14 +19,13 @@ import de.cismet.cismap.commons.gui.piccolo.eventlistener.MetaSearchFollowingCre
 /**
  * DOCUMENT ME!
  *
- * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class VzkatStandortCreateSearchGeometryListener extends MetaSearchFollowingCreateSearchGeometryListener {
+public class VzkatSchildCreateSearchGeometryListener extends MetaSearchFollowingCreateSearchGeometryListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final String CREATE_SEARCH_GEOMETRY = "VZKAT_STANDORT_CREATE_SEARCH_GEOMETRY";
+    public static final String CREATE_SEARCH_GEOMETRY = "VZKAT_SCHILD_CREATE_SEARCH_GEOMETRY";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -40,7 +39,7 @@ public class VzkatStandortCreateSearchGeometryListener extends MetaSearchFollowi
      * @param  mc       DOCUMENT ME!
      * @param  toolTip  DOCUMENT ME!
      */
-    public VzkatStandortCreateSearchGeometryListener(final MappingComponent mc, final PNode toolTip) {
+    public VzkatSchildCreateSearchGeometryListener(final MappingComponent mc, final PNode toolTip) {
         super(mc, CREATE_SEARCH_GEOMETRY);
         this.toolTip = toolTip;
     }
