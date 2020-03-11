@@ -22,10 +22,6 @@ import de.cismet.cids.dynamics.CidsBean;
  */
 public class VzkatSchildEditor extends VzkatStandortEditor {
 
-    //~ Instance fields --------------------------------------------------------
-
-    private CidsBean cidsBean;
-
     //~ Constructors -----------------------------------------------------------
 
     /**
