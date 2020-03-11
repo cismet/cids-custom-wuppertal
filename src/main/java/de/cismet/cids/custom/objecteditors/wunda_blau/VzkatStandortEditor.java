@@ -136,6 +136,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
@@ -145,12 +147,10 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JLabel lblStrassenschluessel;
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
-    private de.cismet.tools.gui.RoundedPanel panBild;
     private de.cismet.tools.gui.SemiRoundedPanel panBildTitle;
-    private javax.swing.JPanel panLageBody1;
+    private de.cismet.tools.gui.RoundedPanel panLageBody;
     private de.cismet.tools.gui.SemiRoundedPanel panLageTitle;
-    private de.cismet.tools.gui.RoundedPanel panStandortKarte;
-    private javax.swing.JPanel panStandortKarteBody;
+    private de.cismet.tools.gui.RoundedPanel panStandortKarteBody;
     private javax.swing.JPanel panTitle;
     private javax.swing.JLabel txtTitle;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -237,10 +237,10 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        panStandortKarte = new de.cismet.tools.gui.RoundedPanel();
+        jPanel7 = new javax.swing.JPanel();
         panLageTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBildTitle1 = new javax.swing.JLabel();
-        panStandortKarteBody = new javax.swing.JPanel();
+        panStandortKarteBody = new de.cismet.tools.gui.RoundedPanel();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
         jPanel1 = new javax.swing.JPanel();
         lblGeom = new javax.swing.JLabel();
@@ -256,10 +256,10 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
-        panBild = new de.cismet.tools.gui.RoundedPanel();
+        jPanel8 = new javax.swing.JPanel();
         panBildTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBildTitle = new javax.swing.JLabel();
-        panLageBody1 = new javax.swing.JPanel();
+        panLageBody = new de.cismet.tools.gui.RoundedPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
@@ -296,7 +296,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        panStandortKarte.setLayout(new java.awt.GridBagLayout());
+        jPanel7.setOpaque(false);
+        jPanel7.setLayout(new java.awt.GridBagLayout());
 
         panLageTitle.setBackground(java.awt.Color.darkGray);
         panLageTitle.setLayout(new java.awt.GridBagLayout());
@@ -317,9 +318,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panStandortKarte.add(panLageTitle, gridBagConstraints);
+        jPanel7.add(panLageTitle, gridBagConstraints);
 
-        panStandortKarteBody.setOpaque(false);
+        panStandortKarteBody.setCurve(0);
         panStandortKarteBody.setLayout(new java.awt.GridBagLayout());
 
         mappingComponent1.setMaximumSize(new java.awt.Dimension(300, 200));
@@ -442,18 +443,18 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panStandortKarte.add(panStandortKarteBody, gridBagConstraints);
+        jPanel7.add(panStandortKarteBody, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(panStandortKarte, gridBagConstraints);
+        add(jPanel7, gridBagConstraints);
 
-        panBild.setLayout(new java.awt.GridBagLayout());
+        jPanel8.setOpaque(false);
+        jPanel8.setLayout(new java.awt.GridBagLayout());
 
         panBildTitle.setBackground(java.awt.Color.darkGray);
         panBildTitle.setLayout(new java.awt.GridBagLayout());
@@ -472,12 +473,13 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panBild.add(panBildTitle, gridBagConstraints);
+        jPanel8.add(panBildTitle, gridBagConstraints);
 
-        panLageBody1.setMinimumSize(new java.awt.Dimension(320, 320));
-        panLageBody1.setOpaque(false);
-        panLageBody1.setPreferredSize(new java.awt.Dimension(320, 320));
-        panLageBody1.setLayout(new java.awt.GridBagLayout());
+        panLageBody.setCurve(0);
+        panLageBody.setMaximumSize(new java.awt.Dimension(320, 320));
+        panLageBody.setMinimumSize(new java.awt.Dimension(320, 320));
+        panLageBody.setPreferredSize(new java.awt.Dimension(320, 320));
+        panLageBody.setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setForeground(new java.awt.Color(127, 127, 127));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -490,7 +492,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panLageBody1.add(jLabel2, gridBagConstraints);
+        panLageBody.add(jLabel2, gridBagConstraints);
 
         jPanel6.setOpaque(false);
         jPanel6.setLayout(new java.awt.GridBagLayout());
@@ -516,7 +518,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panLageBody1.add(jPanel6, gridBagConstraints);
+        panLageBody.add(jPanel6, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -524,15 +526,12 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panBild.add(panLageBody1, gridBagConstraints);
+        jPanel8.add(panLageBody, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(panBild, gridBagConstraints);
+        add(jPanel8, gridBagConstraints);
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setOpaque(false);
@@ -782,6 +781,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      */
     public void refreshSchildPanels() {
         jPanel5.removeAll();
+        jButton3.setVisible(schildBeans.isEmpty());
 
         VzkatStandortSchildPanel selectedSchildPanel = null;
         for (final CidsBean schildBean : schildBeans) {
