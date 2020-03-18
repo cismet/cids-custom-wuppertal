@@ -162,7 +162,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
 
     @Override
     public Component getComponent() {
-        if (validateUserHasButler1Access(connectionContext) || validateUserHasNasAccess(connectionContext)) {
+        if (validateUserHasButler1Access(getConnectionContext()) || validateUserHasNasAccess(getConnectionContext())) {
             return new DataExportButton();
         } else {
             return null;
@@ -302,12 +302,9 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        StaticSwingTools.showDialog(
-                            new Butler2Dialog(
-                                StaticSwingTools.getParentFrame(
-                                    CismapBroker.getInstance().getMappingComponent()),
-                                true,
-                                getConnectionContext()));
+                        final Butler2Dialog dialog = new Butler2Dialog();
+                        dialog.initWithConnectionContext(getConnectionContext());
+                        StaticSwingTools.showDialog(dialog);
                     }
                 };
             return new JMenuItem(action);

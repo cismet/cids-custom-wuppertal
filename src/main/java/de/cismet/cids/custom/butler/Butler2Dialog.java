@@ -73,7 +73,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -88,7 +88,7 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  */
 public class Butler2Dialog extends javax.swing.JDialog implements DocumentListener,
     ListSelectionListener,
-    ConnectionContextProvider {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -124,7 +124,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private PredefinedBoxes feldVergleichBox500 = null;
     private PredefinedBoxes feldVergleichBox1000 = null;
     private boolean isEtrsRahmenkarte = false;
-    private final ConnectionContext connectionContext;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -159,16 +159,21 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new Butler2Dialog object.
+     */
+    public Butler2Dialog() {
+        super(StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()), true);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
      * Creates new form Butler2Dialog.
      *
-     * @param  parent             DOCUMENT ME!
-     * @param  modal              DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Butler2Dialog(final java.awt.Frame parent,
-            final boolean modal,
-            final ConnectionContext connectionContext) {
-        super(parent, modal);
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
         formatSymbols.setDecimalSeparator('.');
@@ -241,8 +246,6 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         pnlMap.add(map, BorderLayout.CENTER);
         cbPointGeomActionPerformed(null);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -330,7 +333,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
         pnlProductSettings = new javax.swing.JPanel();
         tbpProducts = new javax.swing.JTabbedPane();
-        butler2ProductPanel1 = new de.cismet.cids.custom.butler.Butler2ProductPanel(getConnectionContext());
+        butler2ProductPanel1 = new de.cismet.cids.custom.butler.Butler2ProductPanel();
         pnlMapSettings = new javax.swing.JPanel();
         lblLowerPosition = new javax.swing.JLabel();
         lblSize = new javax.swing.JLabel();
@@ -1074,7 +1077,8 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         final int number = tbpProducts.getTabCount();
         final String title = "Produkt " + number;
         final int tabPos = tbpProducts.getTabCount() - 1;
-        final Butler2ProductPanel productPan = new Butler2ProductPanel(getConnectionContext());
+        final Butler2ProductPanel productPan = new Butler2ProductPanel();
+        productPan.initWithConnectionContext(getConnectionContext());
         productPan.addProductListSelectionListener(this);
         if ((rectangleFeature != null) && (rectangleFeature.getGeometry() != null)) {
 //            productPan.setGeometry(rectangleFeature.getGeometry());
@@ -1221,60 +1225,6 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             return false;
         }
         return true;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  args  the command line arguments
-     */
-    public static void main(final String[] args) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (final javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Butler2Dialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Butler2Dialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Butler2Dialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Butler2Dialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    final Butler2Dialog dialog = new Butler2Dialog(
-                            new javax.swing.JFrame(),
-                            true,
-                            ConnectionContext.createDeprecated());
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                            @Override
-                            public void windowClosing(final java.awt.event.WindowEvent e) {
-                                System.exit(0);
-                            }
-                        });
-                    dialog.setVisible(true);
-                }
-            });
     }
 
     /**
