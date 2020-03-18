@@ -180,6 +180,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         coordFormatter.setDecimalFormatSymbols(formatSymbols);
         boxes = PredefinedBoxes.butler2Boxes;
         initComponents();
+        butler2ProductPanel1.initWithConnectionContext(connectionContext);
         butler2ProductPanel1.addProductListSelectionListener(this);
         tfLowerE.getDocument().addDocumentListener(this);
         tfLowerN.getDocument().addDocumentListener(this);

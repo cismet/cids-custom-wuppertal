@@ -280,12 +280,9 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        StaticSwingTools.showDialog(
-                            new Butler1Dialog(
-                                StaticSwingTools.getParentFrame(
-                                    CismapBroker.getInstance().getMappingComponent()),
-                                true,
-                                getConnectionContext()));
+                        final Butler1Dialog dialog = new Butler1Dialog();
+                        dialog.initWithConnectionContext(getConnectionContext());
+                        StaticSwingTools.showDialog(dialog);
                     }
                 };
             return new JMenuItem(action);
