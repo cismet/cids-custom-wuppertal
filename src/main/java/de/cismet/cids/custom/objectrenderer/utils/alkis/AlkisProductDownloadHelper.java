@@ -567,8 +567,10 @@ public class AlkisProductDownloadHelper {
             final ConnectionContext connectionContext) {
         final String title = "ALKIS-Druck";
         final String directory = DownloadManagerDialog.getInstance().getJobName();
-        final String filename = info.getProduct() + "." + info.getLandparcelCode().replace("/", "--")
-                    + (moreFlurstueckeSuffix ? ".ua" : "");
+        final String filename = info.getProduct()
+                    + ((info.getLandparcelCode() != null)
+                        ? ("." + info.getLandparcelCode().replace("/", "--")
+                            + (moreFlurstueckeSuffix ? ".ua" : "")) : "");
         final String extension = ".pdf";
 
         final Download download = new ByteArrayActionDownload(

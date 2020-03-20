@@ -406,7 +406,7 @@ public class AlkisPrintListener extends FeatureMoveListener {
      *
      * @version  $Revision$, $Date$
      */
-    private static final class PrintFeature extends DefaultStyledFeature {
+    public static final class PrintFeature extends DefaultStyledFeature {
 
         //~ Methods ------------------------------------------------------------
 
