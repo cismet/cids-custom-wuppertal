@@ -292,6 +292,15 @@ public class AlkisPrintListener extends FeatureMoveListener {
 
     /**
      * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isFeatureInCollection() {
+        return printFeatureCollection.contains(printTemplateStyledFeature);
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     private void gotoPrintAreaWithBuffer() {
         final Point center = printTemplateStyledFeature.getGeometry().getCentroid();
@@ -335,7 +344,6 @@ public class AlkisPrintListener extends FeatureMoveListener {
             final double rotationAngle = calculateRotationAngle();
             final Point templateCenter = getTemplateCenter();
             printWidget.downloadProduct(templateCenter, rotationAngle);
-            cleanUpAndRestoreFeatures();
         }
     }
 

@@ -30,10 +30,11 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
 
     //~ Instance fields --------------------------------------------------------
 
-    private final String taskname;
-    private final Object body;
+    protected String taskname;
+    protected Object body;
+    protected ServerActionParameter[] params;
+
     private final String domain;
-    private final ServerActionParameter[] params;
 
     private final ConnectionContext connectionContext;
 
@@ -97,6 +98,27 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
         determineDestinationFile(filename, extension);
     }
 
+    /**
+     * Creates a new ByteArrayActionDownload object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    protected ByteArrayActionDownload(final ConnectionContext connectionContext) {
+        this("WUNDA_BLAU", connectionContext);
+    }
+
+    /**
+     * Creates a new ByteArrayActionDownload object.
+     *
+     * @param  domain             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    protected ByteArrayActionDownload(final String domain, final ConnectionContext connectionContext) {
+        this.domain = domain;
+        this.connectionContext = connectionContext;
+        status = State.WAITING;
+    }
+
     //~ Methods ----------------------------------------------------------------
 
     @Override
@@ -108,26 +130,14 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
         status = State.RUNNING;
         stateChanged();
 
-        final Object ret;
+        final byte[] content;
         try {
-            ret = SessionManager.getProxy().executeTask(
-                    taskname,
-                    domain,
-                    body,
-                    getConnectionContext(),
-                    params);
-
-            if (ret instanceof Exception) {
-                final Exception ex = (Exception)ret;
-                throw ex;
-            }
+            content = execAction();
         } catch (final Exception ex) {
             log.warn("Couldn't execute task '" + taskname + "'.", ex);
             error(ex);
             return;
         }
-
-        final byte[] content = (byte[])ret;
 
         if ((content == null) || (content.length <= 0)) {
             log.info("Downloaded content seems to be empty..");
@@ -161,6 +171,30 @@ public class ByteArrayActionDownload extends AbstractDownload implements Connect
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    protected byte[] execAction() throws Exception {
+        final Object ret = SessionManager.getProxy()
+                    .executeTask(
+                        taskname,
+                        domain,
+                        body,
+                        getConnectionContext(),
+                        params);
+
+        if (ret instanceof Exception) {
+            final Exception ex = (Exception)ret;
+            throw ex;
+        }
+        final byte[] content = (byte[])ret;
+        return content;
     }
 
     @Override
