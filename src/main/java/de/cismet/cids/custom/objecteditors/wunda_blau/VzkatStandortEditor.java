@@ -761,7 +761,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                     }
 
                     if (isEditable()) {
-                        redoSchilder(redoReihenfolge(createRichtungsLists(schildBeans)));
+                        redoSchilder(redoReihenfolge(createRichtungsLists(sortByReihenfolge(schildBeans))));
                     } else {
                         redoSchilder(schildBeans);
                     }
@@ -849,7 +849,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                             "WUNDA_BLAU",
                             "vzkat_schild",
                             getConnectionContext());
-                    newSchildBean.setProperty("fk_standort", getCidsBean());
+                    newSchildBean.setProperty("fk_standort", standortBean);
                     newSchildBean.setProperty("gueltig_von", new Timestamp(new Date().getTime()));
 
                     setSelectedSchildBean(newSchildBean);
@@ -935,6 +935,32 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                     refreshSchildPanels();
                 }
             }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   schildBeans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<CidsBean> sortByReihenfolge(final List<CidsBean> schildBeans) {
+        Collections.sort(schildBeans, new Comparator<CidsBean>() {
+
+                @Override
+                public int compare(final CidsBean o1, final CidsBean o2) {
+                    final Integer f1 = ((o1 != null) && (o1.getProperty("fk_richtung.id") != null))
+                        ? (Integer)o1.getProperty("fk_richtung.id") : -1;
+                    final Integer r1 = ((o1 != null) && (o1.getProperty("reihenfolge") != null))
+                        ? (Integer)o1.getProperty("reihenfolge") : -1;
+                    final Integer f2 = ((o2 != null) && (o2.getProperty("fk_richtung.id") != null))
+                        ? (Integer)o2.getProperty("fk_richtung.id") : -1;
+                    final Integer r2 = ((o2 != null) && (o2.getProperty("reihenfolge") != null))
+                        ? (Integer)o2.getProperty("reihenfolge") : -1;
+                    return Integer.compare((f1 * 10000) + r1, (f2 * 10000) + r2);
+                }
+            });
+        return schildBeans;
     }
 
     /**
@@ -1028,24 +1054,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  newSchildBeans  DOCUMENT ME!
      */
     private void redoSchilder(final List<CidsBean> newSchildBeans) {
-        Collections.sort(newSchildBeans, new Comparator<CidsBean>() {
-
-                @Override
-                public int compare(final CidsBean o1, final CidsBean o2) {
-                    final Integer f1 = ((o1 != null) && (o1.getProperty("fk_richtung.id") != null))
-                        ? (Integer)o1.getProperty("fk_richtung.id") : -1;
-                    final Integer r1 = ((o1 != null) && (o1.getProperty("reihenfolge") != null))
-                        ? (Integer)o1.getProperty("reihenfolge") : -1;
-                    final Integer f2 = ((o2 != null) && (o2.getProperty("fk_richtung.id") != null))
-                        ? (Integer)o2.getProperty("fk_richtung.id") : -1;
-                    final Integer r2 = ((o2 != null) && (o2.getProperty("reihenfolge") != null))
-                        ? (Integer)o2.getProperty("reihenfolge") : -1;
-                    return Integer.compare((f1 * 10000) + r1, (f2 * 10000) + r2);
-                }
-            });
-
         schildBeans.clear();
-        schildBeans.addAll(newSchildBeans);
+        schildBeans.addAll(sortByReihenfolge(newSchildBeans));
     }
 
     /**
@@ -1059,7 +1069,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     @Override
     public CidsBean getCidsBean() {
-        return standortBean;
+        return cidsBean;
     }
 
     /**
@@ -1135,7 +1145,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     @Override
     public String getTitle() {
         final String standort = String.valueOf(standortBean);
-        return String.format("<html>Standort <i>%s</i>", standort);
+        return String.format("%s", standort);
     }
 
     @Override
@@ -1186,6 +1196,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         for (final CidsBean schildBean : deletedSchildBeans) {
             try {
                 schildBean.delete();
+                schildBean.persist(getConnectionContext());
             } catch (final Exception ex) {
                 errorOccured = true;
                 LOG.error(ex, ex);
