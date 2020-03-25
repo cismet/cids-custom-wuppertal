@@ -15,6 +15,9 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import java.io.InputStream;
 
 import java.util.HashMap;
@@ -70,6 +73,16 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private ConnectionContext connectionContext;
     private MetaClass mcVzkatStvo = null;
     private final VzkatZeichenLightweightSearch verkehrszeichenSearch = new VzkatZeichenLightweightSearch();
+    private final PropertyChangeListener changeListener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(final PropertyChangeEvent evt) {
+                if ((parentEditor != null) && (parentEditor.getCidsBean() != null)
+                            && !"fk_richtung".equals(evt.getPropertyName())) {
+                    parentEditor.getCidsBean().setArtificialChangeFlag(true);
+                }
+            }
+        };
 
     private boolean cbStvoActionListenerEnabled = true;
     private SwingWorker<ImageIcon, Void> iconLoadingWorker = null;
@@ -763,6 +776,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        if (isEditable() && (this.cidsBean != null)) {
+            this.cidsBean.removePropertyChangeListener(changeListener);
+        }
+
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
@@ -781,6 +798,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                 getConnectionContext());
         }
         bindingGroup.bind();
+
+        if (isEditable() && (cidsBean != null)) {
+            cidsBean.addPropertyChangeListener(changeListener);
+        }
 
         refreshIcon((cidsBean != null) ? VzkatUtils.createZeichenKey((CidsBean)cidsBean.getProperty("fk_zeichen"))
                                        : null);
