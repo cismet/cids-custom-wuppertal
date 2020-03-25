@@ -170,7 +170,7 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        OrbitControlFeature.addToMap(getConnectionContext());
+                        OrbitControlFeature.controlOrAddOnMap(getConnectionContext());
                     }
                 });
         }

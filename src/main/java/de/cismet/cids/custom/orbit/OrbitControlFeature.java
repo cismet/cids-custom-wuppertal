@@ -66,6 +66,7 @@ import de.cismet.cismap.commons.features.RequestForRotatingPivotLock;
 import de.cismet.cismap.commons.features.RequestForUnaddableHandles;
 import de.cismet.cismap.commons.features.RequestForUnmoveableHandles;
 import de.cismet.cismap.commons.features.RequestForUnremovableHandles;
+import de.cismet.cismap.commons.features.RequestNoAutoSelectionWhenMoving;
 import de.cismet.cismap.commons.features.XStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.piccolo.FixedPImage;
@@ -93,7 +94,8 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
     RequestForHidingHandles,
     RequestForRotatingPivotLock,
     RequestForNonreflectingFeature,
-    ConnectionContextProvider {
+    ConnectionContextProvider,
+    RequestNoAutoSelectionWhenMoving {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -113,6 +115,8 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
 
     //~ Instance fields --------------------------------------------------------
 
+    DerivedFixedPImageCommandArea linkAreaRef = null;
+
     private final ArrayList<PNode> children = new ArrayList<>();
     private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
     private final ConnectionContext connectionContext;
@@ -125,6 +129,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
     private final String launcherUrl;
     private final StacResult stacInfo;
     private final Socket socket;
+    private boolean browserOpened = false;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -144,10 +149,10 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
     }
 
     /**
-     * Creates a new VCMControlFeature object.
+     * Creates a new OrbitControlFeature object.
      *
      * @param  connectionContext  DOCUMENT ME!
-     * @param  stac               stacResult
+     * @param  stac               DOCUMENT ME!
      * @param  socket             DOCUMENT ME!
      * @param  launcherUrl        DOCUMENT ME!
      * @param  centroid           DOCUMENT ME!
@@ -170,10 +175,66 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
         this.camState.setFov(100);
         this.camState.setTilt(0);
         this.camState.setPan(0);
+        this.setSocketChannelId(stacInfo.getSocketChannelId());
+        this.setGeometry(getControlFeatureGeometry(centroid));
+    }
+
+    /**
+     * Creates a new VCMControlFeature object.
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     * @param  stac               stacResult
+     * @param  socket             DOCUMENT ME!
+     * @param  launcherUrl        DOCUMENT ME!
+     * @param  centroid           DOCUMENT ME!
+     * @param  fov                DOCUMENT ME!
+     * @param  tilt               DOCUMENT ME!
+     * @param  pan                DOCUMENT ME!
+     */
+    public OrbitControlFeature(final ConnectionContext connectionContext,
+            final StacResult stac,
+            final Socket socket,
+            final String launcherUrl,
+            final Point centroid,
+            final float fov,
+            final float tilt,
+            final float pan) {
+        this.connectionContext = connectionContext;
+        setEditable(true);
+        setCanBeSelected(true);
+
+        setLinePaint(new Color(0, 0, 0, 0));
+        setHighlightingEnabled(false);
+
+        this.stacInfo = stac;
+        this.socket = socket;
+        this.launcherUrl = launcherUrl;
+        this.camState.setFov(fov);
+        this.camState.setTilt(tilt);
+        this.camState.setPan(pan);
+        this.setSocketChannelId(stacInfo.getSocketChannelId());
         this.setGeometry(getControlFeatureGeometry(centroid));
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isBrowserOpened() {
+        return browserOpened;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  browserOpened  DOCUMENT ME!
+     */
+    public void setBrowserOpened(final boolean browserOpened) {
+        this.browserOpened = browserOpened;
+    }
 
     /**
      * DOCUMENT ME!
@@ -196,12 +257,88 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
     /**
      * DOCUMENT ME!
      *
+     * @param  position           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void controlOrAddOnMap(final Point position, final ConnectionContext connectionContext) {
+        controlOrAddOnMap(position, connectionContext, null, null, null);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  position           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     * @param  fov                DOCUMENT ME!
+     * @param  pan                DOCUMENT ME!
+     * @param  tilt               DOCUMENT ME!
+     */
+    public static void controlOrAddOnMap(final Point position,
+            final ConnectionContext connectionContext,
+            final Double fov,
+            final Double pan,
+            final Double tilt) {
+        if ((CURRENT_CONTROL_FEATURE != null) && (CURRENT_CONTROL_FEATURE.socketChannelId != null)
+                    && (CismapBroker.getInstance().getMappingComponent().getPFeatureHM().get(CURRENT_CONTROL_FEATURE)
+                        != null)) {
+            CURRENT_CONTROL_FEATURE.setGeometry(CURRENT_CONTROL_FEATURE.getControlFeatureGeometry(position));
+//            CismapBroker.getInstance()
+//                    .getMappingComponent()
+//                    .getFeatureCollection()
+//                    .removeFeature(CURRENT_CONTROL_FEATURE);
+//            CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeature(CURRENT_CONTROL_FEATURE);
+
+            CURRENT_CONTROL_FEATURE.updateCamStatePosition();
+
+            if (fov != null) {
+                CURRENT_CONTROL_FEATURE.camState.setFov(fov);
+            }
+            if (pan != null) {
+                CURRENT_CONTROL_FEATURE.camState.setPan(pan);
+            }
+            if (tilt != null) {
+                CURRENT_CONTROL_FEATURE.camState.setTilt(tilt);
+            }
+            CURRENT_CONTROL_FEATURE.updateOrbitIfPossible();
+            CismapBroker.getInstance().getMappingComponent().getPFeatureHM().get(CURRENT_CONTROL_FEATURE).visualize();
+        } else {
+            addToMap(position, connectionContext, fov, pan, tilt);
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void controlOrAddOnMap(final ConnectionContext connectionContext) {
+        controlOrAddOnMap(null, connectionContext);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  position           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void addToMap(final Point position, final ConnectionContext connectionContext) {
+        addToMap(position, connectionContext, null, null, null);
+    }
+    /**
+     * DOCUMENT ME!
+     *
      * @param   centroid           DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
+     * @param   fov                DOCUMENT ME!
+     * @param   pan                DOCUMENT ME!
+     * @param   tilt               DOCUMENT ME!
      *
      * @throws  RuntimeException  DOCUMENT ME!
      */
-    public static void addToMap(final Point centroid, final ConnectionContext connectionContext) {
+    public static void addToMap(final Point centroid,
+            final ConnectionContext connectionContext,
+            final Double fov,
+            final Double pan,
+            final Double tilt) {
         try {
             new SwingWorker<OrbitControlFeature, Void>() {
 
@@ -249,6 +386,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                                 CURRENT_CONTROL_FEATURE = null;
                             }
                             CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeature(vcmf);
+                            CismapBroker.getInstance().getMappingComponent().getFeatureCollection().holdFeature(vcmf);
                             CURRENT_CONTROL_FEATURE = vcmf;
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
@@ -361,7 +499,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @return  DOCUMENT ME!
      */
     public static ImageIcon createArcImage(final int width, final int height, int pan, final int tilt, int fov) {
-        final BufferedImage bi = new BufferedImage(200, 200, BufferedImage.TYPE_4BYTE_ABGR);
+        final BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         final Graphics2D g2 = (Graphics2D)bi.getGraphics();
         // tilt is between -90 and 90
 
@@ -436,10 +574,17 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                                 final Geometry newGeometry = getControlFeatureGeometry(
                                         factory.createPoint(new Coordinate(cs.getX(), cs.getY())));
                                 setGeometry(newGeometry);
-                                ((DefaultFeatureCollection)mappingComponent.getFeatureCollection()).removeFeature(
-                                    OrbitControlFeature.this);
-                                ((DefaultFeatureCollection)mappingComponent.getFeatureCollection()).addFeature(
-                                    OrbitControlFeature.this);
+//
+//                                ((DefaultFeatureCollection)mappingComponent.getFeatureCollection()).removeFeature(
+//                                    OrbitControlFeature.this);
+//                                ((DefaultFeatureCollection)mappingComponent.getFeatureCollection()).addFeature(
+//                                    OrbitControlFeature.this);
+                                CismapBroker.getInstance()
+                                        .getMappingComponent()
+                                        .getPFeatureHM()
+                                        .get(CURRENT_CONTROL_FEATURE)
+                                        .visualize();
+
                                 if (LOG.isDebugEnabled()) {
                                     LOG.debug("move it: " + cs.getX() + "," + cs.getY());
                                 }
@@ -664,7 +809,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
             };
         linkArea.setSweetSpotX(0.5d);
         linkArea.setSweetSpotY(0.5d);
-
+        linkAreaRef = linkArea;
         return linkArea;
     }
 
@@ -710,6 +855,8 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      */
     public void removeFeature() {
         mappingComponent.getFeatureCollection().removeFeature(this);
+        socketChannelId = null;
+        CURRENT_CONTROL_FEATURE = null;
     }
 
     /**
@@ -723,10 +870,11 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
         final String url = getLaunchUrl();
 
         final String channel = getSocketChannelId();
-        if (channel == null) {
+        if (isBrowserOpened() == false) {
             try {
                 de.cismet.tools.BrowserLauncher.openURL(url);
-                setSocketChannelId(stacInfo.getSocketChannelId());
+                setBrowserOpened(true);
+                linkAreaRef.setTransparency((float)0.1);
             } catch (Exception ex) {
                 LOG.error("error while browserlaunching url: " + url, ex);
             }
