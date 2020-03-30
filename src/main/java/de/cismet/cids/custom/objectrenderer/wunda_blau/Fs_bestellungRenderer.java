@@ -1716,12 +1716,12 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 statusText = "-";
             }
 
-            lblGebuehr.setVisible(!"BAB".equals(type));
-            jPanel7.setVisible(!"BAB".equals(type));
-            lblGebuehrDownload.setVisible("BAB".equals(type));
-            lblGebuehrDownloadValue.setVisible("BAB".equals(type));
-            lblGebuehrPostweg.setVisible("BAB".equals(type));
-            lblGebuehrPostwegValue.setVisible("BAB".equals(type));
+            lblGebuehr.setVisible(!"BAB_WEITERLEITUNG".equals(type));
+            jPanel7.setVisible(!"BAB_WEITERLEITUNG".equals(type));
+            lblGebuehrDownload.setVisible("BAB_WEITERLEITUNG".equals(type));
+            lblGebuehrDownloadValue.setVisible("BAB_WEITERLEITUNG".equals(type));
+            lblGebuehrPostweg.setVisible("BAB_WEITERLEITUNG".equals(type));
+            lblGebuehrPostwegValue.setVisible("BAB_WEITERLEITUNG".equals(type));
 
             lblStatusValue.setText(statusText);
 
