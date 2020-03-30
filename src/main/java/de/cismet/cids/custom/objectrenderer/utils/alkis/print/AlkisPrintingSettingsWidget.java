@@ -65,6 +65,7 @@ import javax.swing.event.DocumentListener;
 import de.cismet.cids.custom.butler.Butler2Dialog;
 import de.cismet.cids.custom.butler.ButlerGeometryComboBox;
 import de.cismet.cids.custom.butler.CoordWrapper;
+import de.cismet.cids.custom.nas.NasFeeCalculator;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
@@ -1464,14 +1465,15 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     /**
      * Adds the selected product to the DownloadManager.
      *
-     * @param  center         DOCUMENT ME!
+     * @param  geom           DOCUMENT ME!
      * @param  rotationAngle  DOCUMENT ME!
      */
-    public void downloadProduct(final Point center, final double rotationAngle) {
+    public void downloadProduct(final Geometry geom, final double rotationAngle) {
         if (!mapPrintListener.isFeatureInCollection()) {
             return;
         }
 
+        final Point center = geom.getEnvelope().getCentroid();
         final AlkisProductDownloadHelper.AlkisKarteDownloadInfoCreator creator =
             new AlkisProductDownloadHelper.AlkisKarteDownloadInfoCreator() {
 
@@ -1548,7 +1550,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
                         try {
                             final String product;
-                            final String prGroup;
                             final String dinFormat = selectedProduct.getDinFormat();
                             final boolean isDinA4 = dinFormat.equals("DINA4 Hochformat")
                                         || dinFormat.equals("DINA4 Querformat");
@@ -1565,6 +1566,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                             final boolean isNrwKommunal = clazz.equals("NRW-Kommunal");
                             final boolean isWupKommunal = clazz.equals("WUP-Kommunal");
                             final String type = selectedProduct.getType();
+                            final boolean isFeldvergleichsKarte = type.equals("Feldvergleichskarte, farbig")
+                                        || type.equals("Feldvergleichskarte, sw");
                             final boolean isLiegenschaftsKarte = type.equals("Liegenschaftskarte, farbig")
                                         || type.equals("Liegenschaftskarte, grau");
                             final boolean isStadtgrundkarteMKO = type.equals(
@@ -1589,214 +1592,355 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                             final boolean isOrthofotoMitKatasterdarstellung = type.equals(
                                     "Orthofoto mit Katasterdarstellung");
 
+                            final BillingProductGroupAmount[] groupAmounts;
                             if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA4) {
                                 product = "fknw4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA3) {
                                 product = "fknw3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA2) {
                                 product = "fknw2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA1) {
                                 product = "fknw1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA0) {
                                 product = "fknw0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA4) {
                                 product = "skmekom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA3) {
                                 product = "skmekom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA2) {
                                 product = "skmekom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA1) {
                                 product = "skmekom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA0) {
                                 product = "skmekom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA4) {
                                 product = "schknw4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA3) {
                                 product = "schknw3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA2) {
                                 product = "schknw2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA1) {
                                 product = "schknw1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA0) {
                                 product = "schknw0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA4) {
                                 product = "abknw4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA3) {
                                 product = "abknw3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA2) {
                                 product = "abknw2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA1) {
                                 product = "abknw1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA0) {
                                 product = "abknw0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarte && isDinA4) {
                                 product = "skkom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarte && isDinA3) {
                                 product = "skkom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarte && isDinA2) {
                                 product = "skkom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarte && isDinA1) {
                                 product = "skkom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isNrwKommunal && isStadtgrundkarte && isDinA0) {
                                 product = "skkom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isDgk && isDinA4) {
                                 product = "dgkkom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isDgk && isDinA3) {
                                 product = "dgkkom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isDgk && isDinA2) {
                                 product = "dgkkom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isDgk && isDinA1) {
                                 product = "dgkkom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isDgk && isDinA0) {
                                 product = "dgkkom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofoto && isDinA4) {
                                 product = "ofkom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofoto && isDinA3) {
                                 product = "ofkom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofoto && isDinA2) {
                                 product = "ofkom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofoto && isDinA1) {
                                 product = "ofkom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofoto && isDinA0) {
                                 product = "ofkom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isNivPUebersicht && isDinA4) {
                                 product = "nivpükom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isNivPUebersicht && isDinA3) {
                                 product = "nivpükom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isNivPUebersicht && isDinA2) {
                                 product = "nivpükom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isNivPUebersicht && isDinA1) {
                                 product = "nivpükom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isNivPUebersicht && isDinA0) {
                                 product = "nivpükom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isApUebersicht && isDinA4) {
                                 product = "apükom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isApUebersicht && isDinA3) {
                                 product = "apükom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isApUebersicht && isDinA2) {
                                 product = "apükom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isApUebersicht && isDinA1) {
                                 product = "apükom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isApUebersicht && isDinA0) {
                                 product = "apükom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isPunktnummerierungsuebersicht && isDinA4) {
                                 product = "pnükom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isPunktnummerierungsuebersicht && isDinA3) {
                                 product = "pnükom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isPunktnummerierungsuebersicht && isDinA2) {
                                 product = "pnükom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isPunktnummerierungsuebersicht && isDinA1) {
                                 product = "pnükom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isPunktnummerierungsuebersicht && isDinA0) {
                                 product = "pnükom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA4) {
                                 product = "abkhkom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA3) {
                                 product = "abkhkom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA2) {
                                 product = "abkhkom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA1) {
                                 product = "abkhkom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isDgkMitHoehenlinien && isDinA0) {
                                 product = "abkhkom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isStadtgrundkarteMitHoehenlinien && isDinA4) {
                                 product = "skhkom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isStadtgrundkarteMitHoehenlinien && isDinA3) {
                                 product = "skhkom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isStadtgrundkarteMitHoehenlinien && isDinA2) {
                                 product = "skhkom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isStadtgrundkarteMitHoehenlinien && isDinA1) {
                                 product = "skhkom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isStadtgrundkarteMitHoehenlinien && isDinA0) {
                                 product = "skhkom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofotoMitKatasterdarstellung && isDinA4) {
                                 product = "ofkkom4";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofotoMitKatasterdarstellung && isDinA3) {
                                 product = "ofkkom3";
-                                prGroup = "eakarte_a3";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a3", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofotoMitKatasterdarstellung && isDinA2) {
                                 product = "ofkkom2";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofotoMitKatasterdarstellung && isDinA1) {
                                 product = "ofkkom1";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
                             } else if (isWupKommunal && isOrthofotoMitKatasterdarstellung && isDinA0) {
                                 product = "ofkkom0";
-                                prGroup = "eakarte_a2-a0";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount("eakarte_a2-a0", 1)
+                                    };
+                            } else if (isFeldvergleichsKarte) {
+                                product = "skmekomtiff";
+                                groupAmounts = new BillingProductGroupAmount[] {
+                                        new BillingProductGroupAmount(
+                                            "eaflst_1000",
+                                            NasFeeCalculator.getFlurstueckAmount(geom, getConnectionContext())),
+                                        new BillingProductGroupAmount(
+                                            "eageb_1000",
+                                            NasFeeCalculator.getGebaeudeAmount(geom, getConnectionContext()))
+                                    };
                             } else {
                                 product = null;
-                                prGroup = null;
+                                groupAmounts = null;
                             }
 
-                            if ((product != null) && (prGroup != null)) {
+                            if ((product != null)) {
                                 if (BillingPopup.doBilling(
                                                 product,
                                                 MAPPER.writeValueAsString(info),
                                                 requestPerUsage,
                                                 (Geometry)null,
                                                 getConnectionContext(),
-                                                new BillingProductGroupAmount(prGroup, 1))) {
+                                                groupAmounts)) {
                                     return MAPPER.readValue(
                                             BillingPopup.getInstance().getCurrentRequest(),
                                             AlkisProductDownloadHelper.AlkisKarteDownloadInfo.class);

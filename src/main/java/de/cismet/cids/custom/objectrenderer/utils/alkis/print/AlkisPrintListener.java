@@ -342,8 +342,7 @@ public class AlkisPrintListener extends FeatureMoveListener {
         super.mouseClicked(event);
         if ((event.getClickCount() > 1) && event.isLeftMouseButton()) {
             final double rotationAngle = calculateRotationAngle();
-            final Point templateCenter = getTemplateCenter();
-            printWidget.downloadProduct(templateCenter, rotationAngle);
+            printWidget.downloadProduct(printTemplateStyledFeature.getGeometry(), rotationAngle);
         }
     }
 
@@ -371,15 +370,6 @@ public class AlkisPrintListener extends FeatureMoveListener {
         }
         cleared = true;
         CismapBroker.getInstance().setCheckForOverlappingGeometriesAfterFeatureRotation(oldOverlappingCheck);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Point getTemplateCenter() {
-        return printTemplateStyledFeature.getGeometry().getEnvelope().getCentroid();
     }
 
     /**

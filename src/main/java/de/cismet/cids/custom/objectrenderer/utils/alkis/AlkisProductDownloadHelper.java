@@ -588,7 +588,7 @@ public class AlkisProductDownloadHelper {
             final String jobName,
             final boolean moreFlurstueckeSuffix,
             final ConnectionContext connectionContext) {
-        DownloadManager.instance().add(new DingensDownload(moreFlurstueckeSuffix, infoCreator, connectionContext));
+        DownloadManager.instance().add(new AlkisKarteDownload(moreFlurstueckeSuffix, infoCreator, connectionContext));
     }
 
     /**
@@ -697,7 +697,7 @@ public class AlkisProductDownloadHelper {
      *
      * @version  $Revision$, $Date$
      */
-    public static class DingensDownload extends ByteArrayActionDownload {
+    public static class AlkisKarteDownload extends ByteArrayActionDownload {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -713,7 +713,7 @@ public class AlkisProductDownloadHelper {
          * @param  infoCreator            DOCUMENT ME!
          * @param  connectionContext      DOCUMENT ME!
          */
-        public DingensDownload(final boolean moreFlurstueckeSuffix,
+        public AlkisKarteDownload(final boolean moreFlurstueckeSuffix,
                 final AlkisKarteDownloadInfoCreator infoCreator,
                 final ConnectionContext connectionContext) {
             super("WUNDA_BLAU", connectionContext);
