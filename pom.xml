@@ -73,14 +73,14 @@
             
             <dependency>
                 <groupId>de.cismet.commons</groupId>
-                <artifactId>ismet-gui-commons</artifactId>
+                <artifactId>cismet-gui-commons</artifactId>
                 <version>6.2.5</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>6.2.4</version>
+                <version>6.2.5</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
