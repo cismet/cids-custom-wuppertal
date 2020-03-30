@@ -1220,17 +1220,17 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
+    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
         super.dispose();
-    }                                                                         //GEN-LAST:event_cmdOkActionPerformed
+    }//GEN-LAST:event_cmdOkActionPerformed
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
+    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
         dispose();
-    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
+    }//GEN-LAST:event_cmdCancelActionPerformed
 
     @Override
     public void dispose() {
@@ -1244,76 +1244,76 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final int[] sel = lstFlurstuecke.getSelectedIndices();
         for (int i = sel.length; --i >= 0;) {
             cidsObjectListModel.removeElementAt(sel[i]);
         }
         updateFormatProposal();
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbClazzActionPerformed
+    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClazzActionPerformed
         cbProduct.setModel(getProductTypeModel());
         cbProductActionPerformed(null);
         updateFormatProposal();
-    }                                                                           //GEN-LAST:event_cbClazzActionPerformed
+    }//GEN-LAST:event_cbClazzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbProductActionPerformed
+    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductActionPerformed
         final ComboBoxModel[] models = getProductDetailModels();
         cbFormat.setModel(models[0]);
         cbScales.setModel(models[1]);
         updateFormatProposal();
-    }                                                                             //GEN-LAST:event_cbProductActionPerformed
+    }//GEN-LAST:event_cbProductActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbScalesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbScalesActionPerformed
-    }                                                                            //GEN-LAST:event_cbScalesActionPerformed
+    private void cbScalesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbScalesActionPerformed
+    }//GEN-LAST:event_cbScalesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbFormatActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFormatActionPerformed
-    }                                                                            //GEN-LAST:event_cbFormatActionPerformed
+    private void cbFormatActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFormatActionPerformed
+    }//GEN-LAST:event_cbFormatActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomsActionPerformed
+    private void cbGeomsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGeomsActionPerformed
         updateFormatProposal();
         tfE.setEnabled(cbGeoms.getSelectedItem() == null);
         tfN.setEnabled(cbGeoms.getSelectedItem() == null);
-    }                                                                           //GEN-LAST:event_cbGeomsActionPerformed
+    }//GEN-LAST:event_cbGeomsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTabbedPane1StateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_jTabbedPane1StateChanged
+    private void jTabbedPane1StateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         if (jPanel3.equals(jTabbedPane1.getSelectedComponent())) {
             updateForRahmenKartenNr();
         } else {
             updateFormatProposal();
         }
-    }                                                                                //GEN-LAST:event_jTabbedPane1StateChanged
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     /**
      * DOCUMENT ME!
@@ -1473,55 +1473,61 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             return;
         }
 
+        final AlkisProductDescription selectedProduct = getSelectedProduct();
+        final boolean isObjekte = jPanel2.equals(jTabbedPane1.getSelectedComponent());
+        final String auftragsnummer = txtAuftragsnummer.getText();
+        final String additionalText = taAdditionalText.getText();
+        String landParcelCode = null;
+
+        for (int i = 0; i < cidsObjectListModel.size(); ++i) {
+            final Object o = cidsObjectListModel.get(i);
+            if (isObjekte && (o instanceof CidsBean)) {
+                if (((CidsBean)o).getMetaObject().getMetaClass().getTableName().equals(ALKIS_LANDPARCEL_TABLE)) {
+                    landParcelCode = AlkisProducts.getLandparcelCodeFromParcelBeanObject(o);
+                    break;
+                } else if (((CidsBean)o).getMetaObject().getMetaClass().getTableName().equals(
+                                ALKIS_BUCHUNGSBLATT_TABLE)) {
+                    landParcelCode = String.valueOf(((CidsBean)o).getProperty("landparcels[0].landparcelcode"));
+                    break;
+                }
+            }
+        }
+
+        final String objectLandparcel = landParcelCode;
+
         final Point center = geom.getEnvelope().getCentroid();
         final AlkisProductDownloadHelper.AlkisKarteDownloadInfoCreator creator =
             new AlkisProductDownloadHelper.AlkisKarteDownloadInfoCreator() {
 
                 @Override
                 public AlkisProductDownloadHelper.AlkisKarteDownloadInfo createInfo() throws Exception {
-                    String landParcelCode = null;
-                    for (int i = 0; i < cidsObjectListModel.size(); ++i) {
-                        if (((cidsObjectListModel.get(i) instanceof CidsBean)
-                                        && ((CidsBean)cidsObjectListModel.get(i)).getMetaObject().getMetaClass()
-                                        .getTableName().equals(ALKIS_LANDPARCEL_TABLE))) {
-                            landParcelCode = AlkisProducts.getLandparcelCodeFromParcelBeanObject(
-                                    cidsObjectListModel.get(i));
-                            break;
-                        }
-                    }
-                    if (landParcelCode == null) {
-                        // nur Buchungsblätter in Liste
-                        // nimm das erte
-                        if (jPanel2.equals(jTabbedPane1.getSelectedComponent()) && !cidsObjectListModel.isEmpty()
-                                    && ((cidsObjectListModel.get(0) instanceof CidsBean)
-                                        && ((CidsBean)cidsObjectListModel.get(0)).getMetaObject().getMetaClass()
-                                        .getTableName().equals(ALKIS_BUCHUNGSBLATT_TABLE))) {
-                            landParcelCode = String.valueOf(((CidsBean)cidsObjectListModel.get(0)).getProperty(
-                                        "landparcels[0].landparcelcode"));
+                    final String landParcelCode;
+                    if (objectLandparcel != null) {
+                        landParcelCode = objectLandparcel;
+                    } else {
+                        final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
+                                CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
+                                CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
+                                "%",
+                                center);
+                        final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                    .customServerSearch(search, getConnectionContext());
+                        if ((mons != null) && !mons.isEmpty()) {
+                            final MetaObjectNode mon = mons.iterator().next();
+                            landParcelCode = mon.toString();
                         } else {
-                            final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
-                                    CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
-                                    CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
-                                    "%",
-                                    center);
-                            final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                                        .customServerSearch(search, getConnectionContext());
-                            if ((mons != null) && !mons.isEmpty()) {
-                                final MetaObjectNode mon = mons.iterator().next();
-                                landParcelCode = mon.toString();
-                            }
+                            landParcelCode = null;
                         }
                     }
 
-                    final AlkisProductDescription selectedProduct = getSelectedProduct();
                     try {
                         final AlkisProductDownloadHelper.AlkisKarteDownloadInfo info =
                             new AlkisProductDownloadHelper.AlkisKarteDownloadInfo(
                                 selectedProduct.getCode(),
                                 landParcelCode,
-                                txtAuftragsnummer.getText().replaceAll("\\?", ""),
+                                auftragsnummer.replaceAll("\\?", ""),
                                 null,
-                                taAdditionalText.getText(),
+                                additionalText,
                                 selectedProduct.getMassstab(),
                                 selectedProduct.getMassstabMin(),
                                 selectedProduct.getMassstabMax(),
@@ -1960,21 +1966,22 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                             e,
                             AlkisPrintingSettingsWidget.this);
                         LOG.error(e);
-                    } finally {
-                        dispose();
-                        mapPrintListener.cleanUpAndRestoreFeatures();
                     }
 
                     return null;
                 }
             };
 
-        AlkisProductDownloadHelper.downloadKarteCustomProduct(
-            creator,
-            DownloadManagerDialog.getInstance().getJobName(),
-            cidsObjectListModel.size()
-                    > 1,
-            getConnectionContext());
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
+            AlkisProductDownloadHelper.downloadKarteCustomProduct(
+                creator,
+                DownloadManagerDialog.getInstance().getJobName(),
+                cidsObjectListModel.size()
+                        > 1,
+                getConnectionContext());
+            dispose();
+            mapPrintListener.cleanUpAndRestoreFeatures();
+        }
     }
 
     /**
@@ -1984,7 +1991,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      *
      * @return  DOCUMENT ME!
      */
-    private int toInt(final double input) {
+    private static int toInt(final double input) {
         return Double.valueOf(input).intValue();
     }
 
