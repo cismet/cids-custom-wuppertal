@@ -138,6 +138,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
     boolean coodChangedFlag = false;
 
+    boolean updateGeomRunning = false;
+
     private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
     private final DefaultListModel cidsObjectListModel = new DefaultListModel();
     private AlkisPrintListener mapPrintListener;
@@ -251,7 +253,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  features  DOCUMENT ME!
      */
     private void featureChanged(final Collection<Feature> features) {
-        if (!(features.iterator().next() instanceof AlkisPrintListener.PrintFeature)) {
+        if ((features != null) && !features.isEmpty()
+                    && !(features.iterator().next() instanceof AlkisPrintListener.PrintFeature)) {
             ((ButlerGeometryComboBox)cbGeoms).refresh();
         }
     }
@@ -499,9 +502,10 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     @Override
     public void setVisible(final boolean b) {
         cidsObjectListModel.clear();
-        cbFormat.removeActionListener(updatePrintingGeometryAction);
-        cbScales.removeActionListener(updatePrintingGeometryAction);
-        chkRotation.removeActionListener(updatePrintingGeometryAction);
+        tfE.setText("");
+        tfN.setText("");
+        tfRahmenkartenNr.setText("");
+        cbGeoms.setSelectedItem(null);
         Collection<CidsBean> beansToPrint = getObjectBeansInMap();
         if (beansToPrint.isEmpty()) {
             beansToPrint = getBeansFromTreeSelection();
@@ -526,15 +530,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             getSelectedProduct(),
             getCurrentGeometry(),
             chkRotation.isSelected());
-        if (b) {
-            cbFormat.addActionListener(updatePrintingGeometryAction);
-            cbScales.addActionListener(updatePrintingGeometryAction);
-            chkRotation.addActionListener(updatePrintingGeometryAction);
-        } else {
-            cbFormat.removeActionListener(updatePrintingGeometryAction);
-            cbScales.removeActionListener(updatePrintingGeometryAction);
-            chkRotation.removeActionListener(updatePrintingGeometryAction);
-        }
         super.setVisible(b);
     }
 
@@ -1322,41 +1317,58 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      */
     private void setGeomForCenter(final Geometry geom) {
         if (geom != null) {
-            cbScales.setSelectedIndex(cbScales.getModel().getSize() - 1);
+            try {
+                cbFormat.removeActionListener(updatePrintingGeometryAction);
+                cbScales.removeActionListener(updatePrintingGeometryAction);
+                chkRotation.removeActionListener(updatePrintingGeometryAction);
 
-            //
-            if (!coodChangedFlag) {
-                final Point centroid = geom.getEnvelope().getCentroid();
-                tfE.setText("" + coordFormatter.format(centroid.getX()));
-                tfN.setText("" + coordFormatter.format(centroid.getY()));
-            }
-            //
+                cbScales.setSelectedIndex(cbScales.getModel().getSize() - 1);
 
-            final BoundingBox allGeomBB = new BoundingBox(geom);
+                //
+                if (!coodChangedFlag) {
+                    final Point centroid = geom.getEnvelope().getCentroid();
+                    tfE.setText("" + coordFormatter.format(centroid.getX()));
+                    tfN.setText("" + coordFormatter.format(centroid.getY()));
+                }
+                //
 
-            Integer productDefaultScale = null;
-            if (getSelectedProduct() != null) {
-                productDefaultScale = getSelectedProduct().getProductDefaultScale();
-            }
-            final boolean hit = checkAndSet(productDefaultScale, allGeomBB);
-            if (hit) {
-                return;
-            }
+                final BoundingBox allGeomBB = new BoundingBox(geom);
 
-            chkRotation.setSelected(true);
-            final String formatHint;
-            if (allGeomBB.getWidth() >= allGeomBB.getHeight()) {
-                formatHint = "Hoch";
-                cbFormat.setSelectedIndex(cbFormat.getModel().getSize() - 1);
-            } else {
-                cbFormat.setSelectedIndex(cbFormat.getModel().getSize() - 2);
-                formatHint = "Quer";
-            }
+                Integer productDefaultScale = null;
+                if (getSelectedProduct() != null) {
+                    productDefaultScale = getSelectedProduct().getProductDefaultScale();
+                }
+                final boolean hit = checkAndSet(productDefaultScale, allGeomBB);
+                updatePrintingGeometryAction.actionPerformed(null);
+                if (hit) {
+                    return;
+                }
 
-            for (int i = cbFormat.getModel().getSize(); --i >= 0;) {
-                if (String.valueOf(cbFormat.getItemAt(i)).equals(formatHint)) {
-                    cbFormat.setSelectedIndex(i);
-                    break;
+                chkRotation.setSelected(true);
+                final String formatHint;
+                if (allGeomBB.getWidth() >= allGeomBB.getHeight()) {
+                    formatHint = "Hoch";
+                    cbFormat.setSelectedIndex(cbFormat.getModel().getSize() - 1);
+                } else {
+                    cbFormat.setSelectedIndex(cbFormat.getModel().getSize() - 2);
+                    formatHint = "Quer";
+                }
+
+                for (int i = cbFormat.getModel().getSize(); --i >= 0;) {
+                    if (String.valueOf(cbFormat.getItemAt(i)).equals(formatHint)) {
+                        cbFormat.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            } finally {
+                if (isVisible()) {
+                    cbFormat.addActionListener(updatePrintingGeometryAction);
+                    cbScales.addActionListener(updatePrintingGeometryAction);
+                    chkRotation.addActionListener(updatePrintingGeometryAction);
+                } else {
+                    cbFormat.removeActionListener(updatePrintingGeometryAction);
+                    cbScales.removeActionListener(updatePrintingGeometryAction);
+                    chkRotation.removeActionListener(updatePrintingGeometryAction);
                 }
             }
         } else {
@@ -1433,21 +1445,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                             currentLayout.width,
                             currentLayout.heigth,
                             currentMassstab)) {
-                cbFormat.removeActionListener(updatePrintingGeometryAction);
-                cbScales.removeActionListener(updatePrintingGeometryAction);
-                chkRotation.removeActionListener(updatePrintingGeometryAction);
-                try {
-                    cbFormat.setSelectedIndex(i);
-                    cbScales.setSelectedIndex(scaleIndex);
-                    chkRotation.setSelected(false);
-                } finally {
-                    if (isVisible()) {
-                        cbFormat.addActionListener(updatePrintingGeometryAction);
-                        cbScales.addActionListener(updatePrintingGeometryAction);
-                        chkRotation.addActionListener(updatePrintingGeometryAction);
-                    }
-                }
-                updatePrintingGeometryAction.actionPerformed(null);
+                cbFormat.setSelectedIndex(i);
+                cbScales.setSelectedIndex(scaleIndex);
+                chkRotation.setSelected(false);
                 return true;
             }
         }
@@ -1458,8 +1458,15 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * DOCUMENT ME!
      */
     private void updateFormatProposal() {
-        setGeomForCenter(getCurrentGeometry());
-        syncOkButtonWithListStatus();
+        if (!updateGeomRunning) {
+            updateGeomRunning = true;
+            try {
+                setGeomForCenter(getCurrentGeometry());
+                syncOkButtonWithListStatus();
+            } finally {
+                updateGeomRunning = false;
+            }
+        }
     }
 
     /**

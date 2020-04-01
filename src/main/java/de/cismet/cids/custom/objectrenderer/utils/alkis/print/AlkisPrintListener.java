@@ -139,7 +139,6 @@ public class AlkisPrintListener extends FeatureMoveListener {
         mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
         mappingComponent.setPointerAnnotationVisibility(true);
     }
-
     /**
      * DOCUMENT ME!
      *
