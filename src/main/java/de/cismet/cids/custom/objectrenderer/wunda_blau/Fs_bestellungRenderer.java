@@ -162,6 +162,10 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JLabel lblEingegangenAmValue;
     private javax.swing.JLabel lblFlurstuecke;
     private javax.swing.JLabel lblGebuehr;
+    private javax.swing.JLabel lblGebuehrDownload;
+    private javax.swing.JLabel lblGebuehrDownloadValue;
+    private javax.swing.JLabel lblGebuehrPostweg;
+    private javax.swing.JLabel lblGebuehrPostwegValue;
     private javax.swing.JLabel lblGebuehrValue;
     private javax.swing.JLabel lblLaAdresse;
     private javax.swing.JLabel lblLaFirma;
@@ -334,6 +338,10 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         lblGebuehrValue = new javax.swing.JLabel();
         jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         jPanel5 = new javax.swing.JPanel();
+        lblGebuehrDownload = new javax.swing.JLabel();
+        lblGebuehrPostweg = new javax.swing.JLabel();
+        lblGebuehrDownloadValue = new javax.swing.JLabel();
+        lblGebuehrPostwegValue = new javax.swing.JLabel();
         panMap = new javax.swing.JPanel();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
         panAdressen = new javax.swing.JPanel();
@@ -782,6 +790,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebuehr}"),
                 lblGebuehrValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
         binding.setConverter(new CurrencyConverter());
         bindingGroup.addBinding(binding);
 
@@ -841,10 +851,69 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel1.add(jPanel5, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGebuehrDownload,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblGebuehrDownload.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblGebuehrDownload, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGebuehrPostweg,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblGebuehrPostweg.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblGebuehrPostweg, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebuehr}"),
+                lblGebuehrDownloadValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        binding.setConverter(new CurrencyConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblGebuehrDownloadValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebuehr_postweg}"),
+                lblGebuehrPostwegValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        binding.setConverter(new CurrencyConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblGebuehrPostwegValue, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1646,6 +1715,14 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             } else {
                 statusText = "-";
             }
+
+            lblGebuehr.setVisible(!"BAB_WEITERLEITUNG".equals(type));
+            jPanel7.setVisible(!"BAB_WEITERLEITUNG".equals(type));
+            lblGebuehrDownload.setVisible("BAB_WEITERLEITUNG".equals(type));
+            lblGebuehrDownloadValue.setVisible("BAB_WEITERLEITUNG".equals(type));
+            lblGebuehrPostweg.setVisible("BAB_WEITERLEITUNG".equals(type));
+            lblGebuehrPostwegValue.setVisible("BAB_WEITERLEITUNG".equals(type));
+
             lblStatusValue.setText(statusText);
 
             hlStatusErrorDetails.setVisible(fehler != null);
