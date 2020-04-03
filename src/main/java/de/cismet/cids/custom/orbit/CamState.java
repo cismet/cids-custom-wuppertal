@@ -29,6 +29,8 @@ public class CamState {
     private double pan;
     private double tilt;
     private double fov;
+    private String reason;
+    private String additionalInfo;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -146,5 +148,41 @@ public class CamState {
      */
     public void setFov(final double fov) {
         this.fov = fov;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getReason() {
+        return reason;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  reason  DOCUMENT ME!
+     */
+    public void setReason(final String reason) {
+        this.reason = reason;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  additionalInfo  DOCUMENT ME!
+     */
+    public void setAdditionalInfo(final String additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 }

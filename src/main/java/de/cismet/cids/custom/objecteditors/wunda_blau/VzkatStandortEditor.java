@@ -978,40 +978,61 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         final Point viewpoint = (Point)standortBean.getProperty(propertyName);
         final Point standort = (Point)standortBean.getProperty("fk_geom.geo_field");
 
-        if (viewpoint == null) {
-            OrbitControlFeature.controlOrAddOnMap(standort, getConnectionContext());
-        } else {
-            final Geometry currentBB = CismapBroker.getInstance()
-                        .getMappingComponent()
-                        .getCurrentBoundingBoxFromCamera()
-                        .getGeometry(CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
+        final Geometry currentBB = CismapBroker.getInstance()
+                    .getMappingComponent()
+                    .getCurrentBoundingBoxFromCamera()
+                    .getGeometry(CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
 
-            final double h = currentBB.getEnvelopeInternal().getHeight();
-            final double w = currentBB.getEnvelopeInternal().getWidth();
+        final double h = currentBB.getEnvelopeInternal().getHeight();
+        final double w = currentBB.getEnvelopeInternal().getWidth();
 
-            final XBoundingBox bb = new XBoundingBox(viewpoint.getX() - (w / 2),
-                    viewpoint.getY()
-                            - (h / 2),
-                    viewpoint.getX()
-                            + (w / 2),
-                    viewpoint.getY()
-                            + (h / 2),
-                    CismapBroker.getInstance().getSrs().getCode(),
-                    true);
-            CismapBroker.getInstance().getMappingComponent().gotoBoundingBoxWithHistory(bb);
+        final XBoundingBox bb = new XBoundingBox(viewpoint.getX() - (w / 2),
+                viewpoint.getY()
+                        - (h / 2),
+                viewpoint.getX()
+                        + (w / 2),
+                viewpoint.getY()
+                        + (h / 2),
+                CismapBroker.getInstance().getSrs().getCode(),
+                true);
+        CismapBroker.getInstance().getMappingComponent().gotoBoundingBoxWithHistory(bb);
 
-            final double distance = viewpoint.distance(standort);
-            final double angle = getAngle(viewpoint, standort);
+        final double distance = viewpoint.distance(standort);
+        final double angle = getAngle(viewpoint, standort);
 
-            final double fov = 115;
-            final double tilt = -10;
-            final double pan = angle;
-            final Collection selF = CismapBroker.getInstance()
-                        .getMappingComponent()
-                        .getFeatureCollection()
-                        .getSelectedFeatures();
-            OrbitControlFeature.controlOrAddOnMap(viewpoint, getConnectionContext(), fov, pan, tilt);
+        final double fov = 115;
+        final double tilt = -10;
+        final double pan = angle;
+        final Collection selF = CismapBroker.getInstance()
+                    .getMappingComponent()
+                    .getFeatureCollection()
+                    .getSelectedFeatures();
+
+        // Well the right suffix is always the 4th char of the proprtyName
+        // what could possibly go wrong
+
+        final String suffix = propertyName.substring(3, 4);
+
+        final ArrayList richtungen = new ArrayList<String>(3);
+
+        for (final CidsBean schildBean : schildBeans) {
+            final String richtung = "\"" + (String)schildBean.getProperty("fk_richtung.schluessel") + "\""; // vorne, hinten, sonst
+            if (!richtungen.contains(richtung)) {
+                richtungen.add(richtung);
+            }
         }
+
+        final String additionalInfoString = "{\"enableScreenshotsFor\":" + richtungen.toString() + "}";
+
+        OrbitControlFeature.controlOrAddOnMap(
+            viewpoint,
+            getConnectionContext(),
+            fov,
+            pan,
+            tilt,
+            "vzkat.standort."
+                    + ((Integer)standortBean.getProperty("import_id")).toString(),
+            additionalInfoString);
     }
 
     /**
