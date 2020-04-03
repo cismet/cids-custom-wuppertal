@@ -25,6 +25,7 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import java.io.InputStream;
@@ -53,6 +54,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.commons.gui.ScrollablePanel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.VzkatProperties;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.orbit.OrbitControlFeature;
@@ -83,6 +85,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
+
+import de.cismet.netutil.Proxy;
 
 import de.cismet.security.WebAccessManager;
 
@@ -131,6 +135,11 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     //~ Instance fields --------------------------------------------------------
 
+    final WebDavHelper webdavHelper = new WebDavHelper(Proxy.fromPreferences(),
+            VzkatProperties.getInstance().getWebdavUploadUsername(),
+            VzkatProperties.getInstance().getWebdavUploadPassword(),
+            false);
+
     private final StrAdrStrasseLightweightSearch strassennameSearch = new StrAdrStrasseLightweightSearch(
             StrAdrStrasseLightweightSearch.Subject.NAME,
             STRASSENNAME_TOSTRING_TEMPLATE,
@@ -156,13 +165,13 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private final DefaultStyledFeature viewPreviewFeature = new DefaultStyledFeature();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cbGeom;
     private de.cismet.cids.editors.FastBindableReferenceCombo cbStrassenname;
     private de.cismet.cids.editors.FastBindableReferenceCombo cbStrassenschluessel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -175,6 +184,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton jToggleButton2;
+    private javax.swing.JToggleButton jToggleButton3;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXHyperlink jxhOVBW;
     private org.jdesktop.swingx.JXHyperlink jxhOVCenter;
@@ -182,6 +194,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JLabel lblBildTitle;
     private javax.swing.JLabel lblBildTitle1;
     private javax.swing.JLabel lblGeom;
+    private javax.swing.JLabel lblIconHinten;
+    private javax.swing.JLabel lblIconSonstige;
+    private javax.swing.JLabel lblIconVorne;
     private javax.swing.JLabel lblOvPreviewBackwards;
     private javax.swing.JLabel lblOvPreviewCenter;
     private javax.swing.JLabel lblOvPreviewForwards;
@@ -278,6 +293,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel7 = new javax.swing.JPanel();
         panLageTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBildTitle1 = new javax.swing.JLabel();
@@ -303,7 +319,12 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panLageBody = new de.cismet.tools.gui.RoundedPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jToggleButton2 = new javax.swing.JToggleButton();
+        jToggleButton3 = new javax.swing.JToggleButton();
+        lblIconVorne = new javax.swing.JLabel();
+        lblIconHinten = new javax.swing.JLabel();
+        lblIconSonstige = new javax.swing.JLabel();
         lblOvPreviewBackwards = new javax.swing.JLabel();
         lblOvPreviewCenter = new javax.swing.JLabel();
         lblOvPreviewForwards = new javax.swing.JLabel();
@@ -535,18 +556,98 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         jPanel9.setOpaque(false);
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setForeground(new java.awt.Color(127, 127, 127));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        buttonGroup1.add(jToggleButton1);
+        jToggleButton1.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
-            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.jLabel2.text")); // NOI18N
+            jToggleButton1,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.jToggleButton1.text")); // NOI18N
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jToggleButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jToggleButton1, gridBagConstraints);
+
+        buttonGroup1.add(jToggleButton2);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jToggleButton2,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.jToggleButton2.text")); // NOI18N
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jToggleButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jToggleButton2, gridBagConstraints);
+
+        buttonGroup1.add(jToggleButton3);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jToggleButton3,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.jToggleButton3.text")); // NOI18N
+        jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jToggleButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jToggleButton3, gridBagConstraints);
+
+        lblIconVorne.setForeground(new java.awt.Color(127, 127, 127));
+        lblIconVorne.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblIconVorne,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblIconVorne.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel9.add(jLabel2, gridBagConstraints);
+        jPanel9.add(lblIconVorne, gridBagConstraints);
+
+        lblIconHinten.setForeground(new java.awt.Color(127, 127, 127));
+        lblIconHinten.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblIconHinten,
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.lblIconHinten.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel9.add(lblIconHinten, gridBagConstraints);
+
+        lblIconSonstige.setForeground(new java.awt.Color(127, 127, 127));
+        lblIconSonstige.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblIconSonstige,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortEditor.class,
+                "VzkatStandortEditor.lblIconSonstige.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel9.add(lblIconSonstige, gridBagConstraints);
 
         jPanel10.add(jPanel9, "pics");
 
@@ -877,36 +978,40 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         final Point viewpoint = (Point)standortBean.getProperty(propertyName);
         final Point standort = (Point)standortBean.getProperty("fk_geom.geo_field");
 
-        final Geometry currentBB = CismapBroker.getInstance()
-                    .getMappingComponent()
-                    .getCurrentBoundingBoxFromCamera()
-                    .getGeometry(CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
+        if (viewpoint == null) {
+            OrbitControlFeature.controlOrAddOnMap(standort, getConnectionContext());
+        } else {
+            final Geometry currentBB = CismapBroker.getInstance()
+                        .getMappingComponent()
+                        .getCurrentBoundingBoxFromCamera()
+                        .getGeometry(CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()));
 
-        final double h = currentBB.getEnvelopeInternal().getHeight();
-        final double w = currentBB.getEnvelopeInternal().getWidth();
+            final double h = currentBB.getEnvelopeInternal().getHeight();
+            final double w = currentBB.getEnvelopeInternal().getWidth();
 
-        final XBoundingBox bb = new XBoundingBox(viewpoint.getX() - (w / 2),
-                viewpoint.getY()
-                        - (h / 2),
-                viewpoint.getX()
-                        + (w / 2),
-                viewpoint.getY()
-                        + (h / 2),
-                CismapBroker.getInstance().getSrs().getCode(),
-                true);
-        CismapBroker.getInstance().getMappingComponent().gotoBoundingBoxWithHistory(bb);
+            final XBoundingBox bb = new XBoundingBox(viewpoint.getX() - (w / 2),
+                    viewpoint.getY()
+                            - (h / 2),
+                    viewpoint.getX()
+                            + (w / 2),
+                    viewpoint.getY()
+                            + (h / 2),
+                    CismapBroker.getInstance().getSrs().getCode(),
+                    true);
+            CismapBroker.getInstance().getMappingComponent().gotoBoundingBoxWithHistory(bb);
 
-        final double distance = viewpoint.distance(standort);
-        final double angle = getAngle(viewpoint, standort);
+            final double distance = viewpoint.distance(standort);
+            final double angle = getAngle(viewpoint, standort);
 
-        final double fov = 115;
-        final double tilt = -10;
-        final double pan = angle;
-        final Collection selF = CismapBroker.getInstance()
-                    .getMappingComponent()
-                    .getFeatureCollection()
-                    .getSelectedFeatures();
-        OrbitControlFeature.controlOrAddOnMap(viewpoint, getConnectionContext(), fov, pan, tilt);
+            final double fov = 115;
+            final double tilt = -10;
+            final double pan = angle;
+            final Collection selF = CismapBroker.getInstance()
+                        .getMappingComponent()
+                        .getFeatureCollection()
+                        .getSelectedFeatures();
+            OrbitControlFeature.controlOrAddOnMap(viewpoint, getConnectionContext(), fov, pan, tilt);
+        }
     }
 
     /**
@@ -941,12 +1046,71 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     /**
      * DOCUMENT ME!
      */
-    private void loadOvPreviews() {
+    private void loadPreviews() {
         if (cidsBean != null) {
             loadOvPreview(OvDirection.BACKWARDS);
             loadOvPreview(OvDirection.CENTER);
             loadOvPreview(OvDirection.FORWARDS);
+            loadBild("vorne");
+            loadBild("hinten");
+            loadBild("sonstige");
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  richtungSchluessel  DOCUMENT ME!
+     */
+    private void loadBild(final String richtungSchluessel) {
+        final Integer standortImportId = (Integer)cidsBean.getProperty("import_id");
+        final String origFileName = String.format(
+                "ov.image.vzkat.standort.%d.%s.png",
+                standortImportId,
+                richtungSchluessel);
+        // final String previewFileName = String.format("ov.preview.vzkat.standort.%d.%s.png", standortImportId,
+        // "vorne");
+
+        final JLabel label;
+        if ("vorne".equals(richtungSchluessel)) {
+            label = lblIconVorne;
+        } else if ("hinten".equals(richtungSchluessel)) {
+            label = lblIconHinten;
+        } else if ("sonstige".equals(richtungSchluessel)) {
+            label = lblIconSonstige;
+        } else {
+            label = null;
+        }
+
+        label.setText("<html><i>Vorschaubild wird geladen...");
+
+        new SwingWorker<Image, Void>() {
+
+                @Override
+                protected Image doInBackground() throws Exception {
+                    final InputStream is = webdavHelper.getFileFromWebDAV(
+                            origFileName,
+                            VzkatProperties.getInstance().getWebdavUploadUrl()
+                                    + "/",
+                            getConnectionContext());
+
+                    final ImageIcon overview = new javax.swing.ImageIcon(ImageIO.read(is));
+                    // final ImageIcon watermark = new
+                    // javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/orbitviewer/orbit22.png"));
+                    return resizeTo(overview, 320, 320, null);
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        label.setText("");
+                        label.setIcon(new ImageIcon(get()));
+                    } catch (final Exception ex) {
+                        LOG.error("error while loading preview image " + origFileName, ex);
+                        label.setText("<html><i>keine Vorschau verfügbar");
+                    }
+                }
+            }.execute();
     }
 
     /**
@@ -978,7 +1142,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             }
         }
         final Integer standortImportId = (Integer)cidsBean.getProperty("import_id");
-        final String fileName = String.format("ov.preview.%d.%s.png", standortImportId, suffix);
+        final String origFileName = String.format("ov.%d.%s.png", standortImportId, suffix);
+        final String previewFileName = String.format("ov.preview.%d.%s.png", standortImportId, suffix);
 
         label.setText("<html><i>Vorschaubild wird geladen...");
 
@@ -986,34 +1151,26 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
                 @Override
                 protected Image doInBackground() throws Exception {
-                    final String url = String.format(
-                            "%s/%s",
-                            VzkatProperties.getInstance().getOvOverviewUrl(),
-                            fileName);
-                    final InputStream is = WebAccessManager.getInstance().doRequest(new URL(url));
+                    final URL previewUrl = new URL(String.format(
+                                "%s/%s",
+                                VzkatProperties.getInstance().getOvOverviewUrl(),
+                                previewFileName));
+                    final URL origUrl = new URL(String.format(
+                                "%s/%s",
+                                VzkatProperties.getInstance().getOvOverviewUrl(),
+                                origFileName));
+
+                    final InputStream is;
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(previewUrl)) {
+                        is = WebAccessManager.getInstance().doRequest(previewUrl);
+                    } else {
+                        is = WebAccessManager.getInstance().doRequest(origUrl);
+                    }
 
                     final ImageIcon overview = new javax.swing.ImageIcon(ImageIO.read(is));
                     final ImageIcon watermark = new javax.swing.ImageIcon(
                             getClass().getResource("/de/cismet/cids/custom/orbitviewer/orbit22.png"));
-
-                    // create BufferedImage object of same width and height as of original image
-                    final BufferedImage bufferedImage = new BufferedImage(overview.getIconWidth(),
-                            overview.getIconHeight(),
-                            BufferedImage.TRANSLUCENT);
-
-                    final Graphics2D g = (Graphics2D)bufferedImage.getGraphics();
-                    g.drawImage(overview.getImage(), 0, 0, overview.getIconWidth(), overview.getIconHeight(), null);
-                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-                    g.drawImage(watermark.getImage(),
-                        overview.getIconWidth()
-                                - watermark.getIconWidth()
-                                - 10,
-                        10,
-                        watermark.getIconWidth(),
-                        watermark.getIconHeight(),
-                        null);
-
-                    return bufferedImage;
+                    return resizeTo(overview, 320, 320, watermark);
                 }
 
                 @Override
@@ -1022,11 +1179,59 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                         label.setText("");
                         label.setIcon(new ImageIcon(get()));
                     } catch (final Exception ex) {
-                        LOG.error("error while loading ov preview image " + fileName, ex);
+                        LOG.error("error while loading ov preview image " + previewFileName, ex);
                         label.setText("<html><i>keine Vorschau verfügbar");
                     }
                 }
             }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   overview   DOCUMENT ME!
+     * @param   width      DOCUMENT ME!
+     * @param   height     DOCUMENT ME!
+     * @param   watermark  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Image resizeTo(final ImageIcon overview, final int width, final int height, final ImageIcon watermark) {
+        // create BufferedImage object of same width and height as of original image
+        final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+
+        final Graphics2D g = (Graphics2D)bufferedImage.getGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+        final int shortest = (overview.getIconWidth() > overview.getIconHeight()) ? overview.getIconHeight()
+                                                                                  : overview.getIconWidth();
+        g.drawImage(overview.getImage(),
+            0,
+            0,
+            width,
+            height,
+            (overview.getIconWidth() - shortest)
+                    / 2,
+            (overview.getIconHeight() - shortest)
+                    / 2,
+            overview.getIconWidth()
+                    - ((overview.getIconWidth() - shortest) / 2),
+            overview.getIconHeight()
+                    - ((overview.getIconHeight() - shortest) / 2),
+            null);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+        if (watermark != null) {
+            g.drawImage(watermark.getImage(),
+                width
+                        - watermark.getIconWidth()
+                        - 10,
+                10,
+                watermark.getIconWidth(),
+                watermark.getIconHeight(),
+                null);
+        }
+
+        return bufferedImage;
     }
 
     /**
@@ -1099,23 +1304,25 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             final String propertyName = getOvPropertyName(ovDirection);
 
             final Point viewpoint = (Point)standortBean.getProperty(propertyName);
-            final Point standort = (Point)standortBean.getProperty("fk_geom.geo_field");
-            viewPreviewFeature.setGeometry(viewpoint);
+            if (viewpoint != null) {
+                final Point standort = (Point)standortBean.getProperty("fk_geom.geo_field");
+                viewPreviewFeature.setGeometry(viewpoint);
 
-            final FeatureAnnotationSymbol fas = new FeatureAnnotationSymbol(OrbitControlFeature.createArcImage(
-                        90,
-                        90,
-                        (int)getAngle(viewpoint, standort),
-                        10,
-                        60).getImage());
+                final FeatureAnnotationSymbol fas = new FeatureAnnotationSymbol(OrbitControlFeature.createArcImage(
+                            90,
+                            90,
+                            (int)getAngle(viewpoint, standort),
+                            10,
+                            60).getImage());
 
-            fas.setSweetSpotX(0.5);
-            fas.setSweetSpotY(0.5);
+                fas.setSweetSpotX(0.5);
+                fas.setSweetSpotY(0.5);
 
-            viewPreviewFeature.setPointAnnotationSymbol(fas);
+                viewPreviewFeature.setPointAnnotationSymbol(fas);
 
-            mappingComponent1.getFeatureCollection().addFeature(viewPreviewFeature);
-            mappingComponent1.refresh();
+                mappingComponent1.getFeatureCollection().addFeature(viewPreviewFeature);
+                mappingComponent1.refresh();
+            }
         } else {
             mappingComponent1.getFeatureCollection().removeFeature(viewPreviewFeature);
         }
@@ -1180,6 +1387,44 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         showOvPreviewFeature(OvDirection.FORWARDS, false);
         showOvPreviewImage(OvDirection.FORWARDS, false);
     }                                                                      //GEN-LAST:event_jxhOVFWMouseExited
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
+        showImage("vorne");
+    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jToggleButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton2ActionPerformed
+        showImage("hinten");
+    }                                                                                  //GEN-LAST:event_jToggleButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jToggleButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton3ActionPerformed
+        showImage("sonstige");
+    }                                                                                  //GEN-LAST:event_jToggleButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  richtungSchluessel  DOCUMENT ME!
+     */
+    private void showImage(final String richtungSchluessel) {
+        lblIconVorne.setVisible("vorne".equals(richtungSchluessel));
+        lblIconHinten.setVisible("hinten".equals(richtungSchluessel));
+        lblIconSonstige.setVisible("sonstige".equals(richtungSchluessel));
+    }
 
     /**
      * DOCUMENT ME!
@@ -1512,6 +1757,15 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      */
     protected void setSelectedSchildBean(final CidsBean schildBean) {
         selectedSchildBean = schildBean;
+        if (schildBean != null) {
+            if ("vorne".equals(schildBean.getProperty("fk_richtung.schluessel"))) {
+                jToggleButton1.setSelected(true);
+            } else if ("hinten".equals(schildBean.getProperty("fk_richtung.schluessel"))) {
+                jToggleButton2.setSelected(true);
+            } else if ("sonstige".equals(schildBean.getProperty("fk_richtung.schluessel"))) {
+                jToggleButton3.setSelected(true);
+            }
+        }
     }
 
     @Override
@@ -1539,45 +1793,12 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             refreshGeomFeatures();
 
             reloadShilder();
+
             if (standortBean.getProperty("ov_center") == null) {
-                jxhOVCenter.setEnabled(false);
-            }
-            if (standortBean.getProperty("ov_bw") == null) {
-                jxhOVBW.setEnabled(false);
-            }
-            if (standortBean.getProperty("ov_fw") == null) {
-                jxhOVFW.setEnabled(false);
+                jxhOVBW.setVisible(false);
+                jxhOVFW.setVisible(false);
             }
         }
-
-//        new SwingWorker<Image, Object>() {
-//
-//                @Override
-//                protected Image doInBackground() throws Exception {
-//                    final URL bildURL = new URL(
-//                            "https://i.pinimg.com/236x/b7/95/67/b79567b505f3101a8a58f1d0f6d10687.jpg");
-//                    final BufferedImage originalBild = ImageIO.read(WebAccessManager.getInstance().doRequest(bildURL));
-//                    final int bildZielBreite = (originalBild.getWidth() > originalBild.getHeight()) ? -1 : 250;
-//                    final int bildZielHoehe = (originalBild.getWidth() > originalBild.getHeight()) ? 250 : -1;
-//                    final Image skaliertesBild = originalBild.getScaledInstance(
-//                            bildZielBreite,
-//                            bildZielHoehe,
-//                            Image.SCALE_SMOOTH);
-//                    return skaliertesBild;
-//                }
-//
-//                @Override
-//                protected void done() {
-//                    final Image skaliertesBild;
-//                    try {
-//                        skaliertesBild = get();
-//                        jLabel2.setIcon(new ImageIcon(skaliertesBild));
-//                    } catch (final Exception ex) {
-//                        LOG.error("Bild konnte nicht geladen werden", ex);
-//                    }
-//                }
-//            }.execute();
-
     }
 
     /**
@@ -1592,7 +1813,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         this.cidsBean = cidsBean;
-        loadOvPreviews();
+        showImage("vorne");
+        loadPreviews();
         if ((cidsBean != null)
                     && "vzkat_standort".equalsIgnoreCase((cidsBean.getMetaObject().getMetaClass().getTableName()))) {
             setStandortBean(cidsBean);
