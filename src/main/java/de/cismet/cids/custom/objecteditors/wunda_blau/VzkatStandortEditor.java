@@ -19,8 +19,17 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineSegment;
 import com.vividsolutions.jts.geom.Point;
 
+import java.awt.AlphaComposite;
+import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+
+import java.io.InputStream;
+
+import java.net.URL;
 
 import java.sql.Timestamp;
 
@@ -33,13 +42,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.commons.gui.ScrollablePanel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.VzkatProperties;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.orbit.OrbitControlFeature;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
@@ -58,10 +72,8 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultFeatureServiceFeature;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
-import de.cismet.cismap.commons.featureservice.DefaultLayerProperties;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
@@ -71,6 +83,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
+
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -101,6 +115,20 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             StrAdrStrasseLightweightSearch.Subject.SCHLUESSEL.toString()
         };
 
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private enum OvDirection {
+
+        //~ Enum constants -----------------------------------------------------
+
+        BACKWARDS, CENTER, FORWARDS
+    }
+
     //~ Instance fields --------------------------------------------------------
 
     private final StrAdrStrasseLightweightSearch strassennameSearch = new StrAdrStrasseLightweightSearch(
@@ -125,7 +153,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private final List<CidsBean> deletedSchildBeans = new ArrayList<>();
     private CidsBean standortBean;
 
-    private DefaultStyledFeature viewPreviewFeature = new DefaultStyledFeature();
+    private final DefaultStyledFeature viewPreviewFeature = new DefaultStyledFeature();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbGeom;
@@ -137,6 +165,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -144,6 +173,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXHyperlink jxhOVBW;
@@ -152,6 +182,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JLabel lblBildTitle;
     private javax.swing.JLabel lblBildTitle1;
     private javax.swing.JLabel lblGeom;
+    private javax.swing.JLabel lblOvPreviewBackwards;
+    private javax.swing.JLabel lblOvPreviewCenter;
+    private javax.swing.JLabel lblOvPreviewForwards;
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JLabel lblStrassenschluessel;
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
@@ -268,7 +301,12 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panBildTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBildTitle = new javax.swing.JLabel();
         panLageBody = new de.cismet.tools.gui.RoundedPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        lblOvPreviewBackwards = new javax.swing.JLabel();
+        lblOvPreviewCenter = new javax.swing.JLabel();
+        lblOvPreviewForwards = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jxhOVCenter = new org.jdesktop.swingx.JXHyperlink();
         jxhOVFW = new org.jdesktop.swingx.JXHyperlink();
@@ -486,10 +524,16 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         jPanel8.add(panBildTitle, gridBagConstraints);
 
         panLageBody.setCurve(0);
-        panLageBody.setMaximumSize(new java.awt.Dimension(320, 320));
-        panLageBody.setMinimumSize(new java.awt.Dimension(320, 320));
-        panLageBody.setPreferredSize(new java.awt.Dimension(320, 320));
         panLageBody.setLayout(new java.awt.GridBagLayout());
+
+        jPanel10.setMaximumSize(new java.awt.Dimension(320, 320));
+        jPanel10.setMinimumSize(new java.awt.Dimension(320, 320));
+        jPanel10.setOpaque(false);
+        jPanel10.setPreferredSize(new java.awt.Dimension(320, 320));
+        jPanel10.setLayout(new java.awt.CardLayout());
+
+        jPanel9.setOpaque(false);
+        jPanel9.setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setForeground(new java.awt.Color(127, 127, 127));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -502,7 +546,39 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panLageBody.add(jLabel2, gridBagConstraints);
+        jPanel9.add(jLabel2, gridBagConstraints);
+
+        jPanel10.add(jPanel9, "pics");
+
+        lblOvPreviewBackwards.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblOvPreviewBackwards,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortEditor.class,
+                "VzkatStandortEditor.lblOvPreviewBackwards.text")); // NOI18N
+        jPanel10.add(lblOvPreviewBackwards, "ovBackwards");
+
+        lblOvPreviewCenter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblOvPreviewCenter,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortEditor.class,
+                "VzkatStandortEditor.lblOvPreviewBackwards.text")); // NOI18N
+        jPanel10.add(lblOvPreviewCenter, "ovCenter");
+
+        lblOvPreviewForwards.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblOvPreviewForwards,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortEditor.class,
+                "VzkatStandortEditor.lblOvPreviewBackwards.text")); // NOI18N
+        jPanel10.add(lblOvPreviewForwards, "ovForwards");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panLageBody.add(jPanel10, gridBagConstraints);
 
         jPanel6.setOpaque(false);
         jPanel6.setLayout(new java.awt.GridBagLayout());
@@ -787,15 +863,17 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVCenterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVCenterActionPerformed
-        handleViewGeom("ov_center");
+        handleViewGeom(OvDirection.CENTER);
     }                                                                               //GEN-LAST:event_jxhOVCenterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param  propertyName  DOCUMENT ME!
+     * @param  ovDirection  propertyName DOCUMENT ME!
      */
-    private void handleViewGeom(final String propertyName) {
+    private void handleViewGeom(final OvDirection ovDirection) {
+        final String propertyName = getOvPropertyName(ovDirection);
+
         final Point viewpoint = (Point)standortBean.getProperty(propertyName);
         final Point standort = (Point)standortBean.getProperty("fk_geom.geo_field");
 
@@ -834,10 +912,157 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     /**
      * DOCUMENT ME!
      *
+     * @param   ovDirection  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getOvPropertyName(final OvDirection ovDirection) {
+        final String propertyName;
+        switch (ovDirection) {
+            case BACKWARDS: {
+                propertyName = "ov_bw";
+            }
+            break;
+            case CENTER: {
+                propertyName = "ov_center";
+            }
+            break;
+            case FORWARDS: {
+                propertyName = "ov_fw";
+            }
+            break;
+            default: {
+                propertyName = null;
+            }
+        }
+        return propertyName;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void loadOvPreviews() {
+        if (cidsBean != null) {
+            loadOvPreview(OvDirection.BACKWARDS);
+            loadOvPreview(OvDirection.CENTER);
+            loadOvPreview(OvDirection.FORWARDS);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  ovDirection  DOCUMENT ME!
+     */
+    private void loadOvPreview(final OvDirection ovDirection) {
+        final String suffix;
+        final JLabel label;
+        switch (ovDirection) {
+            case BACKWARDS: {
+                suffix = "b";
+                label = lblOvPreviewBackwards;
+            }
+            break;
+            case CENTER: {
+                suffix = "c";
+                label = lblOvPreviewCenter;
+            }
+            break;
+            case FORWARDS: {
+                suffix = "f";
+                label = lblOvPreviewForwards;
+            }
+            break;
+            default: {
+                return;
+            }
+        }
+        final Integer standortImportId = (Integer)cidsBean.getProperty("import_id");
+        final String fileName = String.format("ov.preview.%d.%s.png", standortImportId, suffix);
+
+        label.setText("<html><i>Vorschaubild wird geladen...");
+
+        new SwingWorker<Image, Void>() {
+
+                @Override
+                protected Image doInBackground() throws Exception {
+                    final String url = String.format(
+                            "%s/%s",
+                            VzkatProperties.getInstance().getOvOverviewUrl(),
+                            fileName);
+                    final InputStream is = WebAccessManager.getInstance().doRequest(new URL(url));
+
+                    final ImageIcon overview = new javax.swing.ImageIcon(ImageIO.read(is));
+                    final ImageIcon watermark = new javax.swing.ImageIcon(
+                            getClass().getResource("/de/cismet/cids/custom/orbitviewer/orbit22.png"));
+
+                    // create BufferedImage object of same width and height as of original image
+                    final BufferedImage bufferedImage = new BufferedImage(overview.getIconWidth(),
+                            overview.getIconHeight(),
+                            BufferedImage.TRANSLUCENT);
+
+                    final Graphics2D g = (Graphics2D)bufferedImage.getGraphics();
+                    g.drawImage(overview.getImage(), 0, 0, overview.getIconWidth(), overview.getIconHeight(), null);
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                    g.drawImage(watermark.getImage(),
+                        overview.getIconWidth()
+                                - watermark.getIconWidth()
+                                - 10,
+                        10,
+                        watermark.getIconWidth(),
+                        watermark.getIconHeight(),
+                        null);
+
+                    return bufferedImage;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        label.setText("");
+                        label.setIcon(new ImageIcon(get()));
+                    } catch (final Exception ex) {
+                        LOG.error("error while loading ov preview image " + fileName, ex);
+                        label.setText("<html><i>keine Vorschau verfügbar");
+                    }
+                }
+            }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  ovDirection  DOCUMENT ME!
+     * @param  show         DOCUMENT ME!
+     */
+    private void showOvPreviewImage(final OvDirection ovDirection, final boolean show) {
+        if (show) {
+            switch (ovDirection) {
+                case BACKWARDS: {
+                    ((CardLayout)jPanel10.getLayout()).show(jPanel10, "ovBackwards");
+                }
+                break;
+                case CENTER: {
+                    ((CardLayout)jPanel10.getLayout()).show(jPanel10, "ovCenter");
+                }
+                break;
+                case FORWARDS: {
+                    ((CardLayout)jPanel10.getLayout()).show(jPanel10, "ovForwards");
+                }
+                break;
+            }
+        } else {
+            ((CardLayout)jPanel10.getLayout()).show(jPanel10, "pics");
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVFWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVFWActionPerformed
-        handleViewGeom("ov_fw");
+        handleViewGeom(OvDirection.FORWARDS);
     }                                                                           //GEN-LAST:event_jxhOVFWActionPerformed
 
     /**
@@ -860,44 +1085,51 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVBWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVBWActionPerformed
-        handleViewGeom("ov_bw");
+        handleViewGeom(OvDirection.BACKWARDS);
     }                                                                           //GEN-LAST:event_jxhOVBWActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param  propertyName  DOCUMENT ME!
+     * @param  ovDirection  propertyName DOCUMENT ME!
+     * @param  show         DOCUMENT ME!
      */
-    private void addPreviewFeature(final String propertyName) {
-        final Point viewpoint = (Point)standortBean.getProperty(propertyName);
-        final Point standort = (Point)standortBean.getProperty("fk_geom.geo_field");
-        viewPreviewFeature.setGeometry(viewpoint);
+    private void showOvPreviewFeature(final OvDirection ovDirection, final boolean show) {
+        if (show) {
+            final String propertyName = getOvPropertyName(ovDirection);
 
-        final FeatureAnnotationSymbol fas = new FeatureAnnotationSymbol(OrbitControlFeature.createArcImage(
-                    90,
-                    90,
-                    (int)getAngle(viewpoint, standort),
-                    10,
-                    60).getImage());
+            final Point viewpoint = (Point)standortBean.getProperty(propertyName);
+            final Point standort = (Point)standortBean.getProperty("fk_geom.geo_field");
+            viewPreviewFeature.setGeometry(viewpoint);
 
-        fas.setSweetSpotX(0.5);
-        fas.setSweetSpotY(0.5);
+            final FeatureAnnotationSymbol fas = new FeatureAnnotationSymbol(OrbitControlFeature.createArcImage(
+                        90,
+                        90,
+                        (int)getAngle(viewpoint, standort),
+                        10,
+                        60).getImage());
 
-        viewPreviewFeature.setPointAnnotationSymbol(fas);
+            fas.setSweetSpotX(0.5);
+            fas.setSweetSpotY(0.5);
 
-        mappingComponent1.getFeatureCollection().addFeature(viewPreviewFeature);
+            viewPreviewFeature.setPointAnnotationSymbol(fas);
 
-        mappingComponent1.refresh();
+            mappingComponent1.getFeatureCollection().addFeature(viewPreviewFeature);
+            mappingComponent1.refresh();
+        } else {
+            mappingComponent1.getFeatureCollection().removeFeature(viewPreviewFeature);
+        }
     }
+
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVCenterMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVCenterMouseEntered
-
-        addPreviewFeature("ov_center");
-    } //GEN-LAST:event_jxhOVCenterMouseEntered
+        showOvPreviewFeature(OvDirection.CENTER, true);
+        showOvPreviewImage(OvDirection.CENTER, true);
+    }                                                                           //GEN-LAST:event_jxhOVCenterMouseEntered
 
     /**
      * DOCUMENT ME!
@@ -905,7 +1137,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVCenterMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVCenterMouseExited
-        mappingComponent1.getFeatureCollection().removeFeature(viewPreviewFeature);
+        showOvPreviewFeature(OvDirection.CENTER, false);
+        showOvPreviewImage(OvDirection.CENTER, false);
     }                                                                          //GEN-LAST:event_jxhOVCenterMouseExited
 
     /**
@@ -914,7 +1147,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVBWMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVBWMouseEntered
-        addPreviewFeature("ov_bw");
+        showOvPreviewFeature(OvDirection.BACKWARDS, true);
+        showOvPreviewImage(OvDirection.BACKWARDS, true);
     }                                                                       //GEN-LAST:event_jxhOVBWMouseEntered
 
     /**
@@ -923,7 +1157,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVFWMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVFWMouseEntered
-        addPreviewFeature("ov_fw");
+        showOvPreviewFeature(OvDirection.FORWARDS, true);
+        showOvPreviewImage(OvDirection.FORWARDS, true);
     }                                                                       //GEN-LAST:event_jxhOVFWMouseEntered
 
     /**
@@ -932,7 +1167,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVBWMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVBWMouseExited
-        mappingComponent1.getFeatureCollection().removeFeature(viewPreviewFeature);
+        showOvPreviewFeature(OvDirection.BACKWARDS, false);
+        showOvPreviewImage(OvDirection.BACKWARDS, false);
     }                                                                      //GEN-LAST:event_jxhOVBWMouseExited
 
     /**
@@ -941,7 +1177,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void jxhOVFWMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVFWMouseExited
-        mappingComponent1.getFeatureCollection().removeFeature(viewPreviewFeature);
+        showOvPreviewFeature(OvDirection.FORWARDS, false);
+        showOvPreviewImage(OvDirection.FORWARDS, false);
     }                                                                      //GEN-LAST:event_jxhOVFWMouseExited
 
     /**
@@ -1355,6 +1592,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         this.cidsBean = cidsBean;
+        loadOvPreviews();
         if ((cidsBean != null)
                     && "vzkat_standort".equalsIgnoreCase((cidsBean.getMetaObject().getMetaClass().getTableName()))) {
             setStandortBean(cidsBean);

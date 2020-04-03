@@ -93,9 +93,8 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbStvo;
     private de.cismet.cids.editors.FastBindableReferenceCombo cbVerkehrszeichen;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo1;
-    private javax.swing.Box.Filler fillBeschreibungBodyLeft;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler fillBemerkungBodyLeft;
+    private javax.swing.Box.Filler fillBeschriftungBodyLeft;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -109,14 +108,19 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblBemerkung;
+    private javax.swing.JLabel lblBeschriftung;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblPosition;
+    private javax.swing.JLabel lblVerfuegungsnummer;
     private javax.swing.JLabel lblVerkehrszeichen;
     private de.cismet.tools.gui.RoundedPanel panBeschreibungBody;
     private javax.swing.JPanel panBeschreibungBodyLeft;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
     private javax.swing.JTextArea txtBemerkung;
+    private javax.swing.JTextArea txtBeschriftung;
+    private javax.swing.JTextField txtVerfuegungsnummer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -180,33 +184,35 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         jLabel3 = new javax.swing.JLabel();
         panBeschreibungBody = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungBodyLeft = new javax.swing.JPanel();
+        lblPosition = new javax.swing.JLabel();
+        lblVerfuegungsnummer = new javax.swing.JLabel();
         lblVerkehrszeichen = new javax.swing.JLabel();
-        fillBeschreibungBodyLeft = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        lblBeschriftung = new javax.swing.JLabel();
+        fillBeschriftungBodyLeft = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         lblBemerkung = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtBemerkung = new javax.swing.JTextArea();
-        lblIcon = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        fillBemerkungBodyLeft = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        lblPosition = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        txtVerfuegungsnummer = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         cbStvo = new DefaultBindableReferenceCombo(mcVzkatStvo, true, false);
         cbVerkehrszeichen = new de.cismet.cids.editors.FastBindableReferenceCombo(
                 verkehrszeichenSearch,
                 verkehrszeichenSearch.getRepresentationPattern(),
                 verkehrszeichenSearch.getRepresentationFields());
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtBeschriftung = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtBemerkung = new javax.swing.JTextArea();
+        lblIcon = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
 
         setOpaque(false);
@@ -315,99 +321,6 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         panBeschreibungBodyLeft.setOpaque(false);
         panBeschreibungBodyLeft.setLayout(new java.awt.GridBagLayout());
 
-        lblVerkehrszeichen.setFont(lblVerkehrszeichen.getFont().deriveFont(
-                lblVerkehrszeichen.getFont().getStyle()
-                        | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblVerkehrszeichen,
-            org.openide.util.NbBundle.getMessage(
-                VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.lblVerkehrszeichen.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        panBeschreibungBodyLeft.add(lblVerkehrszeichen, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        panBeschreibungBodyLeft.add(fillBeschreibungBodyLeft, gridBagConstraints);
-
-        lblBemerkung.setFont(lblBemerkung.getFont().deriveFont(lblBemerkung.getFont().getStyle() | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblBemerkung,
-            org.openide.util.NbBundle.getMessage(
-                VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.lblBemerkung.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        panBeschreibungBodyLeft.add(lblBemerkung, gridBagConstraints);
-
-        txtBemerkung.setColumns(20);
-        txtBemerkung.setRows(3);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
-                txtBemerkung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane1.setViewportView(txtBemerkung);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        panBeschreibungBodyLeft.add(jScrollPane1, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblIcon,
-            org.openide.util.NbBundle.getMessage(
-                VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.lblIcon.text")); // NOI18N
-        lblIcon.setMaximumSize(new java.awt.Dimension(128, 128));
-        lblIcon.setMinimumSize(new java.awt.Dimension(128, 128));
-        lblIcon.setPreferredSize(new java.awt.Dimension(128, 128));
-        lblIcon.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblIconMouseClicked(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panBeschreibungBodyLeft.add(lblIcon, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panBeschreibungBodyLeft.add(filler1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panBeschreibungBodyLeft.add(filler2, gridBagConstraints);
-
         lblPosition.setFont(new java.awt.Font("Ubuntu", 1, 13)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             lblPosition,
@@ -421,6 +334,79 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.ipady = 10;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panBeschreibungBodyLeft.add(lblPosition, gridBagConstraints);
+
+        lblVerfuegungsnummer.setFont(lblVerfuegungsnummer.getFont().deriveFont(
+                lblVerfuegungsnummer.getFont().getStyle()
+                        | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblVerfuegungsnummer,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.lblVerfuegungsnummer.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(lblVerfuegungsnummer, gridBagConstraints);
+
+        lblVerkehrszeichen.setFont(lblVerkehrszeichen.getFont().deriveFont(
+                lblVerkehrszeichen.getFont().getStyle()
+                        | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblVerkehrszeichen,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.lblVerkehrszeichen.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(lblVerkehrszeichen, gridBagConstraints);
+
+        lblBeschriftung.setFont(lblBeschriftung.getFont().deriveFont(
+                lblBeschriftung.getFont().getStyle()
+                        | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBeschriftung,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.lblBeschriftung.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(lblBeschriftung, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panBeschreibungBodyLeft.add(fillBeschriftungBodyLeft, gridBagConstraints);
+
+        lblBemerkung.setFont(lblBemerkung.getFont().deriveFont(lblBemerkung.getFont().getStyle() | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBemerkung,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.lblBemerkung.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(lblBemerkung, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        panBeschreibungBodyLeft.add(fillBemerkungBodyLeft, gridBagConstraints);
 
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -455,7 +441,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.reihenfolge}"),
@@ -534,6 +520,23 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.weightx = 1.0;
         panBeschreibungBodyLeft.add(jPanel2, gridBagConstraints);
 
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verfuegungsnummer}"),
+                txtVerfuegungsnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panBeschreibungBodyLeft.add(txtVerfuegungsnummer, gridBagConstraints);
+
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
@@ -578,10 +581,79 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         panBeschreibungBodyLeft.add(jPanel3, gridBagConstraints);
+
+        txtBeschriftung.setColumns(20);
+        txtBeschriftung.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschriftung}"),
+                txtBeschriftung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(txtBeschriftung);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(jScrollPane1, gridBagConstraints);
+
+        txtBemerkung.setColumns(20);
+        txtBemerkung.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                txtBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane2.setViewportView(txtBemerkung);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panBeschreibungBodyLeft.add(jScrollPane2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblIcon,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.lblIcon.text")); // NOI18N
+        lblIcon.setMaximumSize(new java.awt.Dimension(128, 128));
+        lblIcon.setMinimumSize(new java.awt.Dimension(128, 128));
+        lblIcon.setPreferredSize(new java.awt.Dimension(128, 128));
+        lblIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblIconMouseClicked(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panBeschreibungBodyLeft.add(lblIcon, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -590,7 +662,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         panBeschreibungBody.add(panBeschreibungBodyLeft, gridBagConstraints);
 
         jPanel4.setBackground(java.awt.Color.gray);
@@ -733,8 +805,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 
         if (!editable) {
             RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
+            txtVerfuegungsnummer.setEditable(editable);
             RendererTools.makeReadOnly(cbVerkehrszeichen);
             RendererTools.makeReadOnly(cbStvo);
+            RendererTools.makeReadOnly(txtBeschriftung);
             RendererTools.makeReadOnly(txtBemerkung);
         } else {
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbVerkehrszeichen);
