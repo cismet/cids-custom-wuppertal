@@ -906,7 +906,32 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                     .getMappingComponent()
                     .getFeatureCollection()
                     .getSelectedFeatures();
-        OrbitControlFeature.controlOrAddOnMap(viewpoint, getConnectionContext(), fov, pan, tilt);
+
+        // Well the right suffix is always the 4th char of the proprtyName
+        // what could possibly go wrong
+
+        final String suffix = propertyName.substring(3, 4);
+
+        final ArrayList richtungen = new ArrayList<String>(3);
+
+        for (final CidsBean schildBean : schildBeans) {
+            final String richtung = "\"" + (String)schildBean.getProperty("fk_richtung.schluessel") + "\""; // vorne, hinten, sonst
+            if (!richtungen.contains(richtung)) {
+                richtungen.add(richtung);
+            }
+        }
+
+        final String additionalInfoString = "{\"enableScreenshotsFor\":" + richtungen.toString() + "}";
+
+        OrbitControlFeature.controlOrAddOnMap(
+            viewpoint,
+            getConnectionContext(),
+            fov,
+            pan,
+            tilt,
+            "vzkat.standort."
+                    + ((Integer)standortBean.getProperty("import_id")).toString(),
+            additionalInfoString);
     }
 
     /**
