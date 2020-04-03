@@ -715,25 +715,25 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXDatePicker1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker1ActionPerformed
+    private void jXDatePicker1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXDatePicker1ActionPerformed
         reloadShilder();
-    }//GEN-LAST:event_jXDatePicker1ActionPerformed
+    }                                                                                 //GEN-LAST:event_jXDatePicker1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         addSchildPanel(null);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrassenschluesselActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrassenschluesselActionPerformed
+    private void cbStrassenschluesselActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrassenschluesselActionPerformed
         if (comboboxesInited && cbStrassenschluesselEnabled) {
             synchronized (this) {
                 try {
@@ -747,14 +747,14 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             }
         }
         updateSelectedStrassenschluessel();
-    }//GEN-LAST:event_cbStrassenschluesselActionPerformed
+    }                                                                                        //GEN-LAST:event_cbStrassenschluesselActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrassennameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrassennameActionPerformed
+    private void cbStrassennameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrassennameActionPerformed
         if (comboboxesInited && cbStrassennameEnabled) {
             synchronized (this) {
                 try {
@@ -767,28 +767,28 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 }
             }
         }
-    }//GEN-LAST:event_cbStrassennameActionPerformed
+    }                                                                                  //GEN-LAST:event_cbStrassennameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGeomActionPerformed
+    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomActionPerformed
         if (editable) {
             refreshGeomFeatures();
             mappingComponent1.zoomToFeatureCollection();
         }
-    }//GEN-LAST:event_cbGeomActionPerformed
+    }                                                                          //GEN-LAST:event_cbGeomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVCenterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhOVCenterActionPerformed
+    private void jxhOVCenterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVCenterActionPerformed
         handleViewGeom("ov_center");
-    }//GEN-LAST:event_jxhOVCenterActionPerformed
+    }                                                                               //GEN-LAST:event_jxhOVCenterActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -828,7 +828,32 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                     .getMappingComponent()
                     .getFeatureCollection()
                     .getSelectedFeatures();
-        OrbitControlFeature.controlOrAddOnMap(viewpoint, getConnectionContext(), fov, pan, tilt);
+
+        // Well the right suffix is always the 4th char of the proprtyName
+        // what could possibly go wrong
+
+        final String suffix = propertyName.substring(3, 4);
+
+        final ArrayList richtungen = new ArrayList<String>(3);
+
+        for (final CidsBean schildBean : schildBeans) {
+            final String richtung = "\"" + (String)schildBean.getProperty("fk_richtung.schluessel") + "\""; // vorne, hinten, sonst
+            if (!richtungen.contains(richtung)) {
+                richtungen.add(richtung);
+            }
+        }
+
+        final String additionalInfoString = "{\"enableScreenshotsFor\":" + richtungen.toString() + "}";
+
+        OrbitControlFeature.controlOrAddOnMap(
+            viewpoint,
+            getConnectionContext(),
+            fov,
+            pan,
+            tilt,
+            "vzkat.standort."
+                    + ((Integer)standortBean.getProperty("import_id")).toString(),
+            additionalInfoString);
     }
 
     /**
@@ -836,9 +861,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVFWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhOVFWActionPerformed
+    private void jxhOVFWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVFWActionPerformed
         handleViewGeom("ov_fw");
-    }//GEN-LAST:event_jxhOVFWActionPerformed
+    }                                                                           //GEN-LAST:event_jxhOVFWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -859,9 +884,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVBWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhOVBWActionPerformed
+    private void jxhOVBWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVBWActionPerformed
         handleViewGeom("ov_bw");
-    }//GEN-LAST:event_jxhOVBWActionPerformed
+    }                                                                           //GEN-LAST:event_jxhOVBWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -894,55 +919,55 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVCenterMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVCenterMouseEntered
+    private void jxhOVCenterMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVCenterMouseEntered
 
         addPreviewFeature("ov_center");
-    }//GEN-LAST:event_jxhOVCenterMouseEntered
+    } //GEN-LAST:event_jxhOVCenterMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVCenterMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVCenterMouseExited
+    private void jxhOVCenterMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVCenterMouseExited
         mappingComponent1.getFeatureCollection().removeFeature(viewPreviewFeature);
-    }//GEN-LAST:event_jxhOVCenterMouseExited
+    }                                                                          //GEN-LAST:event_jxhOVCenterMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVBWMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVBWMouseEntered
+    private void jxhOVBWMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVBWMouseEntered
         addPreviewFeature("ov_bw");
-    }//GEN-LAST:event_jxhOVBWMouseEntered
+    }                                                                       //GEN-LAST:event_jxhOVBWMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVFWMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVFWMouseEntered
+    private void jxhOVFWMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVFWMouseEntered
         addPreviewFeature("ov_fw");
-    }//GEN-LAST:event_jxhOVFWMouseEntered
+    }                                                                       //GEN-LAST:event_jxhOVFWMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVBWMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVBWMouseExited
+    private void jxhOVBWMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVBWMouseExited
         mappingComponent1.getFeatureCollection().removeFeature(viewPreviewFeature);
-    }//GEN-LAST:event_jxhOVBWMouseExited
+    }                                                                      //GEN-LAST:event_jxhOVBWMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVFWMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVFWMouseExited
+    private void jxhOVFWMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVFWMouseExited
         mappingComponent1.getFeatureCollection().removeFeature(viewPreviewFeature);
-    }//GEN-LAST:event_jxhOVFWMouseExited
+    }                                                                      //GEN-LAST:event_jxhOVFWMouseExited
 
     /**
      * DOCUMENT ME!

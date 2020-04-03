@@ -261,7 +261,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @param  connectionContext  DOCUMENT ME!
      */
     public static void controlOrAddOnMap(final Point position, final ConnectionContext connectionContext) {
-        controlOrAddOnMap(position, connectionContext, null, null, null);
+        controlOrAddOnMap(position, connectionContext, null, null, null, null, null);
     }
 
     /**
@@ -272,12 +272,16 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @param  fov                DOCUMENT ME!
      * @param  pan                DOCUMENT ME!
      * @param  tilt               DOCUMENT ME!
+     * @param  reason             DOCUMENT ME!
+     * @param  additionalInfo     DOCUMENT ME!
      */
     public static void controlOrAddOnMap(final Point position,
             final ConnectionContext connectionContext,
             final Double fov,
             final Double pan,
-            final Double tilt) {
+            final Double tilt,
+            final String reason,
+            final String additionalInfo) {
         if ((CURRENT_CONTROL_FEATURE != null) && (CURRENT_CONTROL_FEATURE.socketChannelId != null)
                     && (CismapBroker.getInstance().getMappingComponent().getPFeatureHM().get(CURRENT_CONTROL_FEATURE)
                         != null)) {
@@ -299,10 +303,16 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
             if (tilt != null) {
                 CURRENT_CONTROL_FEATURE.camState.setTilt(tilt);
             }
+            if (reason != null) {
+                CURRENT_CONTROL_FEATURE.camState.setReason(reason);
+            }
+            if (additionalInfo != null) {
+                CURRENT_CONTROL_FEATURE.camState.setAdditionalInfo(additionalInfo);
+            }
             CURRENT_CONTROL_FEATURE.updateOrbitIfPossible();
             CismapBroker.getInstance().getMappingComponent().getPFeatureHM().get(CURRENT_CONTROL_FEATURE).visualize();
         } else {
-            addToMap(position, connectionContext, fov, pan, tilt);
+            addToMap(position, connectionContext, fov, pan, tilt, reason, additionalInfo);
         }
     }
     /**
@@ -321,7 +331,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @param  connectionContext  DOCUMENT ME!
      */
     public static void addToMap(final Point position, final ConnectionContext connectionContext) {
-        addToMap(position, connectionContext, null, null, null);
+        addToMap(position, connectionContext, null, null, null, null, null);
     }
     /**
      * DOCUMENT ME!
@@ -331,6 +341,8 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
      * @param   fov                DOCUMENT ME!
      * @param   pan                DOCUMENT ME!
      * @param   tilt               DOCUMENT ME!
+     * @param   reason             DOCUMENT ME!
+     * @param   additionalInfo     DOCUMENT ME!
      *
      * @throws  RuntimeException  DOCUMENT ME!
      */
@@ -338,7 +350,9 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
             final ConnectionContext connectionContext,
             final Double fov,
             final Double pan,
-            final Double tilt) {
+            final Double tilt,
+            final String reason,
+            final String additionalInfo) {
         try {
             new SwingWorker<OrbitControlFeature, Void>() {
 
@@ -384,6 +398,21 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                                         .getFeatureCollection()
                                         .removeFeature(CURRENT_CONTROL_FEATURE);
                                 CURRENT_CONTROL_FEATURE = null;
+                            }
+                            if (fov != null) {
+                                CURRENT_CONTROL_FEATURE.camState.setFov(fov);
+                            }
+                            if (pan != null) {
+                                CURRENT_CONTROL_FEATURE.camState.setPan(pan);
+                            }
+                            if (tilt != null) {
+                                CURRENT_CONTROL_FEATURE.camState.setTilt(tilt);
+                            }
+                            if (reason != null) {
+                                CURRENT_CONTROL_FEATURE.camState.setReason(reason);
+                            }
+                            if (additionalInfo != null) {
+                                CURRENT_CONTROL_FEATURE.camState.setAdditionalInfo(additionalInfo);
                             }
                             CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeature(vcmf);
                             CismapBroker.getInstance().getMappingComponent().getFeatureCollection().holdFeature(vcmf);
