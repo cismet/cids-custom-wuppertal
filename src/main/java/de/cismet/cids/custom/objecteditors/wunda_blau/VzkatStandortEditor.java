@@ -1084,7 +1084,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * @param  richtungSchluessel  DOCUMENT ME!
      */
     private void loadBild(final String richtungSchluessel) {
-        final Integer standortImportId = (Integer)cidsBean.getProperty("import_id");
+        final Integer standortImportId = (Integer)standortBean.getProperty("import_id");
         final String origFileName = String.format(
                 "ov.image.vzkat.standort.%d.%s.png",
                 standortImportId,
@@ -1162,7 +1162,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 return;
             }
         }
-        final Integer standortImportId = (Integer)cidsBean.getProperty("import_id");
+        final Integer standortImportId = (Integer)standortBean.getProperty("import_id");
         final String origFileName = String.format("ov.%d.%s.png", standortImportId, suffix);
         final String previewFileName = String.format("ov.preview.%d.%s.png", standortImportId, suffix);
 
