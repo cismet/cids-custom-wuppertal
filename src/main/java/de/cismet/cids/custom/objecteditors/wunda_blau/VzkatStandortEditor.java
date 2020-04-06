@@ -1813,9 +1813,11 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             initMap();
             refreshStrassenComboboxes();
             refreshGeomFeatures();
-
+            
             reloadShilder();
 
+            loadPreviews();
+            
             if (standortBean.getProperty("ov_center") == null) {
                 jxhOVBW.setVisible(false);
                 jxhOVFW.setVisible(false);
@@ -1841,7 +1843,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             setStandortBean(cidsBean);
         }
 
-        loadPreviews();
 //
 //        final Map<CidsBean, List> richtungBeanMap = createRichtungsLists(schildBeans);
 //        if (richtungBeanMap != null) {
