@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -1834,11 +1835,43 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         this.cidsBean = cidsBean;
-        showImage("vorne");
-        loadPreviews();
+
         if ((cidsBean != null)
                     && "vzkat_standort".equalsIgnoreCase((cidsBean.getMetaObject().getMetaClass().getTableName()))) {
             setStandortBean(cidsBean);
+        }
+
+        loadPreviews();
+
+        final Map<CidsBean, List> richtungBeanMap = createRichtungsLists(schildBeans);
+        if (richtungBeanMap != null) {
+            final Set<CidsBean> richtungBeans = richtungBeanMap.keySet();
+            boolean vorneExists = false;
+            boolean hintenExists = false;
+            boolean sonstigeExists = false;
+            if ((richtungBeans != null) && !richtungBeans.isEmpty()) {
+                for (final CidsBean richtungBean : richtungBeans) {
+                    if (richtungBean != null) {
+                        if ("vorne".equals(richtungBean.getProperty("schluessel"))) {
+                            vorneExists = true;
+                        } else if ("hinten".equals(richtungBean.getProperty("schluessel"))) {
+                            hintenExists = true;
+                        } else if ("sonstige".equals(richtungBean.getProperty("schluessel"))) {
+                            sonstigeExists = true;
+                        }
+                    }
+                }
+                if (vorneExists) {
+                    showImage("vorne");
+                } else if (hintenExists) {
+                    showImage("hinten");
+                } else if (sonstigeExists) {
+                    showImage("sonstige");
+                }
+            }
+            jToggleButton1.setVisible(vorneExists);
+            jToggleButton2.setVisible(hintenExists);
+            jToggleButton3.setVisible(sonstigeExists);
         }
     }
 
