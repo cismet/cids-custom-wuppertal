@@ -311,6 +311,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
             }
             CURRENT_CONTROL_FEATURE.updateOrbitIfPossible();
             CismapBroker.getInstance().getMappingComponent().getPFeatureHM().get(CURRENT_CONTROL_FEATURE).visualize();
+            CURRENT_CONTROL_FEATURE.visualizeRotation();
         } else {
             addToMap(position, connectionContext, fov, pan, tilt, reason, additionalInfo);
         }
@@ -399,6 +400,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                                         .removeFeature(CURRENT_CONTROL_FEATURE);
                                 CURRENT_CONTROL_FEATURE = null;
                             }
+                            CURRENT_CONTROL_FEATURE = vcmf;
                             if (fov != null) {
                                 CURRENT_CONTROL_FEATURE.camState.setFov(fov);
                             }
@@ -416,7 +418,7 @@ public class OrbitControlFeature extends DefaultStyledFeature implements XStyled
                             }
                             CismapBroker.getInstance().getMappingComponent().getFeatureCollection().addFeature(vcmf);
                             CismapBroker.getInstance().getMappingComponent().getFeatureCollection().holdFeature(vcmf);
-                            CURRENT_CONTROL_FEATURE = vcmf;
+                            CURRENT_CONTROL_FEATURE.visualizeRotation();
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
                         }
