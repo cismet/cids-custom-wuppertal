@@ -17,7 +17,7 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
-import de.cismet.tools.gui.downloadmanager.AbstractDownload;
+import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
 
 /**
  * A ByteArrayDownload writes a given byte array to the file system. Using the DownloadManager this class can be used to
@@ -26,7 +26,7 @@ import de.cismet.tools.gui.downloadmanager.AbstractDownload;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class ByteArrayActionDownload extends AbstractDownload implements ConnectionContextProvider {
+public class ByteArrayActionDownload extends AbstractCancellableDownload implements ConnectionContextProvider {
 
     //~ Instance fields --------------------------------------------------------
 

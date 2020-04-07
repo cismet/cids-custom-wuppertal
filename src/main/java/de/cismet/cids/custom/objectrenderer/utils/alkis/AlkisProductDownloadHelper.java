@@ -24,11 +24,14 @@ import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Cancellable;
+
 import java.awt.Component;
 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.JOptionPane;
 
@@ -729,45 +732,77 @@ public class AlkisProductDownloadHelper {
             this.directory = DownloadManagerDialog.getInstance().getJobName();
 
             final AlkisKarteDownloadInfo info = infoCreator.createInfo();
-            final String filename = info.getProduct()
-                        + ((info.getLandparcelCode() != null)
-                            ? ("." + info.getLandparcelCode().replace("/", "--")
-                                + (moreFlurstueckeSuffix ? ".ua" : "")) : "");
-            determineDestinationFile(filename, ".pdf");
 
-            this.taskname = AlkisProductServerAction.TASK_NAME;
-            this.body = AlkisProductServerAction.Body.KARTE_CUSTOM;
+            if (status == State.ABORTED) {
+                return null;
+            } else {
+                final String filename = info.getProduct()
+                            + ((info.getLandparcelCode() != null)
+                                ? ("." + info.getLandparcelCode().replace("/", "--")
+                                    + (moreFlurstueckeSuffix ? ".ua" : "")) : "");
+                determineDestinationFile(filename, ".pdf");
 
-            this.params = new ServerActionParameter[] {
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), info.getProduct()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
-                        info.getLandparcelCode()),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.WINKEL.toString(), info.getWinkel()),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.X.toString(), info.getX()),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.Y.toString(), info.getY()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.MASSSTAB.toString(),
-                        info.getMassstab()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.MASSSTAB_MIN.toString(),
-                        info.getMassstabMin()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.MASSSTAB_MAX.toString(),
-                        info.getMassstabMax()),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.ZUSATZ.toString(), info.getZusatz()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.AUFTRAGSNUMMER.toString(),
-                        info.getAuftragsnummer()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
-                        info.getFertigungsvermerk())
-                };
+                this.taskname = AlkisProductServerAction.TASK_NAME;
+                this.body = AlkisProductServerAction.Body.KARTE_CUSTOM;
 
-            titleChanged();
-            stateChanged();
+                this.params = new ServerActionParameter[] {
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(),
+                            info.getProduct()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                            info.getLandparcelCode()),
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.WINKEL.toString(),
+                            info.getWinkel()),
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.X.toString(), info.getX()),
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.Y.toString(), info.getY()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.MASSSTAB.toString(),
+                            info.getMassstab()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.MASSSTAB_MIN.toString(),
+                            info.getMassstabMin()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.MASSSTAB_MAX.toString(),
+                            info.getMassstabMax()),
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.ZUSATZ.toString(),
+                            info.getZusatz()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.AUFTRAGSNUMMER.toString(),
+                            info.getAuftragsnummer()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                            info.getFertigungsvermerk())
+                    };
 
-            return super.execAction();
+                titleChanged();
+                stateChanged();
+                return super.execAction();
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = (67 * hash) + Objects.hashCode(this.infoCreator);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final AlkisKarteDownload other = (AlkisKarteDownload)obj;
+            if (!Objects.equals(this.infoCreator, other.infoCreator)) {
+                return false;
+            }
+            return true;
         }
     }
 

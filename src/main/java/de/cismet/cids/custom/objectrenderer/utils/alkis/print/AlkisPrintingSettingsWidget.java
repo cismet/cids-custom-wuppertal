@@ -173,7 +173,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -732,6 +734,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         jPanel3 = new javax.swing.JPanel();
         lblRahmenkartenNr = new javax.swing.JLabel();
         tfRahmenkartenNr = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         tfE = new javax.swing.JTextField();
         tfN = new javax.swing.JTextField();
@@ -1055,7 +1059,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         lblRahmenkartenNr.setText("Rahmenkarten-Nr.:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblRahmenkartenNr, gridBagConstraints);
@@ -1064,11 +1068,30 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         tfRahmenkartenNr.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(tfRahmenkartenNr, gridBagConstraints);
+
+        jLabel13.setText(
+            "<html>Beispiel für gültige Rahmenkartennummern:<table cellpadding=0 cellspacing=0><tr><td>&nbsp;GK-System:</td><td>&nbsp;83826</td></tr><tr><td>&nbsp;ETRS89 System:</td><td>&nbsp;374815</td></tr>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel13, gridBagConstraints);
+
+        jLabel15.setText("Eingabe ohne Punkt, Komma oder Leerstelle !");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel15, gridBagConstraints);
 
         jTabbedPane1.addTab("Rahmenkarte", jPanel3);
 
@@ -1580,7 +1603,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                             final boolean isWupKommunal = clazz.equals("WUP-Kommunal");
                             final String type = selectedProduct.getType();
                             final boolean isFeldvergleichsKarte = type.equals("Feldvergleichskarte, farbig")
-                                        || type.equals("Feldvergleichskarte, sw");
+                                        || type.equals("Feldvergleichskarte, schwarzweiß");
                             final boolean isLiegenschaftsKarte = type.equals("Liegenschaftskarte, farbig")
                                         || type.equals("Liegenschaftskarte, grau");
                             final boolean isStadtgrundkarteMKO = type.equals(
