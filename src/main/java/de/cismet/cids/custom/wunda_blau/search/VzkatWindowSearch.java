@@ -33,9 +33,9 @@ import java.io.InputStream;
 
 import java.net.URL;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.WeakHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -95,7 +95,7 @@ public class VzkatWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 "/res/vzkat/error_64.png"));
 //    private static final String ICON_URL_TEMPLATE = "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/64x64/%s.png";
     public static final String ICON_PATH_TEMPLATE = "/de/cismet/cids/custom/wunda_blau/res/vzkat-bilder/64x64/%s.png";
-    private static final Map<String, ImageIcon> ICONS = new HashMap<>();
+    private static final Map<String, ImageIcon> ICONS = new WeakHashMap<>();
 
     //~ Instance fields --------------------------------------------------------
 

@@ -20,9 +20,9 @@ import java.beans.PropertyChangeListener;
 
 import java.io.InputStream;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.WeakHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -36,6 +36,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.VzkatZeichenLightweightSea
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -53,7 +54,9 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class VzkatStandortSchildPanel extends javax.swing.JPanel implements ConnectionContextStore, CidsBeanStore {
+public class VzkatStandortSchildPanel extends javax.swing.JPanel implements ConnectionContextStore,
+    CidsBeanStore,
+    Disposable {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -64,14 +67,12 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 //    private static final String ICON_URL_TEMPLATE = "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/128x128/%s.png";
     private static final String ICON_PATH_TEMPLATE =
         "/de/cismet/cids/custom/wunda_blau/res/vzkat-bilder/128x128/%s.png";
-    private static final Map<String, ImageIcon> ICONS = new HashMap<>();
+    private static final Map<String, ImageIcon> ICONS = new WeakHashMap<>();
 
     //~ Instance fields --------------------------------------------------------
 
     private final boolean editable;
-    private CidsBean cidsBean;
-    private ConnectionContext connectionContext;
-    private MetaClass mcVzkatStvo = null;
+    private final VzkatStandortEditor parentEditor;
     private final VzkatZeichenLightweightSearch verkehrszeichenSearch = new VzkatZeichenLightweightSearch();
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
@@ -84,10 +85,11 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
             }
         };
 
-    private boolean cbStvoActionListenerEnabled = true;
+    private CidsBean cidsBean;
+    private ConnectionContext connectionContext;
+    private MetaClass mcVzkatStvo = null;
     private SwingWorker<ImageIcon, Void> iconLoadingWorker = null;
-
-    private final VzkatStandortEditor parentEditor;
+    private boolean cbStvoActionListenerEnabled = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbStvo;
@@ -870,15 +872,13 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                 bindingGroup,
                 this.cidsBean,
                 getConnectionContext());
-        }
-        bindingGroup.bind();
+            bindingGroup.bind();
 
-        if (isEditable() && (cidsBean != null)) {
-            cidsBean.addPropertyChangeListener(changeListener);
+            if (isEditable()) {
+                cidsBean.addPropertyChangeListener(changeListener);
+            }
+            refreshIcon(VzkatUtils.createZeichenKey((CidsBean)cidsBean.getProperty("fk_zeichen")));
         }
-
-        refreshIcon((cidsBean != null) ? VzkatUtils.createZeichenKey((CidsBean)cidsBean.getProperty("fk_zeichen"))
-                                       : null);
     }
 
     /**
@@ -929,5 +929,12 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         } else {
             lblIcon.setIcon(null);
         }
+    }
+
+    @Override
+    public void dispose() {
+        cbStvoActionListenerEnabled = false;
+        iconLoadingWorker = null;
+        setCidsBean(null);
     }
 }

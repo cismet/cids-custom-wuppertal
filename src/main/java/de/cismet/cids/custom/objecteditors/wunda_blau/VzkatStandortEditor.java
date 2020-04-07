@@ -151,6 +151,10 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             STRASSENSCHLUESSEL_TOSTRING_FIELDS);
 
     private final boolean editable;
+    private final List<CidsBean> schildBeans = new ArrayList<>();
+    private final List<CidsBean> deletedSchildBeans = new ArrayList<>();
+    private final DefaultStyledFeature viewPreviewFeature = new DefaultStyledFeature();
+
     private ConnectionContext connectionContext;
     private CidsBean cidsBean;
     private CidsBean selectedSchildBean;
@@ -158,12 +162,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private boolean cbStrassenschluesselEnabled = true;
     private boolean cbStrassennameEnabled = true;
     private boolean comboboxesInited = false;
-
-    private final List<CidsBean> schildBeans = new ArrayList<>();
-    private final List<CidsBean> deletedSchildBeans = new ArrayList<>();
     private CidsBean standortBean;
-
-    private final DefaultStyledFeature viewPreviewFeature = new DefaultStyledFeature();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -303,7 +302,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
         jPanel1 = new javax.swing.JPanel();
         lblGeom = new javax.swing.JLabel();
-        cbGeom = new DefaultCismapGeometryComboBoxEditor(editable);
+        if (editable) {
+            cbGeom = new DefaultCismapGeometryComboBoxEditor(editable);
+        }
         jPanel4 = new javax.swing.JPanel();
         lblStrassenschluessel = new javax.swing.JLabel();
         cbStrassenschluessel = new de.cismet.cids.editors.FastBindableReferenceCombo(
@@ -418,29 +419,33 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel1.add(lblGeom, gridBagConstraints);
 
-        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${standortBean.fk_geom}"),
-                cbGeom,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        binding.setConverter(editable ? ((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter() : null);
-        bindingGroup.addBinding(binding);
+        if (editable) {
+            final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${standortBean.fk_geom}"),
+                    cbGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding.setConverter(editable ? ((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter() : null);
+            bindingGroup.addBinding(binding);
 
-        cbGeom.addActionListener(new java.awt.event.ActionListener() {
+            cbGeom.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbGeomActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        jPanel1.add(cbGeom, gridBagConstraints);
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        cbGeomActionPerformed(evt);
+                    }
+                });
+        }
+        if (editable) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+            jPanel1.add(cbGeom, gridBagConstraints);
+        }
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1031,9 +1036,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         // Well the right suffix is always the 4th char of the proprtyName
         // what could possibly go wrong
 
-        final String suffix = propertyName.substring(3, 4);
-
-        final ArrayList richtungen = new ArrayList<String>(3);
+        final ArrayList richtungen = new ArrayList<>(3);
 
         for (final CidsBean schildBean : schildBeans) {
             final String richtung = "\"" + (String)schildBean.getProperty("fk_richtung.schluessel") + "\""; // vorne, hinten, sonst
@@ -1551,7 +1554,13 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * DOCUMENT ME!
      */
     public void refreshSchildPanels() {
+        for (final Component component : jPanel5.getComponents()) {
+            if (component instanceof VzkatStandortSchildPanel) {
+                ((VzkatStandortSchildPanel)component).dispose();
+            }
+        }
         jPanel5.removeAll();
+
         jButton3.setVisible(schildBeans.isEmpty());
 
         VzkatStandortSchildPanel selectedSchildPanel = null;
@@ -1919,24 +1928,22 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         return connectionContext;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Collection<VzkatStandortSchildPanel> getSchildPanels() {
-        final Collection<VzkatStandortSchildPanel> vzkatSchildPanel = new ArrayList<>();
-        for (final Component component : jPanel5.getComponents()) {
-            if (component instanceof VzkatStandortSchildPanel) {
-                vzkatSchildPanel.add((VzkatStandortSchildPanel)component);
-            }
-        }
-        return vzkatSchildPanel;
-    }
-
     @Override
     public void dispose() {
-        ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
+        cidsBean = null;
+        standortBean = null;
+        selectedSchildBean = null;
+        cbStrassenschluesselEnabled = false;
+        cbStrassennameEnabled = false;
+
+        schildBeans.clear();
+        deletedSchildBeans.clear();
+        refreshSchildPanels();
+        refreshGeomFeatures();
+
+        if (cbGeom != null) {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
+        }
     }
 
     @Override
