@@ -23,7 +23,6 @@ import Sirius.server.middleware.types.MetaObject;
 
 import java.io.InputStream;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
@@ -52,7 +51,7 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VzkatSchildIconFactory.class);
-    private static final Map<String, ImageIcon> ICONS = new HashMap<>();
+    private static final Map<String, ImageIcon> ICONS = new WeakHashMap<>();
 
     // TODO change
     private static final ImageIcon LOADING_ICON = new ImageIcon(VzkatSchildIconFactory.class.getResource(
