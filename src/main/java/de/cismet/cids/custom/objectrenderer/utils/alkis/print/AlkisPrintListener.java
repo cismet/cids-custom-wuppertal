@@ -139,7 +139,6 @@ public class AlkisPrintListener extends FeatureMoveListener {
         mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
         mappingComponent.setPointerAnnotationVisibility(true);
     }
-
     /**
      * DOCUMENT ME!
      *
@@ -292,6 +291,15 @@ public class AlkisPrintListener extends FeatureMoveListener {
 
     /**
      * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isFeatureInCollection() {
+        return printFeatureCollection.contains(printTemplateStyledFeature);
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     private void gotoPrintAreaWithBuffer() {
         final Point center = printTemplateStyledFeature.getGeometry().getCentroid();
@@ -333,9 +341,7 @@ public class AlkisPrintListener extends FeatureMoveListener {
         super.mouseClicked(event);
         if ((event.getClickCount() > 1) && event.isLeftMouseButton()) {
             final double rotationAngle = calculateRotationAngle();
-            final Point templateCenter = getTemplateCenter();
-            printWidget.downloadProduct(templateCenter, rotationAngle);
-            cleanUpAndRestoreFeatures();
+            printWidget.downloadProduct(printTemplateStyledFeature.getGeometry(), rotationAngle);
         }
     }
 
@@ -370,15 +376,6 @@ public class AlkisPrintListener extends FeatureMoveListener {
      *
      * @return  DOCUMENT ME!
      */
-    private Point getTemplateCenter() {
-        return printTemplateStyledFeature.getGeometry().getEnvelope().getCentroid();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     private double calculateRotationAngle() {
         final Geometry geom = printTemplateStyledFeature.getGeometry();
         final Coordinate[] corrds = geom.getCoordinates();
@@ -406,7 +403,7 @@ public class AlkisPrintListener extends FeatureMoveListener {
      *
      * @version  $Revision$, $Date$
      */
-    private static final class PrintFeature extends DefaultStyledFeature {
+    public static final class PrintFeature extends DefaultStyledFeature {
 
         //~ Methods ------------------------------------------------------------
 
