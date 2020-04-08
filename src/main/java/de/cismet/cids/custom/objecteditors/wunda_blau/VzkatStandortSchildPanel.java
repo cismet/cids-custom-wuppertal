@@ -92,8 +92,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private boolean cbStvoActionListenerEnabled = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox cbSchildPrivat;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbStvo;
     private de.cismet.cids.editors.FastBindableReferenceCombo cbVerkehrszeichen;
+    private javax.swing.JCheckBox cbZeichenPrivat;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo defaultBindableReferenceCombo1;
     private javax.swing.Box.Filler fillBemerkungBodyLeft;
     private javax.swing.Box.Filler fillBeschriftungBodyLeft;
@@ -106,7 +108,6 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
@@ -197,12 +198,6 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         fillBemerkungBodyLeft = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        jPanel2 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         txtVerfuegungsnummer = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         cbStvo = new DefaultBindableReferenceCombo(mcVzkatStvo, true, false);
@@ -215,6 +210,13 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         jScrollPane2 = new javax.swing.JScrollPane();
         txtBemerkung = new javax.swing.JTextArea();
         lblIcon = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        cbZeichenPrivat = new javax.swing.JCheckBox();
+        cbSchildPrivat = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
 
         setOpaque(false);
@@ -410,8 +412,141 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.weighty = 1.0;
         panBeschreibungBodyLeft.add(fillBemerkungBodyLeft, gridBagConstraints);
 
-        jPanel2.setOpaque(false);
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verfuegungsnummer}"),
+                txtVerfuegungsnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panBeschreibungBodyLeft.add(txtVerfuegungsnummer, gridBagConstraints);
+
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        cbStvo.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbStvoActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel3.add(cbStvo, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zeichen}"),
+                cbVerkehrszeichen,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        cbVerkehrszeichen.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbVerkehrszeichenActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(cbVerkehrszeichen, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(jPanel3, gridBagConstraints);
+
+        txtBeschriftung.setColumns(20);
+        txtBeschriftung.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschriftung}"),
+                txtBeschriftung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(txtBeschriftung);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(jScrollPane1, gridBagConstraints);
+
+        txtBemerkung.setColumns(20);
+        txtBemerkung.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                txtBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane2.setViewportView(txtBemerkung);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panBeschreibungBodyLeft.add(jScrollPane2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblIcon,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.lblIcon.text")); // NOI18N
+        lblIcon.setMaximumSize(new java.awt.Dimension(128, 128));
+        lblIcon.setMinimumSize(new java.awt.Dimension(128, 128));
+        lblIcon.setPreferredSize(new java.awt.Dimension(128, 128));
+        lblIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblIconMouseClicked(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panBeschreibungBodyLeft.add(lblIcon, gridBagConstraints);
 
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -443,7 +578,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.reihenfolge}"),
@@ -486,11 +621,11 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         jButton1.setVisible(isEditable());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        jPanel2.add(jPanel1, gridBagConstraints);
+        panBeschreibungBodyLeft.add(jPanel1, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -508,154 +643,60 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        jPanel2.add(defaultBindableReferenceCombo1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        panBeschreibungBodyLeft.add(jPanel2, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verfuegungsnummer}"),
-                txtVerfuegungsnummer,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panBeschreibungBodyLeft.add(txtVerfuegungsnummer, gridBagConstraints);
-
-        jPanel3.setOpaque(false);
-        jPanel3.setLayout(new java.awt.GridBagLayout());
-
-        cbStvo.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbStvoActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        jPanel3.add(cbStvo, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zeichen}"),
-                cbVerkehrszeichen,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        cbVerkehrszeichen.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbVerkehrszeichenActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        jPanel3.add(cbVerkehrszeichen, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panBeschreibungBodyLeft.add(jPanel3, gridBagConstraints);
-
-        txtBeschriftung.setColumns(20);
-        txtBeschriftung.setRows(3);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschriftung}"),
-                txtBeschriftung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane1.setViewportView(txtBeschriftung);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        panBeschreibungBodyLeft.add(jScrollPane1, gridBagConstraints);
-
-        txtBemerkung.setColumns(20);
-        txtBemerkung.setRows(3);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
-                txtBemerkung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane2.setViewportView(txtBemerkung);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panBeschreibungBodyLeft.add(jScrollPane2, gridBagConstraints);
+        panBeschreibungBodyLeft.add(defaultBindableReferenceCombo1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            lblIcon,
+            cbZeichenPrivat,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.lblIcon.text")); // NOI18N
-        lblIcon.setMaximumSize(new java.awt.Dimension(128, 128));
-        lblIcon.setMinimumSize(new java.awt.Dimension(128, 128));
-        lblIcon.setPreferredSize(new java.awt.Dimension(128, 128));
-        lblIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+                "VzkatStandortSchildPanel.cbZeichenPrivat.text")); // NOI18N
+        cbZeichenPrivat.setContentAreaFilled(false);
 
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblIconMouseClicked(evt);
-                }
-            });
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zeichen.privat}"),
+                cbZeichenPrivat,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panBeschreibungBodyLeft.add(lblIcon, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(cbZeichenPrivat, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cbSchildPrivat,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.cbSchildPrivat.text")); // NOI18N
+        cbSchildPrivat.setContentAreaFilled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.privat}"),
+                cbSchildPrivat,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panBeschreibungBodyLeft.add(cbSchildPrivat, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -773,6 +814,8 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
             }
 
             refreshIcon(VzkatUtils.createZeichenKey(selectedZeichen));
+            cbZeichenPrivat.setVisible(selectedZeichen.getProperty("privat") != null);
+            cbSchildPrivat.setVisible(selectedZeichen.getProperty("privat") == null);
         } else {
             text = "";
             refreshIcon(null);
@@ -805,6 +848,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
 
         initComponents();
 
+        RendererTools.makeReadOnly(cbZeichenPrivat);
         if (!editable) {
             RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
             txtVerfuegungsnummer.setEditable(editable);
@@ -812,6 +856,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
             RendererTools.makeReadOnly(cbStvo);
             RendererTools.makeReadOnly(txtBeschriftung);
             RendererTools.makeReadOnly(txtBemerkung);
+            RendererTools.makeReadOnly(cbSchildPrivat);
         } else {
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbVerkehrszeichen);
         }
