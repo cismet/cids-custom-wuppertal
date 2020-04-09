@@ -16,15 +16,13 @@ import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.types.treenode.PureTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.tree.CidsTreeObjectIconFactory;
+import Sirius.navigator.ui.tree.MetaCatalogueTree;
 import Sirius.navigator.ui.tree.SearchResultsTree;
 
 import Sirius.server.middleware.types.MetaObject;
 
 import java.io.InputStream;
 
-import java.net.URL;
-
-import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
@@ -39,7 +37,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.security.WebAccessManager;
+import de.cismet.commons.concurrency.CismetExecutors;
 
 import de.cismet.tools.Static2DTools;
 
@@ -53,15 +51,17 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VzkatSchildIconFactory.class);
-    private static final Map<String, ImageIcon> ICONS = new HashMap<>();
+    private static final Map<String, ImageIcon> ICONS = new WeakHashMap<>();
 
     // TODO change
     private static final ImageIcon LOADING_ICON = new ImageIcon(VzkatSchildIconFactory.class.getResource(
-                "/res/16/vzkat_loading.png"));
+                "/res/vzkat/loading_16.png"));
     private static final ImageIcon ERROR_ICON = new ImageIcon(VzkatSchildIconFactory.class.getResource(
-                "/res/16/vzkat_error.png"));
-    private static final String ICON_URL_TEMPLATE =
-        "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/16x16/%s.png";
+                "/res/vzkat/error_16.png"));
+//    private static final String ICON_URL_TEMPLATE = "http://dokumente.s10222.wuppertal-intra.de/vzkat-bilder/16x16/%s.png";
+    private static final String ICON_PATH_TEMPLATE = "/de/cismet/cids/custom/wunda_blau/res/vzkat-bilder/16x16/%s.png";
+
+    private static final ExecutorService EXECUTOR = CismetExecutors.newFixedThreadPool(4);
 
     //~ Enums ------------------------------------------------------------------
 
@@ -137,10 +137,11 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    public static ImageIcon loadZeichenIcon(final String key) throws Exception {
-        final String urlString = String.format(ICON_URL_TEMPLATE, key);
-        final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
-        return new ImageIcon(ImageIO.read(is));
+    public ImageIcon loadZeichenIcon(final String key) throws Exception {
+//        final String urlString = String.format(ICON_URL_TEMPLATE, key);
+//        final InputStream is = WebAccessManager.getInstance().doRequest(new URL(urlString));
+        final InputStream is = getClass().getResourceAsStream(String.format(ICON_PATH_TEMPLATE, key));
+        return (is != null) ? new ImageIcon(ImageIO.read(is)) : null;
     }
 
     /**
@@ -243,7 +244,7 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
                     final Overlay overlay = getOverlay(schildBean);
                     return overlayIcon(icon, overlay);
                 } else {
-                    new SwingWorker<ImageIcon, Void>() {
+                    EXECUTOR.execute(new SwingWorker<ImageIcon, Void>() {
 
                             @Override
                             protected ImageIcon doInBackground() throws Exception {
@@ -256,14 +257,19 @@ public class VzkatSchildIconFactory implements CidsTreeObjectIconFactory {
                                     final ImageIcon icon = get();
                                     ICONS.put(key, icon);
                                 } catch (final Exception ex) {
-                                    LOG.error(ex, ex);
+                                    LOG.info(ex, ex);
                                     ICONS.put(key, ERROR_ICON);
                                 }
-                                final SearchResultsTree tree = ComponentRegistry.getRegistry().getSearchResultsTree();
+                                final SearchResultsTree SearchTree = ComponentRegistry.getRegistry()
+                                            .getSearchResultsTree();
+                                final DefaultTreeModel searchModel = (DefaultTreeModel)SearchTree.getModel();
+                                searchModel.reload(node);
+
+                                final MetaCatalogueTree tree = ComponentRegistry.getRegistry().getCatalogueTree();
                                 final DefaultTreeModel treeModel = (DefaultTreeModel)tree.getModel();
                                 treeModel.reload(node);
                             }
-                        }.execute();
+                        });
                 }
             } else {
                 loadNode(node);

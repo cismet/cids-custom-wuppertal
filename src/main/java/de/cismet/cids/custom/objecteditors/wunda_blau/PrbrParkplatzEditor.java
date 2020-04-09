@@ -1231,7 +1231,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
             }
         } catch (final MalformedURLException e) {
             lblUrlCheck.setIcon(statusFalsch);
-            LOG.warn("URL Ceck Problem.", e);
+            LOG.warn("URL Check Problem.", e);
         }
     }
 
@@ -1423,21 +1423,6 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String makeTitle() {
-        String myname;
-        myname = String.valueOf(cidsBean.getProperty("name"));
-        if ("null".equals(myname)) {
-            myname = "Neue P+R bzw. B+R Anlage anlegen";
-        }
-
-        return myname;
-    }
-
     @Override
     public void dispose() {
         super.dispose();
@@ -1450,7 +1435,7 @@ public class PrbrParkplatzEditor extends DefaultCustomObjectEditor implements Ci
 
     @Override
     public String getTitle() {
-        return makeTitle();
+        return cidsBean.toString();
     }
 
     @Override
