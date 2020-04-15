@@ -234,9 +234,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                 "VzkatStandortSchildPanel.jButton3.text"));                                          // NOI18N
         jButton3.setBorderPainted(false);
         jButton3.setContentAreaFilled(false);
-        jButton3.setMaximumSize(new java.awt.Dimension(24, 24));
-        jButton3.setMinimumSize(new java.awt.Dimension(24, 24));
-        jButton3.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton3.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton3.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton3.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton3.setRequestFocusEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -247,7 +248,8 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 10);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 4, 10);
         panBeschreibungTitle.add(jButton3, gridBagConstraints);
         jButton3.setVisible(isEditable());
 
@@ -260,9 +262,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                 "VzkatStandortSchildPanel.jButton4.text"));                                             // NOI18N
         jButton4.setBorderPainted(false);
         jButton4.setContentAreaFilled(false);
-        jButton4.setMaximumSize(new java.awt.Dimension(24, 24));
-        jButton4.setMinimumSize(new java.awt.Dimension(24, 24));
-        jButton4.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton4.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton4.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton4.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton4.setRequestFocusEnabled(false);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -273,12 +276,13 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 4, 10);
         panBeschreibungTitle.add(jButton4, gridBagConstraints);
         jButton4.setVisible(isEditable());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
@@ -310,7 +314,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 4, 0);
         panBeschreibungTitle.add(jLabel3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -562,6 +566,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         jButton2.setMaximumSize(new java.awt.Dimension(24, 24));
         jButton2.setMinimumSize(new java.awt.Dimension(24, 24));
         jButton2.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton2.setRequestFocusEnabled(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -606,6 +611,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         jButton1.setMaximumSize(new java.awt.Dimension(24, 24));
         jButton1.setMinimumSize(new java.awt.Dimension(24, 24));
         jButton1.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton1.setRequestFocusEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
