@@ -1011,19 +1011,29 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         final double h = currentBB.getEnvelopeInternal().getHeight();
         final double w = currentBB.getEnvelopeInternal().getWidth();
 
-        final XBoundingBox bb = new XBoundingBox(viewpoint.getX() - (w / 2),
-                viewpoint.getY()
-                        - (h / 2),
-                viewpoint.getX()
-                        + (w / 2),
-                viewpoint.getY()
-                        + (h / 2),
-                CismapBroker.getInstance().getSrs().getCode(),
-                true);
-        CismapBroker.getInstance().getMappingComponent().gotoBoundingBoxWithHistory(bb);
+        final Point point;
+        final double distance;
+        final double angle;
+        if (viewpoint != null) {
+            final XBoundingBox bb = new XBoundingBox(viewpoint.getX() - (w / 2),
+                    viewpoint.getY()
+                            - (h / 2),
+                    viewpoint.getX()
+                            + (w / 2),
+                    viewpoint.getY()
+                            + (h / 2),
+                    CismapBroker.getInstance().getSrs().getCode(),
+                    true);
+            CismapBroker.getInstance().getMappingComponent().gotoBoundingBoxWithHistory(bb);
 
-        final double distance = viewpoint.distance(standort);
-        final double angle = getAngle(viewpoint, standort);
+            distance = viewpoint.distance(standort);
+            angle = getAngle(viewpoint, standort);
+            point = viewpoint;
+        } else {
+            distance = 0;
+            angle = 0;
+            point = standort;
+        }
 
         final double fov = 115;
         final double tilt = -10;
@@ -1048,7 +1058,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         final String additionalInfoString = "{\"enableScreenshotsFor\":" + richtungen.toString() + "}";
 
         OrbitControlFeature.controlOrAddOnMap(
-            viewpoint,
+            point,
             getConnectionContext(),
             fov,
             pan,
