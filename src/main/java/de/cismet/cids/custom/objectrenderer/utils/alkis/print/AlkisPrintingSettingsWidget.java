@@ -531,13 +531,14 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             cidsObjectListModel.addElement(currentBean);
         }
 
+        super.setVisible(b);
+
         updateFormatProposal();
         mapPrintListener.init();
         mapPrintListener.refreshPreviewGeometry(
             getSelectedProduct(),
             getCurrentGeometry(),
             chkRotation.isSelected());
-        super.setVisible(b);
     }
 
     /**
