@@ -15,6 +15,9 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -27,8 +30,10 @@ import java.util.WeakHashMap;
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
+import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+import javax.swing.plaf.basic.ComboPopup;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.vzkat.VzkatUtils;
@@ -865,6 +870,18 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
             RendererTools.makeReadOnly(cbSchildPrivat);
         } else {
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbVerkehrszeichen);
+
+            final JList pop = ((ComboPopup)cbVerkehrszeichen.getUI().getAccessibleChild(cbVerkehrszeichen, 0))
+                        .getList();
+            final JTextField txt = (JTextField)cbVerkehrszeichen.getEditor().getEditorComponent();
+            cbVerkehrszeichen.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        final Object selectedValue = pop.getSelectedValue();
+                        txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
+                    }
+                });
         }
 
         new SwingWorker<Void, Void>() {
