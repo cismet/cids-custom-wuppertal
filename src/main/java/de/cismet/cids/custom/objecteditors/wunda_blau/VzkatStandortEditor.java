@@ -28,6 +28,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
@@ -103,6 +104,7 @@ import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+import de.cismet.cismap.commons.util.DnDUtils;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -328,19 +330,11 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     @Override
     public void dragEnter(final DropTargetDragEvent dtde) {
-        if (isEditable()) {
-            final Transferable tr = dtde.getTransferable();
-            final DataFlavor[] flavors = tr.getTransferDataFlavors();
-            try {
-                if ((flavors.length == 1)
-                            && flavors[0].isFlavorJavaFileListType()
-                            && (((List<File>)tr.getTransferData(flavors[0])).size() == 1)) {
-                    return;
-                }
-            } catch (final Exception ex) {
-            }
+        if (isEditable() && dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+            dtde.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
+        } else {
+            dtde.rejectDrag();
         }
-        dtde.rejectDrag();
     }
 
     @Override
@@ -357,27 +351,22 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     @Override
     public void drop(final DropTargetDropEvent dtde) {
-        if (isEditable()) {
+        if (isEditable() && dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+            dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
             try {
-                final Transferable tr = dtde.getTransferable();
-                final DataFlavor[] flavors = tr.getTransferDataFlavors();
-
-                if ((flavors.length == 1) && flavors[0].isFlavorJavaFileListType()) {
-                    dtde.acceptDrop(dtde.getDropAction());
-                    final List<File> files = (List<File>)tr.getTransferData(flavors[0]);
-                    if ((files != null) && (files.size() == 1)) {
-                        final File file = files.iterator().next();
-                        uploadImageToWebDav(file);
-                    }
-                    dtde.dropComplete(true);
-                    return;
+                final List<File> files = ((List<File>)dtde.getTransferable().getTransferData(
+                            DataFlavor.javaFileListFlavor));
+                if ((files != null) && (files.size() == 1)) {
+                    final File file = files.iterator().next();
+                    uploadImageToWebDav(file);
                 }
+                dtde.dropComplete(true);
             } catch (Exception ex) {
                 LOG.warn(ex, ex);
             }
+        } else {
+            dtde.rejectDrop();
         }
-
-        dtde.rejectDrop();
     }
 
     /**
