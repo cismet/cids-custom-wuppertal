@@ -33,6 +33,8 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import java.io.ByteArrayInputStream;
@@ -62,9 +64,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.basic.ComboPopup;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -426,7 +431,33 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             RendererTools.makeReadOnly(cbStrassenname);
         } else {
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbStrassenschluessel);
+            {
+                final JList pop = ((ComboPopup)cbStrassenschluessel.getUI().getAccessibleChild(cbStrassenschluessel, 0))
+                            .getList();
+                final JTextField txt = (JTextField)cbStrassenschluessel.getEditor().getEditorComponent();
+                cbStrassenschluessel.addActionListener(new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            final Object selectedValue = pop.getSelectedValue();
+                            txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
+                        }
+                    });
+            }
+
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbStrassenname);
+            {
+                final JList pop = ((ComboPopup)cbStrassenname.getUI().getAccessibleChild(cbStrassenname, 0)).getList();
+                final JTextField txt = (JTextField)cbStrassenname.getEditor().getEditorComponent();
+                cbStrassenname.addActionListener(new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            final Object selectedValue = pop.getSelectedValue();
+                            txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
+                        }
+                    });
+            }
         }
 
         initComboboxes();
@@ -3034,11 +3065,13 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    final MetaClass mcGeom = ClassCacheMultiple.getMetaClass(
-                            "WUNDA_BLAU",
-                            "geom",
-                            getConnectionContext());
-                    ((DefaultCismapGeometryComboBoxEditor)cbGeom).setMetaClass(mcGeom);
+                    if (cbGeom != null) {
+                        final MetaClass mcGeom = ClassCacheMultiple.getMetaClass(
+                                "WUNDA_BLAU",
+                                "geom",
+                                getConnectionContext());
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeom).setMetaClass(mcGeom);
+                    }
                     final MetaClass mcStrAdrStrasse = ClassCacheMultiple.getMetaClass(
                             "WUNDA_BLAU",
                             "str_adr_strasse",
