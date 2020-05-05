@@ -196,6 +196,23 @@ public class WebDavHelper {
             final File toUpload,
             final Component parent,
             final ConnectionContext connectionContext) throws Exception {
+        uploadFileToWebDAV(fileName, new FileInputStream(toUpload), parent, connectionContext);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fileName           DOCUMENT ME!
+     * @param   toUpload           DOCUMENT ME!
+     * @param   parent             DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public void uploadFileToWebDAV(final String fileName,
+            final InputStream toUpload,
+            final Component parent,
+            final ConnectionContext connectionContext) throws Exception {
         uploadFileToWebDAV(fileName, toUpload, null, parent, connectionContext);
     }
 
@@ -215,10 +232,29 @@ public class WebDavHelper {
             final String webDavDirectory,
             final Component parent,
             final ConnectionContext connectionContext) throws Exception {
+        uploadFileToWebDAV(fileName, new FileInputStream(toUpload), webDavDirectory, parent, connectionContext);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fileName           DOCUMENT ME!
+     * @param   toUpload           DOCUMENT ME!
+     * @param   webDavDirectory    DOCUMENT ME!
+     * @param   parent             DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public void uploadFileToWebDAV(final String fileName,
+            final InputStream toUpload,
+            final String webDavDirectory,
+            final Component parent,
+            final ConnectionContext connectionContext) throws Exception {
         final BufferedInputStream bfis = new BufferedInputStream(new ProgressMonitorInputStream(
                     parent,
                     "Bild wird übertragen...",
-                    new FileInputStream(toUpload)));
+                    toUpload));
         final byte[] bytes = IOUtils.toByteArray(bfis);
         try {
             final Collection<ServerActionParameter> params = createParams();

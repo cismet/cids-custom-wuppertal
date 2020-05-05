@@ -36,7 +36,7 @@ import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -46,7 +46,7 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
  */
 public class Butler2ProductPanel extends javax.swing.JPanel implements ActionListener,
     ListSelectionListener,
-    ConnectionContextProvider {
+    ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -58,7 +58,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ActionLis
     ArrayList<ButlerProduct> products;
     ArrayList<ButlerResolution> resolutions;
     private Geometry geom;
-    private final ConnectionContext connectionContext;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
@@ -79,11 +79,20 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ActionLis
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new Butler2ProductPanel object.
+     */
+    public Butler2ProductPanel() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
      * Creates new form Butler2ProductPanel.
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public Butler2ProductPanel(final ConnectionContext connectionContext) {
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         loadPrductDescriptions();
         initComponents();
@@ -98,8 +107,6 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ActionLis
         geom = gf.createMultiPolygon(null);
         calculateFee();
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

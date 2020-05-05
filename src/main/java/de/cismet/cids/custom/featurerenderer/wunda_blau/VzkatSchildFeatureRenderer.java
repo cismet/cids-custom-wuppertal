@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 
 import java.io.InputStream;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -35,7 +35,7 @@ public class VzkatSchildFeatureRenderer extends CustomCidsFeatureRenderer {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(VzkatSchildFeatureRenderer.class);
-    private static final Map<String, ImageIcon> ICONS = new HashMap<>();
+    private static final Map<String, ImageIcon> ICONS = new WeakHashMap<>();
 
     //~ Methods ----------------------------------------------------------------
 

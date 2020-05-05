@@ -212,7 +212,7 @@ public class FsBestellungReportGenerator {
                 parametersGenerator,
                 dataSourceGenerator,
                 jobname,
-                "Produkt-Bestelllung",
+                "Produkt-Bestellung",
                 "Bestellung_"
                         + vorgangsnummer);
 

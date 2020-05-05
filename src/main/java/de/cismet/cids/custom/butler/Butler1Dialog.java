@@ -68,7 +68,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -81,7 +81,7 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler1Dialog extends javax.swing.JDialog implements DocumentListener, ConnectionContextProvider {
+public class Butler1Dialog extends javax.swing.JDialog implements DocumentListener, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -104,7 +104,8 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private final GeometryFactory factory = new GeometryFactory(new PrecisionModel(),
             CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().getSrsService()));
     private boolean documentListenersRemoved = false;
-    private final ConnectionContext connectionContext;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
@@ -137,35 +138,10 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Butler1Dialog.
-     *
-     * @param  parent             DOCUMENT ME!
-     * @param  modal              DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * Creates a new Butler1Dialog object.
      */
-    public Butler1Dialog(final java.awt.Frame parent,
-            final boolean modal,
-            final ConnectionContext connectionContext) {
-        super(parent, modal);
-        this.connectionContext = connectionContext;
-        pointFeature = createPointFeature();
-        rectangleFeature = createRectangleFeature();
-        final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
-        formatSymbols.setDecimalSeparator('.');
-        coordFormatter.setDecimalFormatSymbols(formatSymbols);
-        boxes = new ArrayList<PredefinedBoxes>(PredefinedBoxes.butler1Boxes);
-        initComponents();
-        tfLowerE.getDocument().addDocumentListener(this);
-        tfLowerN.getDocument().addDocumentListener(this);
-        final FocusListener upperTfFocusListener = new FocusAdapter() {
-
-                @Override
-                public void focusGained(final FocusEvent e) {
-                    firstUpperTFChange = false;
-                }
-            };
-        tfUpperE.addFocusListener(upperTfFocusListener);
-        tfUpperN.addFocusListener(upperTfFocusListener);
+    public Butler1Dialog() {
+        super(StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()), true);
         upperTfListeners = new DocumentListener() {
 
                 @Override
@@ -183,6 +159,32 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     handleUpperTFAction();
                 }
             };
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+        pointFeature = createPointFeature();
+        rectangleFeature = createRectangleFeature();
+        final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+        formatSymbols.setDecimalSeparator('.');
+        coordFormatter.setDecimalFormatSymbols(formatSymbols);
+        boxes = new ArrayList<>(PredefinedBoxes.butler1Boxes);
+        initComponents();
+        butler1ProductPanel1.initWithConnectionContext(connectionContext);
+        tfLowerE.getDocument().addDocumentListener(this);
+        tfLowerN.getDocument().addDocumentListener(this);
+        final FocusListener upperTfFocusListener = new FocusAdapter() {
+
+                @Override
+                public void focusGained(final FocusEvent e) {
+                    firstUpperTFChange = false;
+                }
+            };
+        tfUpperE.addFocusListener(upperTfFocusListener);
+        tfUpperN.addFocusListener(upperTfFocusListener);
 
         tfUpperE.getDocument().addDocumentListener(upperTfListeners);
         tfUpperN.getDocument().addDocumentListener(upperTfListeners);
@@ -233,8 +235,6 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         pnlMap.add(map, BorderLayout.CENTER);
     }
 
-    //~ Methods ----------------------------------------------------------------
-
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
      * content of this method is always regenerated by the Form Editor.
@@ -247,7 +247,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 
         pnlProductSettings = new javax.swing.JPanel();
         tbpProducts = new javax.swing.JTabbedPane();
-        butler1ProductPanel1 = new de.cismet.cids.custom.butler.Butler1ProductPanel(getConnectionContext());
+        butler1ProductPanel1 = new de.cismet.cids.custom.butler.Butler1ProductPanel();
         pnlMapSettings = new javax.swing.JPanel();
         lblLowerPosition = new javax.swing.JLabel();
         tfLowerE = new javax.swing.JTextField();
@@ -1044,7 +1044,8 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         final int number = tbpProducts.getTabCount();
         final String title = "Produkt " + number;
         final int tabPos = tbpProducts.getTabCount() - 1;
-        final Butler1ProductPanel productPan = new Butler1ProductPanel(getConnectionContext());
+        final Butler1ProductPanel productPan = new Butler1ProductPanel();
+        productPan.initWithConnectionContext(getConnectionContext());
         if ((rectangleFeature != null) && (rectangleFeature.getGeometry() != null)) {
             productPan.setGeometry(rectangleFeature.getGeometry());
         }

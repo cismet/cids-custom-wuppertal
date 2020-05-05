@@ -24,11 +24,14 @@ import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Cancellable;
+
 import java.awt.Component;
 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.JOptionPane;
 
@@ -565,46 +568,30 @@ public class AlkisProductDownloadHelper {
             final String jobName,
             final boolean moreFlurstueckeSuffix,
             final ConnectionContext connectionContext) {
-        final String title = "ALKIS-Druck";
-        final String directory = DownloadManagerDialog.getInstance().getJobName();
-        final String filename = info.getProduct() + "." + info.getLandparcelCode().replace("/", "--")
-                    + (moreFlurstueckeSuffix ? ".ua" : "");
-        final String extension = ".pdf";
+        final AlkisKarteDownloadInfoCreator creator = new AlkisKarteDownloadInfoCreator() {
 
-        final Download download = new ByteArrayActionDownload(
-                AlkisProductServerAction.TASK_NAME,
-                AlkisProductServerAction.Body.KARTE_CUSTOM,
-                new ServerActionParameter[] {
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(), info.getProduct()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
-                        info.getLandparcelCode()),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.WINKEL.toString(), info.getWinkel()),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.X.toString(), info.getX()),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.Y.toString(), info.getY()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.MASSSTAB.toString(),
-                        info.getMassstab()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.MASSSTAB_MIN.toString(),
-                        info.getMassstabMin()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.MASSSTAB_MAX.toString(),
-                        info.getMassstabMax()),
-                    new ServerActionParameter(AlkisProductServerAction.Parameter.ZUSATZ.toString(), info.getZusatz()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.AUFTRAGSNUMMER.toString(),
-                        info.getAuftragsnummer()),
-                    new ServerActionParameter(
-                        AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
-                        info.getFertigungsvermerk())
-                },
-                title,
-                directory,
-                filename,
-                extension,
-                connectionContext);
-        DownloadManager.instance().add(download);
+                @Override
+                public AlkisKarteDownloadInfo createInfo() {
+                    return info;
+                }
+            };
+
+        downloadKarteCustomProduct(creator, jobName, moreFlurstueckeSuffix, connectionContext);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  infoCreator            DOCUMENT ME!
+     * @param  jobName                DOCUMENT ME!
+     * @param  moreFlurstueckeSuffix  DOCUMENT ME!
+     * @param  connectionContext      DOCUMENT ME!
+     */
+    public static void downloadKarteCustomProduct(final AlkisKarteDownloadInfoCreator infoCreator,
+            final String jobName,
+            final boolean moreFlurstueckeSuffix,
+            final ConnectionContext connectionContext) {
+        DownloadManager.instance().add(new AlkisKarteDownload(moreFlurstueckeSuffix, infoCreator, connectionContext));
     }
 
     /**
@@ -688,6 +675,136 @@ public class AlkisProductDownloadHelper {
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public abstract static class AlkisKarteDownloadInfoCreator {
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
+        public abstract AlkisKarteDownloadInfo createInfo() throws Exception;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class AlkisKarteDownload extends ByteArrayActionDownload {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final AlkisKarteDownloadInfoCreator infoCreator;
+        private final boolean moreFlurstueckeSuffix;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DingensDownload object.
+         *
+         * @param  moreFlurstueckeSuffix  DOCUMENT ME!
+         * @param  infoCreator            DOCUMENT ME!
+         * @param  connectionContext      DOCUMENT ME!
+         */
+        public AlkisKarteDownload(final boolean moreFlurstueckeSuffix,
+                final AlkisKarteDownloadInfoCreator infoCreator,
+                final ConnectionContext connectionContext) {
+            super("WUNDA_BLAU", connectionContext);
+            this.moreFlurstueckeSuffix = moreFlurstueckeSuffix;
+            this.infoCreator = infoCreator;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected byte[] execAction() throws Exception {
+            this.title = "ALKIS-Druck";
+            this.directory = DownloadManagerDialog.getInstance().getJobName();
+
+            final AlkisKarteDownloadInfo info = infoCreator.createInfo();
+
+            if (status == State.ABORTED) {
+                return null;
+            } else {
+                final String filename = info.getProduct()
+                            + ((info.getLandparcelCode() != null)
+                                ? ("." + info.getLandparcelCode().replace("/", "--")
+                                    + (moreFlurstueckeSuffix ? ".ua" : "")) : "");
+                determineDestinationFile(filename, ".pdf");
+
+                this.taskname = AlkisProductServerAction.TASK_NAME;
+                this.body = AlkisProductServerAction.Body.KARTE_CUSTOM;
+
+                this.params = new ServerActionParameter[] {
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.PRODUKT.toString(),
+                            info.getProduct()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.ALKIS_CODE.toString(),
+                            info.getLandparcelCode()),
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.WINKEL.toString(),
+                            info.getWinkel()),
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.X.toString(), info.getX()),
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.Y.toString(), info.getY()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.MASSSTAB.toString(),
+                            info.getMassstab()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.MASSSTAB_MIN.toString(),
+                            info.getMassstabMin()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.MASSSTAB_MAX.toString(),
+                            info.getMassstabMax()),
+                        new ServerActionParameter(AlkisProductServerAction.Parameter.ZUSATZ.toString(),
+                            info.getZusatz()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.AUFTRAGSNUMMER.toString(),
+                            info.getAuftragsnummer()),
+                        new ServerActionParameter(
+                            AlkisProductServerAction.Parameter.FERTIGUNGSVERMERK.toString(),
+                            info.getFertigungsvermerk())
+                    };
+
+                titleChanged();
+                stateChanged();
+                return super.execAction();
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = (67 * hash) + Objects.hashCode(this.infoCreator);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final AlkisKarteDownload other = (AlkisKarteDownload)obj;
+            if (!Objects.equals(this.infoCreator, other.infoCreator)) {
+                return false;
+            }
+            return true;
+        }
+    }
 
     /**
      * DOCUMENT ME!
