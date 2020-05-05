@@ -19,7 +19,20 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.swingx.JXTable;
+
+import java.awt.Component;
+import java.awt.HeadlessException;
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -158,16 +171,23 @@ public class TableUtils {
      * @return  DOCUMENT ME!
      */
 
+    public static CidsBean addBeanToCollection(final CidsBean addBean,
+            final String propName,
+            final CidsBean newTypeBean) {
+        return addBeanToCollectionWithMessage(null, addBean, propName, newTypeBean);
+    }
     /**
      * DOCUMENT ME!
      *
-     * @param   addBean      DOCUMENT ME!
-     * @param   propName     DOCUMENT ME!
-     * @param   newTypeBean  DOCUMENT ME!
+     * @param   parentComponent  DOCUMENT ME!
+     * @param   addBean          DOCUMENT ME!
+     * @param   propName         DOCUMENT ME!
+     * @param   newTypeBean      DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean addBeanToCollection(final CidsBean addBean,
+    public static CidsBean addBeanToCollectionWithMessage(final Component parentComponent,
+            final CidsBean addBean,
             final String propName,
             final CidsBean newTypeBean) {
         if ((newTypeBean != null) && (propName != null)) {
@@ -178,15 +198,64 @@ public class TableUtils {
                     for (final CidsBean bean : col) {
                         if (newTypeBean.equals(bean)) {
                             LOG.info("Bean " + newTypeBean + " already present in " + propName + "!");
+                            if (parentComponent != null) {
+                                JOptionPane.showMessageDialog(
+
+                                    // StaticSwingTools.getParentFrame(this),
+                                    parentComponent,
+                                    "Das Objekt "
+                                            + newTypeBean
+                                            + " kann nicht noch einmal hinzugefügt werden.",
+                                    "Objekt hinzufügen",
+                                    JOptionPane.OK_OPTION);
+                            }
                             return addBean;
                         }
                     }
                     col.add(newTypeBean);
-                } catch (Exception ex) {
+                } catch (HeadlessException ex) {
                     LOG.error(ex, ex);
                 }
             }
         }
         return addBean;
+    }
+    /**
+     * Für 1:n-Beziehung.
+     *
+     * @param  table              DOCUMENT ME!
+     * @param  tableClass         DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void addObjectToTable(final JXTable table,
+            final String tableClass,
+            final ConnectionContext connectionContext) {
+        try {
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(tableClass, connectionContext);
+
+            ((DivBeanTable)table.getModel()).addBean(bean);
+        } catch (Exception e) {
+            LOG.error("Cannot add new " + tableClass + " object", e);
+        }
+    }
+    /**
+     * Für 1:n-Beziehung.
+     *
+     * @param  table  DOCUMENT ME!
+     */
+    public static void removeObjectsFromTable(final JXTable table) {
+        final int[] selectedRows = table.getSelectedRows();
+        final List<Integer> modelRows = new ArrayList<>();
+
+        // The model rows should be in reverse order
+        for (final int row : selectedRows) {
+            modelRows.add(table.convertRowIndexToModel(row));
+        }
+
+        Collections.sort(modelRows, Collections.reverseOrder());
+
+        for (final Integer row : modelRows) {
+            ((DivBeanTable)table.getModel()).removeRow(row);
+        }
     }
 }

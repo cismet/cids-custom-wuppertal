@@ -35,6 +35,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -51,7 +52,7 @@ import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageN
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
-import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ClientBillingUtils;
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.CachedInfoBaulastRetriever;
@@ -113,7 +114,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
     private String title;
     private CidsBean cidsBean;
-    private CidsBean bestellungBean;
+    private CidsBean[] bestellungBeans;
 
     private BerechtigungspruefungDownloadInfo downloadInfo = null;
 
@@ -132,6 +133,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JDialog diaFreigabe;
     private javax.swing.JDialog diaStorno;
     private org.jdesktop.swingx.JXHyperlink hlBestellung;
+    private org.jdesktop.swingx.JXHyperlink hlBestellung1;
     private org.jdesktop.swingx.JXHyperlink hlDateianhangValue;
     private org.jdesktop.swingx.JXHyperlink hlEMailValue;
     private org.jdesktop.swingx.JXHyperlink hlVorschauValue;
@@ -193,6 +195,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
     private javax.swing.JLabel lblBerechtigungsgrund;
     private javax.swing.JLabel lblBerechtigungsgrundValue;
     private javax.swing.JLabel lblBestellung;
+    private javax.swing.JLabel lblBestellung1;
     private javax.swing.JLabel lblDateianhang;
     private javax.swing.JLabel lblEMail;
     private javax.swing.JLabel lblEingegangenAmValue;
@@ -327,6 +330,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         jPanel7 = new javax.swing.JPanel();
         lblBestellung = new javax.swing.JLabel();
         hlBestellung = new org.jdesktop.swingx.JXHyperlink();
+        lblBestellung1 = new javax.swing.JLabel();
+        hlBestellung1 = new org.jdesktop.swingx.JXHyperlink();
         panLieferanschrift = new javax.swing.JPanel();
         semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
         labInfoTitle1 = new javax.swing.JLabel();
@@ -863,7 +868,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 "BerechtigungspruefungRenderer.lblTelNummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTelNummer, gridBagConstraints);
@@ -877,7 +882,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         txtTelNummerValue.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -891,7 +896,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 "BerechtigungspruefungRenderer.lblPruefStatus.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblPruefStatus, gridBagConstraints);
@@ -903,7 +908,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 "BerechtigungspruefungRenderer.lblPruefStatusValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -923,7 +928,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -936,7 +941,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 "BerechtigungspruefungRenderer.lblPruefer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblPruefer, gridBagConstraints);
@@ -953,7 +958,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -973,7 +978,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -986,7 +991,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                 "BerechtigungspruefungRenderer.lblPruefKommentar.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblPruefKommentar, gridBagConstraints);
@@ -1011,7 +1016,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -1022,7 +1027,7 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         jPanel7.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -1062,6 +1067,40 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(hlBestellung, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBestellung1,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.lblBestellung1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblBestellung1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            hlBestellung1,
+            org.openide.util.NbBundle.getMessage(
+                BerechtigungspruefungRenderer.class,
+                "BerechtigungspruefungRenderer.hlBestellung1.text")); // NOI18N
+        hlBestellung1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlBestellung1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(hlBestellung1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1747,8 +1786,17 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
      * @param  evt  DOCUMENT ME!
      */
     private void hlBestellungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestellungActionPerformed
-        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(bestellungBean));
+        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(bestellungBeans[0]));
     }                                                                                //GEN-LAST:event_hlBestellungActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlBestellung1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestellung1ActionPerformed
+        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(bestellungBeans[1]));
+    }                                                                                 //GEN-LAST:event_hlBestellung1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1889,6 +1937,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
         ((DefaultListModel<String>)jList1.getModel()).clear();
         if (cidsBean != null) {
+            final boolean isBestellung = "formsolutions".equals(cidsBean.getProperty("benutzer"));
+
             hlDateianhangValue.setEnabled((cidsBean.getProperty("dateiname") != null)
                         && ((Timestamp)cidsBean.getProperty("anfrage_timestamp") != null)
                         && !((Timestamp)cidsBean.getProperty("anfrage_timestamp")).before(
@@ -1916,30 +1966,33 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             hlEMailValue.setText("");
             hlEMailValue.setText("");
 
-            final boolean isBestellung = "formsolutions".equals(cidsBean.getProperty("benutzer"));
             lblBestellung.setVisible(isBestellung);
             hlBestellung.setVisible(isBestellung);
+            lblBestellung1.setVisible(isBestellung);
+            hlBestellung1.setVisible(isBestellung);
             lblTelNummer.setVisible(!isBestellung);
             txtTelNummerValue.setVisible(!isBestellung);
             if (isBestellung) {
-                new SwingWorker<CidsBean, Void>() {
+                new SwingWorker<CidsBean[], Void>() {
 
                         @Override
-                        protected CidsBean doInBackground() throws Exception {
+                        protected CidsBean[] doInBackground() throws Exception {
                             final FormSolutionsBestellungSearch search = new FormSolutionsBestellungSearch();
                             search.setBerechtigungspruefungSchluessel((String)cidsBean.getProperty("schluessel"));
                             final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                         .customServerSearch(SessionManager.getSession().getUser(),
                                             search,
                                             getConnectionContext());
+                            final List<CidsBean> beans = new ArrayList<>();
                             if (!mons.isEmpty()) {
-                                final MetaObjectNode mon = mons.iterator().next();
-                                return SessionManager.getProxy()
-                                            .getMetaObject(mon.getObjectId(),
-                                                    mon.getClassId(),
-                                                    "WUNDA_BLAU",
-                                                    getConnectionContext())
-                                            .getBean();
+                                for (final MetaObjectNode mon : mons) {
+                                    beans.add(SessionManager.getProxy().getMetaObject(
+                                            mon.getObjectId(),
+                                            mon.getClassId(),
+                                            "WUNDA_BLAU",
+                                            getConnectionContext()).getBean());
+                                }
+                                return beans.toArray(new CidsBean[0]);
                             } else {
                                 return null;
                             }
@@ -1948,14 +2001,17 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                         @Override
                         protected void done() {
                             try {
-                                bestellungBean = get();
-                                if (bestellungBean != null) {
+                                bestellungBeans = get();
+                                if ((bestellungBeans != null) && (bestellungBeans.length > 0)) {
                                     lblAnfrageVonValue.setText(
-                                        (String)bestellungBean.getProperty("fk_adresse_rechnung.vorname")
+                                        (String)bestellungBeans[0].getProperty("fk_adresse_rechnung.vorname")
                                                 + " "
-                                                + (String)bestellungBean.getProperty("fk_adresse_rechnung.name"));
-                                    hlEMailValue.setText((String)bestellungBean.getProperty("email"));
-                                    hlBestellung.setText((String)bestellungBean.getProperty("transid"));
+                                                + (String)bestellungBeans[0].getProperty("fk_adresse_rechnung.name"));
+                                    hlEMailValue.setText((String)bestellungBeans[0].getProperty("email"));
+                                    hlBestellung.setText((String)bestellungBeans[0].getProperty("transid"));
+                                    if (bestellungBeans.length > 1) {
+                                        hlBestellung1.setText((String)bestellungBeans[1].getProperty("transid"));
+                                    }
                                 }
                             } catch (final Exception ex) {
                                 LOG.warn(ex, ex);
@@ -1967,7 +2023,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
                         @Override
                         protected CidsBean doInBackground() throws Exception {
-                            return BillingPopup.getInstance().getExternalUser((String)cidsBean.getProperty("benutzer"));
+                            return ClientBillingUtils.getInstance()
+                                        .getExternalUser((String)cidsBean.getProperty("benutzer"), connectionContext);
                         }
 
                         @Override
@@ -2002,9 +2059,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                             (BerechtigungspruefungBescheinigungDownloadInfo)downloadInfo;
 
                         final Collection<BerechtigungspruefungBescheinigungFlurstueckInfo> flurstueckInfos =
-                            new ArrayList<BerechtigungspruefungBescheinigungFlurstueckInfo>();
+                            new ArrayList<>();
                         final Collection<BerechtigungspruefungBescheinigungBaulastInfo> baulastInfos =
-                            new ArrayList<BerechtigungspruefungBescheinigungBaulastInfo>();
+                            new ArrayList<>();
                         for (final BerechtigungspruefungBescheinigungGruppeInfo gruppeInfo
                                     : bescheinigungDownloadInfo.getBescheinigungsInfo().getBescheinigungsgruppen()) {
                             flurstueckInfos.addAll(gruppeInfo.getFlurstuecke());
@@ -2064,14 +2121,20 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
                     } else if (downloadInfo instanceof BerechtigungspruefungAlkisDownloadInfo) {
                         final BerechtigungspruefungAlkisDownloadInfo alkisDownloadInfo =
                             (BerechtigungspruefungAlkisDownloadInfo)downloadInfo;
-                        if (BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.FLURSTUECKE.equals(
-                                        alkisDownloadInfo.getAlkisObjectTyp())) {
-                            lblBegruendungstext3.setText("Flurstücke:");
-                        } else if (BerechtigungspruefungAlkisDownloadInfo.AlkisObjektTyp.BUCHUNGSBLAETTER.equals(
-                                        alkisDownloadInfo.getAlkisObjectTyp())) {
-                            lblBegruendungstext3.setText("Buchungsblätter:");
-                        } else {
+
+                        if (null == alkisDownloadInfo.getAlkisObjectTyp()) {
                             lblBegruendungstext3.setText("Alkis-Codes:");
+                        } else {
+                            switch (alkisDownloadInfo.getAlkisObjectTyp()) {
+                                case FLURSTUECKE: {
+                                    lblBegruendungstext3.setText("Flurstücke:");
+                                    break;
+                                }
+                                case BUCHUNGSBLAETTER: {
+                                    lblBegruendungstext3.setText("Buchungsblätter:");
+                                    break;
+                                }
+                            }
                         }
 
                         if (downloadInfo instanceof BerechtigungspruefungAlkisEinzelnachweisDownloadInfo) {
@@ -2120,6 +2183,24 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             } else {
                 downloadInfo = null;
             }
+
+            final String notYetDownloadedKuText = "Vom Kunden noch nicht heruntergeladen";
+            final String notYetDownloadedFSText = "Noch nicht zum Download ausgeliefert";
+            final String pruefungTrueKuText = "Vom Kunden heruntergeladen";
+            final String pruefungTrueFSText = "Zum Download ausgeliefert";
+
+            final String notYetDownloadedText = isBestellung ? notYetDownloadedFSText : notYetDownloadedKuText;
+
+            final String pruefungTrueText = isBestellung ? pruefungTrueFSText : pruefungTrueKuText;
+            final String pruefungFalseText = "Ablehnungsmeldung erhalten";
+
+            final String downloadedText = Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus")) ? pruefungTrueText
+                                                                                                   : pruefungFalseText;
+
+            final String abholstatusText = Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")) ? downloadedText
+                                                                                                 : notYetDownloadedText;
+
+            lblAbholStatusValue.setText(abholstatusText);
         } else {
             hlDateianhangValue.setEnabled(false);
 
@@ -2132,12 +2213,8 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
             txtTelNummerValue.setText("");
 
             downloadInfo = null;
+            lblAbholStatusValue.setText(null);
         }
-
-        lblAbholStatusValue.setText(((cidsBean != null) && Boolean.TRUE.equals(cidsBean.getProperty("abgeholt")))
-                ? (Boolean.TRUE.equals(cidsBean.getProperty("pruefstatus")) ? "Vom Kunden heruntergeladen"
-                                                                            : "Ablehnungsmeldung erhalten")
-                : "Vom Kunden noch nicht heruntergeladen");
 
         bindingGroup.bind();
     }

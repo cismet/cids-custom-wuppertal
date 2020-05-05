@@ -11,8 +11,6 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
-import Sirius.server.localserver.attribute.ObjectAttribute;
-
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Binding;
@@ -20,6 +18,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.el.impl.ValueExpressionImpl;
 import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -33,6 +33,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.swing.AbstractButton;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -43,6 +44,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicCheckBoxUI;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
@@ -51,6 +53,7 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 /**
  * DOCUMENT ME!
@@ -91,7 +94,8 @@ public class RendererTools {
                     if (expr.substring(2, expr.length() - 1).startsWith(baseProp + ".")) {
                         makeReadOnly(target);
                     }
-                } catch (final Exception ex) {
+                } catch (final IllegalAccessException | IllegalArgumentException | NoSuchFieldException
+                            | SecurityException ex) {
                     LOG.warn("", ex);
                 }
             }
@@ -116,7 +120,7 @@ public class RendererTools {
         } else if (comp instanceof JComboBox) {
             final JComboBox cb = (JComboBox)comp;
             cb.setEnabled(false);
-            cb.setRenderer(new CustomListCellRenderer());
+            cb.setRenderer(new CustomListCellRenderer((ListCellRenderer)cb.getRenderer()));
         } else if (comp instanceof JSpinner) {
             final JSpinner sp = (JSpinner)comp;
             sp.setOpaque(false);
@@ -135,6 +139,30 @@ public class RendererTools {
                     @Override
                     protected BasicButtonListener createButtonListener(final AbstractButton b) {
                         return null;
+                    }
+                });
+        } else if (comp instanceof JXTable) {
+            final JXTable jxt = (JXTable)comp;
+            jxt.setEditable(false);
+            ((DefaultTableRenderer)jxt.getDefaultRenderer(Object.class)).setBackground(new Color(0, 0, 0, 0));
+            jxt.setOpaque(false);
+            jxt.setGridColor(Color.GRAY);
+            jxt.setBackground(new Color(0, 0, 0, 0));
+        } else if (comp instanceof JList) {
+            final JList jl = (JList)comp;
+            jl.setOpaque(false);
+            jl.setCellRenderer(new DefaultListCellRenderer() {
+
+                    @Override
+                    public Component getListCellRendererComponent(final JList<?> list,
+                            final Object value,
+                            final int index,
+                            final boolean isSelected,
+                            final boolean cellHasFocus) {
+                        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                        // setForeground(Color.WHITE);
+                        setOpaque(isSelected);
+                        return this;
                     }
                 });
         } else if (comp != null) {

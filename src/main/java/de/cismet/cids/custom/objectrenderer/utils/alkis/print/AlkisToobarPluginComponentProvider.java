@@ -37,7 +37,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelp
 
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
-import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -60,8 +59,7 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
 
     //~ Instance fields --------------------------------------------------------
 
-    private final List<ToolbarComponentDescription> toolbarComponents;
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private List<ToolbarComponentDescription> toolbarComponents;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
@@ -70,6 +68,13 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
      * Creates a new AlkisToobarPluginComponentProvider object.
      */
     public AlkisToobarPluginComponentProvider() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         final List<ToolbarComponentDescription> preparationList = TypeSafeCollections.newArrayList();
         final ToolbarComponentDescription description = new ToolbarComponentDescription(
                 "tlbMain",
@@ -78,13 +83,6 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
                 "cmdPrint");
         preparationList.add(description);
         this.toolbarComponents = Collections.unmodifiableList(preparationList);
-    }
-
-    //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
     }
 
     @Override
@@ -148,10 +146,8 @@ final class AlkisPrintJButton extends JButton {
      */
     public AlkisPrintJButton(final ConnectionContext connectionContext) {
         try {
-            this.printWidget = new AlkisPrintingSettingsWidget(
-                    false,
-                    CismapBroker.getInstance().getMappingComponent(),
-                    connectionContext);
+            this.printWidget = new AlkisPrintingSettingsWidget();
+            printWidget.initWithConnectionContext(connectionContext);
 //            printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
             // printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
             printWidget.setLocationRelativeTo(ComponentRegistry.getRegistry().getCatalogueTree());

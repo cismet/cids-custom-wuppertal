@@ -15,6 +15,8 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
+import Sirius.server.newuser.User;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
@@ -30,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ClientBillingUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer.Buchungsblattbezirke;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
@@ -509,6 +512,34 @@ public class AlkisUtils {
                             connectionContext,
                             buchungsblattCodeSAP);
         return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   user               DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  ConnectionException DOCUMENT ME!
+     */
+    public static String createFertigungsVermerk(final User user, final ConnectionContext connectionContext)
+            throws Exception {
+        final String fertigungsVermerk = SessionManager.getConnection()
+                    .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU", connectionContext);
+        if (fertigungsVermerk != null) {
+            return fertigungsVermerk;
+        } else {
+            final CidsBean billingLogin = ClientBillingUtils.getInstance().getExternalUser(user, connectionContext);
+            if (billingLogin != null) {
+                final CidsBean billingKunde = (CidsBean)billingLogin.getProperty("kunde");
+                if (billingKunde != null) {
+                    return (String)billingKunde.getProperty("name");
+                }
+            }
+            return null;
+        }
     }
 
     /**

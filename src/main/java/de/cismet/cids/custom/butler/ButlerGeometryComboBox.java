@@ -28,6 +28,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.print.AlkisPrintListener;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.features.Feature;
@@ -57,6 +58,10 @@ public class ButlerGeometryComboBox extends JComboBox {
         POINT, RECTANGLE, BOTH
     }
 
+    //~ Instance fields --------------------------------------------------------
+
+    private final GEOM_FILTER_TYPE filter;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -65,27 +70,34 @@ public class ButlerGeometryComboBox extends JComboBox {
      * @param  filter  DOCUMENT ME!
      */
     public ButlerGeometryComboBox(final GEOM_FILTER_TYPE filter) {
-        final MappingComponent mc = CismapBroker.getInstance().getMappingComponent();
-        final FeatureCollection fc = mc.getFeatureCollection();
-        final List objects = new ArrayList();
-        objects.add("keine Auswahl");
-        for (final Feature f : fc.getAllFeatures()) {
-            final Geometry g = CrsTransformer.transformToGivenCrs(f.getGeometry(),
-                    ClientAlkisConf.getInstance().getSrsService());
-            // todo check that the geoms are in the right crs
-            if (validatesFilter(g, filter)) {
-                objects.add(g);
-            }
-        }
-
-        DefaultComboBoxModel model = null;
-        model = new DefaultComboBoxModel(objects.toArray());
-
-        this.setModel(model);
-        this.setRenderer(new ButlerCbRenderer(filter));
+        this.filter = filter;
+        setRenderer(new ButlerCbRenderer(filter));
+        refresh();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void refresh() {
+        final MappingComponent mc = CismapBroker.getInstance().getMappingComponent();
+        final FeatureCollection fc = mc.getFeatureCollection();
+        final List objects = new ArrayList();
+        objects.add(null);
+        for (final Feature f : fc.getAllFeatures()) {
+            if (!(f instanceof AlkisPrintListener.PrintFeature)) {
+                final Geometry g = CrsTransformer.transformToGivenCrs(f.getGeometry(),
+                        ClientAlkisConf.getInstance().getSrsService());
+                // todo check that the geoms are in the right crs
+                if ((filter == null) || validatesFilter(g, filter)) {
+                    objects.add(g);
+                }
+            }
+        }
+
+        this.setModel(new DefaultComboBoxModel(objects.toArray()));
+    }
 
     /**
      * DOCUMENT ME!
@@ -146,7 +158,7 @@ public class ButlerGeometryComboBox extends JComboBox {
                 final boolean isSelected,
                 final boolean cellHasFocus) {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            String text = "";
+            final String text;
 
             if (value instanceof Geometry) {
                 final Geometry g = (Geometry)value;
@@ -171,7 +183,7 @@ public class ButlerGeometryComboBox extends JComboBox {
                     text = value.toString();
                 }
             } else {
-                text = value.toString();
+                text = "keine Auswahl";
             }
             setText(text);
             return this;
