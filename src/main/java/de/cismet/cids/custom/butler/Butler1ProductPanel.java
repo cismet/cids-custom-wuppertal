@@ -29,7 +29,6 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -43,7 +42,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteServerActi
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.StaticDecimalTools;
 
@@ -53,8 +52,7 @@ import de.cismet.tools.StaticDecimalTools;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelectionListener,
-    ConnectionContextProvider {
+public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelectionListener, ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -69,7 +67,8 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     ArrayList<ButlerFormat> formats;
     private Geometry geom;
 
-    private final ConnectionContext connectionContext;
+    private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
     private javax.swing.JComboBox cbProduktGruppe;
@@ -98,19 +97,21 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Butler1ProductPanel.
-     *
-     * @param  connectionContext  DOCUMENT ME!
+     * Creates a new Butler1ProductPanel object.
      */
-    public Butler1ProductPanel(final ConnectionContext connectionContext) {
+    public Butler1ProductPanel() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         loadPrductDescriptions();
         initComponents();
         lstProdukt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstProdukt.addListSelectionListener(this);
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -495,19 +496,6 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      */
     public void setResolutions(final ArrayList<ButlerResolution> resolution) {
         this.resolutions = resolution;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  args  DOCUMENT ME!
-     */
-    public static void main(final String[] args) {
-        final JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.getContentPane().add(new Butler1ProductPanel(ConnectionContext.createDeprecated()));
-        f.pack();
-        f.setVisible(true);
     }
 
     /**
