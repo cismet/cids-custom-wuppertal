@@ -162,24 +162,35 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
     public static final String BUNDLE_NOSTECKDOSE = "EmobradLadestationEditor.prepareForSave().noSteckdose";
     public static final String BUNDLE_WRONGSTECKDOSE = "EmobradLadestationEditor.prepareForSave().wrongSteckdose";
     public static final String BUNDLE_NOOPERATOR = "EmobradLadestationEditor.prepareForSave().noBetreiber";
-    public static final String BUNDLE_PANE_PREFIX = "EmobradLadestationEditor.prepareForSave().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX = "EmobradLadestationEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX =
+        "EmobradLadestationEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX =
+        "EmobradLadestationEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "EmobradLadestationEditor.prepareForSave().JOptionPane.title";
 
-    public static final String BUNDLE_REMZUG_QUESTION = "EmobradLadestationEditor.btnRemoveZugangActionPerformed().question";
+    public static final String BUNDLE_REMZUG_QUESTION =
+        "EmobradLadestationEditor.btnRemoveZugangActionPerformed().question";
     public static final String BUNDLE_REMZUG_TITLE = "EmobradLadestationEditor.btnRemoveZugangActionPerformed().title";
-    public static final String BUNDLE_REMZUG_ERRORTITLE = "EmobradLadestationEditor.btnRemoveZugangActionPerformed().errortitle";
-    public static final String BUNDLE_REMZUG_ERRORTEXT =  "EmobradLadestationEditor.btnRemoveZugangActionPerformed().errortext";
+    public static final String BUNDLE_REMZUG_ERRORTITLE =
+        "EmobradLadestationEditor.btnRemoveZugangActionPerformed().errortitle";
+    public static final String BUNDLE_REMZUG_ERRORTEXT =
+        "EmobradLadestationEditor.btnRemoveZugangActionPerformed().errortext";
 
-    public static final String BUNDLE_REMSTE_QUESTION =  "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().question";
+    public static final String BUNDLE_REMSTE_QUESTION =
+        "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().question";
     public static final String BUNDLE_REMSTE_TITLE = "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().title";
-    public static final String BUNDLE_REMSTE_ERRORTITLE = "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().errortitle";
-    public static final String BUNDLE_REMSTE_ERRORTEXT = "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().errortext";
-    
-    public static final String BUNDLE_REMPFA_QUESTION = "EmobradLadestationEditor.btnRemovePfandActionPerformed().question";
+    public static final String BUNDLE_REMSTE_ERRORTITLE =
+        "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().errortitle";
+    public static final String BUNDLE_REMSTE_ERRORTEXT =
+        "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().errortext";
+
+    public static final String BUNDLE_REMPFA_QUESTION =
+        "EmobradLadestationEditor.btnRemovePfandActionPerformed().question";
     public static final String BUNDLE_REMPFA_TITLE = "EmobradLadestationEditor.btnRemovePfandActionPerformed().title";
-    public static final String BUNDLE_REMPFA_ERRORTITLE = "EmobradLadestationEditor.btnRemovePfandActionPerformed().errortitle";
-    public static final String BUNDLE_REMPFA_ERRORTEXT = "EmobradLadestationEditor.btnRemovePfandActionPerformed().errortext";
+    public static final String BUNDLE_REMPFA_ERRORTITLE =
+        "EmobradLadestationEditor.btnRemovePfandActionPerformed().errortitle";
+    public static final String BUNDLE_REMPFA_ERRORTEXT =
+        "EmobradLadestationEditor.btnRemovePfandActionPerformed().errortext";
 
     //~ Enums ------------------------------------------------------------------
 
@@ -196,12 +207,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
     }
 
     //~ Instance fields --------------------------------------------------------
-    
+
     private SwingWorker worker_loadFoto;
     private SwingWorker worker_name;
     private SwingWorker worker_foto;
     private SwingWorker worker_versatz;
-    
+
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
@@ -353,7 +364,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        
+
         txtName.getDocument().addDocumentListener(new DocumentListener() {
 
                 // Immer, wenn der Name geändert wird, wird dieser überprüft.
@@ -398,7 +409,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         dlgAddStecker.getRootPane().setDefaultButton(btnMenOkStecker);
         dlgAddPfand.pack();
         dlgAddPfand.getRootPane().setDefaultButton(btnMenOkPfand);
-        
+
         if (isEditor) {
             ((DefaultBindableScrollableComboBox)this.cbAbrechnung).setNullable(true);
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
@@ -419,8 +430,11 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         dlgAddZugang = new JDialog();
         panAddZugang = new JPanel();
         lblAuswaehlenZugang = new JLabel();
-        final MetaObject[] zugang = ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_zugangsart", new String[]{"name"}, getConnectionContext());
-        if(zugang != null) {
+        final MetaObject[] zugang = ObjectRendererUtils.getLightweightMetaObjectsForTable(
+                "emobrad_zugangsart",
+                new String[] { "name" },
+                getConnectionContext());
+        if (zugang != null) {
             Arrays.sort(zugang);
             cbZugang = new JComboBox(zugang);
         }
@@ -430,9 +444,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         dlgAddStecker = new JDialog();
         panAddStecker = new JPanel();
         lblAuswaehlenStecker = new JLabel();
-        final MetaObject[] stecker = ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_stecker", new String[]{"schluessel"}, getConnectionContext());
-        if(stecker != null) {
-            Arrays.sort(stecker);//||
+        final MetaObject[] stecker = ObjectRendererUtils.getLightweightMetaObjectsForTable(
+                "emobrad_stecker",
+                new String[] { "schluessel" },
+                getConnectionContext());
+        if (stecker != null) {
+            Arrays.sort(stecker); // ||
             cbStecker = new JComboBox(stecker);
         }
         panMenButtonsStecker = new JPanel();
@@ -441,8 +458,11 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         dlgAddPfand = new JDialog();
         panAddPfand = new JPanel();
         lblAuswaehlenPfand = new JLabel();
-        final MetaObject[] pfand = ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_pfand", new String[]{"name"}, getConnectionContext());
-        if(pfand != null) {
+        final MetaObject[] pfand = ObjectRendererUtils.getLightweightMetaObjectsForTable(
+                "emobrad_pfand",
+                new String[] { "name" },
+                getConnectionContext());
+        if (pfand != null) {
             Arrays.sort(pfand);
             cbPfand = new JComboBox(pfand);
             panMenButtonsPfand = new JPanel();
@@ -460,7 +480,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             lblHnr = new JLabel();
             txtHnr = new JTextField();
             lblBetreiber = new JLabel();
-            cbBetreiber = new DefaultBindableReferenceCombo(true) ;
+            cbBetreiber = new DefaultBindableReferenceCombo(true);
             lblHalb = new JLabel();
             chHalb = new JCheckBox();
             lblOffen = new JLabel();
@@ -502,7 +522,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             panAbrechnung = new JPanel();
             scpAbrechnung = new JScrollPane();
             taAbrechnung = new JTextArea();
-            if(isEditor){
+            if (isEditor) {
                 cbAbrechnung = new DefaultBindableScrollableComboBox();
             }
             panFiller = new JPanel();
@@ -532,7 +552,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             lblPfand = new JLabel();
             panGeometrie = new JPanel();
             lblGeom = new JLabel();
-            if (isEditor){
+            if (isEditor) {
                 cbGeom = new DefaultCismapGeometryComboBoxEditor();
             }
             panLage = new JPanel();
@@ -541,7 +561,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             semiRoundedPanel7 = new SemiRoundedPanel();
             lblKarte = new JLabel();
             lblVersatz = new JLabel();
-            cbVersatz = new DefaultBindableReferenceCombo(true) ;
+            cbVersatz = new DefaultBindableReferenceCombo(true);
             panOnline = new JPanel();
             sepOnline = new JSeparator();
             lblOnline = new JLabel();
@@ -567,10 +587,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
             btnMenAbortZugang.setText("Abbrechen");
             btnMenAbortZugang.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenAbortZugangActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final ActionEvent evt) {
+                        btnMenAbortZugangActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -580,10 +602,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
             btnMenOkZugang.setText("Ok");
             btnMenOkZugang.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenOkZugangActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final ActionEvent evt) {
+                        btnMenOkZugangActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
@@ -619,10 +643,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
             btnMenAbortStecker.setText("Abbrechen");
             btnMenAbortStecker.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenAbortSteckerActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final ActionEvent evt) {
+                        btnMenAbortSteckerActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -632,10 +658,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
             btnMenOkStecker.setText("Ok");
             btnMenOkStecker.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenOkSteckerActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final ActionEvent evt) {
+                        btnMenOkSteckerActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
@@ -660,7 +688,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.insets = new Insets(10, 10, 10, 10);
             panAddPfand.add(lblAuswaehlenPfand, gridBagConstraints);
-
         }
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -673,10 +700,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         btnMenAbortPfand.setText("Abbrechen");
         btnMenAbortPfand.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenAbortPfandActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenAbortPfandActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -686,10 +715,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         btnMenOkPfand.setText("Ok");
         btnMenOkPfand.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenOkPfandActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenOkPfandActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -710,14 +741,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -735,14 +764,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -769,7 +796,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.standort}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.standort}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -793,7 +825,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblStrasse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strasse}"), txtStrasse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -825,7 +862,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         txtHnr.setName(""); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hausnummer}"), txtHnr, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hausnummer}"),
+                txtHnr,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -852,7 +894,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         cbBetreiber.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbBetreiber.setMaximumRowCount(6);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_betreiber}"), cbBetreiber, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_betreiber}"),
+                cbBetreiber,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -877,16 +924,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         chHalb.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.halb_oeffentlich}"), chHalb, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.halb_oeffentlich}"),
+                chHalb,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         chHalb.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                chHalbStateChanged(evt);
-            }
-        });
+
+                @Override
+                public void stateChanged(final ChangeEvent evt) {
+                    chHalbStateChanged(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -914,7 +968,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taOffen.setRows(2);
         taOffen.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.oeffnungszeiten}"), taOffen, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.oeffnungszeiten}"),
+                taOffen,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpOffen.setViewportView(taOffen);
@@ -961,7 +1020,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taZusatz.setRows(2);
         taZusatz.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.zusatzinfo}"), taZusatz, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.zusatzinfo}"),
+                taZusatz,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpZusatz.setViewportView(taZusatz);
@@ -1007,7 +1071,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taDetailbeschreibung.setRows(2);
         taDetailbeschreibung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.detailbeschreibung}"), taDetailbeschreibung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.detailbeschreibung}"),
+                taDetailbeschreibung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpDetailbeschreibung.setViewportView(taDetailbeschreibung);
@@ -1053,7 +1122,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -1092,7 +1166,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblFoto, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.foto}"), txtFoto, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.foto}"),
+                txtFoto,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1108,7 +1187,8 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panUrl.setOpaque(false);
         panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1155,7 +1235,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         chGruen.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gruener_strom}"), chGruen, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.gruener_strom}"),
+                chGruen,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1181,9 +1266,14 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         spAnzahl.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spAnzahl.setModel(new SpinnerNumberModel(0, 0, 100, 1));
-        spAnzahl.setName("spAnzahl"); // NOI18N
+        spAnzahl.setName("spAnzahl");                // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_plaetze}"), spAnzahl, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anzahl_plaetze}"),
+                spAnzahl,
+                BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1204,9 +1294,15 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblAnzahlLadepunkte, gridBagConstraints);
 
-        ftxtAnzahlLadepunkte.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
+        ftxtAnzahlLadepunkte.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_ladepunkte}"), ftxtAnzahlLadepunkte, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anzahl_ladepunkte}"),
+                ftxtAnzahlLadepunkte,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1231,16 +1327,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         chLadebox.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ladebox_zu}"), chLadebox, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ladebox_zu}"),
+                chLadebox,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         chLadebox.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                chLadeboxStateChanged(evt);
-            }
-        });
+
+                @Override
+                public void stateChanged(final ChangeEvent evt) {
+                    chLadeboxStateChanged(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 20;
@@ -1260,16 +1363,24 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblSchliessfaecher, gridBagConstraints);
 
-        ftxtSchliessfaecher.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
+        ftxtSchliessfaecher.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_schliessfaecher}"), ftxtSchliessfaecher, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anzahl_schliessfaecher}"),
+                ftxtSchliessfaecher,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         ftxtSchliessfaecher.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                ftxtSchliessfaecherActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    ftxtSchliessfaecherActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 21;
@@ -1290,16 +1401,24 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblSteckdosen, gridBagConstraints);
 
-        ftxtSteckdosen.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
+        ftxtSteckdosen.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(new DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_fach_steckdosen}"), ftxtSteckdosen, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anzahl_fach_steckdosen}"),
+                ftxtSteckdosen,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         ftxtSteckdosen.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                ftxtSteckdosenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    ftxtSteckdosenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 22;
@@ -1311,14 +1430,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panFillerUntenFoto.setName(""); // NOI18N
         panFillerUntenFoto.setOpaque(false);
 
-        GroupLayout panFillerUntenFotoLayout = new GroupLayout(panFillerUntenFoto);
+        final GroupLayout panFillerUntenFotoLayout = new GroupLayout(panFillerUntenFoto);
         panFillerUntenFoto.setLayout(panFillerUntenFotoLayout);
-        panFillerUntenFotoLayout.setHorizontalGroup(panFillerUntenFotoLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUntenFotoLayout.setVerticalGroup(panFillerUntenFotoLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenFotoLayout.setHorizontalGroup(panFillerUntenFotoLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUntenFotoLayout.setVerticalGroup(panFillerUntenFotoLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1352,7 +1469,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taAbrechnung.setToolTipText("");
         taAbrechnung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_ladekosten.name}"), taAbrechnung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_ladekosten.name}"),
+                taAbrechnung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpAbrechnung.setViewportView(taAbrechnung);
@@ -1378,17 +1500,21 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(panAbrechnung, gridBagConstraints);
 
-        if(isEditor){
+        if (isEditor) {
             cbAbrechnung.setFont(new Font("Dialog", 0, 12)); // NOI18N
-            if(isEditor){
+            if (isEditor) {
                 cbAbrechnung.setPreferredSize(new Dimension(100, 24));
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_ladekosten}"), cbAbrechnung, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_ladekosten}"),
+                    cbAbrechnung,
+                    BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
-
         }
-        if(isEditor){
+        if (isEditor) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 28;
@@ -1402,14 +1528,16 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1436,7 +1564,11 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         lstZugang.setVisibleRowCount(3);
 
         ELProperty eLProperty = ELProperty.create("${cidsBean.arr_zugangsart}");
-        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstZugang);
+        JListBinding jListBinding = SwingBindings.createJListBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstZugang);
         bindingGroup.addBinding(jListBinding);
 
         scpLstZugang.setViewportView(lstZugang);
@@ -1457,22 +1589,28 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panButtonsZugang.setOpaque(false);
         panButtonsZugang.setLayout(new GridBagLayout());
 
-        btnAddZugang.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddZugang.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddZugang.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddZugangActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddZugangActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsZugang.add(btnAddZugang, gridBagConstraints);
 
-        btnRemoveZugang.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveZugang.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveZugang.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveZugangActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveZugangActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1525,7 +1663,11 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         lstStecker.setVisibleRowCount(2);
 
         eLProperty = ELProperty.create("${cidsBean.arr_stecker}");
-        jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstStecker);
+        jListBinding = SwingBindings.createJListBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstStecker);
         bindingGroup.addBinding(jListBinding);
 
         scpLstStecker.setViewportView(lstStecker);
@@ -1545,22 +1687,28 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panButtonsStecker.setOpaque(false);
         panButtonsStecker.setLayout(new GridBagLayout());
 
-        btnAddStecker.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddStecker.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddStecker.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddSteckerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddSteckerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsStecker.add(btnAddStecker, gridBagConstraints);
 
-        btnRemoveStecker.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveStecker.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveStecker.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveSteckerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveSteckerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1600,7 +1748,11 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         lstPfand.setVisibleRowCount(3);
 
         eLProperty = ELProperty.create("${cidsBean.arr_pfand}");
-        jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstPfand);
+        jListBinding = SwingBindings.createJListBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstPfand);
         bindingGroup.addBinding(jListBinding);
 
         scpLstPfand.setViewportView(lstPfand);
@@ -1620,22 +1772,28 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panButtonsPfand.setOpaque(false);
         panButtonsPfand.setLayout(new GridBagLayout());
 
-        btnAddPfand.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddPfand.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddPfand.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddPfandActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddPfandActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsPfand.add(btnAddPfand, gridBagConstraints);
 
-        btnRemovePfand.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemovePfand.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemovePfand.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemovePfandActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemovePfandActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1699,17 +1857,21 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new Insets(2, 10, 2, 5);
         panGeometrie.add(lblGeom, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
+        if (isEditor) {
+            if (isEditor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -1789,7 +1951,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         cbVersatz.setMinimumSize(new Dimension(150, 23));
         cbVersatz.setPreferredSize(new Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_versatz}"), cbVersatz, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_versatz}"),
+                cbVersatz,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1833,7 +2000,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         chOnline.setOpaque(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.online}"), chOnline, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.online}"),
+                chOnline,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1868,23 +2040,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddZugangActionPerformed
+    private void btnAddZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddZugangActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this), dlgAddZugang, true);
-    }//GEN-LAST:event_btnAddZugangActionPerformed
+    }                                                                 //GEN-LAST:event_btnAddZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveZugangActionPerformed
+    private void btnRemoveZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveZugangActionPerformed
         final Object selection = lstZugang.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1907,23 +2079,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveZugangActionPerformed
+    }                                                                    //GEN-LAST:event_btnRemoveZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortZugangActionPerformed
+    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortZugangActionPerformed
         dlgAddZugang.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortZugangActionPerformed
+    }                                                                      //GEN-LAST:event_btnMenAbortZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkZugangActionPerformed
+    private void btnMenOkZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkZugangActionPerformed
         try {
             final Object selItem = cbZugang.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1938,26 +2110,41 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddZugang.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkZugangActionPerformed
+    }                                                                   //GEN-LAST:event_btnMenOkZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chHalbStateChanged(final ChangeEvent evt) {//GEN-FIRST:event_chHalbStateChanged
+    private void chHalbStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chHalbStateChanged
         isOpen();
-    }//GEN-LAST:event_chHalbStateChanged
+    }                                                        //GEN-LAST:event_chHalbStateChanged
 
-    private void ftxtSchliessfaecherActionPerformed(ActionEvent evt) {//GEN-FIRST:event_ftxtSchliessfaecherActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtSchliessfaecherActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtSchliessfaecherActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ftxtSchliessfaecherActionPerformed
+    } //GEN-LAST:event_ftxtSchliessfaecherActionPerformed
 
-    private void ftxtSteckdosenActionPerformed(ActionEvent evt) {//GEN-FIRST:event_ftxtSteckdosenActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtSteckdosenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtSteckdosenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ftxtSteckdosenActionPerformed
+    } //GEN-LAST:event_ftxtSteckdosenActionPerformed
 
-    private void btnRemoveSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveSteckerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveSteckerActionPerformed
         final Object selection = lstStecker.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1980,13 +2167,25 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveSteckerActionPerformed
+    }                                                                     //GEN-LAST:event_btnRemoveSteckerActionPerformed
 
-    private void btnAddSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddSteckerActionPerformed
-        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this), dlgAddStecker, true);
-    }//GEN-LAST:event_btnAddSteckerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddSteckerActionPerformed
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this),
+            dlgAddStecker,
+            true);
+    }                                                                  //GEN-LAST:event_btnAddSteckerActionPerformed
 
-    private void btnRemovePfandActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemovePfandActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemovePfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemovePfandActionPerformed
         final Object selection = lstPfand.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -2009,13 +2208,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemovePfandActionPerformed
+    }                                                                   //GEN-LAST:event_btnRemovePfandActionPerformed
 
-    private void btnAddPfandActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddPfandActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddPfandActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this), dlgAddPfand, true);
-    }//GEN-LAST:event_btnAddPfandActionPerformed
+    }                                                                //GEN-LAST:event_btnAddPfandActionPerformed
 
-    private void btnMenOkPfandActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkPfandActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkPfandActionPerformed
         try {
             final Object selItem = cbPfand.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -2030,13 +2239,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddPfand.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkPfandActionPerformed
+    }                                                                  //GEN-LAST:event_btnMenOkPfandActionPerformed
 
-    private void btnMenAbortPfandActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortPfandActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortPfandActionPerformed
         dlgAddPfand.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortPfandActionPerformed
+    }                                                                     //GEN-LAST:event_btnMenAbortPfandActionPerformed
 
-    private void btnMenOkSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkSteckerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkSteckerActionPerformed
         try {
             final Object selItem = cbStecker.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -2051,15 +2270,25 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddStecker.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkSteckerActionPerformed
+    }                                                                    //GEN-LAST:event_btnMenOkSteckerActionPerformed
 
-    private void btnMenAbortSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortSteckerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortSteckerActionPerformed
         dlgAddStecker.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortSteckerActionPerformed
+    }                                                                       //GEN-LAST:event_btnMenAbortSteckerActionPerformed
 
-    private void chLadeboxStateChanged(ChangeEvent evt) {//GEN-FIRST:event_chLadeboxStateChanged
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void chLadeboxStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chLadeboxStateChanged
         isBox();
-    }//GEN-LAST:event_chLadeboxStateChanged
+    }                                                           //GEN-LAST:event_chLadeboxStateChanged
 
     /**
      * DOCUMENT ME!
@@ -2152,7 +2381,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOCOUNT));
             } else {
                 try {
-                    if (Integer.parseInt(ftxtAnzahlLadepunkte.getText())<= 0){
+                    if (Integer.parseInt(ftxtAnzahlLadepunkte.getText()) <= 0) {
                         errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGCOUNT));
                     }
                 } catch (NumberFormatException e) {
@@ -2174,20 +2403,24 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             LOG.warn("Open not given.", ex);
             save = false;
         }
-        //Wenn Ladebox: Schliessfaecher & Steckdosen > 0, wenn nicht: S & S= 0
-        try{
-            if (chLadebox.isSelected()){
+        // Wenn Ladebox: Schliessfaecher & Steckdosen > 0, wenn nicht: S & S= 0
+        try {
+            if (chLadebox.isSelected()) {
                 if (ftxtSchliessfaecher.getText().trim().isEmpty()) {
                     LOG.warn("No schliessfaecher specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOSCHLIESSFACH));
                 } else {
                     try {
-                        if (Integer.parseInt(ftxtSchliessfaecher.getText()) <= 0){
-                            errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGSCHLIESSFACH));
+                        if (Integer.parseInt(ftxtSchliessfaecher.getText()) <= 0) {
+                            errorMessage.append(NbBundle.getMessage(
+                                    EmobradLadestationEditor.class,
+                                    BUNDLE_WRONGSCHLIESSFACH));
                         }
                     } catch (NumberFormatException e) {
                         LOG.warn("Wrong schliessfach specified. Skip persisting.", e);
-                        errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGSCHLIESSFACH));
+                        errorMessage.append(NbBundle.getMessage(
+                                EmobradLadestationEditor.class,
+                                BUNDLE_WRONGSCHLIESSFACH));
                     }
                 }
                 if (ftxtSteckdosen.getText().trim().isEmpty()) {
@@ -2195,8 +2428,10 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOSTECKDOSE));
                 } else {
                     try {
-                        if (Integer.parseInt(ftxtSteckdosen.getText()) <= 0){
-                            errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGSTECKDOSE));
+                        if (Integer.parseInt(ftxtSteckdosen.getText()) <= 0) {
+                            errorMessage.append(NbBundle.getMessage(
+                                    EmobradLadestationEditor.class,
+                                    BUNDLE_WRONGSTECKDOSE));
                         }
                     } catch (NumberFormatException e) {
                         LOG.warn("Wrong steckdose specified. Skip persisting.", e);
@@ -2204,14 +2439,14 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     }
                 }
             } else {
-                if  (!(ftxtSchliessfaecher.getText().trim().equals(TEXT_BOX))){
+                if (!(ftxtSchliessfaecher.getText().trim().equals(TEXT_BOX))) {
                     try {
                         cidsBean.setProperty(FIELD__FACH, Integer.getInteger(TEXT_BOX));
                     } catch (Exception ex) {
                         LOG.warn("Setting default value schliessfaecher.", ex);
                     }
                 }
-                if  (!(ftxtSteckdosen.getText().trim().equals(TEXT_BOX))){
+                if (!(ftxtSteckdosen.getText().trim().equals(TEXT_BOX))) {
                     try {
                         cidsBean.setProperty(FIELD__DOSE, Integer.getInteger(TEXT_BOX));
                     } catch (Exception ex) {
@@ -2223,7 +2458,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             LOG.warn("Error with Box.", ex);
             save = false;
         }
-        
+
         // georeferenz muss gefüllt sein
         try {
             if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
@@ -2240,8 +2475,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             LOG.warn("Geom not given.", ex);
             save = false;
         }
-
-        
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -2261,7 +2494,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         return cidsBean;
     }
 
-    
     @Override
     public void setCidsBean(final CidsBean cb) {
         // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
@@ -2281,13 +2513,13 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     cidsBean,
                     FIELD__ZUGANG);
             Collections.sort(zugangCol, AlphanumComparator.getInstance());
-            
+
             // Damit die Stecker sortiert in der Liste erscheinen.
             final List<CidsBean> steckerCol = CidsBeanSupport.getBeanCollectionFromProperty(
                     cidsBean,
                     FIELD__STECKER);
             Collections.sort(steckerCol, AlphanumComparator.getInstance());
-            
+
             // Damit die moeglichen Muenzen fuer den Pfand sortiert in der Liste erscheinen.
             final List<CidsBean> pfandCol = CidsBeanSupport.getBeanCollectionFromProperty(
                     cidsBean,
@@ -2311,8 +2543,10 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         }
     }
 
-    public void setDefaultVersatz(){
-        
+    /**
+     * DOCUMENT ME!
+     */
+    public void setDefaultVersatz() {
         if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
             // Aufruf worker um default values zu setzen
             valueFromOtherTable(
@@ -2325,7 +2559,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 FIELD__VERSATZ,
                 OtherTableCases.SET_VALUE);
         }
-
     }
     /**
      * DOCUMENT ME!
@@ -2379,7 +2612,10 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             }
         }
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     */
     private void isBox() {
         final boolean isNotBox = chLadebox.isSelected();
 
@@ -2393,7 +2629,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 if (ftxtSchliessfaecher.getText().equals(TEXT_BOX)) {
                     ftxtSchliessfaecher.setText("");
                 }
-                 if (ftxtSteckdosen.getText().equals(TEXT_BOX)) {
+                if (ftxtSteckdosen.getText().equals(TEXT_BOX)) {
                     ftxtSteckdosen.setText("");
                 }
             }
@@ -2600,7 +2836,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                             check = get();
                             if (check != null) {
                                 switch (fall) {
-                                    case SET_VALUE: {         // set default value
+                                    case SET_VALUE: {          // set default value
                                         try {
                                             cidsBean.setProperty(
                                                 propertyName,
@@ -2627,22 +2863,21 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     } catch (InterruptedException | ExecutionException e) {
                         LOG.warn("problem in Worker: load values.", e);
                     }
-                  }
+                }
             };
-        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)){
+        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)) {
             if (worker_name != null) {
                 worker_name.cancel(true);
             }
             worker_name = worker;
             worker_name.execute();
-        } else{
+        } else {
             if (worker_versatz != null) {
                 worker_versatz.cancel(true);
             }
             worker_versatz = worker;
-            worker_versatz.execute(); 
+            worker_versatz.execute();
         }
-        
     }
 
     //~ Inner Classes ----------------------------------------------------------

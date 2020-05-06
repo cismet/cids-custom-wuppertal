@@ -50,7 +50,7 @@ public class EmobConfProperties {
     private final Double bufferMeter;
     private final String fotoUrlRaeder;
     private final String fotoUrlVerleih;
-    
+
     //~ Constructors -----------------------------------------------------------
 
     /**

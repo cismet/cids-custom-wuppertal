@@ -34,7 +34,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import java.text.DecimalFormat;
+
+import java.util.MissingResourceException;
+import java.util.concurrent.ExecutionException;
+
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
@@ -51,15 +60,8 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.util.concurrent.ExecutionException;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import java.text.DecimalFormat;
-import java.util.MissingResourceException;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 
 /**
  * DOCUMENT ME!
@@ -75,15 +77,15 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(EmobradSteckerEditor.class);
-    
-    public static final String FIELD__SCHLUESSEL = "schluessel";                    // emobrad_stecker
-    public static final String FIELD__KWATT = "kilowatt";                           // emobrad_stecker
-    public static final String FIELD__AMPERE = "ampere";                            // emobrad_stecker
-    public static final String FIELD__VOLT= "volt";                                 // emobrad_stecker
-    public static final String FIELD__TYP= "typ";                                   // emobrad_stecker
-    public static final String FIELD__ID = "id";                                    // emobrad_stecker
+
+    public static final String FIELD__SCHLUESSEL = "schluessel"; // emobrad_stecker
+    public static final String FIELD__KWATT = "kilowatt";        // emobrad_stecker
+    public static final String FIELD__AMPERE = "ampere";         // emobrad_stecker
+    public static final String FIELD__VOLT = "volt";             // emobrad_stecker
+    public static final String FIELD__TYP = "typ";               // emobrad_stecker
+    public static final String FIELD__ID = "id";                 // emobrad_stecker
     public static final String TABLE_NAME = "emobrad_stecker";
-    
+
     public static final String BUNDLE_NONAME = "EmobradSteckerEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "EmobradSteckerEditor.prepareForSave().duplicateName";
     public static final String BUNDLE_DUPLICATEKEY = "EmobradSteckerEditor.prepareForSave().duplicateSchluessel";
@@ -96,10 +98,6 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
     public static final String BUNDLE_PANE_PREFIX = "EmobradSteckerEditor.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "EmobradSteckerEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "EmobradSteckerEditor.prepareForSave().JOptionPane.title";
-
-    //~ Instance fields --------------------------------------------------------
-    private SwingWorker worker_key;
-    private SwingWorker worker_name;
 
     //~ Enums ------------------------------------------------------------------
 
@@ -117,9 +115,12 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
 
     //~ Instance fields --------------------------------------------------------
 
+    private SwingWorker worker_key;
+    private SwingWorker worker_name;
+
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
-    
+
     private boolean isEditor = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -161,8 +162,8 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        
-        DocumentListener keyListener = new DocumentListener() {
+
+        final DocumentListener keyListener = new DocumentListener() {
 
                 // Immer, wenn der "Name" geändert wird, wird dieser überprüft.
                 @Override
@@ -180,12 +181,12 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
                     checkAttributes();
                 }
             };
-      
+
         txtTyp.getDocument().addDocumentListener(keyListener);
         ((JSpinner.DefaultEditor)spKWatt.getEditor()).getTextField().getDocument().addDocumentListener(keyListener);
         ftxtAmpere.getDocument().addDocumentListener(keyListener);
         ftxtVolt.getDocument().addDocumentListener(keyListener);
-        
+
         setReadOnly();
     }
 
@@ -220,14 +221,12 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -249,14 +248,12 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -281,7 +278,12 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
 
         txtTyp.setHorizontalAlignment(JTextField.RIGHT);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.typ}"), txtTyp, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.typ}"),
+                txtTyp,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -304,9 +306,14 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
 
         spKWatt.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spKWatt.setModel(new SpinnerNumberModel(0.0d, 0.0d, 100.0d, 0.1d));
-        spKWatt.setName("spKWatt"); // NOI18N
+        spKWatt.setName("spKWatt");                 // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.kilowatt}"), spKWatt, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.kilowatt}"),
+                spKWatt,
+                BeanProperty.create("value"));
         binding.setSourceNullValue(0d);
         binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
@@ -331,7 +338,12 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
         ftxtAmpere.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
         ftxtAmpere.setHorizontalAlignment(JTextField.RIGHT);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ampere}"), ftxtAmpere, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ampere}"),
+                ftxtAmpere,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -356,7 +368,12 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
         ftxtVolt.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
         ftxtVolt.setHorizontalAlignment(JTextField.RIGHT);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.volt}"), ftxtVolt, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.volt}"),
+                ftxtVolt,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -387,7 +404,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public boolean prepareForSave() {
@@ -418,18 +435,18 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
             LOG.warn("Name not given.", ex);
             save = false;
         }
-        
+
         // KiloWatt muss angegeben werden
         try {
             if (spKWatt.getValue().equals(0.0)) {
                 LOG.warn("No kilowatt specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOKWATT));
-            } 
+            }
         } catch (final MissingResourceException ex) {
             LOG.warn("KiloWatt not given.", ex);
             save = false;
         }
-        
+
         // Ampere muss angegeben werden
         try {
             if (ftxtAmpere.getText().trim().isEmpty()) {
@@ -437,7 +454,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
                 errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOAMPERE));
             } else {
                 try {
-                    if (Integer.parseInt(ftxtAmpere.getText()) <= 0){
+                    if (Integer.parseInt(ftxtAmpere.getText()) <= 0) {
                         errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGAMPERE));
                     }
                 } catch (NumberFormatException e) {
@@ -449,7 +466,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
             LOG.warn("Ampere not given.", ex);
             save = false;
         }
-        
+
         // Volt muss angegeben werden
         try {
             if (ftxtVolt.getText().trim().isEmpty()) {
@@ -457,7 +474,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
                 errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOVOLT));
             } else {
                 try {
-                    if (Integer.parseInt(ftxtVolt.getText()) <= 0){
+                    if (Integer.parseInt(ftxtVolt.getText()) <= 0) {
                         errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGVOLT));
                     }
                 } catch (NumberFormatException e) {
@@ -516,20 +533,27 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
         }
     }
 
-    public String createKey() {
-        return txtTyp.getText().trim() + " (" + spKWatt.getValue() + "kW, " + ftxtAmpere.getText().trim() + "A, " + ftxtVolt.getText().trim() + "V)";
-    }
-            
-   
     /**
      * DOCUMENT ME!
      *
-     * @param  field  DOCUMENT ME!
-     * @param  fall   DOCUMENT ME!
+     * @return  DOCUMENT ME!
+     */
+    public String createKey() {
+        return txtTyp.getText().trim() + " (" + spKWatt.getValue() + "kW, " + ftxtAmpere.getText().trim() + "A, "
+                    + ftxtVolt.getText().trim() + "V)";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  field         DOCUMENT ME!
+     * @param  insertValues  DOCUMENT ME!
+     * @param  fall          DOCUMENT ME!
      */
     private void checkKey(final String field, final String insertValues, final OtherTableCases fall) {
         // Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(TABLE_NAME,
+        valueFromOtherTable(
+            TABLE_NAME,
             " where "
                     + field
                     + " ilike '"
@@ -541,16 +565,16 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
             fall);
     }
 
-     /**
+    /**
      * DOCUMENT ME!
      *
-     * @param  field  DOCUMENT ME!
+     * @param  where  field DOCUMENT ME!
      * @param  fall   DOCUMENT ME!
      */
     private void checkName(final String where, final OtherTableCases fall) {
         // Worker Aufruf, ob das Objekt schon existiert
         valueFromOtherTable(TABLE_NAME,
-            where 
+            where
                     + " and "
                     + FIELD__ID
                     + " <> "
@@ -561,14 +585,14 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
      * DOCUMENT ME!
      */
     private void checkAttributes() {
-        checkName (" where " + FIELD__TYP + " ilike '" +  cidsBean.getProperty(FIELD__TYP) + "' and " 
-                + FIELD__AMPERE + " = " + cidsBean.getProperty(FIELD__AMPERE) + " and "
-                + FIELD__VOLT + " = " + cidsBean.getProperty(FIELD__VOLT) + " and "
-                + FIELD__KWATT + " = " + cidsBean.getProperty(FIELD__KWATT), OtherTableCases.REDUNDANT_NAME);
+        checkName(" where " + FIELD__TYP + " ilike '" + cidsBean.getProperty(FIELD__TYP) + "' and "
+                    + FIELD__AMPERE + " = " + cidsBean.getProperty(FIELD__AMPERE) + " and "
+                    + FIELD__VOLT + " = " + cidsBean.getProperty(FIELD__VOLT) + " and "
+                    + FIELD__KWATT + " = " + cidsBean.getProperty(FIELD__KWATT),
+            OtherTableCases.REDUNDANT_NAME);
         checkKey(FIELD__SCHLUESSEL, createKey(), OtherTableCases.REDUNDANT_ATT_KEY);
     }
 
-    
     @Override
     public void dispose() {
         super.dispose();
@@ -591,7 +615,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
     public BindingGroup getBindingGroup() {
         return bindingGroup;
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -600,7 +624,6 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
      * @param  fall         DOCUMENT ME!
      */
     private void valueFromOtherTable(final String tableName, final String whereClause, final OtherTableCases fall) {
-        
         final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
 
                 @Override
@@ -616,22 +639,22 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
                             check = get();
                             if (check != null) {
                                 switch (fall) {
-                                    case REDUNDANT_ATT_KEY: {  // check redundant key
+                                    case REDUNDANT_ATT_KEY: { // check redundant key
                                         redundantKey = true;
                                         break;
                                     }
-                                    case REDUNDANT_NAME: { // check redundant name
+                                    case REDUNDANT_NAME: {    // check redundant name
                                         redundantName = true;
                                         break;
                                     }
                                 }
                             } else {
                                 switch (fall) {
-                                    case REDUNDANT_ATT_KEY: {  // check redundant key
+                                    case REDUNDANT_ATT_KEY: { // check redundant key
                                         redundantKey = false;
                                         break;
                                     }
-                                    case REDUNDANT_NAME: { // check redundant name
+                                    case REDUNDANT_NAME: {    // check redundant name
                                         redundantName = false;
                                         break;
                                     }
@@ -643,19 +666,19 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
                     }
                 }
             };
-       
-        if (fall.equals(OtherTableCases.REDUNDANT_NAME)){
+
+        if (fall.equals(OtherTableCases.REDUNDANT_NAME)) {
             if (worker_name != null) {
                 worker_name.cancel(true);
             }
             worker_name = worker;
             worker_name.execute();
-        } else{
-           if (worker_key != null) {
+        } else {
+            if (worker_key != null) {
                 worker_key.cancel(true);
             }
             worker_key = worker;
-            worker_key.execute(); 
+            worker_key.execute();
         }
     }
 }

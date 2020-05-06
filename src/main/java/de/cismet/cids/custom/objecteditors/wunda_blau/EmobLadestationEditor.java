@@ -1805,16 +1805,16 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddZugangActionPerformed
+    private void btnAddZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddZugangActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobLadestationEditor.this), dlgAddZugang, true);
-    }//GEN-LAST:event_btnAddZugangActionPerformed
+    }                                                                 //GEN-LAST:event_btnAddZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveZugangActionPerformed
+    private void btnRemoveZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveZugangActionPerformed
         final Object selection = lstZugang.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1838,23 +1838,23 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveZugangActionPerformed
+    }                                                                    //GEN-LAST:event_btnRemoveZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortZugangActionPerformed
+    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortZugangActionPerformed
         dlgAddZugang.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortZugangActionPerformed
+    }                                                                      //GEN-LAST:event_btnMenAbortZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkZugangActionPerformed
+    private void btnMenOkZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkZugangActionPerformed
         try {
             final Object selItem = cbZugang.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1869,34 +1869,34 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         } finally {
             dlgAddZugang.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkZugangActionPerformed
+    }                                                                   //GEN-LAST:event_btnMenOkZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSteckdoseActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddSteckdoseActionPerformed
+    private void btnAddSteckdoseActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddSteckdoseActionPerformed
         TableUtils.addObjectToTable(xtSteckdose, TABLE_NAME_STECKDOSE, getConnectionContext());
-    }//GEN-LAST:event_btnAddSteckdoseActionPerformed
+    }                                                                    //GEN-LAST:event_btnAddSteckdoseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemSteckdoseActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemSteckdoseActionPerformed
+    private void btnRemSteckdoseActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemSteckdoseActionPerformed
         TableUtils.removeObjectsFromTable(xtSteckdose);
-    }//GEN-LAST:event_btnRemSteckdoseActionPerformed
+    }                                                                    //GEN-LAST:event_btnRemSteckdoseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chHalbStateChanged(final ChangeEvent evt) {//GEN-FIRST:event_chHalbStateChanged
+    private void chHalbStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chHalbStateChanged
         isOpen();
-    }//GEN-LAST:event_chHalbStateChanged
+    }                                                        //GEN-LAST:event_chHalbStateChanged
 
     /**
      * DOCUMENT ME!
@@ -2184,8 +2184,10 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         }
     }
 
-    public void setDefaultVersatz(){
-        
+    /**
+     * DOCUMENT ME!
+     */
+    public void setDefaultVersatz() {
         if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
             // Aufruf worker um default values zu setzen
             valueFromOtherTable(
@@ -2198,9 +2200,8 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
                 FIELD__VERSATZ,
                 otherTableCases.setValue);
         }
-
     }
-    
+
     /**
      * DOCUMENT ME!
      */

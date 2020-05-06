@@ -108,8 +108,10 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
     public static final String BUNDLE_NONAME = "EmobradBetreiberEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "EmobradBetreiberEditor.prepareForSave().duplicateName";
     public static final String BUNDLE_DUPLICATEKEY = "EmobradBetreiberEditor.prepareForSave().duplicateSchluessel";
-    public static final String BUNDLE_PANE_PREFIX = "EmobradBetreiberEditor.prepareForSave().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX = "EmobradBetreiberEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX =
+        "EmobradBetreiberEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX =
+        "EmobradBetreiberEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "EmobradBetreiberEditor.prepareForSave().JOptionPane.title";
 
     public static final String BUNDLE_HP_TITLE = "EmobradBetreiberEditor.xhHomepageActionPerformed.title";
@@ -137,7 +139,7 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
     private SwingWorker worker_key;
     private SwingWorker worker_name;
     private SwingWorker worker_url;
-    
+
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
 
@@ -306,7 +308,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -328,7 +335,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblStrasse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strasse}"), txtStrasse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -358,7 +370,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblHnr, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hausnummer}"), txtHnr, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hausnummer}"),
+                txtHnr,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -383,7 +400,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
 
         ftxtPlz.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plz}"), ftxtPlz, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.plz}"),
+                ftxtPlz,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -406,7 +428,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblOrt, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ort}"), txtOrt, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ort}"),
+                txtOrt,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -429,19 +456,28 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblTelefon, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtTelefon, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.telefon}"),
+                ftxtTelefon,
+                BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         ftxtTelefon.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent evt) {
-                ftxtTelefonFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusLost(final FocusEvent evt) {
+                    ftxtTelefonFocusLost(evt);
+                }
+            });
         ftxtTelefon.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                ftxtTelefonActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    ftxtTelefonActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -463,7 +499,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblMail, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.email}"), txtMail, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.email}"),
+                txtMail,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -491,10 +532,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         panHomepage.setLayout(new GridBagLayout());
 
         xhHomepage.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                xhHomepageActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    xhHomepageActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -504,7 +547,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.weightx = 1.0;
         panHomepage.add(xhHomepage, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.homepage}"), txtHomepage, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.homepage}"),
+                txtHomepage,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -517,7 +565,8 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.weighty = 1.0;
         panHomepage.add(txtHomepage, gridBagConstraints);
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -543,7 +592,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBemerkung, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), txtBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                txtBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -566,14 +620,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -597,14 +649,12 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -617,42 +667,47 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
         add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void ftxtTelefonFocusLost(final FocusEvent evt) {//GEN-FIRST:event_ftxtTelefonFocusLost
+    private void ftxtTelefonFocusLost(final FocusEvent evt) { //GEN-FIRST:event_ftxtTelefonFocusLost
         refreshValidTel();
-    }//GEN-LAST:event_ftxtTelefonFocusLost
+    }                                                         //GEN-LAST:event_ftxtTelefonFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void ftxtTelefonActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_ftxtTelefonActionPerformed
+    private void ftxtTelefonActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtTelefonActionPerformed
         refreshValidTel();
-    }//GEN-LAST:event_ftxtTelefonActionPerformed
+    }                                                                //GEN-LAST:event_ftxtTelefonActionPerformed
 
-    private void xhHomepageActionPerformed(ActionEvent evt) {//GEN-FIRST:event_xhHomepageActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void xhHomepageActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_xhHomepageActionPerformed
         try {
             BrowserLauncher.openURL(xhHomepage.getText());
         } catch (final Exception e) {
             LOG.fatal("Problem during opening url", e);
             final ErrorInfo ei = new ErrorInfo(
-                BUNDLE_HP_TITLE,
-                BUNDLE_HP_TEXT,
-                null,
-                null,
-                e,
-                Level.SEVERE,
-                null);
+                    BUNDLE_HP_TITLE,
+                    BUNDLE_HP_TEXT,
+                    null,
+                    null,
+                    e,
+                    Level.SEVERE,
+                    null);
             JXErrorPane.showDialog(this, ei);
         }
-    }//GEN-LAST:event_xhHomepageActionPerformed
+    }                                                               //GEN-LAST:event_xhHomepageActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -876,8 +931,8 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
                 }
             };
         if (worker_url != null) {
-                worker_url.cancel(true);
-            }
+            worker_url.cancel(true);
+        }
         worker_url = worker;
         worker_url.execute();
     }
@@ -931,18 +986,18 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
                     }
                 }
             };
-        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)){
+        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)) {
             if (worker_name != null) {
                 worker_name.cancel(true);
             }
             worker_name = worker;
             worker_name.execute();
-        } else{
-           if (worker_key != null) {
+        } else {
+            if (worker_key != null) {
                 worker_key.cancel(true);
             }
             worker_key = worker;
-            worker_key.execute(); 
+            worker_key.execute();
         }
     }
 
