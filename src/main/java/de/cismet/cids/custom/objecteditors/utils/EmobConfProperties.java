@@ -48,6 +48,8 @@ public class EmobConfProperties {
 
     private final String fotoUrlAutos;
     private final Double bufferMeter;
+    private final String fotoUrlRaeder;
+    private final String fotoUrlVerleih;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -59,6 +61,8 @@ public class EmobConfProperties {
     private EmobConfProperties(final Properties properties) {
         fotoUrlAutos = readProperty(properties, "PICTURE_PATH_CARS", null);
         bufferMeter = Double.valueOf(readProperty(properties, "BUFFER_METER", null));
+        fotoUrlRaeder = readProperty(properties, "PICTURE_PATH_BIKES", null);
+        fotoUrlVerleih = readProperty(properties, "PICTURE_PATH_RENT", null);
     }
 
     //~ Methods ----------------------------------------------------------------
