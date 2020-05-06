@@ -100,7 +100,7 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
 
         //~ Enum constants -----------------------------------------------------
 
-        redundantAttKey, redundantAttName
+        REDUNDANTATTKEY, REDUNDANTATTNAME
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -382,8 +382,8 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
      * DOCUMENT ME!
      */
     private void checkAttributes() {
-        checkName(FIELD__NAME, otherTableCases.redundantAttName);
-        checkName(FIELD__SCHLUESSEL, otherTableCases.redundantAttKey);
+        checkName(FIELD__NAME, otherTableCases.REDUNDANTATTNAME);
+        checkName(FIELD__SCHLUESSEL, otherTableCases.REDUNDANTATTKEY);
     }
 
     
@@ -429,27 +429,29 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
                 protected void done() {
                     final CidsBean check;
                     try {
-                        check = get();
-                        if (check != null) {
-                            switch (fall) {
-                                case redundantAttKey: {  // check redundant key
-                                    redundantKey = true;
-                                    break;
+                        if (!isCancelled()) {
+                            check = get();
+                            if (check != null) {
+                                switch (fall) {
+                                    case REDUNDANTATTKEY: {  // check redundant key
+                                        redundantKey = true;
+                                        break;
+                                    }
+                                    case REDUNDANTATTNAME: { // check redundant name
+                                        redundantName = true;
+                                        break;
+                                    }
                                 }
-                                case redundantAttName: { // check redundant name
-                                    redundantName = true;
-                                    break;
-                                }
-                            }
-                        } else {
-                            switch (fall) {
-                                case redundantAttKey: {  // check redundant key
-                                    redundantKey = false;
-                                    break;
-                                }
-                                case redundantAttName: { // check redundant name
-                                    redundantName = false;
-                                    break;
+                            } else {
+                                switch (fall) {
+                                    case REDUNDANTATTKEY: {  // check redundant key
+                                        redundantKey = false;
+                                        break;
+                                    }
+                                    case REDUNDANTATTNAME: { // check redundant name
+                                        redundantName = false;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -458,7 +460,7 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
                     }
                 }
             };
-        if (fall.equals(otherTableCases.redundantAttName)){
+        if (fall.equals(otherTableCases.REDUNDANTATTNAME)){
             if (worker_name != null) {
                 worker_name.cancel(true);
             }

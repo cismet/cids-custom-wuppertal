@@ -192,7 +192,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         //~ Enum constants -----------------------------------------------------
 
-        setValue, redundantAttName
+        SETVALUE, REDUNDANTATTNAME
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -2102,7 +2102,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     + " <> "
                     + cidsBean.getProperty(FIELD__ID),
             FIELD__NAME,
-            otherTableCases.redundantAttName);
+            otherTableCases.REDUNDANTATTNAME);
     }
 
     @Override
@@ -2323,7 +2323,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                         + VERSATZ_ZENTRAL_SCHLUESSEL
                         + "'",
                 FIELD__VERSATZ,
-                otherTableCases.setValue);
+                otherTableCases.SETVALUE);
         }
 
     }
@@ -2505,13 +2505,15 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 protected void done() {
                     final Boolean check;
                     try {
-                        check = get();
-                        if (check) {
-                            showLabel.setIcon(statusOk);
-                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                        } else {
-                            showLabel.setIcon(statusFalsch);
-                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        if (!isCancelled()) {
+                            check = get();
+                            if (check) {
+                                showLabel.setIcon(statusOk);
+                                showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                            } else {
+                                showLabel.setIcon(statusFalsch);
+                                showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                            }
                         }
                     } catch (InterruptedException | ExecutionException e) {
                         showLabel.setIcon(statusFalsch);
@@ -2546,15 +2548,17 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 protected void done() {
                     final ImageIcon check;
                     try {
-                        check = get();
-                        if (check != null) {
-                            showLabel.setIcon(check);
-                            showLabel.setText("");
-                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                        } else {
-                            showLabel.setIcon(null);
-                            showLabel.setText(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOLOAD));
-                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        if (!isCancelled()) {
+                            check = get();
+                            if (check != null) {
+                                showLabel.setIcon(check);
+                                showLabel.setText("");
+                                showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                            } else {
+                                showLabel.setIcon(null);
+                                showLabel.setText(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOLOAD));
+                                showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                            }
                         }
                     } catch (InterruptedException | ExecutionException e) {
                         showLabel.setText(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOLOAD));
@@ -2592,29 +2596,31 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 protected void done() {
                     final CidsBean check;
                     try {
-                        check = get();
-                        if (check != null) {
-                            switch (fall) {
-                                case setValue: {         // set default value
-                                    try {
-                                        cidsBean.setProperty(
-                                            propertyName,
-                                            check);
-                                    } catch (Exception ex) {
-                                        LOG.warn("setVersatz: Versatz not set.", ex);
+                        if (!isCancelled()) {
+                            check = get();
+                            if (check != null) {
+                                switch (fall) {
+                                    case SETVALUE: {         // set default value
+                                        try {
+                                            cidsBean.setProperty(
+                                                propertyName,
+                                                check);
+                                        } catch (Exception ex) {
+                                            LOG.warn("setVersatz: Versatz not set.", ex);
+                                        }
+                                        break;
                                     }
-                                    break;
+                                    case REDUNDANTATTNAME: { // check redundant name
+                                        redundantName = true;
+                                        break;
+                                    }
                                 }
-                                case redundantAttName: { // check redundant name
-                                    redundantName = true;
-                                    break;
-                                }
-                            }
-                        } else {
-                            switch (fall) {
-                                case redundantAttName: { // check redundant name
-                                    redundantName = false;
-                                    break;
+                            } else {
+                                switch (fall) {
+                                    case REDUNDANTATTNAME: { // check redundant name
+                                        redundantName = false;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -2623,7 +2629,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     }
                   }
             };
-        if (fall.equals(otherTableCases.redundantAttName)){
+        if (fall.equals(otherTableCases.REDUNDANTATTNAME)){
             if (worker_name != null) {
                 worker_name.cancel(true);
             }

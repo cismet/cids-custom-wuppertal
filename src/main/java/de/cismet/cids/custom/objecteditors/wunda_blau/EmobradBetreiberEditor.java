@@ -129,7 +129,7 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
 
         //~ Enum constants -----------------------------------------------------
 
-        redundantAttKey, redundantAttName
+        REDUNDANTATTKEY, REDUNDANTATTNAME
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -835,8 +835,8 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
      * DOCUMENT ME!
      */
     private void checkAttributes() {
-        checkName(FIELD__NAME, otherTableCases.redundantAttName);
-        checkName(FIELD__SCHLUESSEL, otherTableCases.redundantAttKey);
+        checkName(FIELD__NAME, otherTableCases.REDUNDANTATTNAME);
+        checkName(FIELD__SCHLUESSEL, otherTableCases.REDUNDANTATTKEY);
     }
     /**
      * DOCUMENT ME!
@@ -858,13 +858,15 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
                 protected void done() {
                     final Boolean check;
                     try {
-                        check = get();
-                        if (check) {
-                            showLabel.setIcon(statusOk);
-                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                        } else {
-                            showLabel.setIcon(statusFalsch);
-                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        if (!isCancelled()) {
+                            check = get();
+                            if (check) {
+                                showLabel.setIcon(statusOk);
+                                showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                            } else {
+                                showLabel.setIcon(statusFalsch);
+                                showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                            }
                         }
                     } catch (InterruptedException | ExecutionException e) {
                         showLabel.setIcon(statusFalsch);
@@ -898,27 +900,29 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
                 protected void done() {
                     final CidsBean check;
                     try {
-                        check = get();
-                        if (check != null) {
-                            switch (fall) {
-                                case redundantAttKey: {  // check redundant key
-                                    redundantKey = true;
-                                    break;
+                        if (!isCancelled()) {
+                            check = get();
+                            if (check != null) {
+                                switch (fall) {
+                                    case REDUNDANTATTKEY: {  // check redundant key
+                                        redundantKey = true;
+                                        break;
+                                    }
+                                    case REDUNDANTATTNAME: { // check redundant name
+                                        redundantName = true;
+                                        break;
+                                    }
                                 }
-                                case redundantAttName: { // check redundant name
-                                    redundantName = true;
-                                    break;
-                                }
-                            }
-                        } else {
-                            switch (fall) {
-                                case redundantAttKey: {  // check redundant key
-                                    redundantKey = false;
-                                    break;
-                                }
-                                case redundantAttName: { // check redundant name
-                                    redundantName = false;
-                                    break;
+                            } else {
+                                switch (fall) {
+                                    case REDUNDANTATTKEY: {  // check redundant key
+                                        redundantKey = false;
+                                        break;
+                                    }
+                                    case REDUNDANTATTNAME: { // check redundant name
+                                        redundantName = false;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -927,7 +931,7 @@ public class EmobradBetreiberEditor extends DefaultCustomObjectEditor implements
                     }
                 }
             };
-        if (fall.equals(otherTableCases.redundantAttName)){
+        if (fall.equals(otherTableCases.REDUNDANTATTNAME)){
             if (worker_name != null) {
                 worker_name.cancel(true);
             }
