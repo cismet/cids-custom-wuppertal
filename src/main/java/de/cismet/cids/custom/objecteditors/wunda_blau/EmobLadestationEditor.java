@@ -416,11 +416,8 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         dlgAddZugang = new JDialog();
         panAddZugang = new JPanel();
         lblAuswaehlenZugang = new JLabel();
-        final MetaObject[] zugang = ObjectRendererUtils.getLightweightMetaObjectsForTable(
-                "emob_zugangsart",
-                new String[] { "name" },
-                getConnectionContext());
-        if (zugang != null) {
+        final MetaObject[] zugang = ObjectRendererUtils.getLightweightMetaObjectsForTable("emob_zugangsart", new String[]{"name"}, getConnectionContext());
+        if(zugang != null) {
             Arrays.sort(zugang);
             cbZugang = new JComboBox(zugang);
             panMenButtonsZugang = new JPanel();
@@ -438,7 +435,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             lblHnr = new JLabel();
             txtHnr = new JTextField();
             lblBetreiber = new JLabel();
-            cbBetreiber = new DefaultBindableReferenceCombo(true);
+            cbBetreiber = new DefaultBindableReferenceCombo(true) ;
             lblHalb = new JLabel();
             chHalb = new JCheckBox();
             lblOffen = new JLabel();
@@ -476,13 +473,13 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             lblWasserstoff = new JLabel();
             chWasserstoff = new JCheckBox();
             lblStromart = new JLabel();
-            cbStromart = new DefaultBindableReferenceCombo(true);
+            cbStromart = new DefaultBindableReferenceCombo(true) ;
             panFillerUntenFoto = new JPanel();
             lblAbrechnung = new JLabel();
             panAbrechnung = new JPanel();
             scpAbrechnung = new JScrollPane();
             taAbrechnung = new JTextArea();
-            if (isEditor) {
+            if(isEditor){
                 cbAbrechnung = new DefaultBindableScrollableComboBox();
             }
             panFiller = new JPanel();
@@ -505,7 +502,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
             panGeometrie = new JPanel();
             lblGeom = new JLabel();
-            if (isEditor) {
+            if (isEditor){
                 cbGeom = new DefaultCismapGeometryComboBoxEditor();
             }
             panLage = new JPanel();
@@ -514,7 +511,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             semiRoundedPanel7 = new SemiRoundedPanel();
             lblKarte = new JLabel();
             lblVersatz = new JLabel();
-            cbVersatz = new DefaultBindableReferenceCombo(true);
+            cbVersatz = new DefaultBindableReferenceCombo(true) ;
             panOnline = new JPanel();
             sepOnline = new JSeparator();
             lblOnline = new JLabel();
@@ -530,6 +527,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.insets = new Insets(10, 10, 10, 10);
             panAddZugang.add(lblAuswaehlenZugang, gridBagConstraints);
+
         }
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -542,12 +540,10 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         btnMenAbortZugang.setText("Abbrechen");
         btnMenAbortZugang.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnMenAbortZugangActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnMenAbortZugangActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -557,12 +553,10 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         btnMenOkZugang.setText("Ok");
         btnMenOkZugang.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnMenOkZugangActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnMenOkZugangActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -590,12 +584,14 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 532, Short.MAX_VALUE));
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 532, Short.MAX_VALUE)
+        );
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -622,12 +618,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.standort}"),
-                txtName,
-                BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.standort}"), txtName, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -651,12 +642,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblStrasse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.strasse}"),
-                txtStrasse,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strasse}"), txtStrasse, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -689,12 +675,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         txtHnr.setName(""); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.hausnummer}"),
-                txtHnr,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hausnummer}"), txtHnr, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -721,12 +702,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         cbBetreiber.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbBetreiber.setMaximumRowCount(6);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_betreiber}"),
-                cbBetreiber,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_betreiber}"), cbBetreiber, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -752,23 +728,16 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         chHalb.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.halb_oeffentlich}"),
-                chHalb,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.halb_oeffentlich}"), chHalb, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         chHalb.addChangeListener(new ChangeListener() {
-
-                @Override
-                public void stateChanged(final ChangeEvent evt) {
-                    chHalbStateChanged(evt);
-                }
-            });
+            public void stateChanged(ChangeEvent evt) {
+                chHalbStateChanged(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 2;
@@ -796,12 +765,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         taOffen.setRows(2);
         taOffen.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.oeffnungszeiten}"),
-                taOffen,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.oeffnungszeiten}"), taOffen, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpOffen.setViewportView(taOffen);
@@ -848,12 +812,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         taZusatz.setRows(2);
         taZusatz.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.zusatzinfo}"),
-                taZusatz,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.zusatzinfo}"), taZusatz, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpZusatz.setViewportView(taZusatz);
@@ -900,12 +859,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.bemerkung}"),
-                taBemerkung,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -951,12 +905,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         taParkgebuehr.setRows(2);
         taParkgebuehr.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.parkgebuehr}"),
-                taParkgebuehr,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.parkgebuehr}"), taParkgebuehr, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpParkgebuehr.setViewportView(taParkgebuehr);
@@ -994,12 +943,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblFoto, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.foto}"),
-                txtFoto,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.foto}"), txtFoto, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1015,8 +959,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         panUrl.setOpaque(false);
         panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1056,12 +999,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         ftxtAnzahl.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.anzahl_ladeplaetze}"),
-                ftxtAnzahl,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_ladeplaetze}"), ftxtAnzahl, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1092,12 +1030,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         chSchnell.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.schnellladestation}"),
-                chSchnell,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.schnellladestation}"), chSchnell, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1123,12 +1056,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         chBarrierefrei.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.barrierefrei}"),
-                chBarrierefrei,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.barrierefrei}"), chBarrierefrei, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1154,12 +1082,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         chGruen.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.gruener_strom}"),
-                chGruen,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gruener_strom}"), chGruen, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1185,12 +1108,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         chParkhaus.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.parkhaus}"),
-                chParkhaus,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.parkhaus}"), chParkhaus, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1216,12 +1134,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         chWasserstoff.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.wasserstoff}"),
-                chWasserstoff,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.wasserstoff}"), chWasserstoff, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1247,12 +1160,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         cbStromart.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_stromart}"),
-                cbStromart,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_stromart}"), cbStromart, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1266,12 +1174,14 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         panFillerUntenFoto.setName(""); // NOI18N
         panFillerUntenFoto.setOpaque(false);
 
-        final GroupLayout panFillerUntenFotoLayout = new GroupLayout(panFillerUntenFoto);
+        GroupLayout panFillerUntenFotoLayout = new GroupLayout(panFillerUntenFoto);
         panFillerUntenFoto.setLayout(panFillerUntenFotoLayout);
-        panFillerUntenFotoLayout.setHorizontalGroup(panFillerUntenFotoLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        panFillerUntenFotoLayout.setVerticalGroup(panFillerUntenFotoLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUntenFotoLayout.setHorizontalGroup(panFillerUntenFotoLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUntenFotoLayout.setVerticalGroup(panFillerUntenFotoLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1305,12 +1215,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         taAbrechnung.setToolTipText("");
         taAbrechnung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_abrechnungsart.name}"),
-                taAbrechnung,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_abrechnungsart.name}"), taAbrechnung, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpAbrechnung.setViewportView(taAbrechnung);
@@ -1336,21 +1241,17 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(panAbrechnung, gridBagConstraints);
 
-        if (isEditor) {
+        if(isEditor){
             cbAbrechnung.setFont(new Font("Dialog", 0, 12)); // NOI18N
-            if (isEditor) {
+            if(isEditor){
                 cbAbrechnung.setPreferredSize(new Dimension(100, 24));
             }
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.fk_abrechnungsart}"),
-                    cbAbrechnung,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_abrechnungsart}"), cbAbrechnung, BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor) {
+        if(isEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 26;
@@ -1364,16 +1265,14 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
-                0,
-                20,
-                Short.MAX_VALUE));
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
-                0,
-                0,
-                Short.MAX_VALUE));
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1411,12 +1310,8 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         lstZugang.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstZugang.setVisibleRowCount(4);
 
-        final ELProperty eLProperty = ELProperty.create("${cidsBean.arr_zugangsarten}");
-        final JListBinding jListBinding = SwingBindings.createJListBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                eLProperty,
-                lstZugang);
+        ELProperty eLProperty = ELProperty.create("${cidsBean.arr_zugangsarten}");
+        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstZugang);
         bindingGroup.addBinding(jListBinding);
 
         scpLstZugang.setViewportView(lstZugang);
@@ -1436,28 +1331,22 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         panButtonsZugang.setOpaque(false);
         panButtonsZugang.setLayout(new GridBagLayout());
 
-        btnAddZugang.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddZugang.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddZugang.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnAddZugangActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnAddZugangActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsZugang.add(btnAddZugang, gridBagConstraints);
 
-        btnRemoveZugang.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveZugang.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveZugang.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnRemoveZugangActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnRemoveZugangActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1524,30 +1413,24 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         panSteckdoseAdd.setFocusable(false);
         panSteckdoseAdd.setLayout(new GridBagLayout());
 
-        btnAddSteckdose.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddSteckdose.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddSteckdose.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnAddSteckdoseActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnAddSteckdoseActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panSteckdoseAdd.add(btnAddSteckdose, gridBagConstraints);
 
-        btnRemSteckdose.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemSteckdose.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemSteckdose.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnRemSteckdoseActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnRemSteckdoseActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1601,21 +1484,17 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.insets = new Insets(2, 10, 2, 5);
         panGeometrie.add(lblGeom, gridBagConstraints);
 
-        if (isEditor) {
-            if (isEditor) {
+        if (isEditor){
+            if (isEditor){
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.fk_geom}"),
-                    cbGeom,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor) {
+        if (isEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -1658,13 +1537,11 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         rpKarte.add(semiRoundedPanel7, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
         panLage.add(rpKarte, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1695,12 +1572,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         cbVersatz.setMinimumSize(new Dimension(150, 23));
         cbVersatz.setPreferredSize(new Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_versatz}"),
-                cbVersatz,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_versatz}"), cbVersatz, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1717,7 +1589,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 0, 5);
+        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
         jPanel1.add(panGeometrie, gridBagConstraints);
 
         panOnline.setOpaque(false);
@@ -1742,12 +1614,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panOnline.add(lblOnline, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.online}"),
-                chOnline,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.online}"), chOnline, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1763,7 +1630,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1791,12 +1658,14 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGap(0, 0, Short.MAX_VALUE));
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1808,23 +1677,23 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddZugangActionPerformed
+    private void btnAddZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddZugangActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobLadestationEditor.this), dlgAddZugang, true);
-    }                                                                 //GEN-LAST:event_btnAddZugangActionPerformed
+    }//GEN-LAST:event_btnAddZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveZugangActionPerformed
+    private void btnRemoveZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveZugangActionPerformed
         final Object selection = lstZugang.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1848,23 +1717,23 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
                 }
             }
         }
-    }                                                                    //GEN-LAST:event_btnRemoveZugangActionPerformed
+    }//GEN-LAST:event_btnRemoveZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortZugangActionPerformed
+    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortZugangActionPerformed
         dlgAddZugang.setVisible(false);
-    }                                                                      //GEN-LAST:event_btnMenAbortZugangActionPerformed
+    }//GEN-LAST:event_btnMenAbortZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkZugangActionPerformed
+    private void btnMenOkZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkZugangActionPerformed
         try {
             final Object selItem = cbZugang.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1879,34 +1748,34 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         } finally {
             dlgAddZugang.setVisible(false);
         }
-    }                                                                   //GEN-LAST:event_btnMenOkZugangActionPerformed
+    }//GEN-LAST:event_btnMenOkZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSteckdoseActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddSteckdoseActionPerformed
+    private void btnAddSteckdoseActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddSteckdoseActionPerformed
         TableUtils.addObjectToTable(xtSteckdose, TABLE_NAME_STECKDOSE, getConnectionContext());
-    }                                                                    //GEN-LAST:event_btnAddSteckdoseActionPerformed
+    }//GEN-LAST:event_btnAddSteckdoseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemSteckdoseActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemSteckdoseActionPerformed
+    private void btnRemSteckdoseActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemSteckdoseActionPerformed
         TableUtils.removeObjectsFromTable(xtSteckdose);
-    }                                                                    //GEN-LAST:event_btnRemSteckdoseActionPerformed
+    }//GEN-LAST:event_btnRemSteckdoseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chHalbStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chHalbStateChanged
+    private void chHalbStateChanged(final ChangeEvent evt) {//GEN-FIRST:event_chHalbStateChanged
         isOpen();
-    }                                                        //GEN-LAST:event_chHalbStateChanged
+    }//GEN-LAST:event_chHalbStateChanged
 
     /**
      * DOCUMENT ME!
