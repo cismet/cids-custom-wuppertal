@@ -1637,7 +1637,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 errors.add("Die RVR-Priorität wurde nicht ausgewählt (Pflichtfeld).");
             } else if (Boolean.TRUE.equals(cidsBean.getProperty("to_publish"))
                         && "prio 0".equals((String)prioRvrBean.getProperty("schluessel"))) {
-                errors.add("Die RVR-Priorität „Prio 0“ nur möglich, wenn das POI nicht öffentlich ist.");
+                errors.add("Die RVR-Priorität „Prio 0“ ist nur möglich, wenn das POI nicht öffentlich ist.");
             } else if (Boolean.FALSE.equals(cidsBean.getProperty("to_publish"))
                         && !"prio 0".equals((String)prioRvrBean.getProperty("schluessel"))) {
                 errors.add("Das POI ist nicht öffentlich, daher muss die RVR-Priorität „Prio 0“ ausgewählt werden.");
