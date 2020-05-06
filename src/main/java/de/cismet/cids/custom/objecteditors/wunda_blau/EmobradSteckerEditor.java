@@ -108,11 +108,11 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
      *
      * @version  $Revision$, $Date$
      */
-    private static enum otherTableCases {
+    private static enum OtherTableCases {
 
         //~ Enum constants -----------------------------------------------------
 
-        REDUNDANTATTKEY, REDUNDANTNAME
+        REDUNDANT_ATT_KEY, REDUNDANT_NAME
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -527,7 +527,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
      * @param  field  DOCUMENT ME!
      * @param  fall   DOCUMENT ME!
      */
-    private void checkKey(final String field, final String insertValues, final otherTableCases fall) {
+    private void checkKey(final String field, final String insertValues, final OtherTableCases fall) {
         // Worker Aufruf, ob das Objekt schon existiert
         valueFromOtherTable(TABLE_NAME,
             " where "
@@ -547,7 +547,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
      * @param  field  DOCUMENT ME!
      * @param  fall   DOCUMENT ME!
      */
-    private void checkName(final String where, final otherTableCases fall) {
+    private void checkName(final String where, final OtherTableCases fall) {
         // Worker Aufruf, ob das Objekt schon existiert
         valueFromOtherTable(TABLE_NAME,
             where 
@@ -564,8 +564,8 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
         checkName (" where " + FIELD__TYP + " ilike '" +  cidsBean.getProperty(FIELD__TYP) + "' and " 
                 + FIELD__AMPERE + " = " + cidsBean.getProperty(FIELD__AMPERE) + " and "
                 + FIELD__VOLT + " = " + cidsBean.getProperty(FIELD__VOLT) + " and "
-                + FIELD__KWATT + " = " + cidsBean.getProperty(FIELD__KWATT), otherTableCases.REDUNDANTNAME);
-        checkKey(FIELD__SCHLUESSEL, createKey(), otherTableCases.REDUNDANTATTKEY);
+                + FIELD__KWATT + " = " + cidsBean.getProperty(FIELD__KWATT), OtherTableCases.REDUNDANT_NAME);
+        checkKey(FIELD__SCHLUESSEL, createKey(), OtherTableCases.REDUNDANT_ATT_KEY);
     }
 
     
@@ -599,7 +599,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
      * @param  whereClause  DOCUMENT ME!
      * @param  fall         DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName, final String whereClause, final otherTableCases fall) {
+    private void valueFromOtherTable(final String tableName, final String whereClause, final OtherTableCases fall) {
         
         final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
 
@@ -616,22 +616,22 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
                             check = get();
                             if (check != null) {
                                 switch (fall) {
-                                    case REDUNDANTATTKEY: {  // check redundant key
+                                    case REDUNDANT_ATT_KEY: {  // check redundant key
                                         redundantKey = true;
                                         break;
                                     }
-                                    case REDUNDANTNAME: { // check redundant name
+                                    case REDUNDANT_NAME: { // check redundant name
                                         redundantName = true;
                                         break;
                                     }
                                 }
                             } else {
                                 switch (fall) {
-                                    case REDUNDANTATTKEY: {  // check redundant key
+                                    case REDUNDANT_ATT_KEY: {  // check redundant key
                                         redundantKey = false;
                                         break;
                                     }
-                                    case REDUNDANTNAME: { // check redundant name
+                                    case REDUNDANT_NAME: { // check redundant name
                                         redundantName = false;
                                         break;
                                     }
@@ -644,7 +644,7 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
                 }
             };
        
-        if (fall.equals(otherTableCases.REDUNDANTNAME)){
+        if (fall.equals(OtherTableCases.REDUNDANT_NAME)){
             if (worker_name != null) {
                 worker_name.cancel(true);
             }

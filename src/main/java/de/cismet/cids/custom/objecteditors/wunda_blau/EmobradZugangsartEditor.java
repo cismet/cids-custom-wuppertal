@@ -96,11 +96,11 @@ public class EmobradZugangsartEditor extends DefaultCustomObjectEditor implement
      *
      * @version  $Revision$, $Date$
      */
-    private static enum otherTableCases {
+    private static enum OtherTableCases {
 
         //~ Enum constants -----------------------------------------------------
 
-        REDUNDANTATTKEY, REDUNDANTATTNAME
+        REDUNDANT_ATT_KEY, REDUNDANT_ATT_NAME
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -363,7 +363,7 @@ public class EmobradZugangsartEditor extends DefaultCustomObjectEditor implement
      * @param  field  DOCUMENT ME!
      * @param  fall   DOCUMENT ME!
      */
-    private void checkName(final String field, final otherTableCases fall) {
+    private void checkName(final String field, final OtherTableCases fall) {
         // Worker Aufruf, ob das Objekt schon existiert
         valueFromOtherTable(
             TABLE_NAME,
@@ -382,8 +382,8 @@ public class EmobradZugangsartEditor extends DefaultCustomObjectEditor implement
      * DOCUMENT ME!
      */
     private void checkAttributes() {
-        checkName(FIELD__NAME, otherTableCases.REDUNDANTATTNAME);
-        checkName(FIELD__SCHLUESSEL, otherTableCases.REDUNDANTATTKEY);
+        checkName(FIELD__NAME, OtherTableCases.REDUNDANT_ATT_NAME);
+        checkName(FIELD__SCHLUESSEL, OtherTableCases.REDUNDANT_ATT_KEY);
     }
 
     
@@ -417,7 +417,7 @@ public class EmobradZugangsartEditor extends DefaultCustomObjectEditor implement
      * @param  whereClause  DOCUMENT ME!
      * @param  fall         DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName, final String whereClause, final otherTableCases fall) {
+    private void valueFromOtherTable(final String tableName, final String whereClause, final OtherTableCases fall) {
         final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
 
                 @Override
@@ -433,22 +433,22 @@ public class EmobradZugangsartEditor extends DefaultCustomObjectEditor implement
                             check = get();
                             if (check != null) {
                                 switch (fall) {
-                                    case REDUNDANTATTKEY: {  // check redundant key
+                                    case REDUNDANT_ATT_KEY: {  // check redundant key
                                         redundantKey = true;
                                         break;
                                     }
-                                    case REDUNDANTATTNAME: { // check redundant name
+                                    case REDUNDANT_ATT_NAME: { // check redundant name
                                         redundantName = true;
                                         break;
                                     }
                                 }
                             } else {
                                 switch (fall) {
-                                    case REDUNDANTATTKEY: {  // check redundant key
+                                    case REDUNDANT_ATT_KEY: {  // check redundant key
                                         redundantKey = false;
                                         break;
                                     }
-                                    case REDUNDANTATTNAME: { // check redundant name
+                                    case REDUNDANT_ATT_NAME: { // check redundant name
                                         redundantName = false;
                                         break;
                                     }
@@ -460,7 +460,7 @@ public class EmobradZugangsartEditor extends DefaultCustomObjectEditor implement
                     }
                 }
             };
-        if (fall.equals(otherTableCases.REDUNDANTATTNAME)){
+        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)){
             if (worker_name != null) {
                 worker_name.cancel(true);
             }

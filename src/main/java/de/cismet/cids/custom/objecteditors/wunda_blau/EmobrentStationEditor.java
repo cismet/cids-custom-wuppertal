@@ -147,11 +147,11 @@ public class EmobrentStationEditor extends DefaultCustomObjectEditor implements 
      *
      * @version  $Revision$, $Date$
      */
-    private static enum otherTableCases {
+    private static enum OtherTableCases {
 
         //~ Enum constants -----------------------------------------------------
 
-        SETVALUE, REDUNDANTATTNAME
+        SET_VALUE, REDUNDANT_ATT_NAME
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -1383,7 +1383,7 @@ public class EmobrentStationEditor extends DefaultCustomObjectEditor implements 
                     + " <> "
                     + cidsBean.getProperty(FIELD__ID),
             FIELD__NAME,
-            otherTableCases.REDUNDANTATTNAME);
+            OtherTableCases.REDUNDANT_ATT_NAME);
     }
 
     @Override
@@ -1498,7 +1498,7 @@ public class EmobrentStationEditor extends DefaultCustomObjectEditor implements 
                         + VERSATZ_ZENTRAL_SCHLUESSEL
                         + "'",
                 FIELD__VERSATZ,
-                otherTableCases.SETVALUE);
+                OtherTableCases.SET_VALUE);
         }
 
     }
@@ -1724,7 +1724,7 @@ public class EmobrentStationEditor extends DefaultCustomObjectEditor implements 
     private void valueFromOtherTable(final String tableName,
             final String whereClause,
             final String propertyName,
-            final otherTableCases fall) {
+            final OtherTableCases fall) {
         final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
 
                 @Override
@@ -1740,7 +1740,7 @@ public class EmobrentStationEditor extends DefaultCustomObjectEditor implements 
                             check = get();
                             if (check != null) {
                                 switch (fall) {
-                                    case SETVALUE: {         // set default value
+                                    case SET_VALUE: {         // set default value
                                         try {
                                             cidsBean.setProperty(
                                                 propertyName,
@@ -1750,14 +1750,14 @@ public class EmobrentStationEditor extends DefaultCustomObjectEditor implements 
                                         }
                                         break;
                                     }
-                                    case REDUNDANTATTNAME: { // check redundant name
+                                    case REDUNDANT_ATT_NAME: { // check redundant name
                                         redundantName = true;
                                         break;
                                     }
                                 }
                             } else {
                                 switch (fall) {
-                                    case REDUNDANTATTNAME: { // check redundant name
+                                    case REDUNDANT_ATT_NAME: { // check redundant name
                                         redundantName = false;
                                         break;
                                     }
@@ -1769,7 +1769,7 @@ public class EmobrentStationEditor extends DefaultCustomObjectEditor implements 
                     }
                   }
             };
-        if (fall.equals(otherTableCases.REDUNDANTATTNAME)){
+        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)){
             if (worker_name != null) {
                 worker_name.cancel(true);
             }
