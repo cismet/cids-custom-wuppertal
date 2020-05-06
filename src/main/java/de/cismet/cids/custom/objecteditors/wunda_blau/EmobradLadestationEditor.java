@@ -257,6 +257,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
     private JFormattedTextField ftxtAnzahlLadepunkte;
     private JFormattedTextField ftxtSchliessfaecher;
     private JFormattedTextField ftxtSteckdosen;
+    private JPanel jPanel1;
     private JLabel lblAbrechnung;
     private JLabel lblAnzahl;
     private JLabel lblAnzahlLadepunkte;
@@ -470,6 +471,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             btnMenOkPfand = new JButton();
             panFillerUnten = new JPanel();
             panContent = new RoundedPanel();
+            jPanel1 = new JPanel();
             panFillerUnten1 = new JPanel();
             panDaten = new JPanel();
             lblName = new JLabel();
@@ -761,6 +763,9 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panContent.setOpaque(false);
         panContent.setLayout(new GridBagLayout());
 
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new GridBagLayout());
+
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
@@ -778,7 +783,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        panContent.add(panFillerUnten1, gridBagConstraints);
+        jPanel1.add(panFillerUnten1, gridBagConstraints);
 
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
@@ -1841,7 +1846,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-        panContent.add(panDaten, gridBagConstraints);
+        jPanel1.add(panDaten, gridBagConstraints);
 
         panGeometrie.setOpaque(false);
         panGeometrie.setLayout(new GridBagLayout());
@@ -1974,7 +1979,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 0, 5);
-        panContent.add(panGeometrie, gridBagConstraints);
+        jPanel1.add(panGeometrie, gridBagConstraints);
 
         panOnline.setOpaque(false);
         panOnline.setLayout(new GridBagLayout());
@@ -1997,8 +2002,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panOnline.add(lblOnline, gridBagConstraints);
-
-        chOnline.setOpaque(false);
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
@@ -2027,7 +2030,14 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-        panContent.add(panOnline, gridBagConstraints);
+        jPanel1.add(panOnline, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panContent.add(jPanel1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
