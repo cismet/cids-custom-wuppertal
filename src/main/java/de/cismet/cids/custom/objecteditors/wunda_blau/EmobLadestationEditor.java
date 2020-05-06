@@ -252,6 +252,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
     private Box.Filler filler3;
     private Box.Filler filler4;
     private JFormattedTextField ftxtAnzahl;
+    private JPanel jPanel1;
     private JScrollPane jScrollPaneSteckdose;
     private JLabel lblAbrechnung;
     private JLabel lblAnzahl;
@@ -425,8 +426,8 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             panMenButtonsZugang = new JPanel();
             btnMenAbortZugang = new JButton();
             btnMenOkZugang = new JButton();
-            panFillerUnten = new JPanel();
             panContent = new RoundedPanel();
+            jPanel1 = new JPanel();
             panFillerUnten1 = new JPanel();
             panDaten = new JPanel();
             lblName = new JLabel();
@@ -518,6 +519,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
             sepOnline = new JSeparator();
             lblOnline = new JLabel();
             chOnline = new JCheckBox();
+            panFillerUnten = new JPanel();
 
             dlgAddZugang.setTitle("Zugangsart");
             dlgAddZugang.setModal(true);
@@ -578,28 +580,12 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
 
         setLayout(new GridBagLayout());
 
-        panFillerUnten.setName(""); // NOI18N
-        panFillerUnten.setOpaque(false);
-
-        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
-        panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGap(0, 0, Short.MAX_VALUE));
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        add(panFillerUnten, gridBagConstraints);
-
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
         panContent.setLayout(new GridBagLayout());
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new GridBagLayout());
 
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
@@ -607,7 +593,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
         panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+                GroupLayout.Alignment.LEADING).addGap(0, 532, Short.MAX_VALUE));
         panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
                 GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
@@ -618,7 +604,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        panContent.add(panFillerUnten1, gridBagConstraints);
+        jPanel1.add(panFillerUnten1, gridBagConstraints);
 
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
@@ -1599,7 +1585,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-        panContent.add(panDaten, gridBagConstraints);
+        jPanel1.add(panDaten, gridBagConstraints);
 
         panGeometrie.setOpaque(false);
         panGeometrie.setLayout(new GridBagLayout());
@@ -1732,7 +1718,7 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 0, 5);
-        panContent.add(panGeometrie, gridBagConstraints);
+        jPanel1.add(panGeometrie, gridBagConstraints);
 
         panOnline.setOpaque(false);
         panOnline.setLayout(new GridBagLayout());
@@ -1755,8 +1741,6 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panOnline.add(lblOnline, gridBagConstraints);
-
-        chOnline.setOpaque(false);
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1785,7 +1769,14 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-        panContent.add(panOnline, gridBagConstraints);
+        jPanel1.add(panOnline, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panContent.add(jPanel1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1796,6 +1787,25 @@ public class EmobLadestationEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panContent, gridBagConstraints);
+
+        panFillerUnten.setName(""); // NOI18N
+        panFillerUnten.setOpaque(false);
+
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        panFillerUnten.setLayout(panFillerUntenLayout);
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGap(0, 0, Short.MAX_VALUE));
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
