@@ -30,25 +30,24 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.wunda_blau.band.SideComboBox;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -59,11 +58,54 @@ import de.cismet.tools.gui.SemiRoundedPanel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
+public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBeanStore,
+    Disposable,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(TreppeLeitelementPanel.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private CidsBean cidsBean;
+    private boolean editable = true;
+    private ConnectionContext connectionContext;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    SideComboBox cbSide;
+    JTextArea jTextArea4;
+    JTextArea jTextArea7;
+    JTextField jTextField22;
+    TreppeBauteilZustandKostenPanel treppeBauteilZustandKostenPanel3;
+    private BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new TreppeLeitelementPanel object.
+     */
+    public TreppeLeitelementPanel() {
+        this(true, ConnectionContext.createDummy());
+    }
+
+    /**
+     * Creates new form TreppeLeitelementPanel.
+     *
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public TreppeLeitelementPanel(final boolean editable, final ConnectionContext connectionContext) {
+        this.editable = editable;
+        this.connectionContext = connectionContext;
+        initComponents();
+        jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
+        jTextArea7.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
+        setEditable(editable);
+    }
+
+    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -83,6 +125,8 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         final JPanel jPanel25 = new JPanel();
         final JLabel jLabel62 = new JLabel();
         jTextField22 = new JTextField();
+        final JLabel lblSide = new JLabel();
+        cbSide = new SideComboBox();
         final JLabel jLabel68 = new JLabel();
         final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final JScrollPane jScrollPane8 = new JScrollPane();
@@ -93,13 +137,9 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         jTextArea4 = new JTextArea();
         final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final JPanel jPanel1 = new JPanel();
-        btnRemoveArt1 = new JButton();
         final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         treppeBauteilZustandKostenPanel3 = new TreppeBauteilZustandKostenPanel(editable);
-        final JSeparator jSeparator1 = new JSeparator();
         final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-
-        final FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -167,6 +207,29 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel25.add(jTextField22, gridBagConstraints);
+
+        Mnemonics.setLocalizedText(
+            lblSide,
+            NbBundle.getMessage(
+                TreppeLeitelementPanel.class,
+                "TreppeLeitelementPanel.lblSide.text",
+                new Object[] {}));  // NOI18N
+        lblSide.setName("lblSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        jPanel25.add(lblSide, gridBagConstraints);
+
+        cbSide.setName("cbSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel25.add(cbSide, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jLabel68,
@@ -304,20 +367,6 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new GridBagLayout());
 
-        btnRemoveArt1.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveArt1.setBorderPainted(false);
-        btnRemoveArt1.setContentAreaFilled(false);
-        btnRemoveArt1.setName("btnRemoveArt1");                                                                   // NOI18N
-        btnRemoveArt1.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = GridBagConstraints.SOUTHEAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        jPanel1.add(btnRemoveArt1, gridBagConstraints);
-
         filler3.setName("filler3"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -349,15 +398,6 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         add(jPanel1, gridBagConstraints);
 
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        add(jSeparator1, gridBagConstraints);
-
         filler2.setName("filler2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -368,82 +408,39 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         add(filler2, gridBagConstraints);
 
         bindingGroup.bind();
-    }
-
-    /**
-     * Code for dispatching events from components to event handlers.
-     *
-     * @version  $Revision$, $Date$
-     */
-    private class FormListener implements ActionListener {
-
-        /**
-         * Creates a new FormListener object.
-         */
-        FormListener() {
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent evt) {
-            if (evt.getSource() == btnRemoveArt1) {
-                TreppeLeitelementPanel.this.btnRemoveArt1ActionPerformed(evt);
-            }
-        }
     } // </editor-fold>//GEN-END:initComponents
-
-    //~ Instance fields --------------------------------------------------------
-
-    private CidsBean cidsBean;
-    private TreppeLeitelementePanel parent;
-    private final boolean editable;
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    JButton btnRemoveArt1;
-    JTextArea jTextArea4;
-    JTextArea jTextArea7;
-    JTextField jTextField22;
-    TreppeBauteilZustandKostenPanel treppeBauteilZustandKostenPanel3;
-    private BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
-
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new TreppeLeitelementPanel object.
-     */
-    public TreppeLeitelementPanel() {
-        this(true);
-    }
-
-    /**
-     * Creates new form TreppeLeitelementPanel.
-     *
-     * @param  editable  DOCUMENT ME!
-     */
-    public TreppeLeitelementPanel(final boolean editable) {
-        this.editable = editable;
-        initComponents();
-        jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
-        jTextArea7.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
-        if (!editable) {
-            RendererTools.makeReadOnly(jTextField22);
-            RendererTools.makeReadOnly(jTextArea4);
-            RendererTools.makeReadOnly(jTextArea7);
-        }
-        btnRemoveArt1.setVisible(editable);
-    }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
      *
-     * @param  evt  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    private void btnRemoveArt1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveArt1ActionPerformed
-        parent.getCidsBeans().remove(cidsBean);
-        parent.removeLeitelementPanel(this);
-    }                                                                  //GEN-LAST:event_btnRemoveArt1ActionPerformed
+    public void setEditable(final boolean editable) {
+        this.editable = editable;
+
+        if (editable) {
+            RendererTools.makeWritable(jTextField22);
+            RendererTools.makeWritable(jTextArea4);
+            RendererTools.makeWritable(jTextArea7);
+            RendererTools.makeWritable(cbSide);
+        } else {
+            RendererTools.makeReadOnly(jTextField22);
+            RendererTools.makeReadOnly(jTextArea4);
+            RendererTools.makeReadOnly(jTextArea7);
+            RendererTools.makeReadOnly(cbSide);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     @Override
     public CidsBean getCidsBean() {
@@ -455,15 +452,7 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         bindingGroup.bind();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  parent  DOCUMENT ME!
-     */
-    public void setParent(final TreppeLeitelementePanel parent) {
-        this.parent = parent;
+        cbSide.setCidsBean(cidsBean);
     }
 
     @Override
@@ -471,6 +460,6 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
         bindingGroup.unbind();
         treppeBauteilZustandKostenPanel3.dispose();
         cidsBean = null;
-        parent = null;
+        cbSide.setCidsBean(null);
     }
 }

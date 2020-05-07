@@ -36,8 +36,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -125,10 +123,7 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         final JLabel jLabel56 = new JLabel();
         final JLabel jLabel1 = new JLabel();
         final JPanel jPanel2 = new JPanel();
-        defaultBindableReferenceCombo1 = new DefaultBindableReferenceCombo(
-                MC__PODEST_MATERIAL,
-                true,
-                false);
+        defaultBindableReferenceCombo1 = new DefaultBindableReferenceCombo(MC__PODEST_MATERIAL, true, false);
         fastBindableReferenceCombo1 = new FastBindableReferenceCombo(
                 materialArtSearch1,
                 materialArtSearch1.getRepresentationPattern(),
@@ -139,15 +134,9 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
                 materialArtSearch2.getRepresentationFields());
         final JSeparator jSeparator3 = new JSeparator();
         final JLabel jLabel2 = new JLabel();
-        defaultBindableReferenceCombo4 = new DefaultBindableReferenceCombo(
-                MC__ENTWAESSERUNG_ART,
-                true,
-                false);
+        defaultBindableReferenceCombo4 = new DefaultBindableReferenceCombo(MC__ENTWAESSERUNG_ART, true, false);
         final JLabel jLabel3 = new JLabel();
-        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(
-                MC__PODEST_FUGEN,
-                true,
-                false);
+        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(MC__PODEST_FUGEN, true, false);
         final JLabel jLabel55 = new JLabel();
         final JScrollPane jScrollPane2 = new JScrollPane();
         jTextArea2 = new JTextArea();
@@ -156,8 +145,6 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         final JPanel jPanel4 = new JPanel();
         treppeBauteilZustandKostenPanel7 = new TreppeBauteilZustandKostenPanel(editable);
         final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        btnRemoveArt1 = new JButton();
-        final JSeparator jSeparator1 = new JSeparator();
         final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
 
         final FormListener formListener = new FormListener();
@@ -577,33 +564,10 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(filler3, gridBagConstraints);
 
-        btnRemoveArt1.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveArt1.setBorderPainted(false);
-        btnRemoveArt1.setContentAreaFilled(false);
-        btnRemoveArt1.setName("btnRemoveArt1");                                                                   // NOI18N
-        btnRemoveArt1.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = GridBagConstraints.SOUTHEAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        jPanel4.add(btnRemoveArt1, gridBagConstraints);
-
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         add(jPanel4, gridBagConstraints);
-
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        add(jSeparator1, gridBagConstraints);
 
         filler2.setName("filler2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
@@ -634,8 +598,6 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == defaultBindableReferenceCombo1) {
                 TreppePodestPanel.this.defaultBindableReferenceCombo1ActionPerformed(evt);
-            } else if (evt.getSource() == btnRemoveArt1) {
-                TreppePodestPanel.this.btnRemoveArt1ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -643,14 +605,12 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private TreppePodestePanel parent;
-    private final boolean editable;
+    private boolean editable = true;
     private final TreppeMaterialArtLightweightSearch materialArtSearch1;
     private final TreppeMaterialArtLightweightSearch materialArtSearch2;
     private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    JButton btnRemoveArt1;
     DefaultBindableReferenceCombo defaultBindableReferenceCombo1;
     DefaultBindableReferenceCombo defaultBindableReferenceCombo4;
     DefaultBindableReferenceCombo defaultBindableReferenceCombo5;
@@ -668,11 +628,9 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
 
     /**
      * Creates a new TreppePodestPanel object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppePodestPanel(final ConnectionContext connectionContext) {
-        this(true, connectionContext);
+    public TreppePodestPanel() {
+        this(true, ConnectionContext.createDummy());
     }
 
     /**
@@ -697,19 +655,10 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         materialArtSearch2.setTypId(2);
 
         initComponents();
+        setEditable(editable);
         jTextArea2.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
-            RendererTools.makeReadOnly(jCheckBox1);
-            RendererTools.makeReadOnly(jCheckBox2);
-            RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
-            RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
-            RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
-            RendererTools.makeReadOnly(fastBindableReferenceCombo1);
-            RendererTools.makeReadOnly(fastBindableReferenceCombo2);
-            RendererTools.makeReadOnly(jTextArea2);
-            RendererTools.makeReadOnly(jTextField19);
         }
-        btnRemoveArt1.setVisible(editable);
 
         fastBindableReferenceCombo1.setMetaClassFromTableName("WUNDA_BLAU", "treppe_podest_material_art");
         fastBindableReferenceCombo2.setMetaClassFromTableName("WUNDA_BLAU", "treppe_podest_material_art");
@@ -720,12 +669,33 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
     /**
      * DOCUMENT ME!
      *
-     * @param  evt  DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
-    private void btnRemoveArt1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveArt1ActionPerformed
-        parent.getCidsBeans().remove(cidsBean);
-        parent.removePodestPanel(this);
-    }                                                                  //GEN-LAST:event_btnRemoveArt1ActionPerformed
+    public void setEditable(final boolean editable) {
+        this.editable = editable;
+
+        if (editable) {
+            RendererTools.makeWritable(jCheckBox1);
+            RendererTools.makeWritable(jCheckBox2);
+            RendererTools.makeWritable(defaultBindableReferenceCombo1);
+            RendererTools.makeWritable(defaultBindableReferenceCombo4);
+            RendererTools.makeWritable(defaultBindableReferenceCombo5);
+            RendererTools.makeWritable(fastBindableReferenceCombo1);
+            RendererTools.makeWritable(fastBindableReferenceCombo2);
+            RendererTools.makeWritable(jTextArea2);
+            RendererTools.makeWritable(jTextField19);
+        } else {
+            RendererTools.makeReadOnly(jCheckBox1);
+            RendererTools.makeReadOnly(jCheckBox2);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
+            RendererTools.makeReadOnly(fastBindableReferenceCombo1);
+            RendererTools.makeReadOnly(fastBindableReferenceCombo2);
+            RendererTools.makeReadOnly(jTextArea2);
+            RendererTools.makeReadOnly(jTextField19);
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -771,21 +741,11 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  parent  DOCUMENT ME!
-     */
-    public void setParent(final TreppePodestePanel parent) {
-        this.parent = parent;
-    }
-
     @Override
     public void dispose() {
         bindingGroup.unbind();
         treppeBauteilZustandKostenPanel7.dispose();
         cidsBean = null;
-        parent = null;
     }
 
     @Override

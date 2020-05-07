@@ -92,7 +92,7 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private final boolean editable;
+    private boolean editable = true;
     private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -133,14 +133,29 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
 
         initComponents();
         jTextArea6.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
-        if (!editable) {
+        setEditable(editable);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public void setEditable(final boolean editable) {
+        this.editable = editable;
+
+        if (editable) {
+            RendererTools.makeWritable(jTextArea6);
+            RendererTools.makeWritable(defaultBindableReferenceCombo4);
+            RendererTools.makeWritable(defaultBindableReferenceCombo5);
+        } else {
             RendererTools.makeReadOnly(jTextArea6);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
             RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

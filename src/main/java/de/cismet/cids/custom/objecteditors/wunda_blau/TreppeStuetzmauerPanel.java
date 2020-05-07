@@ -12,8 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
@@ -39,21 +42,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.band.SideComboBox;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
+
+import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -64,7 +70,9 @@ import de.cismet.tools.gui.SemiRoundedPanel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
+public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBeanStore,
+    Disposable,
+    ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -92,6 +100,8 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         jXHyperlink1 = new JXHyperlink();
         final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         jTextField1 = new JTextField();
+        final JLabel lblSide = new JLabel();
+        cbSide = new SideComboBox();
         final JLabel jLabel79 = new JLabel();
         jTextField2 = new JTextField();
         final JLabel jLabel78 = new JLabel();
@@ -104,8 +114,6 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         final JPanel jPanel3 = new JPanel();
         treppeBauteilZustandKostenPanel4 = new TreppeBauteilZustandKostenPanel(false, true);
         final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        btnRemoveArt1 = new JButton();
-        final JSeparator jSeparator1 = new JSeparator();
         final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
 
         final FormListener formListener = new FormListener();
@@ -227,6 +235,29 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
         jPanel36.add(jPanel1, gridBagConstraints);
+
+        Mnemonics.setLocalizedText(
+            lblSide,
+            NbBundle.getMessage(
+                TreppeStuetzmauerPanel.class,
+                "TreppeStuetzmauerPanel.lblSide.text",
+                new Object[] {}));  // NOI18N
+        lblSide.setName("lblSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        jPanel36.add(lblSide, gridBagConstraints);
+
+        cbSide.setName("cbSide"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel36.add(cbSide, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jLabel79,
@@ -401,33 +432,10 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(filler4, gridBagConstraints);
 
-        btnRemoveArt1.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveArt1.setBorderPainted(false);
-        btnRemoveArt1.setContentAreaFilled(false);
-        btnRemoveArt1.setName("btnRemoveArt1");                                                                   // NOI18N
-        btnRemoveArt1.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = GridBagConstraints.SOUTHEAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        jPanel3.add(btnRemoveArt1, gridBagConstraints);
-
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         add(jPanel3, gridBagConstraints);
-
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        add(jSeparator1, gridBagConstraints);
 
         filler3.setName("filler3"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
@@ -458,8 +466,6 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == jXHyperlink1) {
                 TreppeStuetzmauerPanel.this.jXHyperlink1ActionPerformed(evt);
-            } else if (evt.getSource() == btnRemoveArt1) {
-                TreppeStuetzmauerPanel.this.btnRemoveArt1ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -469,11 +475,11 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     private CidsBean cidsBean;
     private CidsBean mauerBean;
     private CidsBean zustandBean;
-    private TreppeStuetzmauernPanel parent;
-    private final boolean editable;
+    private boolean editable = true;
+    private ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    JButton btnRemoveArt1;
+    SideComboBox cbSide;
     JTextArea jTextArea4;
     JTextField jTextField1;
     JTextField jTextField2;
@@ -489,39 +495,24 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
      * Creates a new TreppeStuetzmauerPanel object.
      */
     public TreppeStuetzmauerPanel() {
-        this(true);
+        this(true, ConnectionContext.createDummy());
     }
 
     /**
      * Creates new form TreppeStuetzmauerPanel.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  editable           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeStuetzmauerPanel(final boolean editable) {
-        this.editable = editable;
+    public TreppeStuetzmauerPanel(final boolean editable, final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
         initComponents();
 
         jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
-        if (!editable) {
-            RendererTools.makeReadOnly(jTextField1);
-            RendererTools.makeReadOnly(jTextField2);
-            RendererTools.makeReadOnly(jTextField3);
-            RendererTools.makeReadOnly(jTextArea4);
-        }
-        btnRemoveArt1.setVisible(editable);
+        setEditable(editable);
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnRemoveArt1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveArt1ActionPerformed
-        parent.getCidsBeans().remove(cidsBean);
-        parent.removeMauerPanel(this);
-    }                                                                  //GEN-LAST:event_btnRemoveArt1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -535,6 +526,29 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public void setEditable(final boolean editable) {
+        this.editable = editable;
+
+        if (editable) {
+            RendererTools.makeWritable(jTextField1);
+            RendererTools.makeWritable(jTextField2);
+            RendererTools.makeWritable(jTextField3);
+            RendererTools.makeWritable(jTextArea4);
+            RendererTools.makeWritable(cbSide);
+        } else {
+            RendererTools.makeReadOnly(jTextField1);
+            RendererTools.makeReadOnly(jTextField2);
+            RendererTools.makeReadOnly(jTextField3);
+            RendererTools.makeReadOnly(jTextArea4);
+            RendererTools.makeReadOnly(cbSide);
+        }
     }
 
     /**
@@ -559,16 +573,70 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
-        bindingGroup.bind();
-    }
+        cbSide.setCidsBean(cidsBean);
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  parent  DOCUMENT ME!
-     */
-    public void setParent(final TreppeStuetzmauernPanel parent) {
-        this.parent = parent;
+        final Integer mauerId = (Integer)cidsBean.getProperty("mauer");
+        if ((mauerId != null)) {
+            new SwingWorker<CidsBean, Void>() {
+
+                    @Override
+                    protected CidsBean doInBackground() throws Exception {
+                        final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                                "WUNDA_BLAU",
+                                "mauer",
+                                getConnectionContext());
+                        final MetaObject mo = SessionManager.getProxy()
+                                    .getMetaObject(mauerId, mc.getID(), "WUNDA_BLAU", getConnectionContext());
+                        final CidsBean mauerBean = mo.getBean();
+
+                        final Integer kostenGelaender = (Integer)mauerBean.getProperty("san_kosten_gelaender");
+                        final Integer kostenGruendung = (Integer)mauerBean.getProperty("san_kosten_gruendung");
+                        final Integer kostenverformung = (Integer)mauerBean.getProperty("san_kosten_verformung");
+                        final Integer kostenGelaende = (Integer)mauerBean.getProperty("san_kosten_gelaende");
+                        final Integer kostenAnsicht = (Integer)mauerBean.getProperty("san_kosten_ansicht");
+                        final Integer kostenKopf = (Integer)mauerBean.getProperty("san_kosten_kopf");
+
+                        double summe = 0;
+                        summe += (kostenGelaender != null) ? kostenGelaender : 0;
+                        summe += (kostenGruendung != null) ? kostenGruendung : 0;
+                        summe += (kostenverformung != null) ? kostenverformung : 0;
+                        summe += (kostenGelaende != null) ? kostenGelaende : 0;
+                        summe += (kostenAnsicht != null) ? kostenAnsicht : 0;
+                        summe += (kostenKopf != null) ? kostenKopf : 0;
+
+                        final CidsBean zustandBean = CidsBean.createNewCidsBeanFromTableName(
+                                "WUNDA_BLAU",
+                                "TREPPE_ZUSTAND",
+                                getConnectionContext());
+                        zustandBean.setProperty("verkehrssicherheit", null);
+                        zustandBean.setProperty("dauerhaftigkeit", null);
+                        zustandBean.setProperty("standsicherheit", null);
+                        zustandBean.setProperty("sanierungsmassnahmen", "siehe Mauer-Beschreibung");
+                        zustandBean.setProperty("gesamt", mauerBean.getProperty("zustand_gesamt"));
+                        zustandBean.setProperty("kosten", summe);
+                        setZustandBean(zustandBean);
+
+                        return mauerBean;
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final CidsBean mauerBean = get();
+                            setMauerBean(mauerBean);
+                            bindingGroup.bind();
+                        } catch (final Exception ex) {
+                            final String message = "Fehler beim Laden der Stützmauer. (mauerId: " + mauerId
+                                        + ")";
+                            LOG.error(message, ex);
+                            ObjectRendererUtils.showExceptionWindowToUser(
+                                message,
+                                ex,
+                                TreppeStuetzmauerPanel.this);
+                        }
+                    }
+                }.execute();
+        }
     }
 
     /**
@@ -593,10 +661,15 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
     public void dispose() {
         bindingGroup.unbind();
 
-        parent = null;
         cidsBean = null;
         mauerBean = null;
         zustandBean = null;
         treppeBauteilZustandKostenPanel4.dispose();
+        cbSide.setCidsBean(null);
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return this.connectionContext;
     }
 }

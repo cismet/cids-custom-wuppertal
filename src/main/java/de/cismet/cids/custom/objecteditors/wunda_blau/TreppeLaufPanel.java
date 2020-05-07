@@ -39,8 +39,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -135,10 +133,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         final JLabel jLabel61 = new JLabel();
         final JLabel jLabel2 = new JLabel();
         final JPanel jPanel2 = new JPanel();
-        defaultBindableReferenceCombo1 = new DefaultBindableReferenceCombo(
-                MC__TREPPENLAUF_MATERIAL,
-                true,
-                false);
+        defaultBindableReferenceCombo1 = new DefaultBindableReferenceCombo(MC__TREPPENLAUF_MATERIAL, true, false);
         fastBindableReferenceCombo1 = new FastBindableReferenceCombo(
                 materialArtSearch1,
                 materialArtSearch1.getRepresentationPattern(),
@@ -158,8 +153,6 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         final JPanel jPanel6 = new JPanel();
         treppeBauteilZustandKostenPanel7 = new TreppeBauteilZustandKostenPanel(editable);
         final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        btnRemoveArt1 = new JButton();
-        final JSeparator jSeparator1 = new JSeparator();
         final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
 
         final FormListener formListener = new FormListener();
@@ -698,33 +691,10 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         gridBagConstraints.weighty = 1.0;
         jPanel6.add(filler3, gridBagConstraints);
 
-        btnRemoveArt1.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveArt1.setBorderPainted(false);
-        btnRemoveArt1.setContentAreaFilled(false);
-        btnRemoveArt1.setName("btnRemoveArt1");                                                                   // NOI18N
-        btnRemoveArt1.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = GridBagConstraints.SOUTHEAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        jPanel6.add(btnRemoveArt1, gridBagConstraints);
-
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         add(jPanel6, gridBagConstraints);
-
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        add(jSeparator1, gridBagConstraints);
 
         filler2.setName("filler2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
@@ -755,8 +725,6 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == defaultBindableReferenceCombo1) {
                 TreppeLaufPanel.this.defaultBindableReferenceCombo1ActionPerformed(evt);
-            } else if (evt.getSource() == btnRemoveArt1) {
-                TreppeLaufPanel.this.btnRemoveArt1ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -764,14 +732,12 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private TreppeLaeufePanel parent;
-    private final boolean editable;
+    private boolean editable = true;
     private final TreppeMaterialArtLightweightSearch materialArtSearch1;
     private final TreppeMaterialArtLightweightSearch materialArtSearch2;
     private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    JButton btnRemoveArt1;
     DefaultBindableReferenceCombo defaultBindableReferenceCombo1;
     FastBindableReferenceCombo fastBindableReferenceCombo1;
     FastBindableReferenceCombo fastBindableReferenceCombo2;
@@ -791,11 +757,9 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
 
     /**
      * Creates a new TreppeLaufPanel object.
-     *
-     * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeLaufPanel(final ConnectionContext connectionContext) {
-        this(true, connectionContext);
+    public TreppeLaufPanel() {
+        this(true, ConnectionContext.createDummy());
     }
 
     /**
@@ -824,7 +788,35 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner3, 2);
         RendererTools.makeDoubleSpinnerWithoutButtons(jSpinner4, 4);
         jTextArea3.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
-        if (!editable) {
+        setEditable(editable);
+
+        fastBindableReferenceCombo1.setMetaClassFromTableName("WUNDA_BLAU", "treppe_treppenlauf_material_art");
+        fastBindableReferenceCombo2.setMetaClassFromTableName("WUNDA_BLAU", "treppe_treppenlauf_material_art");
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public void setEditable(final boolean editable) {
+        this.editable = editable;
+
+        if (editable) {
+            RendererTools.makeWritable(jSpinner1);
+            RendererTools.makeWritable(jSpinner2);
+            RendererTools.makeWritable(jSpinner3);
+            RendererTools.makeWritable(jSpinner4);
+            RendererTools.makeWritable(defaultBindableReferenceCombo1);
+            RendererTools.makeWritable(fastBindableReferenceCombo1);
+            RendererTools.makeWritable(fastBindableReferenceCombo2);
+            RendererTools.makeWritable(jCheckBox1);
+            RendererTools.makeWritable(jCheckBox2);
+            RendererTools.makeWritable(jTextArea3);
+            RendererTools.makeWritable(jTextField22);
+        } else {
             RendererTools.makeReadOnly(jSpinner1);
             RendererTools.makeReadOnly(jSpinner2);
             RendererTools.makeReadOnly(jSpinner3);
@@ -837,23 +829,7 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
             RendererTools.makeReadOnly(jTextArea3);
             RendererTools.makeReadOnly(jTextField22);
         }
-        btnRemoveArt1.setVisible(editable);
-
-        fastBindableReferenceCombo1.setMetaClassFromTableName("WUNDA_BLAU", "treppe_treppenlauf_material_art");
-        fastBindableReferenceCombo2.setMetaClassFromTableName("WUNDA_BLAU", "treppe_treppenlauf_material_art");
     }
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnRemoveArt1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveArt1ActionPerformed
-        parent.getCidsBeans().remove(cidsBean);
-        parent.removeLaufPanel(this);
-    }                                                                  //GEN-LAST:event_btnRemoveArt1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -900,21 +876,11 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  parent  DOCUMENT ME!
-     */
-    public void setParent(final TreppeLaeufePanel parent) {
-        this.parent = parent;
-    }
-
     @Override
     public void dispose() {
         bindingGroup.unbind();
         treppeBauteilZustandKostenPanel7.dispose();
         cidsBean = null;
-        parent = null;
     }
 
     @Override

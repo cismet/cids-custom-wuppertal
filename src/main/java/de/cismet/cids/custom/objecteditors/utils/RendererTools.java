@@ -44,6 +44,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicCheckBoxUI;
@@ -167,6 +168,72 @@ public class RendererTools {
                 });
         } else if (comp != null) {
             comp.setEnabled(false);
+        }
+    }
+
+    /**
+     * Makes the given component editable. 
+     *
+     * @param  comp  DOCUMENT ME!
+     */
+    public static void makeWritable(final JComponent comp) {
+        if (comp instanceof JTextComponent) {
+            final JTextComponent tComp = (JTextComponent)comp;
+            tComp.setEditable(true);
+            tComp.setOpaque(true);
+            try {
+                tComp.setBorder(comp.getClass().newInstance().getBorder());
+            } catch (Exception e) {
+                tComp.setBorder(new JTextField().getBorder());
+            }
+        } else if (comp instanceof JScrollPane) {
+            final JScrollPane jsp = (JScrollPane)comp;
+            jsp.setOpaque(true);
+            jsp.getViewport().setOpaque(true);
+        } else if (comp instanceof JComboBox) {
+            final JComboBox cb = (JComboBox)comp;
+            cb.setEnabled(true);
+            cb.setRenderer((new JComboBox()).getRenderer());
+        } else if (comp instanceof JSpinner) {
+            final JSpinner sp = (JSpinner)comp;
+            sp.setOpaque(true);
+            sp.setBorder((new JSpinner()).getBorder());
+            sp.getEditor().setOpaque(true);
+            ((JSpinner.DefaultEditor)sp.getEditor()).getTextField().setOpaque(true);
+        } else if (comp instanceof DefaultBindableDateChooser) {
+            final DefaultBindableDateChooser dc = (DefaultBindableDateChooser)comp;
+            dc.setEditable(true);
+            ((Component)dc.getComponents()[1]).setVisible(true);
+            ((JFormattedTextField)dc.getComponents()[0]).setOpaque(true);
+//            ((JFormattedTextField)dc.getComponents()[0]).setBorder(null);
+        } else if (comp instanceof JCheckBox) {
+            ((JCheckBox)comp).setUI(new JCheckBox().getUI());
+        } else if (comp instanceof JXTable) {
+//            final JXTable jxt = (JXTable)comp;
+//            jxt.setEditable(true);
+//            ((DefaultTableRenderer)jxt.getDefaultRenderer(Object.class)).setBackground(new Color(0, 0, 0, 0));
+//            jxt.setOpaque(true);
+//            jxt.setGridColor(Color.GRAY);
+//            jxt.setBackground(new Color(0, 0, 0, 0));
+        } else if (comp instanceof JList) {
+            final JList jl = (JList)comp;
+            jl.setOpaque(true);
+//            jl.setCellRenderer(new DefaultListCellRenderer() {
+//
+//                    @Override
+//                    public Component getListCellRendererComponent(final JList<?> list,
+//                            final Object value,
+//                            final int index,
+//                            final boolean isSelected,
+//                            final boolean cellHasFocus) {
+//                        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//                        // setForeground(Color.WHITE);
+//                        setOpaque(isSelected);
+//                        return this;
+//                    }
+//                });
+        } else if (comp != null) {
+            comp.setEnabled(true);
         }
     }
 
