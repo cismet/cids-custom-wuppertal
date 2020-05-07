@@ -978,14 +978,18 @@ public class TreppenBandPanel extends javax.swing.JPanel implements ConnectionCo
                     switchToForm("stuetzmauern");
                     treppeStuetzmauerPanel1.setCidsBean(((StuetzmauerBandMember)bm).getCidsBean());
                     activateControls(null, null, null, null, null);
-                    ((DeleteItem)butRemove.getAction()).init((StuetzmauerBandMember)bm);
+                    if (!readOnly) {
+                        ((DeleteItem)butRemove.getAction()).init((StuetzmauerBandMember)bm);
+                    }
                     ((SelectNext)butNext.getAction()).init((StuetzmauerBandMember)bm);
                     ((SelectPrevious)butPrev.getAction()).init((StuetzmauerBandMember)bm);
                 } else if (bm instanceof EntwaesserungBandMember) {
                     switchToForm("entwaesserung");
                     treppeEntwaesserungPanel1.setCidsBean(((EntwaesserungBandMember)bm).getCidsBean());
                     activateControls(null, null, null, null, null);
-                    ((DeleteItem)butRemove.getAction()).init((EntwaesserungBandMember)bm);
+                    if (!readOnly) {
+                        ((DeleteItem)butRemove.getAction()).init((EntwaesserungBandMember)bm);
+                    }
                 } else if (bm instanceof DummyBandMember) {
                     panChooser.removeAll();
                     panChooser.add(((DummyBandMember)bm).getObjectChooser());

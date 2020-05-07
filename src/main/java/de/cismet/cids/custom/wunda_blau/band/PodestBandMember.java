@@ -18,6 +18,7 @@ import org.jdesktop.swingx.painter.PinstripePainter;
 import org.jdesktop.swingx.painter.RectanglePainter;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 
 /**
  * DOCUMENT ME!
@@ -53,6 +54,21 @@ public class PodestBandMember extends LaufBandMember {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void mouseDragged(final MouseEvent e) {
+        // nothing to do
+    }
+
+    @Override
+    public void mouseDragged(final MouseEvent e, final double station) {
+        // nothing to do
+    }
+
+    @Override
+    public void mouseMoved(final MouseEvent e) {
+        // nothing to do
+    }
 
     @Override
     protected double roundToNextValidPosition(final double pos, final boolean till) {

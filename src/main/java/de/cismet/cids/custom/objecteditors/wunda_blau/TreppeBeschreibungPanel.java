@@ -209,6 +209,7 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
             final ConnectionContext connectionContext,
             final JPanel panZusammenfassung) {
         this.connectionContext = connectionContext;
+        this.editable = editable;
         initComponents();
         if (panZusammenfassung != null) {
             treppenBandPanel1.setZusammenfassung(panZusammenfassung);
@@ -225,96 +226,93 @@ public class TreppeBeschreibungPanel extends javax.swing.JPanel implements CidsB
      * @param  editable  DOCUMENT ME!
      */
     public void setEditable(final boolean editable) {
-        final boolean editableBefore = this.editable;
-        if (editableBefore != editable) {
-            lblGeom.setVisible(editable);
-            cbGeom.setVisible(editable);
+        lblGeom.setVisible(editable);
+        cbGeom.setVisible(editable);
 
-            this.editable = editable;
+        this.editable = editable;
 
-            if (editable) {
-                RendererTools.showNormalState(jCheckBox1);
-                RendererTools.showNormalState(jCheckBox2);
-                RendererTools.showNormalState(jCheckBox3);
-                RendererTools.showNormalState(jCheckBox4);
-                RendererTools.showNormalState(jCheckBox5);
-                RendererTools.showNormalState(jCheckBox6);
-                RendererTools.showNormalState(jCheckBox7);
-                RendererTools.showNormalState(jCheckBox8);
-                RendererTools.showNormalState(jCheckBox9);
-                RendererTools.showNormalState(jCheckBox10);
-                RendererTools.showNormalState(jCheckBox11);
-                RendererTools.showNormalState(jFormattedTextField1);
-                RendererTools.showNormalState(jFormattedTextField2);
-                RendererTools.showNormalState(jTextField2);
-                RendererTools.showNormalState(jTextField3);
-                RendererTools.showNormalState(jTextField4);
-                RendererTools.showNormalState(jTextField5);
-                RendererTools.showNormalState(jTextField6);
-                RendererTools.showNormalState(jTextField7);
-                RendererTools.showNormalState(jTextField8);
-                RendererTools.showNormalState(jTextField9);
-                RendererTools.showNormalState(jTextField10);
-                RendererTools.showNormalState(jTextField11);
-                RendererTools.showNormalState(jTextField12);
-                RendererTools.showNormalState(jTextField13);
-                RendererTools.showNormalState(jTextField14);
-                RendererTools.showNormalState(jTextField1);
-                RendererTools.showNormalState(jTextField15);
-                RendererTools.showNormalState(defaultBindableDateChooser1);
-                RendererTools.showNormalState(defaultBindableDateChooser2);
-                RendererTools.showNormalState(defaultBindableDateChooser3);
-                RendererTools.showNormalState(defaultBindableDateChooser4);
-                RendererTools.showNormalState(defaultBindableDateChooser5);
-                RendererTools.showNormalState(defaultBindableDateChooser6);
-                RendererTools.showNormalState(defaultBindableReferenceCombo2);
-                RendererTools.showNormalState(defaultBindableReferenceCombo3);
-                RendererTools.showNormalState(defaultBindableReferenceCombo5);
-                RendererTools.showNormalState(defaultBindableReferenceCombo6);
-                RendererTools.showNormalState(defaultBindableReferenceCombo7);
-                RendererTools.showNormalState(defaultBindableReferenceCombo8);
-            } else {
-                RendererTools.makeReadOnly(jCheckBox1);
-                RendererTools.makeReadOnly(jCheckBox2);
-                RendererTools.makeReadOnly(jCheckBox3);
-                RendererTools.makeReadOnly(jCheckBox4);
-                RendererTools.makeReadOnly(jCheckBox5);
-                RendererTools.makeReadOnly(jCheckBox6);
-                RendererTools.makeReadOnly(jCheckBox7);
-                RendererTools.makeReadOnly(jCheckBox8);
-                RendererTools.makeReadOnly(jCheckBox9);
-                RendererTools.makeReadOnly(jCheckBox10);
-                RendererTools.makeReadOnly(jCheckBox11);
-                RendererTools.makeReadOnly(jFormattedTextField1);
-                RendererTools.makeReadOnly(jFormattedTextField2);
-                RendererTools.makeReadOnly(jTextField2);
-                RendererTools.makeReadOnly(jTextField3);
-                RendererTools.makeReadOnly(jTextField4);
-                RendererTools.makeReadOnly(jTextField5);
-                RendererTools.makeReadOnly(jTextField6);
-                RendererTools.makeReadOnly(jTextField7);
-                RendererTools.makeReadOnly(jTextField8);
-                RendererTools.makeReadOnly(jTextField9);
-                RendererTools.makeReadOnly(jTextField10);
-                RendererTools.makeReadOnly(jTextField11);
-                RendererTools.makeReadOnly(jTextField12);
-                RendererTools.makeReadOnly(jTextField13);
-                RendererTools.makeReadOnly(jTextField14);
-                RendererTools.makeReadOnly(jTextField1);
-                RendererTools.makeReadOnly(jTextField15);
-                RendererTools.makeReadOnly(defaultBindableDateChooser1);
-                RendererTools.makeReadOnly(defaultBindableDateChooser2);
-                RendererTools.makeReadOnly(defaultBindableDateChooser3);
-                RendererTools.makeReadOnly(defaultBindableDateChooser4);
-                RendererTools.makeReadOnly(defaultBindableDateChooser5);
-                RendererTools.makeReadOnly(defaultBindableDateChooser6);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo2);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo3);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo6);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo7);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo8);
-            }
+        if (editable) {
+            RendererTools.makeWritable(jCheckBox1);
+            RendererTools.makeWritable(jCheckBox2);
+            RendererTools.makeWritable(jCheckBox3);
+            RendererTools.makeWritable(jCheckBox4);
+            RendererTools.makeWritable(jCheckBox5);
+            RendererTools.makeWritable(jCheckBox6);
+            RendererTools.makeWritable(jCheckBox7);
+            RendererTools.makeWritable(jCheckBox8);
+            RendererTools.makeWritable(jCheckBox9);
+            RendererTools.makeWritable(jCheckBox10);
+            RendererTools.makeWritable(jCheckBox11);
+            RendererTools.makeWritable(jFormattedTextField1);
+            RendererTools.makeWritable(jFormattedTextField2);
+            RendererTools.makeWritable(jTextField2);
+            RendererTools.makeWritable(jTextField3);
+            RendererTools.makeWritable(jTextField4);
+            RendererTools.makeWritable(jTextField5);
+            RendererTools.makeWritable(jTextField6);
+            RendererTools.makeWritable(jTextField7);
+            RendererTools.makeWritable(jTextField8);
+            RendererTools.makeWritable(jTextField9);
+            RendererTools.makeWritable(jTextField10);
+            RendererTools.makeWritable(jTextField11);
+            RendererTools.makeWritable(jTextField12);
+            RendererTools.makeWritable(jTextField13);
+            RendererTools.makeWritable(jTextField14);
+            RendererTools.makeWritable(jTextField1);
+            RendererTools.makeWritable(jTextField15);
+            RendererTools.makeWritable(defaultBindableDateChooser1);
+            RendererTools.makeWritable(defaultBindableDateChooser2);
+            RendererTools.makeWritable(defaultBindableDateChooser3);
+            RendererTools.makeWritable(defaultBindableDateChooser4);
+            RendererTools.makeWritable(defaultBindableDateChooser5);
+            RendererTools.makeWritable(defaultBindableDateChooser6);
+            RendererTools.makeWritable(defaultBindableReferenceCombo2);
+            RendererTools.makeWritable(defaultBindableReferenceCombo3);
+            RendererTools.makeWritable(defaultBindableReferenceCombo5);
+            RendererTools.makeWritable(defaultBindableReferenceCombo6);
+            RendererTools.makeWritable(defaultBindableReferenceCombo7);
+            RendererTools.makeWritable(defaultBindableReferenceCombo8);
+        } else {
+            RendererTools.makeReadOnly(jCheckBox1);
+            RendererTools.makeReadOnly(jCheckBox2);
+            RendererTools.makeReadOnly(jCheckBox3);
+            RendererTools.makeReadOnly(jCheckBox4);
+            RendererTools.makeReadOnly(jCheckBox5);
+            RendererTools.makeReadOnly(jCheckBox6);
+            RendererTools.makeReadOnly(jCheckBox7);
+            RendererTools.makeReadOnly(jCheckBox8);
+            RendererTools.makeReadOnly(jCheckBox9);
+            RendererTools.makeReadOnly(jCheckBox10);
+            RendererTools.makeReadOnly(jCheckBox11);
+            RendererTools.makeReadOnly(jFormattedTextField1);
+            RendererTools.makeReadOnly(jFormattedTextField2);
+            RendererTools.makeReadOnly(jTextField2);
+            RendererTools.makeReadOnly(jTextField3);
+            RendererTools.makeReadOnly(jTextField4);
+            RendererTools.makeReadOnly(jTextField5);
+            RendererTools.makeReadOnly(jTextField6);
+            RendererTools.makeReadOnly(jTextField7);
+            RendererTools.makeReadOnly(jTextField8);
+            RendererTools.makeReadOnly(jTextField9);
+            RendererTools.makeReadOnly(jTextField10);
+            RendererTools.makeReadOnly(jTextField11);
+            RendererTools.makeReadOnly(jTextField12);
+            RendererTools.makeReadOnly(jTextField13);
+            RendererTools.makeReadOnly(jTextField14);
+            RendererTools.makeReadOnly(jTextField1);
+            RendererTools.makeReadOnly(jTextField15);
+            RendererTools.makeReadOnly(defaultBindableDateChooser1);
+            RendererTools.makeReadOnly(defaultBindableDateChooser2);
+            RendererTools.makeReadOnly(defaultBindableDateChooser3);
+            RendererTools.makeReadOnly(defaultBindableDateChooser4);
+            RendererTools.makeReadOnly(defaultBindableDateChooser5);
+            RendererTools.makeReadOnly(defaultBindableDateChooser6);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo2);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo3);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo6);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo7);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo8);
         }
     }
 

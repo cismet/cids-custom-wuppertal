@@ -534,23 +534,20 @@ public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBe
      * @param  editable  DOCUMENT ME!
      */
     public void setEditable(final boolean editable) {
-        final boolean editableBefore = this.editable;
-        if (editableBefore != editable) {
-            this.editable = editable;
+        this.editable = editable;
 
-            if (editable) {
-                RendererTools.showNormalState(jTextField1);
-                RendererTools.showNormalState(jTextField2);
-                RendererTools.showNormalState(jTextField3);
-                RendererTools.showNormalState(jTextArea4);
-                RendererTools.showNormalState(cbSide);
-            } else {
-                RendererTools.makeReadOnly(jTextField1);
-                RendererTools.makeReadOnly(jTextField2);
-                RendererTools.makeReadOnly(jTextField3);
-                RendererTools.makeReadOnly(jTextArea4);
-                RendererTools.makeReadOnly(cbSide);
-            }
+        if (editable) {
+            RendererTools.makeWritable(jTextField1);
+            RendererTools.makeWritable(jTextField2);
+            RendererTools.makeWritable(jTextField3);
+            RendererTools.makeWritable(jTextArea4);
+            RendererTools.makeWritable(cbSide);
+        } else {
+            RendererTools.makeReadOnly(jTextField1);
+            RendererTools.makeReadOnly(jTextField2);
+            RendererTools.makeReadOnly(jTextField3);
+            RendererTools.makeReadOnly(jTextArea4);
+            RendererTools.makeReadOnly(cbSide);
         }
     }
 

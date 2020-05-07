@@ -109,8 +109,10 @@ public class LaufBandMember extends TreppeBandMember {
 
             popup.add(menu);
 
-            popup.addSeparator();
-            popup.add(splitItem);
+            if (!(this instanceof PodestBandMember)) {
+                popup.addSeparator();
+                popup.add(splitItem);
+            }
             popup.addSeparator();
             popup.add(deleteItem);
         }

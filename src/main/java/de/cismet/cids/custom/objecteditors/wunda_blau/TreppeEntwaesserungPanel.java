@@ -144,19 +144,16 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
      * @param  editable  DOCUMENT ME!
      */
     public void setEditable(final boolean editable) {
-        final boolean editableBefore = this.editable;
-        if (editableBefore != editable) {
-            this.editable = editable;
+        this.editable = editable;
 
-            if (editable) {
-                RendererTools.showNormalState(jTextArea6);
-                RendererTools.showNormalState(defaultBindableReferenceCombo4);
-                RendererTools.showNormalState(defaultBindableReferenceCombo5);
-            } else {
-                RendererTools.makeReadOnly(jTextArea6);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
-            }
+        if (editable) {
+            RendererTools.makeWritable(jTextArea6);
+            RendererTools.makeWritable(defaultBindableReferenceCombo4);
+            RendererTools.makeWritable(defaultBindableReferenceCombo5);
+        } else {
+            RendererTools.makeReadOnly(jTextArea6);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
         }
     }
 

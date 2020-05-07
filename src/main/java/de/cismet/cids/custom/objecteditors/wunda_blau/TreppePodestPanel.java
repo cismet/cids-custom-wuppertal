@@ -672,31 +672,28 @@ public class TreppePodestPanel extends javax.swing.JPanel implements CidsBeanSto
      * @param  editable  DOCUMENT ME!
      */
     public void setEditable(final boolean editable) {
-        final boolean editableBefore = this.editable;
-        if (editableBefore != editable) {
-            this.editable = editable;
+        this.editable = editable;
 
-            if (editable) {
-                RendererTools.showNormalState(jCheckBox1);
-                RendererTools.showNormalState(jCheckBox2);
-                RendererTools.showNormalState(defaultBindableReferenceCombo1);
-                RendererTools.showNormalState(defaultBindableReferenceCombo4);
-                RendererTools.showNormalState(defaultBindableReferenceCombo5);
-                RendererTools.showNormalState(fastBindableReferenceCombo1);
-                RendererTools.showNormalState(fastBindableReferenceCombo2);
-                RendererTools.showNormalState(jTextArea2);
-                RendererTools.showNormalState(jTextField19);
-            } else {
-                RendererTools.makeReadOnly(jCheckBox1);
-                RendererTools.makeReadOnly(jCheckBox2);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
-                RendererTools.makeReadOnly(fastBindableReferenceCombo1);
-                RendererTools.makeReadOnly(fastBindableReferenceCombo2);
-                RendererTools.makeReadOnly(jTextArea2);
-                RendererTools.makeReadOnly(jTextField19);
-            }
+        if (editable) {
+            RendererTools.makeWritable(jCheckBox1);
+            RendererTools.makeWritable(jCheckBox2);
+            RendererTools.makeWritable(defaultBindableReferenceCombo1);
+            RendererTools.makeWritable(defaultBindableReferenceCombo4);
+            RendererTools.makeWritable(defaultBindableReferenceCombo5);
+            RendererTools.makeWritable(fastBindableReferenceCombo1);
+            RendererTools.makeWritable(fastBindableReferenceCombo2);
+            RendererTools.makeWritable(jTextArea2);
+            RendererTools.makeWritable(jTextField19);
+        } else {
+            RendererTools.makeReadOnly(jCheckBox1);
+            RendererTools.makeReadOnly(jCheckBox2);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo4);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo5);
+            RendererTools.makeReadOnly(fastBindableReferenceCombo1);
+            RendererTools.makeReadOnly(fastBindableReferenceCombo2);
+            RendererTools.makeReadOnly(jTextArea2);
+            RendererTools.makeReadOnly(jTextField19);
         }
     }
 

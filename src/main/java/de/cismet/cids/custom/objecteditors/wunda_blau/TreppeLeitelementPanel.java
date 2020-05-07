@@ -416,21 +416,18 @@ public class TreppeLeitelementPanel extends javax.swing.JPanel implements CidsBe
      * @param  editable  DOCUMENT ME!
      */
     public void setEditable(final boolean editable) {
-        final boolean editableBefore = this.editable;
-        if (editableBefore != editable) {
-            this.editable = editable;
+        this.editable = editable;
 
-            if (editable) {
-                RendererTools.showNormalState(jTextField22);
-                RendererTools.showNormalState(jTextArea4);
-                RendererTools.showNormalState(jTextArea7);
-                RendererTools.showNormalState(cbSide);
-            } else {
-                RendererTools.makeReadOnly(jTextField22);
-                RendererTools.makeReadOnly(jTextArea4);
-                RendererTools.makeReadOnly(jTextArea7);
-                RendererTools.makeReadOnly(cbSide);
-            }
+        if (editable) {
+            RendererTools.makeWritable(jTextField22);
+            RendererTools.makeWritable(jTextArea4);
+            RendererTools.makeWritable(jTextArea7);
+            RendererTools.makeWritable(cbSide);
+        } else {
+            RendererTools.makeReadOnly(jTextField22);
+            RendererTools.makeReadOnly(jTextArea4);
+            RendererTools.makeReadOnly(jTextArea7);
+            RendererTools.makeReadOnly(cbSide);
         }
     }
 

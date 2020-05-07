@@ -802,35 +802,32 @@ public class TreppeLaufPanel extends javax.swing.JPanel implements CidsBeanStore
      * @param  editable  DOCUMENT ME!
      */
     public void setEditable(final boolean editable) {
-        final boolean editableBefore = this.editable;
-        if (editableBefore != editable) {
-            this.editable = editable;
+        this.editable = editable;
 
-            if (editable) {
-                RendererTools.showNormalState(jSpinner1);
-                RendererTools.showNormalState(jSpinner2);
-                RendererTools.showNormalState(jSpinner3);
-                RendererTools.showNormalState(jSpinner4);
-                RendererTools.showNormalState(defaultBindableReferenceCombo1);
-                RendererTools.showNormalState(fastBindableReferenceCombo1);
-                RendererTools.showNormalState(fastBindableReferenceCombo2);
-                RendererTools.showNormalState(jCheckBox1);
-                RendererTools.showNormalState(jCheckBox2);
-                RendererTools.showNormalState(jTextArea3);
-                RendererTools.showNormalState(jTextField22);
-            } else {
-                RendererTools.makeReadOnly(jSpinner1);
-                RendererTools.makeReadOnly(jSpinner2);
-                RendererTools.makeReadOnly(jSpinner3);
-                RendererTools.makeReadOnly(jSpinner4);
-                RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
-                RendererTools.makeReadOnly(fastBindableReferenceCombo1);
-                RendererTools.makeReadOnly(fastBindableReferenceCombo2);
-                RendererTools.makeReadOnly(jCheckBox1);
-                RendererTools.makeReadOnly(jCheckBox2);
-                RendererTools.makeReadOnly(jTextArea3);
-                RendererTools.makeReadOnly(jTextField22);
-            }
+        if (editable) {
+            RendererTools.makeWritable(jSpinner1);
+            RendererTools.makeWritable(jSpinner2);
+            RendererTools.makeWritable(jSpinner3);
+            RendererTools.makeWritable(jSpinner4);
+            RendererTools.makeWritable(defaultBindableReferenceCombo1);
+            RendererTools.makeWritable(fastBindableReferenceCombo1);
+            RendererTools.makeWritable(fastBindableReferenceCombo2);
+            RendererTools.makeWritable(jCheckBox1);
+            RendererTools.makeWritable(jCheckBox2);
+            RendererTools.makeWritable(jTextArea3);
+            RendererTools.makeWritable(jTextField22);
+        } else {
+            RendererTools.makeReadOnly(jSpinner1);
+            RendererTools.makeReadOnly(jSpinner2);
+            RendererTools.makeReadOnly(jSpinner3);
+            RendererTools.makeReadOnly(jSpinner4);
+            RendererTools.makeReadOnly(defaultBindableReferenceCombo1);
+            RendererTools.makeReadOnly(fastBindableReferenceCombo1);
+            RendererTools.makeReadOnly(fastBindableReferenceCombo2);
+            RendererTools.makeReadOnly(jCheckBox1);
+            RendererTools.makeReadOnly(jCheckBox2);
+            RendererTools.makeReadOnly(jTextArea3);
+            RendererTools.makeReadOnly(jTextField22);
         }
     }
 
