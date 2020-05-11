@@ -431,8 +431,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         dlgAddZugang = new javax.swing.JDialog();
         panAddZugang = new javax.swing.JPanel();
         lblAuswaehlenZugang = new javax.swing.JLabel();
-        final MetaObject[] zugang = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_zugangsart", new String[]{"name"}, getConnectionContext());
-        if(zugang != null) {
+        final MetaObject[] zugang = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
+                    .getLightweightMetaObjectsForTable(
+                        "emobrad_zugangsart",
+                        new String[] { "name" },
+                        getConnectionContext());
+        if (zugang != null) {
             Arrays.sort(zugang);
             cbZugang = new javax.swing.JComboBox(zugang);
         }
@@ -442,9 +446,13 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         dlgAddStecker = new javax.swing.JDialog();
         panAddStecker = new javax.swing.JPanel();
         lblAuswaehlenStecker = new javax.swing.JLabel();
-        final MetaObject[] stecker = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_stecker", new String[]{"schluessel"}, getConnectionContext());
-        if(stecker != null) {
-            Arrays.sort(stecker);//||
+        final MetaObject[] stecker = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
+                    .getLightweightMetaObjectsForTable(
+                        "emobrad_stecker",
+                        new String[] { "schluessel" },
+                        getConnectionContext());
+        if (stecker != null) {
+            Arrays.sort(stecker); // ||
             cbStecker = new javax.swing.JComboBox(stecker);
         }
         panMenButtonsStecker = new javax.swing.JPanel();
@@ -453,8 +461,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         dlgAddPfand = new javax.swing.JDialog();
         panAddPfand = new javax.swing.JPanel();
         lblAuswaehlenPfand = new javax.swing.JLabel();
-        final MetaObject[] pfand = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_pfand", new String[]{"name"}, getConnectionContext());
-        if(pfand != null) {
+        final MetaObject[] pfand = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
+                    .getLightweightMetaObjectsForTable(
+                        "emobrad_pfand",
+                        new String[] { "name" },
+                        getConnectionContext());
+        if (pfand != null) {
             Arrays.sort(pfand);
             cbPfand = new javax.swing.JComboBox(pfand);
             panMenButtonsPfand = new javax.swing.JPanel();
@@ -469,11 +481,13 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             txtName = new javax.swing.JTextField();
             lblStrasse = new javax.swing.JLabel();
             txtStrasse = new javax.swing.JTextField();
-            filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+            filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(32767, 0));
             lblHnr = new javax.swing.JLabel();
             txtHnr = new javax.swing.JTextField();
             lblBetreiber = new javax.swing.JLabel();
-            cbBetreiber = new DefaultBindableReferenceCombo(true) ;
+            cbBetreiber = new DefaultBindableReferenceCombo(true);
             lblHalb = new javax.swing.JLabel();
             chHalb = new javax.swing.JCheckBox();
             lblOffen = new javax.swing.JLabel();
@@ -497,7 +511,9 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             panUrl = new javax.swing.JPanel();
             lblUrlCheck = new javax.swing.JLabel();
             lblFotoAnzeigen = new javax.swing.JLabel();
-            filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+            filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(32767, 0));
             lblGruen = new javax.swing.JLabel();
             chGruen = new javax.swing.JCheckBox();
             lblAnzahl = new javax.swing.JLabel();
@@ -515,7 +531,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             panAbrechnung = new javax.swing.JPanel();
             scpAbrechnung = new javax.swing.JScrollPane();
             taAbrechnung = new javax.swing.JTextArea();
-            if(isEditor){
+            if (isEditor) {
                 cbAbrechnung = new DefaultBindableScrollableComboBox();
             }
             panFiller = new javax.swing.JPanel();
@@ -526,7 +542,9 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             panButtonsZugang = new javax.swing.JPanel();
             btnAddZugang = new javax.swing.JButton();
             btnRemoveZugang = new javax.swing.JButton();
-            filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+            filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 32767));
             lblStecker = new javax.swing.JLabel();
             panStecker = new javax.swing.JPanel();
             scpLstStecker = new javax.swing.JScrollPane();
@@ -534,18 +552,22 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             panButtonsStecker = new javax.swing.JPanel();
             btnAddStecker = new javax.swing.JButton();
             btnRemoveStecker = new javax.swing.JButton();
-            filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+            filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 32767));
             panPfand = new javax.swing.JPanel();
             scpLstPfand = new javax.swing.JScrollPane();
             lstPfand = new javax.swing.JList();
             panButtonsPfand = new javax.swing.JPanel();
             btnAddPfand = new javax.swing.JButton();
             btnRemovePfand = new javax.swing.JButton();
-            filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+            filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 32767));
             lblPfand = new javax.swing.JLabel();
             panGeometrie = new javax.swing.JPanel();
             lblGeom = new javax.swing.JLabel();
-            if (isEditor){
+            if (isEditor) {
                 cbGeom = new DefaultCismapGeometryComboBoxEditor();
             }
             panLage = new javax.swing.JPanel();
@@ -554,7 +576,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             semiRoundedPanel7 = new de.cismet.tools.gui.SemiRoundedPanel();
             lblKarte = new javax.swing.JLabel();
             lblVersatz = new javax.swing.JLabel();
-            cbVersatz = new DefaultBindableReferenceCombo(true) ;
+            cbVersatz = new DefaultBindableReferenceCombo(true);
             panOnline = new javax.swing.JPanel();
             sepOnline = new javax.swing.JSeparator();
             lblOnline = new javax.swing.JLabel();
@@ -580,10 +602,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
             btnMenAbortZugang.setText("Abbrechen");
             btnMenAbortZugang.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnMenAbortZugangActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenAbortZugangActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -593,10 +617,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
             btnMenOkZugang.setText("Ok");
             btnMenOkZugang.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnMenOkZugangActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenOkZugangActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
@@ -632,10 +658,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
             btnMenAbortStecker.setText("Abbrechen");
             btnMenAbortStecker.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnMenAbortSteckerActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenAbortSteckerActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -645,10 +673,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
             btnMenOkStecker.setText("Ok");
             btnMenOkStecker.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnMenOkSteckerActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenOkSteckerActionPerformed(evt);
+                    }
+                });
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
@@ -673,7 +703,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
             panAddPfand.add(lblAuswaehlenPfand, gridBagConstraints);
-
         }
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -686,10 +715,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         btnMenAbortPfand.setText("Abbrechen");
         btnMenAbortPfand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenAbortPfandActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbortPfandActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -699,10 +730,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         btnMenOkPfand.setText("Ok");
         btnMenOkPfand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenOkPfandActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOkPfandActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -723,16 +756,18 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
+        final javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
         panFillerUntenLayout.setHorizontalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -753,16 +788,18 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
+        final javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
         panFillerUnten1Layout.setHorizontalGroup(
-            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUnten1Layout.setVerticalGroup(
-            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -789,7 +826,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         txtName.setToolTipText("");
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.standort}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.standort}"),
+                txtName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -813,7 +855,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblStrasse, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"), txtStrasse, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -845,7 +892,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         txtHnr.setName(""); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"), txtHnr, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
+                txtHnr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -872,7 +924,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         cbBetreiber.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         cbBetreiber.setMaximumRowCount(6);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_betreiber}"), cbBetreiber, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_betreiber}"),
+                cbBetreiber,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -897,16 +954,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         chHalb.setContentAreaFilled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.halb_oeffentlich}"), chHalb, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.halb_oeffentlich}"),
+                chHalb,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         chHalb.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                chHalbStateChanged(evt);
-            }
-        });
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    chHalbStateChanged(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -934,7 +998,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taOffen.setRows(2);
         taOffen.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.oeffnungszeiten}"), taOffen, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.oeffnungszeiten}"),
+                taOffen,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpOffen.setViewportView(taOffen);
@@ -981,7 +1050,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taZusatz.setRows(2);
         taZusatz.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zusatzinfo}"), taZusatz, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zusatzinfo}"),
+                taZusatz,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpZusatz.setViewportView(taZusatz);
@@ -1027,7 +1101,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taDetailbeschreibung.setRows(2);
         taDetailbeschreibung.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.detailbeschreibung}"), taDetailbeschreibung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.detailbeschreibung}"),
+                taDetailbeschreibung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpDetailbeschreibung.setViewportView(taDetailbeschreibung);
@@ -1073,7 +1152,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -1112,7 +1196,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblFoto, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.foto}"), txtFoto, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.foto}"),
+                txtFoto,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1128,7 +1217,8 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panUrl.setOpaque(false);
         panUrl.setLayout(new java.awt.GridBagLayout());
 
-        lblUrlCheck.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1175,7 +1265,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         chGruen.setContentAreaFilled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gruener_strom}"), chGruen, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gruener_strom}"),
+                chGruen,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1201,9 +1296,14 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         spAnzahl.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         spAnzahl.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
-        spAnzahl.setName("spAnzahl"); // NOI18N
+        spAnzahl.setName("spAnzahl");                         // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_plaetze}"), spAnzahl, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_plaetze}"),
+                spAnzahl,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1224,9 +1324,15 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblAnzahlLadepunkte, gridBagConstraints);
 
-        ftxtAnzahlLadepunkte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
+        ftxtAnzahlLadepunkte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_ladepunkte}"), ftxtAnzahlLadepunkte, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_ladepunkte}"),
+                ftxtAnzahlLadepunkte,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1251,16 +1357,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
 
         chLadebox.setContentAreaFilled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ladebox_zu}"), chLadebox, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ladebox_zu}"),
+                chLadebox,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         chLadebox.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                chLadeboxStateChanged(evt);
-            }
-        });
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    chLadeboxStateChanged(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 20;
@@ -1280,16 +1393,24 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblSchliessfaecher, gridBagConstraints);
 
-        ftxtSchliessfaecher.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
+        ftxtSchliessfaecher.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_schliessfaecher}"), ftxtSchliessfaecher, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_schliessfaecher}"),
+                ftxtSchliessfaecher,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         ftxtSchliessfaecher.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ftxtSchliessfaecherActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    ftxtSchliessfaecherActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 21;
@@ -1310,16 +1431,24 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblSteckdosen, gridBagConstraints);
 
-        ftxtSteckdosen.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
+        ftxtSteckdosen.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_fach_steckdosen}"), ftxtSteckdosen, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_fach_steckdosen}"),
+                ftxtSteckdosen,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         ftxtSteckdosen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ftxtSteckdosenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    ftxtSteckdosenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 22;
@@ -1331,16 +1460,18 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panFillerUntenFoto.setName(""); // NOI18N
         panFillerUntenFoto.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUntenFotoLayout = new javax.swing.GroupLayout(panFillerUntenFoto);
+        final javax.swing.GroupLayout panFillerUntenFotoLayout = new javax.swing.GroupLayout(panFillerUntenFoto);
         panFillerUntenFoto.setLayout(panFillerUntenFotoLayout);
         panFillerUntenFotoLayout.setHorizontalGroup(
-            panFillerUntenFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUntenFotoLayout.setVerticalGroup(
-            panFillerUntenFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1374,7 +1505,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taAbrechnung.setToolTipText("");
         taAbrechnung.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ladekosten.name}"), taAbrechnung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ladekosten.name}"),
+                taAbrechnung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpAbrechnung.setViewportView(taAbrechnung);
@@ -1400,17 +1536,21 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(panAbrechnung, gridBagConstraints);
 
-        if(isEditor){
+        if (isEditor) {
             cbAbrechnung.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-            if(isEditor){
+            if (isEditor) {
                 cbAbrechnung.setPreferredSize(new java.awt.Dimension(100, 24));
             }
 
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ladekosten}"), cbAbrechnung, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ladekosten}"),
+                    cbAbrechnung,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
-
         }
-        if(isEditor){
+        if (isEditor) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 28;
@@ -1424,16 +1564,18 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panFiller.setMinimumSize(new java.awt.Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerLayout = new javax.swing.GroupLayout(panFiller);
+        final javax.swing.GroupLayout panFillerLayout = new javax.swing.GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
         panFillerLayout.setHorizontalGroup(
-            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
+            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
         panFillerLayout.setVerticalGroup(
-            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1459,8 +1601,14 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         lstZugang.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstZugang.setVisibleRowCount(3);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_zugangsart}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstZugang);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.arr_zugangsart}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJListBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        lstZugang);
         bindingGroup.addBinding(jListBinding);
 
         scpLstZugang.setViewportView(lstZugang);
@@ -1481,22 +1629,28 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panButtonsZugang.setOpaque(false);
         panButtonsZugang.setLayout(new java.awt.GridBagLayout());
 
-        btnAddZugang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddZugang.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddZugang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddZugangActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddZugangActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsZugang.add(btnAddZugang, gridBagConstraints);
 
-        btnRemoveZugang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveZugang.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveZugang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveZugangActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveZugangActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1549,7 +1703,11 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         lstStecker.setVisibleRowCount(2);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_stecker}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstStecker);
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstStecker);
         bindingGroup.addBinding(jListBinding);
 
         scpLstStecker.setViewportView(lstStecker);
@@ -1569,22 +1727,28 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panButtonsStecker.setOpaque(false);
         panButtonsStecker.setLayout(new java.awt.GridBagLayout());
 
-        btnAddStecker.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddStecker.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddStecker.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddSteckerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddSteckerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsStecker.add(btnAddStecker, gridBagConstraints);
 
-        btnRemoveStecker.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveStecker.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveStecker.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveSteckerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveSteckerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1624,7 +1788,11 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         lstPfand.setVisibleRowCount(3);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_pfand}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstPfand);
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstPfand);
         bindingGroup.addBinding(jListBinding);
 
         scpLstPfand.setViewportView(lstPfand);
@@ -1644,22 +1812,28 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         panButtonsPfand.setOpaque(false);
         panButtonsPfand.setLayout(new java.awt.GridBagLayout());
 
-        btnAddPfand.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddPfand.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddPfand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddPfandActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddPfandActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsPfand.add(btnAddPfand, gridBagConstraints);
 
-        btnRemovePfand.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemovePfand.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemovePfand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemovePfandActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemovePfandActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1723,17 +1897,21 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 5);
         panGeometrie.add(lblGeom, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
+        if (isEditor) {
+            if (isEditor) {
                 cbGeom.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_geom}"), cbGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -1811,7 +1989,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         cbVersatz.setMinimumSize(new java.awt.Dimension(150, 23));
         cbVersatz.setPreferredSize(new java.awt.Dimension(150, 23));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_versatz}"), cbVersatz, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_versatz}"),
+                cbVersatz,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1853,7 +2036,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panOnline.add(lblOnline, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.online}"), chOnline, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.online}"),
+                chOnline,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1895,23 +2083,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddZugangActionPerformed
+    private void btnAddZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddZugangActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this), dlgAddZugang, true);
-    }//GEN-LAST:event_btnAddZugangActionPerformed
+    }                                                                 //GEN-LAST:event_btnAddZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveZugangActionPerformed
+    private void btnRemoveZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveZugangActionPerformed
         final Object selection = lstZugang.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1934,23 +2122,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveZugangActionPerformed
+    }                                                                    //GEN-LAST:event_btnRemoveZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortZugangActionPerformed
+    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortZugangActionPerformed
         dlgAddZugang.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortZugangActionPerformed
+    }                                                                      //GEN-LAST:event_btnMenAbortZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkZugangActionPerformed
+    private void btnMenOkZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkZugangActionPerformed
         try {
             final Object selItem = cbZugang.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1965,41 +2153,41 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddZugang.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkZugangActionPerformed
+    }                                                                   //GEN-LAST:event_btnMenOkZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chHalbStateChanged(final ChangeEvent evt) {//GEN-FIRST:event_chHalbStateChanged
+    private void chHalbStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chHalbStateChanged
         isOpen();
-    }//GEN-LAST:event_chHalbStateChanged
+    }                                                        //GEN-LAST:event_chHalbStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void ftxtSchliessfaecherActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_ftxtSchliessfaecherActionPerformed
+    private void ftxtSchliessfaecherActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtSchliessfaecherActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ftxtSchliessfaecherActionPerformed
+    } //GEN-LAST:event_ftxtSchliessfaecherActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void ftxtSteckdosenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_ftxtSteckdosenActionPerformed
+    private void ftxtSteckdosenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtSteckdosenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ftxtSteckdosenActionPerformed
+    } //GEN-LAST:event_ftxtSteckdosenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSteckerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveSteckerActionPerformed
+    private void btnRemoveSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveSteckerActionPerformed
         final Object selection = lstStecker.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -2022,25 +2210,25 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveSteckerActionPerformed
+    }                                                                     //GEN-LAST:event_btnRemoveSteckerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSteckerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddSteckerActionPerformed
+    private void btnAddSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddSteckerActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this),
             dlgAddStecker,
             true);
-    }//GEN-LAST:event_btnAddSteckerActionPerformed
+    }                                                                  //GEN-LAST:event_btnAddSteckerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemovePfandActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemovePfandActionPerformed
+    private void btnRemovePfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemovePfandActionPerformed
         final Object selection = lstPfand.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -2063,23 +2251,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemovePfandActionPerformed
+    }                                                                   //GEN-LAST:event_btnRemovePfandActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddPfandActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddPfandActionPerformed
+    private void btnAddPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddPfandActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this), dlgAddPfand, true);
-    }//GEN-LAST:event_btnAddPfandActionPerformed
+    }                                                                //GEN-LAST:event_btnAddPfandActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkPfandActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkPfandActionPerformed
+    private void btnMenOkPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkPfandActionPerformed
         try {
             final Object selItem = cbPfand.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -2094,23 +2282,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddPfand.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkPfandActionPerformed
+    }                                                                  //GEN-LAST:event_btnMenOkPfandActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortPfandActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortPfandActionPerformed
+    private void btnMenAbortPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortPfandActionPerformed
         dlgAddPfand.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortPfandActionPerformed
+    }                                                                     //GEN-LAST:event_btnMenAbortPfandActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkSteckerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkSteckerActionPerformed
+    private void btnMenOkSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkSteckerActionPerformed
         try {
             final Object selItem = cbStecker.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -2125,25 +2313,25 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddStecker.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkSteckerActionPerformed
+    }                                                                    //GEN-LAST:event_btnMenOkSteckerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortSteckerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortSteckerActionPerformed
+    private void btnMenAbortSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortSteckerActionPerformed
         dlgAddStecker.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortSteckerActionPerformed
+    }                                                                       //GEN-LAST:event_btnMenAbortSteckerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chLadeboxStateChanged(final ChangeEvent evt) {//GEN-FIRST:event_chLadeboxStateChanged
+    private void chLadeboxStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chLadeboxStateChanged
         isBox();
-    }//GEN-LAST:event_chLadeboxStateChanged
+    }                                                           //GEN-LAST:event_chLadeboxStateChanged
 
     /**
      * DOCUMENT ME!

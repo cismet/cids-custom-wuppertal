@@ -36,6 +36,7 @@ import java.awt.Insets;
 
 import java.text.DecimalFormat;
 
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
 
@@ -539,7 +540,8 @@ public class EmobradSteckerEditor extends DefaultCustomObjectEditor implements C
      * @return  DOCUMENT ME!
      */
     public String createKey() {
-        return txtTyp.getText().trim() + " (" + spKWatt.getValue() + "kW, " + ftxtAmpere.getText().trim() + "A, "
+        return txtTyp.getText().trim() + " (" + String.format(Locale.ROOT, "%.1f", spKWatt.getValue()) + "kW, "
+                    + ftxtAmpere.getText().trim() + "A, "
                     + ftxtVolt.getText().trim() + "V)";
     }
 
