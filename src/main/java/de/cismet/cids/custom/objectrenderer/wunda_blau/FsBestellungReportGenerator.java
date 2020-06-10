@@ -207,8 +207,12 @@ public class FsBestellungReportGenerator {
                 }
             };
 
+        final boolean isBaulasten = ((String)bestellungbean.getProperty("transid")).startsWith("KFAS_KF600202-")
+                    || ((String)bestellungbean.getProperty("transid")).startsWith("KFAS_KF600203-");
+
         final JasperReportDownload download = new JasperReportDownload(
-                "/de/cismet/cids/custom/wunda_blau/res/bestellung_produkt.jasper",
+                isBaulasten ? "/de/cismet/cids/custom/wunda_blau/res/bestellung_baulasten.jasper"
+                            : "/de/cismet/cids/custom/wunda_blau/res/bestellung_produkt.jasper",
                 parametersGenerator,
                 dataSourceGenerator,
                 jobname,
