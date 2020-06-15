@@ -101,7 +101,7 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, Conne
             if (ctxObject instanceof PureTreeNode) {
                 final PureTreeNode ptn = (PureTreeNode)ctxObject;
                 final TreeNode parent = ptn.getParent();
-                if ((parent instanceof RootTreeNode) && (ptn.getID() == 281001105)) {
+                if ((parent instanceof RootTreeNode) && (ptn.getID() == 281001238)) {
                     actions.add(new FsReloadBestellungenAction(ptn, getConnectionContext()));
                 }
             } else {
