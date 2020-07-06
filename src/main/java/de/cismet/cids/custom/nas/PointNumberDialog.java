@@ -19,7 +19,6 @@ import Sirius.server.newuser.User;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -106,15 +105,15 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
     private PointNumberLoadWorker pnrLoadWorker;
 
     private boolean useAutoCompleteDecorator = false;
-    private List<String> priorityPrefixes = new ArrayList<String>();
-    private List<CheckListItem> punktnummern = new ArrayList<CheckListItem>();
+    private List<String> priorityPrefixes = new ArrayList<>();
+    private List<CheckListItem> punktnummern = new ArrayList<>();
 
     private PointNumberTableModel releaseModel = new PointNumberTableModel(punktnummern, false);
     private PointNumberTableModel prolongModel = new PointNumberTableModel(punktnummern, true);
     private boolean hasBeenDownloadedOrIgnoredYet = true;
 
     private String dontReloadPnrsForThisAnr = null;
-    private final List<String> antragsNummern = new ArrayList<String>();
+    private final List<String> antragsNummern = new ArrayList<>();
 
     private String protokollAnrPrefix = null;
     private String protokollAnr = null;
@@ -380,8 +379,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                                     @Override
                                     protected void done() {
                                         try {
-                                            final ArrayList<VermessungsStellenSearchResult> tmp =
-                                                new ArrayList<VermessungsStellenSearchResult>();
+                                            final ArrayList<VermessungsStellenSearchResult> tmp = new ArrayList<>();
                                             final List<VermessungsStellenSearchResult> resultAllVnr =
                                                 (List<VermessungsStellenSearchResult>)get();
                                             Collections.sort(resultAllVnr, vnrComperator);
@@ -408,10 +406,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                                             cbAntragPrefix.setModel(
                                                 new DefaultComboBoxModel(tmp.toArray()));
                                             loadAllAntragsNummern();
-                                        } catch (InterruptedException ex) {
-                                            Exceptions.printStackTrace(ex);
-                                        } catch (ExecutionException ex) {
-                                            Exceptions.printStackTrace(ex);
+                                        } catch (final Exception ex) {
+                                            LOG.error(ex, ex);
                                         }
                                     }
                                 };
@@ -1137,16 +1133,16 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
+    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
         this.dispose();
-    }                                                                           //GEN-LAST:event_btnDoneActionPerformed
+    }//GEN-LAST:event_btnDoneActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
         cancelWorker(freigebenWorker);
         freigebenWorker = new FreigebenWorker();
         executeWorker(
@@ -1155,7 +1151,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
             btnFreigeben,
             "Sende Freigabeauftrag.",
             "Es wurden keine Punktnummern zur Freigabe selektiert.");
-    }                                                                                //GEN-LAST:event_btnFreigebenActionPerformed
+    }//GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1203,7 +1199,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadActionPerformed
+    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         if (result == null) {
             return;
         }
@@ -1231,36 +1227,36 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
 
         DownloadManager.instance().add(download);
         hasBeenDownloadedOrIgnoredYet = true;
-    } //GEN-LAST:event_btnDownloadActionPerformed
+    }//GEN-LAST:event_btnDownloadActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragPrefixActionPerformed
-    }                                                                                  //GEN-LAST:event_cbAntragPrefixActionPerformed
+    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragPrefixActionPerformed
+    }//GEN-LAST:event_cbAntragPrefixActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAllActionPerformed
+    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeSelectAllActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             item.setSelected(true);
             releaseModel.setValueAt(item, i, 0);
         }
         tblPunktnummernFreigeben.repaint();
-    }                                                                                  //GEN-LAST:event_btnDeSelectAllActionPerformed
+    }//GEN-LAST:event_btnDeSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
+    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             // inverts the selection for the item
@@ -1268,27 +1264,27 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
             releaseModel.setValueAt(item, i, 0);
         }
         tblPunktnummernFreigeben.repaint();
-    } //GEN-LAST:event_btnSelectAllActionPerformed
+    }//GEN-LAST:event_btnSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragsNummerActionPerformed
+    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragsNummerActionPerformed
         if (cbAntragsNummer.isEnabled()
                     && (tbpModus.getSelectedComponent().equals(pnlFreigeben)
                         || (tbpModus.getSelectedComponent().equals(pnlVerlaengern)))) {
             loadPointNumbers();
         }
-    }                                                                                   //GEN-LAST:event_cbAntragsNummerActionPerformed
+    }//GEN-LAST:event_cbAntragsNummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnVerlaengernActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnVerlaengernActionPerformed
+    private void btnVerlaengernActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerlaengernActionPerformed
         cancelWorker(verlaengernWorker);
         verlaengernWorker = new VerlaengernWorker();
         executeWorker(
@@ -1297,14 +1293,14 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
             btnVerlaengern,
             "Sende Verlängerungseauftrag.",
             "Es wurden keine Punktnummern zum Verlängern selektiert.");
-    }                                                                                  //GEN-LAST:event_btnVerlaengernActionPerformed
+    }//GEN-LAST:event_btnVerlaengernActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSelectAll1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAll1ActionPerformed
+    private void btnSelectAll1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAll1ActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             // inverts the selection for the item
@@ -1312,21 +1308,21 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
             prolongModel.setValueAt(item, i, 0);
         }
         tblPunktnummernVerlaengern.repaint();
-    } //GEN-LAST:event_btnSelectAll1ActionPerformed
+    }//GEN-LAST:event_btnSelectAll1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDeSelectAll1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAll1ActionPerformed
+    private void btnDeSelectAll1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeSelectAll1ActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             item.setSelected(true);
             prolongModel.setValueAt(item, i, 0);
         }
         tblPunktnummernVerlaengern.repaint();
-    }                                                                                   //GEN-LAST:event_btnDeSelectAll1ActionPerformed
+    }//GEN-LAST:event_btnDeSelectAll1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1421,7 +1417,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
      */
     public void addAnr(final String newAnr) {
         final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)cbAntragsNummer.getModel();
-        final List<String> tmp = new ArrayList<String>();
+        final List<String> tmp = new ArrayList<>();
         for (int i = 0; i < model.getSize(); i++) {
             tmp.add(model.getElementAt(i));
         }
@@ -1517,11 +1513,11 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
      * @throws  ConnectionException  DOCUMENT ME!
      */
     private List<String> executeGetAllReservationsAction() throws ConnectionException {
-        final ServerActionParameter action = new ServerActionParameter(
-                PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                PointNumberReserverationServerAction.ACTION_TYPE.GET_ALL_RESERVATIONS);
-        final ServerActionParameter prefix = new ServerActionParameter(
-                PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+        final ServerActionParameter<PointNumberReserverationServerAction.Action> action = new ServerActionParameter<>(
+                PointNumberReserverationServerAction.Parameter.ACTION.toString(),
+                PointNumberReserverationServerAction.Action.GET_ALL_RESERVATIONS);
+        final ServerActionParameter<String> prefix = new ServerActionParameter<>(
+                PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
                 getAnrPrefix());
 
         return (List<String>)SessionManager.getProxy()
@@ -1625,15 +1621,15 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                 }
 
                 final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
-                final ServerActionParameter prefix = new ServerActionParameter(
-                        PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+                final ServerActionParameter<String> prefix = new ServerActionParameter<>(
+                        PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
                         anrPrefix);
-                final ServerActionParameter aNummer = new ServerActionParameter(
-                        PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
+                final ServerActionParameter<String> aNummer = new ServerActionParameter<>(
+                        PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                         anr);
-                final ServerActionParameter action = new ServerActionParameter(
-                        PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                        PointNumberReserverationServerAction.ACTION_TYPE.GET_POINT_NUMBERS);
+                final ServerActionParameter<PointNumberReserverationServerAction.Action> action = new ServerActionParameter<>(
+                        PointNumberReserverationServerAction.Parameter.ACTION.toString(),
+                        PointNumberReserverationServerAction.Action.GET_POINT_NUMBERS);
                 final Collection<PointNumberReservation> pointNumbers = (Collection<PointNumberReservation>)
                     SessionManager.getProxy()
                             .executeTask(
@@ -1668,7 +1664,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                     return;
                 }
 
-                final List<CheckListItem> listModel = new ArrayList<CheckListItem>();
+                final List<CheckListItem> listModel = new ArrayList<>();
                 final SimpleDateFormat formatterFrom = new SimpleDateFormat("yyyy-MM-dd");
                 final SimpleDateFormat formatterTo = new SimpleDateFormat("dd.MM.yyyy");
                 for (final PointNumberReservation pnr : result) {
@@ -1789,14 +1785,14 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                 return null;
             }
 
-            final List<String> selectedValues = new ArrayList<String>();
+            final List<String> selectedValues = new ArrayList<>();
             for (final CheckListItem item : punktnummern) {
                 if (item.isSelected()) {
                     selectedValues.add(item.getPnr());
                 }
             }
-            final HashMap<Integer, ArrayList<Long>> pnrIntervals = new HashMap<Integer, ArrayList<Long>>();
-            ArrayList<Long> pnrs = new ArrayList<Long>();
+            final HashMap<Integer, ArrayList<Long>> pnrIntervals = new HashMap<>();
+            ArrayList<Long> pnrs = new ArrayList<>();
             int index = 0;
             // find coherent intervals
             for (final String pnr : selectedValues) {
@@ -1808,7 +1804,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                     if ((currPnr + 1) != nextPnr) {
                         pnrIntervals.put(index, pnrs);
                         index++;
-                        pnrs = new ArrayList<Long>();
+                        pnrs = new ArrayList<>();
                     }
                 } else {
                     pnrs.add(Long.parseLong(pnr));
@@ -1823,17 +1819,17 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
 
             final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
             final ServerActionParameter prefix = new ServerActionParameter(
-                    PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+                    PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
                     anrPrefix);
             final ServerActionParameter aNummer = new ServerActionParameter(
-                    PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
+                    PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                     anr);
             final ServerActionParameter action = new ServerActionParameter(
-                    PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                    PointNumberReserverationServerAction.ACTION_TYPE.DO_STORNO);
+                    PointNumberReserverationServerAction.Parameter.ACTION.toString(),
+                    PointNumberReserverationServerAction.Action.DO_STORNO);
 
             // do release for each interval...
-            final ArrayList<PointNumberReservation> releasedPoints = new ArrayList<PointNumberReservation>();
+            final ArrayList<PointNumberReservation> releasedPoints = new ArrayList<>();
             final PointNumberReservationRequest res = new PointNumberReservationRequest();
             res.setSuccessful(true);
             for (final ArrayList<Long> interval : pnrIntervals.values()) {
@@ -1844,13 +1840,13 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
 
                 final String nummerierungsbezirk = "" + (interval.get(0) / 1000000);
                 final ServerActionParameter on1 = new ServerActionParameter(
-                        PointNumberReserverationServerAction.PARAMETER_TYPE.ON1.toString(),
+                        PointNumberReserverationServerAction.Parameter.ON1.toString(),
                         start);
                 final ServerActionParameter on2 = new ServerActionParameter(
-                        PointNumberReserverationServerAction.PARAMETER_TYPE.ON2.toString(),
+                        PointNumberReserverationServerAction.Parameter.ON2.toString(),
                         end);
                 final ServerActionParameter nbz = new ServerActionParameter(
-                        PointNumberReserverationServerAction.PARAMETER_TYPE.NBZ.toString(),
+                        PointNumberReserverationServerAction.Parameter.NBZ.toString(),
                         nummerierungsbezirk);
                 final PointNumberReservationRequest result = (PointNumberReservationRequest)SessionManager
                             .getProxy()
@@ -1967,7 +1963,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                 return null;
             }
 
-            final List<PointNumberReservation> selectedValues = new ArrayList<PointNumberReservation>();
+            final List<PointNumberReservation> selectedValues = new ArrayList<>();
             for (final CheckListItem item : punktnummern) {
                 if (item.isSelected()) {
                     final PointNumberReservation pnr = new PointNumberReservation();
@@ -1982,21 +1978,21 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                 return null;
             }
 
-            final Collection<ServerActionParameter> allSaps = new ArrayList<ServerActionParameter>();
+            final Collection<ServerActionParameter> allSaps = new ArrayList<>();
 
             final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
-            final ServerActionParameter prefixSap = new ServerActionParameter(
-                    PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+            final ServerActionParameter<String> prefixSap = new ServerActionParameter<>(
+                    PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
                     anrPrefix);
-            final ServerActionParameter aNummerSap = new ServerActionParameter(
-                    PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
+            final ServerActionParameter<String> aNummerSap = new ServerActionParameter<>(
+                    PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                     anr);
-            final ServerActionParameter actionSap = new ServerActionParameter(
-                    PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                    PointNumberReserverationServerAction.ACTION_TYPE.DO_PROLONG);
+            final ServerActionParameter<PointNumberReserverationServerAction.Action> actionSap = new ServerActionParameter<>(
+                    PointNumberReserverationServerAction.Parameter.ACTION.toString(),
+                    PointNumberReserverationServerAction.Action.DO_PROLONGATION);
 
-            final ServerActionParameter dateSap = new ServerActionParameter(
-                    PointNumberReserverationServerAction.PARAMETER_TYPE.PROLONG_DATE.toString(),
+            final ServerActionParameter<Date> dateSap = new ServerActionParameter<>(
+                    PointNumberReserverationServerAction.Parameter.PROLONG_DATE.toString(),
                     jXDatePicker1.getDate());
 
             allSaps.add(prefixSap);
@@ -2004,13 +2000,10 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
             allSaps.add(actionSap);
             allSaps.add(dateSap);
             for (final PointNumberReservation pnr : selectedValues) {
-                final ServerActionParameter<Integer> pnrSap = new ServerActionParameter<Integer>(
-                        PointNumberReserverationServerAction.PARAMETER_TYPE.POINT_NUMBER.toString(),
-                        Integer.parseInt(
-                            pnr.getPunktnummer().substring(
-                                pnr.getPunktnummer().length()
-                                        - 6,
-                                pnr.getPunktnummer().length())));
+                final ServerActionParameter<Long> pnrSap = new ServerActionParameter<>(
+                    PointNumberReserverationServerAction.Parameter.POINT_NUMBER.toString(),
+                    Long.parseLong(pnr.getPunktnummer())
+                );
                 LOG.info("adding pnr SAP: " + pnrSap.getValue());
                 allSaps.add(pnrSap);
             }
