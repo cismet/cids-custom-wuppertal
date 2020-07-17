@@ -34,7 +34,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import java.util.concurrent.ExecutionException;
+
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
@@ -51,9 +55,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.util.concurrent.ExecutionException;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 
@@ -71,24 +72,21 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(EmobrentLeihgebuehrEditor.class);
-    
-    public static final String FIELD__SCHLUESSEL = "schluessel";                    // emobrentLeihgebuehr
-    public static final String FIELD__NAME = "name";                                // emobrentLeihgebuehr
-    public static final String FIELD__ID = "id";                                    // emobrentLeihgebuehr
+
+    public static final String FIELD__SCHLUESSEL = "schluessel"; // emobrentLeihgebuehr
+    public static final String FIELD__NAME = "name";             // emobrentLeihgebuehr
+    public static final String FIELD__ID = "id";                 // emobrentLeihgebuehr
     public static final String TABLE_NAME = "emobrent_leihgebuehr";
-    
+
     public static final String BUNDLE_NONAME = "EmobrentLeihgebuehrEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "EmobrentLeihgebuehrEditor.prepareForSave().duplicateName";
     public static final String BUNDLE_DUPLICATEKEY = "EmobrentLeihgebuehrEditor.prepareForSave().duplicateSchluessel";
-    public static final String BUNDLE_PANE_PREFIX = "EmobrentLeihgebuehrEditor.prepareForSave().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX = "EmobrentLeihgebuehrEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX =
+        "EmobrentLeihgebuehrEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX =
+        "EmobrentLeihgebuehrEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "EmobrentLeihgebuehrEditor.prepareForSave().JOptionPane.title";
 
-    //~ Instance fields --------------------------------------------------------
-    
-    private SwingWorker worker_key;
-    private SwingWorker worker_name;
-    
     //~ Enums ------------------------------------------------------------------
 
     /**
@@ -105,9 +103,12 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
 
     //~ Instance fields --------------------------------------------------------
 
+    private SwingWorker worker_key;
+    private SwingWorker worker_name;
+
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
-    
+
     private boolean isEditor = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -143,7 +144,7 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        
+
         txtName.getDocument().addDocumentListener(new DocumentListener() {
 
                 // Immer, wenn der Name geändert wird, wird dieser überprüft.
@@ -162,7 +163,7 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
                     checkAttributes();
                 }
             });
-        
+
         setReadOnly();
     }
 
@@ -191,14 +192,12 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -220,14 +219,12 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -252,7 +249,12 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        final Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -282,7 +284,7 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public boolean prepareForSave() {
@@ -356,7 +358,6 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
         }
     }
 
-   
     /**
      * DOCUMENT ME!
      *
@@ -386,7 +387,6 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
         checkName(FIELD__SCHLUESSEL, OtherTableCases.REDUNDANT_ATT_KEY);
     }
 
-    
     @Override
     public void dispose() {
         super.dispose();
@@ -409,7 +409,7 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
     public BindingGroup getBindingGroup() {
         return bindingGroup;
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -460,18 +460,18 @@ public class EmobrentLeihgebuehrEditor extends DefaultCustomObjectEditor impleme
                     }
                 }
             };
-        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)){
+        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)) {
             if (worker_name != null) {
                 worker_name.cancel(true);
             }
             worker_name = worker;
             worker_name.execute();
-        } else{
-           if (worker_key != null) {
+        } else {
+            if (worker_key != null) {
                 worker_key.cancel(true);
             }
             worker_key = worker;
-            worker_key.execute(); 
+            worker_key.execute();
         }
     }
 }

@@ -78,16 +78,16 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
     private static final Logger LOG = Logger.getLogger(PointNumberReservationPanel.class);
     private static final String SEVER_ACTION = "pointNumberReservation";
     private static final String WUPP_ZONEN_KENNZIFFER = "32";
-    private static final DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
-    private static final DateFormat dateFormater = new SimpleDateFormat("dd-MM-yyyy");
-    private static final ArrayList<String> nbzWhitelist = new ArrayList<String>();
+    private static final DateFormat DATE_PARSER = new SimpleDateFormat("yyyy-MM-dd");
+    private static final DateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
+    private static final ArrayList<String> NBZ_WHITELISTE = new ArrayList<>();
 
     //~ Instance fields --------------------------------------------------------
 
     boolean showErrorLbl = false;
     private final PointNumberDialog pnrDialog;
     private BusyLoggingTextPane protokollPane;
-    private ArrayList<String> nbz = new ArrayList<String>();
+    private ArrayList<String> nbz = new ArrayList<>();
     private int maxNbz = 4;
     private boolean anzahlWarnVisible = false;
 
@@ -141,16 +141,16 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
             maxNbz = Integer.parseInt(props.getProperty("maxNbz")); // NOI18N
             final BufferedReader whitelistReader = new BufferedReader(new InputStreamReader(
                         PointNumberReservationPanel.class.getResourceAsStream("pnr_nbz_whitelist.properties")));
-            String nbzWhitelistEntry = null;
+            String nbzWhitelistEntry;
             while ((nbzWhitelistEntry = whitelistReader.readLine()) != null) {
-                nbzWhitelist.add(nbzWhitelistEntry);
+                NBZ_WHITELISTE.add(nbzWhitelistEntry);
             }
 
-            Collections.sort(nbzWhitelist);
+            Collections.sort(NBZ_WHITELISTE);
             if (!loadNummerierungsbezirke()) {
                 showErrorLbl = true;
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("Error reading pointNUmberSetting.properties", e);
             showErrorLbl = true;
         }
@@ -241,7 +241,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
      * @return  DOCUMENT ME!
      */
     private boolean loadNummerierungsbezirke() {
-        nbz = new ArrayList<String>();
+        nbz = new ArrayList<>();
         final MappingComponent mapC = CismapBroker.getInstance().getMappingComponent();
         Geometry g = ((XBoundingBox)mapC.getCurrentBoundingBoxFromCamera()).getGeometry();
         if (!CrsTransformer.createCrsFromSrid(g.getSRID()).equals(ClientAlkisConf.getInstance().getSrsService())) {
@@ -255,13 +255,13 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
         final int diffX = (((upperX - lowerX) + 1) == 0) ? 1 : ((upperX - lowerX) + 1);
         final int diffY = (((upperY - lowerY) + 1) == 0) ? 1 : ((upperY - lowerY) + 1);
 
-        final ArrayList<String> mapNbz = new ArrayList<String>();
+        final ArrayList<String> mapNbz = new ArrayList<>();
         for (int i = 0; i < diffX; i++) {
             final int x = lowerX + i;
             for (int j = 0; j < diffY; j++) {
                 final int y = lowerY + j;
                 final String currNbz = WUPP_ZONEN_KENNZIFFER + x + y;
-                if (Collections.binarySearch(nbzWhitelist, currNbz) > 0) {
+                if (Collections.binarySearch(NBZ_WHITELISTE, currNbz) > 0) {
                     mapNbz.add(currNbz);
                 }
             }
@@ -621,30 +621,30 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
                         startwert = 0;
                     }
 
-                    final ServerActionParameter action;
+                    final ServerActionParameter<PointNumberReserverationServerAction.Action> action;
                     if (pnrDialog.isErgaenzenMode()) {
-                        action = new ServerActionParameter(
-                                PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                                PointNumberReserverationServerAction.ACTION_TYPE.PROLONG_RESERVATION);
+                        action = new ServerActionParameter<>(
+                                PointNumberReserverationServerAction.Parameter.ACTION.toString(),
+                                PointNumberReserverationServerAction.Action.DO_ADDITION);
                     } else {
-                        action = new ServerActionParameter(
-                                PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                                PointNumberReserverationServerAction.ACTION_TYPE.DO_RESERVATION);
+                        action = new ServerActionParameter<>(
+                                PointNumberReserverationServerAction.Parameter.ACTION.toString(),
+                                PointNumberReserverationServerAction.Action.DO_RESERVATION);
                     }
-                    final ServerActionParameter prefix = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+                    final ServerActionParameter<String> prefix = new ServerActionParameter<>(
+                            PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
                             anrPrefix);
-                    final ServerActionParameter aNummer = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
+                    final ServerActionParameter<String> aNummer = new ServerActionParameter<>(
+                            PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                             anr);
-                    final ServerActionParameter nbz = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.NBZ.toString(),
+                    final ServerActionParameter<String> nbz = new ServerActionParameter<>(
+                            PointNumberReserverationServerAction.Parameter.NBZ.toString(),
                             nummerierungsbezirk);
-                    final ServerActionParameter amount = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.ANZAHL.toString(),
+                    final ServerActionParameter<Integer> amount = new ServerActionParameter<>(
+                            PointNumberReserverationServerAction.Parameter.ANZAHL.toString(),
                             anzahl);
-                    final ServerActionParameter startVal = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.STARTWERT.toString(),
+                    final ServerActionParameter startVal = new ServerActionParameter<>(
+                            PointNumberReserverationServerAction.Parameter.STARTWERT.toString(),
                             startwert);
 
                     final PointNumberReservationRequest result = (PointNumberReservationRequest)SessionManager
@@ -708,7 +708,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
                                         protokollPane.addMessage(
                                             pnr.getPunktnummer()
                                                     + " ("
-                                                    + dateFormater.format(dateParser.parse(pnr.getAblaufDatum()))
+                                                    + DATE_FORMATTER.format(DATE_PARSER.parse(pnr.getAblaufDatum()))
                                                     + ")",
                                             Styles.INFO);
                                     }
@@ -739,14 +739,15 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    final ServerActionParameter action = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                            PointNumberReserverationServerAction.ACTION_TYPE.IS_ANTRAG_EXISTING);
-                    final ServerActionParameter prefix = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+                    final ServerActionParameter<PointNumberReserverationServerAction.Action> action =
+                        new ServerActionParameter<>(
+                            PointNumberReserverationServerAction.Parameter.ACTION.toString(),
+                            PointNumberReserverationServerAction.Action.IS_ANTRAG_EXISTING);
+                    final ServerActionParameter<String> prefix = new ServerActionParameter<>(
+                            PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
                             anrPrefix);
-                    final ServerActionParameter aNummer = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
+                    final ServerActionParameter<String> aNummer = new ServerActionParameter<>(
+                            PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                             anr);
                     final boolean isAntragExisting = (Boolean)SessionManager.getProxy()
                                 .executeTask(

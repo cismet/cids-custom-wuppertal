@@ -162,24 +162,35 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
     public static final String BUNDLE_NOSTECKDOSE = "EmobradLadestationEditor.prepareForSave().noSteckdose";
     public static final String BUNDLE_WRONGSTECKDOSE = "EmobradLadestationEditor.prepareForSave().wrongSteckdose";
     public static final String BUNDLE_NOOPERATOR = "EmobradLadestationEditor.prepareForSave().noBetreiber";
-    public static final String BUNDLE_PANE_PREFIX = "EmobradLadestationEditor.prepareForSave().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX = "EmobradLadestationEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX =
+        "EmobradLadestationEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX =
+        "EmobradLadestationEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "EmobradLadestationEditor.prepareForSave().JOptionPane.title";
 
-    public static final String BUNDLE_REMZUG_QUESTION = "EmobradLadestationEditor.btnRemoveZugangActionPerformed().question";
+    public static final String BUNDLE_REMZUG_QUESTION =
+        "EmobradLadestationEditor.btnRemoveZugangActionPerformed().question";
     public static final String BUNDLE_REMZUG_TITLE = "EmobradLadestationEditor.btnRemoveZugangActionPerformed().title";
-    public static final String BUNDLE_REMZUG_ERRORTITLE = "EmobradLadestationEditor.btnRemoveZugangActionPerformed().errortitle";
-    public static final String BUNDLE_REMZUG_ERRORTEXT =  "EmobradLadestationEditor.btnRemoveZugangActionPerformed().errortext";
+    public static final String BUNDLE_REMZUG_ERRORTITLE =
+        "EmobradLadestationEditor.btnRemoveZugangActionPerformed().errortitle";
+    public static final String BUNDLE_REMZUG_ERRORTEXT =
+        "EmobradLadestationEditor.btnRemoveZugangActionPerformed().errortext";
 
-    public static final String BUNDLE_REMSTE_QUESTION =  "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().question";
+    public static final String BUNDLE_REMSTE_QUESTION =
+        "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().question";
     public static final String BUNDLE_REMSTE_TITLE = "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().title";
-    public static final String BUNDLE_REMSTE_ERRORTITLE = "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().errortitle";
-    public static final String BUNDLE_REMSTE_ERRORTEXT = "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().errortext";
-    
-    public static final String BUNDLE_REMPFA_QUESTION = "EmobradLadestationEditor.btnRemovePfandActionPerformed().question";
+    public static final String BUNDLE_REMSTE_ERRORTITLE =
+        "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().errortitle";
+    public static final String BUNDLE_REMSTE_ERRORTEXT =
+        "EmobradLadestationEditor.btnRemoveSteckerActionPerformed().errortext";
+
+    public static final String BUNDLE_REMPFA_QUESTION =
+        "EmobradLadestationEditor.btnRemovePfandActionPerformed().question";
     public static final String BUNDLE_REMPFA_TITLE = "EmobradLadestationEditor.btnRemovePfandActionPerformed().title";
-    public static final String BUNDLE_REMPFA_ERRORTITLE = "EmobradLadestationEditor.btnRemovePfandActionPerformed().errortitle";
-    public static final String BUNDLE_REMPFA_ERRORTEXT = "EmobradLadestationEditor.btnRemovePfandActionPerformed().errortext";
+    public static final String BUNDLE_REMPFA_ERRORTITLE =
+        "EmobradLadestationEditor.btnRemovePfandActionPerformed().errortitle";
+    public static final String BUNDLE_REMPFA_ERRORTEXT =
+        "EmobradLadestationEditor.btnRemovePfandActionPerformed().errortext";
 
     //~ Enums ------------------------------------------------------------------
 
@@ -196,12 +207,12 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
     }
 
     //~ Instance fields --------------------------------------------------------
-    
+
     private SwingWorker worker_loadFoto;
     private SwingWorker worker_name;
     private SwingWorker worker_foto;
     private SwingWorker worker_versatz;
-    
+
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
@@ -212,122 +223,123 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton btnAddPfand;
-    private JButton btnAddStecker;
-    private JButton btnAddZugang;
-    private JButton btnMenAbortPfand;
-    private JButton btnMenAbortStecker;
-    private JButton btnMenAbortZugang;
-    private JButton btnMenOkPfand;
-    private JButton btnMenOkStecker;
-    private JButton btnMenOkZugang;
-    private JButton btnRemovePfand;
-    private JButton btnRemoveStecker;
-    private JButton btnRemoveZugang;
-    private JComboBox<String> cbAbrechnung;
-    private DefaultBindableReferenceCombo cbBetreiber;
-    private JComboBox cbGeom;
-    private JComboBox cbPfand;
-    private JComboBox cbStecker;
-    private DefaultBindableReferenceCombo cbVersatz;
-    private JComboBox cbZugang;
-    private JCheckBox chGruen;
-    private JCheckBox chHalb;
-    private JCheckBox chLadebox;
-    private JCheckBox chOnline;
-    private JDialog dlgAddPfand;
-    private JDialog dlgAddStecker;
-    private JDialog dlgAddZugang;
-    private Box.Filler filler1;
-    private Box.Filler filler3;
-    private Box.Filler filler4;
-    private Box.Filler filler5;
-    private Box.Filler filler6;
-    private JFormattedTextField ftxtAnzahlLadepunkte;
-    private JFormattedTextField ftxtSchliessfaecher;
-    private JFormattedTextField ftxtSteckdosen;
-    private JLabel lblAbrechnung;
-    private JLabel lblAnzahl;
-    private JLabel lblAnzahlLadepunkte;
-    private JLabel lblAuswaehlenPfand;
-    private JLabel lblAuswaehlenStecker;
-    private JLabel lblAuswaehlenZugang;
-    private JLabel lblBemerkung;
-    private JLabel lblBetreiber;
-    private JLabel lblDetailbeschreibung;
-    private JLabel lblFoto;
-    private JLabel lblFotoAnzeigen;
-    private JLabel lblGeom;
-    private JLabel lblGruen;
-    private JLabel lblHalb;
-    private JLabel lblHnr;
-    private JLabel lblKarte;
-    private JLabel lblLadebox;
-    private JLabel lblName;
-    private JLabel lblOffen;
-    private JLabel lblOnline;
-    private JLabel lblPfand;
-    private JLabel lblSchliessfaecher;
-    private JLabel lblSteckdosen;
-    private JLabel lblStecker;
-    private JLabel lblStrasse;
-    private JLabel lblUrlCheck;
-    private JLabel lblVersatz;
-    private JLabel lblZugang;
-    private JLabel lblZusatz;
-    private JList lstPfand;
-    private JList lstStecker;
-    private JList lstZugang;
-    private JPanel panAbrechnung;
-    private JPanel panAddPfand;
-    private JPanel panAddStecker;
-    private JPanel panAddZugang;
-    private JPanel panBemerkung;
-    private JPanel panButtonsPfand;
-    private JPanel panButtonsStecker;
-    private JPanel panButtonsZugang;
-    private JPanel panContent;
-    private JPanel panDaten;
-    private JPanel panDetailbeschreibung;
-    private JPanel panFiller;
-    private JPanel panFillerUnten;
-    private JPanel panFillerUnten1;
-    private JPanel panFillerUntenFoto;
-    private JPanel panGeometrie;
-    private JPanel panLage;
-    private JPanel panMenButtonsPfand;
-    private JPanel panMenButtonsStecker;
-    private JPanel panMenButtonsZugang;
-    private JPanel panOffen;
-    private JPanel panOnline;
-    private JPanel panPfand;
-    private DefaultPreviewMapPanel panPreviewMap;
-    private JPanel panStecker;
-    private JPanel panUrl;
-    private JPanel panZugang;
-    private JPanel panZusatz;
-    private RoundedPanel rpKarte;
-    private JScrollPane scpAbrechnung;
-    private JScrollPane scpBemerkung;
-    private JScrollPane scpDetailbeschreibung;
-    private JScrollPane scpLstPfand;
-    private JScrollPane scpLstStecker;
-    private JScrollPane scpLstZugang;
-    private JScrollPane scpOffen;
-    private JScrollPane scpZusatz;
-    private SemiRoundedPanel semiRoundedPanel7;
-    private JSeparator sepOnline;
-    JSpinner spAnzahl;
-    private JTextArea taAbrechnung;
-    private JTextArea taBemerkung;
-    private JTextArea taDetailbeschreibung;
-    private JTextArea taOffen;
-    private JTextArea taZusatz;
-    private JTextField txtFoto;
-    private JTextField txtHnr;
-    private JTextField txtName;
-    private JTextField txtStrasse;
-    private BindingGroup bindingGroup;
+    private javax.swing.JButton btnAddPfand;
+    private javax.swing.JButton btnAddStecker;
+    private javax.swing.JButton btnAddZugang;
+    private javax.swing.JButton btnMenAbortPfand;
+    private javax.swing.JButton btnMenAbortStecker;
+    private javax.swing.JButton btnMenAbortZugang;
+    private javax.swing.JButton btnMenOkPfand;
+    private javax.swing.JButton btnMenOkStecker;
+    private javax.swing.JButton btnMenOkZugang;
+    private javax.swing.JButton btnRemovePfand;
+    private javax.swing.JButton btnRemoveStecker;
+    private javax.swing.JButton btnRemoveZugang;
+    private javax.swing.JComboBox<String> cbAbrechnung;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbBetreiber;
+    private javax.swing.JComboBox cbGeom;
+    private javax.swing.JComboBox cbPfand;
+    private javax.swing.JComboBox cbStecker;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbVersatz;
+    private javax.swing.JComboBox cbZugang;
+    private javax.swing.JCheckBox chGruen;
+    private javax.swing.JCheckBox chHalb;
+    private javax.swing.JCheckBox chLadebox;
+    private javax.swing.JCheckBox chOnline;
+    private javax.swing.JDialog dlgAddPfand;
+    private javax.swing.JDialog dlgAddStecker;
+    private javax.swing.JDialog dlgAddZugang;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.JFormattedTextField ftxtAnzahlLadepunkte;
+    private javax.swing.JFormattedTextField ftxtSchliessfaecher;
+    private javax.swing.JFormattedTextField ftxtSteckdosen;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblAbrechnung;
+    private javax.swing.JLabel lblAnzahl;
+    private javax.swing.JLabel lblAnzahlLadepunkte;
+    private javax.swing.JLabel lblAuswaehlenPfand;
+    private javax.swing.JLabel lblAuswaehlenStecker;
+    private javax.swing.JLabel lblAuswaehlenZugang;
+    private javax.swing.JLabel lblBemerkung;
+    private javax.swing.JLabel lblBetreiber;
+    private javax.swing.JLabel lblDetailbeschreibung;
+    private javax.swing.JLabel lblFoto;
+    private javax.swing.JLabel lblFotoAnzeigen;
+    private javax.swing.JLabel lblGeom;
+    private javax.swing.JLabel lblGruen;
+    private javax.swing.JLabel lblHalb;
+    private javax.swing.JLabel lblHnr;
+    private javax.swing.JLabel lblKarte;
+    private javax.swing.JLabel lblLadebox;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblOffen;
+    private javax.swing.JLabel lblOnline;
+    private javax.swing.JLabel lblPfand;
+    private javax.swing.JLabel lblSchliessfaecher;
+    private javax.swing.JLabel lblSteckdosen;
+    private javax.swing.JLabel lblStecker;
+    private javax.swing.JLabel lblStrasse;
+    private javax.swing.JLabel lblUrlCheck;
+    private javax.swing.JLabel lblVersatz;
+    private javax.swing.JLabel lblZugang;
+    private javax.swing.JLabel lblZusatz;
+    private javax.swing.JList lstPfand;
+    private javax.swing.JList lstStecker;
+    private javax.swing.JList lstZugang;
+    private javax.swing.JPanel panAbrechnung;
+    private javax.swing.JPanel panAddPfand;
+    private javax.swing.JPanel panAddStecker;
+    private javax.swing.JPanel panAddZugang;
+    private javax.swing.JPanel panBemerkung;
+    private javax.swing.JPanel panButtonsPfand;
+    private javax.swing.JPanel panButtonsStecker;
+    private javax.swing.JPanel panButtonsZugang;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panDaten;
+    private javax.swing.JPanel panDetailbeschreibung;
+    private javax.swing.JPanel panFiller;
+    private javax.swing.JPanel panFillerUnten;
+    private javax.swing.JPanel panFillerUnten1;
+    private javax.swing.JPanel panFillerUntenFoto;
+    private javax.swing.JPanel panGeometrie;
+    private javax.swing.JPanel panLage;
+    private javax.swing.JPanel panMenButtonsPfand;
+    private javax.swing.JPanel panMenButtonsStecker;
+    private javax.swing.JPanel panMenButtonsZugang;
+    private javax.swing.JPanel panOffen;
+    private javax.swing.JPanel panOnline;
+    private javax.swing.JPanel panPfand;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
+    private javax.swing.JPanel panStecker;
+    private javax.swing.JPanel panUrl;
+    private javax.swing.JPanel panZugang;
+    private javax.swing.JPanel panZusatz;
+    private de.cismet.tools.gui.RoundedPanel rpKarte;
+    private javax.swing.JScrollPane scpAbrechnung;
+    private javax.swing.JScrollPane scpBemerkung;
+    private javax.swing.JScrollPane scpDetailbeschreibung;
+    private javax.swing.JScrollPane scpLstPfand;
+    private javax.swing.JScrollPane scpLstStecker;
+    private javax.swing.JScrollPane scpLstZugang;
+    private javax.swing.JScrollPane scpOffen;
+    private javax.swing.JScrollPane scpZusatz;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel7;
+    private javax.swing.JSeparator sepOnline;
+    javax.swing.JSpinner spAnzahl;
+    private javax.swing.JTextArea taAbrechnung;
+    private javax.swing.JTextArea taBemerkung;
+    private javax.swing.JTextArea taDetailbeschreibung;
+    private javax.swing.JTextArea taOffen;
+    private javax.swing.JTextArea taZusatz;
+    private javax.swing.JTextField txtFoto;
+    private javax.swing.JTextField txtHnr;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtStrasse;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -353,7 +365,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        
+
         txtName.getDocument().addDocumentListener(new DocumentListener() {
 
                 // Immer, wenn der Name geändert wird, wird dieser überprüft.
@@ -398,7 +410,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         dlgAddStecker.getRootPane().setDefaultButton(btnMenOkStecker);
         dlgAddPfand.pack();
         dlgAddPfand.getRootPane().setDefaultButton(btnMenOkPfand);
-        
+
         if (isEditor) {
             ((DefaultBindableScrollableComboBox)this.cbAbrechnung).setNullable(true);
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
@@ -413,938 +425,1079 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        GridBagConstraints gridBagConstraints;
-        bindingGroup = new BindingGroup();
+        java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        dlgAddZugang = new JDialog();
-        panAddZugang = new JPanel();
-        lblAuswaehlenZugang = new JLabel();
-        final MetaObject[] zugang = ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_zugangsart", new String[]{"name"}, getConnectionContext());
-        if(zugang != null) {
+        dlgAddZugang = new javax.swing.JDialog();
+        panAddZugang = new javax.swing.JPanel();
+        lblAuswaehlenZugang = new javax.swing.JLabel();
+        final MetaObject[] zugang = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
+                    .getLightweightMetaObjectsForTable(
+                        "emobrad_zugangsart",
+                        new String[] { "name" },
+                        getConnectionContext());
+        if (zugang != null) {
             Arrays.sort(zugang);
-            cbZugang = new JComboBox(zugang);
+            cbZugang = new javax.swing.JComboBox(zugang);
         }
-        panMenButtonsZugang = new JPanel();
-        btnMenAbortZugang = new JButton();
-        btnMenOkZugang = new JButton();
-        dlgAddStecker = new JDialog();
-        panAddStecker = new JPanel();
-        lblAuswaehlenStecker = new JLabel();
-        final MetaObject[] stecker = ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_stecker", new String[]{"schluessel"}, getConnectionContext());
-        if(stecker != null) {
-            Arrays.sort(stecker);//||
-            cbStecker = new JComboBox(stecker);
+        panMenButtonsZugang = new javax.swing.JPanel();
+        btnMenAbortZugang = new javax.swing.JButton();
+        btnMenOkZugang = new javax.swing.JButton();
+        dlgAddStecker = new javax.swing.JDialog();
+        panAddStecker = new javax.swing.JPanel();
+        lblAuswaehlenStecker = new javax.swing.JLabel();
+        final MetaObject[] stecker = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
+                    .getLightweightMetaObjectsForTable(
+                        "emobrad_stecker",
+                        new String[] { "schluessel" },
+                        getConnectionContext());
+        if (stecker != null) {
+            Arrays.sort(stecker); // ||
+            cbStecker = new javax.swing.JComboBox(stecker);
         }
-        panMenButtonsStecker = new JPanel();
-        btnMenAbortStecker = new JButton();
-        btnMenOkStecker = new JButton();
-        dlgAddPfand = new JDialog();
-        panAddPfand = new JPanel();
-        lblAuswaehlenPfand = new JLabel();
-        final MetaObject[] pfand = ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_pfand", new String[]{"name"}, getConnectionContext());
-        if(pfand != null) {
+        panMenButtonsStecker = new javax.swing.JPanel();
+        btnMenAbortStecker = new javax.swing.JButton();
+        btnMenOkStecker = new javax.swing.JButton();
+        dlgAddPfand = new javax.swing.JDialog();
+        panAddPfand = new javax.swing.JPanel();
+        lblAuswaehlenPfand = new javax.swing.JLabel();
+        final MetaObject[] pfand = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
+                    .getLightweightMetaObjectsForTable(
+                        "emobrad_pfand",
+                        new String[] { "name" },
+                        getConnectionContext());
+        if (pfand != null) {
             Arrays.sort(pfand);
-            cbPfand = new JComboBox(pfand);
-            panMenButtonsPfand = new JPanel();
-            btnMenAbortPfand = new JButton();
-            btnMenOkPfand = new JButton();
-            panFillerUnten = new JPanel();
+            cbPfand = new javax.swing.JComboBox(pfand);
+            panMenButtonsPfand = new javax.swing.JPanel();
+            btnMenAbortPfand = new javax.swing.JButton();
+            btnMenOkPfand = new javax.swing.JButton();
+            panFillerUnten = new javax.swing.JPanel();
             panContent = new RoundedPanel();
-            panFillerUnten1 = new JPanel();
-            panDaten = new JPanel();
-            lblName = new JLabel();
-            txtName = new JTextField();
-            lblStrasse = new JLabel();
-            txtStrasse = new JTextField();
-            filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-            lblHnr = new JLabel();
-            txtHnr = new JTextField();
-            lblBetreiber = new JLabel();
-            cbBetreiber = new DefaultBindableReferenceCombo(true) ;
-            lblHalb = new JLabel();
-            chHalb = new JCheckBox();
-            lblOffen = new JLabel();
-            panOffen = new JPanel();
-            scpOffen = new JScrollPane();
-            taOffen = new JTextArea();
-            lblZusatz = new JLabel();
-            panZusatz = new JPanel();
-            scpZusatz = new JScrollPane();
-            taZusatz = new JTextArea();
-            lblDetailbeschreibung = new JLabel();
-            panDetailbeschreibung = new JPanel();
-            scpDetailbeschreibung = new JScrollPane();
-            taDetailbeschreibung = new JTextArea();
-            lblBemerkung = new JLabel();
-            panBemerkung = new JPanel();
-            scpBemerkung = new JScrollPane();
-            taBemerkung = new JTextArea();
-            lblFoto = new JLabel();
-            txtFoto = new JTextField();
-            panUrl = new JPanel();
-            lblUrlCheck = new JLabel();
-            lblFotoAnzeigen = new JLabel();
-            filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-            lblGruen = new JLabel();
-            chGruen = new JCheckBox();
-            lblAnzahl = new JLabel();
-            spAnzahl = new JSpinner();
-            lblAnzahlLadepunkte = new JLabel();
-            ftxtAnzahlLadepunkte = new JFormattedTextField();
-            lblLadebox = new JLabel();
-            chLadebox = new JCheckBox();
-            lblSchliessfaecher = new JLabel();
-            ftxtSchliessfaecher = new JFormattedTextField();
-            lblSteckdosen = new JLabel();
-            ftxtSteckdosen = new JFormattedTextField();
-            panFillerUntenFoto = new JPanel();
-            lblAbrechnung = new JLabel();
-            panAbrechnung = new JPanel();
-            scpAbrechnung = new JScrollPane();
-            taAbrechnung = new JTextArea();
-            if(isEditor){
+            jPanel1 = new javax.swing.JPanel();
+            panFillerUnten1 = new javax.swing.JPanel();
+            panDaten = new javax.swing.JPanel();
+            lblName = new javax.swing.JLabel();
+            txtName = new javax.swing.JTextField();
+            lblStrasse = new javax.swing.JLabel();
+            txtStrasse = new javax.swing.JTextField();
+            filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(32767, 0));
+            lblHnr = new javax.swing.JLabel();
+            txtHnr = new javax.swing.JTextField();
+            lblBetreiber = new javax.swing.JLabel();
+            cbBetreiber = new DefaultBindableReferenceCombo(true);
+            lblHalb = new javax.swing.JLabel();
+            chHalb = new javax.swing.JCheckBox();
+            lblOffen = new javax.swing.JLabel();
+            panOffen = new javax.swing.JPanel();
+            scpOffen = new javax.swing.JScrollPane();
+            taOffen = new javax.swing.JTextArea();
+            lblZusatz = new javax.swing.JLabel();
+            panZusatz = new javax.swing.JPanel();
+            scpZusatz = new javax.swing.JScrollPane();
+            taZusatz = new javax.swing.JTextArea();
+            lblDetailbeschreibung = new javax.swing.JLabel();
+            panDetailbeschreibung = new javax.swing.JPanel();
+            scpDetailbeschreibung = new javax.swing.JScrollPane();
+            taDetailbeschreibung = new javax.swing.JTextArea();
+            lblBemerkung = new javax.swing.JLabel();
+            panBemerkung = new javax.swing.JPanel();
+            scpBemerkung = new javax.swing.JScrollPane();
+            taBemerkung = new javax.swing.JTextArea();
+            lblFoto = new javax.swing.JLabel();
+            txtFoto = new javax.swing.JTextField();
+            panUrl = new javax.swing.JPanel();
+            lblUrlCheck = new javax.swing.JLabel();
+            lblFotoAnzeigen = new javax.swing.JLabel();
+            filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(32767, 0));
+            lblGruen = new javax.swing.JLabel();
+            chGruen = new javax.swing.JCheckBox();
+            lblAnzahl = new javax.swing.JLabel();
+            spAnzahl = new javax.swing.JSpinner();
+            lblAnzahlLadepunkte = new javax.swing.JLabel();
+            ftxtAnzahlLadepunkte = new javax.swing.JFormattedTextField();
+            lblLadebox = new javax.swing.JLabel();
+            chLadebox = new javax.swing.JCheckBox();
+            lblSchliessfaecher = new javax.swing.JLabel();
+            ftxtSchliessfaecher = new javax.swing.JFormattedTextField();
+            lblSteckdosen = new javax.swing.JLabel();
+            ftxtSteckdosen = new javax.swing.JFormattedTextField();
+            panFillerUntenFoto = new javax.swing.JPanel();
+            lblAbrechnung = new javax.swing.JLabel();
+            panAbrechnung = new javax.swing.JPanel();
+            scpAbrechnung = new javax.swing.JScrollPane();
+            taAbrechnung = new javax.swing.JTextArea();
+            if (isEditor) {
                 cbAbrechnung = new DefaultBindableScrollableComboBox();
             }
-            panFiller = new JPanel();
-            lblZugang = new JLabel();
-            panZugang = new JPanel();
-            scpLstZugang = new JScrollPane();
-            lstZugang = new JList();
-            panButtonsZugang = new JPanel();
-            btnAddZugang = new JButton();
-            btnRemoveZugang = new JButton();
-            filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-            lblStecker = new JLabel();
-            panStecker = new JPanel();
-            scpLstStecker = new JScrollPane();
-            lstStecker = new JList();
-            panButtonsStecker = new JPanel();
-            btnAddStecker = new JButton();
-            btnRemoveStecker = new JButton();
-            filler5 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-            panPfand = new JPanel();
-            scpLstPfand = new JScrollPane();
-            lstPfand = new JList();
-            panButtonsPfand = new JPanel();
-            btnAddPfand = new JButton();
-            btnRemovePfand = new JButton();
-            filler6 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-            lblPfand = new JLabel();
-            panGeometrie = new JPanel();
-            lblGeom = new JLabel();
-            if (isEditor){
+            panFiller = new javax.swing.JPanel();
+            lblZugang = new javax.swing.JLabel();
+            panZugang = new javax.swing.JPanel();
+            scpLstZugang = new javax.swing.JScrollPane();
+            lstZugang = new javax.swing.JList();
+            panButtonsZugang = new javax.swing.JPanel();
+            btnAddZugang = new javax.swing.JButton();
+            btnRemoveZugang = new javax.swing.JButton();
+            filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 32767));
+            lblStecker = new javax.swing.JLabel();
+            panStecker = new javax.swing.JPanel();
+            scpLstStecker = new javax.swing.JScrollPane();
+            lstStecker = new javax.swing.JList();
+            panButtonsStecker = new javax.swing.JPanel();
+            btnAddStecker = new javax.swing.JButton();
+            btnRemoveStecker = new javax.swing.JButton();
+            filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 32767));
+            panPfand = new javax.swing.JPanel();
+            scpLstPfand = new javax.swing.JScrollPane();
+            lstPfand = new javax.swing.JList();
+            panButtonsPfand = new javax.swing.JPanel();
+            btnAddPfand = new javax.swing.JButton();
+            btnRemovePfand = new javax.swing.JButton();
+            filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 0),
+                    new java.awt.Dimension(0, 32767));
+            lblPfand = new javax.swing.JLabel();
+            panGeometrie = new javax.swing.JPanel();
+            lblGeom = new javax.swing.JLabel();
+            if (isEditor) {
                 cbGeom = new DefaultCismapGeometryComboBoxEditor();
             }
-            panLage = new JPanel();
-            rpKarte = new RoundedPanel();
-            panPreviewMap = new DefaultPreviewMapPanel();
-            semiRoundedPanel7 = new SemiRoundedPanel();
-            lblKarte = new JLabel();
-            lblVersatz = new JLabel();
-            cbVersatz = new DefaultBindableReferenceCombo(true) ;
-            panOnline = new JPanel();
-            sepOnline = new JSeparator();
-            lblOnline = new JLabel();
-            chOnline = new JCheckBox();
+            panLage = new javax.swing.JPanel();
+            rpKarte = new de.cismet.tools.gui.RoundedPanel();
+            panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
+            semiRoundedPanel7 = new de.cismet.tools.gui.SemiRoundedPanel();
+            lblKarte = new javax.swing.JLabel();
+            lblVersatz = new javax.swing.JLabel();
+            cbVersatz = new DefaultBindableReferenceCombo(true);
+            panOnline = new javax.swing.JPanel();
+            sepOnline = new javax.swing.JSeparator();
+            lblOnline = new javax.swing.JLabel();
+            chOnline = new javax.swing.JCheckBox();
 
             dlgAddZugang.setTitle("Zugangsart");
             dlgAddZugang.setModal(true);
 
-            panAddZugang.setLayout(new GridBagLayout());
+            panAddZugang.setLayout(new java.awt.GridBagLayout());
 
             lblAuswaehlenZugang.setText("Bitte Zugangsart auswählen:");
-            gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
             panAddZugang.add(lblAuswaehlenZugang, gridBagConstraints);
-            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             panAddZugang.add(cbZugang, gridBagConstraints);
 
-            panMenButtonsZugang.setLayout(new GridBagLayout());
+            panMenButtonsZugang.setLayout(new java.awt.GridBagLayout());
 
             btnMenAbortZugang.setText("Abbrechen");
-            btnMenAbortZugang.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenAbortZugangActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new GridBagConstraints();
+            btnMenAbortZugang.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenAbortZugangActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             panMenButtonsZugang.add(btnMenAbortZugang, gridBagConstraints);
 
             btnMenOkZugang.setText("Ok");
-            btnMenOkZugang.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenOkZugangActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new GridBagConstraints();
+            btnMenOkZugang.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenOkZugangActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             panMenButtonsZugang.add(btnMenOkZugang, gridBagConstraints);
 
-            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 2;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             panAddZugang.add(panMenButtonsZugang, gridBagConstraints);
 
-            dlgAddZugang.getContentPane().add(panAddZugang, BorderLayout.CENTER);
+            dlgAddZugang.getContentPane().add(panAddZugang, java.awt.BorderLayout.CENTER);
 
             dlgAddStecker.setTitle("Steckerverbindung");
             dlgAddStecker.setModal(true);
 
-            panAddStecker.setLayout(new GridBagLayout());
+            panAddStecker.setLayout(new java.awt.GridBagLayout());
 
             lblAuswaehlenStecker.setText("Bitte Steckerverbindung auswählen:");
-            gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
             panAddStecker.add(lblAuswaehlenStecker, gridBagConstraints);
-            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             panAddStecker.add(cbStecker, gridBagConstraints);
 
-            panMenButtonsStecker.setLayout(new GridBagLayout());
+            panMenButtonsStecker.setLayout(new java.awt.GridBagLayout());
 
             btnMenAbortStecker.setText("Abbrechen");
-            btnMenAbortStecker.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenAbortSteckerActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new GridBagConstraints();
+            btnMenAbortStecker.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenAbortSteckerActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             panMenButtonsStecker.add(btnMenAbortStecker, gridBagConstraints);
 
             btnMenOkStecker.setText("Ok");
-            btnMenOkStecker.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    btnMenOkSteckerActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new GridBagConstraints();
+            btnMenOkStecker.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnMenOkSteckerActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             panMenButtonsStecker.add(btnMenOkStecker, gridBagConstraints);
 
-            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 2;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             panAddStecker.add(panMenButtonsStecker, gridBagConstraints);
 
-            dlgAddStecker.getContentPane().add(panAddStecker, BorderLayout.CENTER);
+            dlgAddStecker.getContentPane().add(panAddStecker, java.awt.BorderLayout.CENTER);
 
             dlgAddPfand.setTitle("Pfandmünze");
             dlgAddPfand.setModal(true);
 
-            panAddPfand.setLayout(new GridBagLayout());
+            panAddPfand.setLayout(new java.awt.GridBagLayout());
 
             lblAuswaehlenPfand.setText("Bitte Pfandmünze auswählen:");
-            gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
             panAddPfand.add(lblAuswaehlenPfand, gridBagConstraints);
-
         }
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAddPfand.add(cbPfand, gridBagConstraints);
 
-        panMenButtonsPfand.setLayout(new GridBagLayout());
+        panMenButtonsPfand.setLayout(new java.awt.GridBagLayout());
 
         btnMenAbortPfand.setText("Abbrechen");
-        btnMenAbortPfand.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenAbortPfandActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        btnMenAbortPfand.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbortPfandActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panMenButtonsPfand.add(btnMenAbortPfand, gridBagConstraints);
 
         btnMenOkPfand.setText("Ok");
-        btnMenOkPfand.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenOkPfandActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        btnMenOkPfand.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOkPfandActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panMenButtonsPfand.add(btnMenOkPfand, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAddPfand.add(panMenButtonsPfand, gridBagConstraints);
 
-        dlgAddPfand.getContentPane().add(panAddPfand, BorderLayout.CENTER);
+        dlgAddPfand.getContentPane().add(panAddPfand, java.awt.BorderLayout.CENTER);
 
-        setLayout(new GridBagLayout());
+        setLayout(new java.awt.GridBagLayout());
 
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+        panFillerUntenLayout.setVerticalGroup(
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(panFillerUnten, gridBagConstraints);
 
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
-        panContent.setLayout(new GridBagLayout());
+        panContent.setLayout(new java.awt.GridBagLayout());
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        panContent.add(panFillerUnten1, gridBagConstraints);
+        jPanel1.add(panFillerUnten1, gridBagConstraints);
 
         panDaten.setOpaque(false);
-        panDaten.setLayout(new GridBagLayout());
+        panDaten.setLayout(new java.awt.GridBagLayout());
 
-        lblName.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblName.setText("Name:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.standort}"), txtName, BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.standort}"),
+                txtName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(txtName, gridBagConstraints);
 
-        lblStrasse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblStrasse.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblStrasse.setText("Straße:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblStrasse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strasse}"), txtStrasse, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(txtStrasse, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         panDaten.add(filler3, gridBagConstraints);
 
-        lblHnr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblHnr.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblHnr.setText("Hausnummer:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblHnr, gridBagConstraints);
 
         txtHnr.setName(""); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hausnummer}"), txtHnr, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
+                txtHnr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(txtHnr, gridBagConstraints);
 
-        lblBetreiber.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBetreiber.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBetreiber.setText("Betreiber:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblBetreiber, gridBagConstraints);
 
         cbBetreiber.setNullable(false);
-        cbBetreiber.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbBetreiber.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         cbBetreiber.setMaximumRowCount(6);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_betreiber}"), cbBetreiber, BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_betreiber}"),
+                cbBetreiber,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(cbBetreiber, gridBagConstraints);
 
-        lblHalb.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblHalb.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblHalb.setText("halb-öffentlich:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblHalb, gridBagConstraints);
 
         chHalb.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.halb_oeffentlich}"), chHalb, BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.halb_oeffentlich}"),
+                chHalb,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
-        chHalb.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                chHalbStateChanged(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        chHalb.addChangeListener(new javax.swing.event.ChangeListener() {
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    chHalbStateChanged(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(chHalb, gridBagConstraints);
 
-        lblOffen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblOffen.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblOffen.setText("Öffnungszeiten:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblOffen, gridBagConstraints);
 
         panOffen.setOpaque(false);
-        panOffen.setLayout(new GridBagLayout());
+        panOffen.setLayout(new java.awt.GridBagLayout());
 
         taOffen.setColumns(20);
         taOffen.setLineWrap(true);
         taOffen.setRows(2);
         taOffen.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.oeffnungszeiten}"), taOffen, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.oeffnungszeiten}"),
+                taOffen,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpOffen.setViewportView(taOffen);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panOffen.add(scpOffen, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(panOffen, gridBagConstraints);
 
-        lblZusatz.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblZusatz.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblZusatz.setText("Zusatzinfo:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblZusatz, gridBagConstraints);
 
         panZusatz.setOpaque(false);
-        panZusatz.setLayout(new GridBagLayout());
+        panZusatz.setLayout(new java.awt.GridBagLayout());
 
         taZusatz.setColumns(20);
         taZusatz.setLineWrap(true);
         taZusatz.setRows(2);
         taZusatz.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.zusatzinfo}"), taZusatz, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zusatzinfo}"),
+                taZusatz,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpZusatz.setViewportView(taZusatz);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panZusatz.add(scpZusatz, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(panZusatz, gridBagConstraints);
 
-        lblDetailbeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDetailbeschreibung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDetailbeschreibung.setText("Details:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblDetailbeschreibung, gridBagConstraints);
 
         panDetailbeschreibung.setOpaque(false);
-        panDetailbeschreibung.setLayout(new GridBagLayout());
+        panDetailbeschreibung.setLayout(new java.awt.GridBagLayout());
 
         taDetailbeschreibung.setLineWrap(true);
         taDetailbeschreibung.setRows(2);
         taDetailbeschreibung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.detailbeschreibung}"), taDetailbeschreibung, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.detailbeschreibung}"),
+                taDetailbeschreibung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpDetailbeschreibung.setViewportView(taDetailbeschreibung);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         panDetailbeschreibung.add(scpDetailbeschreibung, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(panDetailbeschreibung, gridBagConstraints);
 
-        lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBemerkung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblBemerkung.setText("Bemerkung:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblBemerkung, gridBagConstraints);
 
         panBemerkung.setOpaque(false);
-        panBemerkung.setLayout(new GridBagLayout());
+        panBemerkung.setLayout(new java.awt.GridBagLayout());
 
         taBemerkung.setColumns(20);
         taBemerkung.setLineWrap(true);
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panBemerkung.add(scpBemerkung, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(panBemerkung, gridBagConstraints);
 
-        lblFoto.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFoto.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblFoto.setText("Foto:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 16;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblFoto, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.foto}"), txtFoto, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.foto}"),
+                txtFoto,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(txtFoto, gridBagConstraints);
 
         panUrl.setOpaque(false);
-        panUrl.setLayout(new GridBagLayout());
+        panUrl.setLayout(new java.awt.GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
+        lblUrlCheck.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         panUrl.add(lblUrlCheck, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 16;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(panUrl, gridBagConstraints);
 
-        lblFotoAnzeigen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
+        lblFotoAnzeigen.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 17;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 7;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 4);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 4);
         panDaten.add(lblFotoAnzeigen, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 17;
         gridBagConstraints.gridheight = 6;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         panDaten.add(filler4, gridBagConstraints);
 
-        lblGruen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblGruen.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblGruen.setText("Grüner Strom:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 17;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblGruen, gridBagConstraints);
 
         chGruen.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gruener_strom}"), chGruen, BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gruener_strom}"),
+                chGruen,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 17;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(chGruen, gridBagConstraints);
 
-        lblAnzahl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblAnzahl.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAnzahl.setText("Stellplätze:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 18;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblAnzahl, gridBagConstraints);
 
-        spAnzahl.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        spAnzahl.setModel(new SpinnerNumberModel(0, 0, 100, 1));
-        spAnzahl.setName("spAnzahl"); // NOI18N
+        spAnzahl.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        spAnzahl.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        spAnzahl.setName("spAnzahl");                         // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_plaetze}"), spAnzahl, BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_plaetze}"),
+                spAnzahl,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 18;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(spAnzahl, gridBagConstraints);
 
-        lblAnzahlLadepunkte.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblAnzahlLadepunkte.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAnzahlLadepunkte.setText("Ladepunkte:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 19;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblAnzahlLadepunkte, gridBagConstraints);
 
-        ftxtAnzahlLadepunkte.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
+        ftxtAnzahlLadepunkte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_ladepunkte}"), ftxtAnzahlLadepunkte, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_ladepunkte}"),
+                ftxtAnzahlLadepunkte,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 19;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(ftxtAnzahlLadepunkte, gridBagConstraints);
 
-        lblLadebox.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLadebox.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblLadebox.setText("Ladebox:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 20;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblLadebox, gridBagConstraints);
 
         chLadebox.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ladebox_zu}"), chLadebox, BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ladebox_zu}"),
+                chLadebox,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
-        chLadebox.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                chLadeboxStateChanged(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        chLadebox.addChangeListener(new javax.swing.event.ChangeListener() {
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    chLadeboxStateChanged(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 20;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(chLadebox, gridBagConstraints);
 
-        lblSchliessfaecher.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblSchliessfaecher.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSchliessfaecher.setText("Schließfächer:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 21;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblSchliessfaecher, gridBagConstraints);
 
-        ftxtSchliessfaecher.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
+        ftxtSchliessfaecher.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_schliessfaecher}"), ftxtSchliessfaecher, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_schliessfaecher}"),
+                ftxtSchliessfaecher,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        ftxtSchliessfaecher.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                ftxtSchliessfaecherActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        ftxtSchliessfaecher.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    ftxtSchliessfaecherActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 21;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(ftxtSchliessfaecher, gridBagConstraints);
 
-        lblSteckdosen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblSteckdosen.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSteckdosen.setText("Steckdosen je S.:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 22;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblSteckdosen, gridBagConstraints);
 
-        ftxtSteckdosen.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
+        ftxtSteckdosen.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl_fach_steckdosen}"), ftxtSteckdosen, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_fach_steckdosen}"),
+                ftxtSteckdosen,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        ftxtSteckdosen.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                ftxtSteckdosenActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        ftxtSteckdosen.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    ftxtSteckdosenActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 22;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(ftxtSteckdosen, gridBagConstraints);
 
         panFillerUntenFoto.setName(""); // NOI18N
         panFillerUntenFoto.setOpaque(false);
 
-        GroupLayout panFillerUntenFotoLayout = new GroupLayout(panFillerUntenFoto);
+        final javax.swing.GroupLayout panFillerUntenFotoLayout = new javax.swing.GroupLayout(panFillerUntenFoto);
         panFillerUntenFoto.setLayout(panFillerUntenFotoLayout);
-        panFillerUntenFotoLayout.setHorizontalGroup(panFillerUntenFotoLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUntenFotoLayout.setVerticalGroup(panFillerUntenFotoLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenFotoLayout.setHorizontalGroup(
+            panFillerUntenFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+        panFillerUntenFotoLayout.setVerticalGroup(
+            panFillerUntenFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 23;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(panFillerUntenFoto, gridBagConstraints);
 
-        lblAbrechnung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblAbrechnung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAbrechnung.setText("Ladekosten:");
         lblAbrechnung.setToolTipText("");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 25;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblAbrechnung, gridBagConstraints);
 
         panAbrechnung.setOpaque(false);
-        panAbrechnung.setLayout(new GridBagLayout());
+        panAbrechnung.setLayout(new java.awt.GridBagLayout());
 
         taAbrechnung.setEditable(false);
         taAbrechnung.setLineWrap(true);
@@ -1352,539 +1505,601 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         taAbrechnung.setToolTipText("");
         taAbrechnung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_ladekosten.name}"), taAbrechnung, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ladekosten.name}"),
+                taAbrechnung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpAbrechnung.setViewportView(taAbrechnung);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         panAbrechnung.add(scpAbrechnung, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 25;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panDaten.add(panAbrechnung, gridBagConstraints);
 
-        if(isEditor){
-            cbAbrechnung.setFont(new Font("Dialog", 0, 12)); // NOI18N
-            if(isEditor){
-                cbAbrechnung.setPreferredSize(new Dimension(100, 24));
+        if (isEditor) {
+            cbAbrechnung.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+            if (isEditor) {
+                cbAbrechnung.setPreferredSize(new java.awt.Dimension(100, 24));
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_ladekosten}"), cbAbrechnung, BeanProperty.create("selectedItem"));
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ladekosten}"),
+                    cbAbrechnung,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
-
         }
-        if(isEditor){
-            gridBagConstraints = new GridBagConstraints();
+        if (isEditor) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 28;
             gridBagConstraints.gridwidth = 4;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = GridBagConstraints.WEST;
-            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
             panDaten.add(cbAbrechnung, gridBagConstraints);
         }
 
-        panFiller.setMinimumSize(new Dimension(20, 0));
+        panFiller.setMinimumSize(new java.awt.Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final javax.swing.GroupLayout panFillerLayout = new javax.swing.GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(
+            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(
+            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         panDaten.add(panFiller, gridBagConstraints);
 
-        lblZugang.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblZugang.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblZugang.setText("Zugang:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 29;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblZugang, gridBagConstraints);
 
-        panZugang.setLayout(new GridBagLayout());
+        panZugang.setLayout(new java.awt.GridBagLayout());
 
-        scpLstZugang.setMinimumSize(new Dimension(258, 66));
+        scpLstZugang.setMinimumSize(new java.awt.Dimension(258, 66));
 
-        lstZugang.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        lstZugang.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstZugang.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        lstZugang.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstZugang.setVisibleRowCount(3);
 
-        ELProperty eLProperty = ELProperty.create("${cidsBean.arr_zugangsart}");
-        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstZugang);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.arr_zugangsart}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJListBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        lstZugang);
         bindingGroup.addBinding(jListBinding);
 
         scpLstZugang.setViewportView(lstZugang);
         lstZugang.getAccessibleContext().setAccessibleName("");
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panZugang.add(scpLstZugang, gridBagConstraints);
 
         panButtonsZugang.setOpaque(false);
-        panButtonsZugang.setLayout(new GridBagLayout());
+        panButtonsZugang.setLayout(new java.awt.GridBagLayout());
 
-        btnAddZugang.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddZugang.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddZugangActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        btnAddZugang.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddZugang.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddZugangActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsZugang.add(btnAddZugang, gridBagConstraints);
 
-        btnRemoveZugang.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveZugang.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveZugangActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        btnRemoveZugang.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveZugang.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveZugangActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsZugang.add(btnRemoveZugang, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         panButtonsZugang.add(filler1, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(10, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 2, 2, 2);
         panZugang.add(panButtonsZugang, gridBagConstraints);
         panButtonsZugang.getAccessibleContext().setAccessibleName("");
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 29;
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         panDaten.add(panZugang, gridBagConstraints);
 
-        lblStecker.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblStecker.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblStecker.setText("Stecker:");
         lblStecker.setToolTipText("");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 32;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblStecker, gridBagConstraints);
 
-        panStecker.setLayout(new GridBagLayout());
+        panStecker.setLayout(new java.awt.GridBagLayout());
 
-        scpLstStecker.setMinimumSize(new Dimension(258, 66));
+        scpLstStecker.setMinimumSize(new java.awt.Dimension(258, 66));
 
-        lstStecker.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        lstStecker.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstStecker.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        lstStecker.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstStecker.setVisibleRowCount(2);
 
-        eLProperty = ELProperty.create("${cidsBean.arr_stecker}");
-        jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstStecker);
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_stecker}");
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstStecker);
         bindingGroup.addBinding(jListBinding);
 
         scpLstStecker.setViewportView(lstStecker);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panStecker.add(scpLstStecker, gridBagConstraints);
 
         panButtonsStecker.setOpaque(false);
-        panButtonsStecker.setLayout(new GridBagLayout());
+        panButtonsStecker.setLayout(new java.awt.GridBagLayout());
 
-        btnAddStecker.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddStecker.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddSteckerActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        btnAddStecker.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddStecker.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddSteckerActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsStecker.add(btnAddStecker, gridBagConstraints);
 
-        btnRemoveStecker.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveStecker.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveSteckerActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        btnRemoveStecker.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveStecker.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveSteckerActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsStecker.add(btnRemoveStecker, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         panButtonsStecker.add(filler5, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(10, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 2, 2, 2);
         panStecker.add(panButtonsStecker, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 32;
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         panDaten.add(panStecker, gridBagConstraints);
 
-        panPfand.setLayout(new GridBagLayout());
+        panPfand.setLayout(new java.awt.GridBagLayout());
 
-        scpLstPfand.setMinimumSize(new Dimension(258, 66));
+        scpLstPfand.setMinimumSize(new java.awt.Dimension(258, 66));
 
-        lstPfand.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        lstPfand.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstPfand.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        lstPfand.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstPfand.setVisibleRowCount(3);
 
-        eLProperty = ELProperty.create("${cidsBean.arr_pfand}");
-        jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstPfand);
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_pfand}");
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstPfand);
         bindingGroup.addBinding(jListBinding);
 
         scpLstPfand.setViewportView(lstPfand);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panPfand.add(scpLstPfand, gridBagConstraints);
 
         panButtonsPfand.setOpaque(false);
-        panButtonsPfand.setLayout(new GridBagLayout());
+        panButtonsPfand.setLayout(new java.awt.GridBagLayout());
 
-        btnAddPfand.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddPfand.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddPfandActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        btnAddPfand.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddPfand.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddPfandActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsPfand.add(btnAddPfand, gridBagConstraints);
 
-        btnRemovePfand.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemovePfand.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemovePfandActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
+        btnRemovePfand.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemovePfand.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemovePfandActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         panButtonsPfand.add(btnRemovePfand, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         panButtonsPfand.add(filler6, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(10, 2, 2, 2);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 2, 2, 2);
         panPfand.add(panButtonsPfand, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 35;
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         panDaten.add(panPfand, gridBagConstraints);
 
-        lblPfand.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblPfand.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblPfand.setText("Pfand:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 35;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblPfand, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-        panContent.add(panDaten, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 5);
+        jPanel1.add(panDaten, gridBagConstraints);
 
         panGeometrie.setOpaque(false);
-        panGeometrie.setLayout(new GridBagLayout());
+        panGeometrie.setLayout(new java.awt.GridBagLayout());
 
-        lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblGeom.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblGeom.setText("Geometrie:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 5);
         panGeometrie.add(lblGeom, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
-                cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        if (isEditor) {
+            if (isEditor) {
+                cbGeom.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
-            gridBagConstraints = new GridBagConstraints();
+        if (isEditor) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new Insets(2, 2, 2, 10);
+            gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 10);
             panGeometrie.add(cbGeom, gridBagConstraints);
         }
 
-        panLage.setMinimumSize(new Dimension(300, 142));
+        panLage.setMinimumSize(new java.awt.Dimension(300, 142));
         panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
+        panLage.setLayout(new java.awt.GridBagLayout());
 
         rpKarte.setName(""); // NOI18N
-        rpKarte.setLayout(new GridBagLayout());
-        gridBagConstraints = new GridBagConstraints();
+        rpKarte.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         rpKarte.add(panPreviewMap, gridBagConstraints);
 
-        semiRoundedPanel7.setBackground(Color.darkGray);
-        semiRoundedPanel7.setLayout(new GridBagLayout());
+        semiRoundedPanel7.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel7.setLayout(new java.awt.GridBagLayout());
 
-        lblKarte.setForeground(new Color(255, 255, 255));
+        lblKarte.setForeground(new java.awt.Color(255, 255, 255));
         lblKarte.setText("Lage");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         semiRoundedPanel7.add(lblKarte, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         rpKarte.add(semiRoundedPanel7, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
         panLage.add(rpKarte, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         panGeometrie.add(panLage, gridBagConstraints);
 
-        lblVersatz.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVersatz.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblVersatz.setText("Versatz:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 5);
         panGeometrie.add(lblVersatz, gridBagConstraints);
 
         cbVersatz.setNullable(false);
-        cbVersatz.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        cbVersatz.setMaximumSize(new Dimension(200, 23));
-        cbVersatz.setMinimumSize(new Dimension(150, 23));
-        cbVersatz.setPreferredSize(new Dimension(150, 23));
+        cbVersatz.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        cbVersatz.setMaximumSize(new java.awt.Dimension(200, 23));
+        cbVersatz.setMinimumSize(new java.awt.Dimension(150, 23));
+        cbVersatz.setPreferredSize(new java.awt.Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_versatz}"), cbVersatz, BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_versatz}"),
+                cbVersatz,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 10);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 10);
         panGeometrie.add(cbVersatz, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 0, 5);
-        panContent.add(panGeometrie, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 5);
+        jPanel1.add(panGeometrie, gridBagConstraints);
 
         panOnline.setOpaque(false);
-        panOnline.setLayout(new GridBagLayout());
-        gridBagConstraints = new GridBagConstraints();
+        panOnline.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(10, 0, 5, 0);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 5, 0);
         panOnline.add(sepOnline, gridBagConstraints);
 
-        lblOnline.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblOnline.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblOnline.setText("Online:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panOnline.add(lblOnline, gridBagConstraints);
 
-        chOnline.setOpaque(false);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.online}"), chOnline, BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.online}"),
+                chOnline,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panOnline.add(chOnline, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-        panContent.add(panOnline, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 5);
+        jPanel1.add(panOnline, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panContent.add(jPanel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddZugangActionPerformed
+    private void btnAddZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddZugangActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this), dlgAddZugang, true);
-    }//GEN-LAST:event_btnAddZugangActionPerformed
+    }                                                                 //GEN-LAST:event_btnAddZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveZugangActionPerformed
+    private void btnRemoveZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveZugangActionPerformed
         final Object selection = lstZugang.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1907,23 +2122,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveZugangActionPerformed
+    }                                                                    //GEN-LAST:event_btnRemoveZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortZugangActionPerformed
+    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortZugangActionPerformed
         dlgAddZugang.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortZugangActionPerformed
+    }                                                                      //GEN-LAST:event_btnMenAbortZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkZugangActionPerformed
+    private void btnMenOkZugangActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkZugangActionPerformed
         try {
             final Object selItem = cbZugang.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1938,26 +2153,41 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddZugang.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkZugangActionPerformed
+    }                                                                   //GEN-LAST:event_btnMenOkZugangActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chHalbStateChanged(final ChangeEvent evt) {//GEN-FIRST:event_chHalbStateChanged
+    private void chHalbStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chHalbStateChanged
         isOpen();
-    }//GEN-LAST:event_chHalbStateChanged
+    }                                                        //GEN-LAST:event_chHalbStateChanged
 
-    private void ftxtSchliessfaecherActionPerformed(ActionEvent evt) {//GEN-FIRST:event_ftxtSchliessfaecherActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtSchliessfaecherActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtSchliessfaecherActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ftxtSchliessfaecherActionPerformed
+    } //GEN-LAST:event_ftxtSchliessfaecherActionPerformed
 
-    private void ftxtSteckdosenActionPerformed(ActionEvent evt) {//GEN-FIRST:event_ftxtSteckdosenActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtSteckdosenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtSteckdosenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ftxtSteckdosenActionPerformed
+    } //GEN-LAST:event_ftxtSteckdosenActionPerformed
 
-    private void btnRemoveSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveSteckerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveSteckerActionPerformed
         final Object selection = lstStecker.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1980,13 +2210,25 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveSteckerActionPerformed
+    }                                                                     //GEN-LAST:event_btnRemoveSteckerActionPerformed
 
-    private void btnAddSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddSteckerActionPerformed
-        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this), dlgAddStecker, true);
-    }//GEN-LAST:event_btnAddSteckerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddSteckerActionPerformed
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this),
+            dlgAddStecker,
+            true);
+    }                                                                  //GEN-LAST:event_btnAddSteckerActionPerformed
 
-    private void btnRemovePfandActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemovePfandActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemovePfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemovePfandActionPerformed
         final Object selection = lstPfand.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -2009,13 +2251,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 }
             }
         }
-    }//GEN-LAST:event_btnRemovePfandActionPerformed
+    }                                                                   //GEN-LAST:event_btnRemovePfandActionPerformed
 
-    private void btnAddPfandActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddPfandActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddPfandActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(EmobradLadestationEditor.this), dlgAddPfand, true);
-    }//GEN-LAST:event_btnAddPfandActionPerformed
+    }                                                                //GEN-LAST:event_btnAddPfandActionPerformed
 
-    private void btnMenOkPfandActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkPfandActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkPfandActionPerformed
         try {
             final Object selItem = cbPfand.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -2030,13 +2282,23 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddPfand.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkPfandActionPerformed
+    }                                                                  //GEN-LAST:event_btnMenOkPfandActionPerformed
 
-    private void btnMenAbortPfandActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortPfandActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortPfandActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortPfandActionPerformed
         dlgAddPfand.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortPfandActionPerformed
+    }                                                                     //GEN-LAST:event_btnMenAbortPfandActionPerformed
 
-    private void btnMenOkSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkSteckerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkSteckerActionPerformed
         try {
             final Object selItem = cbStecker.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -2051,15 +2313,25 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         } finally {
             dlgAddStecker.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkSteckerActionPerformed
+    }                                                                    //GEN-LAST:event_btnMenOkSteckerActionPerformed
 
-    private void btnMenAbortSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortSteckerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortSteckerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortSteckerActionPerformed
         dlgAddStecker.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortSteckerActionPerformed
+    }                                                                       //GEN-LAST:event_btnMenAbortSteckerActionPerformed
 
-    private void chLadeboxStateChanged(ChangeEvent evt) {//GEN-FIRST:event_chLadeboxStateChanged
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void chLadeboxStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chLadeboxStateChanged
         isBox();
-    }//GEN-LAST:event_chLadeboxStateChanged
+    }                                                           //GEN-LAST:event_chLadeboxStateChanged
 
     /**
      * DOCUMENT ME!
@@ -2152,7 +2424,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOCOUNT));
             } else {
                 try {
-                    if (Integer.parseInt(ftxtAnzahlLadepunkte.getText())<= 0){
+                    if (Integer.parseInt(ftxtAnzahlLadepunkte.getText()) <= 0) {
                         errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGCOUNT));
                     }
                 } catch (NumberFormatException e) {
@@ -2174,20 +2446,24 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             LOG.warn("Open not given.", ex);
             save = false;
         }
-        //Wenn Ladebox: Schliessfaecher & Steckdosen > 0, wenn nicht: S & S= 0
-        try{
-            if (chLadebox.isSelected()){
+        // Wenn Ladebox: Schliessfaecher & Steckdosen > 0, wenn nicht: S & S= 0
+        try {
+            if (chLadebox.isSelected()) {
                 if (ftxtSchliessfaecher.getText().trim().isEmpty()) {
                     LOG.warn("No schliessfaecher specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOSCHLIESSFACH));
                 } else {
                     try {
-                        if (Integer.parseInt(ftxtSchliessfaecher.getText()) <= 0){
-                            errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGSCHLIESSFACH));
+                        if (Integer.parseInt(ftxtSchliessfaecher.getText()) <= 0) {
+                            errorMessage.append(NbBundle.getMessage(
+                                    EmobradLadestationEditor.class,
+                                    BUNDLE_WRONGSCHLIESSFACH));
                         }
                     } catch (NumberFormatException e) {
                         LOG.warn("Wrong schliessfach specified. Skip persisting.", e);
-                        errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGSCHLIESSFACH));
+                        errorMessage.append(NbBundle.getMessage(
+                                EmobradLadestationEditor.class,
+                                BUNDLE_WRONGSCHLIESSFACH));
                     }
                 }
                 if (ftxtSteckdosen.getText().trim().isEmpty()) {
@@ -2195,8 +2471,10 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOSTECKDOSE));
                 } else {
                     try {
-                        if (Integer.parseInt(ftxtSteckdosen.getText()) <= 0){
-                            errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGSTECKDOSE));
+                        if (Integer.parseInt(ftxtSteckdosen.getText()) <= 0) {
+                            errorMessage.append(NbBundle.getMessage(
+                                    EmobradLadestationEditor.class,
+                                    BUNDLE_WRONGSTECKDOSE));
                         }
                     } catch (NumberFormatException e) {
                         LOG.warn("Wrong steckdose specified. Skip persisting.", e);
@@ -2204,14 +2482,14 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     }
                 }
             } else {
-                if  (!(ftxtSchliessfaecher.getText().trim().equals(TEXT_BOX))){
+                if (!(ftxtSchliessfaecher.getText().trim().equals(TEXT_BOX))) {
                     try {
                         cidsBean.setProperty(FIELD__FACH, Integer.getInteger(TEXT_BOX));
                     } catch (Exception ex) {
                         LOG.warn("Setting default value schliessfaecher.", ex);
                     }
                 }
-                if  (!(ftxtSteckdosen.getText().trim().equals(TEXT_BOX))){
+                if (!(ftxtSteckdosen.getText().trim().equals(TEXT_BOX))) {
                     try {
                         cidsBean.setProperty(FIELD__DOSE, Integer.getInteger(TEXT_BOX));
                     } catch (Exception ex) {
@@ -2223,7 +2501,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             LOG.warn("Error with Box.", ex);
             save = false;
         }
-        
+
         // georeferenz muss gefüllt sein
         try {
             if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
@@ -2240,8 +2518,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             LOG.warn("Geom not given.", ex);
             save = false;
         }
-
-        
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -2261,7 +2537,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         return cidsBean;
     }
 
-    
     @Override
     public void setCidsBean(final CidsBean cb) {
         // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
@@ -2281,13 +2556,13 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     cidsBean,
                     FIELD__ZUGANG);
             Collections.sort(zugangCol, AlphanumComparator.getInstance());
-            
+
             // Damit die Stecker sortiert in der Liste erscheinen.
             final List<CidsBean> steckerCol = CidsBeanSupport.getBeanCollectionFromProperty(
                     cidsBean,
                     FIELD__STECKER);
             Collections.sort(steckerCol, AlphanumComparator.getInstance());
-            
+
             // Damit die moeglichen Muenzen fuer den Pfand sortiert in der Liste erscheinen.
             final List<CidsBean> pfandCol = CidsBeanSupport.getBeanCollectionFromProperty(
                     cidsBean,
@@ -2311,8 +2586,10 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
         }
     }
 
-    public void setDefaultVersatz(){
-        
+    /**
+     * DOCUMENT ME!
+     */
+    public void setDefaultVersatz() {
         if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
             // Aufruf worker um default values zu setzen
             valueFromOtherTable(
@@ -2325,7 +2602,6 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 FIELD__VERSATZ,
                 OtherTableCases.SET_VALUE);
         }
-
     }
     /**
      * DOCUMENT ME!
@@ -2379,7 +2655,10 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
             }
         }
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     */
     private void isBox() {
         final boolean isNotBox = chLadebox.isSelected();
 
@@ -2393,7 +2672,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                 if (ftxtSchliessfaecher.getText().equals(TEXT_BOX)) {
                     ftxtSchliessfaecher.setText("");
                 }
-                 if (ftxtSteckdosen.getText().equals(TEXT_BOX)) {
+                if (ftxtSteckdosen.getText().equals(TEXT_BOX)) {
                     ftxtSteckdosen.setText("");
                 }
             }
@@ -2600,7 +2879,7 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                             check = get();
                             if (check != null) {
                                 switch (fall) {
-                                    case SET_VALUE: {         // set default value
+                                    case SET_VALUE: {          // set default value
                                         try {
                                             cidsBean.setProperty(
                                                 propertyName,
@@ -2627,22 +2906,21 @@ public class EmobradLadestationEditor extends DefaultCustomObjectEditor implemen
                     } catch (InterruptedException | ExecutionException e) {
                         LOG.warn("problem in Worker: load values.", e);
                     }
-                  }
+                }
             };
-        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)){
+        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)) {
             if (worker_name != null) {
                 worker_name.cancel(true);
             }
             worker_name = worker;
             worker_name.execute();
-        } else{
+        } else {
             if (worker_versatz != null) {
                 worker_versatz.cancel(true);
             }
             worker_versatz = worker;
-            worker_versatz.execute(); 
+            worker_versatz.execute();
         }
-        
     }
 
     //~ Inner Classes ----------------------------------------------------------
