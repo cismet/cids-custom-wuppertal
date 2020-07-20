@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
+import de.cismet.cids.custom.utils.HexcolorFormatter;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -70,6 +71,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblAuswaehlen;
     private javax.swing.JLabel lblDefinition;
+    private javax.swing.JLabel lblFarbe;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblIcon;
@@ -87,6 +89,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     private javax.swing.JPanel panSpacing2;
     private javax.swing.JScrollPane scpLocationtypeList;
     private javax.swing.JTextField txtDefinition;
+    private javax.swing.JFormattedTextField txtFarbe;
     private javax.swing.JTextField txtName;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -154,28 +157,28 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             btnMenOk = new javax.swing.JButton();
             panCenter = new javax.swing.JPanel();
             panContent1 = new RoundedPanel();
-            panSpacing1 = new javax.swing.JPanel();
-            txtName = new javax.swing.JTextField();
-            lblDefinition = new javax.swing.JLabel();
-            txtDefinition = new javax.swing.JTextField();
             lblHeader1 = new javax.swing.JLabel();
             lblIcon = new javax.swing.JLabel();
+            txtName = new javax.swing.JTextField();
             jLabel1 = new javax.swing.JLabel();
+            lblDefinition = new javax.swing.JLabel();
+            txtDefinition = new javax.swing.JTextField();
+            panSpacing1 = new javax.swing.JPanel();
             panContent2 = new RoundedPanel();
-            lblSignatur = new javax.swing.JLabel();
+            lblHeader2 = new javax.swing.JLabel();
             lblLocationTypes = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo(
-                    "%1$2s",
-                    new String[] { "definition", "filename" });
             scpLocationtypeList = new javax.swing.JScrollPane();
             lstLocationTypes = new javax.swing.JList();
             panButtons = new javax.swing.JPanel();
             btnAdd = new javax.swing.JButton();
             btnRemove = new javax.swing.JButton();
-            panSpacing2 = new javax.swing.JPanel();
-            lblHeader2 = new javax.swing.JLabel();
+            lblSignatur = new javax.swing.JLabel();
+            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[] { "definition", "filename" });
+            lblFarbe = new javax.swing.JLabel();
+            txtFarbe = new javax.swing.JFormattedTextField(new HexcolorFormatter());
             lblToPublish = new javax.swing.JLabel();
             chkToPublish = new javax.swing.JCheckBox();
+            panSpacing2 = new javax.swing.JPanel();
 
             dlgAddLocationType.setModal(true);
 
@@ -247,14 +250,22 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         panContent1.setOpaque(false);
         panContent1.setLayout(new java.awt.GridBagLayout());
 
-        panSpacing1.setOpaque(false);
+        lblHeader1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblHeader1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblHeader1.setText("Beschreibung");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent1.add(lblHeader1, gridBagConstraints);
+
+        lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblIcon.setText("Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        panContent1.add(panSpacing1, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent1.add(lblIcon, gridBagConstraints);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -268,17 +279,21 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(txtName, gridBagConstraints);
+
+        jLabel1.setText("                  ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panContent1.add(jLabel1, gridBagConstraints);
 
         lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDefinition.setText("Definition:        ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(lblDefinition, gridBagConstraints);
@@ -295,33 +310,17 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(txtDefinition, gridBagConstraints);
 
-        lblHeader1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblHeader1.setText("        Beschreibung");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent1.add(lblHeader1, gridBagConstraints);
-
-        lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblIcon.setText("Name:");
+        panSpacing1.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent1.add(lblIcon, gridBagConstraints);
-
-        jLabel1.setText("                  ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panContent1.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        panContent1.add(panSpacing1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -333,44 +332,23 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         panContent2.setOpaque(false);
         panContent2.setLayout(new java.awt.GridBagLayout());
 
-        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblSignatur.setText("Signatur:");
+        lblHeader2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblHeader2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblHeader2.setText("Einordnung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent2.add(lblSignatur, gridBagConstraints);
+        panContent2.add(lblHeader2, gridBagConstraints);
 
         lblLocationTypes.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblLocationTypes.setText("Lebenslagen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         panContent2.add(lblLocationTypes, gridBagConstraints);
-
-        ((FastBindableReferenceCombo)cbSignatur).setSorted(true);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"),
-                cbSignatur,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("<Error>");
-        bindingGroup.addBinding(binding);
-
-        cbSignatur.setRenderer(new SignaturListCellRenderer());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
-        panContent2.add(cbSignatur, gridBagConstraints);
 
         lstLocationTypes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -388,7 +366,6 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -427,34 +404,63 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(panButtons, gridBagConstraints);
 
-        panSpacing2.setOpaque(false);
+        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSignatur.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        panContent2.add(panSpacing2, gridBagConstraints);
-
-        lblHeader2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblHeader2.setText("Einordnung");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent2.add(lblHeader2, gridBagConstraints);
+        panContent2.add(lblSignatur, gridBagConstraints);
+
+        ((FastBindableReferenceCombo)cbSignatur).setSorted(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"),
+                cbSignatur,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("<Error>");
+        bindingGroup.addBinding(binding);
+
+        cbSignatur.setRenderer(new SignaturListCellRenderer());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(cbSignatur, gridBagConstraints);
+
+        lblFarbe.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblFarbe.setText("Farbe:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblFarbe, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.color}"),
+                txtFarbe,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(txtFarbe, gridBagConstraints);
 
         lblToPublish.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblToPublish.setText("Veröffentlicht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblToPublish, gridBagConstraints);
@@ -471,10 +477,18 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 3, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(chkToPublish, gridBagConstraints);
+
+        panSpacing2.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        panContent2.add(panSpacing2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

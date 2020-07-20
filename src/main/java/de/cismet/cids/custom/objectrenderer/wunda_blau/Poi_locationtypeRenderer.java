@@ -45,12 +45,14 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblDefinition;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblSignatur;
+    private javax.swing.JLabel lblSignatur1;
     private javax.swing.JLabel lblThemen;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTxtDefinition;
@@ -92,17 +94,19 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         lblIcon = new javax.swing.JLabel();
         lblTxtIcon = new javax.swing.JLabel();
         lblVeroeffentlicht = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
         lblSignatur = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        lblSignatur1 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         lblThemen = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
 
         panTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("TITLE");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -112,12 +116,13 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
 
+        setOpaque(false);
         setLayout(new java.awt.BorderLayout());
 
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblName.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblName.setText("Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -140,11 +145,10 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTxtName, gridBagConstraints);
 
-        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDefinition.setText("Definition:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblDefinition, gridBagConstraints);
@@ -161,16 +165,14 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTxtDefinition, gridBagConstraints);
 
-        lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblIcon.setText("Icon:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblIcon, gridBagConstraints);
@@ -187,25 +189,41 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTxtIcon, gridBagConstraints);
 
-        lblVeroeffentlicht.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblVeroeffentlicht.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblVeroeffentlicht.setText("Veröffentlicht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblVeroeffentlicht, gridBagConstraints);
 
-        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jCheckBox1.setContentAreaFilled(false);
+        jCheckBox1.setEnabled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jCheckBox1, gridBagConstraints);
+
+        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSignatur.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblSignatur, gridBagConstraints);
@@ -223,16 +241,38 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel10, gridBagConstraints);
 
-        lblThemen.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblSignatur1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSignatur1.setText("Farbe:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblSignatur1, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.color}"),
+                jLabel11,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("<Error>");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel11, gridBagConstraints);
+
+        lblThemen.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblThemen.setText("Lebenslage:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblThemen, gridBagConstraints);
@@ -250,30 +290,9 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel12, gridBagConstraints);
-
-        jCheckBox1.setEnabled(false);
-        jCheckBox1.setOpaque(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"),
-                jCheckBox1,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 0);
-        jPanel1.add(jCheckBox1, gridBagConstraints);
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
