@@ -560,7 +560,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnErstellenActionPerformed
+    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
         pnrDialog.warnIfNeeded();
 
 // check anr
@@ -739,7 +739,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    final ServerActionParameter<PointNumberReserverationServerAction.Action> action = new ServerActionParameter<>(
+                    final ServerActionParameter<PointNumberReserverationServerAction.Action> action =
+                        new ServerActionParameter<>(
                             PointNumberReserverationServerAction.Parameter.ACTION.toString(),
                             PointNumberReserverationServerAction.Action.IS_ANTRAG_EXISTING);
                     final ServerActionParameter<String> prefix = new ServerActionParameter<>(
@@ -813,7 +814,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
             };
 
         isAntragExistingWorker.execute();
-    }//GEN-LAST:event_btnErstellenActionPerformed
+    } //GEN-LAST:event_btnErstellenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -865,31 +866,31 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshNbzActionPerformed
+    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshNbzActionPerformed
         checkNummerierungsbezirke();
         btnRefreshNbz.setVisible(false);
         this.invalidate();
         this.validate();
         this.repaint();
-    }//GEN-LAST:event_btnRefreshNbzActionPerformed
+    }                                                                                 //GEN-LAST:event_btnRefreshNbzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspAnzahlStateChanged
+    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_jspAnzahlStateChanged
 //        handleAnzahlSpinnderChanged();
-    }//GEN-LAST:event_jspAnzahlStateChanged
+    } //GEN-LAST:event_jspAnzahlStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNbzActionPerformed
+    private void cbNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbNbzActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbNbzActionPerformed
+    } //GEN-LAST:event_cbNbzActionPerformed
 
     /**
      * DOCUMENT ME!
